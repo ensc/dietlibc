@@ -192,6 +192,15 @@ static void *__mthread_starter(void *arg)
 #ifdef DEBUG
   printf("in starter %d, parameter %8p\n", td->pid, td->func);
 #endif
+  do {
+    __thread_wait_some_time();
+    if (td->canceled) return 42;
+  } while (__pthread_trylock(&td->go));
+
+//  __pthread_lock(&td->go);
+#ifdef DEBUG
+  printf("post starter %d, parameter %8p\n", td->pid, td->func);
+#endif
 
   if (!td->canceled) {
     if (!(setjmp(td->jmp_exit))) {
@@ -279,6 +288,8 @@ static void* __manager_thread(void *arg)
 	      CLONE_VM | CLONE_FS | CLONE_FILES | SIGCHLD,
 	      __manager_thread_data);
     __thread_wait_some_time();
+    __thread_wait_some_time();
+    __pthread_unlock(&__manager_thread_data->go);
 #ifdef DEBUG
     printf("manager new thread %d\n",__manager_thread_data->pid);
 #endif

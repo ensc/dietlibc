@@ -58,7 +58,7 @@ struct _pthread_descr_struct {
   void* arg;			/* thread argument */
 
   /* create thread / manager thread lock */
-  struct _pthread_fastlock *manager_lock;
+  struct _pthread_fastlock go;
 
   /* cleanup stack */
   struct thread_cleanup_t cleanup_stack[PTHREAD_MAX_CLEANUP];

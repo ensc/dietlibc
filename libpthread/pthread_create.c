@@ -22,6 +22,7 @@ int pthread_create (pthread_t *thread, const pthread_attr_t *attr,
   td = __thread_get_free();
 
   if (td) {
+    td->go.__spinlock=1;
     if (!(attr)) {
       pthread_attr_init(&default_attr);
       attr=&default_attr;
