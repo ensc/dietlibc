@@ -2,7 +2,7 @@
 
 #include "_dl_int.h"
 
-void *dlsym(void *handle, char *symbol)
+void *_dlsym(void *handle, char *symbol)
 {
   unsigned long * ret=0;
   if (handle) {
@@ -33,4 +33,11 @@ void *dlsym(void *handle, char *symbol)
 
   }
   return ret;
+}
+
+void *dlsym(void *handle, char *symbol) {
+  _dl_error_location = "dlsym";
+  _dl_error_data = symbol;
+  _dl_error = 4;
+  return _dlsym(handle,symbol);
 }

@@ -16,11 +16,12 @@ static void *_dl_sym_search(struct _dl_handle * h, int symbol)
 //    if (tmp==h) continue;
 //    if (!tmp->flag_global) continue;
     printf("_dl_sym_search: searching in %s\n",tmp->so_name);
-    sym=dlsym((void*)tmp,name);
+    sym=_dlsym((void*)tmp,name);
     if (sym) printf("_dl_sym_search: found: %s @ %08lx\n",name,(long)sym);
   }
-  if (sym) return sym;
-  return &dummy; // sym;
+//  if (sym) return sym;
+//  return &dummy; // sym;
+  return sym;
 }
 
 void *_dl_sym(struct _dl_handle * h, int symbol)

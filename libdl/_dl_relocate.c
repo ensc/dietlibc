@@ -8,6 +8,8 @@
   R_386_GLOB_DAT:	// 6
   R_386_JMP_SLOT:	// 7
   R_386_RELATIVE:	// 8
+
+--- are this relocation types vital to shared objects ? ---
   R_386_PLT32:
   R_386_PC32:
   R_386_GOTPC:

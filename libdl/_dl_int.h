@@ -60,4 +60,9 @@ void *_dl_sym(struct _dl_handle * h, int symbol);
 /* _dl_relocate.c */
 int _dl_relocate(struct _dl_handle* dh, Elf32_Rel *rel, int num);
 
+/* dlerror.c */
+extern int   _dl_error;
+extern char* _dl_error_location;
+extern char* _dl_error_data;
+
 #endif

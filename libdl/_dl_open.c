@@ -76,6 +76,7 @@ void *_dl_open(const char*pathname, int fd, int flag)
 
   if (fstat(fd,&st)<0) {
     close(fd);
+    _dl_error=1;
     return 0;
   }
   else {
@@ -233,12 +234,13 @@ void *_dl_open(const char*pathname, int fd, int flag)
       if (dyn_tab[i].d_tag==DT_TEXTREL) {
 	printf("_dl_open have textrel ?!? -> SUE LIB CREATOR ! \n");
 	_dl_free_handle(ret);
+	_dl_error = 2;
 	return 0;
       }
     }
     printf("_dl_open post dynamic scan\n");
 
-    if ((got=dlsym(ret,"_GLOBAL_OFFSET_TABLE_"))) {
+    if ((got=_dlsym(ret,"_GLOBAL_OFFSET_TABLE_"))) {
       ret->got=got;
       printf("_dl_open found a GOT @ %08lx\n",(long)got);
       /* GOT */
@@ -250,6 +252,7 @@ void *_dl_open(const char*pathname, int fd, int flag)
     else {
       printf("_dl_open non PIC dynamic -> SUE USER ! \n");
       if (ret) _dl_free_handle(ret);
+      _dl_error = 2;
       return 0;
     }
 
@@ -277,6 +280,7 @@ void *_dl_open(const char*pathname, int fd, int flag)
 	  if (sym) *((unsigned long*)(m+tmp->r_offset))=sym;
 	  else {
 	    _dl_free_handle(ret);
+	    _dl_error = 3;
 	    return 0;
 	  }
 	}
@@ -295,6 +299,7 @@ void *_dl_open(const char*pathname, int fd, int flag)
 	  if (sym) *((unsigned long*)(m+tmp->r_offset))=sym;
 	  else {
 	    _dl_free_handle(ret);
+	    _dl_error = 3;
 	    return 0;
 	  }
 	}
