@@ -16,7 +16,7 @@ exit:
 .global _exit
 _exit:
 __exit:
-	ldmfd	sp!, {r4, r5, r6}
+	stmfd	sp!, {r4, r5, r6}
 	swi	__NR_exit
 __unified_syscall:
 	ldmfd   sp!, {r4, r5, r6}
