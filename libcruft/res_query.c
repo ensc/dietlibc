@@ -45,10 +45,11 @@ int res_query(const char *dname, int class, int type, unsigned char *answer, int
 	pnpfd=socket(PF_INET6,SOCK_DGRAM,IPPROTO_UDP);
 	if (pnpfd>=0) fcntl(pnpfd,F_SETFD,FD_CLOEXEC);
       }
+      memset(&pnpsa,0,sizeof(pnpsa));
       pnpsa.sin6_family=AF_INET6;
-      pnpsa.sin6_scope_id=0;
+      if (pnpfd!=-1) bind(pnpfd,(struct sockaddr*)&pnpsa,sizeof(pnpsa));
       pnpsa.sin6_port=htons(53);
-      memmove(&pnpsa.sin6_addr,"\xff\x04\x00\x00\x00\x00\x00\x00\x00\x00dnspnp",16);
+      memmove(&pnpsa.sin6_addr,"\xff\x02\x00\x00\x00\x00\x00\x00\x00\x00dnspnp",16);
 
       duh[1].events=POLLIN;
       duh[1].fd=pnpfd;
