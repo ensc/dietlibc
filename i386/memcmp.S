@@ -3,12 +3,15 @@
 .global memcmp
 .type	 memcmp,@function
 memcmp:
+	xorl %eax,%eax
+	orl 12(%esp),%eax
+	jz .Lempty
 	pushl %esi
 	pushl %edi
 	movl 12(%esp),%esi
 	movl 16(%esp),%edi
-	movl 20(%esp),%ecx
-	
+	movl %eax,%ecx
+
 	rep cmpsb
 
 	decl %esi
@@ -19,4 +22,5 @@ memcmp:
 
 	popl %edi
 	popl %esi
+.Lempty:
 	ret

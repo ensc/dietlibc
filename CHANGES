@@ -19,6 +19,7 @@
   fix some nasty regular expression bugs
   write a stupid malloc checker (contrib/debug-realloc.c) to help me
     debug my regular expressions.  Please read contrib/debug-realloc.txt
+  our i386 memchr,memcmp were broken for the count=0 case
 
 0.16:
   "diet -v" or "diet -Os" segfaulted without further arguments.
