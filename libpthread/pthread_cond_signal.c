@@ -9,7 +9,7 @@ int pthread_cond_signal(pthread_cond_t*cond) {
   __NO_ASYNC_CANCEL_BEGIN_(this);
   LOCK(cond);
 
-  __thread_restart(cond->wait_chain);
+  if (cond->wait_chain) __thread_restart(cond->wait_chain);
 
   UNLOCK(cond);
   __NO_ASYNC_CANCEL_END_(this);

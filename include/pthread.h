@@ -214,6 +214,7 @@ enum {
 
 #define PTHREAD_CANCELED ((void *) -1)
 
+int pthread_kill(pthread_t thread,int sig);
 int pthread_cancel(pthread_t thread);
 int pthread_setcancelstate(int state,int*oldstate);
 
