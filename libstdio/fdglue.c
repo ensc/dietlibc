@@ -9,7 +9,7 @@ extern int __stdio_atexit;
 extern void __stdio_flushall();
 #endif
 
-int __stdio_parse_mode(const char *mode,int *seektoend) {
+int __stdio_parse_mode(const char *mode) {
   int f=0;
   for (;;) {
     switch (*mode) {
@@ -17,7 +17,7 @@ int __stdio_parse_mode(const char *mode,int *seektoend) {
     case 'b': break;
     case 'r': f=O_RDONLY; break;
     case 'w': f=O_WRONLY|O_CREAT|O_TRUNC; break;
-    case 'a': f=O_WRONLY|O_CREAT; *seektoend=1; break;
+    case 'a': f=O_WRONLY|O_CREAT|O_APPEND; break;
     case '+': f=(f&(~O_WRONLY))|O_RDWR; break;
     }
     ++mode;
