@@ -40,11 +40,15 @@ static int rand() {
 extern double atof(const char *c);
 
 int main(int argc,char *argv[]) {
-  char buf[512];
+  char buf[512]="foo";
+  strncat(buf,"barbaz",3);
+  puts(buf);
+#if 0
   time_t oink=time(0);
   struct tm *duh=localtime(&oink);
   strftime(buf,512,"%A %B %Y\n",duh);
   puts(buf);
+#endif
 #if 0
   struct in_addr bar;
   struct hostent *foo;

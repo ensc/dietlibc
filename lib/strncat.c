@@ -3,8 +3,9 @@
 
 char *strncat(char *s, const char *t, size_t n) {
   char *dest=s;
-  register char *max=s+n-1;
+  register char *max;
   s+=strlen(s);
+  max=s+n-1;
   for (;;) {
     if (!(*s = *t)) break; if (++s==max) break; ++t;
 #ifndef WANT_SMALL_STRING_ROUTINES
