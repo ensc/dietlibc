@@ -207,7 +207,7 @@ num_vsnprintf:
 	{
 	  int g=(ch=='g');
 	  double d=va_arg(arg_ptr,double);
-	  buf_len=__dtostr(d,buf,sizeof(buf),width?width:6);
+	  buf_len=__dtostr(d,buf,sizeof(buf),width?width+(flag_dot?preci+1:1):6);
 	  if (flag_dot) {
 	    char *tmp;
 	    if ((tmp=strchr(buf,'.'))) {
