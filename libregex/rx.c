@@ -137,11 +137,11 @@ static int matchatom(void*__restrict__ x,const char*__restrict__ s,int ofs,struc
     if ((*s && *s!='\n') || (eflags&REG_NOTEOL)==0) break;
     goto match;
   case WORDSTART:
-    if ((ofs==0 || isspace(s[-1])) && !isspace(*s))
+    if ((ofs==0 || !isalnum(s[-1])) && isalnum(*s))
       goto match;
     break;
   case WORDEND:
-    if (ofs>0 && !isspace(s[-1]) && isspace(*s))
+    if (ofs>0 && isalnum(s[-1]) && !isalnum(*s))
       goto match;
     break;
   case CHAR:
