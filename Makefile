@@ -111,6 +111,9 @@ PWD=$(shell pwd)
 .SUFFIXES:
 .SUFFIXES: .S .c
 
+# added real dynamic dietlibc.so
+PICODIR = pic-$(ARCH)
+
 $(OBJDIR) $(PICODIR):
 	mkdir $@
 
@@ -163,9 +166,6 @@ $(OBJDIR)/libdl.a: $(LIBDLOBJ)
 
 dynlinker/diet-linux.so: $(OBJDIR)/libdl.a
 	make -C dynlinker
-
-# added real dynamic dietlibc.so
-PICODIR = pic-$(ARCH)
 
 dyn_lib: $(PICODIR) $(PICODIR)/libdietc.so $(PICODIR)/dstart.o \
 	$(PICODIR)/dyn_so_start.o $(PICODIR)/dyn_start.o $(PICODIR)/dyn_stop.o \
