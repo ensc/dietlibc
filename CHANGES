@@ -2,6 +2,7 @@
   fix i386 libm
   fix netinet/ip_icmp.h (Rui Prior)
   make strings.h susv3 compliant (Gunnar Ritter)
+  remove stdio dependence in abort
 
 0.21:
   use gcc's size_t, ptrdiff_t and wchar_t types (Olaf)
