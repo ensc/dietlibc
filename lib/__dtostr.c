@@ -13,9 +13,13 @@ static int copystring(char* buf,int maxlen, const char* s) {
 
 int __dtostr(double d,char *buf,unsigned int maxlen,unsigned int prec,unsigned int prec2) {
 #if 1
-  unsigned long long *x=(unsigned long long *)&d;
+  union {
+    unsigned long long l;
+    double d;
+  } u;
+  u.d=d;
   /* step 1: extract sign, mantissa and exponent */
-  signed long e=((*x>>52)&((1<<11)-1))-1023;
+  signed long e=((u.l>>52)&((1<<11)-1))-1023;
 #else
 #if __BYTE_ORDER == __LITTLE_ENDIAN
   signed long e=(((((unsigned long*)&d)[1])>>20)&((1<<11)-1))-1023;
@@ -23,7 +27,7 @@ int __dtostr(double d,char *buf,unsigned int maxlen,unsigned int prec,unsigned i
   signed long e=(((*((unsigned long*)&d))>>20)&((1<<11)-1))-1023;
 #endif
 #endif
-/*  unsigned long long m=*x & ((1ull<<52)-1); */
+/*  unsigned long long m=u.l & ((1ull<<52)-1); */
   /* step 2: exponent is base 2, compute exponent for base 10 */
   signed long e10;
   /* step 3: calculate 10^e10 */

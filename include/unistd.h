@@ -9,8 +9,8 @@
 
 __BEGIN_DECLS
 
-int optind,opterr;
-char *optarg;
+extern int optind,opterr,optopt;
+extern char *optarg;
 int getopt(int argc, char *const argv[], const char *options);
 
 /* Values for the second argument to access.

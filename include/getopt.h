@@ -5,8 +5,6 @@
 
 __BEGIN_DECLS
 
-extern int optopt;
-
 struct option {
   const char* name;
   int has_arg;
