@@ -3,6 +3,7 @@
 .text
 .global __unified_syscall
 __unified_syscall:
+	ldmfd	sp!, {r4, r5, r6}
 	cmn	r0, #4096
 	movcc	pc, lr
 	rsb	r0, r0, #0

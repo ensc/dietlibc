@@ -230,6 +230,9 @@ wsym: ; \
 .type sym,function; \
 .global sym; \
 sym: \
+	mov	ip, sp; \
+	stmfd	sp!,{r4, r5, r6}; \
+	ldmia	ip, {r4, r5, r6}; \
 	swi	__NR_##name; \
 	b	__unified_syscall
 
@@ -238,6 +241,9 @@ sym: \
 .type sym,function; \
 .global sym; \
 sym: \
+	mov	ip, sp; \
+	stmfd	sp!,{r4, r5, r6}; \
+	ldmia	ip, {r4, r5, r6}; \
 	swi	__NR_##name; \
 	b	__unified_syscall
 
