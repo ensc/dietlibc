@@ -7,6 +7,14 @@ size_t fread( void *ptr, size_t size, size_t nmemb, FILE *stream) {
 #ifdef WANT_BUFFERED_STDIO
   unsigned long i,j;
   j=size*nmemb;
+#ifdef WANT_UNGETC
+  if (stream->ungotten) {
+    *(char*)ptr=stream->ungetbuf;
+    ptr=((char*)ptr)+1;
+    --j;
+  }
+  if (!j) return 1;
+#endif
   for (i=0; i<j; ++i) {
     res=fgetc(stream);
     if (res==EOF)
@@ -16,8 +24,21 @@ size_t fread( void *ptr, size_t size, size_t nmemb, FILE *stream) {
   }
   return nmemb;
 #else
+#ifdef WANT_UNGETC
+  j=size*nmemb;
+#endif
   fflush(stream);
+#ifdef WANT_UNGETC
+  if (stream->ungotten) {
+    *(char*)ptr=stream->ungetbuf;
+    ptr=((char*)ptr)+1;
+    --j;
+  }
+  if (!j) return 1;
+  res=read(stream->fd,ptr,j);
+#else
   res=read(stream->fd,ptr,size*nmemb);
+#endif
   if (res<0) {
     stream->flags|=ERRORINDICATOR;
     return 0;

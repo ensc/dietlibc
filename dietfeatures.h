@@ -22,6 +22,9 @@
 /* do you want smaller or faster string routines? */
 /* #define WANT_FASTER_STRING_ROUTINES */
 
+/* do you want ungetc?  makes fgetc more complex */
+#define WANT_UNGETC
+
 #define WANT_LINKER_WARNINGS
 
 #endif

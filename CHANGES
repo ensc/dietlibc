@@ -18,6 +18,7 @@
   corrected usleep.  It was more of an msleep until now.
   corrected __dtostr (it looped when trying to format "0.0").
   several fixes to stdio (thanks to S-Lang's excellent test suite!)
+  added ungetc (does it work?)
 
 0.7.2:
   added several prototypes to already implemented functions and

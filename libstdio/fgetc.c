@@ -5,6 +5,12 @@ extern int feof(FILE *stream);
 
 int fgetc(FILE *stream) {
   unsigned char c;
+#ifdef WANT_UNGETC
+  if (stream->ungotten) {
+    stream->ungotten=0;
+    return stream->ungetbuf;
+  }
+#endif
   if (feof(stream))
     return EOF;
 #ifdef WANT_BUFFERED_STDIO

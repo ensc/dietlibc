@@ -15,6 +15,10 @@ typedef struct __file {
   struct __file *next;	/* for fflush */
 #endif
   pid_t popen_kludge;
+#ifdef WANT_UNGETC
+  char ungetbuf;
+  char ungotten;
+#endif
 } FILE;
 
 extern FILE *__stdio_root;
