@@ -43,7 +43,6 @@ skip0x:
     ++nptr;
   }
   if (__unlikely(nptr==orig)) {		/* no conversion done */
-err_conv:
     nptr=ptr;
     errno=EINVAL;
     v=0;
