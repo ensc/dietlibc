@@ -36,11 +36,12 @@ static int rand() {
 #endif
 
 int main(int argc,char *argv[]) {
-  FILE *f=popen("../embutils/echo foo","r");
+  FILE *f=fopen("duh","r+");
   char buf[100];
   fgets(buf,100,f);
-  write(1,buf,strlen(buf));
-  pclose(f);
+  printf("%s",buf);
+  fputs("bonk\n",f);
+  fclose(f);
 #if 0
   double d=0.0;
   long long t=0x12345678ABCDEF01;

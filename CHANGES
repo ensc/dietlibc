@@ -15,6 +15,7 @@
   added __isnan (references by libm.a from glibc).
   added popen() and pclose().  Now the diet libc can link slsh (from
     S-Lang!)
+  corrected usleep.  It was more of an msleep until now.
 
 0.7.2:
   added several prototypes to already implemented functions and

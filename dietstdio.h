@@ -9,10 +9,10 @@ typedef struct __file {
   int fd;
   int flags;
 #ifdef WANT_BUFFERED_STDIO
-  int seekofs;
-  int bm;
+  unsigned int bs;	/* read: bytes in buffer */
+  unsigned int bm;	/* position in buffer */
   char buf[BUFSIZE];
-  struct __file *next;
+  struct __file *next;	/* for fflush */
 #endif
   pid_t popen_kludge;
 } FILE;

@@ -34,6 +34,7 @@ FILE* __stdio_init_file(int fd) {
   tmp->fd=fd;
 #ifdef WANT_BUFFERED_STDIO
   tmp->bm=0;
+  tmp->bs=0;
 #endif
   tmp->flags=0;
 #ifdef WANT_BUFFERED_STDIO

@@ -29,7 +29,8 @@ int fflush(FILE *stream) {
     return res;
   }
   if (stream->flags&BUFINPUT) {
-    if (stream->seekofs) lseek(stream->fd,stream->seekofs,SEEK_CUR);
+    register int tmp;
+    if ((tmp=stream->bm-stream->bs)) lseek(stream->fd,tmp,SEEK_CUR);
   } else
     if (stream->bm && write(stream->fd,stream->buf,stream->bm)!=stream->bm) {
       stream->flags|=ERRORINDICATOR;

@@ -9,7 +9,7 @@ int fgetc(FILE *stream) {
     return EOF;
 #ifdef WANT_BUFFERED_STDIO
   if (__fflush4(stream,BUFINPUT)) return EOF;
-  if (stream->bm>=-stream->seekofs) {
+  if (stream->bm>=stream->bs) {
     int len=read(stream->fd,stream->buf,BUFSIZE);
     if (len==0) {
       stream->flags|=EOFINDICATOR;
@@ -19,7 +19,7 @@ int fgetc(FILE *stream) {
       return EOF;
     }
     stream->bm=0;
-    stream->seekofs=-len;
+    stream->bs=len;
   }
   c=stream->buf[stream->bm];
   ++stream->bm;
