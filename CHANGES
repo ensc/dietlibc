@@ -9,6 +9,7 @@
   forward poll.h to sys/poll.h
   make DNS socket close-on-exec (Felix J. Ogris)
   add cuserid to libcompat (Andreas Krennmair)
+  add ctermid and ftok to libcompat (those are _really_ ugly)
 
 0.22:
   fix i386 libm

@@ -130,10 +130,9 @@ FILE* tmpfile(void) __THROW;
 #define FILENAME_MAX 4095
 #define FOPEN_MAX 16
 
-#ifdef _POSIX_SOURCE
+/* this is so bad, we moved it to -lcompat */
 #define L_ctermid 9
-#define L_cuserid 9
-#endif
+char* ctermid(char* s); /* returns "/dev/tty" */
 
 void flockfile(FILE* f) __THROW;
 void funlockfile(FILE* f) __THROW;

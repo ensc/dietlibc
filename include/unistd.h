@@ -228,6 +228,7 @@ void setusershell(void);
 void endusershell(void);
 #endif
 
+/* this is so bad, we moved it to -lcompat */
 #define   L_cuserid   17
 char * cuserid(char * string); /* ugh! */
 

@@ -46,4 +46,7 @@ struct ipc_perm {
   unsigned short	seq;
 };
 
+/* this is so bad, we moved it to -lcompat */
+key_t ftok(const char *pathname, int proj_id);
+
 #endif
