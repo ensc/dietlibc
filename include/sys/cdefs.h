@@ -1,8 +1,6 @@
 #ifndef _SYS_CDEFS_H
 #define _SYS_CDEFS_H
 
-#define __dietlibc__
-
 #ifndef __cplusplus
 #define __THROW
 #define __BEGIN_DECLS
