@@ -5,7 +5,7 @@
 #ifdef __DIET_LD_SO__
 static
 #endif
-void *_dlsym(void*handle,char*symbol) {
+void *_dlsym(void* handle,const char* symbol) {
   unsigned long*sym=0;
   if (handle) {
     struct _dl_handle*dh=(struct _dl_handle*)handle;
@@ -78,7 +78,7 @@ void*_dl_sym(struct _dl_handle*dh,int symbol) {
   return sym;
 }
 
-void*dlsym(void*handle,char*symbol) {
+void* dlsym(void* handle,const char* symbol) {
   void*h;
   if (handle==RTLD_DEFAULT || !handle /* RTLD_DEFAULT is NULL on glibc */ )
     h=_dl_sym_search_str(0,symbol);

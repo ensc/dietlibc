@@ -16,7 +16,7 @@ __BEGIN_DECLS
 
 void *dlopen (const char *filename, int flag);
 const char *dlerror(void);
-void *dlsym(void *handle, char *symbol);
+void *dlsym(void *handle, const char *symbol);
 int dlclose (void *handle);
 
 __END_DECLS
