@@ -121,9 +121,10 @@ $(OBJDIR)/%.o: %.c
 	$(CROSS)$(CC) -I. -Iinclude $(CFLAGS) -c $< -o $@
 	$(COMMENT) $(CROSS)strip -x -R .comment -R .note $@
 
-DIETLIBC_OBJ = $(SYSCALLOBJ) $(LIBOBJ) $(LIBSTDIOOBJ) $(LIBUGLYOBJ) \
+DIETLIBC_OBJ = $(OBJDIR)/unified.o \
+$(SYSCALLOBJ) $(LIBOBJ) $(LIBSTDIOOBJ) $(LIBUGLYOBJ) \
 $(LIBCRUFTOBJ) $(LIBCRYPTOBJ) $(LIBSHELLOBJ) $(LIBREGEXOBJ) \
-$(OBJDIR)/__longjmp.o $(OBJDIR)/setjmp.o $(OBJDIR)/unified.o \
+$(OBJDIR)/__longjmp.o $(OBJDIR)/setjmp.o \
 $(OBJDIR)/mmap.o $(OBJDIR)/clone.o
 
 $(OBJDIR)/dietlibc.a: $(DIETLIBC_OBJ) $(OBJDIR)/start.o

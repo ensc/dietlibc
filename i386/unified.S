@@ -2,10 +2,10 @@
 #include <dietfeatures.h>
 
 .text
-.global _exit
 .weak exit
-_exit:
 exit:
+.global _exit
+_exit:
 	movb	$1,%al
 #ifndef __DYN_LIB
 .global __unified_syscall
