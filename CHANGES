@@ -29,6 +29,7 @@
   more MIPS fixes (the stoned MIPS ABI for restartable syscalls expects
     the instruction before the syscall to be a load immediate)
   fix fread() from a pipe (oops, tried to lseek)
+  #define _POSIX_VDISABLE in termios.h (Laurent Bercot)
 
 0.21:
   use gcc's size_t, ptrdiff_t and wchar_t types (Olaf)

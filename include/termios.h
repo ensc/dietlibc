@@ -76,6 +76,8 @@ typedef unsigned char	cc_t;
 typedef unsigned int	speed_t;
 typedef unsigned int	tcflag_t;
 
+#define _POSIX_VDISABLE '\0'
+
 #if defined(__i386__) || defined(__arm__) || defined(__ia64__) || defined(__hppa__) || defined(__s390__) || defined(__s390x__) || defined(__x86_64__)
 #define NCCS	19
 struct termios {
