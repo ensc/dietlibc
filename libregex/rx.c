@@ -335,6 +335,7 @@ static const char* parseregex(struct regex*__restrict__ r,const char*__restrict_
   const char *tmp;
   r->m=matchregex;
   r->num=0; r->b=0; r->pieces=0;
+  p->brackets=0;
   for (;;) {
     tmp=parsebranch(&b,s,p,&r->pieces);
     if (tmp==s) return s;
