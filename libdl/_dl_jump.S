@@ -11,8 +11,8 @@ _dl_jump:
 
 	pushl	%ebx
 
-	push	20(%esp)	# 2. arg from plt
-	push	20(%esp)	# 1. arg from plt
+	pushl	24(%esp)	# 2. arg from plt
+	pushl	24(%esp)	# 1. arg from plt
 #ifdef __DYN_LIB
 	call	1f
 1:	popl	%ebx
@@ -21,7 +21,7 @@ _dl_jump:
 #else
 	call	do_rel
 #endif
-	add	$8, %esp
+	addl	$8, %esp
 
 	popl	%ebx
 
