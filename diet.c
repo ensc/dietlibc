@@ -62,7 +62,7 @@ int main(int argc,char *argv[]) {
       int len=strlen(platform);
       --tmp2;
       if (tmp2-cc>90) error("platform name too long!\n");
-      memmove(platform+len,argv[1],tmp2-cc);
+      memmove(platform+len,argv[1],(size_t)(tmp2-cc));
       platform[tmp2-cc+len]=0;
       if (platform[0]=='i' && platform[2]=='8' && platform[3]=='6') platform[1]='3';
 /*      printf("found platform %s\n",platform); */
@@ -141,7 +141,7 @@ int main(int argc,char *argv[]) {
 	  if (strcmp(*o,platform)) {
 	    ++o;
 	    while (*o) {
-	      *dest++=*o;
+	      *dest++=(char*)*o;
 	      ++o;
 	    }
 	  } else

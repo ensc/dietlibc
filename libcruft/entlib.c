@@ -42,6 +42,7 @@ int __ent_start(const char *pathname, struct __ent_state **st_ref)
 		st = NULL;
 		return -1;
 	}
+	fcntl (st->fd, F_SETFD, FD_CLOEXEC);	/* if it fails: too bad */
 
 	*st_ref = st;
 	return 0;

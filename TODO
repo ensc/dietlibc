@@ -2,8 +2,6 @@
 
 real regerror
 
-real DNS errors (gai_strerror,hstrerror,...)
-
 Try to improve code size and quality with __restrict__.
 
 FPU exception handling (for mawk)
