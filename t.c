@@ -54,8 +54,11 @@ int compar(const void*a,const void*b) {
 }
 
 int main(int argc,char *argv[]) {
-  char foo[10]="abcdefghij";
-  printf("%c\n",*((char*)bsearch("j",foo,10,1,compar)));
+  char foo[10]="none,zlib";
+  char *tmp,*tmp2=foo;
+  while (tmp=strsep(&tmp2,",")) {
+    puts(tmp);
+  }
 #if 0
   char foo[10];
   printf("%d %d\n",abs(-3),abs(23));

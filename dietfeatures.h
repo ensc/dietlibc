@@ -24,6 +24,12 @@
 /* read the comment in lib/strncat.c for an explanation */
 /* #define WANT_NON_COMPLIANT_STRNCAT */
 
+/* strsep, according to the Linux man page, when called on "foo,bar"
+ * with separator ",", should return "foo" and then NULL.  glibc,
+ * however, returns "foo", then "bar", and then NULL.  The man page
+ * behaviour breaks openssh, so you might want to have glibc behaviour. */
+#define WANT_BUGGY_GLIBC_STRSEP
+
 /* do you want ungetc?  makes fgetc more complex */
 #define WANT_UNGETC
 
