@@ -67,7 +67,6 @@ int execl(const char *path, ...) __THROW;
 
 pid_t getpid(void) __attribute__((__const__)) __THROW;
 pid_t getppid(void) __THROW;
-int kill(pid_t pid, int sig) __THROW;
 
 int setpgid (pid_t pid,pid_t pgid) __THROW;
 pid_t getpgid (pid_t pid) __THROW;

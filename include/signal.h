@@ -19,6 +19,7 @@ sighandler_t signal(int signum, sighandler_t action);
 int raise (int sig) __THROW;
 int sigaction(int signum, const struct sigaction *act, struct sigaction *oldact) __THROW;
 int sigaltstack(const struct sigaltstack *newstack, struct sigaltstack *oldstack) __THROW;
+int kill(pid_t pid, int sig) __THROW;
 
 int sigsuspend(const sigset_t *mask) __THROW;
 int sigpending(sigset_t *set) __THROW;
