@@ -123,6 +123,8 @@ int dn_expand(unsigned char *msg, unsigned char *eomorig,
       unsigned char *comp_dn, unsigned char *exp_dn,
       int length) __THROW;
 
+void res_close(void) __THROW __attribute_dontuse__;
+
 __END_DECLS
 
 #endif

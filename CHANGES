@@ -14,6 +14,9 @@
   Add MNT_DETACH to sys/mount.h
   add pselect
   fix for tzfile (Felix J. Ogris)
+  add res_close to close the DNS UDP sockets
+  remove ia64/waitpid.S; it was broken and there is a working C version
+    (Gerrit Pape)
 
 0.25:
   fix sprintf
