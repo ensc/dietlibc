@@ -87,8 +87,8 @@ void foo(int tmp,...) {
 
 int main(int argc,char *argv[]) {
   char buf[20]="fnord";
-/*  printf("%s\n",memmem("x86-linux-gcc",20,"gcc",3)); */
-  printf("%d\n",strcmp(buf,"fnord"));
+  printf("%s\n",memmem("x86-linux-gcc",12,"gcc",3));
+/*  printf("%d\n",strcmp(buf,"fnord")); */
 #if 0
   regex_t r;
 //  printf("regcomp %d\n",regcomp(&r,"^(re([\\[0-9\\]+])*|aw):[ \t]*",REG_EXTENDED));
