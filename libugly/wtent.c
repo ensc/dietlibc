@@ -23,7 +23,14 @@ void logwtmp(const char *line, const char *name, const char *host) {
   memccpy (ut.ut_name, name, 0, sizeof ut.ut_name);
   memccpy (ut.ut_host, host, 0, sizeof ut.ut_host);
 
-  gettimeofday (&ut.ut_tv, NULL);
+  if (sizeof(ut.ut_tv) == sizeof(struct timeval))
+    gettimeofday((struct timeval *)&ut.ut_tv, NULL);
+  else {
+	struct timeval tv;
+	gettimeofday(&tv, NULL);
+	ut.ut_tv.tv_sec = tv.tv_sec;
+	ut.ut_tv.tv_usec = tv.tv_usec;
+  }
 
   updwtmp (_PATH_WTMP, &ut);
 }

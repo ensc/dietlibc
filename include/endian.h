@@ -51,6 +51,10 @@
 #define __WORDSIZE 64
 #endif
 
+#if defined(__x86_64__) || defined(__powerpc64__) || defined(__sparc_v9__)
+#define __WORDSIZE_COMPAT32 1
+#endif
+
 #if defined(__sparc__) && (__arch64__)
 #define __WORDSIZE 64
 #endif
