@@ -213,13 +213,48 @@ __extension__ (*({							   \
 /* Copy va_list into another variable of this type.  */
 #define va_copy(dest, src) *(dest) = *(src)
 
-#else	/* !__sparc__ && !__powerpc__ */
+#elif defined(__alpha__)
 
 typedef char* va_list;
+#define va_start(pvar, firstarg)				\
+  (__builtin_next_arg (firstarg),				\
+   (pvar) = __builtin_saveregs ())
+#define va_end(__va)	((void) 0)
 
-#ifndef __i386__
-#warning "stdarg for this platform is untested!"
-#endif
+enum {
+  __no_type_class = -1,
+  __void_type_class,
+  __integer_type_class,
+  __char_type_class,
+  __enumeral_type_class,
+  __boolean_type_class,
+  __pointer_type_class,
+  __reference_type_class,
+  __offset_type_class,
+  __real_type_class,
+  __complex_type_class,
+  __function_type_class,
+  __method_type_class,
+  __record_type_class,
+  __union_type_class,
+  __array_type_class,
+  __string_type_class,
+  __set_type_class,
+  __file_type_class,
+  __lang_type_class
+};
+
+#define __va_tsize(__type)  \
+  (((sizeof (__type) + __extension__ sizeof (long long) - 1)   \
+    / __extension__ sizeof (long long)) * __extension__ sizeof (long long))
+
+#define va_arg(__va, __type)						\
+(*(((__va) += __va_tsize (__type)),					\
+   (__type *)(void *)((__va) - __va_tsize (__type))))
+
+#else	/* !__sparc__ && !__powerpc__ && !__mips__ && !__alpha__*/
+
+typedef char* va_list;
 
 /* this only works when everything is passed on the stack (i.e. x86) */
 #if __WORDSIZE == 64
