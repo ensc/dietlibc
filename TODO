@@ -47,3 +47,5 @@ ucontext.h (that looks nasty)
 printf %e
 
 move DNS stuff to libresolv.a?
+
+x86_64: readdir and regex fail their tests (Gwenole Beauchesne)
