@@ -20,6 +20,7 @@
     it improves the optimizer when functions return malloced pointers.
   Steven Rostedt pointed out that my setvbuf was broken with regard to
     size==0 and sent a patch to fix it.
+  Thomas Ogrisegg made setenv smaller.
 
 0.13:
   add readdir64 and automatic mapping if _FILE_OFFSET_BITS == 64
