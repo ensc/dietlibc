@@ -160,3 +160,12 @@ A: I started adding a few of them to libcompat.  You have to link it in
    manually, though, as using them is bad for portability and I want
    people to make a conscious effort to write non-portable applications
    by not including them in the libc itself.
+
+
+Q: I'm just starting with the diet libc.  Should I use the tarball or
+   the CVS version?
+A: Always use the CVS version.  We generally don't add unstable test
+   stuff on the CVS tree, and our APIs are stable (they are
+   standardized, remember?).  In fact, we don't add much stuff at all.
+   Most changes are bug fixes and optimizations, and in general you'll
+   want those.
