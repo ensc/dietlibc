@@ -1,18 +1,24 @@
 #include "dietfeatures.h"
 #include <unistd.h>
 #include <string.h>
-#include <stdio.h>
 
 #define _BSD_SOURCE
 #include <errno.h>
 
-void perror(const char *s) {
-  register const char *message="[unknown error]";
-  register int save=errno;
-  write(2,s,strlen(s));
-  write(2,": ",2);
-  if (save>=0 && save<sys_nerr)
-    message=sys_errlist[save];
-  write(2,message,strlen(message));
-  write(2,"\n",1);
+#define __NO_CODE
+#include "errlist.c"
+
+extern const char  __sys_err_unknown [];
+
+void  perror ( const char* prepend )
+{
+    register const char* message = __sys_err_unknown;
+
+    if ( (unsigned int) errno < (unsigned int) __SYS_NERR )
+        message = sys_errlist [errno];
+
+    write ( 2, prepend, strlen(prepend) );
+    write ( 2, ": ", 2 );
+    write ( 2, message, strlen(message) );
+    write ( 2, "\n", 1 );
 }

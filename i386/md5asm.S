@@ -1,4 +1,3 @@
-
 #define S11   7
 #define S12  12
 #define S13  17
@@ -47,16 +46,6 @@
 #define II(a, b, c, d, x, s, ac)   addl x, a; addl $ac,a; I (b, c, d); addl %eax,a; roll $s,a; addl b,a
 
 
-/* MD5 basic transformation: Transforms state based on data block */
-
-// static void  __MD5Transform ( word state[4], const word* x, size_t repeat )
-
-.text
-.type __MD5Transform, @function
-.align 32
-.global __MD5Transform
-__MD5Transform:
-
 //			    // x is ecx
 //    word  a = state [0];  // a is edx
 //    word  b = state [1];  // b is esi
@@ -70,14 +59,18 @@ __MD5Transform:
 #define c       %edi
 #define d       %ebp
 
-	pushal
-	movl	8+32(%esp),%ecx		// x
-	movl	4+32(%esp),%eax		// state
-	movl	  (%eax),a
-	movl	 4(%eax),b
-	movl	 8(%eax),c
-	movl	12(%eax),d
 
+
+/* MD5 basic transformation: Transforms state based on data block */
+
+// void  __MD5Transform ( word state[4], const word* x, size_t repeat )
+
+.text
+.type __MD5Transform, @function
+.align 32
+.global __MD5Transform
+
+	.align	32
 repeat:	
 
         /* Round 1 */
@@ -157,6 +150,8 @@ repeat:
 //    state [2] += c;
 //    state [3] += d;
 
+	addl	$64,%ecx
+	
 	movl	4+32(%esp),%eax		// state
 	addl	  (%eax),a
 	addl	 4(%eax),b
@@ -167,12 +162,139 @@ repeat:
 	movl	c, 8(%eax)
 	movl	d,12(%eax)
 
-	addl	$64,%ecx
+start:
 	decl	12+32(%esp)
-	jnz	repeat
+	jns	repeat
     
 	popal
 	ret
+
+__MD5Transform:
+	pushal
+	movl	8+32(%esp),%ecx		// x
+	movl	4+32(%esp),%eax		// state
+	movl	  (%eax),a
+	movl	 4(%eax),b
+	movl	 8(%eax),c
+	movl	12(%eax),d
+	jmp	start
 	
 .Lende:
 .size	__MD5Transform, .Lende-__MD5Transform
+
+.type	 __MD5Init,@function
+.global	 __MD5Init
+
+__MD5Init:
+	movl 	4(%esp), %ecx
+	xorl	%eax,%eax
+	movl 	$0x67452301,   (%ecx)
+	movl 	$0xefcdab89,  4(%ecx)
+	movl 	$0x98badcfe,  8(%ecx)
+	movl 	$0x10325476, 12(%ecx)
+	movl 	%eax, 16(%ecx)
+	movl 	%eax, 20(%ecx)
+	ret
+
+
+.global __MD5Update
+.type	__MD5Update,@function
+
+
+// void  MD5Update ( MD5_CTX* context, const byte* input, size_t inputBytes )
+
+#define CONTEXT		 4+32(%esp)
+#define INPUT		 8+32(%esp)
+#define INPUTBYTES	12+32(%esp)
+
+#define	COUNT		16(%ebx)
+#define BUFFER		24(%ebx)
+
+
+__MD5Update:
+	pushal
+	cld
+	movl 	CONTEXT, %ebx
+
+//  ByteIndex = (context->count[0] >> 3) & 0x3F;
+
+	movl 	COUNT, %ebp
+	shrl 	$3, %ebp
+	andl 	$63,%ebp		; ebp = ByteIndex	
+
+//  if ( (context->count[0] += inputBytes << 3 ) < (inputBytes << 3) )
+//      context->count[1]++;
+//  context->count[1] += inputBytes >> (32-3);
+
+	movl	$8, %eax
+	mull	INPUTBYTES
+	addl	%eax, 0+COUNT
+	adcl	%edx, 4+COUNT
+
+// partLen = 64 - ByteIndex;
+
+	movl	$64, %eax
+	subl	%ebp, %eax		; eax = partLen
+
+// i = 0;
+// if ( partLen <= inputBytes ) {
+
+	xorl	%ecx,%ecx		; ecx = i
+	cmpl	INPUTBYTES, %eax	
+	ja 	ende
+
+//      memcpy ( context->buffer + ByteIndex, input, partLen );
+
+	leal	24(%ebx,%ebp,1), %edi
+	movl	INPUT, %esi
+	movl	%eax, %ecx
+	rep	movsb
+	
+//      MD5Transform ( context->state, context->buffer, 1 );
+
+	pushl	$1
+	leal	BUFFER, %ecx
+	pushl	%ecx
+	push	%ebx
+	call	__MD5Transform
+
+//      len = (inputBytes - partLen) / 64;
+
+	movl	12+INPUTBYTES, %ecx
+	subl	%eax, %ecx
+	shrl	$6, %ecx
+
+//      MD5Transform ( context->state, input+partLen, len );
+	
+	pushl	%ecx
+	pushl	%esi
+	pushl	%ebx
+	call	__MD5Transform
+	addl	$24,%esp
+	
+//	i = partLen + 64 * len;
+//	ByteIndex = 0;
+	
+	shll	$6, %ecx
+	addl	%eax, %ecx
+	xorl	%ebp, %ebp
+	
+ende:	
+
+//  }
+//  memcpy ( context->buffer + ByteIndex, input + i, inputBytes - i );
+
+	movl	INPUT, %esi
+	addl	%ecx, %esi
+
+	negl	%ecx
+	addl	INPUTBYTES, %ecx
+	
+	leal	24(%ebx,%ebp,1), %edi
+	rep	movsb
+
+	popal
+	ret
+
+
+
