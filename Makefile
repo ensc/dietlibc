@@ -141,7 +141,7 @@ PICODIR = pic-$(ARCH)
 $(PICODIR):
 	mkdir $@
 
-dyn_lib: $(PICODIR) $(PICODIR)/libdietc.so $(PICODIR)/start.o $(PICODIR)/libpthread.so
+dyn_lib: $(PICODIR) $(PICODIR)/libdietc.so $(PICODIR)/start.o $(PICODIR)/libpthread.so $(PICODIR)/libdl.so
 
 $(PICODIR)/%.o: %.S
 	$(CROSS)$(CC) -I. -Iinclude $(CFLAGS) -fPIC -D__DYN_LIB -c $< -o $@
@@ -164,11 +164,16 @@ DYN_LIBC_OBJ = $(PICODIR)/dyn_syscalls.o $(PICODIR)/errlist.o \
 
 DYN_PTHREAD_OBJS = $(patsubst $(OBJDIR)/%.o,$(PICODIR)/%.o,$(LIBPTHREAD_OBJS))
 
+DYN_LIBDL_OBJS = $(patsubst $(OBJDIR)/%.o,$(PICODIR)/%.o,$(LIBDLOBJ))
+
 $(PICODIR)/libdietc.so: $(PICODIR) $(DYN_LIBC_OBJ)
-	$(CROSS)gcc -nostdlib -shared -o $@ $(CFLAGS) -fPIC $(DYN_LIBC_OBJ)
+	$(CROSS)$(CC) -nostdlib -shared -o $@ $(CFLAGS) -fPIC $(DYN_LIBC_OBJ)
 
 $(PICODIR)/libpthread.so: $(DYN_PTHREAD_OBJS) dietfeatures.h
 	$(CROSS)$(CC) -nostdlib -shared -o $@ $(CFLAGS) -fPIC $(DYN_PTHREAD_OBJS) -L$(PICODIR) -ldietc
+
+$(PICODIR)/libdl.so: $(DYN_LIBDL_OBJS) dietfeatures.h
+	$(CROSS)$(CC) -nostdlib -shared -o $@ $(CFLAGS) -fPIC $(DYN_LIBDL_OBJS) -L$(PICODIR) -ldietc
 
 
 $(SYSCALLOBJ): syscalls.h
