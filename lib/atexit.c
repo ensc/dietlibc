@@ -17,12 +17,12 @@ int atexit(function t) {
 }
 
 extern void _exit(int code) __attribute__((noreturn));
-extern void __thread_doexit();
+extern void __thread_doexit(int doexit);
 
 void __libc_exit(int code);
 void __libc_exit(int code) {
   register int i=atexit_counter;
-  __thread_doexit();
+  __thread_doexit(code);
   while(i) {
     __atexitlist[--i]();
   }
