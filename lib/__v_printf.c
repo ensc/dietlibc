@@ -243,11 +243,15 @@ num_printf:
 	    }
 	  }
 	  if (g) {
-	    char *tmp;
+	    char *tmp,*tmp1;	/* boy, is _this_ ugly! */
 	    if ((tmp=strchr(buf,'.'))) {
+	      tmp1=strchr(tmp,'e');
 	      while (*tmp) ++tmp;
+	      if (tmp1) tmp=tmp1;
 	      while (*--tmp=='0') ;
-	      if (*--tmp=='.') *tmp=0; else tmp[1]=0;
+	      if (*tmp!='.') ++tmp;
+	      *tmp=0;
+	      if (tmp1) strcpy(tmp,tmp1);
 	    }
 	  }
 	  sz=strlen(buf);

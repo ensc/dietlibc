@@ -24,3 +24,5 @@ test .*scanf functions ....
 EINTR handling (*puke*).  What about EAGAIN?
 
 bizarre printf bullshit: "%8.7lx",0xfefe should yield " 000fefe"?!
+
+fix %f and %g in printf.  They are more or less completely b0rken.
