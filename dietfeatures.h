@@ -58,6 +58,10 @@
 /* do you want gethostbyname and friends to consult /etc/hosts? */
 #define WANT_ETC_HOSTS
 
+/* do you want gethostbyname to understand dotted decimal IP numbers
+ * directly and not try to resolve them? */
+#define WANT_INET_ADDR_DNS
+
 /* do you want math functions high precision rather than fast/small? */
 #define WANT_HIGH_PRECISION_MATH
 

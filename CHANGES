@@ -3,6 +3,8 @@
   use -G 8 on MIPS to reduce code size (Johannes Stezenbach)
   add munlock (Jens Låås)
   argh, atexit fell victim to bit rot (or maybe Olaf)
+  add WANT_INET_ADDR_DNS to make gethostbyname not look up IP numbers
+    but use them to fill in the struct hostent directly.
 
 0.20:
   calloc was botched

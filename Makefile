@@ -405,4 +405,8 @@ $(OBJDIR)/seteuid.o: dietfeatures.h
 $(OBJDIR)/strncpy.o: dietfeatures.h
 $(OBJDIR)/strxfrm.o: dietfeatures.h
 
+# these depend on dietfeatures.h for WANT_INET_ADDR_DNS
+$(OBJDIR)/gethostbyname_r.o: dietfeatures.h
+
+
 # CFLAGS+=-W -Wshadow -Wid-clash-31 -Wpointer-arith -Wcast-align -Wstrict-prototypes -Wwrite-strings
