@@ -177,7 +177,7 @@ $(OBJDIR)/librpc.a: $(LIBRPCOBJ)
 
 $(OBJDIR)/libcrypt.a:
 	touch dummy.c
-	$(CROSS)gcc -c dummy.c
+	$(CROSS)$(CC)gcc -c dummy.c
 	$(CROSS)ar cru $@ dummy.o
 	rm -f dummy.c dummy.o
 
