@@ -8,6 +8,10 @@ size_t fread_unlocked(void *ptr, size_t size, size_t nmemb, FILE *stream) {
   j=size*nmemb;
   i=0;
 
+  if (!(stream->flags&CANREAD)) {
+    stream->flags|=ERRORINDICATOR;
+    return 0;
+  }
   if (!j || j/nmemb!=size) return 0;
   if (stream->ungotten) {
     stream->ungotten=0;
@@ -20,7 +24,7 @@ size_t fread_unlocked(void *ptr, size_t size, size_t nmemb, FILE *stream) {
   if ( !(stream->flags&FDPIPE) && (j>stream->buflen)) {
     size_t tmp=j-i;
     int res;
-    fflush_unlocked(stream);
+    if (fflush_unlocked(stream)) return 0;
     while ((res=__libc_read(stream->fd,ptr+i,tmp))<(int)tmp) {
       if (res==-1) {
 	stream->flags|=ERRORINDICATOR;

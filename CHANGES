@@ -34,6 +34,7 @@
   add ar.h (for GNU make)
   replace qsort with new quicksort with three-way partitioning
   parisc start.S fix (Gerrit Pape)
+  check fflush return code (Manuel Novoa III)
 
 0.23:
   update sys/soundcard.h

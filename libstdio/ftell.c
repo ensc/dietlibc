@@ -4,18 +4,10 @@
 
 long ftell_unlocked(FILE *stream) {
   off_t l;
-  fflush_unlocked(stream);
+  if (fflush_unlocked(stream)) return -1;
   l=lseek(stream->fd,0,SEEK_CUR);
   if (l==-1) return -1;
-  l-=stream->ungotten;
-  {
-    long x=l;
-    if (x!=l) {
-      errno=EOVERFLOW;
-      return -1;
-    }
-    return x;
-  }
+  return l-stream->ungotten;
 }
 
 long ftell(FILE *stream) __attribute__((weak,alias("ftell_unlocked")));

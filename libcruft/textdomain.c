@@ -1,5 +1,6 @@
 #include <libintl.h>
 #include <string.h>
+#include <stdlib.h>
 
 static char* dom;
 

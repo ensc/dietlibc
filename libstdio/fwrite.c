@@ -7,9 +7,13 @@ size_t fwrite_unlocked(const void *ptr, size_t size, size_t nmemb, FILE *stream)
   int res;
   unsigned long len=size*nmemb;
   long i;
+  if (!(stream->flags&CANWRITE)) {
+    stream->flags|=ERRORINDICATOR;
+    return 0;
+  }
   if (!nmemb || len/nmemb!=size) return 0; /* check for integer overflow */
   if (len>stream->buflen || (stream->flags&NOBUF)) {
-    fflush_unlocked(stream);
+    if (fflush_unlocked(stream)) return 0;
     do {
       res=__libc_write(stream->fd,ptr,size*nmemb);
     } while (res==-1 && errno==EINTR);

@@ -3,7 +3,7 @@
 
 off_t ftello_unlocked(FILE *stream) {
   off_t l;
-  fflush_unlocked(stream);
+  if (fflush_unlocked(stream)) return -1;
   return ((l=lseek(stream->fd,0,SEEK_CUR))==-1?-1:l-stream->ungotten);
 }
 
