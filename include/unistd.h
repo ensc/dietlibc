@@ -68,8 +68,8 @@ int mknod(const char *pathname, mode_t mode, dev_t dev) __THROW;
 int getdents(unsigned int fd, struct dirent *dirp, unsigned int count) __THROW;
 int getdents64(unsigned int fd, struct dirent64 *dirp, unsigned int count) __THROW;
 
-pid_t fork() __THROW;
-pid_t vfork() __THROW;
+pid_t fork(void) __THROW;
+pid_t vfork(void) __THROW;
 
 int readlink(const char *path, char *buf, size_t bufsiz) __THROW;
 int symlink(const char *oldpath, const char *newpath) __THROW;
@@ -78,6 +78,8 @@ int link(const char *oldpath, const char *newpath) __THROW;
 int chown(const char *path, uid_t owner, gid_t group) __THROW;
 int fchown(int fd, uid_t owner, gid_t group) __THROW;
 int lchown(const char *path, uid_t owner, gid_t group) __THROW;
+
+int fsync(int fd) __THROW;
 
 int pipe(int filedes[2]) __THROW;
 
@@ -106,7 +108,7 @@ extern int daemon (int nochdir,int noclose) __THROW;
 #define creat creat64
 #endif
 
-extern char* getlogin() __THROW;
+extern char* getlogin(void) __THROW;
 /* warning: the diet libc getlogin() simply returns getenv("LOGNAME") */
 
 int chroot(const char *path) __THROW;
