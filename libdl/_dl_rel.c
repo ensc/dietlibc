@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <dlfcn.h>
 
 #include "_dl_int.h"

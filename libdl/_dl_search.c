@@ -4,7 +4,6 @@
 #include <dlfcn.h>
 
 #include <fcntl.h>
-#include <stdio.h>
 
 #include "_dl_int.h"
 

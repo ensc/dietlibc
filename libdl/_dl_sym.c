@@ -1,5 +1,4 @@
 #include "_dl_int.h"
-#include <stdio.h>
 
 #if 0
 static void dummy(unsigned long t) {

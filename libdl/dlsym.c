@@ -1,5 +1,3 @@
-#include <stdio.h>
-
 #include "_dl_int.h"
 
 void *_dlsym(void *handle, char *symbol)

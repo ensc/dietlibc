@@ -1,5 +1,3 @@
-#include <stdio.h>
-
 #include "_dl_int.h"
 
 #if 0
@@ -10,8 +8,8 @@
   R_386_RELATIVE:	// 8
 
 --- are this relocation types vital to shared objects ? ---
-  R_386_PLT32:
-  R_386_PC32:
+  R_386_PC32
+  R_386_PLT32
   R_386_GOTPC:
   R_386_GOT32:
   R_386_GOTOFF:
@@ -24,7 +22,7 @@ int _dl_apply_relocate(struct _dl_handle* dh, Elf32_Rel *rel) {
   rel = (void*)rel+(long)dh->mem_base;
   loc = (Elf32_Addr *)(dh->mem_base+rel->r_offset);
 
-  DEBUG("_dl_apply_relocate %d @ %08lx\n",ELF32_R_TYPE(rel->r_info),(unsigned long)loc);
+  DEBUG("_dl_apply_relocate %d @ %08lx (%08lx)\n",ELF32_R_TYPE(rel->r_info),(unsigned long)loc,*(unsigned long*)loc);
 
   typ = ELF32_R_TYPE(rel->r_info);
 
@@ -38,6 +36,7 @@ int _dl_apply_relocate(struct _dl_handle* dh, Elf32_Rel *rel) {
   } else
     ret=1;
 
+  DEBUG("_dl_apply_relocate @ %08lx val %08lx\n",(unsigned long)loc,*(unsigned long*)loc);
   return ret;
 }
 

@@ -4,7 +4,9 @@
 #include <elf.h>
 #include <dlfcn.h>
 
-#ifdef DEBUG_ALL
+
+#if 0
+#include <stdio.h>
 #define DEBUG(x, args...)	printf(x , ## args )
 #else
 #define DEBUG(x, args...)

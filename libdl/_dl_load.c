@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <string.h>
 #include <unistd.h>
 #include <sys/mman.h>
@@ -31,7 +30,7 @@ static inline void *do_map_in(void *base, unsigned long length, int flags, int f
 {
   register int op = MAP_PRIVATE;
   if (base) op|=MAP_FIXED;
-  return mmap(base, length, flags, op, fd, offset);
+  return mmap(base, length, map_flags(flags), op, fd, offset);
 }
 
 static struct _dl_handle *_dl_map_lib(const char*fn, const char*pathname, int fd, int flags)
@@ -89,8 +88,7 @@ static struct _dl_handle *_dl_map_lib(const char*fn, const char*pathname, int fd
     unsigned long length = _ELF_UP_ROUND(ps,ld[0]->p_memsz+off);
     ret = _dl_get_handle();
 
-    ret->lnk_count = map_flags(ld[0]->p_flags); /* missuse of field */
-    m = (char*)do_map_in(0, length, ret->lnk_count, fd, offset);
+    m = (char*)do_map_in(0, length, ld[0]->p_flags, fd, offset);
     if (m==MAP_FAILED) { _dl_free_handle(ret); close(fd); return 0; }
 
     /* zero pad bss */
@@ -99,7 +97,6 @@ static struct _dl_handle *_dl_map_lib(const char*fn, const char*pathname, int fd
 
     ret->mem_base=m;
     ret->mem_size=length;
-    ret->text_size=length;
   }
   else if (ld_nr==2) { /* aem... yes Quick & Really Dirty / for the avarage 99% */
 //    unsigned long text_addr = _ELF_DWN_ROUND(ps,ld[0]->p_vaddr);	/* do we need this ? */
@@ -115,15 +112,14 @@ static struct _dl_handle *_dl_map_lib(const char*fn, const char*pathname, int fd
 
     ret = _dl_get_handle();
     /* mmap all mem_blocks for *.so */
-    ret->lnk_count = map_flags(ld[0]->p_flags); /* missuse of field */
-    m = (char*) do_map_in(0,text_size+data_size,ret->lnk_count,fd,text_offset);
+    m = (char*) do_map_in(0,text_size+data_size,ld[0]->p_flags,fd,text_offset);
     if (m==MAP_FAILED) { _dl_free_handle(ret); close(fd); return 0; }
 
     /* release data,bss part */
     mprotect(m+data_addr, data_size, PROT_NONE);
 
     /* mmap data,bss part */
-    d = (char*) do_map_in(m+data_addr,data_fsize,map_flags(ld[1]->p_flags),fd,data_offset);
+    d = (char*) do_map_in(m+data_addr,data_fsize,ld[1]->p_flags,fd,data_offset);
 
     /* zero pad bss */
     l = data_off+ld[1]->p_filesz;
@@ -137,7 +133,6 @@ static struct _dl_handle *_dl_map_lib(const char*fn, const char*pathname, int fd
 
     ret->mem_base=m;
     ret->mem_size=text_size+data_size;
-    ret->text_size=text_size;
   }
 
   if (ret) {
@@ -183,67 +178,63 @@ struct _dl_handle* _dl_dyn_scan(struct _dl_handle* dh, void* dyn_addr, int flags
       dh->hash_tab = (unsigned long*)(dh->mem_base+dyn_tab[i].d_un.d_ptr);
       DEBUG("_dl_load have hash @ %08lx\n",(long)dh->hash_tab);
     }
-    if (dyn_tab[i].d_tag==DT_SYMTAB) {
+    else if (dyn_tab[i].d_tag==DT_SYMTAB) {
       dh->dyn_sym_tab = (Elf32_Sym*)(dh->mem_base+dyn_tab[i].d_un.d_ptr);
       DEBUG("_dl_load have dyn_sym_tab @ %08lx\n",(long)dh->dyn_sym_tab);
     }
-    if (dyn_tab[i].d_tag==DT_STRTAB) {
+    else if (dyn_tab[i].d_tag==DT_STRTAB) {
       dh->dyn_str_tab = (char*)(dh->mem_base+dyn_tab[i].d_un.d_ptr);
       DEBUG("_dl_load have dyn_str_tab @ %08lx\n",(long)dh->dyn_str_tab);
     }
 
     /* INIT / FINI */
-    if (dyn_tab[i].d_tag==DT_FINI) {
+    else if (dyn_tab[i].d_tag==DT_FINI) {
       dh->fini = (void(*)(void))(dh->mem_base+dyn_tab[i].d_un.d_val);
       DEBUG("_dl_load have fini @ %08lx\n",(long)dh->fini);
     }
-    if (dyn_tab[i].d_tag==DT_INIT) {
+    else if (dyn_tab[i].d_tag==DT_INIT) {
       init = (void(*)(void))(dh->mem_base+dyn_tab[i].d_un.d_val);
       DEBUG("_dl_load have init @ %08lx\n",(long)init);
     }
 
     /* PLT / Relocation entries for PLT in GOT */
-    if (dyn_tab[i].d_tag==DT_PLTGOT) {
+    else if (dyn_tab[i].d_tag==DT_PLTGOT) {
       got=(unsigned long*)(dh->mem_base+dyn_tab[i].d_un.d_val);
       dh->pltgot=got;
       DEBUG("_dl_load have plt got @ %08lx\n",(long)got);
     }
-    if (dyn_tab[i].d_tag==DT_PLTREL) {
+    else if (dyn_tab[i].d_tag==DT_PLTREL) {
       pltreltype=dyn_tab[i].d_un.d_val;
       DEBUG("_dl_load have pltreltype @ %08lx\n",(long)pltreltype);
     }
-    if (dyn_tab[i].d_tag==DT_PLTRELSZ) {
+    else if (dyn_tab[i].d_tag==DT_PLTRELSZ) {
       pltrelsize=dyn_tab[i].d_un.d_val;
       DEBUG("_dl_load have pltrelsize @ %08lx\n",(long)pltrelsize);
     }
-    if (dyn_tab[i].d_tag==DT_JMPREL) {
+    else if (dyn_tab[i].d_tag==DT_JMPREL) {
       jmprel=(dh->mem_base+dyn_tab[i].d_un.d_val);
       dh->plt_rel=jmprel;
       DEBUG("_dl_load have jmprel @ %08lx\n",(long)jmprel);
     }
 
     /* Relocation */
-    if (dyn_tab[i].d_tag==DT_REL) {
+    else if (dyn_tab[i].d_tag==DT_REL) {
       rel=dyn_tab[i].d_un.d_val;
       DEBUG("_dl_load have rel @ %08lx\n",(long)rel);
     }
-    if (dyn_tab[i].d_tag==DT_RELENT) {
+    else if (dyn_tab[i].d_tag==DT_RELENT) {
       relent=dyn_tab[i].d_un.d_val;
       DEBUG("_dl_load have relent  @ %08lx\n",(long)relent);
     }
-    if (dyn_tab[i].d_tag==DT_RELSZ) {
+    else if (dyn_tab[i].d_tag==DT_RELSZ) {
       relsize=dyn_tab[i].d_un.d_val;
       DEBUG("_dl_load have relsize @ %08lx\n",(long)relsize);
     }
 
-    if (dyn_tab[i].d_tag==DT_TEXTREL) {
-#if 1
-      textrel=1;
-#else
+    else if (dyn_tab[i].d_tag==DT_TEXTREL) {
       _dl_free_handle(dh);
       _dl_error = 2;
       return 0;
-#endif
     }
   }
   /* extra scan for rpath (if program) ... */
@@ -278,18 +269,11 @@ struct _dl_handle* _dl_dyn_scan(struct _dl_handle* dh, void* dyn_addr, int flags
   }
 
   if (rel) {
-    if (textrel) { /* here unprotect the text as writable IF TEXTREL is given */
-      if (mprotect(dh->mem_base,dh->text_size,PROT_READ|PROT_WRITE)) goto rel_err;
-    }
     DEBUG("_dl_load try to relocate some values\n");
     if (_dl_relocate(dh,(Elf32_Rel*)rel,relsize/relent)) {
-rel_err:
       munmap(dh->mem_base,dh->mem_size);
       _dl_free_handle(dh);
       return 0;
-    }
-    if (textrel) { /* here reprotect the text as readonly IF TEXTREL is given */
-      mprotect(dh->mem_base,dh->text_size,text_flags);
     }
   }
 
