@@ -7,20 +7,11 @@
 .ent	__clone
 .type __clone,@function
 __clone:
-#if 0
-	.set noreorder
-	bltzal $0,0f
-	nop
-0:	.cpload	$31
-	.set reorder
-
-#else
 	.set noreorder
 	.cpload $25
 	.set reorder
 	subu	$29,$29,32
 	.cprestore 16
-#endif
 
 	li	$2, EINVAL
 	beqz	$4, .Lerror
