@@ -25,6 +25,7 @@
   make NULL C++ friendly (Martin Pohlack)
   new realpath (Thomas Ogrisegg)
   fix stupid glibcism in sys/epoll.h
+  add pause for Alpha (Kurt Garloff)
 
 0.24:
   work around incompatible Linux select() modifying the timeout in
