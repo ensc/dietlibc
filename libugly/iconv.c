@@ -1,6 +1,7 @@
 #include "dietfeatures.h"
 #include <errno.h>
 #include "dieticonv.h"
+#include <netinet/in.h>
 
 size_t iconv(iconv_t cd, const char* * inbuf, size_t *
 		    inbytesleft, char* * outbuf, size_t * outbytesleft) {
@@ -11,13 +12,13 @@ size_t iconv(iconv_t cd, const char* * inbuf, size_t *
     unsigned int v=0;
     v=*(unsigned char*)*inbuf;
     i=j=1;
-    switch (cd->from) {
+    switch (ic_from(cd)) {
     case UCS_2:
-      v=*(unsigned short*)*inbuf;
+      v=ntohs(*(unsigned short*)*inbuf);
       i=2;
       break;
     case UCS_4:
-      v=*(unsigned int*)*inbuf;
+      v=ntohs(*(unsigned int*)*inbuf);
       i=4;
     case ISO_8859_1:
       break;
@@ -33,16 +34,16 @@ size_t iconv(iconv_t cd, const char* * inbuf, size_t *
 /*      printf("got %u in %u bytes, buflen %u\n",v,i,*inbytesleft); */
       break;
     }
-    switch (cd->to) {
+    switch (ic_to(cd)) {
     case ISO_8859_1:
       **outbuf=(unsigned char)v;
       break;
     case UCS_2:
-      *(unsigned short*)*outbuf=v;
+      *(unsigned short*)*outbuf=htons(v);
       j=2;
       break;
     case UCS_4:
-      *(unsigned int*)*outbuf=v;
+      *(unsigned int*)*outbuf=htonl(v);
       j=4;
       break;
     case UTF_8:
@@ -65,7 +66,6 @@ size_t iconv(iconv_t cd, const char* * inbuf, size_t *
     }
     *inbuf+=i; *inbytesleft-=i; ++converted;
     *outbuf+=j; *outbytesleft-=j;
-    break;
   }
   return converted;
 }

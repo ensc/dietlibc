@@ -5,7 +5,7 @@
 #include <sys/types.h>
 
 /* Identifier for conversion method from one codeset to another.  */
-typedef struct dieticonv *iconv_t;
+typedef unsigned int iconv_t;
 
 /* Allocate descriptor for code conversion from codeset FROMCODE to
    codeset TOCODE.  */
