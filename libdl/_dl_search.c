@@ -28,13 +28,22 @@ static int _dl_search_path(char*buf,int len,const char*path,const int pathlen,co
       i=strcspn(c,":;");
       if (i) {
 	if (i>ml) continue;	/* if len(path-entry)+len(filename)+2 is greater than the buffer ? SKIP */
-	memcpy(buf,c,i); buf[i]=0;
+	memcpy(buf,c,i);
+#if 1
+	buf[i]=0;
 	l-=i;
 	strncat(buf,"/",l);
       }
       else
 	buf[0]=0;
       strncat(buf,filename,--l);
+#else
+	buf[i]='/';
+	l-=++i;
+      }
+      memcpy(buf+i,filename,fl);
+      buf[i+fl]=0;
+#endif
 //      DEBUG(printf("_dl_search_path: %s\n",buf);)
       if ((fd=open(buf,O_RDONLY))!=-1) return fd;
     }

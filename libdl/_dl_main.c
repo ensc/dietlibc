@@ -21,6 +21,7 @@ static unsigned long at_uid;
 static unsigned long at_euid;
 static unsigned long at_gid;
 static unsigned long at_egid;
+static unsigned long at_pagesize;
 
 #warning "Ignore all warnings about 'used but never defined' functions..."
 static void _dl_jump(void);
@@ -237,6 +238,18 @@ static int strcmp(register const unsigned char *s,register const unsigned char *
   return ((int)(unsigned int)x) - ((int)(unsigned int)*t);
 }
 
+/* strcspn.c */
+static unsigned long strcspn(const char*s, const char*reject) {
+  unsigned long l=0;
+  int a=1,i,al=strlen(reject);
+  while((a)&&(*s)) {
+    for(i=0;(a)&&(i<al);++i) if (*s==reject[i]) a=0;
+    if (a) ++l;
+    ++s;
+  }
+  return l;
+}
+
 /* memcpy.c */
 static void*memcpy(void* dst, const void* src, unsigned long count) {
   register char *d=dst;
@@ -293,6 +306,7 @@ static struct _dl_handle*_dl_root_handle=0;
 //#include "_dl_queue.c"	/* QUEUE */
 #include "_dl_search.c"
 
+//#include "_dl_open.c"
 //#include "dlopen.c"
 //#include "dlclose.c"
 
@@ -519,7 +533,6 @@ static void _dl_elfaux(register unsigned long*ui) {
   Elf_Phdr *ph=0;
   unsigned long ph_size;
   unsigned long ph_num;
-  unsigned long pg_size;
 
   while (*ui) ++ui;
   /* now *ui points to the tailing NULL-pointer of the envirioment */
@@ -547,7 +560,7 @@ static void _dl_elfaux(register unsigned long*ui) {
       break;
 
     case AT_PAGESZ:	/* 6 */
-      pg_size=ea->val;
+      at_pagesize=ea->val;
       DEBUG("page size %ld\n",pg_size);
       break;
 

@@ -8,14 +8,15 @@
 void*_dl_open(const char*filename,int flags) {
   int fd;
   char buf[PATH_MAX];
-  const char*p;
+  const char*p=0;
 
   _dl_error_location="dlopen";
   _dl_error_data=filename;
   _dl_error=0;
 
-  if (strchr(filename,'/'))
-    fd=open(p=filename,O_RDONLY);
+  for (fd=0;filename[fd] && (p==0);++fd) if (filename[fd]=='/') p=filename;
+  if (p)
+    fd=open(p,O_RDONLY);
   else {
     p=buf;
     fd=_dl_search(buf,sizeof(buf)-1,filename);
