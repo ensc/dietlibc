@@ -91,8 +91,8 @@ void foo(int tmp,...) {
 }
 
 int compint(const void *a, const void *b) {
-  register int* A=a;
-  register int* B=b;
+  register const int* A=a;
+  register const int* B=b;
   return *B-*A;
 }
 
@@ -111,6 +111,12 @@ int traverse(const char* file, const struct stat* sb, int flag) {
 #endif
 
 int main(int argc,char *argv[]) {
+  char server_version_string[]="SSH-1.99-OpenSSH_2.9p2\n";
+  int remote_major, remote_minor;
+  char remote_version[1000];
+  if (sscanf(server_version_string, "SSH-%d.%d-%[^\n]\n",
+	    &remote_major, &remote_minor, remote_version) != 3) puts("punt");
+  printf("%d.%d.%.100s\n",remote_major,remote_minor,remote_version);
 #if 0
   ftw("/tmp",traverse,10);
 #endif
@@ -213,7 +219,7 @@ int main(int argc,char *argv[]) {
   snprintf( strport, sizeof(strport), "%d", 80 );
   puts(strport);
 #endif
-#if 1
+#if 0
   struct addrinfo *ai;
   struct addrinfo hints;
   char buf[16];

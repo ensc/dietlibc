@@ -328,6 +328,7 @@ exp_out:
 	      --width;
 	      tpch=A_GETC(fn);
 	    }
+	    if (!flag_discard) *s=0;
 	    ++format;
 	  }
 	  break;
