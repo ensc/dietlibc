@@ -11,6 +11,8 @@
 #define _ELF_UP_ROUND(ps,n)	((((n)&((ps)-1))?(ps):0)+ _ELF_DWN_ROUND((ps),(n)))
 #define _ELF_RST_ROUND(ps,n)	((n)&((ps)-1))
 
+#define puts(m) write(2,(m),sizeof(m))
+
 /* this is an arch specific "return jump" for the relocation */
 void _dl_jump();
 
@@ -247,20 +249,22 @@ struct _dl_handle* _dl_dyn_scan(struct _dl_handle* dh, void* dyn_addr, int flags
     }
 
     if (dyn_tab[i].d_tag==DT_TEXTREL) {
-      printf("_dl_load have textrel ?!? -> SUE LIB CREATOR ! \n");
+      puts("_dl_load have textrel ?!? -> SUE LIB CREATOR !");
       _dl_free_handle(dh);
       _dl_error = 2;
       return 0;
     }
   }
   /* extra scan for rpath (if program) ... */
-  for(i=0;dyn_tab[i].d_tag;i++) {
-    if (dyn_tab[i].d_tag==DT_RPATH) {
-      char *rpath=dh->dyn_str_tab+dyn_tab[i].d_un.d_val;
-      _dl_set_rpath(rpath);
+  if (dh->name==0) {
+    for(i=0;dyn_tab[i].d_tag;i++) {
+      if (dyn_tab[i].d_tag==DT_RPATH) {
+	char *rpath=dh->dyn_str_tab+dyn_tab[i].d_un.d_val;
+	_dl_set_rpath(rpath);
 #ifdef DEBUG
-      printf("_dl_load have runpath: %s\n",rpath);
+	printf("_dl_load have runpath: %s\n",rpath);
 #endif
+      }
     }
   }
 
@@ -280,7 +284,7 @@ struct _dl_handle* _dl_dyn_scan(struct _dl_handle* dh, void* dyn_addr, int flags
     /* */
   }
   else {
-    printf("_dl_load non PIC dynamic -> SUE USER ! \n");
+    puts("_dl_load non PIC dynamic -> SUE USER !");
     if (dh) _dl_free_handle(dh);
     _dl_error = 2;
     return 0;

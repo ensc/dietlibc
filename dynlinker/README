@@ -1,0 +1,14 @@
+DYN-LINKER
+
+  This is the Dynamic linker for the dietlibc.
+  Written from scratch by Olaf Dreesen.
+
+Replacement for standard ld.so
+
+It is still test-code only and depends on dietlibc/libdl code
+
+1. STATUS: it works on i386.
+	ARM is in progress
+	other no code available
+
+

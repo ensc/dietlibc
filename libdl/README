@@ -3,6 +3,14 @@ this is the experimental libdl
 written by Olaf Dreesen
 
 
+Thu Jun 21 15:32:45 MEST 2001
+
+It work good enough to make a libdietc.so possible.
+
+TODO: rebuild the code in a more readable and consistent way.
+TODO: code for other archs than i386
+
+
 Thu Jun  7 14:10:03 MEST 2001
 
 Status: test-pre-alpha code
