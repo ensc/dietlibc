@@ -85,6 +85,7 @@ again:
     if (cur>=last || !isblank(*cur)) break;
     cur++;
   }
+  pe->h_aliases[aliasidx+1]=0;
   pe->h_name=pe->h_aliases[0];
   pe->h_aliases++;
   return pe;
