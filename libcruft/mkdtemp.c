@@ -6,20 +6,17 @@
 
 int mkdtemp(char* template) {
   char *tmp=template+strlen(template)-6;
-  int randfd;
-  int i,res;
+  int randfd,i;
   unsigned int random;
   for (i=0; i<6; ++i) if (tmp[i]!='X') { errno=EINVAL; return -1; }
   randfd=open("/dev/urandom",O_RDONLY);
-  for (;;) {
+  do {
     read(randfd,&random,sizeof(random));
     for (i=0; i<6; ++i) {
       int hexdigit=(random>>(i*5))&0x1f;
       tmp[i]=hexdigit>9?hexdigit+'a'-10:hexdigit+'0';
     }
-    res=mkdir(template,0700);
-    if (res>=0) break;
-  }
+  } while(mkdir(template,0700));
   close(randfd);
-  return res;
+  return 0;
 }
