@@ -138,7 +138,7 @@ $(OBJDIR) $(PICODIR):
 $(OBJDIR)/pstart.o: start.S
 	$(CROSS)$(CC) -I. -Iinclude $(CFLAGS) -DPROFILING -c $< -o $@
 
-$(OBJDIR)/%.o: %.S
+$(OBJDIR)/%.o: %.S $(ARCH)/syscalls.h
 	$(CROSS)$(CC) -I. -Iinclude $(CFLAGS) -c $< -o $@
 
 $(OBJDIR)/pthread_%.o: libpthread/pthread_%.c
@@ -191,7 +191,7 @@ dyn_lib: $(PICODIR) $(PICODIR)/libc.so $(PICODIR)/dstart.o \
 	$(PICODIR)/libpthread.so $(PICODIR)/libdl.so $(PICODIR)/libcompat.so \
 	$(PICODIR)/diet-dyn $(PICODIR)/diet-dyn-i
 
-$(PICODIR)/%.o: %.S
+$(PICODIR)/%.o: %.S $(ARCH)/syscalls.h
 	$(CROSS)$(CC) -I. -Iinclude $(CFLAGS) -fPIC -D__DYN_LIB -c $< -o $@
 
 $(PICODIR)/pthread_%.o: libpthread/pthread_%.c

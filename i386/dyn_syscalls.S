@@ -58,6 +58,13 @@
 
 /* OK this is basicaly unified.S */
 .text
+.type __unified_syscall_256,@function
+.global __unified_syscall_256
+__unified_syscall_256:
+	movzwl %ax, %eax
+	jmp .L23
+.L22:
+.size __unified_syscall_256,.L22-__unified_syscall_256
 .type exit,@function
 .weak exit
 exit:
@@ -68,6 +75,7 @@ __exit:
 	mov $__NR_exit, %al
 __unified_syscall:
 	movzbl	%al, %eax
+.L23:
 	push	%edi
 	push	%esi
 	push	%ebx

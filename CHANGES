@@ -24,6 +24,8 @@
   remove a few more warnings
   add new 2.5 syscall #defines
   add epoll_create, epoll_ctl and epoll_wait
+  the new x86 syscall numbers exceed 255, breaking our %al optimization
+    I worked around it with conditional assembly in cpp macros.  Ugh.
 
 0.21:
   use gcc's size_t, ptrdiff_t and wchar_t types (Olaf)

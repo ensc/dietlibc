@@ -2,6 +2,13 @@
 #include <dietfeatures.h>
 
 .text
+.global __unified_syscall_256
+.type __unified_syscall_256,@function
+__unified_syscall_256:
+	movzwl %ax,%eax
+	jmp .L1
+.L2:
+.size __unified_syscall_256,.L2-__unified_syscall_256
 .weak exit
 exit:
 .global _exit
@@ -11,7 +18,9 @@ _exit:
 .global __unified_syscall
 .type	__unified_syscall,@function
 __unified_syscall:
+.size _exit,__unified_syscall-_exit
 	movzbl	%al, %eax
+.L1:
 	push	%edi
 	push	%esi
 	push	%ebx
@@ -46,3 +55,5 @@ __unified_syscall:
 #include "dietuglyweaks.h"
 
 	ret
+.L3:
+.size __unified_syscall,.L3-__unified_syscall
