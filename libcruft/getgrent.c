@@ -1,11 +1,11 @@
 #include <grp.h>
 
-static struct group gr;
-static char buf[1000];
+extern struct group __group_pw;
+extern char __group_buf[1000];
 
 struct group *getgrent(void) {
   struct group* tmp;
-  if (getgrent_r(&gr,buf,sizeof(buf),&tmp)==0)
+  if (getgrent_r(&__group_pw,__group_buf,sizeof(__group_buf),&tmp)==0)
     return tmp;
   return 0;
 }

@@ -1,14 +1,12 @@
 #include <shadow.h>
 #include <string.h>
-#include <stdlib.h>
 
-struct spwd *getspnam(const char * name) {
+extern struct spwd __shadow_pw;
+extern char __shadow_buf[1000];
+
+struct spwd *getspnam(const char* name) {
   struct spwd *tmp;
-  setspent();
-  for (;;) {
-    tmp=getspent();
-    if (!tmp) return 0;
-    if (!strcmp(tmp->sp_namp,name))
-      return tmp;
-  }
+  if (getspnam_r(name,&__shadow_pw,__shadow_buf,sizeof(__shadow_buf),&tmp)==0)
+    return tmp;
+  return 0;
 }

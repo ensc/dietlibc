@@ -1,6 +1,5 @@
 #include <pwd.h>
 #include <string.h>
-#include <stdlib.h>
 
 extern struct passwd __passwd_pw;
 extern char __passwd_buf[1000];
