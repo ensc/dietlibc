@@ -27,6 +27,10 @@
 
 #define WANT_LINKER_WARNINGS
 
+/* you need to define this if you want to run your programs with large
+ * file support on kernel 2.2 or 2.4 */
+#define WANT_LARGEFILE_BACKCOMPAT
+
 #endif
 
 /* stop uncommenting here ;-) */
