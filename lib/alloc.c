@@ -7,6 +7,7 @@
 #include <errno.h>
 #include "dietfeatures.h"
 #include <sys/types.h>
+#include <stdlib.h>
 
 #include <sys/shm.h>	/* for PAGE_SIZE */
 
@@ -46,7 +47,7 @@ typedef struct t_free_head {
 #define MEM_ALLOC_START	((char*)0x18000000)
 
 /* Make every block align */
-#define PAGE_ALIGN(s)	(((s)+MEM_BLOCK_SIZE-1)&(~(MEM_BLOCK_SIZE-1)))
+#define PAGE_ALIGN(s)	(((s)+MEM_BLOCK_SIZE-1)&(unsigned long)(~(MEM_BLOCK_SIZE-1)))
 #define PAGE_ALIGNP(p)	((char*)PAGE_ALIGN((size_t)(p)))
 
 #define END_OF_BLOCK(p)	((free_head*)(((char*)(p))+((p)->size)))
@@ -122,6 +123,7 @@ static void run_list()
 }
 #endif
 
+void __libc_free(void *ptr);
 void __libc_free(void *ptr)
 {
   register alloc_head *t;
@@ -216,6 +218,7 @@ static void *alloc_get_mem(unsigned long size)
   return base;
 }
 
+void *__libc_malloc(size_t size);
 void *__libc_malloc(size_t size)
 {
   free_head *tmp;

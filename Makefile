@@ -79,7 +79,7 @@ ifneq ($(DEBUG),)
 CFLAGS = -g
 COMMENT = :
 endif
-CFLAGS += -Wall -W -Wchar-subscripts -Wconversion -Wmissing-prototypes -Wmissing-declarations -Wno-switch -Wredundant-decls
+CFLAGS += -Werror -Wall -W -Wchar-subscripts -Wconversion -Wmissing-prototypes -Wmissing-declarations -Wno-switch -Wredundant-decls
 
 PWD=$(shell pwd)
 

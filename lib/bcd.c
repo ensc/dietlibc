@@ -22,6 +22,9 @@ static long double  powers [] = {
  */
 
 int  __decompose_floatp ( long double number, 
+                          unsigned char* digits, unsigned int precision );
+
+int  __decompose_floatp ( long double number, 
                           unsigned char* digits, unsigned int precision )
 {
     int     ret = 0;
@@ -86,6 +89,10 @@ int  __decompose_floatp ( long double number,
  *  Zeiger) sind unbestimmt.  Wünscht man dort Nullen oder Leerzeichen,
  *  sollte man mittels memset() dieses vorher initialsieren.
  */
+
+char*  __decompose_fixp ( long double number, 
+                          unsigned char* digits_int , unsigned int precision_int, 
+                          unsigned char* digits_frac, unsigned int precision_frac );
 
 char*  __decompose_fixp ( long double number, 
                           unsigned char* digits_int , unsigned int precision_int, 
