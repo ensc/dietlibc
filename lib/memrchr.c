@@ -1,3 +1,4 @@
+#define _GNU_SOURCE
 #include <sys/types.h>
 #include <string.h>
 
@@ -10,5 +11,5 @@ void* memrchr(const void *s, int c, size_t n) {
       last=t;
     ++t;
   }
-  return last;
+  return (void*)last; /* man, what an utterly b0rken prototype */
 }
