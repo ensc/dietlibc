@@ -23,7 +23,7 @@ CFLAGS += -Wall
 .SUFFIXES:
 .SUFFIXES: .S .c
 
-%.c : %,v
+% :: %,v
 
 %.o: %.S
 	$(CROSS)gcc -I. -Iinclude $(CFLAGS) -c $<
