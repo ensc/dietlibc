@@ -37,7 +37,7 @@ int pwrite(int fd, const void *buf, size_t count, off_t offset);
 
 int execve (const char *filename, char *const argv [], char *const envp[]) __THROW;
 
-pid_t getpid(void) __attribute__((const)) __THROW;
+pid_t getpid(void) __attribute__((__const__)) __THROW;
 pid_t getppid(void) __THROW;
 int kill(pid_t pid, int sig) __THROW;
 

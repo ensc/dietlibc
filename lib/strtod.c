@@ -29,10 +29,10 @@ double strtod(const char *nptr, char **endptr) {
   }
   if ((*c|32)=='e') {
     int exp=0;
-    char neg=0;
+    double factor=10;
     if (c[1]<'0') {
-      switch (*c) {
-      case '-': neg=1;
+      switch (c[1]) {
+      case '-': factor=0.1;
       case '+': c++; break;
       default:
 	d=0;
@@ -43,7 +43,7 @@ double strtod(const char *nptr, char **endptr) {
     while (isdigit(*++c))
       exp=exp*10+(*c-'0');
     while (exp) {	/* XXX: this introduces rounding errors */
-      d*=10; --exp;
+      d*=factor; --exp;
     }
   }
 done:

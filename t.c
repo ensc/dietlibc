@@ -37,8 +37,7 @@ static int rand() {
 #endif
 
 int main(int argc,char *argv[]) {
-  double d=atof("0.10e1");
-  printf("%g %g\n",0.0,d);
+  printf("%g %g\n",1e-10,1e10);
 #if 0
   double d=0.0;
   long long t=0x12345678ABCDEF01;

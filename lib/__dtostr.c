@@ -1,3 +1,4 @@
+#include <stdio.h>
 /* convert double to string.  Helper for sprintf. */
 
 int __dtostr(double d,char *buf,int maxlen,int prec) {
@@ -19,7 +20,9 @@ int __dtostr(double d,char *buf,int maxlen,int prec) {
     goto done;
   }
   if (s) { d=-d; *buf='-'; --maxlen; buf++; }
-  if ((i=e10)>=0) {
+  printf("e=%d e10=%d prec=%d\n",e,e10,prec);
+  if (e10>=0) {
+    i=e10;
     while (i>10) { tmp=tmp*1e10; i-=10; }
     while (i>1) { tmp=tmp*10; --i; }
   } else {
