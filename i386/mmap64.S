@@ -48,5 +48,5 @@ mmap64:
 .Leinval:
   movl $EINVAL,%eax
   jmp .Lerror
-.Lende:
-.size mmap64,.Lende-mmap64
+.Lende2:
+.size mmap64,.Lende2-mmap64

@@ -10,5 +10,5 @@ mmap:
 	call	__unified_syscall
 	pop	%ecx
 	ret
-.Lende:
-.size mmap,.Lende-mmap
+.Lende3:
+.size mmap,.Lende3-mmap
