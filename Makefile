@@ -71,7 +71,7 @@ include $(ARCH)/Makefile.add
 
 LIBMATHOBJ=$(patsubst %,$(OBJDIR)/%,$(LIBMATH))
 
-ifeq ($(CFLAGS),-pipe)
+ifeq ($(CFLAGS),-pipe -nostdinc)
 CFLAGS+=-O -fomit-frame-pointer
 endif
 
