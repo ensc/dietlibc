@@ -24,9 +24,7 @@ int _dl_apply_relocate(struct _dl_handle* dh, Elf32_Rel *rel) {
   rel = (void*)rel+(long)dh->mem_base;
   loc = (Elf32_Addr *)(dh->mem_base+rel->r_offset);
 
-#ifdef DEBUG
-  printf("_dl_apply_relocate %d @ %08lx\n",ELF32_R_TYPE(rel->r_info),(unsigned long)loc);
-#endif
+  DEBUG(printf("_dl_apply_relocate %d @ %08lx\n",ELF32_R_TYPE(rel->r_info),(unsigned long)loc);)
 
   typ = ELF32_R_TYPE(rel->r_info);
 
@@ -46,7 +44,10 @@ int _dl_apply_relocate(struct _dl_handle* dh, Elf32_Rel *rel) {
 int _dl_relocate(struct _dl_handle* dh, Elf32_Rel *rel, int num) {
   int i;
   for (i=0;i<num;i++) {
-    _dl_apply_relocate(dh,rel+i);
+    if (_dl_apply_relocate(dh,rel+i)) {
+      _dl_error=3;
+      return 1;
+    }
   }
   return 0;
 }

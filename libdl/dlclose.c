@@ -9,9 +9,7 @@ static void dec_referenced_libs(struct _dl_handle* dh)
   for(i=0;dyn_tab[i].d_tag;i++) {
     if (dyn_tab[i].d_tag==DT_NEEDED) {
       char *lib_name=dh->dyn_str_tab+dyn_tab[i].d_un.d_val;
-#ifdef DEBUG
-      printf("dlclose lib: %s\n",lib_name);
-#endif
+      DEBUG(printf("dlclose lib: %s\n",lib_name);)
       dlclose(_dl_find_lib(lib_name));
     }
   }
@@ -23,9 +21,7 @@ int dlclose (void *handle)
     struct _dl_handle *h = handle;
     if (--(h->lnk_count)) return 0;	/* not yet unreferenced */
 
-#ifdef DEBUG
-    printf("dlclose: %s\n",h->name);
-#endif
+    DEBUG(printf("dlclose: %s\n",h->name);)
     if (h->fini) h->fini();
     dec_referenced_libs(h);
     if (munmap(h->mem_base,h->mem_size)==-1) return -1;

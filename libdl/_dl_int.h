@@ -4,7 +4,7 @@
 #include <elf.h>
 #include <dlfcn.h>
 
-//#define DEBUG
+#define DEBUG(x)	//x
 
 struct _dl_handle {
   struct _dl_handle *next;

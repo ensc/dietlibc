@@ -29,9 +29,7 @@ static int _dl_search_path(char *buf, int len, const char*path, const int pathle
       else
 	buf[0]=0;
       strncat(buf, filename, --l);
-#ifdef DEBUG
-//      printf("_dl_search: %s\n",buf);
-#endif
+//      DEBUG(printf("_dl_search: %s\n",buf);)
       if ((fd=open(buf,O_RDONLY))!=-1) return fd;
     }
   }
@@ -56,14 +54,7 @@ static int _dl_search_conf(char *buf, int len, const char *conf, const char *fil
 
 int _dl_search(char *buf, int len, const char *filename)
 {
-  register char* tmp;
   int fd;
-
-  /* 0. if filename contains a slash use filename to open */
-  if ((tmp=strchr(filename,'/'))) {
-    if ((fd=open(buf,O_RDONLY))!=-1) return fd;
-    if (filename==tmp) return -1;	/* absolute path stop it now */
-  }
 
   /* 1. search the LD_RUN_PATH (from the executable) */
   if (_dl_search_rpath) {

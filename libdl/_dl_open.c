@@ -1,6 +1,7 @@
 #include <fcntl.h>
 #include <dlfcn.h>
 #include <limits.h>
+#include <string.h>
 
 #include "_dl_int.h"
 
@@ -14,11 +15,12 @@ void *_dl_open(const char *filename, int flags)
   _dl_error_data=filename;
   _dl_error=0;
 
-  if (*filename=='/')
+  if (strchr(filename,'/'))
     fd=open(p=filename,O_RDONLY);
   else {
     p=buf;
     fd=_dl_search(buf,sizeof(buf),filename);
   }
+  if (fd==-1) return 0;
   return _dl_load(filename,p,fd,flags);
 }
