@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <netdb.h>
+#include <net/if.h>
 #include <arpa/inet.h>
 
 /* XXX TODO FIXME */
@@ -23,8 +24,10 @@ int getaddrinfo(const char *node, const char *service, const struct addrinfo *hi
       int herrno=0;
       char buf[4096];
       int lookupok=0;
+      char* interface;
       h.h_addr_list=(char**)buf+16;
       if (node) {
+	if ((interface=strchr(node,'%'))) ++interface;
 	if (inet_pton(family,node,buf)>0) {
 	  h.h_name=(char*)node;
 	  h.h_addr_list[0]=buf;
@@ -38,6 +41,7 @@ int getaddrinfo(const char *node, const char *service, const struct addrinfo *hi
       } else {
 	h.h_name=0;
 	h.h_addr_list[0]=buf;
+	interface=0;
 	memset(buf,0,16);
 	if (!hints || !(hints->ai_flags&AI_PASSIVE)) {
 	  if (family==AF_INET) {
@@ -67,6 +71,7 @@ int getaddrinfo(const char *node, const char *service, const struct addrinfo *hi
 	if (family==PF_INET6) {
 	  memset(&foo->ip,0,sizeof(foo->ip));
 	  memmove(&foo->ip.ip6.sin6_addr,h.h_addr_list[0],16);
+	  if (interface) foo->ip.ip6.sin6_scope_id=if_nametoindex(interface);
 	} else {
 	  memmove(&foo->ip.ip4.sin_addr,h.h_addr_list[0],4);
 	}

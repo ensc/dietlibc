@@ -12,6 +12,7 @@
     (see dietfeatures.h, see http://www.fefe.de/ipv6pnpdns.html)
   typo in parisc setjmp.S (Michael Mueller)
   Olaf: fixing the pthread_join function
+  add IPv6 link-local%eth0 support to getaddrinfo
 
 0.23:
   update sys/soundcard.h
