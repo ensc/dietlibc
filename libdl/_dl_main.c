@@ -50,6 +50,11 @@ int _dl_sys_fstat(int filedes, struct stat *buf);
 extern char*strdup(const char*s);
 extern void free(void*p);
 
+__attribute__((visibility("hidden")))
+unsigned long _dl_main(int argc,char*argv[],char*envp[],unsigned long _dynamic);
+__attribute__((visibility("hidden")))
+unsigned long do_resolve(struct _dl_handle*dh,unsigned long off);
+
 #if defined(__i386__)
 
 asm(".text \n"
@@ -713,7 +718,7 @@ static void tt_fini(void) {
 static void _DIE_() { _dl_sys_exit(213); }
 
 /* lazy function resolver */
-static unsigned long do_resolve(struct _dl_handle*dh,unsigned long off) {
+unsigned long do_resolve(struct _dl_handle*dh,unsigned long off) {
   _dl_rel_t *tmp = ((void*)dh->plt_rel)+off;
   int sym=ELF_R_SYM(tmp->r_info);
   register unsigned long sym_val;
@@ -1252,7 +1257,7 @@ static void _dl_elfaux(register unsigned long*ui) {
 
 
 /* start of libdl dynamic linker */
-static unsigned long _dl_main(int argc,char*argv[],char*envp[],unsigned long _dynamic) {
+unsigned long _dl_main(int argc,char*argv[],char*envp[],unsigned long _dynamic) {
   unsigned long*got;
   struct _dl_handle*prog,*mydh;
   struct _dl_handle my_dh;

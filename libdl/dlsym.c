@@ -27,11 +27,10 @@ void *_dlsym(void* handle,const char* symbol) {
     while(ind) {
       int ptr=dh->dyn_sym_tab[ind].st_name;
 #ifdef DEBUG
-//      pf(__FUNCTION__); pf(": symbol(\""); pf(name+ptr); pf("\",\"); pf(symbol); pf("\")\n");
+//      pf(__FUNCTION__); pf(": symbol(\""); pf(name+ptr); pf("\",\""); pf(symbol); pf("\")\n");
 #endif
       if (strcmp(name+ptr,symbol)==0) {
-	if (ELF_ST_TYPE(dh->dyn_sym_tab[ind].st_shndx)!=0) {
-	  sym=(long*)(dh->mem_base+dh->dyn_sym_tab[ind].st_value);
+	if ((sym=(long*)(dh->mem_base+dh->dyn_sym_tab[ind].st_value))) {
 	  break;	/* ok found ... */
 	}
       }

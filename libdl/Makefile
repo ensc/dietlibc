@@ -7,7 +7,9 @@ SRC = $(wildcard *.c) # test/test.c
 OBJ = _dl_jump.o $(SRC:.c=.o)
 
 #CFLAGS = -Wall -D__OD_CLEAN_ROOM -DNODIETREF -fPIC -g -O
-CFLAGS = -Wall -O2 -D__OD_CLEAN_ROOM -DNODIETREF -fPIC -frerun-loop-opt -fschedule-insns2 $(DEB) # -fomit-frame-pointer
+#CFLAGS = -Wall -O2 -Bsymbolic -D__OD_CLEAN_ROOM -DNODIETREF -fPIC -frerun-loop-opt -fschedule-insns2 $(DEB)
+CFLAGS = -Wall -g -O -Bsymbolic -D__OD_CLEAN_ROOM -DNODIETREF -fPIC -frerun-loop-opt -fschedule-insns2 $(DEB)
+# -fomit-frame-pointer
 
 %.o : %.S
 	$(DCC) $(CFLAGS) -c -o $@ $^
@@ -21,7 +23,7 @@ a.out: t.out
 	$(CROSS)gcc -O -g test/a.c t.out -L/opt/diet/lib-i386 -lc -lgcc -o $@ -Wl,-dynamic-linker=`pwd`/t.out -nostdlib
 
 t.out: _dl_main.o
-	$(CROSS)ld -shared -o $@ $? -soname=libdl.so
+	$(CROSS)ld -shared -o $@ $? -soname=libdl.so -Bsymbolic
 
 all: test.out libdl.a
 
