@@ -10,10 +10,12 @@ char *ttyname(int fd) {
 #ifdef SLASH_PROC_OK
   char ibuf[20];
   static char obuf[20];
+  int len;
   if (!isatty(fd)) return 0;
   strcpy(ibuf,"/proc/self/fd/");
   ibuf[__ltostr(ibuf+14,6,(unsigned long)fd,10,0)+14]=0;
-  if (readlink(ibuf,obuf,sizeof(obuf)-1)<0) return 0;
+  if ((len=readlink(ibuf,obuf,sizeof(obuf)-1))<0) return 0;
+  obuf[len]=0;
   return obuf;
 #else
   static char buf[20];

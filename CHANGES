@@ -29,6 +29,7 @@
   Fixed asprintf (relied on vsnprintf(NULL,...) to return length but
     don't write anything which was no longer the case.  It also
     allocated one byte unnecessarily, which Uwe Ohse found.
+  Fix ttyname (readlink does not \0-terminate, forgot to do that).
 
 0.13:
   add readdir64 and automatic mapping if _FILE_OFFSET_BITS == 64

@@ -103,9 +103,11 @@ extern char* strcpy2(char*a,char*b);
      __asm__ __volatile__ ("rdtsc" : "=a" (low) : : "edx")
 
 int main(int argc,char *argv[]) {
+#if 0
   char* c;
   printf("%d\n",asprintf(&c,"foo %d",23));
   puts(c);
+#endif
 #if 0
   struct winsize ws;
   if (!ioctl(0, TIOCGWINSZ, &ws)) {
@@ -364,7 +366,7 @@ int main(int argc,char *argv[]) {
     if (a!=b) printf("%d: %d %d\n",i,a,b);
   }
 #endif
-#if 0
+#if 1
   char* name;
   int ptyfd,ttyfd;
   int i=openpty(&ptyfd,&ttyfd,0,0,0);

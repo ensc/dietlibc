@@ -31,11 +31,11 @@ int openpty(int *amaster, int *aslave, char *name, struct termios
 #endif
   {
     int unlock=0;
-    if (ioctl(fd,TIOCSPTLCK, &unlock)<0) goto kaputt;
+    while (ioctl(fd,TIOCSPTLCK, &unlock)<0) if (errno!=EINTR) goto kaputt;
   }
   {
     int ptyno;
-    if (ioctl(fd,TIOCGPTN,&ptyno)<0) goto kaputt;
+    while (ioctl(fd,TIOCGPTN,&ptyno)<0) if (errno!=EINTR) goto kaputt;
     strcpy(buf,"/dev/pts/");
     __ltostr(buf+9,10,ptyno,10,0);
   }
@@ -45,7 +45,7 @@ int openpty(int *amaster, int *aslave, char *name, struct termios
   if (name) strcpy(name,buf);
   if (termp)
     while (tcsetattr(*aslave,TCSAFLUSH,termp) && errno==EINTR);
-  if (winp) ioctl(*aslave, TIOCSWINSZ, winp);
+  if (winp) while (ioctl(*aslave, TIOCSWINSZ, winp) && errno==EINTR);
   return 0;
 kaputt:
   close(fd);
