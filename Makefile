@@ -388,6 +388,9 @@ fclose.o $(OBJDIR)/fdglue.o $(OBJDIR)/fflush.o $(OBJDIR)/fgetc.o $(OBJDIR)/fputc
 # these depend on dietfeatures.h for fast string routines
 strcasecmp.o $(OBJDIR)/strcat.o $(OBJDIR)/strchr.o $(OBJDIR)/strcmp.o $(OBJDIR)/strcpy.o $(OBJDIR)/strlen.o $(OBJDIR)/strncasecmp.o $(OBJDIR)/strncat.o $(OBJDIR)/strrchr.o: dietfeatures.h
 
+# this depends on dietfeatures.h for WANT_NON_COMPLIANT_STRNCAT
+$(OBJDIR)/strncpy.o: dietfeatures.h
+
 # these depend on dietfeatures.h for /proc
 $(OBJDIR)/ttyname.o $(OBJDIR)/sysconf_cpus.o: dietfeatures.h
 

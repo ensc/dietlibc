@@ -30,7 +30,11 @@ _start:
 	mr	6,7
 	bl	_dyn_start
 #else
+#ifdef WANT_STACKGAP
+	bl	stackgap
+#else
 	bl	main
+#endif
 #endif
 	b	exit
 .size _start,.-_start

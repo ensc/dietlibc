@@ -27,7 +27,11 @@ strncpy:
 	cld
 .Lloop:
 	dec %ecx
+#ifdef WANT_NON_COMPLIANT_STRNCAT
+	jz .Lout
+#else
 	js .Lout
+#endif
 	lodsb
 	stosb
 	or %al, %al
@@ -36,6 +40,9 @@ strncpy:
 	repnz stosb
 #endif
 .Lout:
+#ifdef WANT_NON_COMPLIANT_STRNCAT
+	movb $0,(%edi)
+#endif
 	movl %edx, %eax
 	popl %edi
 	popl %esi

@@ -53,7 +53,11 @@ _start:
 	bl	._dyn_start
 #else
 #warning static
+#ifdef WANT_STACKGAP
+	bl	.stackgap
+#else
 	bl	.main
+#endif
 #endif
 	b	.exit
 

@@ -32,7 +32,11 @@ _start:
 #ifdef WANT_DYNAMIC
 	call	dyn_start
 #else
+#ifdef WANT_STACKGAP
+	call	stackgap
+#else
 	call	main
+#endif
 #endif
 	mov	%g1, %o3
 

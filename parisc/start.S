@@ -37,7 +37,11 @@ _start:
 
 	stw %r24, 0(%sr0, %r19)
 	ldil L%$global$, %dp
+#ifdef WANT_STACKGAP
+	bl stackgap, %rp
+#else
 	bl main, %rp
+#endif
 	ldo R%$global$(%dp), %dp
 	b _exit
 	or %r28, %r28, %r26

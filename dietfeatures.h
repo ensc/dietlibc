@@ -36,7 +36,7 @@
 /* #define WANT_FULL_POSIX_COMPAT */
 
 /* read the comment in lib/strncat.c for an explanation */
-/* #define WANT_NON_COMPLIANT_STRNCAT */
+#define WANT_NON_COMPLIANT_STRNCAT
 
 /* on i386, Linux has an alternate syscall method since 2002/12/16 */
 /* on my Athlon XP, it is twice as fast, but it's only in kernel 2.5 */
@@ -85,12 +85,17 @@
  * See http://www.fefe.de/ipv6pnpdns.html */
 // #define WANT_IPV6_PLUGPLAY_DNS
 
-/* dy you want that malloc(0) return a pointer to a "zero-length" object
+/* do you want that malloc(0) return a pointer to a "zero-length" object
  * that is realloc-able; means realloc(..,size) gives a NEW object (like a
  * call to malloc(size)).
  * WARNING: this violates C99 */
 /* #define WANT_MALLOC_ZERO */
 
+/* This enables a stack gap.  Basically, the start code does not run
+ * main but stackgap, which then does alloca(random()) and calls main.
+ * The effect is that buffer overflow exploits will no longer be able to
+ * know the address of the buffer.  Cost: 62 bytes code on x86. */
+#define WANT_STACKGAP
 
 /* stop uncommenting here ;-) */
 #ifndef WANT_FASTER_STRING_ROUTINES

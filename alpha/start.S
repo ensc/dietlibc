@@ -27,7 +27,11 @@ _start:
 	mov	 $0, $19	/* mov v0(dynload) to a3 */
 	jsr	$26, dyn_start
 #else
+#ifdef WANT_STACKGAP
+	jsr	$26, stackgap
+#else
 	jsr	$26, main
+#endif
 #endif
 	mov	 $0, $16
 	jsr	$26, exit	/* YES, CALL! for threads and atexit ! (+4 byte) */

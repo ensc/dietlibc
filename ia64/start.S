@@ -37,7 +37,11 @@ _start:
 	ld8  r14 = [r15]
 	;;
 	st8  [r14] = out2           /* store envp in environ */
+#ifdef WANT_STACKGAP
+	br.call.sptk.few rp = stackgap
+#else
 	br.call.sptk.few rp = main  /* call main */
+#endif
 	;;
 	mov r32 = r8                /* store return code */
 	br exit                     /* branch to exit */

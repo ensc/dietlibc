@@ -30,7 +30,11 @@ _start:
 #ifdef WANT_DYNAMIC
 	brasl	%r14,_dyn_start
 #else
+#ifdef WANT_STACKGAP
+	brasl	%r14,stackgap
+#else
 	brasl	%r14,main
+#endif
 #endif
 
 /* call exit */

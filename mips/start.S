@@ -37,7 +37,11 @@ __start:
 
 	addu	$a2, $a0, 1	/* load envp */
 	sll	$a2, $a2, 2
+#ifdef WANT_STACKGAP
+	la	$25, stackgap
+#else
 	la	$25, main
+#endif
 	add	$a2, $a2, $a1
 	sw	$a2, environ
 	jalr	$25

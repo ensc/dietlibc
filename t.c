@@ -104,7 +104,9 @@ extern char* strcpy2(char*a,char*b);
      __asm__ __volatile__ ("rdtsc" : "=a" (low) : : "edx")
 
 int main(int argc,char *argv[]) {
+  char buf[100];
   __write2("foo!\n");
+  memset(buf,0,200);
 #if 0
   printf("%+05d\n",500);
 #endif
