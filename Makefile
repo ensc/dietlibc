@@ -44,7 +44,7 @@ libdietc.so: dietlibc.a
 $(SYSCALLOBJ): syscalls.h
 
 elftrunc: contrib/elftrunc.c start.o dietlibc.a
-	$(CROSS)gcc $(CFLAGS) -nostdlib -o $@ $^
+	$(CROSS)gcc -Iinclude $(CFLAGS) -nostdlib -o $@ $^
 
 djb: compile load
 
