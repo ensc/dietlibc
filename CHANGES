@@ -23,6 +23,7 @@
   fnmatch infinite loop fix (Piotr Esden-Tempski)
   make signal() into a sigaction wrapper function
   add memrchr (Emil)
+  remove __attribute__((const)) from getpid() (Yuri Kozlov)
 
 0.17:
   fix several bugs in getservent_r
