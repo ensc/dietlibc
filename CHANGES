@@ -10,7 +10,7 @@
   add make uninstall
   fix pread64
   Olaf: MIPS has a special case for the pread/pwrite syscall ...
-  Use -isystem instead of -I for our system includes (Johannes Stezenbach)
+  Use -isystem instead of -I for our system includes (Paul Jarc)
 
 0.25:
   fix sprintf
