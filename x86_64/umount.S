@@ -4,6 +4,6 @@
 .global umount
 .type   umount,@function
 umount:
-        mov     $__NR_umount2,%rax
+        mov     $__NR_umount2,%al
         xorq    %rsi,%rsi
         jmp     __unified_syscall

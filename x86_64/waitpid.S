@@ -8,6 +8,5 @@ waitpid:
 .global __libc_waitpid
 __libc_waitpid:
 	mov	$0,%r10
-	mov	$__NR_wait4,%rax
-	call	__unified_syscall
-	ret
+	mov	$__NR_wait4,%al
+	jmp	__unified_syscall

@@ -5,5 +5,5 @@
 .type	mmap,@function
 mmap:
 	mov	%rcx,%r10
-	mov	$__NR_mmap,%rax
+	mov	$__NR_mmap,%al
 	jmp	__unified_syscall
