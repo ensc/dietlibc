@@ -1,3 +1,4 @@
+#include <sys/socket.h>
 #include <arpa/inet.h>
 
 extern char *inet_ntoa_r(struct in_addr in,char* buf);

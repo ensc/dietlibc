@@ -42,6 +42,7 @@
 
 #define _RPC_AUTH_H	1
 #include <sys/cdefs.h>
+#include <sys/socket.h>
 #include <rpc/xdr.h>
 
 __BEGIN_DECLS
