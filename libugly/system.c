@@ -7,8 +7,8 @@
 
 extern char **environ;
 
-int fork();
-int waitpid(int pid, int *status, int options);
+int __libc_fork();
+int __libc_waitpid(int pid, int *status, int options);
 int execve(const char*filename, char *const argv[], char *const envp[]);
 void __set_errno(int errno);
 int sigaction(int signum,  const  struct  sigaction  *act, struct sigaction *oldact);
@@ -18,7 +18,7 @@ int __libc_system (const char *line)
   struct sigaction sa, intr, quit;
   int save,pid,ret=-1;
 
-  if (line == 0) return system("exit 0") == 0;
+  if (line == 0) return __libc_system("exit 0") == 0;
 
   sa.sa_handler = SIG_IGN;
   sa.sa_flags = 0;
@@ -32,12 +32,12 @@ int __libc_system (const char *line)
     return -1;
   }
 
-  pid=fork();
+  pid=__libc_fork();
   if (pid>0)
   { /* parent */
     int n;
     do
-      n=waitpid(pid, &ret, 0);
+      n=__libc_waitpid(pid, &ret, 0);
     while ((n==-1) && (errno==EINTR));
     if (n!=pid) ret=-1;
   }
