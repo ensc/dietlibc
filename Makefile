@@ -339,6 +339,10 @@ mips-gnu:
 powerpc:
 	$(MAKE) ARCH=ppc CROSS=powerpc-linux- all
 
+hppa:
+	ln -sf bin-parisc bin-hppa
+	$(MAKE) ARCH=parisc CROSS=hppa-linux- all
+
 CROSS_ARCH=arm sparc ppc alpha i386 mips sparc64 x86_64 s390 parisc
 cross:
 	$(MAKE) $(subst $(ARCH),,$(CROSS_ARCH))
