@@ -29,6 +29,7 @@
   ptrace fix (Dallachiesa Michele)
   ptread.h cleanups (Martin Pohlack)
   fix execvp and execlp (Younès)
+  fix time() for sparc64
 
 0.24:
   work around incompatible Linux select() modifying the timeout in
