@@ -152,7 +152,7 @@ int main(int argc, char**argv, char**envp)
 #ifdef DEBUG
     printf("error in dyn_scan");
 #endif
-    exit(23);
+    _exit(23);
   }
 
   dlh->name=0;
@@ -162,12 +162,12 @@ int main(int argc, char**argv, char**envp)
 #ifdef DEBUG
     printf("error in dyn_scan");
 #endif
-    exit(42);
+    _exit(42);
   }
 
   _dl_open_dep();
 
   /* all depending libs have been loaded, now start the program or die */
   if (dyn_start) return (int)dyn_start; /* found an AT_ENTRY in table -> jump to it */
-  exit(23);
+  _exit(23);
 }

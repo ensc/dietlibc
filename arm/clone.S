@@ -4,6 +4,7 @@
 .text
 .weak clone
 clone:
+.type __clone,function
 .global __clone
 __clone:
 	cmp	r0, #0		/* check for function pointer */

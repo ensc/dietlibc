@@ -1,8 +1,10 @@
 #include "syscalls.h"
 
 .text
+.type clone,@function
 .weak clone
 clone:
+.type __clone,@function
 .global __clone
 __clone:
 	movl	4(%esp), %ecx	/* have non null thread_funcion */
