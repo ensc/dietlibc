@@ -5,6 +5,7 @@
 
 #include <sys/cdefs.h>
 #include <sys/types.h>
+#include <alloca.h>
 
 void *calloc(size_t nmemb, size_t size) __attribute_malloc__ __THROW;
 void *malloc(size_t size) __attribute_malloc__ __THROW;
@@ -69,12 +70,6 @@ extern char **environ;
  * The ISO people must be out of their minds. */
 typedef struct { int quot,rem; } div_t;
 div_t div(int numer, int denom) __THROW __attribute__((const));
-
-#ifdef __GNUC__
-#define alloca(x) __builtin_alloca(x)
-#else
-void *alloca(size_t size) __THROW;
-#endif
 
 char *realpath(const char *path, char *resolved_path) __THROW;
 
