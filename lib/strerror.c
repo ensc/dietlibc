@@ -1,4 +1,6 @@
 #include <string.h>
+
+#define _BSD_SOURCE
 #include <errno.h>
 
 const char *strerror(int errnum) {

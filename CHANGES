@@ -51,6 +51,10 @@
       behavior.
     system did not set SIGCHLD and thus contained a race.
     popen did not set close-on-exec and could leak an fd on malloc error.
+  Olaf: Peter Jones reported some problems with perror; strerror had the
+    same problem.
+    Peter also posted a patch to atexit/exit. With some modifications it is
+    now implemented.
 
 0.10:
   update getpagesize.

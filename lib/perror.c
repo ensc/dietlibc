@@ -1,7 +1,9 @@
-#include <errno.h>
 #include "dietfeatures.h"
 #include <unistd.h>
 #include <string.h>
+
+#define _BSD_SOURCE
+#include <errno.h>
 
 void perror(const char *s) {
   register const char *message="[unknown error]";
