@@ -1,5 +1,5 @@
-#include <errno.h>
 #include "dietfeatures.h"
+#include <errno.h>
 #ifdef WANT_LARGEFILE_BACKCOMPAT
 #include <sys/stat.h>
 #include "syscalls.h"
