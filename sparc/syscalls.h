@@ -203,7 +203,7 @@
 #define __NR_oldlstat           202 /* Linux Specific                              */
 #define __NR_uselib             203 /* Linux Specific                              */
 #define __NR_readdir            204 /* Linux Specific                              */
-/* #define __NR_ioperm          205    Linux Specific - i386 specific, unused      */
+#define __NR_readahead          205 /* Linux Specific                              */
 #define __NR_socketcall         206 /* Linux Specific                              */
 #define __NR_syslog             207 /* Linux Specific                              */
 #define __NR_lookup_dcookie     208 /* Linux Specific                              */
@@ -254,6 +254,17 @@
 #define __NR_fdatasync          253
 #define __NR_nfsservctl         254
 #define __NR_aplib              255
+#define __NR_clock_settime	256
+#define __NR_clock_gettime	257
+#define __NR_clock_getres	258
+#define __NR_clock_nanosleep	259
+#define __NR_sched_getaffinity	260
+#define __NR_sched_setaffinity	261
+#define __NR_timer_settime	262
+#define __NR_timer_gettime	263
+#define __NR_timer_getoverrun	264
+#define __NR_timer_delete	265
+#define __NR_timer_create	266
 
 #define syscall_weak(name,wsym,sym) \
 .text; \

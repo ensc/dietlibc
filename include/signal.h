@@ -206,10 +206,14 @@ __BEGIN_DECLS
 #define MINSIGSTKSZ	2048
 #define SIGSTKSZ	8192
 
-#if defined(__alpha__) || defined(__mips__)
-#define SIG_BLOCK	1	/* for blocking signals */
-#define SIG_UNBLOCK	2	/* for unblocking signals */
-#define SIG_SETMASK	3	/* for setting the signal mask */
+#if defined(__sparc__)
+#define SIG_BLOCK	1
+#define SIG_UNBLOCK	2
+#define SIG_SETMASK	4
+#elif defined(__alpha__) || defined(__mips__)
+#define SIG_BLOCK	1
+#define SIG_UNBLOCK	2
+#define SIG_SETMASK	3
 #else
 #define SIG_BLOCK	0	/* for blocking signals */
 #define SIG_UNBLOCK	1	/* for unblocking signals */
