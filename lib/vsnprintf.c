@@ -3,6 +3,7 @@
 #include <sys/types.h>
 #include <stdlib.h>
 #include <string.h>
+#include "dietwarning.h"
 
 extern int __ltostr(char *s, int size, unsigned long i, int base, char UpCase);
 extern int __dtostr(double d,char *buf,int maxlen,int prec);
@@ -214,3 +215,6 @@ num_vsnprintf:
   if (str) str[apos]=0;
   return apos;
 }
+
+link_warning("vsnprintf","warning: the printf functions add several kilobytes of bloat.")
+

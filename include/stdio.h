@@ -73,4 +73,16 @@ extern FILE *stdin, *stdout, *stderr;
 
 #define EOF (int)(-1)
 
+#define BUFSIZ 128
+
+#define _IONBF 0
+#define _IOLBF 1
+#define _IOFBF 2
+
+int setvbuf(FILE *stream, char *buf, int mode , size_t size) __THROW;
+
+#define setbuf(stream,buf) setvbuf(stream,buf,buf?_IOFBF:_IONBF,BUFSIZ)
+#define setbuffer(stream,buf,size) setvbuf(stream,buf,buf?_IOFBF:_IONBF,size)
+#define setlinebuf(stream) setvbuf(stream,0,_IOLBF,BUFSIZ)
+
 #endif

@@ -14,8 +14,8 @@
 #include <sys/shm.h>
 
 int main(int argc,char *argv[]) {
-  int foo;
-  shmctl(1,2,&foo);
+  sprintf(0,"blubber");
+  printf("oink");
 #if 0
   struct in_addr duh;
   printf("%d\n",inet_aton(argv[1]?argv[1]:"10.0.0.1",&duh));

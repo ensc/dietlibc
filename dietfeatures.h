@@ -1,3 +1,5 @@
+#ifndef _DIETFEATURES_H
+#define _DIETFEATURES_H
 
 /* feel free to comment some of these out to reduce code size */
 
@@ -20,9 +22,13 @@
 /* do you want smaller or faster string routines? */
 /* #define WANT_FASTER_STRING_ROUTINES */
 
+#define WANT_LINKER_WARNINGS
+
 #endif
 
 /* stop uncommenting here ;-) */
 #ifndef WANT_FASTER_STRING_ROUTINES
 #define WANT_SMALL_STRING_ROUTINES
+#endif
+
 #endif

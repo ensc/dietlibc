@@ -22,6 +22,11 @@ extern FILE *__stdio_root;
 #define EOFINDICATOR 2
 #define BUFINPUT 4
 #define BUFLINEWISE 8
+#define NOBUF 16
+
+#define _IONBF 0
+#define _IOLBF 1
+#define _IOFBF 2
 
 /* internal function to flush buffer.
  * However, if next is BUFINPUT and the buffer is an input buffer, it

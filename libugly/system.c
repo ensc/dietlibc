@@ -1,6 +1,7 @@
 #include <signal.h>
 #include <asm/errno.h>
 #include <errno.h>
+#include "dietwarning.h"
 
 #define SHELL_PATH      "/bin/sh"       /* Path of the shell.  */
 #define SHELL_NAME      "sh"            /* Name to give it.  */
@@ -63,3 +64,5 @@ int __libc_system (const char *line)
 }
 
 int system (const char *line) __attribute__((weak,alias("__libc_system")));
+
+link_warning("system","warning: system() is a security risk.  Use fork and execvp instead!")

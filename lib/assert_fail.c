@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include "dietwarning.h"
 
 extern int __ltostr(char *s, int size, unsigned long i, int base, char UpCase);
 
@@ -25,3 +26,5 @@ void __assert_fail (const char *assertion, const char *file, unsigned int line, 
   }
   abort();
 }
+
+link_warning("__assert_fail","warning: your code still has assertions enabled!")

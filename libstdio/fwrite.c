@@ -7,8 +7,8 @@ size_t fwrite( const void *ptr, size_t size, size_t nmemb, FILE *stream) {
 #ifdef WANT_BUFFERED_STDIO
   long len=size*nmemb;
   long i;
-  if (len>BUFSIZE) {
-    fflush(stream);
+  if (len>BUFSIZE || (stream->flags&NOBUF)) {
+    if (!(stream->flags&NOBUF)) fflush(stream);
     res=write(stream->fd,ptr,size*nmemb);
   } else {
     register const unsigned char *c=ptr;

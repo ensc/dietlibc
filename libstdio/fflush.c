@@ -1,6 +1,7 @@
 #include "dietstdio.h"
 #include <unistd.h>
 #include <stdlib.h>
+#include "dietwarning.h"
 
 FILE *__stdio_root;
 
@@ -57,3 +58,4 @@ int fflush(FILE *stream) {
 }
 #endif
 
+link_warning("fflush","warning: your code uses stdio (several kilobytes of bloat).")
