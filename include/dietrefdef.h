@@ -14,6 +14,6 @@ __asm__(".section .note\n" \
 	"\t.long 0\n" \
 	"\t.ascii \"diet\"\n" \
 	"1:\t" __DIETREFDEF_H__ " " name "\n2:" \
-	".previous");
+	".previous")
 
 #endif
