@@ -1,4 +1,4 @@
-#include <asm/byteorder.h>
+#include <endian.h>
 
 unsigned short int htonl(unsigned short int hostshort) {
 #if __BYTE_ORDER==__LITTLE_ENDIAN
