@@ -1,3 +1,5 @@
+#include <ctype.h>
+
 long int atol(const char* s) {
   long int v=0;
   int sign=1;

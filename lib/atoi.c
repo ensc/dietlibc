@@ -1,3 +1,5 @@
+#include <ctype.h>
+
 int atoi(const char* s) {
   int v=0;
   int sign=1;
