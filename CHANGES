@@ -15,6 +15,7 @@
     a way to test this.  Maybe I should remove this cruft from the
     diet libc...?
   make declaration of writev and readv match susv3
+  add finite (Andreas Krennmair)
 
 0.22:
   fix i386 libm
