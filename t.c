@@ -40,10 +40,14 @@ static int rand() {
 extern double atof(const char *c);
 
 int main(int argc,char *argv[]) {
+  struct in_addr foo;
+  inet_aton("10.1.1.35",&foo);
+#if 0
   struct hostent *foo=gethostbyname("zeit.fu-berlin.de");
   if (foo)
     printf("%s -> %s\n",foo->h_name,inet_ntoa(*(struct in_addr*)foo->h_addr));
 /*  printf("%g %g\n",1e-10,1e10); */
+#endif
 #if 0
   double d=0.0;
   long long t=0x12345678ABCDEF01;

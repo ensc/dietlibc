@@ -2,7 +2,7 @@
 
 unsigned short int htons(unsigned short int hostshort) {
 #if __BYTE_ORDER==__LITTLE_ENDIAN
-  return ((hostshort>>8)&0xff) | (hostshort&0xff);
+  return ((hostshort>>8)&0xff) | (hostshort<<8);
 #else
   return hostshort;
 #endif
