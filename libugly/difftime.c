@@ -1,8 +1,7 @@
-#include <sys/time.h>
+#include <time.h>
 #include "../dietwarning.h"
 
-double  difftime ( time_t time1, time_t time2 )
-{
+double difftime(time_t time1, time_t time2) {
     return (double)time1 - (double)time2;
 }
 

@@ -180,7 +180,7 @@ match:
 
 static const char* parseatom(struct atom*__restrict__ a,const char*__restrict__ s,regex_t*__restrict__ rx) {
   const char *tmp;
-  a->m=matchatom;
+  a->m=(matcher)matchatom;
   a->bnum=-1;
   switch (*s) {
   case '(':
@@ -317,7 +317,7 @@ static int matchbranch(void*__restrict__ x,const char*__restrict__ s,int ofs,str
 
 static const char* parsebranch(struct branch*__restrict__ b,const char*__restrict__ s,regex_t*__restrict__ rx,int*__restrict__ pieces) {
   struct piece p;
-  const char *tmp;
+  const char *tmp;	/* the gcc warning here is bogus */
   b->m=matchbranch;
   b->num=0; b->p=0;
   for (;;) {

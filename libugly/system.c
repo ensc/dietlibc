@@ -8,8 +8,7 @@
 
 extern char **environ;
 
-int execve(const char*filename, char *const argv[], char *const envp[]);
-int sigaction(int signum,  const  struct  sigaction  *act, struct sigaction *oldact);
+int __libc_system (const char *line);
 
 int __libc_system (const char *line)
 {

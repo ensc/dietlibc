@@ -28,6 +28,8 @@ extern long int timezone;
 extern int daylight;
 extern char* tzname[2];
 
+void tzset (void) __THROW;
+
 struct tm* localtime(const time_t* t) __THROW;
 struct tm* gmtime(const time_t* t) __THROW;
 struct tm* localtime_r(const time_t* t, struct tm* r) __THROW;

@@ -1,6 +1,6 @@
 #include <unistd.h>
 
-extern int __diet_brk(void *end_data_segment);
+extern void* __diet_brk(void *end_data_segment);
 
 void* __curbrk=0;
 

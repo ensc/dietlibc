@@ -9,7 +9,7 @@ int __libc_socketpair(int a) {
 #else
 int __libc_socketpair(int a, int type, int protocol, int sv[2]);
 int __libc_socketpair(int a, int type, int protocol, int sv[2]) {
-  unsigned long args[] = { a, type, protocol, sv };
+  unsigned long args[] = { a, type, protocol, (long)sv };
   return socketcall(SYS_SOCKETPAIR, args);
 #endif
 }

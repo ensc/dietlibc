@@ -24,8 +24,9 @@
    before doing a `__setjmp' on ENV[0].__jmpbuf.
    Always return zero.  */
 
-int
-__sigjmp_save (sigjmp_buf env, int savemask)
+int __sigjmp_save (sigjmp_buf env, int savemask);
+
+int __sigjmp_save (sigjmp_buf env, int savemask)
 {
   env[0].__mask_was_saved = (savemask &&
 			     sigprocmask (SIG_BLOCK, (sigset_t *) NULL,
