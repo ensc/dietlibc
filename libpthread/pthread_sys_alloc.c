@@ -29,7 +29,7 @@ void* realloc(void* ptr, size_t size) { /* the code is not thread-save */
   register void *ret;
   __NO_ASYNC_CANCEL_BEGIN;
   pthread_mutex_lock(&mutex_alloc);
-  __libc_realloc(ptr, size);
+  ret=__libc_realloc(ptr, size);
   pthread_mutex_unlock(&mutex_alloc);
   __NO_ASYNC_CANCEL_END;
   return ret;
