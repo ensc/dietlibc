@@ -7,6 +7,10 @@
   added clone for mips (by Olaf).
   fixed longjmp and setjmp on sparc not to require glibc include files.
   added pause for all (by Olaf).
+  added isupper and islower.
+  added __attribute__ ((__const__)) to ctype.h
+  added putc and putchar as macros.
+  added strcasecmp and strncasecmp.
 
 0.7:
   clone support for i386,alpha,arm and sparc by Olaf.

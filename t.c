@@ -8,7 +8,7 @@
 #include <sys/mount.h>
 
 int main() {
-  printf("%c\n",tolower('A'));
+  printf("%d\n",strncasecmp("foo","FOO2",3));
 #if 0
   int i;
   for (i=0; i<5; i++) {

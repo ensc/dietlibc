@@ -38,8 +38,10 @@ int ungetc(int c, FILE *stream);
 
 int fputc(int c, FILE *stream);
 int fputs(const char *s, FILE *stream);
-int putc(int c, FILE *stream);
-int putchar(int c);
+
+#define putc(c,stream) fputc(c,stream)
+#define putchar(c) fputc(c,stdout)
+
 int puts(const char *s);
 
 int fseek( FILE *stream, long offset, int whence);

@@ -16,6 +16,9 @@ int memcmp(const void *s1, const void *s2, size_t n) __THROW __pure__;
 int strcmp(const char *s1, const char *s2) __THROW __pure__;
 int strncmp(const char *s1, const char *s2, size_t n) __THROW __pure__;
 
+int strcasecmp(const char *s1, const char *s2) __THROW __pure__;
+int strncasecmp(const char *s1, const char *s2, size_t n) __THROW __pure__;
+
 size_t strlen(const char *s) __THROW __pure__;
 
 char *strdup(const char *s) __THROW;
