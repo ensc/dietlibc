@@ -38,8 +38,8 @@ size_t strftime(char *s, size_t max, const char *format, const struct tm *tm) {
       case 'B': src=months[tm->tm_mon]; goto append;
       case 'c': t+=strftime(t,max-(t-s),"%b %a %d %k:%M:%S %Z %Y",tm); break;
       case 'C': buf[i2a(buf,(tm->tm_year+1900)/100)]=0; src=buf; goto append;
-      case 'd': buf[i2a(buf,tm->tm_mday+1)]=0; src=buf; goto append;
-      case 'e': buf[i2as(buf,tm->tm_mday+1)]=0; src=buf; goto append;
+      case 'd': buf[i2a(buf,tm->tm_mday)]=0; src=buf; goto append;
+      case 'e': buf[i2as(buf,tm->tm_mday)]=0; src=buf; goto append;
       case 'H': buf[i2a(buf,tm->tm_hour)]=0; src=buf; goto append;
       case 'I': buf[i2a(buf,tm->tm_hour%12)]=0; src=buf; goto append;
       case 'j': buf[i2a(buf,tm->tm_yday)]=0; src=buf; goto append;

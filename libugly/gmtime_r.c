@@ -20,8 +20,16 @@ struct tm *gmtime_r(const time_t *timep, struct tm *r) {
       break;
   }
   r->tm_year=i-1900;
+  r->tm_yday=work;
+
+  r->tm_mday=1;
+  if (__isleap(i) && (work>58)) {
+    work-=1;
+    if (work==59) r->tm_mday=2; /* 29.2. */
+  }
+
   for (i=11; i && __spm[i]>work; --i) ;
   r->tm_mon=i;
-  r->tm_mday=work-__spm[i]+1;
+  r->tm_mday+=work-__spm[i];
   return r;
 }
