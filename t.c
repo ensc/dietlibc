@@ -7,13 +7,16 @@
 #include <assert.h>
 #include <sys/mount.h>
 #include <time.h>
+#include <sys/stat.h>
 
 int main() {
+#if 0
   struct tm duh;
   time_t t;
   time(&t);
   gmtime_r(&t,&duh);
   printf("%s\n",asctime(&duh));
+#endif
 #if 0
   char buf[30];
   duh.tm_sec=42;
@@ -96,7 +99,7 @@ int main() {
     exit(1);
   execvp(argv[0],argv);
 #endif
-#if 0
+#if 1
   struct stat64 f;
   char buf[128];
   fstat64(0,&f);
