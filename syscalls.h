@@ -11,11 +11,11 @@
 #include "sparc/syscalls.h"
 #endif
 
-#elif defined(__powerpc__)
-#include "ppc/syscalls.h"
-
 #elif defined(__powerpc64__)
 #include "ppc64/syscalls.h"
+
+#elif defined(__powerpc__)
+#include "ppc/syscalls.h"
 
 #elif defined(__mips__)
 #include "mips/syscalls.h"

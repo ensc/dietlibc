@@ -225,7 +225,7 @@ struct timeval utimeout;		/* seconds to wait before giving up */
 	register int outlen;
 	register int inlen;
 	struct timeval singlewait;
-	int fromlen;
+	socklen_t fromlen;
 
 #ifdef FD_SETSIZE
 	fd_set readfds;

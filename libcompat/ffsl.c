@@ -5,11 +5,12 @@ int ffsl(long i) {
   int plus=0;
   /* return index of rightmost bit set */
   /* ffs(1) == 1, ffs(2) == 2, ffs(256) == 9, ffs(257)=1 */
-  if (sizeof(i)==8)	/* fold 64-bit archs */
-    if ((i&0xffffffff)==0) {
-      plus=32;
-      i>>=32;
-    }
+#if __WORDSIZE == 64
+  if ((i&0xffffffff)==0) {
+    plus=32;
+    i>>=32;
+  }
+#endif
   if ((i&0xffff)==0) {
     plus+=16;
     i>>=16;

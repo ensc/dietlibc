@@ -869,7 +869,7 @@ typedef struct
 
 typedef struct
 {
-  int a_type;			/* Entry type */
+  int32_t a_type;		/* Entry type */
   union
     {
       long int a_val;		/* Integer value */

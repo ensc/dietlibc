@@ -190,7 +190,7 @@ struct pt_regs {
 typedef struct {
         uint32_t   mask;
         uint32_t   addr;
-} psw_t __attribute__ ((aligned(8)));
+} psw_t __attribute__ ((__aligned__(8)));
 
 typedef union
 {
@@ -237,7 +237,7 @@ struct pt_regs
 typedef struct
 {
 	uint32_t cr[3];
-} per_cr_words  __attribute__((packed));
+} per_cr_words  __attribute__((__packed__));
 
 #define PER_EM_MASK 0xE8000000
 
@@ -261,14 +261,14 @@ typedef	struct
 	unsigned                       : 21;
 	addr_t   starting_addr;
 	addr_t   ending_addr;
-} per_cr_bits  __attribute__((packed));
+} per_cr_bits  __attribute__((__packed__));
 
 typedef struct
 {
 	uint16_t          perc_atmid;          /* 0x096 */
 	uint32_t          address;             /* 0x098 */
 	uint8_t           access_id;           /* 0x0a1 */
-} per_lowcore_words  __attribute__((packed));
+} per_lowcore_words  __attribute__((__packed__));
 
 typedef struct
 {
@@ -287,14 +287,14 @@ typedef struct
 	addr_t   address;                     /* 0x098 */
 	unsigned                         : 4; /* 0x0a1 */
 	unsigned access_id               : 4;
-} per_lowcore_bits __attribute__((packed));
+} per_lowcore_bits __attribute__((__packed__));
 
 typedef struct
 {
 	union {
 		per_cr_words   words;
 		per_cr_bits    bits;
-	} control_regs  __attribute__((packed));
+	} control_regs  __attribute__((__packed__));
 	/*
 	 * Use these flags instead of setting em_instruction_fetch
 	 * directly they are used so that single stepping can be
@@ -313,7 +313,7 @@ typedef struct
 		per_lowcore_words words;
 		per_lowcore_bits  bits;
 	} lowcore; 
-} per_struct __attribute__((packed));
+} per_struct __attribute__((__packed__));
 
 typedef struct
 {
@@ -673,7 +673,7 @@ struct ia64_fpreg {
   union {
     unsigned long bits[2];
   } u;
-} __attribute__ ((aligned (16)));
+} __attribute__ ((__aligned__ (16)));
 
 struct pt_regs {
 	unsigned long cr_ipsr;		/* interrupted task's psr */

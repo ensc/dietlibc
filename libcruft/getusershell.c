@@ -1,7 +1,9 @@
 #define _BSD_SOURCE
-#include <unistd.h>
 #include <paths.h>
 #include <string.h>
+#undef __attribute_dontuse__
+#define __attribute_dontuse__
+#include <unistd.h>
 #include "parselib.h"
 
 static struct state __ps;

@@ -249,7 +249,7 @@ __extension__ long long	st_size;
 __extension__ long long	st_blocks;
 };
 #elif defined(__powerpc__) || defined(__powerpc64__)
-#if defined(__powerpc__)
+#if defined(__powerpc__) && !defined(__powerpc64__)
 struct stat {
 	dev_t		st_dev;
 	ino_t		st_ino;
@@ -275,9 +275,9 @@ struct stat {
 	unsigned long	st_dev;
 	ino_t		st_ino;
 	nlink_t		st_nlink;
-	mode_t		st_mode;
-	uid_t 		st_uid;
-	gid_t 		st_gid;
+	uint32_t	st_mode;
+	uint32_t 	st_uid;
+	uint32_t 	st_gid;
 	unsigned long	st_rdev;
 	off_t		st_size;
 	unsigned long  	st_blksize;
@@ -299,12 +299,12 @@ struct stat {
 struct stat64 {
 __extension__	unsigned long long st_dev; 	/* Device.  */
 __extension__	unsigned long long st_ino;	/* File serial number.  */
-	unsigned int st_mode;		/* File mode.  */
-	unsigned int st_nlink;		/* Link count.  */
-	unsigned int st_uid;		/* User ID of the file's owner.  */
-	unsigned int st_gid;		/* Group ID of the file's group. */
+	uint32_t st_mode;		/* File mode.  */
+	uint32_t st_nlink;		/* Link count.  */
+	uint32_t st_uid;		/* User ID of the file's owner.  */
+	uint32_t st_gid;		/* Group ID of the file's group. */
 __extension__	unsigned long long st_rdev; 	/* Device number, if device.  */
-	unsigned short int __pad2;
+	uint16_t __pad2;
 __extension__	long long st_size;		/* Size of file, in bytes.  */
 	long st_blksize;		/* Optimal block size for I/O.  */
 
@@ -512,10 +512,10 @@ struct stat {
 	unsigned long	st_dev;
 	unsigned long	st_ino;
 	unsigned long	st_nlink;
-	unsigned int	st_mode;
-	unsigned int	st_uid;
-	unsigned int	st_gid;
-	unsigned int	__pad0;
+	uint32_t	st_mode;
+	uint32_t	st_uid;
+	uint32_t	st_gid;
+	uint32_t	__pad0;
 	unsigned long	 st_rdev;
 	unsigned long	st_size;
 	unsigned long	st_blksize;

@@ -57,7 +57,7 @@ struct epoll_event {
   epoll_data_t data;
 }
 #ifdef __x86_64__
-__attribute__((packed))
+__attribute__((__packed__))
 #endif
 ;
 

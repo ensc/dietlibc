@@ -8,6 +8,10 @@
 #include <stdlib.h>
 #include "dietdirent.h"
 
+#ifdef __NO_STAT64
+int ftw64(const char*dir,int(*f)(const char*file,const struct stat* sb,int flag),int dpth) __THROW;
+#endif
+
 int ftw64(const char*dir,int(*f)(const char*file,const struct stat* sb,int flag),int dpth){
   char* cd;
   size_t cdl;
@@ -16,7 +20,7 @@ int ftw64(const char*dir,int(*f)(const char*file,const struct stat* sb,int flag)
   struct stat sb;
   int r;
   unsigned int oldlen=0;
-  char* filename;	/* the warning gcc issues here is bogus */
+  char* filename = NULL;
   if(chdir(dir))return-1;
   cd=alloca(PATH_MAX+1);
   if(!getcwd(cd,PATH_MAX))return-1;

@@ -1,6 +1,6 @@
 #include <unistd.h>
 
-int getpgrp()
+pid_t getpgrp()
 {
   return getpgid(0);
 }

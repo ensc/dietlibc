@@ -1,8 +1,9 @@
 #include <sys/types.h>
 #include <string.h>
+#include <strings.h>
 #include "dietwarning.h"
 
-void bzero(void *s, size_t n);
+#undef bzero
 void bzero(void *s, size_t n) {
   memset(s,0,n);
 }

@@ -172,9 +172,9 @@ err_out:
 }
 void* __libc_malloc(size_t size) __attribute__((alias("_alloc_libc_malloc")));
 void* malloc(size_t size) __attribute__((weak,alias("_alloc_libc_malloc")));
-void* calloc(size_t nmemb, size_t _size) __attribute__((weak));
 
-void* calloc(size_t nmemb, size_t _size) {
+void* __libc_calloc(size_t nmemb, size_t _size);
+void* __libc_calloc(size_t nmemb, size_t _size) {
   register size_t size=_size*nmemb;
   if (nmemb && size/nmemb!=_size) {
     (*__errno_location())=ENOMEM;
@@ -182,6 +182,7 @@ void* calloc(size_t nmemb, size_t _size) {
   }
   return malloc(size);
 }
+void* calloc(size_t nmemb, size_t _size) __attribute__((weak,alias("__libc_calloc")));
 
 void* __libc_realloc(void* ptr, size_t _size);
 void* __libc_realloc(void* ptr, size_t _size) {

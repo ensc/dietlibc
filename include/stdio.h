@@ -4,38 +4,40 @@
 #include <sys/cdefs.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <stdarg.h>
 
 __BEGIN_DECLS
 
+struct __stdio_file;
 typedef struct __stdio_file FILE;
+
+extern FILE *stdin, *stdout, *stderr;
 
 FILE *fopen (const char *path, const char *mode) __THROW;
 FILE *fdopen (int fildes, const char *mode) __THROW;
 FILE *freopen (const char *path, const char *mode, FILE *stream) __THROW;
 
-int printf(const char *format, ...) __THROW __attribute__((format(printf,1,2)));
-int fprintf(FILE *stream, const char *format, ...) __THROW __attribute__((format(printf,2,3)));
-int sprintf(char *str, const char *format, ...) __THROW __attribute__((format(printf,2,3)));
-int snprintf(char *str, size_t size, const char *format, ...) __THROW __attribute__((format(printf,3,4)));
-int asprintf(char **ptr, const char* format, ...) __THROW __attribute_malloc__ __attribute__((format(printf,2,3)));
+int printf(const char *format, ...) __THROW __attribute__((__format__(__printf__,1,2)));
+int fprintf(FILE *stream, const char *format, ...) __THROW __attribute__((__format__(__printf__,2,3)));
+int sprintf(char *str, const char *format, ...) __THROW __attribute__((__format__(__printf__,2,3)));
+int snprintf(char *str, size_t size, const char *format, ...) __THROW __attribute__((__format__(__printf__,3,4)));
+int asprintf(char **ptr, const char* format, ...) __THROW __attribute_malloc__ __attribute__((__format__(__printf__,2,3)));
 
-int scanf(const char *format, ...) __THROW __attribute__((format(scanf,1,2)));
-int fscanf(FILE *stream, const char *format, ...) __THROW __attribute__((format(scanf,2,3)));
-int sscanf(const char *str, const char *format, ...) __THROW __attribute__((format(scanf,2,3)));
+int scanf(const char *format, ...) __THROW __attribute__((__format__(__scanf__,1,2)));
+int fscanf(FILE *stream, const char *format, ...) __THROW __attribute__((__format__(__scanf__,2,3)));
+int sscanf(const char *str, const char *format, ...) __THROW __attribute__((__format__(__scanf__,2,3)));
 
-#include <stdarg.h>
+int vprintf(const char *format, va_list ap) __THROW __attribute__((__format__(__printf__,1,0)));
+int vfprintf(FILE *stream, const char *format, va_list ap) __THROW __attribute__((__format__(__printf__,2,0)));
+int vsprintf(char *str, const char *format, va_list ap) __THROW __attribute__((__format__(__printf__,2,0)));
+int vsnprintf(char *str, size_t size, const char *format, va_list ap) __THROW __attribute__((__format__(__printf__,3,0)));
 
-int vprintf(const char *format, va_list ap) __THROW __attribute__((format(printf,1,0)));
-int vfprintf(FILE *stream, const char *format, va_list ap) __THROW __attribute__((format(printf,2,0)));
-int vsprintf(char *str, const char *format, va_list ap) __THROW __attribute__((format(printf,2,0)));
-int vsnprintf(char *str, size_t size, const char *format, va_list ap) __THROW __attribute__((format(printf,3,0)));
+int fdprintf(int fd, const char *format, ...) __THROW __attribute__((__format__(__printf__,2,3)));
+int vfdprintf(int fd, const char *format, va_list ap) __THROW __attribute__((__format__(__printf__,2,0)));
 
-int fdprintf(int fd, const char *format, ...) __THROW __attribute__((format(printf,2,3)));
-int vfdprintf(int fd, const char *format, va_list ap) __THROW __attribute__((format(printf,2,0)));
-
-int vscanf(const char *format, va_list ap) __THROW __attribute__((format(scanf,1,0)));
-int vsscanf(const char *str, const char *format, va_list ap) __THROW __attribute__((format(scanf,2,0)));
-int vfscanf(FILE *stream, const char *format, va_list ap) __THROW __attribute__((format(scanf,2,0)));
+int vscanf(const char *format, va_list ap) __THROW __attribute__((__format__(__scanf__,1,0)));
+int vsscanf(const char *str, const char *format, va_list ap) __THROW __attribute__((__format__(__scanf__,2,0)));
+int vfscanf(FILE *stream, const char *format, va_list ap) __THROW __attribute__((__format__(__scanf__,2,0)));
 
 int fgetc(FILE *stream) __THROW;
 int fgetc_unlocked(FILE *stream) __THROW;
@@ -56,15 +58,25 @@ int getchar(void) __THROW;
 int putchar(int c) __THROW;
 int putchar_unlocked(int c) __THROW;
 
+#if !defined(__cplusplus)
 #define putc(c,stream) fputc(c,stream)
 #define putchar(c) fputc(c,stdout)
 #define putc_unlocked(c,stream) fputc_unlocked(c,stream)
 #define putchar_unlocked(c) fputc_unlocked(c,stdout)
+#else
+inline int putc(int c, FILE *stream) __THROW { return fputc(c,stream); }
+inline int putc_unlocked(int c, FILE *stream) __THROW { return fputc_unlocked(c,stream); }
+#endif
 
+#if !defined(__cplusplus)
 #define getc(stream) fgetc(stream)
 #define getchar() fgetc(stdin)
 #define getc_unlocked(stream) fgetc_unlocked(stream)
 #define getchar_unlocked() fgetc_unlocked(stdin)
+#else
+inline int getc_unlocked(FILE *stream) __THROW { return fgetc_unlocked(stream); }
+inline int getchar_unlocked(void) __THROW { return fgetc_unlocked(stdin); }
+#endif
 
 int puts(const char *s) __THROW;
 
@@ -117,10 +129,9 @@ void clearerr(FILE *stream) __THROW;
 void clearerr_unlocked(FILE *stream) __THROW;
 
 int remove(const char *pathname) __THROW;
+int rename(const char *oldpath, const char *newpath) __THROW;
 
 void perror(const char *s) __THROW;
-
-extern FILE *stdin, *stdout, *stderr;
 
 #define EOF (-1)
 
@@ -133,9 +144,18 @@ extern FILE *stdin, *stdout, *stderr;
 int setvbuf(FILE *stream, char *buf, int mode , size_t size) __THROW;
 int setvbuf_unlocked(FILE *stream, char *buf, int mode , size_t size) __THROW;
 
+#if !defined(__cplusplus)
 #define setbuf(stream,buf) setvbuf(stream,buf,buf?_IOFBF:_IONBF,BUFSIZ)
 #define setbuffer(stream,buf,size) setvbuf(stream,buf,buf?_IOFBF:_IONBF,size)
 #define setlinebuf(stream) setvbuf(stream,0,_IOLBF,BUFSIZ)
+#else
+inline int setbuf(FILE *stream, char *buf) __THROW
+  { return setvbuf(stream,buf,buf?_IOFBF:_IONBF,BUFSIZ); }
+inline int setbuffer(FILE *stream, char *buf, size_t size) __THROW
+  { return setvbuf(stream,buf,buf?_IOFBF:_IONBF,size); }
+inline int setlinebuf(FILE *stream) __THROW
+  { return setvbuf(stream,0,_IOLBF,BUFSIZ); }
+#endif
 
 FILE *popen(const char *command, const char *type) __THROW;
 int pclose(FILE *stream) __THROW;

@@ -29,9 +29,9 @@ Return value    return their return values as doubles.
 #endif
 
 
-#define EXPL(x)   ((((short *)&x)[4] & 0x7FFF) >> 0)
-#define EXPD(x)   ((((short *)&x)[3] & 0x7FF0) >> 4)
-#define EXPF(x)   ((((short *)&x)[1] & 0x7F80) >> 7)
+#define EXPL(x)   ((((short *)(void *)&x)[4] & 0x7FFF) >> 0)
+#define EXPD(x)   ((((short *)(void *)&x)[3] & 0x7FF0) >> 4)
+#define EXPF(x)   ((((short *)(void *)&x)[1] & 0x7F80) >> 7)
 
 #define SQUARE(x) (long) (My - (x) * (x) )
 

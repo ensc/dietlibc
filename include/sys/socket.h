@@ -185,8 +185,8 @@ struct sockaddr {
 };
 
 struct linger {
-  int l_onoff;
-  int l_linger;
+  int32_t l_onoff;
+  int32_t l_linger;
 };
 
 struct iovec {
@@ -196,18 +196,18 @@ struct iovec {
 
 struct msghdr {
   void* msg_name;		/* Socket name */
-  int msg_namelen;		/* Length of name */
+  socklen_t msg_namelen;		/* Length of name */
   struct iovec* msg_iov;	/* Data blocks */
   size_t msg_iovlen;		/* Number of blocks */
   void* msg_control;		/* Per protocol magic (eg BSD file descriptor passing) */
   size_t msg_controllen;	/* Length of cmsg list */
-  unsigned msg_flags;
+  uint32_t msg_flags;
 };
 
 struct cmsghdr {
   size_t cmsg_len;	/* data byte count, including hdr */
-  int cmsg_level;	/* originating protocol */
-  int cmsg_type;	/* protocol-specific type */
+  int32_t cmsg_level;	/* originating protocol */
+  int32_t cmsg_type;	/* protocol-specific type */
 };
 
 #define UIO_FASTIOV	8
@@ -220,9 +220,9 @@ struct cmsghdr {
 #define SCM_CONNECT	0x03	/* rw: struct scm_connect       */
 
 struct ucred {
-  unsigned int pid;
-  unsigned int uid;
-  unsigned int gid;
+  pid_t pid;
+  uid_t uid;
+  gid_t gid;
 };
 
 /* Supported address families. */

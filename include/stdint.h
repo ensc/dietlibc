@@ -8,26 +8,45 @@ __BEGIN_DECLS
 typedef int8_t int_least8_t;
 typedef int16_t int_least16_t;
 typedef int32_t int_least32_t;
+typedef int64_t int_least64_t;
+
 typedef uint8_t uint_least8_t;
 typedef uint16_t uint_least16_t;
 typedef uint32_t uint_least32_t;
-
-#if !defined(__STRICT_ANSI__) || __STDC_VERSION__ + 0 >= 199900L
-typedef int64_t int_least64_t;
 typedef uint64_t uint_least64_t;
-#endif
 
 typedef signed char int_fast8_t;
 typedef signed long int int_fast16_t;
 typedef signed long int int_fast32_t;
-typedef signed long long int int_fast64_t;
+typedef int64_t int_fast64_t;
 
 typedef unsigned char uint_fast8_t;
 typedef unsigned long int uint_fast16_t;
 typedef unsigned long int uint_fast32_t;
-typedef unsigned long long int uint_fast64_t;
+typedef uint64_t uint_fast64_t;
 
-#include <endian.h>
+
+
+/* The ISO C99 standard specifies that in C++ implementations these
+   should only be defined if explicitly requested.  */
+#if !defined __cplusplus || defined __STDC_LIMIT_MACROS
+
+/* FIXME: missing are
+     INTx_MIN, INTx_MAX, UINTx_MAX
+     INT_LEASTx_MIN, INT_LEASTx_MAX, UINT_LEASTx_MAX
+     INT_FASTx_MIN, INT_FASTx_MAX, UINT_FASTx_MAX
+     INTMAX_MIN, INTMAX_MAX, UINTMAX_MAX
+     INTPTR_MIN, INTPTR_MAX, UINTPTR_MAX
+     PTRDIFF_MIN, PTRDIFF_MAX
+     SIG_ATOMIC_MIN, SIG_ATOMIC_MAX
+     SIZE_MAX
+     WCHAR_MIN, WCHAR_MAX
+     WINT_MIN, WINT_MAX
+*/
+
+#endif	/* C++ && limit macros */
+
+
 
 /* The ISO C99 standard specifies that in C++ implementations these
    should only be defined if explicitly requested.  */

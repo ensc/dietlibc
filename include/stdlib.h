@@ -42,7 +42,7 @@ long int atol(const char *nptr) __THROW;
 double atof(const char *nptr) __THROW;
 __extension__ long long int atoll(const char *nptr);
 
-void exit(int status) __THROW __attribute__((noreturn));
+void exit(int status) __THROW __attribute__((__noreturn__));
 void abort(void) __THROW;
 
 extern int rand(void) __THROW;
@@ -72,7 +72,7 @@ extern char **environ;
 /* now this function is the greatest bullshit I have ever seen.
  * The ISO people must be out of their minds. */
 typedef struct { int quot,rem; } div_t;
-div_t div(int numer, int denom) __THROW __attribute__((const));
+div_t div(int numer, int denom) __THROW __attribute__((__const__));
 
 char *realpath(const char *path, char *resolved_path) __THROW;
 
@@ -81,9 +81,9 @@ char* mkdtemp(char *_template);
 
 char* mktemp(char *_template);
 
-int abs(int i) __THROW __attribute__((const));
-long int labs(long int i) __THROW __attribute__((const));
-__extension__ long long int llabs(long long int i) __THROW __attribute__((const));
+int abs(int i) __THROW __attribute__((__const__));
+long int labs(long int i) __THROW __attribute__((__const__));
+__extension__ long long int llabs(long long int i) __THROW __attribute__((__const__));
 
 #ifdef _XOPEN_SOURCE
 int grantpt (int fd) __THROW;

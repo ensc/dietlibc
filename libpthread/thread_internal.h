@@ -78,7 +78,7 @@ struct _pthread_descr_struct {
   struct thread_cleanup_t*cleanup_stack;
 
   /* thread specific data */
-  const void*tkd[PTHREAD_KEYS_MAX];
+  void*tkd[PTHREAD_KEYS_MAX];
 
 #ifdef PTHREAD_HANDLE_DNS_CORRECT
   /* DNS cruft */
@@ -92,7 +92,7 @@ struct _pthread_descr_struct {
 /* thread keys */
 struct _thread_key {
   int used;
-  void (*destructor)(const void*);
+  void (*destructor)(void*);
 };
 
 /* internal stuff */

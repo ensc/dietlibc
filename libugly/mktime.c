@@ -1,4 +1,7 @@
 #define _GNU_SOURCE
+#include <sys/cdefs.h>
+#undef __attribute_dontuse__
+#define __attribute_dontuse__
 #include <time.h>
 #include "dietfeatures.h"
 

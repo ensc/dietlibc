@@ -4,6 +4,8 @@
 #include <stdio.h>
 
 #define _BSD_SOURCE
+#undef __attribute_dontuse__
+#define __attribute_dontuse__
 #include <errno.h>
 
 extern const char  __sys_err_unknown [];

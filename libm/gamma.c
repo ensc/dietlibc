@@ -50,7 +50,7 @@ Return value    gamma returns a value in range (-0.1208, +oo). For a input
 static const double  coeff[] = { B0, B1, B2, B3, B4, B5, B6, B7, B8, B9, B10 };
 int                  signgam;
 
-#define EXPL(x) (((short *)&x)[4] & 0x7FFF)
+#define EXPL(x) (((short *)(void *)&x)[4] & 0x7FFF)
 
 static double  logfact ( long double x )
 {

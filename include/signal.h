@@ -243,9 +243,9 @@ typedef union sigval {
 
 #define SI_MAX_SIZE	128
 #if __WORDSIZE == 64
-#define SI_PAD_SIZE	((SI_MAX_SIZE/sizeof(int)) - 4)
+#define SI_PAD_SIZE	((SI_MAX_SIZE/sizeof(int32_t)) - 4)
 #else
-#define SI_PAD_SIZE	((SI_MAX_SIZE/sizeof(int)) - 3)
+#define SI_PAD_SIZE	((SI_MAX_SIZE/sizeof(int32_t)) - 3)
 #endif
 
 #ifdef __sparc_v9__
@@ -255,11 +255,11 @@ typedef long __band_t;
 #endif
 
 typedef struct siginfo {
-  int si_signo;
-  int si_errno;
-  int si_code;
+  int32_t si_signo;
+  int32_t si_errno;
+  int32_t si_code;
   union {
-    int _pad[SI_PAD_SIZE];
+    int32_t _pad[SI_PAD_SIZE];
     /* kill() */
     struct {
       pid_t _pid;		/* sender's pid */
@@ -547,7 +547,7 @@ int sigtimedwait(const sigset_t *mask, siginfo_t *info, const struct timespec *t
 int sigqueueinfo(int pid, int sig, siginfo_t *info) __THROW;
 int siginterrupt(int sig, int flag) __THROW;
 
-int killpg(int pgrp, int sig) __THROW;
+int killpg(pid_t pgrp, int sig) __THROW;
 
 /* 0 is OK ! kernel puts in MAX_THREAD_TIMEOUT :) */
 #define sigwaitinfo(m, i) sigtimedwait((m),(i),0)

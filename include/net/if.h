@@ -32,7 +32,7 @@ __BEGIN_DECLS
 struct ifmap {
   unsigned long mem_start;
   unsigned long mem_end;
-  unsigned short base_addr; 
+  uint16_t base_addr;
   unsigned char irq;
   unsigned char dma;
   unsigned char port;
@@ -53,9 +53,9 @@ struct ifreq {
     struct sockaddr ifru_broadaddr;
     struct sockaddr ifru_netmask;
     struct  sockaddr ifru_hwaddr;
-    short ifru_flags;
-    int ifru_ivalue;
-    int ifru_mtu;
+    int16_t ifru_flags;
+    int32_t ifru_ivalue;
+    int32_t ifru_mtu;
     struct ifmap ifru_map;
     char ifru_slave[IF_NAMESIZE];	/* Just fits the size */
     char ifru_newname[IF_NAMESIZE];
@@ -81,7 +81,7 @@ struct ifreq {
 #define ifr_newname	ifr_ifru.ifru_newname	/* New name		*/
 
 struct ifconf {
-  int ifc_len;			/* size of buffer	*/
+  int32_t ifc_len;		/* size of buffer	*/
   union {
     char *			ifcu_buf;
     struct	ifreq 		*ifcu_req;
@@ -95,7 +95,7 @@ unsigned int if_nametoindex (const char *ifname) __THROW;
 char *if_indextoname (unsigned int ifindex, char *ifname) __THROW;
 
 struct if_nameindex {
-  unsigned int if_index;
+  uint32_t if_index;
   char *if_name;
 };
 

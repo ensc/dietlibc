@@ -7,6 +7,7 @@ extern int main(int argc,char* argv[],char* envp[]);
 
 long __guard;
 
+int stackgap(int argc,char* argv[],char* envp[]);
 int stackgap(int argc,char* argv[],char* envp[]) {
   int fd=open("/dev/urandom",O_RDONLY);
   unsigned short s;

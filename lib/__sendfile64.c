@@ -9,7 +9,7 @@ extern ssize_t __dietlibc_sendfile64 (int out_fd, int in_fd, loff_t* offset,
 
 ssize_t sendfile64 (int out_fd, int in_fd, loff_t* offset, size_t count) {
   static int havesendfile64=1;
-  ssize_t r;
+  ssize_t r = -1;
   if (havesendfile64) {
     r=__dietlibc_sendfile64(out_fd,in_fd,offset,count);
     if (r==-1 && errno==ENOSYS)

@@ -19,18 +19,18 @@ void __thread_start__key(_pthread_descr th) {
 
 void __thread_exit__key(_pthread_descr th) {
   int i;
-  void (*dstr)(const void*);
+  void (*dstr)(void*);
 
   for (i=0;i<PTHREAD_KEYS_MAX;++i) {
     if ((__thread_keys[i].used)&&(dstr=__thread_keys[i].destructor)) {
-      const void*data=th->tkd[i];
+      void*data=th->tkd[i];
       if (data) dstr(data);
     }
   }
 }
 
 /* "create" a thread specific data key */
-int pthread_key_create(pthread_key_t*key,void(*destructor)(const void*)) {
+int pthread_key_create(pthread_key_t*key,void(*destructor)(void*)) {
   _pthread_descr this=__thread_self();
   int ret=EAGAIN,i;
 
@@ -72,9 +72,9 @@ int pthread_key_delete(pthread_key_t key) {
 
 
 /* get thread specific data */
-const void*pthread_getspecific(pthread_key_t key) {
+void*pthread_getspecific(pthread_key_t key) {
   _pthread_descr this=__thread_self();
-  const void*ret=0;
+  void*ret=0;
 
   if ((key<PTHREAD_KEYS_MAX) && (__thread_keys[key].used)) {
     ret=this->tkd[key];
@@ -87,7 +87,7 @@ int pthread_setspecific(pthread_key_t key, const void *value) {
   _pthread_descr this=__thread_self();
 
   if ((key<PTHREAD_KEYS_MAX)&&(__thread_keys[key].used)) {
-    this->tkd[key]=value;
+    this->tkd[key]=(void *)value; /* UNCONST */
     return 0;
   }
   return EINVAL;

@@ -234,7 +234,8 @@ resultproc_t eachresult;		/* call with each result obtained */
 	AUTH *unix_auth = authunix_create_default();
 	XDR xdr_stream;
 	register XDR *xdrs = &xdr_stream;
-	int outlen, inlen, fromlen, nets;
+	int outlen, inlen, nets;
+	socklen_t fromlen;
 	register int sock;
 	int on = 1;
 

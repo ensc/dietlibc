@@ -336,7 +336,7 @@ static int matchempty(void*__restrict__ x,const char*__restrict__ s,int ofs,stru
 
 static const char* parsebranch(struct branch*__restrict__ b,const char*__restrict__ s,regex_t*__restrict__ rx,int*__restrict__ pieces) {
   struct piece p;
-  const char *tmp;	/* the gcc warning here is bogus */
+  const char *tmp = NULL;
   b->m=matchbranch;
   b->num=0; b->p=0;
   for (;;) {

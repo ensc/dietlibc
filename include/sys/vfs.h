@@ -7,7 +7,7 @@
 __BEGIN_DECLS
 
 typedef struct {
-  int     __val[2];
+  int32_t __val[2];
 } __kernel_fsid_t;
 
 struct statfs {

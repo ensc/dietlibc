@@ -15,7 +15,7 @@ int ftw(const char*dir,int(*f)(const char*file,const struct stat*sb,int flag),in
   struct stat sb;
   int r;
   unsigned int oldlen=0;
-  char* filename;	/* the warning gcc issues here is bogus */
+  char* filename = NULL;
   if(chdir(dir))return-1;
   cd=alloca(PATH_MAX+1);
   if(!getcwd(cd,PATH_MAX))return-1;

@@ -45,6 +45,7 @@ static char sccsid[] =
 #include <sys/socket.h>
 #include <string.h>
 #include <arpa/inet.h>
+#define index strchr
 
 /*
  * Internet version.
@@ -62,12 +63,6 @@ struct rpcdata {
 } *rpcdata;
 
 static struct rpcent *interpret(const char* val, size_t len);
-
-#ifndef __linux__
-static char *index();
-#else
-char *index();
-#endif
 
 static char RPCDB[] = "/etc/rpc";
 

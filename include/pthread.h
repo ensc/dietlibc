@@ -32,7 +32,7 @@ typedef int pthread_t;
 
 /* Fast locks */
 #ifdef __hppa__
-struct _pthread_fastlock { int __spinlock; } __attribute__((aligned(16)));
+struct _pthread_fastlock { int __spinlock; } __attribute__((__aligned__(16)));
 
 #define PTHREAD_SPIN_LOCKED 0
 #define PTHREAD_SPIN_UNLOCKED 1
@@ -121,10 +121,10 @@ int pthread_condattr_setpshared(pthread_condattr_t*attr,int pshared);
 /* thread specific variables */
 typedef unsigned int pthread_key_t;
 
-int pthread_key_create(pthread_key_t*key,void(*destructor)(const void*));
+int pthread_key_create(pthread_key_t*key,void(*destructor)(void*));
 int pthread_key_delete(pthread_key_t key);
 int pthread_setspecific(pthread_key_t key,const void*value);
-const void*pthread_getspecific(pthread_key_t key);
+void*pthread_getspecific(pthread_key_t key);
 
 
 /* Attributes for threads.  */
@@ -232,7 +232,7 @@ void pthread_cleanup_pop_restore_np(int execute);
 
 /* FORK */
 
-pid_t pthread_atfork(void(*prepare)(void),void(*parent)(void),
+int pthread_atfork(void(*prepare)(void),void(*parent)(void),
 		     void(*child)(void));
 
 /* THREADS */

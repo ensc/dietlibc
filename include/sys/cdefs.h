@@ -53,7 +53,7 @@
 #endif
 
 #ifndef __i386__
-#define regparm(x)
+#define __regparm__(x)
 #endif
 
 #if (__GNUC__ > 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 2))

@@ -102,7 +102,7 @@ unsigned int sendsz, recvsz;
 	register SVCXPRT *xprt;
 	register struct svcudp_data *su;
 	struct sockaddr_in addr;
-	int len = sizeof(struct sockaddr_in);
+	socklen_t len = sizeof(struct sockaddr_in);
 
 	if (sock == RPC_ANYSOCK) {
 		if ((sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) < 0) {
@@ -173,13 +173,15 @@ struct rpc_msg *msg;
 	register int rlen;
 	char *reply;
 	unsigned long replylen;
+	socklen_t len;
 
   again:
-	xprt->xp_addrlen = sizeof(struct sockaddr_in);
+	len = sizeof(struct sockaddr_in);
 
 	rlen = recvfrom(xprt->xp_sock, rpc_buffer(xprt), (int) su->su_iosz,
 					0, (struct sockaddr *) &(xprt->xp_raddr),
-					&(xprt->xp_addrlen));
+					&len);
+	xprt->xp_addrlen = len;
 	if (rlen == -1 && errno == EINTR)
 		goto again;
 	if (rlen < (int)(4 * sizeof(unsigned long)))

@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <unistd.h>
 
 typedef void (*function)(void);
 
@@ -16,7 +17,6 @@ int atexit(function t) {
   return -1;
 }
 
-extern void _exit(int code) __attribute__((noreturn));
 extern void __thread_doexit(int doexit);
 
 void __libc_exit(int code);

@@ -53,7 +53,7 @@ static char sccsid[] =
  * This routine works on Suns (Sky / 68000's) and Vaxen.
  */
 
-#ifdef __linux__
+#if defined(__linux__) && !defined(sparc)
 /* cheat big time */
 #define sparc
 #endif

@@ -7,6 +7,11 @@
   fix stupid dns decoding bug (Gernot Tenchio)
   #ifdef powerpc -> #ifdef __powerpc__ (Enrico Scholz)
   struct siginfo was wrong for 64-bit platforms
+  Lots of fixes and patches from Markus Oberhumer.
+    libstdc++ compatibility
+    ilp64 compatibility
+    make diet libc compile with -Werror on 13 platforms
+  ppc64 now compiles again
 
 0.28:
   add tcgetsid (Yuri Kozlov)

@@ -48,11 +48,11 @@ _start:
 	std	5,environ@l(14)
 
 #ifdef WANT_DYNAMIC
-#warning dynamic
+/* #warning dynamic */
 	mr	6,7
 	bl	._dyn_start
 #else
-#warning static
+/* #warning static */
 #ifdef WANT_STACKGAP
 	bl	.stackgap
 #else

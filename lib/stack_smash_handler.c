@@ -1,9 +1,11 @@
 #include <write12.h>
+#include <unistd.h>
 
+void __stack_smash_handler(char* func,unsigned int damaged);
 void __stack_smash_handler(char* func,unsigned int damaged) {
   char buf[sizeof(char*)*2+1];
   int i;
-  for (i=0; i<sizeof(buf)-1; ++i) {
+  for (i=0; i<(int)sizeof(buf)-1; ++i) {
     char c=damaged&0xf;
     c+=c<10?'0':'a';
     buf[sizeof(buf)-2-i]=c;

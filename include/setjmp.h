@@ -191,7 +191,7 @@ typedef double __jmp_buf[21];
 
 #ifdef __ia64__
 #ifndef __ASSEMBLER__
-typedef long __jmp_buf[70] __attribute__ ((aligned(16)));
+typedef long __jmp_buf[70] __attribute__ ((__aligned__(16)));
 #endif
 #endif
 

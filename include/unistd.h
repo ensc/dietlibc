@@ -118,7 +118,7 @@ int sync(void) __THROW;
 
 int isatty(int desc) __THROW;
 
-void _exit(int status) __THROW __attribute__((noreturn));
+void _exit(int status) __THROW __attribute__((__noreturn__));
 
 int daemon(int nochdir,int noclose) __THROW;
 
@@ -142,7 +142,6 @@ int setreuid(uid_t ruid, uid_t euid) __THROW;
 #define seteuid(euid) setreuid(-1,euid)
 #define setegid(egid) setregid(-1,egid)
 
-int rename(const char *oldpath, const char *newpath) __THROW;
 int truncate(const char *path, off_t length) __THROW;
 int ftruncate(int fd, off_t length) __THROW;
 #ifndef __NO_STAT64

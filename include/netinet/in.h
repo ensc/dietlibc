@@ -116,8 +116,8 @@ struct sockaddr_in {
   in_port_t		sin_port;	/* Port number			*/
   struct in_addr	sin_addr;	/* Internet address		*/
   /* Pad to size of `struct sockaddr'. */
-  unsigned char		sin_zero[__SOCK_SIZE__ - sizeof(short int) -
-			sizeof(unsigned short int) - sizeof(struct in_addr)];
+  unsigned char		sin_zero[__SOCK_SIZE__ - sizeof(int16_t) -
+			sizeof(uint16_t) - sizeof(struct in_addr)];
 };
 
 
@@ -184,7 +184,7 @@ struct in6_addr {
 };
 
 struct sockaddr_in6 {
-  unsigned short int	sin6_family;    /* AF_INET6 */
+  uint16_t		sin6_family;    /* AF_INET6 */
   uint16_t		sin6_port;      /* Transport layer port # */
   uint32_t		sin6_flowinfo;  /* IPv6 flow information */
   struct in6_addr	sin6_addr;      /* IPv6 address */
@@ -196,8 +196,8 @@ struct sockaddr_in_pad {
   in_port_t		sin_port;	/* Port number			*/
   struct in_addr	sin_addr;	/* Internet address		*/
   /* Pad to size of `struct sockaddr_in6'. */
-  unsigned char		sin_zero[sizeof(struct sockaddr_in6) - sizeof(short int) -
-			sizeof(unsigned short int) - sizeof(struct in_addr)];
+  unsigned char		sin_zero[sizeof(struct sockaddr_in6) - sizeof(int16_t) -
+			sizeof(uint16_t) - sizeof(struct in_addr)];
 };
 
 struct ipv6_mreq {
