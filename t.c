@@ -17,6 +17,7 @@
 #include <termios.h>
 #include <netdb.h>
 #include <sys/mman.h>
+#include <ctype.h>
 
 #if 0
 int compint(const void *a,const void *b) {
@@ -42,7 +43,7 @@ static int rand() {
 extern double atof(const char *c);
 
 int main(int argc,char *argv[]) {
-  printf("%*.*s\n",5,7,"foo bar baz");
+  printf("%d\n",isxdigit(0));
 #if 0
   struct passwd *p=getpwnam("leitner");
   struct spwd *s=getspnam("leitner");
