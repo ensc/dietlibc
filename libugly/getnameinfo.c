@@ -14,14 +14,18 @@ int getnameinfo(const struct sockaddr *sa, socklen_t salen, char *host,
 					   (char*)&((struct sockaddr_in*)sa)->sin_addr;
     if (flags&NI_NUMERICHOST) {
       if (!inet_ntop(f,addr,host,hostlen))
-	return -1;
+	return EAI_NONAME;
     } else {
       char buf[4096];
       struct hostent h;
       struct hostent *H;
       int herrno;
-      if (gethostbyaddr_r(addr,f==AF_INET6?16:4,f,&h,buf,4096,&H,&herrno))
-	return -1;
+      if (gethostbyaddr_r(addr,f==AF_INET6?16:4,f,&h,buf,4096,&H,&herrno)) {
+	switch (herrno) {
+	case TRY_AGAIN: return EAI_AGAIN;
+	case HOST_NOT_FOUND: return EAI_NONAME;
+	}
+      }
       strncpy(host,h.h_name,hostlen-1);
       host[hostlen-1]=0;
     }
@@ -33,7 +37,7 @@ int getnameinfo(const struct sockaddr *sa, socklen_t salen, char *host,
     } else {
       struct servent *s;
       if (!(s=getservbyport(port,flags&NI_DGRAM?"udp":"tcp")))
-	return -1;
+	return EAI_SERVICE;
     }
   }
   return 0;
