@@ -38,7 +38,7 @@ int execvp(const char *file, char *const argv[]) {
     if (execve(buf,argv,environ)==-1) {
       if (errno==ENOEXEC)
 	return __exec_shell(buf,argv);
-      if ((errno!=EACCES) && (errno!=ENOENT)) return -1;
+      if ((errno!=EACCES) && (errno!=ENOENT) && (errno!=ENOTDIR)) return -1;
     }
     if (*next==0) break;
     next++;

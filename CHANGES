@@ -28,6 +28,7 @@
   add pause for Alpha (Kurt Garloff)
   ptrace fix (Dallachiesa Michele)
   ptread.h cleanups (Martin Pohlack)
+  fix execvp and execlp (Younès)
 
 0.24:
   work around incompatible Linux select() modifying the timeout in
