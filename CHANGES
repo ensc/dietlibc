@@ -17,6 +17,7 @@
   make declaration of writev and readv match susv3
   add finite (Andreas Krennmair)
   move flock+constants to unistd.h (the Linux man page is wrong on this)
+  fix assert (Andreas Krennmair)
 
 0.22:
   fix i386 libm
