@@ -4,6 +4,8 @@ LIBPTHREAD
   Written from scratch by Olaf Dreesen.
 
 STATUS: incomplete but should work (or not... I had a lot of heisen-bugs...)
+	On non i386 archs the kernel header have major differences...
+	NO workaround yet for this problems...
 
 It's like linuxthreads a clone base thread implementation.
 
@@ -18,7 +20,7 @@ NON STANDARD SIGNAL HANDLING for the threads:
 
 	ASYNCHRONOUS: the signal handler will KILL the thread immediately.
 
-	DEFERRED: the signal handler make its thread as canceled.
+	DEFERRED: the signal handler mark its thread as canceled.
 		(only for the sig-handler to do some sane stuff...)
 
   SIGTERM	the thread is KILLED
