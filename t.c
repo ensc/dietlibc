@@ -27,6 +27,7 @@
 #include <string.h>
 
 int main(int argc,char *argv[]) {
+#if 0
   struct dirent **namelist;
   int n;
 
@@ -40,6 +41,7 @@ int main(int argc,char *argv[]) {
     }
     free(namelist);
   }
+#endif
 #if 0
   char foo[10]="none,zlib";
   char *tmp,*tmp2=foo;
