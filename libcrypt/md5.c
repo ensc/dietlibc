@@ -27,19 +27,13 @@
    src and dst must both be 32bit aligned.
    Length is the number of 32bit words 
 */   
-static void CopyWithEndianSwap (uint32_t *dst, const uint32_t *src, int length) {
-  unsigned char* in=(unsigned char*)src;
+static void CopyWithEndianSwap (uint32_t *dst, const uint8_t *src, int length) {
   while (length--) {
-#if 0
-    uint32_t value = *src++;
-    *dst++ = ((((value)<<24)|((value)>>8))^((((value)^(((value)<<16)|((value)>>16)))&~0x00ff0000)>>8));
-#else
-    *dst=(((uint32_t)in[3])<<24) |
-	 (((uint32_t)in[2])<<16) |
-	 (((uint32_t)in[1])<<8) |
-	   (uint32_t)in[0];
-    in+=4; ++dst;
-#endif
+    *dst=(((uint32_t)src[3])<<24) |
+	 (((uint32_t)src[2])<<16) |
+	 (((uint32_t)src[1])<<8) |
+	   (uint32_t)src[0];
+    src+=4; ++dst;
   }
 }
 #endif
@@ -82,8 +76,8 @@ void MD5Init (MD5_CTX* context) {
 #define HH(a, b, c, d, x, s, ac) { (a) += H (b, c, d) + (x) + (uint32_t)(ac); (a) = ROTATE_LEFT (a, s); (a) += (b); }
 #define II(a, b, c, d, x, s, ac) { (a) += I (b, c, d) + (x) + (uint32_t)(ac); (a) = ROTATE_LEFT (a, s); (a) += (b); }
 
-static void __MD5Transform (uint32_t state[4], const uint32_t *in, int repeat) {
-   uint32_t *x;
+static void __MD5Transform (uint32_t state[4], const uint8_t *in, int repeat) {
+   const uint32_t *x;
 
    uint32_t  a = state[0];
    uint32_t  b = state[1];
@@ -101,7 +95,7 @@ static void __MD5Transform (uint32_t state[4], const uint32_t *in, int repeat) {
 	memcpy(tempBuffer, in, 64);
 	x = tempBuffer;
       } else
-	x = (uint32_t *) in;
+	x = (const uint32_t *) in;
 #endif
 
       FF (a, b, c, d, x[ 0],  7, 0xd76aa478); /*  1 */     /* Round 1 */
@@ -177,7 +171,7 @@ static void __MD5Transform (uint32_t state[4], const uint32_t *in, int repeat) {
       state[2] = c = c + state[2];
       state[3] = d = d + state[3];
 
-      in += 16;
+      in += 64;
    }
 }
 

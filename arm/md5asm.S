@@ -28,6 +28,12 @@
 *   - Rewrote MD5Update in assembler (saves 52 bytes).
 *   - Added guard so we don't compile anything for Big-Endian targets.
 *
+* 2002/02/22:  Andre McCurdy <armccurdy@yahoo.co.uk>
+*   - Added new function MD5Update (a wrapper for the original version) which
+*     checks for correct 32bit alignment of the input data pointer.
+*   - Original MD5Update function renamed __MD5Update.
+*   - __MD5Transform symbol no longer exported.
+*
 ******************************************************************************
 *
 * Notes:
@@ -43,7 +49,6 @@
 
    .global MD5Init
    .global MD5Update
-   .global __MD5Transform
 
    .text
    .align  2
@@ -70,9 +75,50 @@ MD5Init:
 
     @ --
     @ void MD5Update (MD5_CTX* ctx, const uint8_t* buf, size_t len);
+    @
+    @ Performs alignment checking and correction before passing
+    @ on to __MD5Update which does the real work.
+    @
+    @ Code comes straight from gcc, and could obviously do with
+    @ some optimisation.... :-)
+    @
     @ --
 
 MD5Update:
+    stmfd   sp!, {r4, r5, r6, r7, r8, lr}
+    mov     r7, r1
+    mov     r6, r2
+    tst     r7, #3
+    mov     r8, r0
+    sub     sp, sp, #256
+    bne     2f
+    bl      __MD5Update
+    b       3f
+1:  mov     r5, sp
+    mov     r0, r5
+    mov     r1, r7
+    cmp     r6, #256
+    movcc   r4, r6
+    movcs   r4, #256
+    mov     r2, r4
+    bl      memcpy
+    mov     r0, r8
+    mov     r1, r5
+    mov     r2, r4
+    add     r7, r7, #256
+    sub     r6, r6, #256
+    bl      __MD5Update
+2:  cmp     r6, #0
+    bgt     1b
+3:  add     sp, sp, #256
+    ldmfd   sp!, {r4, r5, r6, r7, r8, pc}
+
+
+    @ --
+    @ void __MD5Update (MD5_CTX* ctx, const uint32_t* buf, size_t len);
+    @ --
+
+__MD5Update:
     stmdb   sp!, { r4 - r8, lr }
     add     r4, r0, #(6 * 4)                @ r4 = &context->buffer[0]
     ldmdb   r4, { r0, r3 }                  @ r0 = count[0], r3 = count[1]
