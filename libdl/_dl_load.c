@@ -275,7 +275,7 @@ struct _dl_handle* _dl_dyn_scan(struct _dl_handle* dh, void* dyn_addr, int flags
     }
   }
 
-  // load other libs
+  /* load other libs */
   for(i=0;dyn_tab[i].d_tag;i++) {
     if (dyn_tab[i].d_tag==DT_NEEDED) {
       char *lib_name=dh->dyn_str_tab+dyn_tab[i].d_un.d_val;
@@ -284,7 +284,10 @@ struct _dl_handle* _dl_dyn_scan(struct _dl_handle* dh, void* dyn_addr, int flags
     }
   }
 
-  _dl_open_dep();
+  if (_dl_open_dep()) {
+    _dl_error = 0;
+    return 0;
+  }
 
   /* do PTL / GOT relocation */
   if (pltreltype == DT_REL) {
@@ -326,7 +329,7 @@ struct _dl_handle* _dl_dyn_scan(struct _dl_handle* dh, void* dyn_addr, int flags
     }
   }
 
-  // _dl_load depending libs ...
+  /* _dl_load depending libs ... */
   DEBUG("_dl_load post resolv, pre init\n");
   if (init) init();
   DEBUG("_dl_load post resolv, post init\n");

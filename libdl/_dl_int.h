@@ -74,7 +74,7 @@ void *_dlsym(void * h, char* symbol);
 
 /* _dl_queue.c */
 int _dl_queue_lib(const char* name, int flags);
-void _dl_open_dep();
+int _dl_open_dep();
 
 /* _dl_relocate.c */
 int _dl_relocate(struct _dl_handle* dh, Elf32_Rel *rel, int num);
