@@ -15,6 +15,7 @@
   make res_mkquery reject invalid domains (label>64, name>255) (Nikola Vladov)
   make res_query return TRY_AGAIN instead of NO_DATA if no answer was
     received (Nikola Vladov)
+  fix PT_READ_U in sys/trace.h (John K. Hohm)
 
 0.27:
   change DNS routines to look for ip6.arpa instead of ip6.int
