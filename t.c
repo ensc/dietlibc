@@ -76,11 +76,29 @@ void closelog(void) {
 }
 #endif
 
+void foo(int tmp,...) {
+  long long l;
+  va_list va;
+  va_start(va,tmp);
+  l=va_arg(va,long long);
+  if (l!=-1) write(2,"kaputt\n",7);
+}
+
+extern int __lltostr(char *s, int size, unsigned long long i, int base, char UpCase);
+
 int main(int argc,char *argv[]) {
-  printf("%d\n",atol("-1234"));
+  char buf[100];
+  printf("%d\n",__lltostr(buf,30,-1ll,10,0));
+  puts(buf);
+#if 1
+  printf("%lld\n",-1ll);
+#endif
 #if 0
-  long int clk_tck=sysconf(_SC_CLK_TCK);
-  printf("%lu\n",clk_tck);
+  char *str="e";
+  setbuf(stdout,0);
+  printf("foo\n");
+  fputc(toupper(*str++),stdout);
+  printf("bar\n");
 #endif
 #if 0
   fwrite("foobar",6,1,stdout);
@@ -152,7 +170,9 @@ int main(int argc,char *argv[]) {
   struct mntent* me;
   FILE* f=fopen("/etc/fstab","r");
   while (me=getmntent(f)) {
+    printf("%s\n",hasmntopt(me,"defaults"));
     printf("%s %s %s %s %d %d\n",me->mnt_fsname,me->mnt_dir,me->mnt_type,me->mnt_opts,me->mnt_freq,me->mnt_passno);
+    break;
   }
 #endif
 #if 0

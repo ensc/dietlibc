@@ -27,7 +27,7 @@ int fflush(FILE *stream) {
 	res=-1;
     return res;
   }
-  if (stream->flags&NOBUF) return 0;
+//  if (stream->flags&NOBUF) return 0;
   if (stream->flags&BUFINPUT) {
     register int tmp;
     if ((tmp=stream->bm-stream->bs)) lseek(stream->fd,tmp,SEEK_CUR);

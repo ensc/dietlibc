@@ -16,7 +16,7 @@ char *asctime_r(const struct tm *t, char *buf) {
   if (buf[8]=='0') buf[8]=' ';
   buf[10]=' ';
   num2str(buf+11,t->tm_hour);
-  if (buf[11]=='0') buf[11]=' ';
+//  if (buf[11]=='0') buf[11]=' ';
   buf[13]=':';
   num2str(buf+14,t->tm_min);
   buf[16]=':';

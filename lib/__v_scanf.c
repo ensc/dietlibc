@@ -335,4 +335,4 @@ err_out:
   return n;
 }
 
-link_warning("__v_scanf","warning: the scnaf functions add several kilobytes of bloat.");
+link_warning("__v_scanf","warning: the scanf functions add several kilobytes of bloat.");
