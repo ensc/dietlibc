@@ -9,8 +9,6 @@
 #include "dietstdio.h"
 #include "dietwarning.h"
 
-static unsigned int consumed;
-
 #define A_GETC(fn)	(++consumed,(fn)->getch((fn)->data))
 #define A_PUTC(c,fn)	(--consumed,(fn)->putch((c),(fn)->data))
 
