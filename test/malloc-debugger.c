@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-main() {
+int main() {
   char* c=malloc(13);
   char* tmp;
   fprintf(stderr,"got %p\n",c);
@@ -14,4 +14,5 @@ main() {
 //  free(c);
   free(tmp);
 //  c[0]=13;
+  return 0;
 }

@@ -1,6 +1,7 @@
 #include <stdio.h>
 
-main() {
+int main() {
   FILE* f=fopen("testing","w");
   fputs("testing",f);
+  return 0;
 }

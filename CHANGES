@@ -2,6 +2,7 @@
   update sys/soundcard.h
   various x86_64 fixes (Gwenole Beauchesne)
   fix assert for 64-bit platforms (Gwenole Beauchesne)
+  remove many warning from test suite (Gwenole Beauchesne)
 
 0.22:
   fix i386 libm

@@ -1,5 +1,7 @@
 #define _FILE_OFFSET_BITS 64
 #include <dirent.h>
+#include <stdio.h>
+#include <errno.h>
 
 int main() {
   DIR* D=opendir(".");

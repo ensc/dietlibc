@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-main(int argc,char* argv[],char* envp[]) {
+int main(int argc,char* argv[],char* envp[]) {
   int i;
   char** x;
   for (i=0; i<=argc; ++i)
@@ -9,4 +9,5 @@ main(int argc,char* argv[],char* envp[]) {
   puts("\nEnvironment:");
   for (x=environ; *x; ++x)
     puts(*x);
+  return 0;
 }

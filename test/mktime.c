@@ -1,6 +1,7 @@
+#include <stdio.h>
 #include <time.h>
 
-main() {
+int main() {
   struct tm t;
   t.tm_sec=1;
   t.tm_min=2;
@@ -13,6 +14,7 @@ main() {
   t.tm_mon=3;
   t.tm_year=102;
   printf("%d\n",mktime(&t));
+  return 0;
 }
 
 #if 0

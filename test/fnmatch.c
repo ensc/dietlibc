@@ -7,7 +7,7 @@ void die(const char* message) {
   exit(1);
 }
 
-main() {
+int main() {
   if (fnmatch("*.c","foo.c",0)) die("fnmatch did not match *.c to foo.c");
   if (fnmatch("*.c",".c",0)) die("fnmatch did not match *.c to .c");
   if (!fnmatch("*.a","foo.c",0)) die("fnmatch matched *.a to foo.c");

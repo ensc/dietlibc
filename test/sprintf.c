@@ -1,7 +1,7 @@
 #include <string.h>
 #include <stdio.h>
 
-main() {
+int main() {
   char buf[1000];
   sprintf(buf,"%d",23);
   if (strcmp(buf,"23")) return 1;

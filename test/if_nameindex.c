@@ -11,4 +11,5 @@ int main() {
     }
     if_freenameindex(t1);
   }
+  return 0;
 }

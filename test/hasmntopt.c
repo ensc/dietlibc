@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <mntent.h>
 
 void die(const char* message) {
@@ -13,4 +14,5 @@ int main() {
   if (!(c=hasmntopt(&me,"foo"))) die("hasmntopt did not find foo");
   if (!(c=hasmntopt(&me,"duh"))) die("hasmntopt did not find duh");
   printf("%s\n",hasmntopt(&me,"bar"));
+  return 0;
 }

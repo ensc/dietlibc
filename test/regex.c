@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <regex.h>
 #include <assert.h>
+#include <string.h>
 
 int main() {
   regex_t r;

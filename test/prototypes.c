@@ -10,7 +10,8 @@ char *strncpy(char *dest, const char *src, size_t n) __THROW;
 int strncmp(const char *s1, const char *s2, size_t n) __THROW __pure__;
 char *strncat(char *dest, const char *src, size_t n) __THROW;
 
-main() {
+int main() {
   /* this is just a test to see whether gcc still has broken internal
    * prototypes */
+  return 0;
 }

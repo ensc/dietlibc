@@ -1,8 +1,10 @@
 #include <stdlib.h>
+#include <string.h>
 #include <assert.h>
 
-main() {
+int main() {
   assert(getenv("PATH"));
   putenv("foo=bar");
   assert(!strcmp(getenv("foo"),"bar"));
+  return 0;
 }

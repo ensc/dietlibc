@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 
 int main() {
   char server_version_string[]="SSH-1.99-OpenSSH_2.9p2\n";

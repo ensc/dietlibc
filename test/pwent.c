@@ -18,4 +18,5 @@ int main(int argc,char *argv[]) {
 	   pw->pw_shell);
   }
 #endif
+  return 0;
 }

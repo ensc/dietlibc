@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <netdb.h>
+#include <netinet/in.h>
 
 int main(int argc,char *argv[]) {
 #ifdef NEW
@@ -24,4 +25,5 @@ int main(int argc,char *argv[]) {
     }
   }
 #endif
+  return 0;
 }

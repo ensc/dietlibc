@@ -1,7 +1,7 @@
 #include <string.h>
 #include <assert.h>
 
-main() {
+int main() {
   char test[100]="blubber";
   assert(memcpy(test,"blubber",8)==test);
   assert(!memcmp(test,"blubber",8));

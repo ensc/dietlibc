@@ -1,6 +1,6 @@
 #include <assert.h>
 
-main()
+int main()
 {
 	long foo = 0;
 	__testandset (&foo);

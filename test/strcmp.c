@@ -1,12 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 void die(const char* message) {
   puts(message);
   exit(1);
 }
 
-main() {
+int main() {
   char buf[100]="fnord";
   char buf2[100]="fnort";
   if (strcmp(buf,buf)) die("strcmp say a != a");

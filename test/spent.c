@@ -10,4 +10,5 @@ int main(int argc,char *argv[]) {
     printf("  %ld %d %d %d %d %d %d\n",sp.sp_lstchg, sp.sp_min,
 	   sp.sp_max, sp.sp_warn, sp.sp_inact, sp.sp_expire, sp.sp_flag);
   }
+  return 0;
 }

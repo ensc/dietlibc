@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <netdb.h>
+#include <netinet/in.h>
 
 int main(int argc,char *argv[]) {
   struct servent* se;
@@ -11,4 +12,5 @@ int main(int argc,char *argv[]) {
       printf("  alias %s\n",se->s_aliases[i]);
     }
   }
+  return 0;
 }

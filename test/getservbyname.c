@@ -11,4 +11,5 @@ int main(int argc,char *argv[]) {
       printf("  alias %s\n",se->s_aliases[i]);
     }
   }
+  return 0;
 }

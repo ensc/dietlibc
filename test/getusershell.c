@@ -2,8 +2,9 @@
 #include <unistd.h>
 #include <stdio.h>
 
-main() {
+int main() {
   char* c;
   while (c=getusershell())
     puts(c);
+  return 0;
 }
