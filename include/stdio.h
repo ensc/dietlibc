@@ -90,4 +90,7 @@ int setvbuf(FILE *stream, char *buf, int mode , size_t size) __THROW;
 FILE *popen(const char *command, const char *type) __THROW;
 int pclose(FILE *stream) __THROW;
 
+#define getc_unlocked(stream) getc(stream)
+#define putc_unlocked(c,stream) putc(c,stream)
+
 #endif

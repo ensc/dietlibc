@@ -12,7 +12,7 @@ void perror(const char *s) {
   write(2,s,strlen(s));
   write(2,": ",2);
   if (errno>=0 && errno<sys_nerr)
-#ifdef WANT_THREAD_SAVE
+#ifdef WANT_THREAD_SAFE
     message=sys_errlist[*__errno_location()];
 #else
     message=sys_errlist[errno];

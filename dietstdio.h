@@ -2,6 +2,9 @@
 
 #include "dietfeatures.h"
 #include <sys/types.h>
+#ifdef WANT_THREAD_SAVE
+#include <pthread.h>
+#endif
 
 #define BUFSIZE 128
 
@@ -18,6 +21,9 @@ typedef struct __file {
 #ifdef WANT_UNGETC
   char ungetbuf;
   char ungotten;
+#endif
+#ifdef WANT_THREAD_SAVE
+  pthread_mutex_t m;
 #endif
 } FILE;
 

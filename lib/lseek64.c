@@ -9,7 +9,7 @@
 loff_t lseek64(int fildes, loff_t offset, int whence) {
   loff_t tmp;
   if (llseek(fildes,offset>>32,offset&0xffffffff,&tmp,whence)) {
-#ifdef WANT_THREAD_SAVE
+#ifdef WANT_THREAD_SAFE
     if (*__errno_location()!=ENOSYS) return -1;
 #else
     if (errno!=ENOSYS) return -1;

@@ -5,7 +5,7 @@
 #include <stdarg.h>
 #include <setjmp.h>
 #include "dietfeatures.h"
-#ifndef WANT_THREAD_SAVE
+#ifndef WANT_THREAD_SAFE
 #error "the diet libc is not compiled with thread safeness enabled!"
 #endif
 

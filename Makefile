@@ -128,27 +128,25 @@ cross:
 
 
 # these depend on dietfeatures.h for large file backward compatibility
-__fstat64.o __lstat64.o __stat64.o: dietfeatures.h
+$(OBJDIR)/__fstat64.o $(OBJDIR)/__lstat64.o $(OBJDIR)/__stat64.o: dietfeatures.h
 
 # these depend on dietfeatures.h for thread support
-alloc.o perror.o logging.o unified.o: dietfeatures.h
+$(OBJDIR)/alloc.o $(OBJDIR)/perror.o $(OBJDIR)/logging.o $(OBJDIR)/unified.o: dietfeatures.h
 
 # these depend on dietfeatures.h for linker warnings
-assert_fail.o sprintf.o vsnprintf.o ___div.o fflush.o setvbuf.o system.o sendfile.o: dietfeatures.h
+$(OBJDIR)/assert_fail.o $(OBJDIR)/sprintf.o $(OBJDIR)/vsnprintf.o $(OBJDIR)/___div.o $(OBJDIR)/fflush.o $(OBJDIR)/setvbuf.o $(OBJDIR)/system.o $(OBJDIR)/sendfile.o $(OBJDIR)/setenv.o: dietfeatures.h
 
 # these depend on dietfeatures.h for buffered stdio
-fclose.o fdglue.o fflush.o fgetc.o fputc.o fread.o fseek.o: dietfeatures.h
-printf.o setvbuf.o stderr.o stdin.o stdout.o fwrite.o: dietfeatures.h
+fclose.o $(OBJDIR)/fdglue.o $(OBJDIR)/fflush.o $(OBJDIR)/fgetc.o $(OBJDIR)/fputc.o $(OBJDIR)/fread.o $(OBJDIR)/fseek.o $(OBJDIR)/printf.o $(OBJDIR)/setvbuf.o $(OBJDIR)/stderr.o $(OBJDIR)/stdin.o $(OBJDIR)/stdout.o $(OBJDIR)/fwrite.o $(OBJDIR)/puts.o: dietfeatures.h
 
 # these depend on dietfeatures.h for fast string routines
-strcasecmp.o strcat.o strchr.o strcmp.o strcpy.o strlen.o: dietfeatures.h
-strncasecmp.o strncat.o strrchr.o: dietfeatures.h
+strcasecmp.o $(OBJDIR)/strcat.o $(OBJDIR)/strchr.o $(OBJDIR)/strcmp.o $(OBJDIR)/strcpy.o $(OBJDIR)/strlen.o $(OBJDIR)/strncasecmp.o $(OBJDIR)/strncat.o $(OBJDIR)/strrchr.o: dietfeatures.h
 
 # these depend on dietfeatures.h for /proc
-tty.o: dietfeatures.h
+$(OBJDIR)/tty.o: dietfeatures.h
 
 # these depend on dietfeatures.h for ungetc support ;-)
-ungetc.o: dietfeatures.h
+$(OBJDIR)/ungetc.o: dietfeatures.h
 
 # these depend on dietfeatures.h for WANT_TZFILE_PARSER
-localtime_r.o: dietfeatures.h
+$(OBJDIR)/localtime_r.o: dietfeatures.h
