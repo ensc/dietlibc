@@ -7,6 +7,7 @@
   add placeholder iconv (iconv_open will always return EINVAL)
   try to remove kernel 2.4 header dependency in IPv6 sockaddr_in6
     initialization of getaddrinfo.
+  fix vsnprintf %X (printed lower case)
 
 0.10:
   update getpagesize.

@@ -33,11 +33,7 @@
 int foo;
 
 int main(int argc,char *argv[]) {
-  fprintf(stderr,"foo \"");
-  putc('b',stderr);
-  putc('a',stderr);
-  putc('r',stderr);
-  fprintf(stderr,"\"\n");
+  fprintf(stderr,"foo %x %X",0xfe17,0xfe23);
 #if 0
   struct netent* n=getnetbyname("loopback");
   printf("%s %s\n",n->n_name,inet_ntoa(*(struct in_addr*)&n->n_net));

@@ -13,7 +13,7 @@ int vsnprintf (char *str, size_t size, const char *format, va_list arg_ptr)
   size_t apos,i;
   char ch,buf[1024];
   char *pb;
-  char flag_in_sign;
+  char flag_in_sign,flag_upcase;
   char flag_hash,flag_zero,flag_left,flag_space,flag_sign,flag_dot,flag_long;
   long number,width,preci,buf_len,pad;
   char padwith;
@@ -27,7 +27,7 @@ int vsnprintf (char *str, size_t size, const char *format, va_list arg_ptr)
     switch (ch)
     {
     case '%':
-      flag_hash=0;
+      flag_hash=flag_upcase=0;
       flag_zero=0;
       flag_left=0;
       flag_space=0;
@@ -151,6 +151,7 @@ print_out:
 	padwith='0';
 	ch='x';
       case 'X':
+	flag_upcase=(ch=='X');
       case 'x':
 	i=16;
 	if (flag_hash)
@@ -186,7 +187,7 @@ num_vsnprintf:
 	  flag_in_sign=2;
 	}
 
-	buf_len=__ltostr(buf+1,sizeof(buf)-1,(unsigned long) number,i,0);
+	buf_len=__ltostr(buf+1,sizeof(buf)-1,(unsigned long) number,i,flag_upcase);
 	pb=buf+1;
 
 	if (flag_in_sign==2)
