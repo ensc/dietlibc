@@ -23,6 +23,8 @@ endif
 #CFLAGS = -g
 CFLAGS += -Wall
 
+PWD=$(shell pwd)
+
 .SUFFIXES:
 .SUFFIXES: .S .c
 
@@ -52,11 +54,11 @@ elftrunc: contrib/elftrunc.c start.o dietlibc.a
 djb: compile load
 
 compile:
-	echo 'exec gcc $(CFLAGS) -I$(HOME)/projects/dietlibc/include -c $${1+"$$@"}' > $@
+	echo 'exec gcc $(CFLAGS) -I$(PWD)/include -c $${1+"$$@"}' > $@
 	chmod 755 $@
 
 load:
-	echo 'main="$$1"; shift; exec gcc -nostdlib -o "$$main" $(HOME)/projects/dietlibc/start.o "$$main".o $${1+"$$@"} $(HOME)/projects/dietlibc/dietlibc.a -lgcc'  > $@
+	echo 'main="$$1"; shift; exec gcc -nostdlib -o "$$main" $(PWD)/start.o "$$main".o $${1+"$$@"} $(PWD)/dietlibc.a -lgcc'  > $@
 	chmod 755 $@
 
 clean:
