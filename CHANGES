@@ -19,6 +19,7 @@
   Fix fnmatch (a/b/* matched a/b/c/d even if FNM_PATHNAME was set)
   Fix regular expression match for x* when there is no x at all.
   Fix memory leak in error case in gethostbyname(2|).  Thanks, Dietz Pröpper.
+  Add %h to vsnprintf.
 
 0.10:
   update getpagesize.

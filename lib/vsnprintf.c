@@ -58,6 +58,9 @@ inn_vsnprintf:
 	flag_hash=1;
 	goto inn_vsnprintf;
 
+      case 'h':
+	flag_long=-1;
+	goto inn_vsnprintf;
       case 'l':
 	++flag_long;
 	goto inn_vsnprintf;
@@ -179,7 +182,7 @@ print_out:
 num_vsnprintf:
 	if (apos>=size) continue; /* ARGL !!! */
 
-	if (flag_long)
+	if (flag_long>0)
 #ifdef WANT_LONGLONG_PRINTF
 	{
 	  if (flag_long>1)
@@ -192,6 +195,7 @@ num_vsnprintf:
 #endif
 	else
 	  number=va_arg(arg_ptr,int);
+	if (flag_long<0) number&=0xffff;
 
 	if (flag_in_sign && (number<0))
 	{

@@ -94,7 +94,7 @@ void perror(const char *s) __THROW;
 
 extern FILE *stdin, *stdout, *stderr;
 
-#define EOF (int)(-1)
+#define EOF (-1)
 
 #define BUFSIZ 128
 
