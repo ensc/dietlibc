@@ -78,9 +78,9 @@
 
 struct iphdr {				/* size 20/0x14 */
 #if __BYTE_ORDER == __LITTLE_ENDIAN
-  unsigned char ihl:4, version:4;	/* offset 0; version=ip version (4) */
+  unsigned int ihl:4, version:4;	/* offset 0; version=ip version (4) */
 #else
-  unsigned char version:4, ihl:4;	/* offset 0; ihl=ip header length, measured in words (5) */
+  unsigned int version:4, ihl:4;	/* offset 0; ihl=ip header length, measured in words (5) */
 #endif
   unsigned char tos;			/* offset 1 */
   unsigned short tot_len;		/* offset 2; total bytes in packet in network byte order */
