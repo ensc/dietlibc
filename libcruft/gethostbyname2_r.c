@@ -7,9 +7,8 @@
 #include <arpa/inet.h>
 #include <sys/poll.h>
 #include <unistd.h>
+#include "dietfeatures.h"
 #include <errno.h>
-
-#include <stdio.h>
 
 extern int __dns_gethostbyx_r(const char* name, struct hostent* result,
 			char *buf, size_t buflen,

@@ -58,13 +58,13 @@ int getaddrinfo(const char *node, const char *service, const struct addrinfo *hi
 	foo->ai.ai_protocol=IPPROTO_TCP;
 	foo->ai.ai_addrlen=family==PF_INET6?sizeof(struct sockaddr_in6):sizeof(struct sockaddr_in);
 	foo->ai.ai_addr=(struct sockaddr*)&foo->ip;
-	foo->ip.ip6.sin6_family=foo->ai.ai_family=family;
 	if (family==PF_INET6) {
 	  memset(&foo->ip,0,sizeof(foo->ip));
 	  memmove(&foo->ip.ip6.sin6_addr,h.h_addr_list[0],16);
 	} else {
 	  memmove(&foo->ip.ip4.sin_addr,h.h_addr_list[0],4);
 	}
+	foo->ip.ip6.sin6_family=foo->ai.ai_family=family;
 	if (h.h_name) {
 	  foo->ai.ai_canonname=foo->name;
 	  memmove(foo->name,h.h_name,strlen(h.h_name)+1);

@@ -76,6 +76,12 @@ void closelog(void) {
 #endif
 
 int main(int argc,char *argv[]) {
+  char* name;
+  int ptyfd,ttyfd;
+  int i=openpty(&ptyfd,&ttyfd,0,0,0);
+  if (i<0) perror("openpty");
+  printf("%d %d\n",ptyfd,ttyfd);
+  printf("%s %s\n",ttyname(ptyfd),ttyname(ttyfd));
 #if 0
   printf("0x%8.7lx\n",0xfefe);
 #endif
@@ -115,7 +121,7 @@ int main(int argc,char *argv[]) {
 //  write(1,"fnord\n",6);
 #if 0
   struct addrinfo *ai;
-  getaddrinfo("ftp.fu-berlin.de","ftp",0,&ai);
+  getaddrinfo("::","22",0,&ai);
 #endif
 #if 0
   struct hostent host,*res;

@@ -62,7 +62,7 @@ static unsigned int scan_ip6(const char *s,char ip[16])
       i=tmp-s;
     }
     if (!i) {
-      len--;
+      if (*s) len--;
       break;
     }
     if (suffixlen+prefixlen<=12 && s[i]=='.') {

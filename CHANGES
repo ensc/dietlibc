@@ -65,6 +65,7 @@
     it before falling back to DNS if enabled.
   Added a littie backwards compatibility cruft for gpm (man, do these
     sources stink!)
+  Added openpty.
 
 0.10:
   update getpagesize.
