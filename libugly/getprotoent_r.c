@@ -22,7 +22,7 @@ int getprotoent_r(struct protoent *res, char *buf, size_t buflen,
 		  struct protoent **res_sig) {
   size_t i,j,n,g;
   unsigned long l;
-  setprotoent(0);
+  if (!__ps.buffirst) setprotoent(0);
   if (!__ps.buffirst) goto error;
   if (__ps.cur>=__ps.buflen) goto error;
   res->p_aliases=(char**)buf;

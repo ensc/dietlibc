@@ -2,7 +2,8 @@
 #include <pwd.h>
 
 int main() {
-  struct passwd* pw=getpwnam("nobody");
+  struct passwd* pw=getpwnam("fnord");
+  if (!pw) pw=getpwnam("alias");
   if (!pw) {
     puts("not found");
     return 0;

@@ -18,7 +18,7 @@ int getpwent_r(struct passwd *res, char *buf, size_t buflen,
 	       struct passwd **res_sig) {
   size_t i,j,n;
   unsigned long l;
-  setpwent();
+  if (!__ps.buffirst) setpwent();
   if (!__ps.buffirst) goto error;
   if (__ps.cur>=__ps.buflen) goto error;
 again:

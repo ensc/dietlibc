@@ -8,6 +8,7 @@
  * return -1 on failure */
 int __prepare_parse(const char* filename,struct state* s) {
   int fd;
+  s->cur=0;
   if (s->buffirst) return 0;
   fd=open(filename,O_RDONLY);
   if (fd>=0) {

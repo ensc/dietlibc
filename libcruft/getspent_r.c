@@ -18,7 +18,7 @@ int getspent_r(struct spwd *res, char *buf, size_t buflen,
 	       struct spwd **res_sig) {
   size_t i,j,n;
   unsigned long l;
-  setspent();
+  if (!__ps.buffirst) setspent();
   if (!__ps.buffirst) goto error;
   if (__ps.cur>=__ps.buflen) goto error;
 again:

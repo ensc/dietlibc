@@ -22,7 +22,7 @@ int getservent_r(struct servent *res, char *buf, size_t buflen,
 		 struct servent **res_sig) {
   size_t i,j,n,g;
   unsigned long l;
-  setservent(0);
+  if (!__ps.buffirst) setservent(0);
   if (!__ps.buffirst) goto error;
   if (__ps.cur>=__ps.buflen) goto error;
   res->s_aliases=(char**)buf;
