@@ -8,10 +8,12 @@ memchr:
 	movl 12(%esp),%eax
 	movl 16(%esp),%ecx
 	cld
+	jcxz .Lnotfound
 
 	repne scasb
 
 	je .Lfound
+.Lnotfound:
 	xorl %edi, %edi
 	incl %edi
 .Lfound:
