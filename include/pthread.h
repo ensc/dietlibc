@@ -181,7 +181,7 @@ int pthread_getschedparam(pthread_t target_thread, int *policy,
 
 /* ONCE */
 typedef int pthread_once_t;
-#define PTHREAD_ONCE_INIT	0
+#define PTHREAD_ONCE_INIT	PTHREAD_SPIN_UNLOCKED
 
 int __pthread_once(pthread_once_t* once_control, void (*init_routine)(void));
 int pthread_once(pthread_once_t* once_control, void (*init_routine)(void));
