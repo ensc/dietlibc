@@ -3,10 +3,6 @@
 #include <unistd.h>
 #include <errno.h>
 
-/* TODO:
- * - check if mode is equel to the old mode
- * - errorindicator test ?
- */
 FILE *freopen (const char *path, const char *mode, FILE *stream) {
   if (stream) {
     fflush(stream);
