@@ -138,6 +138,14 @@ int __thread_setcanceltype(int type,int*oldtype,struct _pthread_descr_struct*td)
 #define __TEST_CANCEL() pthread_testcancel()
 
 /* manager thread stuff */
+typedef void(*MGR_func)(void*);
+typedef struct __thread_manager_func {
+  void(*func)(void*);
+  void*arg;
+} __thread_manager_func;
+
+int __thread_send_manager(void(*f)(void*),void*arg);
+
 typedef struct __thread_descr {
   struct _pthread_descr_struct*tr;	/* thread sending the request */
   struct _pthread_descr_struct*td;	/* new thread descriptor */

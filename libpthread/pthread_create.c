@@ -43,7 +43,10 @@ int pthread_create(pthread_t*thread,const pthread_attr_t*d_attr,
     if ((stack=attr.__stackaddr)==0) {
       /* YES we need PROT_EXEC for signal-handling :( */
       if ((st=stack=(char*)mmap(0,attr.__stacksize,PROT_READ|PROT_WRITE|PROT_EXEC,MAP_PRIVATE|MAP_ANONYMOUS,-1,0))==MAP_FAILED)
-	return EINVAL;
+      {
+	ret=EINVAL;
+	goto func_out;
+      }
     }
     stb=stack;
 #ifdef __parisc__
@@ -63,11 +66,10 @@ int pthread_create(pthread_t*thread,const pthread_attr_t*d_attr,
   request.attr	= &attr;
   request.td	= td;
   request.tr	= this;
-  //request.stack	= stack;
 
   if (attr.__inheritsched==PTHREAD_INHERIT_SCHED) {
     if ((ret=__thread_getschedparam(request.tr->pid,&attr.__schedpolicy,&attr.__schedparam))!=0)
-      return ret;
+      goto func_out;
   }
   td->lock.__spinlock	= PTHREAD_SPIN_UNLOCKED;
   td->joined.__spinlock	= PTHREAD_SPIN_UNLOCKED;
@@ -78,13 +80,18 @@ int pthread_create(pthread_t*thread,const pthread_attr_t*d_attr,
   td->func		= start_routine;
   td->arg		= arg;
 
-  /* lett the "child thread" inherit the procmask (hope this works) */
+  /* let the "child thread" inherit the procmask (hope this works) */
   sigprocmask(SIG_SETMASK,0,&(td->thread_sig_mask));
   sigaddset(&(td->thread_sig_mask),PTHREAD_SIG_RESTART);
   sigdelset(&(td->thread_sig_mask),PTHREAD_SIG_CANCEL);
 
-  if ((ret=__thread_start_new(&request))==-1) return EAGAIN;
+  if ((ret=__thread_start_new(&request))==-1) {
+    ret=EAGAIN;
+    goto func_out;
+  }
   *thread=ret;
+  ret^=ret;
+func_out:
   __NO_ASYNC_CANCEL_END_(this);
-  return 0;
+  return ret;
 }

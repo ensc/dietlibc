@@ -1,6 +1,17 @@
 This is the pthread implementation of dietlibc.
 Written from scratch by Olaf Dreesen.
 
+Wed Sep 17 17:03:57 CEST 2003
+
+  - add the semaphore support. (changed the internals of the manager a
+    little for this.)
+  - fixed pthread_create so that it does not change the global thread
+    cancel-type on error.
+
+Mon Aug 18 17:32:52 CEST 2003
+
+  checkin.
+
 Mon Aug 18 17:27:57 CEST 2003
 
   more preparations for checkin

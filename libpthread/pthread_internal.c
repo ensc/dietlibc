@@ -232,10 +232,10 @@ void __thread_suspend(_pthread_descr this,int cancel) {
   this->p_sig=0;
   sigprocmask(SIG_SETMASK,0,&mask);
   sigdelset(&mask,PTHREAD_SIG_RESTART);
-  do {
+  while (this->p_sig!=PTHREAD_SIG_RESTART) {
     if (cancel && (this->cancelstate==PTHREAD_CANCEL_ENABLE) && this->canceled) break;
     sigsuspend(&mask);
-  } while (this->p_sig!=PTHREAD_SIG_RESTART);
+  }
 }
 
 /* restart a thread */
@@ -421,6 +421,20 @@ void __thread_manager_close(void) {
   manager_thread=0;
 }
 
+static void __MGR_thread_start_new(_thread_descr data) {
+  _pthread_descr td=data->td;
+  pthread_attr_t*attr=data->attr;
+  if ((td->pid=(*(data->pid))=__clone(__managed_start,attr->__stackaddr,CLONE_FLAGS,td))!=-1) {
+    sched_setscheduler(td->pid,attr->__schedpolicy,&attr->__schedparam);
+    __thread_add_list(td);
+    __thread_restart(td); 	/* let the thread loose */
+  }
+#ifdef DEBUG
+  printf("__MGR_thread_start_new: created thread %d\n",td->pid);
+#endif
+  __thread_restart(data->tr);	/* restart request sender */
+}
+
 /* manager thread */
 static char __manager_thread_stack[PTHREAD_STACK_SIZE];
 __attribute__((noreturn))
@@ -457,19 +471,12 @@ static void*__manager_thread(void*arg) {
       _exit(0);
     }
     if (n==1) {
-      struct __thread_descr data;
+      __thread_manager_func data;
       if (INTR_RETRY(__libc_read(mgr_recv_fd,&data,sizeof(data)))==sizeof(data)) {
-	pthread_attr_t*attr=data.attr;
-	td=data.td;
-	if ((td->pid=(*data.pid)=__clone(__managed_start,data.attr->__stackaddr,CLONE_FLAGS,td))!=-1) {
-	  sched_setscheduler(td->pid,attr->__schedpolicy,&attr->__schedparam);
-	  __thread_add_list(td);
-	  __thread_restart(td); 	/* let the thread loose */
-	}
 #ifdef DEBUG
-	printf("__manager_thread: created thread %d\n",td->pid);
+	printf("__manager_thread: do func\n");
 #endif
-	__thread_restart(data.tr);	/* restart request sender */
+	data.func(data.arg);
       }
     }
     while ((n=__libc_waitpid(-1,&status,WNOHANG|__WCLONE))!=-1) {
@@ -601,13 +608,21 @@ static void __thread_init() {
   }
 }
 
+/* send the manager a function and an argument to run */
+static int __MGR_send(void(*f)(void*),void*arg) {
+  __thread_manager_func data={ .func=f, .arg=arg, };
+  __pthread_once(&__thread_started,__thread_init);
+  return INTR_RETRY(__libc_write(mgr_send_fd,&data,sizeof(data)));
+}
+int __thread_send_manager(void(*f)(void*),void*arg) __attribute__((alias("__MGR_send")));
+
 /* start a new thread */
 int __thread_start_new(_thread_descr data) {
   int pid;
 
-  __pthread_once(&__thread_started,__thread_init);
   data->pid=&pid;
-  if (INTR_RETRY(__libc_write(mgr_send_fd,data,sizeof(*data)))==-1) {
+
+  if (__MGR_send((MGR_func)__MGR_thread_start_new,data)==-1) {
     __thread_cleanup(data->tr);
     return -1;
   }
