@@ -1,4 +1,5 @@
 #include <sys/stat.h>
+#ifndef __NO_STAT64
 
 void __stat64_cvt(const struct stat *src,struct stat64 *dest) {
   dest->st_dev=src->st_dev;
@@ -14,3 +15,4 @@ void __stat64_cvt(const struct stat *src,struct stat64 *dest) {
   dest->st_mtime=src->st_mtime;
   dest->st_ctime=src->st_ctime;
 }
+#endif

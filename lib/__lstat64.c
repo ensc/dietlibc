@@ -2,6 +2,7 @@
 
 #ifdef WANT_LARGEFILE_BACKCOMPAT
 #include <sys/stat.h>
+#ifndef __NO_STAT64
 #include <errno.h>
 
 extern int __dietlibc_lstat64(const char *__file, struct stat64 *__buf);
@@ -20,4 +21,5 @@ int lstat64(const char *__file, struct stat64 *__buf) {
   }
   return 0;
 }
+#endif
 #endif

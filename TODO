@@ -1,5 +1,3 @@
 provide __divq for Alpha.
 
 popen, pclose -> libdietugly
-
-add optional large file compatibility layer for kernel 2.2 and 2.0
