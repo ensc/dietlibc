@@ -5,6 +5,117 @@
 #include <sys/types.h>
 
 /* For setsockoptions(2) */
+#if defined(__alpha__) || defined(__mips__)
+#define SOL_SOCKET	0xffff
+
+#define SO_DEBUG	0x0001
+#define SO_REUSEADDR	0x0004
+#define SO_TYPE		0x1008
+#define SO_ERROR	0x1007
+#define SO_DONTROUTE	0x0010
+#define SO_BROADCAST	0x0020
+#define SO_SNDBUF	0x1001
+#define SO_RCVBUF	0x1002
+#define SO_KEEPALIVE	0x0008
+#define SO_OOBINLINE	0x0100
+#define SO_NO_CHECK	11
+#define SO_PRIORITY	12
+#define SO_LINGER	0x0080
+#define SO_BSDCOMPAT	14
+/* To add :#define SO_REUSEPORT 15 */
+#define SO_PASSCRED	17
+#define SO_PEERCRED	18
+#define SO_RCVLOWAT	0x1004
+#define SO_SNDLOWAT	0x1003
+#define SO_RCVTIMEO	0x1006
+#define SO_SNDTIMEO	0x1005
+#define SO_ACCEPTCONN	0x1009
+
+#define SO_STYLE	SO_TYPE /* Synonym */
+
+#elif defined(__hppa__)
+#define SOL_SOCKET	0xffff
+
+#define SO_DEBUG	0x0001
+#define SO_REUSEADDR	0x0004
+#define SO_KEEPALIVE	0x0008
+#define SO_DONTROUTE	0x0010
+#define SO_BROADCAST	0x0020
+#define SO_LINGER	0x0080
+#define SO_OOBINLINE	0x0100
+/* To add :#define SO_REUSEPORT 0x0200 */
+#define SO_SNDBUF	0x1001
+#define SO_RCVBUF	0x1002
+#define SO_SNDLOWAT	0x1003
+#define SO_RCVLOWAT	0x1004
+#define SO_SNDTIMEO	0x1005
+#define SO_RCVTIMEO	0x1006
+#define SO_ERROR	0x1007
+#define SO_TYPE	0x1008
+#define SO_PEERNAME	0x2000
+
+#define SO_NO_CHECK	0x400b
+#define SO_PRIORITY	0x400c
+#define SO_BSDCOMPAT	0x400e
+#define SO_PASSCRED	0x4010
+#define SO_PEERCRED	0x4011
+#define SO_TIMESTAMP	0x4012
+#define SCM_TIMESTAMP   SO_TIMESTAMP
+
+/* Security levels - as per NRL IPv6 - don't actually do anything */
+#define SO_SECURITY_AUTHENTICATION	0x4016
+#define SO_SECURITY_ENCRYPTION_TRANSPORT	0x4017
+#define SO_SECURITY_ENCRYPTION_NETWORK	0x4018
+
+#define SO_BINDTODEVICE	0x4019
+
+/* Socket filtering */
+#define SO_ATTACH_FILTER	0x401a
+#define SO_DETACH_FILTER	0x401b
+
+#define SO_ACCEPTCONN	0x401c
+
+#elif defined(__sparc__)
+#define SOL_SOCKET	0xffff
+
+#define SO_DEBUG	0x0001
+#define SO_PASSCRED	0x0002
+#define SO_REUSEADDR	0x0004
+#define SO_KEEPALIVE	0x0008
+#define SO_DONTROUTE	0x0010
+#define SO_BROADCAST	0x0020
+#define SO_PEERCRED	0x0040
+#define SO_LINGER	0x0080
+#define SO_OOBINLINE	0x0100
+/* To add :#define SO_REUSEPORT 0x0200 */
+#define SO_BSDCOMPAT	0x0400
+#define SO_RCVLOWAT	0x0800
+#define SO_SNDLOWAT	0x1000
+#define SO_RCVTIMEO	0x2000
+#define SO_SNDTIMEO	0x4000
+#define SO_ACCEPTCONN	0x8000
+
+#define SO_DONTLINGER	(~SO_LINGER)  /* Older SunOS compat. hack */
+
+#define SO_SNDBUF	0x1001
+#define SO_RCVBUF	0x1002
+#define SO_ERROR	0x1007
+#define SO_TYPE		0x1008
+
+#define SO_ATTACH_FILTER	0x001a
+#define SO_DETACH_FILTER	0x001b
+
+#define SO_PEERNAME	0x001c
+#define SO_TIMESTAMP	0x001d
+#define SCM_TIMESTAMP	SO_TIMESTAMP
+
+/* Security levels - as per NRL IPv6 - don't actually do anything */
+#define SO_SECURITY_AUTHENTICATION              0x5001
+#define SO_SECURITY_ENCRYPTION_TRANSPORT        0x5002
+#define SO_SECURITY_ENCRYPTION_NETWORK          0x5004
+
+#else
+
 #define SOL_SOCKET	1
 
 #define SO_DEBUG	1
@@ -28,7 +139,11 @@
 #define SO_SNDLOWAT	19
 #define SO_RCVTIMEO	20
 #define SO_SNDTIMEO	21
+#define SO_ACCEPTCONN		30
 
+#endif
+
+#if !defined(__hppa__) && !defined(__sparc__)
 /* Security levels - as per NRL IPv6 - don't actually do anything */
 #define SO_SECURITY_AUTHENTICATION		22
 #define SO_SECURITY_ENCRYPTION_TRANSPORT	23
@@ -43,8 +158,7 @@
 #define SO_PEERNAME		28
 #define SO_TIMESTAMP		29
 #define SCM_TIMESTAMP		SO_TIMESTAMP
-
-#define SO_ACCEPTCONN		30
+#endif
 
 /* Socket types. */
 #ifdef __mips__
