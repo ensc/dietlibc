@@ -14,6 +14,8 @@
   ppc64 now compiles again
   typo in libcompat/syscall.S for WANT_THREAD_SAFE (Björn Döbel)
   syscall.h update for all architectures
+  remove two ppc64 warnings
+  fix s/390 syscalls > 255
 
 0.28:
   add tcgetsid (Yuri Kozlov)

@@ -7,7 +7,7 @@
 #endif
 
 		.quad	.__sigsetjmp,.TOC.@tocbase,0
-		.previous
+		.text
 		.size	__sigsetjmp,24
 		.type	.__sigsetjmp,@function
 		.globl	.__sigsetjmp

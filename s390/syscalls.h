@@ -271,7 +271,12 @@ wsym: ; \
 .type sym,@function; \
 .global sym; \
 sym: \
+	.if __NR_##name < 256 ; \
 	svc __NR_##name ; \
+	.else ; \
+	la %r1,__NR_##name ; \
+	svc 0 ; \
+	.endif ; \
 	j __unified_syscall
 
 #define syscall(name,sym) \
@@ -279,6 +284,11 @@ sym: \
 .type sym,@function; \
 .global sym; \
 sym: \
+	.if __NR_##name < 256 ; \
 	svc __NR_##name ; \
+	.else ; \
+	la %r1,__NR_##name ; \
+	svc 0 ; \
+	.endif ; \
 	j __unified_syscall
 

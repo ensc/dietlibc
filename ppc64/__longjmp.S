@@ -1,7 +1,7 @@
 #include <setjmp.h>
 
 		.quad	.__longjmp,.TOC.@tocbase,0
-		.previous
+		.text
 		.size	__longjmp,24
 		.type	.__longjmp,@function
 		.globl	.__longjmp
