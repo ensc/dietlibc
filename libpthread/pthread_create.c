@@ -14,6 +14,11 @@ int pthread_create (pthread_t *thread, const pthread_attr_t *attr,
 
   __THREAD_INIT();
 
+  if (start_routine==0) {
+    (*(__errno_location()))=EINVAL;
+    return -1;
+  }
+
   td = __thread_get_free();
 
   if (td) {
