@@ -13,12 +13,11 @@ static regex_t re_buf;
 char * re_comp(char * regex) {
   int rc;
   if (regex) {
-    if (re_buf_used) {
+    if (re_buf_used)
       regfree(&re_buf);
     rc = regcomp(&re_buf,regex,0);
-    if (rc) {
+    if (rc)
       return err_compile;
-    }
     re_buf_used = 1;
   }
   return NULL;
