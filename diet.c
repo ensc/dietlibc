@@ -42,6 +42,7 @@ int main(int argc,char *argv[]) {
   int compile=0;
   int preprocess=0;
   int verbose=0;
+  int profile=0;
   char diethome[]=DIETHOME;
   char platform[1000];
 #ifdef __DYN_LIB
@@ -167,6 +168,8 @@ usage:
       for (i=2; i<argc; ++i) {
 	if (argv[i][0]=='-' && argv[i][1]=='M')
 	  goto pp;
+	if (!strcmp(argv[i],"-pg"))
+	  profile=1;
 	if (!strcmp(argv[i],"-c") || !strcmp(argv[i],"-S"))
 	  compile=1;
 	if (!strcmp(argv[i],"-E"))
@@ -189,14 +192,15 @@ pp:
 	if (!strcmp(argv[i],"-o"))
 	  if (!compile) _link=1;
 #endif
-      newargv=alloca(sizeof(char*)*(argc+21));
+      newargv=alloca(sizeof(char*)*(argc+22));
       a=alloca(strlen(diethome)+20);
       b=alloca(strlen(platform)+20);
       c=alloca(strlen(platform)+20);
 
       strcpy(a,"-I"); strcat(a,diethome); strcat(a,"/include");
 #ifndef __DYN_LIB
-      strcpy(b,platform); strcat(b,"/start.o");
+      strcpy(b,platform);
+      if (profile) strcat(b,"/pstart.o"); else strcat(b,"/start.o");
 #ifdef INSTALLVERSION
       strcpy(c,platform); strcat(c,"/libc.a");
 #else
@@ -279,7 +283,10 @@ pp:
 	    while (*o) ++o;
 	}
       }
-      if (_link) { *dest++=c; *dest++=(char*)libgcc; }
+      if (_link) {
+	if (profile) *dest++="-lgmon";
+	*dest++=c; *dest++=(char*)libgcc;
+      }
 #ifdef WANT_DYNAMIC
       if (_link) { *dest++=e; }
 #endif

@@ -24,7 +24,14 @@ _start:
 	pushl	%esi
 	pushl	%ecx
 	PIC_INIT			/* non-PIC: this is an empty line */
-	PUT_VAR %eax, environ, %ecx	/* non-PIC: movl %eax,envrion */
+	PUT_VAR %eax, environ, %ecx	/* non-PIC: movl %eax,environ */
+
+#ifdef PROFILING
+	pushl	$_etext
+	pushl	$.text
+	call	monitor
+	addl	$0x8, %esp
+#endif
 
 #ifdef WANT_DYNAMIC
 	call	_dyn_start
@@ -32,6 +39,11 @@ _start:
 	call	main
 #endif
 
+#ifdef PROFILING
+	pushl	%eax
+	call	_stop_monitor
+	popl	%eax
+#endif
 	pushl	%eax
 	call	exit
 	hlt	/* die now ! will ya ... */

@@ -6,6 +6,9 @@
     move __dietlibc__ #define from features.h to diet
   Thomas Ogrisegg sent x86 memccpy and strncpy routines and introduced
     an dietfeatures.h #define WANT_FULL_POSIX_COMPAT
+  Thomas also sent me profiling support (so far only on x86, but
+    profiling/PORTING describes what needs to be done for other
+    architectures)!
 
 0.16:
   "diet -v" or "diet -Os" segfaulted without further arguments.

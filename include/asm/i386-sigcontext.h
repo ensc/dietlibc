@@ -37,6 +37,7 @@ struct _fpstate {
 };
 
 #define X86_FXSR_MAGIC		0x0000
+#define PC(ctx) (ctx.eip)
 
 struct sigcontext {
 	unsigned short gs, __gsh;

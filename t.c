@@ -104,6 +104,7 @@ extern char* strcpy2(char*a,char*b);
      __asm__ __volatile__ ("rdtsc" : "=a" (low) : : "edx")
 
 int main(int argc,char *argv[]) {
+  __write2("foo!\n");
 #if 0
   printf("%+05d\n",500);
 #endif
@@ -147,7 +148,7 @@ int main(int argc,char *argv[]) {
   time_t t=1009921588;
   puts(asctime(localtime(&t)));
 #endif
-#if 1
+#if 0
   printf("%g\n",atof("30"));
 #endif
 #if 0
