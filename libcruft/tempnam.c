@@ -11,13 +11,21 @@ static char buf[1024];
 char* tempnam(char* dir,char* template) {
   int len=sizeof(buf)-1,fd;
   buf[len]=0;
-  strncpy(buf,(dir)?dir:"/tmp",len);
+  if ((dir)&&(*dir)) {
+    strncpy(buf,dir,len);
+    strncat(buf,"/",1);
+  }
+  else
+    strncpy(buf,"/tmp/",len);
   len=(sizeof(buf)-1)-strlen(buf);
-  strncat(buf,"/",1);
-  strncat(buf,template, --len);
+  if (template)
+    strncat(buf,template, --len);
+  else
+    strncat(buf,"temp_", --len);
   len=(sizeof(buf)-1)-strlen(buf);
   strncat(buf,"XXXXXX",len);
-  if ((fd=mkstemp(template))<0) return 0;
+  if ((fd=mkstemp(buf))<0) return 0;
   close(fd);
-  return template;
+  unlink(buf);
+  return buf;
 }

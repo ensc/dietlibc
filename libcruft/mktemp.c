@@ -11,5 +11,6 @@ char* mktemp(char* template) {
   int fd;
   if ((fd=mkstemp(template))<0) return 0;
   close(fd);
+  unlink(template);
   return template;
 }
