@@ -9,7 +9,7 @@ kaputt:
     return EOF;
   }
   if (stream->bm>=stream->buflen-1)
-    if (fflush(stream)) goto kaputt;
+    if (fflush_unlocked(stream)) goto kaputt;
   if (stream->flags&NOBUF) {
 #if __BYTE_ORDER == __LITTLE_ENDIAN
     if (write(stream->fd,&c,1) != 1)
@@ -23,7 +23,7 @@ kaputt:
   ++stream->bm;
   if (((stream->flags&BUFLINEWISE) && c=='\n') ||
       ((stream->flags&NOBUF))) /* puke */
-    if (fflush(stream)) goto kaputt;
+    if (fflush_unlocked(stream)) goto kaputt;
   return 0;
 }
 

@@ -4,10 +4,13 @@
 #include <fcntl.h>
 #include <errno.h>
 
-FILE *freopen (const char *path, const char *mode, FILE *stream) {
+/* this is needed so the libpthread wrapper can initialize the mutex,
+ * not to lock it */
+
+FILE *freopen_unlocked(const char *path, const char *mode, FILE *stream) {
   if (stream) {
     int f=__stdio_parse_mode(mode);
-    fflush(stream);
+    fflush_unlocked(stream);
     close(stream->fd);
     if ((stream->fd=open(path,f,0666))!=-1) {
       struct stat st;
@@ -22,3 +25,5 @@ FILE *freopen (const char *path, const char *mode, FILE *stream) {
   } else errno=EINVAL;
   return stream;
 }
+
+FILE *freopen(const char *path, const char *mode, FILE *stream) __attribute__((weak,alias("freopen_unlocked")));

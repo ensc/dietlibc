@@ -77,3 +77,8 @@ int __fflush_stderr(void);
 FILE* __stdio_init_file(int fd,int closeonerror,int mode);
 int __stdio_parse_mode(const char *mode);
 void __stdio_flushall(void);
+
+FILE *fopen_unlocked(const char *path, const char *mode) __THROW;
+FILE *fdopen_unlocked(int fildes, const char *mode) __THROW;
+FILE *freopen_unlocked(const char *path, const char *mode, FILE *stream) __THROW;
+

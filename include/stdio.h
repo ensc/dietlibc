@@ -44,6 +44,7 @@ int getc(FILE *stream) __THROW;
 int getchar(void) __THROW;
 char *gets(char *s) __THROW;
 int ungetc(int c, FILE *stream) __THROW;
+int ungetc_unlocked(int c, FILE *stream) __THROW;
 
 int fputc(int c, FILE *stream) __THROW;
 int fputc_unlocked(int c, FILE *stream) __THROW;
@@ -61,13 +62,19 @@ int putchar(int c) __THROW;
 int puts(const char *s) __THROW;
 
 int fseek(FILE *stream, long offset, int whence) __THROW;
+int fseek_unlocked(FILE *stream, long offset, int whence) __THROW;
 long ftell(FILE *stream) __THROW;
+long ftell_unlocked(FILE *stream) __THROW;
 int fseeko(FILE *stream, off_t offset, int whence) __THROW;
+int fseeko_unlocked(FILE *stream, off_t offset, int whence) __THROW;
 off_t ftello(FILE *stream) __THROW;
+off_t ftello_unlocked(FILE *stream) __THROW;
 
 #ifndef __NO_STAT64
 int fseeko64(FILE *stream, loff_t offset, int whence) __THROW;
+int fseeko64_unlocked(FILE *stream, loff_t offset, int whence) __THROW;
 loff_t ftello64(FILE *stream) __THROW;
+loff_t ftello64_unlocked(FILE *stream) __THROW;
 
 #if defined _FILE_OFFSET_BITS && _FILE_OFFSET_BITS == 64
 #define off_t loff_t
@@ -82,17 +89,22 @@ int fgetpos(FILE *stream, fpos_t *pos) __THROW;
 int fsetpos(FILE *stream, fpos_t *pos) __THROW;
 
 size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream) __THROW;
+size_t fread_unlocked(void *ptr, size_t size, size_t nmemb, FILE *stream) __THROW;
 
 size_t fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream) __THROW;
+size_t fwrite_unlocked(const void *ptr, size_t size, size_t nmemb, FILE *stream) __THROW;
 
 int fflush(FILE *stream) __THROW;
+int fflush_unlocked(FILE *stream) __THROW;
 
 int fclose(FILE *stream) __THROW;
+int fclose_unlocked(FILE *stream) __THROW;
 
 int feof (FILE *stream) __THROW;
 int ferror(FILE *stream) __THROW;
 int fileno(FILE *stream) __THROW;
 void clearerr(FILE *stream) __THROW;
+void clearerr_unlocked(FILE *stream) __THROW;
 
 int remove(const char *pathname) __THROW;
 
@@ -109,6 +121,7 @@ extern FILE *stdin, *stdout, *stderr;
 #define _IOFBF 2
 
 int setvbuf(FILE *stream, char *buf, int mode , size_t size) __THROW;
+int setvbuf_unlocked(FILE *stream, char *buf, int mode , size_t size) __THROW;
 
 #define setbuf(stream,buf) setvbuf(stream,buf,buf?_IOFBF:_IONBF,BUFSIZ)
 #define setbuffer(stream,buf,size) setvbuf(stream,buf,buf?_IOFBF:_IONBF,size)
@@ -128,6 +141,7 @@ int pclose(FILE *stream) __THROW;
 char* tmpnam(char *s) __THROW;	/* DO NOT USE!!! Use mkstemp instead! */
 char* tempnam(char* dir,char* _template);	/* dito */
 FILE* tmpfile(void) __THROW;
+FILE* tmpfile_unlocked(void) __THROW;
 
 #define FILENAME_MAX 4095
 #define FOPEN_MAX 16

@@ -3,20 +3,20 @@
 #include <unistd.h>
 #include <errno.h>
 
-size_t fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream) {
+size_t fwrite_unlocked(const void *ptr, size_t size, size_t nmemb, FILE *stream) {
   int res;
   unsigned long len=size*nmemb;
   long i;
   if (!nmemb || len/nmemb!=size) return 0; /* check for integer overflow */
   if (len>stream->buflen || (stream->flags&NOBUF)) {
-    fflush(stream);
+    fflush_unlocked(stream);
     do {
       res=write(stream->fd,ptr,size*nmemb);
     } while (res==-1 && errno==EINTR);
   } else {
     register const unsigned char *c=ptr;
     for (i=len; i>0; --i,++c)
-      if (fputc(*c,stream)) { res=len-i; goto abort; }
+      if (fputc_unlocked(*c,stream)) { res=len-i; goto abort; }
     res=len;
   }
   if (res<0) {
@@ -26,3 +26,5 @@ size_t fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream) {
 abort:
   return size?res/size:0;
 }
+
+size_t fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream) __attribute__((weak,alias("fwrite_unlocked")));

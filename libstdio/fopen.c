@@ -4,7 +4,10 @@
 
 extern int __stdio_atexit;
 
-FILE *fopen (const char *path, const char *mode) {
+/* this is needed so the libpthread wrapper can initialize the mutex,
+ * not to lock it */
+
+FILE *fopen_unlocked(const char *path, const char *mode) {
   int f=0;	/* O_RDONLY, O_WRONLY or O_RDWR */
   int fd;
 
@@ -13,3 +16,5 @@ FILE *fopen (const char *path, const char *mode) {
     return 0;
   return __stdio_init_file(fd,1,f);
 }
+
+FILE *fopen(const char *path, const char *mode) __attribute__((weak,alias("fopen_unlocked")));

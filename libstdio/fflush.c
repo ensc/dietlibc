@@ -7,11 +7,13 @@ FILE *__stdio_root;
 
 int __stdio_atexit=0;
 
+int fflush(FILE *stream) __attribute__((weak,alias("fflush_unlocked")));
+
 void __stdio_flushall(void) {
   fflush(0);
 }
 
-int fflush(FILE *stream) {
+int fflush_unlocked(FILE *stream) {
   if (stream==0) {
     int res;
     FILE *f;
@@ -46,7 +48,7 @@ int __fflush4(FILE *stream,int next) {
     atexit(__stdio_flushall);
   }
   if ((stream->flags&BUFINPUT)!=next) {
-    int res=fflush(stream);
+    int res=fflush_unlocked(stream);
     stream->flags=(stream->flags&~BUFINPUT)|next;
     return res;
   }

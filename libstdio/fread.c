@@ -2,7 +2,7 @@
 #include "dietstdio.h"
 #include <unistd.h>
 
-size_t fread( void *ptr, size_t size, size_t nmemb, FILE *stream) {
+size_t fread_unlocked(void *ptr, size_t size, size_t nmemb, FILE *stream) {
   int res;
   unsigned long i,j;
   j=size*nmemb;
@@ -20,7 +20,7 @@ size_t fread( void *ptr, size_t size, size_t nmemb, FILE *stream) {
   if ( !(stream->flags&FDPIPE) && (j>stream->buflen)) {
     size_t tmp=j-i;
     int res;
-    fflush(stream);
+    fflush_unlocked(stream);
     while ((res=read(stream->fd,ptr+i,tmp))<(int)tmp) {
       if (res==-1) {
 	stream->flags|=ERRORINDICATOR;
@@ -35,7 +35,7 @@ size_t fread( void *ptr, size_t size, size_t nmemb, FILE *stream) {
   }
 #endif
   for (; i<j; ++i) {
-    res=fgetc(stream);
+    res=fgetc_unlocked(stream);
     if (res==EOF)
 exit:
       return i/size;
@@ -44,3 +44,5 @@ exit:
   }
   return nmemb;
 }
+
+size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream) __attribute__((weak,alias("fread_unlocked")));

@@ -378,7 +378,7 @@ $(OBJDIR)/ttyname.o $(OBJDIR)/sysconf_cpus.o: dietfeatures.h
 $(OBJDIR)/localtime_r.o $(OBJDIR)/strftime.o: dietfeatures.h
 
 # these depend on dietfeatures.h for WANT_SMALL_STDIO_BUFS
-$(LIBSTDIOOBJ): dietfeatures.h
+$(LIBSTDIOOBJ): dietfeatures.h include/stdio.h dietstdio.h
 
 # these depend on dietfeatures.h for WANT_FULL_RESOLV_CONF
 $(OBJDIR)/dnscruft.o $(OBJDIR)/dnscruft2.o: dietfeatures.h

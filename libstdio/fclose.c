@@ -2,10 +2,10 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-int fclose(FILE *stream) {
+int fclose_unlocked(FILE *stream) {
   int res;
   FILE *f,*fl;
-  fflush(stream);
+  fflush_unlocked(stream);
   res=close(stream->fd);
   for (fl=0,f=__stdio_root; f; fl=f,f=f->next)
     if (f==stream) {
@@ -20,3 +20,5 @@ int fclose(FILE *stream) {
   free(stream);
   return res;
 }
+
+int fclose(FILE *stream) __attribute__((weak,alias("fclose_unlocked")));
