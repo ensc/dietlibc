@@ -12,7 +12,7 @@ char *optarg;
 
 static int opt_unknown=1,opt_unknown_len;
 
-static int getopt_check(int c,char*o,int ol)
+static int getopt_check(int c,const char*o,int ol)
 {
   int i;
   if (c==':') return 2;
@@ -77,10 +77,10 @@ int getopt(int c,char*const v[],const char*o)
 	  nextchar=0;
 	case 0:
 	  if (!nextchar)
-	    getopt_sort(v,oi);
+	    getopt_sort((char**)v,oi);
 	  else
 	    if (!(*(nextchar+1)))
-	      getopt_sort(v,oi);
+	      getopt_sort((char**)v,oi);
 	  return ret;
 	  break;
 	default:
@@ -97,7 +97,7 @@ int getopt(int c,char*const v[],const char*o)
       {
 	if ((v[optind][1]=='-')&&(v[optind][2]==0))
 	{
-	  getopt_sort(v,oi);
+	  getopt_sort((char**)v,oi);
 	  optind=opt_unknown;
 	  return -1;
 	}

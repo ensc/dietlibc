@@ -15,7 +15,7 @@ int execlp(const char* file, const char *arg,...) {
     ++n;
   va_end (ap);
   if ((argv=(char **)alloca(n*sizeof(char*)))) {
-    argv[0]=arg;
+    argv[0]=(char*)arg;
     for (i=0; i<n; ++i)
       argv[i+1]=va_arg(bak,char *);
     va_end (bak);

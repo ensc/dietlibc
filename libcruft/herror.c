@@ -1,3 +1,4 @@
+#include <string.h>
 #include <unistd.h>
 
 void herror(const char* s) {

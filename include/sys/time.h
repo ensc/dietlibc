@@ -43,4 +43,12 @@ struct tm* gmtime_r(const time_t *t, struct tm *r) __THROW;
 struct tm* localtime(const time_t *t) __THROW;
 struct tm* localtime_r(const time_t *t, struct tm *r) __THROW;
 
+#ifndef __FD_SET
+#define	__FD_SET(d, set)	((set)->fds_bits[__FDELT(d)] |= __FDMASK(d))
+#define	__FD_CLR(d, set)	((set)->fds_bits[__FDELT(d)] &= ~__FDMASK(d))
+#define	__FD_ISSET(d, set)	(((set)->fds_bits[__FDELT(d)] & __FDMASK(d)) != 0)
+#define	__FD_ZERO(set)	\
+  ((void) memset ((void*) (set), 0, sizeof (__kernel_fd_set)))
+#endif
+
 #endif
