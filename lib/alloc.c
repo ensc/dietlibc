@@ -46,7 +46,7 @@ typedef union {
 
 #ifdef __i386__
 /* regparm exists only on i386 */
-static void *do_mmap(unsigned long size) __attribute__((regparm(1)));
+static void *do_mmap(size_t size) __attribute__((regparm(1)));
 static size_t get_index(size_t _size) __attribute__((regparm(1)));
 static void* __small_malloc(size_t _size) __attribute__((regparm(1)));
 #endif

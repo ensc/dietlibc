@@ -18,6 +18,7 @@ int atexit(function t) {
 
 extern void _exit(int code) __attribute__((noreturn));
 
+void __libc_exit(int code);
 void __libc_exit(int code) {
   register int i=atexit_counter;
   while(i) {
