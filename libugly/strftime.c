@@ -1,5 +1,6 @@
 #include <sys/types.h>
 #include <time.h>
+#include "dietfeatures.h"
 
 static const char   sweekdays [7] [4] = {
     "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"
@@ -79,7 +80,13 @@ again:
             case 'w': no  = tm->tm_wday;              		 goto _no;
 	    case 'U': no  = (tm->tm_yday - tm->tm_wday + 7) / 7; goto _no;
 	    case 'W': no  = (tm->tm_yday - (tm->tm_wday - 1 + 7) % 7 + 7) / 7; goto _no;
-            case 'Z': tzset(); src = tzname[0]; 			 goto _str;
+	    case 'Z':
+#ifdef WANT_TZFILE_PARSER
+		      tzset(); src = tzname[0];
+#else
+		      src = "[unknown timezone]";
+#endif
+		      goto _str;
             case 'Y': i2a ( buf+0, (unsigned int)(tm->tm_year / 100 + 19) );
 		      i2a ( buf+2, (unsigned int)(tm->tm_year % 100) );
 		      src = buf;

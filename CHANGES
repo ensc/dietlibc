@@ -48,6 +48,7 @@
   fix puts in full stdio mode (would omit \n)
   fix wrong types on powerpc, broke *stat (Gerrit Pape)
   allow more than 64k in i386 memchr (Karsten Scheibler)
+  make strftime work it WANT_TZFILE_PARSER is not set (Gwenole Beauchesne)
 
 0.21:
   use gcc's size_t, ptrdiff_t and wchar_t types (Olaf)

@@ -357,7 +357,7 @@ strcasecmp.o $(OBJDIR)/strcat.o $(OBJDIR)/strchr.o $(OBJDIR)/strcmp.o $(OBJDIR)/
 $(OBJDIR)/ttyname.o $(OBJDIR)/sysconf_cpus.o: dietfeatures.h
 
 # these depend on dietfeatures.h for WANT_TZFILE_PARSER
-$(OBJDIR)/localtime_r.o: dietfeatures.h
+$(OBJDIR)/localtime_r.o $(OBJDIR)/strftime.o: dietfeatures.h
 
 # these depend on dietfeatures.h for WANT_SMALL_STDIO_BUFS
 $(LIBSTDIOOBJ): dietfeatures.h
