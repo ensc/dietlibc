@@ -18,7 +18,7 @@
   fix the sig*set routines.  mount actually works now *bg*
   fix fwrite dividing by zero when trying to fwrite n records of size 0.
   added an initial regex implementation (3500 bytes!!!).
-  add llseek.
+  add llseek and lseek64 with optional lseek fall-back.
 
 0.9:
   fixed initgroups (oops)

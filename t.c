@@ -1,3 +1,4 @@
+#define _FILE_OFFSET_BITS 64
 #include <unistd.h>
 #include <endian.h>
 #include <stdlib.h>
@@ -43,7 +44,7 @@ static int rand() {
 extern double atof(const char *c);
 
 int main(int argc,char *argv[]) {
-  printf("got password \"%s\"\n",getpass("password"));
+  printf("%ld\n",lseek(0,1234,SEEK_SET));
 #if 0
   struct passwd *p=getpwnam("leitner");
   struct spwd *s=getspnam("leitner");
