@@ -1,6 +1,6 @@
 #include <endian.h>
 
-unsigned short int htonl(unsigned short int hostshort) {
+unsigned short int htons(unsigned short int hostshort) {
 #if __BYTE_ORDER==__LITTLE_ENDIAN
   return ((hostshort>>8)&0xff) | (hostshort&0xff);
 #else
