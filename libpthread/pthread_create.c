@@ -54,13 +54,12 @@ int pthread_create (pthread_t *thread, const pthread_attr_t *attr,
 	(*(__errno_location()))=EINVAL;
 	return -1;
       }
-      td->stack_begin = stack;
-      td->stack_addr = stack+td->stack_size;
-    }
-    else
+      td->stack_begin	= stack;
+      td->stack_addr	= stack+td->stack_size;
+    } else {
+      td->stack_begin	= 0;
       td->stack_addr	= attr->__stackaddr;
-
-    td->stack_size	= attr->__stacksize;
+    }
 
     ret = signal_manager_thread(td);
 

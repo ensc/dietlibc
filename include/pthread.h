@@ -77,8 +77,6 @@ typedef struct
   int		__scope;
   void *	__stackaddr;
   unsigned long __stacksize;
-//  unsigned long __guardsize;
-//  int		__stackaddr_set;
 } pthread_attr_t;
 
 enum

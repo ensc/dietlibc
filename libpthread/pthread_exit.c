@@ -13,5 +13,5 @@ void pthread_exit(void *retval)
   this = __thread_self();
   this->retval = retval;
 
-  _exit(0);
+  longjmp(this->jmp_exit,1);
 }

@@ -15,8 +15,8 @@ static struct _pthread_descr_struct threads[PTHREAD_THREADS_MAX];
 static int _max_used_thread_id=1;
 pthread_once_t __thread_inited;
 
-static struct _pthread_fastlock __manager_thread_signal_lock = {0};
 static _pthread_descr __manager_thread_signal_lock_owner = 0;
+static struct _pthread_fastlock __manager_thread_signal_lock = {0};
 static struct _pthread_fastlock __manager_thread_data_lock = {1};
 static struct _pthread_fastlock __manager_thread_data_go_lock = {1};
 
@@ -87,7 +87,7 @@ void __thread_wait_some_time()
 void __thread_cleanup(_pthread_descr th)
 {
   /* lib provided stack should be freed */
-  if (!(th->userstack)) free(th->stack_begin);
+  if (th->stack_begin) free(th->stack_begin);
 
   /* hopefully a deadlock prevention */
   if (th->manager_lock) {
@@ -151,7 +151,7 @@ static void __kill_all_threads()
 static void *__mthread_starter(void *arg)
 {
   _pthread_descr td = (_pthread_descr)arg;
-  int limit = td->stack_size-4096;
+  int i = td->stack_size-4096;
 
   /* just to be sure */
   td->pid=getpid();
@@ -162,7 +162,7 @@ static void *__mthread_starter(void *arg)
   signal(SIGHUP, __thread_cancel_handler );
 
   /* limit stack so that we NEVER have to worry */
-  setrlimit(RLIMIT_STACK, (struct rlimit *)(&limit));
+  setrlimit(RLIMIT_STACK, (struct rlimit *)(&i));
 
   /* set scheduler */
   if (td->policy!=SCHED_OTHER) {
@@ -175,22 +175,35 @@ static void *__mthread_starter(void *arg)
   printf("in starter %d, parameter %8p\n", td->pid, td->func);
 #endif
 
-  if (!td->canceled) {
-    td->retval=td->func(td->arg);
+  if (!(setjmp(td->jmp_exit))) {
+    if (!td->canceled) {
+      td->retval=td->func(td->arg);
+    }
   }
+#ifdef DEBUG
+  else {
+    printf("pthread_exit called in %d\n", td->piddt);
+  }
+#endif
+
 
 #ifdef DEBUG
   printf("end starter %d, retval %8p\n", td->pid, td->retval);
 #endif
 
-#if 0
   /* wake joined thread and put retval */
   if (td->joined) {
     td->joined->retval=td->retval;
     td->joined->join=0;
     td->joined=0;
   }
-#endif
+
+  /* execute all functions on the cleanup-stack */
+  for (i=PTHREAD_MAX_CLEANUP;i;) {
+    if (td->cleanup_stack[--i].func) {
+      td->cleanup_stack[i].func(td->cleanup_stack[i].arg);
+    }
+  }
 
   return 0;
 }
@@ -306,7 +319,7 @@ void __thread_init()
   ++_max_used_thread_id;
   threads[1].stack_size=sizeof(__manager_thread_stack);
   threads[1].stack_addr=&__manager_thread_stack[sizeof(__manager_thread_stack)];
-  threads[1].userstack=1;
+  threads[1].stack_begin=0;
   threads[1].func=__manager_thread;
 
   threads[1].pid =

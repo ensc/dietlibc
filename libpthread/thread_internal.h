@@ -3,9 +3,10 @@
 
 #include <pthread.h>
 #include <stdarg.h>
+#include <setjmp.h>
 
 /* cleanup */
-#define PTHREAD_MAX_CLEANUP 4
+#define PTHREAD_MAX_CLEANUP 8
 struct thread_cleanup_t {
   void (*func)(void*);
   void *arg;
@@ -29,12 +30,12 @@ struct _pthread_descr_struct {
   /* stack handling */
   unsigned int stack_size;	/* stack size for setrlimit */
   void *stack_addr;		/* stack address for clone */
-  void *stack_begin;		/* begin of stack / lowest address (free) */
-  int  userstack;		/* user has provided the stack */
+  void *stack_begin;		/* begin of lib-stack / lowest address (free) */
 
   /* thread exit handling */
   void  *retval;		/* thread return value */
   int  join;			/* thread waits for other to return */
+  jmp_buf jmp_exit;		/* pthread_exit jump */
 
   /* thread flags */
   int  detached;		/* thread is detached */
