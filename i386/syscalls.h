@@ -245,6 +245,7 @@ sym: \
 .Lend##sym: ; \
 .size sym,.Lend##sym-sym
 
+#ifndef __PIC__
 #define __socketcall(name,NAME) \
 .text; \
 .type name,@function; \
@@ -256,3 +257,6 @@ __libc_##name: ; \
 	jmp socketcall; \
 .Lend##name:; \
 .size name,.Lend##name-name
+#else
+#define __socketcall(name,NAME)
+#endif

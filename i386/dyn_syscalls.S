@@ -231,6 +231,9 @@ __unified_syscall:
 #include "../syscalls.s/truncate64.S"
 #include "../syscalls.s/ftruncate64.S"
 
+#undef __PIC__
+#undef __socketcall
+/* oh what a kludge! */
 #include "../i386/send.S"
 #include "../i386/recv.S"
 #include "../i386/socket.S"
@@ -249,6 +252,8 @@ __unified_syscall:
 #include "../i386/connect.S"
 #include "../i386/bind.S"
 #include "../i386/socketcall.S"
+#define __PIC__
+#undef __socketcall
 
 
 /* so now this was the last u.s.c. */
