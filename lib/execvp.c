@@ -12,7 +12,7 @@ static int exec_shell(const char *file, char *const argv[]) {
 
   for (i = 0; argv[i]; i++);
 
-  if (1) {
+  {
     char *shell_argv[i + 1];
     shell_argv[0] = _PATH_BSHELL;
     shell_argv[1] = (char *) file;
