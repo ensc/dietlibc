@@ -49,6 +49,7 @@
 #define EPROTONOSUPPORT	43	/* Protocol not supported */
 #define ESOCKTNOSUPPORT	44	/* Socket type not supported */
 #define EOPNOTSUPP	45	/* Operation not supported on transport endpoint */
+#define ENOTSUP		EOPNOTSUPP/* Operation not supported on transport endpoint */
 #define EPFNOSUPPORT	46	/* Protocol family not supported */
 #define EAFNOSUPPORT	47	/* Address family not supported by protocol */
 #define EADDRINUSE	48	/* Address already in use */
@@ -307,6 +308,7 @@
 #define EPROTONOSUPPORT	43	/* Protocol not supported */
 #define ESOCKTNOSUPPORT	44	/* Socket type not supported */
 #define EOPNOTSUPP	45	/* Op not supported on transport endpoint */
+#define ENOTSUP		EOPNOTSUPP/* Operation not supported on transport endpoint */
 #define EPFNOSUPPORT	46	/* Protocol family not supported */
 #define EAFNOSUPPORT	47	/* Address family not supported by protocol */
 #define EADDRINUSE	48	/* Address already in use */
@@ -486,6 +488,7 @@
 #define EPROTONOSUPPORT	93	/* Protocol not supported */
 #define ESOCKTNOSUPPORT	94	/* Socket type not supported */
 #define EOPNOTSUPP	95	/* Operation not supported on transport endpoint */
+#define ENOTSUP		EOPNOTSUPP/* Operation not supported on transport endpoint */
 #define EPFNOSUPPORT	96	/* Protocol family not supported */
 #define EAFNOSUPPORT	97	/* Address family not supported by protocol */
 #define EADDRINUSE	98	/* Address already in use */

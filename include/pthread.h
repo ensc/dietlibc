@@ -5,9 +5,6 @@
 #include <signal.h>
 #include <setjmp.h>
 
-/* arg... kernel haeder... */
-#define ENOTSUP 524 /* Operation is not supported */
-
 #define PTHREAD_STACK_SIZE	16384
 
 #define PTHREAD_THREADS_MAX	128
