@@ -9,7 +9,7 @@ int pthread_cond_timedwait(pthread_cond_t *cond, pthread_mutex_t *mutex,
 {
   _pthread_descr tmp;
   _pthread_descr this;
-  int ret;
+  int ret=0;
 
   __THREAD_INIT();
 
@@ -26,7 +26,18 @@ int pthread_cond_timedwait(pthread_cond_t *cond, pthread_mutex_t *mutex,
 
   /* Aeh yeah / wait till signal */
   pthread_mutex_unlock(mutex);
-  ret=nanosleep(abstime,0);
+
+  while (this->waiting) {
+    struct timeval tv;
+    gettimeofday(&tv,0);
+    if ((abstime->tv_sec <= tv.tv_sec) && (abstime->tv_nsec <= tv.tv_usec*1000)) {
+      ret = 1;
+      break;
+    }
+    __thread_wait_some_time();
+    if (this->canceled) this->waiting=0;
+  }
+
   pthread_mutex_lock(mutex);
 
   __TEST_CANCEL();
