@@ -39,6 +39,7 @@ __unified_syscall:
 #include "../syscalls.s/__reboot.S"
 #include "../syscalls.s/_llseek.S"
 #include "../syscalls.s/access.S"
+#include "../syscalls.s/adjtimex.S"
 #include "../syscalls.s/brk.S"
 #include "../syscalls.s/chdir.S"
 #include "../syscalls.s/chmod.S"
