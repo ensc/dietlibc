@@ -104,7 +104,7 @@ invalidclass:
 	}
 	if ((res&&!neg) || ((neg&&!res) && *pattern==']')) {
 	  while (*pattern && *pattern!=']') ++pattern;
-	  return fnmatch(pattern+1,string+1,flags);
+	  return fnmatch(pattern+!!*pattern,string+1,flags);
 	} else if (res && neg)
 	  return FNM_NOMATCH;
       }
