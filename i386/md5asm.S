@@ -182,10 +182,10 @@ __MD5Transform:
 .Lende:
 .size	__MD5Transform, .Lende-__MD5Transform
 
-.type	 __MD5Init,@function
-.global	 __MD5Init
+.type	 MD5Init,@function
+.global	 MD5Init
 
-__MD5Init:
+MD5Init:
 	movl 	4(%esp), %ecx
 	xorl	%eax,%eax
 	movl 	$0x67452301,   (%ecx)
@@ -197,8 +197,8 @@ __MD5Init:
 	ret
 
 
-.global __MD5Update
-.type	__MD5Update,@function
+.global MD5Update
+.type	MD5Update,@function
 
 
 // void  MD5Update ( MD5_CTX* context, const byte* input, size_t inputBytes )
@@ -211,7 +211,7 @@ __MD5Init:
 #define BUFFER		24(%ebx)
 
 
-__MD5Update:
+MD5Update:
 	pushal
 	cld
 	movl 	CONTEXT, %ebx
@@ -256,7 +256,7 @@ __MD5Update:
 	leal	BUFFER, %ecx
 	pushl	%ecx
 	push	%ebx
-	call	__MD5Transform
+	call	MD5Transform
 
 //      len = (inputBytes - partLen) / 64;
 
@@ -269,7 +269,7 @@ __MD5Update:
 	pushl	%ecx
 	pushl	%esi
 	pushl	%ebx
-	call	__MD5Transform
+	call	MD5Transform
 	addl	$24,%esp
 	
 //	i = partLen + 64 * len;
@@ -295,6 +295,5 @@ ende:
 
 	popal
 	ret
-
 
 

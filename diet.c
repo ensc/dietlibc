@@ -17,7 +17,7 @@
  * "sparc-linux-gcc -nostdlib -static -o t t.o /path/to/dietlibc/bin-sparc/start.o /path/to/dietlibc/bin-sparc/dietlibc.a"
 */
 
-void error(const char *message) {
+static void error(const char *message) {
   write(2,message,strlen(message));
   exit(1);
 }

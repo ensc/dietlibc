@@ -272,4 +272,7 @@ $(OBJDIR)/getaddrinfo.o $(OBJDIR)/getnameinfo.o $(OBJDIR)/getprotoent.o \
 $(OBJDIR)/getservent.o $(OBJDIR)/iconv.o $(OBJDIR)/iconv_open.o \
 $(OBJDIR)/netent.o $(OBJDIR)/system.o: dietfeatures.h
 
+# these depend on dietfeatures.h for WANT_CRYPT_MD5
+$(OBJDIR)/crypt.o: dietfeatures.h
+
 # CFLAGS+=-W -Wshadow -Wid-clash-31 -Wpointer-arith -Wcast-align -Wstrict-prototypes -Wwrite-strings

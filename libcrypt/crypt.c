@@ -253,7 +253,10 @@ char * crypt(const char *pw, const char *salt)
 {
   register int i, j, c;
   static char block[66], iobuf[16];
-
+#ifdef WANT_CRYPT_MD5
+  if (salt[0]=='$' && salt[1]=='1' && salt[2]=='$')
+    return md5crypt(pw,salt);
+#endif
   for(i=0; i < 66; i++)
     block[i] = 0;
   for(i=0; (c= *pw) && i < 64; pw++) {

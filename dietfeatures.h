@@ -57,6 +57,9 @@
 /* do you want support for matherr? */
 #define WANT_MATHERR
 
+/* do you want crypt(3) to use MD5 if the salt starts with "$1$"? */
+#define WANT_CRYPT_MD5
+
 /* stop uncommenting here ;-) */
 #ifndef WANT_FASTER_STRING_ROUTINES
 #define WANT_SMALL_STRING_ROUTINES

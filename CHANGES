@@ -8,6 +8,7 @@
   several changes from Michal Ludvig: inttypes.h gets C99 macros,
     add pivot_root syscall, %n for *scanf.
   add adjtimex (thanks, Laurent BERCOT)
+  add Frank Klemm's optimized md5
 
 0.11:
   fix major oops in DNS routines (only with WANT_FULL_RESOLV_CONF enabled).

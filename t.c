@@ -42,6 +42,10 @@
 #include <sys/un.h>
 #include <fcntl.h>
 #include <iconv.h>
+#include <features.h>
+#ifdef __dietlibc__
+#include <md5.h>
+#endif
 
 #if 0
 static const char* Ident;
@@ -91,7 +95,22 @@ extern char* strcpy2(char*a,char*b);
      __asm__ __volatile__ ("rdtsc" : "=a" (low) : : "edx")
 
 int main(int argc,char *argv[]) {
+  printf("%s\n",crypt("test","$1$"));
+#if 0
+  MD5_CTX x;
+  unsigned char md5[16];
+  MD5Init(&x);
+  MD5Update(&x,"fnord",5);
+  MD5Final(md5,&x);
+  {
+    int i;
+    for (i=0; i<16; ++i) {
+      printf("%02x",md5[i]);
+    }
+    putchar('\n');
+  }
   printf("%d\n",memchr("aaaa",'x',4));
+#endif
 #if 0
   long a,b,c;
   char buf[20]="fnord";
