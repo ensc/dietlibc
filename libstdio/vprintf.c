@@ -3,7 +3,7 @@
 #include "dietstdio.h"
 
 __attribute__((weak)) int __buffered_outs(const char *s,size_t len) {
-  return write(1,s,len)==len?1:0;
+  return (write(1,s,len)==(int)len)?1:0;
 }
 
 int vprintf(const char *format, va_list ap)

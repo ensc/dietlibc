@@ -34,6 +34,7 @@ static void __do_global_dtors_aux(void)
   for (df=((__DTOR_LIST__)+1);(*df) != (structor)0; df++) (*df)();
 }
 
+__attribute__((section(".fini"))) void _fini(void);
 __attribute__((section(".fini"))) void _fini(void)
 {
   __do_global_dtors_aux();

@@ -3,6 +3,8 @@
 #include <pthread.h>
 #include "thread_internal.h"
 
+#include <stdlib.h>
+
 static pthread_mutex_t mutex_alloc = PTHREAD_MUTEX_INITIALIZER;
 
 void free(void *ptr)

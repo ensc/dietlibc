@@ -4,6 +4,8 @@
 #include <pthread.h>
 #include "thread_internal.h"
 
+#include <syslog.h>
+
 static pthread_mutex_t mutex_syslog = PTHREAD_MUTEX_INITIALIZER;
 
 void closelog(void)

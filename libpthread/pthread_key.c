@@ -7,6 +7,9 @@
 struct _pthread_fastlock __thread_keys_lock;
 struct _thread_key __thread_keys[PTHREAD_KEYS_MAX];
 
+void __thread_start__key(int id);
+void __thread_exit__key(int id);
+
 void __thread_start__key(int id)
 {
   int i;

@@ -19,7 +19,7 @@
 #define PTHREAD_DESTRUCTOR_ITERATIONS 10
 
 typedef struct _pthread_descr_struct *_pthread_descr;
-typedef unsigned long int pthread_t;
+typedef int pthread_t;
 
 /* Fast locks */
 struct _pthread_fastlock {
@@ -60,6 +60,12 @@ enum
 typedef struct {
   int __mutexkind;
 } pthread_mutexattr_t;
+
+int pthread_mutexattr_init(pthread_mutexattr_t *attr);
+int pthread_mutexattr_destroy(pthread_mutexattr_t *attr);
+
+int pthread_mutexattr_getkind_np(const pthread_mutexattr_t *attr, int *kind);
+int pthread_mutexattr_setkind_np(pthread_mutexattr_t *attr, int kind);
 
 int pthread_mutex_init(pthread_mutex_t *mutex,
 		const pthread_mutexattr_t *mutexattr);

@@ -67,3 +67,7 @@ int __v_printf(struct arg_printf* fn, const unsigned char *format, va_list arg_p
 
 extern FILE *__stdio_root;
 
+int __fflush_stdin(void);
+int __fflush_stdout(void);
+int __fflush_stderr(void);
+

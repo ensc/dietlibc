@@ -1,10 +1,5 @@
 "locale"
 
-fscanf
-
-vsnprintf return value should be the number of needed characters instead
-of the (truncated) number of characters that were actually written.
-
 real regerror
 
 real DNS errors (gai_strerror,hstrerror,...)

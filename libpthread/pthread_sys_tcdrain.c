@@ -3,6 +3,8 @@
 #include <pthread.h>
 #include "thread_internal.h"
 
+#include <termios.h>
+
 int tcdrain(int fd)
 {
   __TEST_CANCEL();

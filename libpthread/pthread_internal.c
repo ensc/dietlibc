@@ -49,14 +49,6 @@ int *__errno_location(void)
     return &threads[id].errno;
 }
 
-/* thread get_errno */
-int __get_errno()
-{
-  int *errno=__errno_location();
-  if (errno) return *errno;
-  return ENODATA;
-}
-
 /* thread self */
 _pthread_descr __thread_self()
 {
@@ -155,6 +147,7 @@ static void __kill_all_threads()
   }
 }
 
+__attribute__((weak)) volatile void __thread_start__key(int id);
 __attribute__((weak)) volatile void __thread_start__key(int id) { return; }
 __attribute__((weak,alias("__thread_start__key"))) volatile void __thread_exit__key(int id);
 

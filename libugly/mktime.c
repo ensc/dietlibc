@@ -1,7 +1,6 @@
 #include <time.h>
 
 extern const short  __spm [];
-int __isleap ( int year );
 
 time_t  mktime ( register struct tm* const t )
 {
