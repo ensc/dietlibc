@@ -3,7 +3,7 @@
 static char __stdin_buf[BUFSIZE];
 static FILE __stdin = {
   .fd=0,
-  .flags=BUFINPUT|STATICBUF|CANREAD,
+  .flags=BUFINPUT|BUFLINEWISE|STATICBUF|CANREAD,
   .bs=0, .bm=0,
   .buflen=BUFSIZE,
   .buf=__stdin_buf,
