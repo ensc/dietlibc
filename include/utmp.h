@@ -9,8 +9,10 @@
 #define UT_NAMESIZE	32
 #define UT_HOSTSIZE	256
 
+#ifndef _PATH_UTMP
 #define _PATH_UTMP	"/var/run/utmp"
 #define _PATH_WTMP	"/var/log/wtmp"
+#endif
 
 /* The structure describing an entry in the database of
    previous logins.  */

@@ -13,6 +13,11 @@
 #define _PATH_GROUP "/etc/group"
 #define _PATH_SHADOW "/etc/shadow"
 
-#define	_PATH_VARRUN	"/var/run/"
+#define _PATH_VARRUN	"/var/run/"
+
+#ifndef _PATH_UTMP
+#define _PATH_UTMP	"/var/run/utmp"
+#define _PATH_WTMP	"/var/log/wtmp"
+#endif
 
 #endif
