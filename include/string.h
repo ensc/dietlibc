@@ -21,6 +21,8 @@ int strncasecmp(const char *s1, const char *s2, size_t n) __THROW __pure__;
 
 size_t strlen(const char *s) __THROW __pure__;
 
+char *strstr(const char *haystack, const char *needle) __THROW __pure__;
+
 char *strdup(const char *s) __THROW;
 
 char *strchr(const char *s, int c) __THROW __pure__;
@@ -38,5 +40,7 @@ void* memset(void *s, int c, size_t n) __THROW;
 
 #define bzero(s,n) memset(s,0,n)
 #define bcmp(s1,s2,n) memcmp(s1,s2,n)
+
+char *strerror(int errnum) __THROW;
 
 #endif

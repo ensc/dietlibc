@@ -72,9 +72,11 @@ void *sbrk(ptrdiff_t increment) __THROW;
 
 int gethostname(char *name, size_t len) __THROW;
 
-int usleep (unsigned long usec) __THROW;
-unsigned int alarm (unsigned int seconds) __THROW;
-int sync (void) __THROW;
+int usleep(unsigned long usec) __THROW;
+unsigned int alarm(unsigned int seconds) __THROW;
+int sync(void) __THROW;
+
+int isatty(int desc) __THROW;
 
 extern int daemon (int nochdir,int noclose) __THROW;
 

@@ -10,8 +10,8 @@
 #ifndef STAT64_HAS_BROKEN_ST_INO
 #define __NO_STAT64
 #endif
-#ifdef __alpha__
-#define __NO_STAT64
+#ifdef __NO_STAT64
+#undef _FILE_OFFSET_BITS
 #endif
 
 #define stat64(file,buf) __dietstat64(file,buf)
@@ -19,9 +19,9 @@
 #define lstat64(file,buf) __dietlstat64(file,buf)
 
 #if _FILE_OFFSET_BITS == 64
-#define stat(file,buf) __dietstat64(file,buf)
 #define lstat(file,buf) __dietlstat64(file,buf)
 #define fstat(file,buf) __dietfstat64(file,buf)
+#define stat stat64
 #else
 #define stat(file,buf) __dietstat(file,buf)
 #define fstat(file,buf) __dietfstat(file,buf)
