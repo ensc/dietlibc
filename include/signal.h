@@ -29,7 +29,7 @@
 #define SIGPIPE		13
 #define SIGALRM		14
 #define SIGTERM		15
-
+#define SIGUNUSED	31
 #if defined(__i386__) || defined(__x86_64__) || defined(__powerpc__) || defined(__arm__) \
 	|| defined(__s390__) || defined(__ia64__)
 #define SIGBUS		 7
@@ -51,7 +51,6 @@
 #define SIGIO		29
 #define SIGPWR		30
 #define SIGSYS		31
-#define SIGUNUSED	31
 #elif defined(__alpha__) || defined(__sparc__)
 #define SIGEMT		 7
 #define SIGBUS		10
