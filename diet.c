@@ -43,18 +43,9 @@ int main(int argc,char *argv[]) {
   int preprocess=0;
   int verbose=0;
   char diethome[]=DIETHOME;
-#ifdef INSTALLVERSION
-  char platform[1000]=DIETHOME "/lib-";
+  char platform[1000];
 #ifdef __DYN_LIB
   int shared=0;
-#endif
-#else
-#ifndef __DYN_LIB
-  char platform[1000]=DIETHOME "/bin-";
-#else
-  char platform[1000]=DIETHOME "/pic-";
-  int shared=0;
-#endif
 #endif
   char* shortplatform=0;
 #ifdef WANT_SAFEGUARD
@@ -63,10 +54,21 @@ int main(int argc,char *argv[]) {
 #endif
   const char *nostdlib="-nostdlib";
   const char *libgcc="-lgcc";
-  char dashL[1000]="-L";
+  char dashL[1000];
   char dashstatic[]="-static";
   int i;
   int mangleopts=0;
+
+#ifdef INSTALLVERSION
+  strcpy(platform,DIETHOME "/lib-");
+#else
+#ifndef __DYN_LIB
+  strcpy(platform,DIETHOME "/bin-");
+#else
+  strcpy(platform,DIETHOME "/pic-");
+#endif
+#endif
+  strcpy(dashL,"-L");
 
   if (argc<2) {
 usage:
