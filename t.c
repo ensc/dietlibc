@@ -8,8 +8,12 @@
 #include <sys/mount.h>
 #include <time.h>
 #include <sys/stat.h>
+#include <stdio.h>
 
 int main() {
+  char buf[100];
+  fgets(buf,100,stdin); printf("got %d bytes\n",strlen(buf));
+  fgets(buf,100,stdin); printf("got %d bytes\n",strlen(buf));
 #if 0
   struct tm duh;
   time_t t;
@@ -99,7 +103,7 @@ int main() {
     exit(1);
   execvp(argv[0],argv);
 #endif
-#if 1
+#if 0
   struct stat64 f;
   char buf[128];
   fstat64(0,&f);

@@ -9,7 +9,7 @@
 
 /* #define SLASH_PROC_OK */
 
-/* #define WANT_BUFFERED_STDIO */
+#define WANT_BUFFERED_STDIO
 
 /* use errno_location instead of errno */
 /* #define WANT_THREAD_SAVE */

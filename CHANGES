@@ -22,6 +22,7 @@
   fixed sparc unified syscall error handling (please upgrade!).
   removed readdir glibc compatibility cruft.
   removed stat glibc compatibility cruft.
+  oops, my fread was broken for pipes.
 
 0.7.1:
   optimized away the static arrays from __ltostr and __lltostr.

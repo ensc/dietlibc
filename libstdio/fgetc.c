@@ -4,7 +4,7 @@
 extern int feof(FILE *stream);
 
 int fgetc(FILE *stream) {
-  char c;
+  unsigned char c;
   if (feof(stream))
     return EOF;
 #ifdef WANT_BUFFERED_STDIO
