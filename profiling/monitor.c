@@ -28,8 +28,8 @@ monitor (long lowpc, long highpc)
 {
 	mparam.highpc     = highpc;
 	mparam.lowpc      = lowpc;
-	mparam.kcountsize = (mparam.textsize = highpc-lowpc) >> 1;
-	mparam.kcount = (u_short *) malloc (mparam.textsize);
+	mparam.kcountsize = (mparam.textsize = highpc-lowpc) << 1;
+	mparam.kcount = (u_short *) malloc (mparam.kcountsize);
 	mparam.arcs = (struct rawarc *) malloc (MAXARCS*sizeof (struct rawarc));
 	if (!mparam.kcount || !mparam.arcs)
 		exit (42);
