@@ -10,7 +10,8 @@ int fputc_unlocked(int c, FILE *stream) {
     if (fflush(stream)) return EOF;
   stream->buf[stream->bm]=c;
   ++stream->bm;
-  if ((stream->flags&BUFLINEWISE) && c=='\n')	/* puke */
+  if (((stream->flags&BUFLINEWISE) && c=='\n') ||
+      ((stream->flags&NOBUF))) /* puke */
     if (fflush(stream)) return EOF;
 #else
   char ch=c;

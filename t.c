@@ -33,6 +33,11 @@
 int foo;
 
 int main(int argc,char *argv[]) {
+  fprintf(stderr,"foo \"");
+  putc('b',stderr);
+  putc('a',stderr);
+  putc('r',stderr);
+  fprintf(stderr,"\"\n");
 #if 0
   struct netent* n=getnetbyname("loopback");
   printf("%s %s\n",n->n_name,inet_ntoa(*(struct in_addr*)&n->n_net));
@@ -78,7 +83,7 @@ int main(int argc,char *argv[]) {
   printf("%p %p\n",inet_ntop(AF_INET6,ip,buf,100),buf);
   puts(buf);
 #endif
-#if 1
+#if 0
   struct addrinfo *ai;
   struct addrinfo hints;
   char buf[16];
