@@ -7,4 +7,8 @@
 int getpriority(int which, int who) __THROW;
 int setpriority(int which, int who, int prio) __THROW;
 
+int getrlimit (int resource, struct rlimit *rlim);
+int getrusage (int who, struct rusage *usage);
+int setrlimit (int resource, const struct rlimit *rlim);
+
 #endif
