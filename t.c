@@ -40,9 +40,9 @@ static int rand() {
 extern double atof(const char *c);
 
 int main(int argc,char *argv[]) {
-  struct hostent *foo=gethostbyname("knuth.fefe.de");
-/*  if (foo)
-    printf("%s -> %s\n",foo->h_name,inet_ntoa(*(struct in_addr*)foo->h_addr)); */
+  struct hostent *foo=gethostbyname("zeit.fu-berlin.de");
+  if (foo)
+    printf("%s -> %s\n",foo->h_name,inet_ntoa(*(struct in_addr*)foo->h_addr));
 /*  printf("%g %g\n",1e-10,1e10); */
 #if 0
   double d=0.0;

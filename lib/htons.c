@@ -1,12 +1,11 @@
 #include <asm/byteorder.h>
 
-#undef htons
-#ifdef __i386__
-unsigned short int htons(unsigned short int netshort) {
-  return ___arch__swab16(netshort);
-}
+unsigned short int htonl(unsigned short int hostshort) {
+#if __BYTE_ORDER==__LITTLE_ENDIAN
+  return ((hostshort>>8)&0xff) | (hostshort&0xff);
 #else
-unsigned short int htons(unsigned short int netshort) {
-  return netshort;
-}
+  return hostshort;
 #endif
+}
+
+unsigned short int ntohs(unsigned short int hostshort) __attribute__((weak,alias("htons")));
