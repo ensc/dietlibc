@@ -3,6 +3,8 @@
   fix bsearch (and remove i386 assembly bsearch, needs to be redone).
   Thanks Ogrisegg sent a patch to make the PA-RISC unified syscall
     thread-safe!
+  remove vfork and add alarm to dynamic syscalls.
+  fix diet-dyn to link in dyn_dstop.o and not dyn_stop.o.
 
 0.14:
   fix brk again (missing __brk, trivial oversight)

@@ -188,7 +188,7 @@ pp:
       else
 	strcat(d,"/dyn_start.o");
 #endif
-      strcpy(e,platform); strcat(e,"/dyn_stop.o");
+      strcpy(e,platform); strcat(e,"/dyn_dstop.o");
 #else
       strcpy(d,platform); strcat(d,"/dyn_start.o");
       strcpy(e,platform); strcat(e,"/dyn_stop.o");
