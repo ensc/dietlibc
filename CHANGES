@@ -10,6 +10,7 @@
   Add "diet" program and man page.
   Add getgrnam, getgrgid
   Add cfmakeraw (Thanks, Antonio Musumeci)
+  localtime won't call gettimeofday when the tzfile parser is used.
 
 0.8:
   vsnprintf(0,...) estimated the length of strings with a padding width
