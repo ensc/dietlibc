@@ -87,7 +87,7 @@ void foo(int tmp,...) {
 extern int __lltostr(char *s, int size, unsigned long long i, int base, char UpCase);
 
 int main(int argc,char *argv[]) {
-  fprintf(stdout,"foo\n");
+  printf("%d\n",atoi("-23"));
 #if 0
   printf("foo\n");
 #endif

@@ -4,8 +4,14 @@
 .text
 .globl _start
 _start:
+#if 1
+	popl	%ecx			/* %ecx = argc */
+	movl	%esp,%esi		/* %esi = argv */
+	pushl	%ecx
+#else
 	movl	(%esp),%ecx		/* %ecx = argc */
 	leal	4(%esp),%esi		/* %esi = argv */
+#endif
 	leal	4(%esi,%ecx,4),%eax	/* %eax = envp = (4*ecx)+%esi+4 */
 
 #ifdef WANT_DYNAMIC
