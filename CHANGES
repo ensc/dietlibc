@@ -6,6 +6,7 @@
   added getopt from Olaf (~600 bytes on x86!)
   added clone for mips (by Olaf).
   fixed longjmp and setjmp on sparc not to require glibc include files.
+  added pause for all (by Olaf).
 
 0.7:
   clone support for i386,alpha,arm and sparc by Olaf.
