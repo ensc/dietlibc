@@ -14,7 +14,8 @@ int vsnprintf (char *str, size_t size, const char *format, va_list arg_ptr)
   char ch,buf[1024];
   char *pb;
   char flag_in_sign,flag_upcase;
-  char flag_hash,flag_zero,flag_left,flag_space,flag_sign,flag_dot,flag_long;
+  char flag_hash,flag_zero,flag_left,flag_space,flag_sign,flag_dot;
+  signed char flag_long;
   long number,width,preci,buf_len,pad;
 #ifdef WANT_LONGLONG_PRINTF
   long long llnumber;
