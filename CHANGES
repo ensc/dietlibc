@@ -13,6 +13,7 @@
   Andreas Krennmair sent a patch to add the BSD regex interface to
     libcompat
   Andre noticed that __dtostr never sets first to false.  Oops!
+  Andre have provieded a largely untest patch that seems to fix the problem.
 
 0.16:
   "diet -v" or "diet -Os" segfaulted without further arguments.

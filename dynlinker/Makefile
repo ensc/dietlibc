@@ -1,6 +1,6 @@
 CC=gcc
 #CFLAGS = -Wall -g
-CFLAGS = -Wall -Os # -fomit-frame-pointer
+CFLAGS = -Wall -Os -fomit-frame-pointer
 
 ARCH = i386
 

@@ -3,17 +3,14 @@
 /* convert double to string.  Helper for sprintf. */
 
 int __dtostr(double d,char *buf,unsigned int maxlen,unsigned int prec,unsigned int prec2) {
-#if 0
+#if 1
   unsigned long long *x=(unsigned long long *)&d;
   /* step 1: extract sign, mantissa and exponent */
-  signed int s=*x>>63;
   signed long e=((*x>>52)&((1<<11)-1))-1023;
 #else
 #if __BYTE_ORDER == __LITTLE_ENDIAN
-  signed int  s=(((unsigned long*)&d)[1])>>31;
   signed long e=(((((unsigned long*)&d)[1])>>20)&((1<<11)-1))-1023;
 #else
-  signed int  s=(*((unsigned long*)&d))>>31;
   signed long e=(((*((unsigned long*)&d))>>20)&((1<<11)-1))-1023;
 #endif
 #endif
@@ -23,7 +20,7 @@ int __dtostr(double d,char *buf,unsigned int maxlen,unsigned int prec,unsigned i
   /* step 3: calculate 10^e10 */
   unsigned int i;
   double backup=d;
-  double tmp=10.0;
+  double tmp;
   char *oldbuf=buf;
 
   /* Wir iterieren von Links bis wir bei 0 sind oder maxlen erreicht
@@ -37,10 +34,22 @@ int __dtostr(double d,char *buf,unsigned int maxlen,unsigned int prec,unsigned i
     buf[1]='.'; buf[i]=0;
     return i;
   }
-  if (s) { d=-d; *buf='-'; --maxlen; buf++; }
+
+  if (d < 0.0) { d=-d; *buf='-'; --maxlen; buf++; }
+  
+   /*
+      Perform rounding. It needs to be done before we generate any
+      digits as the carry could propagate through the whole number.
+   */
+   
+   tmp = 0.5;
+   for (i = 0; i < prec2; i++) { tmp *= 0.1; }
+   d += tmp;
+  
 /*  printf("e=%d e10=%d prec=%d\n",e,e10,prec); */
   if (e10>0) {
     int first=1;	/* are we about to write the first digit? */
+    tmp = 10.0;
     i=e10;
     while (i>10) { tmp=tmp*1e10; i-=10; }
     while (i>1) { tmp=tmp*10; --i; }
@@ -50,11 +59,6 @@ int __dtostr(double d,char *buf,unsigned int maxlen,unsigned int prec,unsigned i
     while (tmp>0.9) {
       char digit;
       double fraction=d/tmp;
-      /* see if we must round. */
-      if (tmp<9 &&		/* last digit before decimal point */
-	  !prec2 && prec-(buf-oldbuf)<2)	/* no digits after decimal point */
-	digit=(int)(fraction+0.5);	/* round() */
-      else
 	digit=(int)(fraction);		/* floor() */
       if (!first || digit) {
 	first=0;
@@ -90,6 +94,11 @@ int __dtostr(double d,char *buf,unsigned int maxlen,unsigned int prec,unsigned i
       tmp/=10.0;
     }
   }
+  else
+  {
+     tmp = 0.1;
+  }
+
   if (buf==oldbuf) {
     if (!maxlen) return 0; --maxlen;
     *buf='0'; ++buf;
@@ -103,11 +112,7 @@ int __dtostr(double d,char *buf,unsigned int maxlen,unsigned int prec,unsigned i
     while (prec>0) {
       char digit;
       double fraction=d/tmp;
-      /* see if we must round. */
-      if (prec==1)
-	digit=(int)(fraction+0.5);	/* round() */
-      else
-	digit=(int)(fraction);		/* floor() */
+      digit=(int)(fraction);		/* floor() */
       *buf=digit+'0'; ++buf;
       d-=digit*tmp;
       tmp/=10.0;
