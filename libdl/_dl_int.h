@@ -53,7 +53,10 @@ struct _dl_handle* _dl_find_lib(const char* name);
 
 /* _dl_open.c */
 void *_dl_open(const char* filename, int flags);
+
+/* _dl_load.c */
 void *_dl_load(const char* filename, const char*pathname, int fd, int flags);
+struct _dl_handle* _dl_dyn_scan(struct _dl_handle* dh, void* dyn_addr, int flags);
 
 /* _dl_search.c */
 void _dl_set_rpath(const char *path);
