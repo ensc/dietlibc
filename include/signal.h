@@ -499,6 +499,8 @@ int killpg(int pgrp, int sig) __THROW;
 
 extern const char *const sys_siglist[];
 
+#include <sys/ucontext.h>
+
 __END_DECLS
 
 #endif
