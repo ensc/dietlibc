@@ -1,3 +1,9 @@
+INSTALL=install
+prefix=/usr
+# Set the following to install to a different root
+#INSTALLPREFIX=/tmp/fefix
+# Use "make DEBUG=1" to compile a debug version.
+
 MYARCH=$(shell uname -m | sed 's/i[4-9]86/i386/')
 
 # This extra-ugly cruft is here so make will not run uname and sed each
@@ -227,10 +233,10 @@ t1:
 	$(CROSS)$(CC) -g -o t1 t.c
 
 install: $(OBJDIR)/start.o $(OBJDIR)/dietlibc.a $(OBJDIR)/liblatin1.a $(OBJDIR)/elftrunc $(OBJDIR)/diet
-	cp $(OBJDIR)/start.o $(INSTALLPREFIX)$(prefix)/lib/dietstart.o
-	cp $(OBJDIR)/dietlibc.a $(INSTALLPREFIX)$(prefix)/lib/libdietc.a
-	cp $(OBJDIR)/liblatin1.a $(INSTALLPREFIX)$(prefix)/lib/libdietlatin1.a
-	cp $(OBJDIR)/diet $(INSTALLPREFIX)$(prefix)/bin/diet
+	$(INSTALL) $(OBJDIR)/start.o $(INSTALLPREFIX)$(prefix)/lib/dietstart.o
+	$(INSTALL) $(OBJDIR)/dietlibc.a $(INSTALLPREFIX)$(prefix)/lib/libdietc.a
+	$(INSTALL) $(OBJDIR)/liblatin1.a $(INSTALLPREFIX)$(prefix)/lib/libdietlatin1.a
+	$(INSTALL) $(OBJDIR)/diet $(INSTALLPREFIX)$(prefix)/bin/diet
 
 .PHONY: sparc ppc mips arm alpha i386
 

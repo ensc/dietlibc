@@ -27,7 +27,6 @@ struct dirent64 {
 #undef  _DIRENT_HAVE_D_NAMLEN
 #define _DIRENT_HAVE_D_RECLEN
 #define _DIRENT_HAVE_D_OFF
-#define _DIRENT_HAVE_D_TYPE
 
 typedef struct __dirstream DIR;
 
