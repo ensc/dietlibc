@@ -9,6 +9,8 @@
     i386 assembler implementation of strncpy(3)
 */
 
+#include "dietfeatures.h"
+
 .text
 .globl strncpy
 
