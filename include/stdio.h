@@ -164,6 +164,7 @@ char* ctermid(char* s); /* returns "/dev/tty" */
 
 void flockfile(FILE* f) __THROW;
 void funlockfile(FILE* f) __THROW;
+int ftrylockfile (FILE *__stream) __THROW;
 
 #ifdef _GNU_SOURCE
 int vasprintf(char **strp, const char *fmt, va_list ap);
