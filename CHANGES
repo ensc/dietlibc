@@ -1,6 +1,8 @@
 0.12:
   more contributions from Frank Klemm.
   iconv can now do UCS-2, too.
+  Lots of bug fixes, and several more i386 specific versions of common
+    routines to make them smaller.
 
 0.11:
   fix major oops in DNS routines (only with WANT_FULL_RESOLV_CONF enabled).
