@@ -26,6 +26,7 @@ int main(int argc,char *argv[]) {
   char diethome[]=DIETHOME;
   char platform[1000]=DIETHOME "/bin-";
   char *nostdlib="-nostdlib";
+  char *libgcc="-lgcc";
   int i;
 
   if (argc<2) {
@@ -76,7 +77,7 @@ int main(int argc,char *argv[]) {
       for (i=2; i<argc; ++i)
 	if (!strcmp(argv[i],"-o"))
 	  if (!compile) link=1;
-      newargv=alloca(sizeof(char*)*(argc+3));
+      newargv=alloca(sizeof(char*)*(argc+5));
       a=alloca(strlen(diethome)+20);
       b=alloca(strlen(platform)+20);
       c=alloca(strlen(platform)+20);
@@ -91,7 +92,7 @@ int main(int argc,char *argv[]) {
       if (compile || link) *dest++=a;
       for (i=2; i<argc; ++i)
 	*dest++=argv[i];
-      if (link) { *dest++=b; *dest++=c; }
+      if (link) { *dest++=b; *dest++=c; *dest++=libgcc; }
       *dest=0;
       execvp(newargv[0],newargv);
       goto error;
