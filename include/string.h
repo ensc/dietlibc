@@ -14,13 +14,13 @@ int memccmp(const void *s1, const void *s2, int c, size_t n) __THROW __pure__;
 /* gcc unfortunately has some internal prototypes that are not compliant
  * to the single unix specification and if we define the correct
  * prototypes here, gcc emits warnings. */
-#if !defined(__GNUC__) || defined(__mips__) || defined(__alpha__) || defined(__arm__)|| defined(__x86_64__)
+#if !defined(__GNUC__) || defined(__mips__) || defined(__alpha__) || defined(__arm__) || defined(__x86_64__)
 void* memset(void *s, int c, size_t n) __THROW;
 int memcmp(const void *s1, const void *s2, size_t n) __THROW __pure__;
 void* memcpy(void *dest, const void *src, size_t n) __THROW;
 #endif
 
-#if !defined(__GNUC__) || __GNUC__ < 3 || defined(__x86_64__)
+#if __GNUC__ < 3 || defined(__x86_64__)
 /* gcc 3 unfortunately has internal prototypes for these functions that
  * differ from ours.  Unfortunately, gcc will complain whether we have
  * the correct prototypes or whether we don't have prototypes :-( */
@@ -76,6 +76,7 @@ size_t strlcpy(char *dst, const char *src, size_t size) __THROW;
 size_t strlcat(char *dst, const char *src, size_t size) __THROW;
 
 int strcoll(const char *s1, const char *s2) __THROW;
+size_t strxfrm(char *dest, const char *src, size_t n) __THROW;
 
 #ifdef _BSD_SOURCE
 #define bzero(s,n) memset(s,0,n)

@@ -361,9 +361,6 @@ $(OBJDIR)/ttyname.o $(OBJDIR)/sysconf_cpus.o: dietfeatures.h
 # these depend on dietfeatures.h for WANT_TZFILE_PARSER
 $(OBJDIR)/localtime_r.o: dietfeatures.h
 
-# these depend on dietfeatures.h for WANT_BUGGY_GLIBC_STRSEP
-$(OBJDIR)/strsep.o: dietfeatures.h
-
 # these depend on dietfeatures.h for WANT_SMALL_STDIO_BUFS
 $(LIBSTDIOOBJ): dietfeatures.h
 

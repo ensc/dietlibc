@@ -16,11 +16,10 @@
 #define __extension__
 #endif
 
-#define __pure__
-#ifdef __GNUC__
 #if (__GNUC__ > 2) || ((__GNUC__ == 2) && (__GNUC_MINOR__ >= 96))
-#undef __pure__
 #define __pure__ __attribute__ ((__pure__))
+#else
+#define __pure__
 #endif
 
 #if (__GNUC__ == 2) && (__GNUC_MINOR__ < 95)
@@ -28,13 +27,12 @@
 #endif
 
 #ifndef __STRICT_ANSI__
-#if (__GNUC__ < 3)
+#if __GNUC__ < 3
 #define __builtin_expect(foo,bar) (foo)
 #define expect(foo,bar) (foo)
 #else
 #define expect(foo,bar) __builtin_expect(foo,bar)
 #define __attribute_malloc__ __attribute__((malloc))
-#endif
 #endif
 #endif
 
@@ -48,10 +46,6 @@
 
 #ifdef __STRICT_ANSI__
 #define inline
-#endif
-
-#ifndef __GNUC__
-#define __extension__
 #endif
 
 #ifndef __i386__

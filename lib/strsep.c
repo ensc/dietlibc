@@ -1,4 +1,3 @@
-#include "dietfeatures.h"
 #include <string.h>
 
 char *strsep(char **stringp, const char *delim) {

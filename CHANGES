@@ -38,6 +38,7 @@
   add missing socket syscalls for PA-RISC and IA64 (Thomas Ogrisegg)
   add cpio.h and tar.h (Thomas Ogrisegg)
   change opendir/readdir/closedir from malloc to mmap (Thomas Ogrisegg)
+  cleanups from Florian LaRoche
 
 0.17:
   fix several bugs in getservent_r

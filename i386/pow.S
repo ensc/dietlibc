@@ -72,10 +72,10 @@ pow:    fld1                                    # 1
 .Lpow00:
         fcompp                                  # 1
         ret
-   
+
 .Lpow0p:
         fcomp                                   # 0             1
         fstp    %st(1)                          # 0
         ret
-   
-   
+
+
