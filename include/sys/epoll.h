@@ -36,8 +36,11 @@ enum EPOLL_EVENTS {
 
 	EPOLLERR = 0x008,
 #define EPOLLERR EPOLLERR
-	EPOLLHUP = 0x010
+	EPOLLHUP = 0x010,
 #define EPOLLHUP EPOLLHUP
+
+	EPOLLET = (1<<31)
+#define EPOLLET EPOLLET
 };
 
 typedef union epoll_data {
