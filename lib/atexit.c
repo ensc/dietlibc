@@ -6,10 +6,9 @@ static function __atexitlist[NUM_ATEXIT];
 static int atexit_counter = 0;
 
 int atexit(function t) {
-  int i=atexit_counter+1;
-  if (i<NUM_ATEXIT) {
-    __atexitlist[i]=t;
-    atexit_counter=i;
+  if (atexit_counter<NUM_ATEXIT) {
+    __atexitlist[atexit_counter]=t;
+    ++atexit_counter;
     return 0;
   }
   return -1;
