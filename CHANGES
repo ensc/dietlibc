@@ -5,6 +5,8 @@
   remove many warning from test suite (Gwenole Beauchesne)
   hopefully fix resolver (again, Gwenole)
   fix floorl typo (Norbert Wolff)
+  add more BSD brokenness to time.h
+  forward poll.h to sys/poll.h
 
 0.22:
   fix i386 libm
