@@ -13,4 +13,7 @@ struct in_addr inet_makeaddr(int net, int host) __THROW;
 unsigned long int inet_lnaof(struct in_addr in) __THROW;
 unsigned long int inet_netof(struct in_addr in) __THROW;
 
+int inet_pton (int AF, const char* CP, void* BUF) __THROW;
+const char* inet_ntop (int AF, const void* CP, char* BUF, size_t LEN) __THROW;
+
 #endif

@@ -38,11 +38,18 @@ int __dns_gethostbyx_r(const char* name, struct hostent* result,
   unsigned char packet[512];
   __dns_make_fd();
 
-  result->h_aliases=(char**)(buf+8*4);
+  if (lookfor==1) {
+    result->h_aliases=(char**)(buf+8*4);
+    result->h_addrtype=AF_INET;
+    result->h_length=4;
+    result->h_addr_list=(char**)buf;
+  } else {
+    result->h_aliases=(char**)(buf+8*16);
+    result->h_addrtype=AF_INET6;
+    result->h_length=16;
+    result->h_addr_list=(char**)buf;
+  }
   result->h_aliases[0]=0;
-  result->h_addrtype=AF_INET;
-  result->h_length=4;
-  result->h_addr_list=(char**)buf;
 
   cur=buf+16*sizeof(char*);
   max=buf+buflen;
@@ -121,9 +128,9 @@ int __dns_gethostbyx_r(const char* name, struct hostent* result,
 	      tmp+=10;	/* skip type, class, TTL and length */
 	      {
 		int slen;
-		if (lookfor==1) /* A */ {
+		if (lookfor==1 || lookfor==28) /* A or AAAA*/ {
 		  slen=strlen(name);
-		  if (cur+slen+8>=max) { *h_errnop=NO_RECOVERY; return 1; }
+		  if (cur+slen+8+(lookfor==28?12:0)>=max) { *h_errnop=NO_RECOVERY; return 1; }
 		} else if (lookfor==12) /* PTR */ {
 		  decofs=__dns_decodename(inpkg,tmp-(char*)inpkg,name,256);
 		  if (decofs<0) break;
@@ -144,6 +151,13 @@ int __dns_gethostbyx_r(const char* name, struct hostent* result,
 		if (lookfor==1) /* A */ {
 		  *(int*)cur=*(int*)tmp;
 		  cur+=4;
+		  result->h_addr_list[ips]=0;
+		} else if (lookfor==28) /* AAAA */ {
+		  {
+		    int i;
+		    for (i=0; i<16; ++i) cur[i]=tmp[i];
+		  }
+		  cur+=16;
 		  result->h_addr_list[ips]=0;
 		}
 	      }
