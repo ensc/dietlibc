@@ -11,8 +11,9 @@ _dl_jump:
 
 	pushl	%ebx
 
-	pushl	24(%esp)	# 2. arg from plt
-	pushl	24(%esp)	# 1. arg from plt
+	pushl	20(%esp)	# 2. arg from plt
+	pushl	20(%esp)	# 1. arg from plt
+
 #ifdef __DYN_LIB
 	call	1f
 1:	popl	%ebx
