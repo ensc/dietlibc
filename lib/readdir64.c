@@ -27,8 +27,8 @@ struct dirent64* readdir64(DIR *d) {
 #endif
   struct dirent* o;
   static struct dirent64 d64;
-again:
 #ifdef __NR_getdents64
+again:
   if (!trygetdents64) {
 #endif
     if (!d->num || (d->cur += ((struct dirent*)(d->buf+d->cur))->d_reclen)>=d->num) {

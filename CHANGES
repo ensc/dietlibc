@@ -26,6 +26,8 @@
   new realpath (Thomas Ogrisegg)
   fix stupid glibcism in sys/epoll.h
   add pause for Alpha (Kurt Garloff)
+  ptrace fix (Dallachiesa Michele)
+  ptread.h cleanups (Martin Pohlack)
 
 0.24:
   work around incompatible Linux select() modifying the timeout in

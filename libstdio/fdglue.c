@@ -2,7 +2,9 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <stdlib.h>
+#ifdef WANT_THREAD_SAFE
 #include <pthread.h>
+#endif
 #include "dietstdio.h"
 
 int __stdio_parse_mode(const char *mode) {

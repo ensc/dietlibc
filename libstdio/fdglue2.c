@@ -4,7 +4,9 @@
 #include <errno.h>
 #include "dietstdio.h"
 #include <stdlib.h>
+#ifdef WANT_THREAD_SAFE
 #include <pthread.h>
+#endif
 
 extern int __stdio_atexit;
 
