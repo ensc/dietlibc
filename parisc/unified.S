@@ -21,6 +21,9 @@
 .global __unified_syscall
 .type __unified_syscall,@function
 
+.export __error_unified_syscall
+.global __error_unified_syscall
+
 .globl _exit
 .weak exit
 _exit:
@@ -32,6 +35,7 @@ __unified_syscall:
 	ldi -0x100, %r1
 	cmpb,>>=,n %r1, %ret0, .Lnoerr
 	sub %r0, %ret0, %ret0
+__error_unified_syscall:
 #ifdef WANT_THREAD_SAFE
 	copy %r2, %r23
 	bl __errno_location, %r2
