@@ -53,4 +53,7 @@ extern char **environ;
 typedef struct { int quot,rem; } div_t;
 div_t div(int numer, int denom) __THROW __attribute__((const));
 
+void *alloca(size_t size) __THROW; /* gcc built-in */
+
+
 #endif
