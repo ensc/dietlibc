@@ -17,9 +17,7 @@
 #endif
 
 #define _PATH_CONSOLE	"/dev/console"
-#define DEF_SIZE 128	/* default buffer size */
-#define FAIL_SIZE (3 * sizeof(pid_t) + sizeof("no openlog with ident []") + 1)
-			/* see error-cases in vsyslog */
+#define BUF_SIZE 512	/* messagebuffer size (>= 200) */
 
 /* those have to be global *sigh* */
 static volatile int	connected = 0;  /* have done connect */
@@ -141,9 +139,8 @@ static void cancel_handler(void *ptr)
 
 void vsyslog(int priority, const char *format, va_list arg_ptr)
 {
-  char *buffer, *message;
-  char failbuf[FAIL_SIZE + 130];
-  char header[130];
+  char buffer[BUF_SIZE];
+  char time_buf[20];
   int buflen, headerlen;
   time_t now;
   struct tm now_tm;
@@ -168,45 +165,26 @@ void vsyslog(int priority, const char *format, va_list arg_ptr)
 
   pid = getpid();
   time(&now);
-  strftime(failbuf, FAIL_SIZE, "%h %e %T", localtime_r (&now, &now_tm));
+  strftime(time_buf, 20, "%h %e %T", localtime_r (&now, &now_tm));
 
   if (LogStat & LOG_PID)
-    headerlen = snprintf(header, 130, "<%d>%s %s[%d]: ", priority, failbuf, LogTag, pid);
+    headerlen = snprintf(buffer, 130, "<%d>%s %s[%d]: ", priority, time_buf, LogTag, pid);
   else
-    headerlen = snprintf(header, 130, "<%d>%s %s: ", priority, failbuf, LogTag);
+    headerlen = snprintf(buffer, 130, "<%d>%s %s: ", priority, time_buf, LogTag);
 
   if (LogTag == NULL) {
     if ((LogStat & LOG_PID) != LOG_PID)
-      headerlen = snprintf(header, 130, "<%d>%s %s[%d]: ", priority, failbuf, LogTag, pid);
-    buflen = snprintf(failbuf, FAIL_SIZE, "%sno openlog with ident [%d]", header, pid);
-    buffer = failbuf;
-  }
-  else if ((buffer = alloca(DEF_SIZE)) == NULL) {
-    buflen = snprintf(failbuf, FAIL_SIZE, "%sout of memory [%d]", header, pid);
-    buffer = failbuf;
+      headerlen = snprintf(buffer, 130, "<%d>%s (unknown)[%d]: ", priority, time_buf, pid);
+    strcat(buffer+headerlen, "no openlog with ident, please check code!");
+    buflen = 41;
   }
   else {
     (*(__errno_location()))=saved_errno;
-    buflen = vsnprintf(buffer, DEF_SIZE, format, arg_ptr);
-    free(buffer);
-    if (buflen > DEF_SIZE) {
-      buffer = realloc(buffer, buflen + 1);
-      buflen = vsnprintf(buffer, buflen + 1, format, arg_ptr);
-    }
-    if ((message = alloca(buflen + headerlen + 1)) == NULL) {
-      buflen = snprintf(failbuf, FAIL_SIZE, "%sout of memory [%d]", header, pid);
-      buffer = failbuf;
-    }
-    else {
-      strcpy(message, header);
-      strcat(message, buffer);
-      buflen = buflen + headerlen;
-      buffer = message;
-    }
+    buflen = vsnprintf(buffer+headerlen, BUF_SIZE - headerlen, format, arg_ptr);
   }
   if (LogStat & LOG_PERROR) {
-    write(1, buffer, buflen);
-    if (buffer[buflen] != '\n') write(1,"\n", 1);
+    write(1, buffer+headerlen, buflen);
+    if (buffer[headerlen+buflen] != '\n') write(1,"\n", 1);
   }
 
 #ifdef WANT_THREAD_SAVE
@@ -228,7 +206,7 @@ void vsyslog(int priority, const char *format, va_list arg_ptr)
    * record terminator. */
   if (LogType == SOCK_STREAM) buflen++;
 
-  if (!connected || (send(LogFile, buffer, buflen, 0) != buflen)) {
+  if (!connected || (send(LogFile, buffer, buflen+headerlen, 0) != buflen+headerlen)) {
     if (LogType == SOCK_STREAM) buflen--;
     closelog_intern();
     /*
@@ -239,7 +217,7 @@ void vsyslog(int priority, const char *format, va_list arg_ptr)
     if ((LogStat & LOG_CONS) &&
        ((fd = open(_PATH_CONSOLE, O_WRONLY|O_NOCTTY, 0)) >= 0))
     {
-      write(fd, buffer, buflen);
+      write(fd, buffer, buflen+headerlen);
       write(fd, "\r\n", 2);
     }
   }
