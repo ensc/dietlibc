@@ -44,6 +44,7 @@ struct utmp
   long int ut_session;		/* Session ID, used for windowing.  */
 #define ut_time ut_tv.tv_sec
   struct timeval ut_tv;		/* Time entry was made.  */
+#define ut_addr ut_addr_v6[0]
   int32_t ut_addr_v6[4];	/* Internet address of remote host.  */
   char __unused[20];		/* Reserved for future use.  */
 };
