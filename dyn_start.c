@@ -23,6 +23,10 @@ __attribute__((section(".fini"))) void _fini(void)
   __do_global_dtors_aux();
 }
 
+#ifdef WANT_STACKGAP
+int stackgap(int argc,char* argv[],char* envp[]);
+#endif
+
 #ifndef __DYN_LIB_SHARED
 /* pre main, post _start */
 int _dyn_start(int argc, char **argv, char **envp, structor dl_init);
