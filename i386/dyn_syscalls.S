@@ -48,7 +48,6 @@
 #include "../syscalls.s/pipe.S"
 #include "../syscalls.s/poll.S"
 #include "../syscalls.s/readv.S"
-#include "../syscalls.s/signal.S"
 #include "../syscalls.s/socketcall.S"
 #include "../syscalls.s/stat.S"
 #include "../syscalls.s/stat64.S"
@@ -56,6 +55,7 @@
 #include "../syscalls.s/umask.S"
 #include "../syscalls.s/wait4.S"
 #include "../syscalls.s/writev.S"
+#include "../syscalls.s/__getpagesize.S"
 
 /* OK this is basicaly unified.S */
 .text
@@ -99,7 +99,6 @@ __unified_syscall:
 #include "dietuglyweaks.h"
 	ret
 
-#include "../syscalls.s/__getpagesize.S"
 #include "../syscalls.s/__pread.S"
 #include "../syscalls.s/__pwrite.S"
 #include "../syscalls.s/__reboot.S"
