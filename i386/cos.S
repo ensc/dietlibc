@@ -7,16 +7,16 @@
 
 cosf:
         flds    4(%esp)
-        jmp __cos
+        jmp .Lcos
 cos:
         fldl    4(%esp)
-__cos:	
-	call	fmod2pi
+.Lcos:	
+	call	__fmod2pi
         fcos
         ret
 cosl:
         fldt    4(%esp)
-        jmp __cos
+        jmp .Lcos
 
 .Lende:
 .size    cos,.Lende-cos

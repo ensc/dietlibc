@@ -11,7 +11,7 @@ sinf:
 sin:
         fldl    4(%esp)
 __sin:
-	call	fmod2pi
+	call	__fmod2pi
         fsin
         ret
 sinl:

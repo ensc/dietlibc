@@ -29,7 +29,7 @@ fabsl:
 
 sincosf:
         flds     4(%esp)
-	call	fmod2pi
+	call	__fmod2pi
         movl    12(%esp),%eax
         movl    8(%esp),%ecx
         fsincos
@@ -38,7 +38,7 @@ sincosf:
         ret
 sincos:
         fldl     4(%esp)
-	call	fmod2pi
+	call	__fmod2pi
         movl    16(%esp),%eax
         movl    12(%esp),%ecx
         fsincos
@@ -47,7 +47,7 @@ sincos:
         ret
 sincosl:
         fldt     4(%esp)
-	call	fmod2pi
+	call	__fmod2pi
         movl    20(%esp),%eax
         movl    16(%esp),%ecx
         fsincos
@@ -65,7 +65,7 @@ tanf:
 tan:
         fldl    4(%esp)
 __tan:
-	call	fmod2pi
+	call	__fmod2pi
         fsincos
         fdivrp
         ret
@@ -475,35 +475,6 @@ __atanh:
 atanhl:
 	fldt 4(%esp)
 	jmp __atanh
-
-fmod2pi:
-	fldpi
-	fadd %st(0)
-	fxch
-	jmp __fmod
-
-.global fmodf,fmod,fmodl
-	.type	fmodf,@function
-	.type	fmod,@function
-	.type	fmodl,@function
-fmodf:
-	flds 8(%esp)		# y
-	flds 4(%esp)		# x
-	jmp __fmod
-fmod:
-	fldl 12(%esp)
-	fldl 4(%esp)
-__fmod:
-	fprem
-	fstsw %ax
-	sahf
-	jp __fmod
-	ret
-
-fmodl:
-	fldt 16(%esp)
-	fldt 4(%esp)
-	jmp __fmod
 
 .global dremf,drem,dreml
 	.type	dremf,@function
