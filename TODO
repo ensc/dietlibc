@@ -14,12 +14,10 @@ EINTR handling (*puke*).  What about EAGAIN?
 
 bizarre printf bullshit: "%8.7lx",0xfefe should yield " 000fefe"?!
 
-fix %f and %g in printf.  They are more or less completely b0rken.
-
 gethost/netent -> parselib
 
-s390: shouldn't we zero the frame pointer for gdb? (Olaf says gdb works)
-
-Look at qsort (make test suite exhibits the worst case)
+Look at qsort (the make test suite exhibits the worst case)
 
 Make __dtostr do scientific notation.
+fix %g in printf.  They are more or less completely b0rken.
+
