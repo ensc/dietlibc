@@ -6,27 +6,27 @@
 
 static struct state __ps;
 
-void setservent(int stayopen) {
+void setprotoent(int stayopen) {
   (void)stayopen;
-  __prepare_parse(_PATH_SERVICES,&__ps);
+  __prepare_parse(_PATH_PROTOCOLS,&__ps);
 }
 
-void endservent(void) {
+void endprotoent(void) {
   __end_parse(&__ps);
 }
 
 #define ALIASES 16
 
-/* "tcpmux		1/tcp		# TCP port multiplexer (RFC1078)" */
-int getservent_r(struct servent *res, char *buf, size_t buflen,
-		 struct servent **res_sig) {
+/* "igmp	2	IGMP		# internet group management protocol" */
+int getprotoent_r(struct protoent *res, char *buf, size_t buflen,
+		  struct protoent **res_sig) {
   size_t i,j,n,g;
   unsigned long l;
-  setservent(0);
+  setprotoent(0);
   if (!__ps.buffirst) goto error;
   if (__ps.cur>=__ps.buflen) goto error;
-  res->s_aliases=(char**)buf;
-/*  getservent */
+  res->p_aliases=(char**)buf;
+/*  getprotoent */
 again:
   n=ALIASES*sizeof(char*); g=0;
   for (i=0; i<3; ++i) {
@@ -47,7 +47,7 @@ parseerror:
     }
     switch (i) {
     case 0:
-      res->s_name=buf+n;
+      res->p_name=buf+n;
 copy:
       if ((size_t)buflen<=n+j) goto error;
       memcpy(buf+n,__ps.buffirst+__ps.cur,j);
@@ -56,17 +56,11 @@ copy:
       if ((found=='\n' || found=='#') && i==1) i=3;
       break;
     case 1:
-      {
-	int k;
-	k=scan_ulong(__ps.buffirst+__ps.cur,&l);
-	if (__ps.buffirst[__ps.cur+k]!='/') goto parseerror;
-	res->s_port=l;
-	res->s_proto=buf+n;
-	j-=k+1; __ps.cur+=k+1;
-	goto copy;
-      }
+      if (scan_ulong(__ps.buffirst+__ps.cur,&l)!=j) goto parseerror;
+      res->p_proto=l;
+      break;
     case 2:
-      res->s_aliases[g]=buf+n;
+      res->p_aliases[g]=buf+n;
       ++g;
       if (g==(ALIASES-1)) break;
       --i;	/* again */
@@ -74,7 +68,7 @@ copy:
     }
     __ps.cur+=j+1;
   }
-  res->s_aliases[g]=0;
+  res->p_aliases[g]=0;
   *res_sig=res;
   return 0;
 error:

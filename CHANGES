@@ -34,6 +34,7 @@
   remove entlib (new code is smaller)
   rewrite getserv* to use parselib (and provide ..._r, too)
   add getpwnam_r and getpwuid_r
+  rewrite getproto* to use parselib (and protive ..._r, too)
 
 0.11:
   fix major oops in DNS routines (only with WANT_FULL_RESOLV_CONF enabled).

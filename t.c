@@ -111,15 +111,28 @@ int traverse(const char* file, const struct stat* sb, int flag) {
 #endif
 
 int main(int argc,char *argv[]) {
-  struct servent* se;
-  if (se=getservbyname("pop-3","tcp")) {
+#ifdef NEW
+  struct protoent se,*tmp;
+  char buf[1000];
+  while (getprotoent_r(&se,buf,sizeof(buf),&tmp)==0) {
     int i;
-    printf("name %s\tport %d\tproto %s\n",se->s_name,se->s_port,se->s_proto);
+    printf("name %s\tproto %d\n",se.p_name,se.p_proto);
     for (i=0; i<16; ++i) {
-      if (!se->s_aliases[i]) break;
-      printf("  alias %s\n",se->s_aliases[i]);
+      if (!se.p_aliases[i]) break;
+      printf("  alias %s\n",se.p_aliases[i]);
     }
   }
+#else
+  struct protoent* se;
+  while (se=getprotoent()) {
+    int i;
+    printf("name %s\tproto %d\n",se->p_name,se->p_proto);
+    for (i=0; i<16; ++i) {
+      if (!se->p_aliases[i]) break;
+      printf("  alias %s\n",se->p_aliases[i]);
+    }
+  }
+#endif
 #if 0
   fd_set f;
   struct timeval tv;

@@ -86,6 +86,17 @@ struct protoent *getprotobyname(const char *name) __THROW;
 struct protoent *getprotobynumber(int proto) __THROW;
 void setprotoent(int stayopen) __THROW;
 void endprotoent(void) __THROW;
+
+int getprotoent_r(struct protoent *res, char *buf, size_t buflen,
+		  struct protoent **res_sig) __THROW;
+int getprotobyname_r(const char* name,
+		     struct protoent *res, char *buf, size_t buflen,
+		     struct protoent **res_sig) __THROW;
+int getprotobynumber_r(int proto,
+		      struct protoent *res, char *buf, size_t buflen,
+		      struct protoent **res_sig) __THROW;
+
+
 void sethostent(int stayopen) __THROW;
 
 /* dummy */
