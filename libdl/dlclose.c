@@ -8,7 +8,9 @@ int dlclose (void *handle)
       --h->lnk_count;
       return -1;
     }
-    if (munmap(h->mem_base,h->mem_size)!=0) return -1;
+    if (h->fini) h->fini();
+    if (munmap(h->mem_base,h->mem_size)==-1) return -1;
+    if (munmap(handle,4096)) return -1;
   }
   return 0;
 }

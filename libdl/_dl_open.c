@@ -6,8 +6,6 @@
 
 #include "_dl_int.h"
 
-struct _dl_handle dl_test;
-
 #define _ELF_DWN_ROUND(ps,n)	((n)&(~((ps)-1)))
 #define _ELF_UP_ROUND(ps,n)	((((n)&((ps)-1))?(ps):0)+ _ELF_DWN_ROUND((ps),(n)))
 #define _ELF_RST_ROUND(ps,n)	((n)&((ps)-1))
@@ -29,29 +27,31 @@ static void *do_map_in(void *base, unsigned long length, int flags, int fd, unsi
 
 unsigned long do_rel(struct _dl_handle * tmp_dl, unsigned long off)
 {
-//  struct _dl_handle * tmp_dl = ((void*)*((&off)-1));
   Elf32_Rel *tmp = ((void*)tmp_dl->plt_rel)+off;
+
   int sym=ELF32_R_SYM(tmp->r_info);
+
   register unsigned long sym_val;
 
+#if 0
   printf("do_rel %08x %08x\n",tmp_dl,off);
-
-  printf ("do_rel %08x+%x\n",tmp_dl->plt_rel,off);
+  printf("do_rel %08x+%x\n",tmp_dl->plt_rel,off);
   printf("do_rel @ %08x with type %d -> %d\n",tmp->r_offset,ELF32_R_TYPE(tmp->r_info),sym);
-
   printf("do_rel sym %08x\n",tmp_dl->dyn_sym_tab[sym].st_value);
+#endif
 
   /* modify GOT for REAL symbol */
   sym_val=((unsigned long)(tmp_dl->mem_base+tmp_dl->dyn_sym_tab[sym].st_value));
   *((unsigned long*)(tmp_dl->mem_base+tmp->r_offset))=sym_val;
 
   printf("do_rel sym %08x\n",sym_val);
-  /* HOWTO JUMP ?!? */
+  /* JUMP (arg sysdep...) */
   return sym_val;
 }
 
 void *_dl_open(const char*pathname, int fd, int flag)
 {
+  struct _dl_handle* dl_test=0;
   int ps=getpagesize();
   int i;
   unsigned char buf[1024];
@@ -84,6 +84,11 @@ void *_dl_open(const char*pathname, int fd, int flag)
     }
   }
 
+  /* get a little page for *.so administration
+   * (in 99% the page pre text/rodata)
+   */
+  dl_test = (struct _dl_handle *)mmap(0, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0);
+
   if (ld_nr==1) {
     unsigned long offset = _ELF_DWN_ROUND(ps,ld[0]->p_offset);
     unsigned long off = _ELF_RST_ROUND(ps,ld[0]->p_offset);
@@ -94,11 +99,11 @@ void *_dl_open(const char*pathname, int fd, int flag)
     l = ld[0]->p_offset+ld[0]->p_filesz;
     memset(m+l,0,length-l);
 
-    dl_test.mem_base=m;
-    dl_test.mem_size=length;
-    dl_test.lnk_count=0;
+    dl_test->mem_base=m;
+    dl_test->mem_size=length;
+    dl_test->lnk_count=0;
 
-    ret = &dl_test;
+    ret = dl_test;
   }
   else if (ld_nr==2) { /* aem... yes Quick & Really Dirty / for the avarage 99% */
     //unsigned long text_addr = _ELF_DWN_ROUND(ps,ld[0]->p_vaddr);
@@ -115,7 +120,7 @@ void *_dl_open(const char*pathname, int fd, int flag)
     /* mmap all mem_blocks for *.so */
     l = text_size+data_size;
 
-    dl_test.mem_size=l;
+    dl_test->mem_size=l;
 
     m = (char*) do_map_in(0,l,ld[0]->p_flags,fd,text_offset);
 
@@ -135,9 +140,9 @@ void *_dl_open(const char*pathname, int fd, int flag)
       mmap(d+data_fsize, l, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0);
     }
 
-    dl_test.mem_base=m;
-    dl_test.lnk_count=0;
-    ret = &dl_test;
+    dl_test->mem_base=m;
+    dl_test->lnk_count=0;
+    ret = dl_test;
   }
 
   printf("_dl_open pre resolv\n");
@@ -165,7 +170,7 @@ void *_dl_open(const char*pathname, int fd, int flag)
       }
       if (dyn_tab[i].d_tag==DT_INIT) {
 	init = (void(*)(void))(m+dyn_tab[i].d_un.d_val);
-	printf("init @ %08x\n",init);
+//	printf("init @ %08x\n",init);
       }
       if (dyn_tab[i].d_tag==DT_PLTGOT) {
 	got=(unsigned long*)(m+dyn_tab[i].d_un.d_val);
@@ -178,13 +183,12 @@ void *_dl_open(const char*pathname, int fd, int flag)
       }
       if (dyn_tab[i].d_tag==DT_JMPREL) {
 	jmprel=(m+dyn_tab[i].d_un.d_val);
-	dl_test.plt_rel=jmprel;
+	dl_test->plt_rel=jmprel;
       }
     }
     /* GOT */
     got[0]+=(unsigned long)m;
-    got[1]=(unsigned long)&dl_test;
-//    got[2]=(unsigned long)do_rel;
+    got[1]=(unsigned long)dl_test;
     got[2]=(unsigned long)(_dl_jump);
     /* */
 
@@ -192,7 +196,6 @@ void *_dl_open(const char*pathname, int fd, int flag)
       Elf32_Rel *tmp = jmprel;
       for (;(char*)tmp<(((char*)jmprel)+pltrelsize);(char*)tmp=((char*)tmp)+sizeof(Elf32_Rel)) {
 	*((unsigned long*)(m+tmp->r_offset))+=(unsigned long)m;
-//	*((unsigned long*)(m+tmp->r_offset))+=(unsigned long)do_rel;
 	printf("rel @ %08x with type %d -> %d\n",tmp->r_offset,ELF32_R_TYPE(tmp->r_info),ELF32_R_SYM(tmp->r_info));
       }
     }
