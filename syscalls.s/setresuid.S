@@ -2,6 +2,6 @@
 
 #ifdef __NR_setresuid
 
-syscall(setresuid)
+syscall(setresuid,setresuid)
 
 #endif

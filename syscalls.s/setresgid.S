@@ -2,6 +2,6 @@
 
 #ifdef __NR_setresgid
 
-syscall(setresgid)
+syscall(setresgid,setresgid)
 
 #endif
