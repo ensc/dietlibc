@@ -87,9 +87,6 @@ struct _dl_handle {
 #define HASH_CHAIN_LEN(p)	(*((p)+1))
 #define HASH_CHAIN(p)		((p)+2+HASH_BUCKET_LEN(p))
 
-/* elf_hash.c */
-unsigned long elf_hash(const unsigned char *name);
-
 /* _dl_alloc.c */
 extern struct _dl_handle* _dl_root_handle;
 extern struct _dl_handle* _dl_top_handle;

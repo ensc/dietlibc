@@ -4,13 +4,15 @@ SRC = $(wildcard *.c) # test/test.c
 OBJ = _dl_jump.o $(SRC:.c=.o)
 
 #CFLAGS = -Wall -O2
-CFLAGS = -Wall -g
+CFLAGS = -Wall -O2 -D__OD_CLEAN_ROOM -DNODIETREF -fPIC -fomit-frame-pointer
 
 %.o : %.S
-	$(HOME)/bin/diet gcc $(CFLAGS) -c -o $@ $^
+	diet gcc $(CFLAGS) -c -o $@ $^
 
 %.o : %.c
-	$(HOME)/bin/diet gcc $(CFLAGS) -c -o $@ $^
+	diet gcc $(CFLAGS) -c -o $@ $^
+
+it: _dl_main.o
 
 all: test.out libdl.a
 

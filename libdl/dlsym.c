@@ -1,5 +1,7 @@
 #include "_dl_int.h"
 
+#include "elf_hash.h"
+
 void *_dlsym(void *handle, char *symbol)
 {
   unsigned long * ret=0;

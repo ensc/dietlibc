@@ -1,7 +1,7 @@
 #ifdef __OD_CLEAN_ROOM
 
 /*
- * the is the dietlibc libdl dynamic-linker
+ * this is the dietlibc libdl & dynamic-linker
  *
  * NEED to be compiled with -fPIC ...
  */
@@ -11,7 +11,7 @@ static void (*fini_entry)(void);
 
 void _start(void);
 void _dl_jump(void);
-void _exit(int);
+void _dl_sys_exit(int);
 
 #ifdef __i386__
 
@@ -59,14 +59,13 @@ _start:
 #	ret
 
 # test / debug code :)
-.global _exit
-_exit:
+_dl_sys_exit:
 	movl	$1,%eax
 	popl	%ebx
 	int	$0x80
 	hlt
 
-.global _dl_jump
+#.global _dl_jump
 .type	_dl_jump,@function
 _dl_jump:
 	pushl	%eax		# save register args...
@@ -130,12 +129,12 @@ _start:
 .L_la:	.long	_DYNAMIC(GOTOFF)
 .L_fe:	.long	fini_entry(GOTOFF)
 
-_exit:
+_dl_sys_exit:
 	swi	#1			@ exit
 	eor	lr, lr, lr		@ OR DIE !
 	mov	pc, lr
 
-.global _dl_jump
+@.global _dl_jump
 .type	_dl_jump,function
 _dl_jump:
 	stmdb	sp!, {r0, r1, r2, r3}	@ save arguments
@@ -162,14 +161,22 @@ static inline unsigned long* get_got(void) {
 #error "arch not supported"
 #endif
 
+/* here do the code includes */
+#include "elf_hash.h"
+
 /* exit ! */
-static void _DIE_() { _exit(213); }
+static void _DIE_() { _dl_sys_exit(213); }
+
+static void *_dl_sym(struct _dl_handle * h, int symbol) { return _DIE_; }
+
 
 /* lazy function resolver */
 static unsigned long do_rel(struct _dl_handle * tmp_dl, unsigned long off) {
   Elf_Rel *tmp = ((void*)tmp_dl->plt_rel)+off;
   int sym=ELF_R_SYM(tmp->r_info);
   register unsigned long sym_val;
+
+  if (0) sym_val=(unsigned long)do_rel; /* TRICK: no warning */
 
   /* modify GOT for REAL symbol */
   //sym_val=((unsigned long)(tmp_dl->mem_base+tmp_dl->dyn_sym_tab[sym].st_value));
@@ -183,13 +190,28 @@ static unsigned long do_rel(struct _dl_handle * tmp_dl, unsigned long off) {
 }
 
 /* bootstarp code */
-static void bootstrap(Elf_Dyn*_dynamic) {
+static void bootstrap(struct _dl_handle*dh,Elf_Dyn*_dynamic,unsigned long load_addr) {
+  int i;
+  for(i=0;_dynamic[i].d_tag;i++) {
+    switch (_dynamic[i].d_tag) {
+    case DT_HASH:
+    case DT_STRTAB:
+    case DT_JMPREL:
+      _dynamic[i].d_un.d_ptr+=load_addr;
+      break;
+    default:
+      break;
+    }
+  }
 }
+//void _dl_dyn_scan(struct _dl_handle*dh,Elf_Dyn*_dynamic,unsigned long load_addr) __attribute__((alias("bootstrap")));
+
 
 /* start of libdl dynamic linker */
 static unsigned long _dl_main(int argc,char*argv[],char*envp[],unsigned long _dynamic) {
   unsigned long*got;
   unsigned long load_addr;
+  struct _dl_handle my_dh;
 
   if (0) _dl_main(argc,argv,envp,load_addr); /* TRICK: no warning */
 
@@ -205,7 +227,7 @@ static unsigned long _dl_main(int argc,char*argv[],char*envp[],unsigned long _dy
   got[2]=(unsigned long)(_DIE_);/* NO dynamic symbol relocation as long as we are not ready */
 
   /* bootstrap relocation */
-  bootstrap((Elf_Dyn*)_dynamic);
+  bootstrap(&my_dh,(Elf_Dyn*)_dynamic,load_addr);
 
   /* now we are save to use anything :) */
 
