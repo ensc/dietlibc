@@ -38,7 +38,7 @@ again:
   dest=buf+sizeof(struct hostent);
   pe->h_name=0;
   pe->h_aliases=(char**)dest; pe->h_aliases[0]=0; dest+=10*sizeof(char*);
-  pe->h_addr_list=(char**)dest; dest+=sizeof(char**);
+  pe->h_addr_list=(char**)dest; dest+=2*sizeof(char**);
   if (cur>=last) return 0;
   if (*cur=='#' || *cur=='\n') goto parseerror;
   /* first, the ip number */
@@ -50,6 +50,7 @@ again:
     char save=*cur;
     *cur=0;
     pe->h_addr_list[0]=dest;
+    pe->h_addr_list[1]=0;
     if (max-dest<16) goto nospace;
     if (inet_pton(AF_INET6,pe->h_name,dest)>0) {
       pe->h_addrtype=AF_INET6;
