@@ -1,4 +1,5 @@
 #include "dietfeatures.h"
+#include <sys/cdefs.h>
 
 int strcmp(register const char *s,register const char *t) {
   register char x;
