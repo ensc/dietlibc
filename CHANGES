@@ -17,6 +17,8 @@
     three people have suggested saving a few bytes with popl now ;)
   I discovered __attribute__((malloc)) and started using it.  For gcc 3,
     it improves the optimizer when functions return malloced pointers.
+  Steven Rostedt pointed out that my setvbuf was broken with regard to
+    size==0 and sent a patch to fix it.
 
 0.13:
   add readdir64 and automatic mapping if _FILE_OFFSET_BITS == 64
