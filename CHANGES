@@ -70,6 +70,11 @@
   add swab (Johannes Stezenbach)
   make a{4} match exactly and not at least 4 times a (Ingo Oeser)
   Olaf: fixed a libdl ref-counter bug (Thomas Walpuski)
+  All hail to the busybox chiefs!  Instead of reporting bugs they find,
+    they put a #error in their source code.  Is Erik seeing the diet
+    libc as uClibc competition that needs to be squashed even with
+    unfair methods?  People, if you find bugs, tell us!
+  Fixed fputc and freopen (found in busybox comments)
 
 0.22:
   fix i386 libm
