@@ -7,7 +7,7 @@
 #include "../syscalls.s/errno.S"
 
 #include <dietfeatures.h>
-#include "syscalls.h"
+#include <syscalls.h>
 
 /* ok now include all syscalls.s/*.S and sysdep *.S */
 
@@ -16,7 +16,10 @@
 /* here on i386 I had split them some pre- some post-unified-syscall,
  * because the jumps pre-u.s.c. have only a 1 byte displacement. the first
  * post-u.s.c. have also 1 byte dsplacement the rest a 4 byte.
- * Please put additional syscalls AFTER the post-u.s.c. */
+ * this pre/post split saves about 250 byte of code ....
+ *
+ * Please put additional syscalls AFTER the post-u.s.c. 
+ * or try to not break the savings :) */
 
 #include "select.S"
 

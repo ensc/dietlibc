@@ -7,7 +7,7 @@
 #include "../syscalls.s/errno.S"
 
 #include <dietfeatures.h>
-#include "syscalls.h"
+#include <syscalls.h>
 
 .text
 .weak exit

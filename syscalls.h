@@ -2,9 +2,7 @@
 
 #include <linux/unistd.h>
 
-#endif
-
-#ifdef __ASSEMBLER__
+#else
 
 #ifdef __i386__
 
