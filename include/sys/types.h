@@ -90,7 +90,10 @@ typedef char* caddr_t;
 typedef unsigned char u_char;
 typedef unsigned short u_short;
 typedef unsigned int u_int;
-typedef unsigned long u_long;
+typedef uint32_t u_long;
+typedef uint32_t n_long;
+typedef uint32_t n_time;
+typedef uint16_t n_short;
 #endif
 
 #endif
