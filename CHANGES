@@ -28,6 +28,7 @@
     Macodiseas)
   sys/ipc.h now includes sys/types.h
   Olaf: started to make the sparc64 port
+  scandir should not sort if compar() is NULL (reported by Andrea Marrosu)
 
 0.15:
   vfork sucks.  I reverted to the old behavior where vfork==fork.

@@ -41,6 +41,7 @@ int scandir(const char *dir, struct dirent ***namelist,
   }
 #endif
 //  qsort(&(*namelist)[0],num,sizeof(struct dirent*),(int (*)(const void*,const void*))(compar));
-  qsort(*namelist,num,sizeof(struct dirent*),(int (*)(const void*,const void*))(compar));
+  if (compar)
+    qsort(*namelist,num,sizeof(struct dirent*),(int (*)(const void*,const void*))(compar));
   return num;
 }

@@ -557,4 +557,8 @@ extern int lockf64 (int __fd, int __cmd, off64_t __len) __THROW;
 #define F_TLOCK 2	/* Test and lock a region for exclusive use.  */
 #define F_TEST  3	/* Test a region for other processes locks.  */
 
+#if !defined(O_ASYNC) && defined(FASYNC)
+#define O_ASYNC FASYNC
+#endif
+
 #endif
