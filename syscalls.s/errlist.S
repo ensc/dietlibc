@@ -10,14 +10,14 @@
 .section	.rodata
 #endif
 
-.globl sys_errlist
-	.align 4
+.align 4
+.global sys_errlist
 #ifdef __arm__
-	.type	 sys_errlist,object
-	.type	 sys_nerr,object
+.type	sys_errlist,object
+.type	sys_nerr,object
 #else
-	.type	 sys_errlist,@object
-	.type	 sys_nerr,@object
+.type	sys_errlist,@object
+.type	sys_nerr,@object
 #endif
 
 #if (__WORDSIZE == 64)
@@ -153,13 +153,13 @@ sys_errlist:
 	deflong .LC123
 	deflong .LC124
 	deflong 0
+.size	sys_errlist,.-sys_errlist
 
-.globl sys_nerr
-	.align 4
-	.size	 sys_nerr,4
-
+.align 4
+.global sys_nerr
 sys_nerr:
 	.long 125
+.size	sys_nerr,4
 
 
 #ifdef __DYN_LIB
