@@ -46,3 +46,4 @@ ucontext.h (that looks nasty)
 
 printf %e
 
+move DNS stuff to libresolv.a?
