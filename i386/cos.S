@@ -7,5 +7,5 @@ cos:
         fcos
         ret
 
-.ende:
-.size    cos,.ende-cos
+.Lende:
+.size    cos,.Lende-cos

@@ -12,6 +12,7 @@
     security implications there.
   fixed regex LINEEND condition
   add .size directive to i386 syscalls
+  shove a few more bytes off the i386 socket calls
 
 0.20:
   calloc was botched

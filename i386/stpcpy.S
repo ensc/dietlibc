@@ -17,3 +17,5 @@ stpcpy:
 	popl %esi
 	popl %edi
 	ret
+.Lende:
+.size stpcpy,.Lende-stpcpy
