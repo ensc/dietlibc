@@ -31,6 +31,7 @@ char *strrchr(const char *s, int c) __THROW __pure__;
 char *strcat(char *dest, const char *src) __THROW;
 char *strncat(char *dest, const char *src, size_t n) __THROW;
 
+size_t strspn(const char *s, const char *accept) __THROW;
 size_t strcspn(const char *s, const char *reject) __THROW;
 
 void* memset(void *s, int c, size_t n) __THROW;

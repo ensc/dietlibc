@@ -6,4 +6,7 @@
 
 #define _PATH_DEVNULL "/dev/null"
 
+#define _PATH_CONSOLE "/dev/console"
+#define _PATH_MOUNTED "/etc/mtab"
+
 #endif

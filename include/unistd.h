@@ -45,7 +45,10 @@ int unlink(const char *pathname) __THROW;
 int pread(int fd, void *buf, size_t count, off_t offset);
 int pwrite(int fd, const void *buf, size_t count, off_t offset);
 
-int execve (const char *filename, char *const argv [], char *const envp[]) __THROW;
+int execve(const char *filename, char *const argv [], char *const envp[]) __THROW;
+int execlp(const char *file, const char *arg, ...) __THROW;
+int execv(const char *path, char *const argv[]) __THROW;
+int execvp(const char *file, char *const argv[]) __THROW;
 
 pid_t getpid(void) __attribute__((__const__)) __THROW;
 pid_t getppid(void) __THROW;
