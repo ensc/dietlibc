@@ -2,7 +2,7 @@
 #include <regex.h>
 #include <assert.h>
 
-main() {
+int main() {
   regex_t r;
   char buf[16*1024];
   int i;
@@ -39,4 +39,5 @@ main() {
   printf("regcomp %d\n",regcomp(&r,"^Subject:",REG_EXTENDED|REG_ICASE));
   printf("regexec %d\n",regexec(&r,"Subject: duh",1,0,0));
   regfree(&r);
+  return 0;
 }

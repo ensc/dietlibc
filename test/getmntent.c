@@ -1,6 +1,7 @@
+#include <stdio.h>
 #include <mntent.h>
 
-main() {
+int main() {
   FILE* f=fopen("test/fstab","r");
   struct mntent* e;
   while ((e=getmntent(f))) {
@@ -15,4 +16,5 @@ main() {
     printf("fsname %s\n  dir %s\n  type %s\n  opts %s\n  freq %d\n  passno %d\n\n",
 	   e->mnt_fsname,e->mnt_dir,e->mnt_type,e->mnt_opts,e->mnt_freq,e->mnt_passno);
   }
+  return 0;
 }

@@ -8,6 +8,8 @@
   add more space to ARM __jmp_buf in setjmp.h (Andre)
   fix libcompat/syscall.S (did't compile on arm)
   add integer overflow fix in xdr_array after bugtraq advisory (me)
+  fix x86_64 socket calls and mmap (and some more) (Gwenole Beauchesne)
+  add calloc integer overflow fix after RUS-CERT advisory (me)
 
 0.18:
   add stpcpy (from Thomas Ogrisegg)

@@ -1,14 +1,14 @@
 #define _FILE_OFFSET_BITS 64
 #include <dirent.h>
 
-main() {
+int main() {
   DIR* D=opendir(".");
   struct dirent* d;
   if (!D) {
     perror("opendir");
     return 1;
   }
-  while (d=readdir(D)) {
+  while ((d=readdir(D))) {
     printf("found %s\n",d->d_name);
   }
   return 0;

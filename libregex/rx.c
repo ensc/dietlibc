@@ -1,6 +1,7 @@
 #define NDEBUG
 #include <regex.h>
 #include <stdlib.h>
+#include <string.h>
 #include <ctype.h>
 #include <sys/types.h>
 #include <string.h>
