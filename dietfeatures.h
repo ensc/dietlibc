@@ -98,7 +98,7 @@
 /* WARNING: this appears to break with some binutils versions.  Works
  * for me with binutils 2.15.  The symptom is an error message that
  * `main' can not be found. */
-#define WANT_STACKGAP
+/* #define WANT_STACKGAP */
 
 /* stop uncommenting here ;-) */
 #ifndef WANT_FASTER_STRING_ROUTINES
