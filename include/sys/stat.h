@@ -7,6 +7,9 @@
 #include <linux/stat.h>
 #include <asm/stat.h>
 
+#ifndef STAT64_HAS_BROKEN_ST_INO
+#define __NO_STAT64
+#endif
 #ifdef __alpha__
 #define __NO_STAT64
 #endif
