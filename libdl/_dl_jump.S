@@ -3,6 +3,7 @@
 _dl_jump:
 
 #ifdef __i386__
+.type	_dl_jump,@function
 
 #ifdef __DYN_LIB
 	call	do_rel@PLT
@@ -16,6 +17,8 @@ _dl_jump:
 #endif
 
 #ifdef __arm__
+.type	_dl_jump,function
+
 	stmdb	sp!, {r0, r1, r2, r3}
 	sub	r1, ip, lr
 	sub	r1, r1, #4

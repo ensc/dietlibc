@@ -3,6 +3,7 @@
 .type   strchr,@function
 .global strchr
 .weak index
+.type index,@function
 
 index:
 strchr:

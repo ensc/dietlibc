@@ -2,6 +2,7 @@
 .global strcmp
 .type	strcmp,@function
 .weak	strcoll
+.type	strcoll,@function
 
 #ifdef HIGH_PERFORMANCE
 .align 	16

@@ -37,13 +37,15 @@ static void closelog_intern(void)
   connected = 0;
 }
 
-void closelog(void)
+void __libc_closelog(void);
+void __libc_closelog(void)
 {
   closelog_intern();
 
   LogTag[0]=0;
   LogType = SOCK_DGRAM;
 }
+void closelog(void) __attribute__((weak,alias("__libc_closelog")));
 
 static void openlog_intern(int option, int facility)
 {
@@ -82,7 +84,8 @@ static void openlog_intern(int option, int facility)
 }
 
 /* has to be secured against multiple, simultanious call's in threaded environment */
-void openlog(const char *ident, int option, int facility)
+void __libc_openlog(const char *ident, int option, int facility);
+void __libc_openlog(const char *ident, int option, int facility)
 {
   if (ident) {
     strncpy(LogTag,ident,MAX_LOGTAG);
@@ -90,6 +93,7 @@ void openlog(const char *ident, int option, int facility)
   }
   openlog_intern(option, facility);
 }
+void openlog(const char *ident, int option, int facility) __attribute__((weak,alias("__libc_openlog")));
 
 int setlogmask(int mask)
 {
@@ -98,7 +102,8 @@ int setlogmask(int mask)
   return old;
 }
 
-void vsyslog(int priority, const char *format, va_list arg_ptr)
+void __libc_vsyslog(int priority, const char *format, va_list arg_ptr);
+void __libc_vsyslog(int priority, const char *format, va_list arg_ptr)
 {
   char buffer[BUF_SIZE];
   char time_buf[20];
@@ -181,6 +186,7 @@ void vsyslog(int priority, const char *format, va_list arg_ptr)
   if (sigpipe == 0)
     sigaction(SIGPIPE, &oldaction, (struct sigaction *) NULL);
 }
+void vsyslog(int priority, const char *format, va_list arg_ptr) __attribute__((weak,alias("__libc_vsyslog")));
 
 void syslog(int priority, const char *format, ...)
 {
