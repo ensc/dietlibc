@@ -41,20 +41,40 @@ typedef unsigned long int clock_t;	/* Used for system times in
              Used for timer ID returned by timer_create().
 */
 
-typedef unsigned short dev_t;		/* Used for device IDs. */
+#if defined(__alpha__) || defined(__mips__) || defined(__ppc__) || defined(__hppa__) || defined(__sparc64__) \
+ || defined(__x86_64__) || defined(__ia64__)
+typedef unsigned int uid_t;		/* Used for user IDs. */
+typedef unsigned int gid_t;		/* Used for group IDs. */
+typedef unsigned int dev_t;		/* Used for device IDs. */
+#else
+typedef unsigned short uid_t;		/* Used for user IDs. */
 typedef unsigned short gid_t;		/* Used for group IDs. */
+typedef unsigned short dev_t;		/* Used for device IDs. */
+#endif
+
+#if defined(__alpha__) || defined(__mips__) || defined(__ppc__) || defined(__sparc64__) \
+ || defined(__x86_64__) || defined(__ia64__)
+typedef unsigned int mode_t;		/* Used for some file attributes. */
+#else
+typedef unsigned short mode_t;		/* Used for some file attributes. */
+#endif
+
+#if defined(__alpha__) || defined(__mips__) || defined(__sparc64__) \
+ || defined(__x86_64__) || defined(__ia64__)
+typedef unsigned int nlink_t;		/* Used for link counts. */
+#else
+typedef unsigned short nlink_t;		/* Used for link counts. */
+#endif
+
 typedef signed int id_t;		/* Used as a general identifier; can be
 					   used to contain at least a pid_t,
 					   uid_t or a gid_t. */
 typedef unsigned long ino_t;		/* Used for file serial numbers. */
 typedef signed int key_t;		/* Used for interprocess communication. */
-typedef unsigned short mode_t;		/* Used for some file attributes. */
-typedef unsigned short nlink_t;		/* Used for link counts. */
 typedef signed int pid_t;		/* Used for process IDs and process group IDs. */
 typedef signed long ssize_t;		/* Used for a count of bytes or an error indication. */
 typedef signed long suseconds_t;	/* Used for time in microseconds. */
 typedef signed long time_t;		/* Used for time in seconds. */
-typedef unsigned short uid_t;		/* Used for user IDs. */
 typedef signed long useconds_t;		/* Used for time in microseconds. */
 
 /* non-susv2 types: */
