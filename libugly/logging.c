@@ -131,10 +131,12 @@ int setlogmask(int mask)
   return old;
 }
 
+#ifdef WANT_THREAD_SAVE
 static void cancel_handler(void *ptr)
 {
   pthread_mutex_unlock(&syslog_mutex);
 }
+#endif
 
 void vsyslog(int priority, const char *format, void *arg_ptr)
 {
