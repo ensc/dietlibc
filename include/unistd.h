@@ -251,12 +251,13 @@ extern char **__environ;
 #define getdents getdents64
 #endif
 
-#ifdef _GNU_SOURCE
+#ifdef _LINUX_SOURCE
 int pivot_root(const char *new_root, const char *put_old) __THROW;
 /* Linux 2.6 module loading infrastructure:
  * init_module takes a buffer where you read the module file into */
 long init_module(void *module, unsigned long len, const char *options) __THROW;
-/* flags can be O_NONBLOCK | O_TRUNC (forced unloading) */
+/* flags can be O_EXCL | O_NONBLOCK | O_TRUNC (forced unloading)
+ * O_EXCL is there so the kernel can spot old rmmod versions */
 long delete_module(const char* name,unsigned int flags) __THROW;
 #endif
 
