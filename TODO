@@ -21,3 +21,5 @@ Look at qsort (the make test suite exhibits the worst case)
 Make __dtostr do scientific notation.
 fix %g in printf.  They are more or less completely b0rken.
 
+qmail-queue dumps core since we added vfork.  Editing fork.h to #define
+  vfork to fork works.  What happens here?
