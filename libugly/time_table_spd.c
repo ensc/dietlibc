@@ -1,6 +1,6 @@
 #include <time.h>
 
-/* seconds per month -- nonleap! */
+/* days per month -- nonleap! */
 const short __spm[12] =
   { 0,
     (31),

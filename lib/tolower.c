@@ -1,6 +1,8 @@
 #include <ctype.h>
 
-inline int tolower(int c) {
-  return (c>='A' && c<='Z')?c-'A'+'a':c;
+int tolower(int ch) {
+  if ( (unsigned int)(ch - 'A') < 26u )
+    ch += 'a' - 'A';
+  return ch;
 }
 

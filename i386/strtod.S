@@ -1,6 +1,6 @@
 .data
 
-.Lten:
+ten:
         .long  0x41200000
 
 .text
@@ -17,8 +17,6 @@ strtod:
 #    unsigned int          expo;
 
         movl    4(%esp),%ecx                    # %ecx = p
-        pushl   %eax
-        pushl   %eax
         xorl    %edx,%edx
         incl    %edx                            # %ebx = sign
 
@@ -28,7 +26,7 @@ strtod:
 #        p++;
 
         decl    %ecx
-.Lwhite:  incl    %ecx
+.Lwhite:incl    %ecx
         movb    (%ecx),%al
         cmpb    $' ',%al
         je      .Lwhite
@@ -50,7 +48,8 @@ strtod:
         negl    %edx
 .Lplus: incl    %ecx
 .Lnosign:
-        movl    %edx,4(%esp)                    # SP[4] = sign
+        push    %edx
+        push    %eax
 
 
 #    while ( (unsigned int)(*p - '0') < 10u )
@@ -58,11 +57,11 @@ strtod:
 
 
         fldz
-.Lint:    movzbl  (%ecx),%eax
+.Lint:  movzbl  (%ecx),%eax
         subb    $'0',%al
         cmpb    $10,%al
         jnc     .Lintend
-        fmuls   .Lten
+        fmuls   ten
         movl    %eax,(%esp)
         fiaddl  (%esp)
         incl    %ecx
@@ -86,11 +85,11 @@ strtod:
 
         fld1
         incl    %ecx
-.Lfrac:   movzbl  (%ecx),%eax
+.Lfrac: movzbl  (%ecx),%eax
         subb    $'0',%al
         cmpb    $10,%al
         jnc     .Lfracend
-        fdivs   .Lten
+        fdivs   ten
         movl    %eax,(%esp)
         fld     %st(0)
         fimull  (%esp)
@@ -113,7 +112,7 @@ strtod:
 #        expo   = 0;
 #        factor = 10.L;
 
-        flds    .Lten
+        flds    ten
 
 
 #        switch (*++p) {                 // ja hier weiß ich nicht, was mindestens nach einem 'E' folgenden MUSS.
@@ -138,7 +137,7 @@ strtod:
         je      .Lexpminus
         fcompp
         fldz
-        movl    4+4*6(%esp),%ecx
+        movl    4+4*2(%esp),%ecx
         jmp     .Lende
 
 .Lexpminus:
@@ -157,8 +156,9 @@ strtod:
         subb    $'0',%al
         cmpb    $10,%al
         jnc     .Lexpend
-        addl    %edx,%edx
-        leal    (%edx,%edx,4),%edx
+#        addl    %edx,%edx
+#        leal    (%edx,%edx,4),%edx
+        imull   $10,%edx
         addl    %eax,%edx
         incl    %ecx
         jmp     .Lexp
@@ -176,7 +176,7 @@ strtod:
         shrl    $1,%edx
         jnc     .Lnomul
         fmul    %st(0),%st(1)
-.Lnomul:  jz      .Lexppop
+.Lnomul:jz      .Lexppop
         fmul    %st(0),%st(0)
         jmp     .Lexpend
 
@@ -193,16 +193,15 @@ strtod:
 #}
 
 .Lende:
-        fimull  4(%esp)
-
+        pop     %eax
+        fimull  (%esp)
         popl    %eax
-        popl    %eax
-#        movl    8(%esp),%eax
-#        andl    %eax,%eax
-#        jz      .Lnostore
-#        movl    %ecx,(%eax)
+        movl    8(%esp),%eax
+        andl    %eax,%eax
+        jz      .Lnostore
+        movl    %ecx,(%eax)
 .Lnostore:
         ret
 
-.L_ende:
-.size    strtod,.L_ende-strtod
+.Lend:
+.size    strtod,.Lend-strtod
