@@ -468,10 +468,9 @@ int regexec(const regex_t*__restrict__ preg, const char*__restrict__ string, siz
 
 void regfree(regex_t* preg) {
   int i;
-  for (i=0; i<preg->r.num; ++i) {
+  for (i=0; i<preg->r.num; ++i)
     free(preg->r.b[i].p);
-    free(preg->r.b);
-  }
+  free(preg->r.b);
 }
 
 size_t regerror(int errcode, const regex_t*__restrict__ preg, char*__restrict__ errbuf, size_t errbuf_size) {
