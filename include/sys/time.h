@@ -46,11 +46,9 @@ int setitimer(int which, const struct itimerval *value, struct itimerval *ovalue
 int gettimeofday(struct timeval *tv, struct timezone *tz) __THROW;
 int settimeofday(const struct timeval *tv , const struct timezone *tz) __THROW;
 
-extern int adjtime (const struct timeval *__delta,
-		    struct timeval *__olddelta) __THROW;
+extern int adjtime (const struct timeval *delta, struct timeval *olddelta) __THROW;
 
-struct tm
-{
+struct tm {
   int tm_sec;			/* Seconds.	[0-60] (1 leap second) */
   int tm_min;			/* Minutes.	[0-59] */
   int tm_hour;			/* Hours.	[0-23] */
