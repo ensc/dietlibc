@@ -271,6 +271,8 @@ __unified_syscall:
 #include "../syscalls.s/epoll_wait.S"
 #include "../syscalls.s/sendfile64.S"
 #include "../syscalls.s/sysfs.S"
+#include "../syscalls.s/capget.S"
+#include "../syscalls.s/capset.S"
 
 #undef __PIC__
 #undef __socketcall

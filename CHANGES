@@ -13,6 +13,7 @@
   typo in parisc setjmp.S (Michael Mueller)
   Olaf: fixing the pthread_join function
   add IPv6 link-local%eth0 support to getaddrinfo
+  Olaf: added missing syscalls (cap{g,s}et) and addmntent
 
 0.23:
   update sys/soundcard.h
