@@ -1,7 +1,7 @@
 #include <stdlib.h>
 
 void *bsearch(const void *key, const void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *)) {
-  const char *v, *l, *r;
+  const char *v, *r;
   int res;
   r=base+(nmemb-1)*size;
   do {

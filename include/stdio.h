@@ -86,4 +86,7 @@ int setvbuf(FILE *stream, char *buf, int mode , size_t size) __THROW;
 #define setbuffer(stream,buf,size) setvbuf(stream,buf,buf?_IOFBF:_IONBF,size)
 #define setlinebuf(stream) setvbuf(stream,0,_IOLBF,BUFSIZ)
 
+FILE *popen(const char *command, const char *type) __THROW;
+int pclose(FILE *stream) __THROW;
+
 #endif

@@ -65,6 +65,8 @@ int chown(const char *path, uid_t owner, gid_t group) __THROW;
 int fchown(int fd, uid_t owner, gid_t group) __THROW;
 int lchown(const char *path, uid_t owner, gid_t group) __THROW;
 
+int pipe(int filedes[2]) __THROW;
+
 char *ttyname (int desc) __THROW;
 
 int brk(void *end_data_segment) __THROW;

@@ -14,6 +14,7 @@ typedef struct __file {
   char buf[BUFSIZE];
   struct __file *next;
 #endif
+  pid_t popen_kludge;
 } FILE;
 
 extern FILE *__stdio_root;

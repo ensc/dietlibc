@@ -36,10 +36,17 @@ static int rand() {
 #endif
 
 int main(int argc,char *argv[]) {
+  FILE *f=popen("../embutils/echo foo","r");
+  char buf[100];
+  fgets(buf,100,f);
+  write(1,buf,strlen(buf));
+  pclose(f);
+#if 0
   double d=0.0;
   long long t=0x12345678ABCDEF01;
   d/=0.0;
   printf("%d %llx\n",__isnan(d),t,*(long long*)&d);
+#endif
 #if 0
   int i,j;
   long a,b,c;

@@ -12,6 +12,9 @@
     glibc: 679414 cycles qsort and 3352 cycles bsearch
     diet libc: 300010 cycles qsort, 553 cycles bsearch
     I have no idea why glibc is so slow.
+  added __isnan (references by libm.a from glibc).
+  added popen() and pclose().  Now the diet libc can link slsh (from
+    S-Lang!)
 
 0.7.2:
   added several prototypes to already implemented functions and
