@@ -7,6 +7,8 @@
   fix and improve erand48() (Luc Van Oostenryck)
   fix realpath for non-existant directories (Gergely Nagy and Gerrit Pape)
   fix DNS timeout and IPv6 socket reuse
+  strtoul now accepts "-1" as well (Thomas Ogrisegg)
+  add i386 strcasecmp and __ltostr (Thomas Ogrisegg)
 
 0.21:
   use gcc's size_t, ptrdiff_t and wchar_t types (Olaf)

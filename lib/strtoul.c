@@ -6,9 +6,11 @@
 
 unsigned long int strtoul(const char *nptr, char **endptr, int base)
 {
+  int neg = 0;
   unsigned long int v=0;
 
   while(isspace(*nptr)) ++nptr;
+  if (*nptr == '-') { neg=1; nptr++; }
   if (*nptr == '+') ++nptr;
   if (base==16 && nptr[0]=='0') goto skip0x;
   if (!base) {
@@ -38,5 +40,5 @@ skip0x:
   }
   if (endptr) *endptr=(char *)nptr;
   errno=0;	/* in case v==ULONG_MAX, ugh! */
-  return v;
+  return (neg?-v:v);
 }

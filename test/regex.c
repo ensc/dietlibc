@@ -9,6 +9,72 @@ int main() {
   regmatch_t matches[10];
   memset(buf,'a',sizeof buf);
   strcpy(buf+sizeof(buf)-100," foo . .. bar\n");
+
+  assert(regcomp(&r,"abracadabra$",REG_EXTENDED)==0);
+  assert(regexec(&r,"abracadabracadabra",10,matches,0)==0);
+  assert(matches[0].rm_so==7 && matches[0].rm_eo==18);
+  regfree(&r);
+
+  assert(regcomp(&r,"a...b",REG_EXTENDED)==0);
+  assert(regexec(&r,"abababbb",10,matches,0)==0);
+  assert(matches[0].rm_so==2 && matches[0].rm_eo==7);
+  regfree(&r);
+
+  assert(regcomp(&r,"XXXXXX",REG_EXTENDED)==0);
+  assert(regexec(&r,"..XXXXXX",10,matches,0)==0);
+  assert(matches[0].rm_so==2 && matches[0].rm_eo==8);
+  regfree(&r);
+
+  assert(regcomp(&r,"\\)",REG_EXTENDED)==0);
+  assert(regexec(&r,"()",10,matches,0)==0);
+  assert(matches[0].rm_so==1 && matches[0].rm_eo==2);
+  regfree(&r);
+
+  assert(regcomp(&r,"a]",REG_EXTENDED)==0);
+  assert(regexec(&r,"a]a",10,matches,0)==0);
+  assert(matches[0].rm_so==0 && matches[0].rm_eo==2);
+  regfree(&r);
+
+  assert(regcomp(&r,"}",REG_EXTENDED)==0);
+  assert(regexec(&r,"}",10,matches,0)==0);
+  assert(matches[0].rm_so==0 && matches[0].rm_eo==1);
+  regfree(&r);
+
+  assert(regcomp(&r,"\\}",REG_EXTENDED)==0);
+  assert(regexec(&r,"}",10,matches,0)==0);
+  assert(matches[0].rm_so==0 && matches[0].rm_eo==1);
+  regfree(&r);
+
+  assert(regcomp(&r,"\\]",REG_EXTENDED)==0);
+  assert(regexec(&r,"]",10,matches,0)==0);
+  assert(matches[0].rm_so==0 && matches[0].rm_eo==1);
+  regfree(&r);
+
+  assert(regcomp(&r,"]",REG_EXTENDED)==0);
+  assert(regexec(&r,"]",10,matches,0)==0);
+  assert(matches[0].rm_so==0 && matches[0].rm_eo==1);
+  regfree(&r);
+
+  assert(regcomp(&r,"}",REG_EXTENDED)==0);
+  assert(regexec(&r,"}",10,matches,0)==0);
+  assert(matches[0].rm_so==0 && matches[0].rm_eo==1);
+  regfree(&r);
+
+  assert(regcomp(&r,"{",REG_EXTENDED)==0);
+  assert(regexec(&r,"{",10,matches,0)==0);
+  assert(matches[0].rm_so==0 && matches[0].rm_eo==1);
+  regfree(&r);
+
+  assert(regcomp(&r,"^a",REG_EXTENDED)==0);
+  assert(regexec(&r,"ax",10,matches,0)==0);
+  assert(matches[0].rm_so==0 && matches[0].rm_eo==1);
+  regfree(&r);
+
+  assert(regcomp(&r,"\\^a",REG_EXTENDED)==0);
+  assert(regexec(&r,"a^a",10,matches,0)==0);
+  assert(matches[0].rm_so==1 && matches[0].rm_eo==3);
+  regfree(&r);
+
 #if 0
   printf("regcomp %d\n",regcomp(&r,"\\.( ? ? ?\\.)*\\.",REG_EXTENDED|REG_NOSUB));
   printf("regexec %d\n",regexec(&r,buf,1,0,0));
@@ -40,8 +106,10 @@ int main() {
   printf("regcomp %d\n",regcomp(&r,"^Subject:",REG_EXTENDED|REG_ICASE));
   printf("regexec %d\n",regexec(&r,"Subject: duh",1,0,0));
 #endif
+#if 0
   printf("regcomp %d\n",regcomp(&r,"^To:([^@]*)?$",REG_EXTENDED|REG_ICASE|REG_NOSUB));
   printf("regexec %d\n",regexec(&r,"To: <Undisclosed Recipients>",1,0,0));
   regfree(&r);
+#endif
   return 0;
 }
