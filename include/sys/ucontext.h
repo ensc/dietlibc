@@ -6,7 +6,9 @@
 
 __BEGIN_DECLS
 
+#if !defined(__sparc__) && !defined(__sparc64__)
 typedef struct sigcontext mcontext_t;
+#endif
 
 #if defined(__i386__) || defined(__arm__) || defined(__mips__) || defined(__mips64__) || defined(__powerpc__) || defined(__hppa__)
 struct ucontext {
