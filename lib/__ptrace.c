@@ -1,5 +1,6 @@
 /* we need this because we need to use the glibc prototype which uses
  * varargs :-( */
+#include <errno.h>
 #define ptrace fnord
 #include <sys/ptrace.h>
 #undef ptrace
@@ -10,6 +11,7 @@ extern int __diet_ptrace(int request, pid_t pid, void *addr, void *data);
 int ptrace(int request, pid_t pid, void *addr, void *data);
 
 int ptrace(int request, pid_t pid, void *addr, void *data) {
+  errno=0;
   switch (request) {
     case PTRACE_TRACEME: case PTRACE_KILL: case PTRACE_ATTACH:
     case PTRACE_DETACH:
