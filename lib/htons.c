@@ -1,7 +1,7 @@
 #include <endian.h>
 #include <netinet/in.h>
 
-unsigned short int htons(unsigned short int hostshort) {
+uint16_t htons(uint16_t hostshort) {
 #if __BYTE_ORDER==__LITTLE_ENDIAN
   return ((hostshort>>8)&0xff) | (hostshort<<8);
 #else
@@ -9,4 +9,4 @@ unsigned short int htons(unsigned short int hostshort) {
 #endif
 }
 
-unsigned short int ntohs(unsigned short int hostshort) __attribute__((weak,alias("htons")));
+uint16_t ntohs(uint16_t hostshort) __attribute__((weak,alias("htons")));

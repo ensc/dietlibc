@@ -67,8 +67,12 @@ unsigned int protocol;
 	struct pmap parms;
 
 	address->sin_port = htons((unsigned short)PMAPPORT);
-	client = clntudp_bufcreate(address, PMAPPROG,
-							   PMAPVERS, timeout, &socket, RPCSMALLMSGSIZE,
+	if (protocol == IPPROTO_TCP)
+	  client = clnttcp_create(address, PMAPPROG, PMAPVERS, &socket,
+							   RPCSMALLMSGSIZE, RPCSMALLMSGSIZE);
+	else
+	  client = clntudp_bufcreate(address, PMAPPROG, PMAPVERS, timeout,
+								  &socket, RPCSMALLMSGSIZE,
 							   RPCSMALLMSGSIZE);
 	if (client != (CLIENT *) NULL) {
 		parms.pm_prog = program;

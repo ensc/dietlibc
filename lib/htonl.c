@@ -1,7 +1,7 @@
 #include <endian.h>
 #include <netinet/in.h>
 
-unsigned long int htonl(unsigned long int hostlong) {
+uint32_t htonl(uint32_t hostlong) {
 #if __BYTE_ORDER==__LITTLE_ENDIAN
   return (hostlong>>24) | ((hostlong&0xff0000)>>8) |
 	  ((hostlong&0xff00)<<8) | (hostlong<<24);
@@ -10,4 +10,4 @@ unsigned long int htonl(unsigned long int hostlong) {
 #endif
 }
 
-unsigned long int ntohl(unsigned long int hostlong) __attribute__((weak,alias("htonl")));
+uint32_t ntohl(uint32_t hostlong) __attribute__((weak,alias("htonl")));
