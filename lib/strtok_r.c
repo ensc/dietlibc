@@ -1,21 +1,15 @@
 #include <string.h>
 
-char *strtok_r(char *s, const char *delim, char **ptrptr)
-{
-  int i;
-  char *tmp=0;
+char*strtok_r(char*s,const char*delim,char**ptrptr) {
+  char*tmp=0;
 
-  if (s) (*ptrptr)=s;
-
-  if (**ptrptr)
-  {
-    while(!(i=strcspn(*ptrptr,delim))) (*ptrptr)++;
-    if (**ptrptr)
-    {
-      tmp=(*ptrptr);
-      (*ptrptr)+=i;
-      if (**ptrptr) *(*ptrptr)++=0;
-    }
+  if (s==0) s=*ptrptr;
+  s+=strspn(s,delim);		/* overread leading delimiter */
+  if (__likely(*s)) {
+    tmp=s;
+    s+=strcspn(s,delim);
+    if (__likely(*s)) *s++=0;	/* not the end ? => terminate it */
   }
+  *ptrptr=s;
   return tmp;
 }

@@ -16,6 +16,9 @@
   Olaf: added missing syscalls (cap{g,s}et) and addmntent
   Add s390x and ppc64 support (Marian Jancar, SuSE)
   Marian also contributed %m support to printf, and fixes for many bugs
+  Olaf:
+   - fixing strtok_r (rewrite)
+   - making the %m support NON DEFAULT as it is NOT SUSv3 or SUSv2
 
 0.23:
   update sys/soundcard.h
