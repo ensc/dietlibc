@@ -203,7 +203,7 @@ pp:
 	if (!strcmp(argv[i],"-o"))
 	  if (!compile) _link=1;
 #endif
-      newargv=alloca(sizeof(char*)*(argc+22));
+      newargv=alloca(sizeof(char*)*(argc+100));
       a=alloca(strlen(diethome)+20);
       b=alloca(strlen(platform)+20);
       c=alloca(strlen(platform)+20);
