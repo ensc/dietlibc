@@ -45,4 +45,8 @@ void* memset(void *s, int c, size_t n) __THROW;
 char *strerror(int errnum) __THROW;
 char *strsignal(int signum) __THROW;
 
+char *strtok(char *s, const char *delim) __THROW;
+char *strtok_r(char *s, const char *delim, char **ptrptr) __THROW;
+
+
 #endif
