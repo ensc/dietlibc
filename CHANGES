@@ -4,6 +4,7 @@
     dl_iterate_phdr for libgcc_eh
     proper endian.h recognition for __s390x__
     rem and sdiv for sparc
+  fix stupid dns decoding bug (Gernot Tenchio)
 
 0.28:
   add tcgetsid (Yuri Kozlov)

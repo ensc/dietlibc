@@ -117,14 +117,14 @@ invalidpacket:
 	  result->h_addr_list[ips++] = cur;
 	  if (lookfor==1) /* A */ {
 	    *(int*)cur=*(int*)tmp;
-	    cur+=4;
+	    cur+=4; tmp+=4;
 	    result->h_addr_list[ips]=0;
 	  } else if (lookfor==28) /* AAAA */ {
 	    {
 	      int k;
 	      for (k=0; k<16; ++k) cur[k]=tmp[k];
 	    }
-	    cur+=16;
+	    cur+=16; tmp+=16;
 	    result->h_addr_list[ips]=0;
 	  }
 	}
