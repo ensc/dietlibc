@@ -5,7 +5,7 @@ sighandler_t signal(int signum, sighandler_t action) {
   sa.sa_handler=action;
   sigemptyset(&sa.sa_mask);
   sigaddset(&sa.sa_mask,signum);
-  sa.sa_flags=SA_RESTART|SA_NODEFER;
+  sa.sa_flags=SA_NODEFER;
   if (sigaction(signum,&sa,&oa))
     return SIG_ERR;
   return oa.sa_handler;
