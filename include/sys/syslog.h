@@ -87,6 +87,6 @@ int setlogmask (int mask) __THROW;
 
 void syslog (int pri, const char *fmt, ...) __THROW;
 
-void vsyslog (int pri, const char *fmt, void *ap) __THROW;
+void vsyslog (int pri, const char *fmt, va_list *ap) __THROW;
 
 #endif

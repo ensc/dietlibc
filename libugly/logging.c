@@ -139,7 +139,7 @@ static void cancel_handler(void *ptr)
 }
 #endif
 
-void vsyslog(int priority, const char *format, void *arg_ptr)
+void vsyslog(int priority, const char *format, va_list arg_ptr)
 {
   char *buffer, *message;
   char failbuf[FAIL_SIZE + 130];
