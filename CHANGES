@@ -14,6 +14,7 @@
     libcompat
   Andre noticed that __dtostr never sets first to false.  Oops!
   Andre has provided a largely untested patch that seems to fix the problem.
+  Igor Gilitschenski sent a patch for the "%8.7lx" issue.
 
 0.16:
   "diet -v" or "diet -Os" segfaulted without further arguments.

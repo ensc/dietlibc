@@ -149,7 +149,12 @@ print_out:
 	    ++s; --sz;
 	    --width;
 	  }
-	  len+=write_pad(fn,(signed int)width-(signed int)sz,padwith);
+//	  len+=write_pad(fn,(signed int)width-(signed int)sz,padwith);
+	  if (flag_dot) {
+	    len+=write_pad(fn,(signed int)width-(signed int)preci,padwith);
+	    len+=write_pad(fn,(signed int)preci-(signed int)sz,'0');
+	  } else
+	    len+=write_pad(fn,(signed int)width-(signed int)sz,padwith);
 	}
 	A_WRITE(fn,s,sz); len+=sz;
 	if (width && (flag_left)) {

@@ -12,8 +12,6 @@ logging.
 
 EINTR handling (*puke*).  What about EAGAIN?
 
-bizarre printf bullshit: "%8.7lx",0xfefe should yield " 000fefe"?!
-
 gethost/netent -> parselib
 
 Look at qsort (the make test suite exhibits the worst case)
@@ -26,5 +24,3 @@ qmail-queue dumps core since we added vfork.  Editing fork.h to #define
   vfork to fork works.  What happens here?
 
 use TCP if buf[2]&2 is non-zero in DNS answers.
-
-bsearch returns pointers outside the array?!
