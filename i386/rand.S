@@ -28,7 +28,7 @@ random:
 #else
 .Lstore:movl	%eax,seed
 #endif
-	andl	$0x7FFFFFFF,%eax
+	andl	$0x7FFF,%eax
 #ifdef __DYN_LIB
 	popl	%ebx
 #endif
