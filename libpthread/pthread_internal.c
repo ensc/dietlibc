@@ -53,7 +53,8 @@ int *__errno_location(void)
 void *set_errno(int error)
 {
   int *errno=__errno_location();
-  if (errno) errno=error;
+  if (errno) *errno=error;
+  else *errno=ENODATA;
 }
 
 /* thread self */
