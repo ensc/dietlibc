@@ -61,7 +61,9 @@ clean:
 	$(MAKE) -C examples clean
 
 tar: clean
-	cd .. && tar cvvf dietlibc.tar.bz2 dietlibc --use=bzip2
+	if test -d armv4l; then test -s armv4l || rmdir armv4l; fi
+	ln -sf arm armv4l
+	cd .. && tar cvvf dietlibc.tar.bz2 dietlibc --use=bzip2 --exclude CVS
 
 exports: dietlibc.a
 	nm -g dietlibc.a | grep -w T | awk '{ print $$3 }' | sort -u > exports
