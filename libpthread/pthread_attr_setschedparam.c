@@ -6,6 +6,8 @@
 
 int pthread_attr_setschedparam(pthread_attr_t *attr, const struct sched_param *param)
 {
+  __THREAD_INIT();
+
   if ((attr->__schedpolicy == SCHED_OTHER) && (param->sched_priority == 0)) {
     attr->__schedparam.sched_priority=0;
     return 0;

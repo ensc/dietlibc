@@ -6,6 +6,8 @@
 
 int pthread_attr_setschedpolicy(pthread_attr_t *attr, int policy)
 {
+  __THREAD_INIT();
+
   if (policy==SCHED_OTHER) {
     attr->__schedpolicy=policy;
     return 0;

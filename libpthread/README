@@ -1,0 +1,36 @@
+LIBPTHREAD
+
+  This is the pthread implementation of dietlibc.
+  Written from scratch by Olaf Dreesen.
+
+
+STATUS: incomplete / may work or not
+
+
+It's like linuxthreads a clone base thread implementation.
+
+
+There is no separate "Manager Thread" or whatever.
+Each thread is generated straight forward, no pipes no pain....
+
+hope that nested threads are working fine... (not yet tested)
+
+
+NON STANDARD SIGNAL HANDLING:
+
+  SIGHUP	the targeted thread is canceled
+	depends on the cancel type of the thread.
+
+	ASYNCHRONOUS: the signal handler will KILL the thread immediately.
+
+	DEFERRED: the signal handler make its thread as canceled.
+		(only for the sig-handler to do some sane stuff...)
+
+  SIGTERM	the thread is KILLED
+	if the thread signaled is the main thread, then ALL child-threads
+	will get a SIGHUP and after some micros a SIGTERM....
+
+  SIGCHLD	a thread has exited
+	if a child-thread exited then this handler is started to free the
+	thread-struct for reuse
+

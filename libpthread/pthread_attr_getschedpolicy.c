@@ -6,6 +6,8 @@
 
 int pthread_attr_getschedpolicy(const pthread_attr_t *attr, int *policy)
 {
+  __THREAD_INIT();
+
   *policy = attr->__schedpolicy;
   return 0;
 }

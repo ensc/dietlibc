@@ -6,7 +6,10 @@
 
 int pthread_attr_init(pthread_attr_t *attr)
 {
+  __THREAD_INIT();
+
   memset(attr,0,sizeof(pthread_attr_t));
+  attr->__stacksize=PTHREAD_STACK_SIZE;
   return 0;
 }
 

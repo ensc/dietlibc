@@ -11,6 +11,8 @@ struct _pthread_descr_struct {
 
   /* thread/process data */
   int  pid;					/* Process id */
+
+  int  policy;					/* thread scheduling policy */
   int  priority;				/* thread priority */
 
   /* errno handling */
@@ -18,6 +20,7 @@ struct _pthread_descr_struct {
   int h_errno;
 
   /* stack handling */
+  unsigned int stack_size;			/* stack size for setrlimit */
   void *stack_begin;				/* begin of stack / lowest address (free) */
   int  userstack;				/* user has provided the stack */
 
@@ -51,6 +54,7 @@ int __clone(void* (*fn)(void*), void* stack, int flags, void *arg);
 
 int __find_thread_id(int pid);
 _pthread_descr __get_thread_struct(int id);
+
 _pthread_descr __thread_get_free();
 _pthread_descr __thread_self();
 
@@ -59,7 +63,11 @@ void __thread_wait_some_time();
 int __thread_create(void *(*__start_routine) (void *),
 		void *__arg,
 		char* stack,
-		unsigned long stacksize);
+		unsigned long stacksize,
+		int detach,
+		int inherit,
+		int spolicy,
+		int spriority);
 
 /* init stuff */
 extern pthread_once_t __thread_inited;

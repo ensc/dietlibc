@@ -6,6 +6,8 @@
 
 int pthread_attr_getscope(const pthread_attr_t *attr, int *scope)
 {
+  __THREAD_INIT();
+
   *scope=PTHREAD_SCOPE_SYSTEM;
   return 0;
 }

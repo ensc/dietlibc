@@ -1,0 +1,12 @@
+This is the pthread implementation of dietlibc.
+Written from scratch by Olaf Dreesen.
+
+Mon Mar 12 16:16:00 CET 2001
+
+first of all:
+  I strongly suggest NOT to use it yet is very, very,... very highly
+  experimental. I guess you got the point. there is still much debug code,
+  incomplete functions and unusable states....
+
+  I'm still working on the final alpha...
+

@@ -11,6 +11,8 @@ int pthread_mutex_lock(pthread_mutex_t *mutex)
 {
   _pthread_descr this;
 
+  __THREAD_INIT();
+
   this = __thread_self();
 
   if (this!=mutex->owner) {

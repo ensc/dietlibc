@@ -6,6 +6,8 @@
 
 int pthread_attr_setinheritsched(pthread_attr_t *attr, int inherit)
 {
+  __THREAD_INIT();
+
   if ((inherit==PTHREAD_INHERIT_SCHED) ||
       (inherit==PTHREAD_EXPLICIT_SCHED)) {
     attr->__inheritsched=inherit;

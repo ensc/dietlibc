@@ -6,6 +6,8 @@
 
 int pthread_mutex_destroy(pthread_mutex_t *mutex)
 {
+  __THREAD_INIT();
+
   if ((mutex->owner)||(mutex->lock.__spinlock)) {
     (*(__errno_location()))=EBUSY;
     return -1;
