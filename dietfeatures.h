@@ -13,7 +13,7 @@
 #define WANT_BUFFERED_STDIO
 
 /* use errno_location instead of errno */
-/* #define WANT_THREAD_SAVE */
+#define WANT_THREAD_SAVE
 
 /* make the startcode, etc. dynamic aware */
 /* #undef WANT_DYNAMIC */

@@ -4,6 +4,10 @@
 #include <pthread.h>
 #include <stdarg.h>
 #include <setjmp.h>
+#include "dietfeatures.h"
+#ifndef WANT_THREAD_SAVE
+#error "the diet libc is not compiled with thread safeness enabled!"
+#endif
 
 /* cleanup */
 #define PTHREAD_MAX_CLEANUP 8
