@@ -17,5 +17,7 @@ extern int tolower(int c) __THROW __attribute__ ((__const__));
 extern int toupper(int c) __THROW __attribute__ ((__const__));
 
 extern int isprint(int c) __THROW __attribute__ ((__const__));
+extern int ispunct(int c) __THROW __attribute__ ((__const__));
+extern int iscntrl(int c) __THROW __attribute__ ((__const__));
 
 #endif
