@@ -6,6 +6,7 @@
     with putchar('\n') behind your back...?!
   import include/scsi/ from glibc.
   add iopl.
+  add execl prototype.
 
 0.9:
   fixed initgroups (oops)
