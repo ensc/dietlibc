@@ -257,7 +257,7 @@
 
 #define syscall_weak(name,wsym,sym) \
 .text; \
-.type wsym,#function; \
+.type wsym,function; \
 .weak wsym; \
 wsym: ; \
 .type sym,#function; \
@@ -268,7 +268,7 @@ sym: \
 
 #define syscall(name,sym) \
 .text; \
-.type sym,#function; \
+.type sym,function; \
 .global sym; \
 sym: \
 	b __unified_syscall; \

@@ -20,13 +20,20 @@ void _dl_jump();
  * this file is a Q. & D. hack ... don't think this is bug free or meaningfull
  */
 
-static void *do_map_in(void *base, unsigned long length, int flags, int fd, unsigned long offset)
+static inline int map_flags(int flags)
 {
   int perm = 0;
   if (flags & PF_X) perm|=PROT_EXEC;
   if (flags & PF_R) perm|=PROT_READ;
   if (flags & PF_W) perm|=PROT_WRITE;
-  return mmap(base, length, perm, MAP_PRIVATE|((base)?MAP_FIXED:0), fd, offset);
+  return perm;
+}
+
+static inline void *do_map_in(void *base, unsigned long length, int flags, int fd, unsigned long offset)
+{
+  register int op = MAP_PRIVATE;
+  if (base) op|=MAP_FIXED;
+  return mmap(base, length, map_flags(flags), op, fd, offset);
 }
 
 static struct _dl_handle *_dl_map_lib(const char*fn, const char*pathname, int fd, int flags)
@@ -132,7 +139,7 @@ static struct _dl_handle *_dl_map_lib(const char*fn, const char*pathname, int fd
   close(fd);
 
   if (ret) {
-    ret->lnk_count=0;
+    ret->lnk_count=1;
     ret->name=strdup(fn);
     ret->dyn_str_tab=(char*)m+dyn->p_vaddr;
   }

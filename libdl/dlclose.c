@@ -6,8 +6,7 @@ int dlclose (void *handle)
 {
   if (handle) {
     struct _dl_handle *h = handle;
-    if (h->lnk_count) {
-      --h->lnk_count;
+    if (--(h->lnk_count)) {
       return -1;
     }
     if (h->fini) h->fini();
