@@ -38,6 +38,7 @@ typedef struct __regex_t {
   int brackets,cflags;
   regmatch_t *l;
 } regex_t;
+#define re_nsub r.pieces
 
 int regcomp(regex_t *preg, const char *regex, int cflags) __THROW;
 int regexec(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags) __THROW;

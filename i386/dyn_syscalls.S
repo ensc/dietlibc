@@ -96,6 +96,7 @@ __unified_syscall:
 	pop	%ebx
 	pop	%esi
 	pop	%edi
+#include "dietuglyweaks.h"
 	ret
 
 #include "../syscalls.s/__getpagesize.S"

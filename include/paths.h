@@ -17,4 +17,7 @@
 
 #define _PATH_VARRUN	"/var/run/"
 
+/* puke */
+#define _PATH_MAILDIR	"/var/mail"
+
 #endif

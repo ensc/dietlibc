@@ -45,6 +45,10 @@ void abort(void) __THROW;
 
 extern int rand(void) __THROW;
 extern void srand(unsigned int seed) __THROW;
+#ifdef _BSD_SOURCE
+extern int random(void) __THROW;
+extern void srandom(unsigned int seed) __THROW;
+#endif
 
 typedef unsigned short randbuf[3];
 double drand48(void) __THROW;
