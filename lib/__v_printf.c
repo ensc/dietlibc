@@ -235,7 +235,9 @@ num_printf:
 	{
 	  int g=(ch=='g');
 	  double d=va_arg(arg_ptr,double);
-	  sz=__dtostr(d,buf,sizeof(buf),width?width+(flag_dot?preci+1:1):6);
+	  if (width==0) width=1;
+	  if (!flag_dot) preci=6;
+	  sz=__dtostr(d,buf,sizeof(buf),width,preci);
 	  if (flag_dot) {
 	    char *tmp;
 	    if ((tmp=strchr(buf,'.'))) {

@@ -102,8 +102,13 @@ extern char* strcpy2(char*a,char*b);
      __asm__ __volatile__ ("rdtsc" : "=a" (low) : : "edx")
 
 int main(int argc,char *argv[]) {
+  char buf[101];
+  __dtostr(-123456789.456,buf,100,6,2);
+  puts(buf);
+#if 0
   time_t t=1009921588;
   puts(asctime(localtime(&t)));
+#endif
 #if 0
   printf("%g\n",atof("30"));
 #endif

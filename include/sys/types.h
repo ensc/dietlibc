@@ -50,7 +50,9 @@ typedef unsigned long ino_t;		/* Used for file serial numbers. */
 typedef signed int key_t;		/* Used for interprocess communication. */
 typedef unsigned short mode_t;		/* Used for some file attributes. */
 typedef unsigned short nlink_t;		/* Used for link counts. */
+#if _FILE_OFFSET_BITS != 64
 typedef signed long off_t;		/* Used for file sizes. */
+#endif
 typedef signed int pid_t;		/* Used for process IDs and process group IDs. */
 typedef signed long ssize_t;		/* Used for a count of bytes or an error indication. */
 typedef signed long suseconds_t;	/* Used for time in microseconds. */
@@ -62,6 +64,9 @@ typedef signed long useconds_t;		/* Used for time in microseconds. */
 __extension__ typedef signed long long loff_t;	/* 64-bit offset */
 
 __extension__ typedef signed long long off64_t;
+#if _FILE_OFFSET_BITS == 64
+typedef off64_t off_t;
+#endif
 __extension__ typedef unsigned long long ino64_t;
 __extension__ typedef signed long long blkcnt64_t;
 
