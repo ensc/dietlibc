@@ -49,7 +49,7 @@ static struct _dl_handle *_dl_map_lib(const char*fn, const char*pathname, int fd
   Elf_Phdr *ph;
 
   int ld_nr=0;
-  Elf_Phdr *ld[4]={0,0,0,0};
+  Elf_Phdr **ld=0;
   Elf_Phdr *dyn=0;
 
   if (fd==-1) return 0;
@@ -77,6 +77,11 @@ static struct _dl_handle *_dl_map_lib(const char*fn, const char*pathname, int fd
   ph=(Elf_Phdr*)&buf[eh->e_phoff];
 
   for (i=0; i<eh->e_phnum; i++) {
+    if (ph[i].p_type==PT_LOAD) ++ld_nr;
+  }
+  ld=alloca(ld_nr*sizeof(Elf_Phdr));
+
+  for (ld_nr=i=0; i<eh->e_phnum; i++) {
     if (ph[i].p_type==PT_LOAD) {
       ld[ld_nr++]=ph+i;
     }
