@@ -25,6 +25,13 @@ void __maplocaltime() {
 
 char *tzset(void)	__attribute__((weak,alias("__maplocaltime")));
 
+static unsigned long __myntohl(const unsigned char* c) {
+  return (((unsigned long)c[0])<<24) +
+         (((unsigned long)c[1])<<16) +
+         (((unsigned long)c[2])<<8) +
+         ((unsigned long)c[3]);
+}
+
 time_t __tzfile_map(time_t t, int *isdst) {
   /* "TZif" plus 16 reserved bytes. */
   char *tmp;
@@ -61,7 +68,7 @@ time_t __tzfile_map(time_t t, int *isdst) {
 
   tmp=tzfile+20+6*4;
   for (i=0; i<tzh_timecnt; ++i)
-    if ((time_t)ntohl(*(int*)(tmp+i*4)) >= t) {
+    if ((time_t)__myntohl(tmp+i*4) >= t) {
 /*      printf("match at %d\n",i); */
       tmp+=tzh_timecnt*4;
       i=tmp[i-1];
@@ -70,7 +77,7 @@ time_t __tzfile_map(time_t t, int *isdst) {
       tmp+=i*6;
 /*      printf("(%lu,%d,%d)\n",ntohl(*(int*)tmp),tmp[4],tmp[5]); */
       *isdst=tmp[4];
-      return t+ntohl(*(int*)tmp);
+      return t+__myntohl(tmp);
     }
   return t;
 }
