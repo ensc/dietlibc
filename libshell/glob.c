@@ -68,17 +68,16 @@ static int add_entry(const char* name,glob_t *pglob,int* nfound) {
   return 0;
 }
 
-static void build_fullname(char * fullname, int fullnamesize, const char * directory, const char * filename) {
+static void build_fullname(char * fullname, const char * directory, const char * filename) {
   char *dest=fullname;
-  char *max=fullname+fullnamesize;
   if (directory[0]=='/' && !directory[1]) {
     *dest='/'; ++dest;
   } else if (directory[0]!='.' || directory[1]) {
-    strncpy(dest,directory,max-dest);
-    dest+=strlen(dest);
+    strcpy(dest,directory);
+    dest=strchr(dest,0);
     *dest='/'; ++dest;
   }
-  strncpy(dest,filename,max-dest);
+  strcpy(dest,filename);
 }
 
 static int glob_in_dir(const char *pattern, const char *directory, int flags,
@@ -103,7 +102,7 @@ static int glob_in_dir(const char *pattern, const char *directory, int flags,
 		while ((ep = readdir(dp))) {
 			i = strlen(directory) + strlen(ep->d_name) + 2;
 			ptr = (char *) alloca(i);
-			build_fullname(ptr, i, directory, ep->d_name);
+			build_fullname(ptr, directory, ep->d_name);
 			if (flags & GLOB_ONLYDIR) {
 				struct stat statr;
 				if (stat(ptr, &statr) || !S_ISDIR(statr.st_mode))
@@ -123,7 +122,7 @@ static int glob_in_dir(const char *pattern, const char *directory, int flags,
 		/* nfound == 0 */
 		i = strlen(directory) + strlen(pattern) + 2;
 		ptr = (char *) alloca(i);
-		build_fullname(ptr, i, directory, pattern);
+		build_fullname(ptr, directory, pattern);
 		if (add_entry(ptr,pglob,&nfound))
 			goto memory_error;
 	}
@@ -300,13 +299,13 @@ int glob(const char *pattern, int flags, int errfunc(const char * epath, int eer
 					}
 
 					/* okay now we add the new entry */
-					k = strlen(dirs.gl_pathv[i]) + 1 + strlen(filename) + 1;
+					k = strlen(dirs.gl_pathv[i]) + strlen(filename) + 2;
 					if ((pglob->gl_pathv[j] = malloc(k)) == NULL) {
 						globfree(&dirs);
 						globfree(pglob);
 						return GLOB_NOSPACE;
 					}
-					build_fullname(pglob->gl_pathv[j], k, dirs.gl_pathv[i], filename);
+					build_fullname(pglob->gl_pathv[j], dirs.gl_pathv[i], filename);
 					pglob->gl_pathc++;
 					pglob->gl_pathv[j+1] = NULL;
 				}
