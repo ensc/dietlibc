@@ -43,6 +43,7 @@ void* memchr(const void *s, int c, size_t n) __THROW;
 const char *strerror(int errnum) __THROW;
 #ifdef _GNU_SOURCE
 char *strsignal(int signum) __THROW;
+void *memmem(const void *haystack, size_t haystacklen, const void *needle, size_t needlelen) __THROW;
 #endif
 
 char *strtok(char *s, const char *delim) __THROW;

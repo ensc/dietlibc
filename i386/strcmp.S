@@ -3,10 +3,10 @@
 .global strcmp
 .type	 strcmp,@function
 strcmp:
-	movl 4(%esp),%ebx
+	movl 4(%esp),%ecx
 	movl 8(%esp),%edx
 .Lloop:
-	movb (%ebx),%al
+	movb (%ecx),%al
 	incl %edx
 	incl %ebx
 	movb %al,%ah

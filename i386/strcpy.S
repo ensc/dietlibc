@@ -7,9 +7,9 @@ strcpy:
 	pushl %esi
 	pushl %edi
 	
-	movl 12(%esp), %ebx
+	movl 12(%esp), %edx
 	movl 16(%esp), %esi
-	movl %ebx, %edi
+	movl %edx, %edi
 	cld
 
 .Lloop:
@@ -20,5 +20,5 @@ strcpy:
 
 	popl %edi
 	popl %esi
-	movl %ebx,%eax
+	movl %edx,%eax
 	ret
