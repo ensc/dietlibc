@@ -50,7 +50,7 @@ void* memrchr(const void *s, int c, size_t n) __THROW __pure;
 char *strerror(int errnum) __THROW;
 /* work around b0rken GNU crapware like tar 1.13.19 */
 #define strerror strerror
-char* strerror_r(int errnum,char* buf,size_t n) __THROW __attribute_dontuse__;
+int strerror_r(int errnum,char* buf,size_t n) __THROW __attribute_dontuse__;
 
 #ifdef _GNU_SOURCE
 const char *strsignal(int signum) __THROW;
