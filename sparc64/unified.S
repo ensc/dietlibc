@@ -15,6 +15,9 @@ __unified_syscall:
 
 	bcs	%xcc, 1f	/* error ? */
 	nop
+
+/* here we go and "reuse" the return for weak-void functions */
+#include "dietuglyweaks.h"
 	retl
 	nop
 

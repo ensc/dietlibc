@@ -14,6 +14,9 @@ __unified_syscall:
 	ta	0x10
 	bcs	1f
 	nop
+
+/* here we go and "reuse" the return for weak-void functions */
+#include "dietuglyweaks.h"
 	retl
 	nop
 

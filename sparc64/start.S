@@ -39,8 +39,7 @@ _start:
 	b	exit
 	mov %o0, %i0
 
-/* here we go and "reuse" the return for weak-void functions */
-#include "dietuglyweaks.h"
+/* die in dishonor */
 	ret
 	nop
 

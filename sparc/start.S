@@ -40,9 +40,6 @@ _start:
 	mov %o0, %i0
 
 /* Die very horribly if exit returns.  */
-
-/* here we go and "reuse" the return for weak-void functions */
-#include "dietuglyweaks.h"
 	ret
 	nop
 
