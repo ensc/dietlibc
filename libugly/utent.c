@@ -36,6 +36,7 @@ void utmpname(const char *file) {
 
 void setutent() {
   if (fd<0) fd = open(utmp_file_name,O_RDWR);
+  fcntl (fd, F_SETFD, FD_CLOEXEC);
   lseek(fd,0,SEEK_SET);
 }
 
@@ -88,14 +89,14 @@ void pututline(struct utmp *ut) {
   struct utmp *tmp;
 
   if ((tmp = getutid(ut))) {
-    lseek(fd, - sizeof(struct utmp), SEEK_CUR);
+    lseek(fd, - (off_t)sizeof(struct utmp), SEEK_CUR);
     if (lock_record(F_WRLCK)) return;
     write(fd, ut, sizeof(struct utmp));
   }
   else {
     lseek(fd, 0, SEEK_END);
     if (lock_record(F_WRLCK)) return;
-    write(fd, ut, sizeof(struct utmp));
+    write(fd, ut, (off_t)sizeof(struct utmp));
   }
   unlock_record();
 }

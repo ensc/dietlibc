@@ -24,6 +24,7 @@ struct servent *getservent(void) {
   if (servicesfd<0) {
     servicesfd=open(_PATH_SERVICES,O_RDONLY);
     if (servicesfd<0) return 0;
+    fcntl (servicesfd, F_SETFD, FD_CLOEXEC);
     serviceslen=lseek(servicesfd,0,SEEK_END);
     servicesmap=mmap(0,serviceslen,PROT_READ|PROT_WRITE,MAP_PRIVATE,servicesfd,0);
     if ((long)servicesmap==(-1)) goto error;
@@ -102,6 +103,7 @@ void endservent(void) {
 }
 
 void setservent(int stayopen) {
+  (void)stayopen;
   endservent();
 }
 

@@ -44,6 +44,7 @@ static char sccsid[] =
 #include <netdb.h>
 #include <sys/socket.h>
 #include <string.h>
+#include <arpa/inet.h>
 
 /*
  * Internet version.
@@ -60,9 +61,7 @@ struct rpcdata {
 	char *domain;
 } *rpcdata;
 
-static struct rpcent *interpret();
-struct hostent *gethostent();
-char *inet_ntoa();
+static struct rpcent *interpret(const char* val, size_t len);
 
 #ifndef __linux__
 static char *index();
@@ -195,7 +194,7 @@ char *s;
 }
 #endif
 
-static struct rpcent *interpret(const char* val, int len)
+static struct rpcent *interpret(const char* val, size_t len)
 {
 	register struct rpcdata *d = _rpcdata();
 	char *p;
@@ -203,7 +202,7 @@ static struct rpcent *interpret(const char* val, int len)
 
 	if (d == 0)
 		return 0;
-	strncpy(d->line, val, len);
+	strncpy(d->line, val, (size_t)len);
 	p = d->line;
 	d->line[len] = '\n';
 	if (*p == '#')

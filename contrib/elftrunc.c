@@ -32,7 +32,7 @@ void trunc32(int fd)
 
   if ((n=read(in,&eh32,sizeof(eh32)))<1) die(3,"read elf hdr");
 
-  lseek(in,eh32.e_phoff,SEEK_SET);
+  lseek(in,(off_t)eh32.e_phoff,SEEK_SET);
 
   for (i=0; (i<eh32.e_phnum) && (read(in,&ph32,sizeof(ph32))>0) ; i++)
   {
@@ -50,7 +50,7 @@ void trunc32(int fd)
     }
   }
 
-  lseek(in,n,SEEK_SET);
+  lseek(in,(off_t)n,SEEK_SET);
   len -= n;
 
   eh32.e_shoff=0;
@@ -87,7 +87,7 @@ void trunc64(int fd)
 
   if ((n=read(in,&eh64,sizeof(eh64)))<1) die(3,"read elf hdr");
 
-  lseek(in,eh64.e_phoff,SEEK_SET);
+  lseek(in,(off_t)eh64.e_phoff,SEEK_SET);
 
   for (i=0; (i<eh64.e_phnum)&&(read(in,&ph64,sizeof(ph64))>0); i++)
   {
@@ -115,14 +115,14 @@ void trunc64(int fd)
 
   if ((out=open(fn,O_CREAT| O_TRUNC|O_WRONLY,0755))<0) die(2,"open outfile");
 
-  write(out,&eh64,n);
+  write(out,&eh64,(size_t)n);
 
   while(len && n>0)
   {
     if ((n=read(in,buf,sizeof(buf)))>0)
     {
-      write(out,buf,(len<n)?len:n);
-      len-=(len<n)?len:n;
+      write(out,buf,(size_t)((len<(size_t)n)?len:n));
+      len-=(len<(size_t)n)?len:n;
     } else die(2,"read error");
   }
 

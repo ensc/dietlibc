@@ -6,6 +6,7 @@
 void updwtmp(const char *wtmp_file, const struct utmp *ut) {
   int fd = open(wtmp_file, O_WRONLY|O_APPEND);
   if (fd<0) return;
+  fcntl (fd, F_SETFD, FD_CLOEXEC);
   write(fd, ut, sizeof(struct utmp));
   close(fd);
 }

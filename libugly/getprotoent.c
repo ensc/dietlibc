@@ -24,6 +24,7 @@ struct protoent *getprotoent(void) {
   if (protofd<0) {
     protofd=open(_PATH_PROTOCOLS,O_RDONLY);
     if (protofd<0) return 0;
+    fcntl (protofd, F_SETFD, FD_CLOEXEC);
     protolen=lseek(protofd,0,SEEK_END);
     protomap=mmap(0,protolen,PROT_READ|PROT_WRITE,MAP_PRIVATE,protofd,0);
     if ((long)protomap==(-1)) goto error;
@@ -79,6 +80,7 @@ error:
 }
 
 void setprotoent(int stayopen) {
+  (void)stayopen;
   cur=protomap;
 }
 

@@ -26,6 +26,7 @@ struct netent *getnetent(void) {
   if (netfd<0) {
     netfd=open(_PATH_NETWORKS,O_RDONLY);
     if (netfd<0) return 0;
+    fcntl (netfd, F_SETFD, FD_CLOEXEC);
     netlen=lseek(netfd,0,SEEK_END);
     netmap=mmap(0,netlen,PROT_READ|PROT_WRITE,MAP_PRIVATE,netfd,0);
     if ((long)netmap==(-1)) goto error;
@@ -99,6 +100,7 @@ void endnetent(void) {
 }
 
 void setnetent(int stayopen) {
+  (void)stayopen;
   endnetent();
 }
 

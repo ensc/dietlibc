@@ -21,6 +21,7 @@ struct servent {
 };
 
 extern void endservent (void) __THROW;
+extern void setservent(int stayopen) __THROW;
 extern struct servent *getservent (void) __THROW;
 extern struct servent *getservbyname (const char *__name,
 				      const char *__proto) __THROW;
