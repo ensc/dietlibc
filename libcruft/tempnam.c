@@ -7,8 +7,8 @@
 
 link_warning("tempnam","\e[1;33;41m>>> tempnam stinks! NEVER ! NEVER USE IT ! <<<\e[0m");
 
-static char buf[1024];
 char* tempnam(char* dir,char* template) {
+  char buf[1024];
   int len=sizeof(buf)-1,fd;
   buf[len]=0;
   if ((dir)&&(*dir)) {
@@ -27,5 +27,5 @@ char* tempnam(char* dir,char* template) {
   if ((fd=mkstemp(buf))<0) return 0;
   close(fd);
   unlink(buf);
-  return buf;
+  return strdup(buf);
 }
