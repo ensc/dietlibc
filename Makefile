@@ -20,7 +20,7 @@ ifeq ($(CFLAGS),-pipe)
 CFLAGS+=-O -fomit-frame-pointer
 endif
 
-CFLAGS = -g
+#CFLAGS = -g
 CFLAGS += -Wall
 
 .SUFFIXES:

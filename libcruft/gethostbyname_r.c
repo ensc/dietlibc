@@ -131,8 +131,8 @@ int gethostbyname_r(const char* name, struct hostent* result,
 	      puts(name);
 	    }
 	  }
-	  printf("%d answers\n",((unsigned short)inpkg[6]<<8)+inpkg[7]);
-	  printf("ok\n");
+/*	  printf("%d answers\n",((unsigned short)inpkg[6]<<8)+inpkg[7]);
+	  printf("ok\n");*/
 	  *h_errnop=0;
 	  *RESULT=result;
 	  return 0;

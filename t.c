@@ -39,6 +39,8 @@ static int rand() {
 
 int main(int argc,char *argv[]) {
   struct hostent *foo=gethostbyname("knuth.fefe.de");
+/*  if (foo)
+    printf("%s -> %s\n",foo->h_name,inet_ntoa(*(struct in_addr*)foo->h_addr)); */
 /*  printf("%g %g\n",1e-10,1e10); */
 #if 0
   double d=0.0;

@@ -21,6 +21,8 @@
   added ungetc (does it work?)
   added inet_aton (yuck!)
   added gethostbyname
+  added h_errno and __h_errno_location
+  added inet_ntoa
 
 0.7.2:
   added several prototypes to already implemented functions and
