@@ -2,8 +2,8 @@
 
 #if defined(__i386__) && defined(__DYN_LIB)
 #include "i386/PIC.h"
-#undef WANT_THREADSAFE
-#define WANT_THREADSAFE
+#undef WANT_THREAD_SAFE
+#define WANT_THREAD_SAFE
 #endif
 
 .text
@@ -32,7 +32,7 @@ syscall:
 	cmpl $-255, %eax
 	jbe .Lret
 	negl %eax
-#ifdef WANT_THREADSAFE
+#ifdef WANT_THREAD_SAFE
 	movl %eax, %edx
 #ifdef __DYN_LIB
 	PIC_INIT
