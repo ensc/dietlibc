@@ -29,6 +29,41 @@ typedef unsigned long long int uint_fast64_t;
 
 #include <endian.h>
 
+/* The ISO C99 standard specifies that in C++ implementations these
+   should only be defined if explicitly requested.  */
+#if !defined __cplusplus || defined __STDC_CONSTANT_MACROS
+
+/* Signed.  */
+# define INT8_C(c)	c
+# define INT16_C(c)	c
+# define INT32_C(c)	c
+# if __WORDSIZE == 64
+#  define INT64_C(c)	c ## L
+# else
+#  define INT64_C(c)	c ## LL
+# endif
+
+/* Unsigned.  */
+# define UINT8_C(c)	c ## U
+# define UINT16_C(c)	c ## U
+# define UINT32_C(c)	c ## U
+# if __WORDSIZE == 64
+#  define UINT64_C(c)	c ## UL
+# else
+#  define UINT64_C(c)	c ## ULL
+# endif
+
+/* Maximal type.  */
+# if __WORDSIZE == 64
+#  define INTMAX_C(c)	c ## L
+#  define UINTMAX_C(c)	c ## UL
+# else
+#  define INTMAX_C(c)	c ## LL
+#  define UINTMAX_C(c)	c ## ULL
+# endif
+
+#endif	/* C++ && constant macros */
+
 __END_DECLS
 
 #endif

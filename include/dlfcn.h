@@ -19,6 +19,18 @@ const char *dlerror(void);
 void *dlsym(void *handle, const char *symbol);
 int dlclose (void *handle);
 
+#ifdef _GNU_SOURCE
+typedef struct
+{
+  const char *dli_fname;
+  void *dli_fbase;
+  const char *dli_sname;
+  void *dli_saddr;
+} Dl_info;
+
+int dladdr(void *addr, Dl_info *info);
+#endif
+
 __END_DECLS
 
 #endif

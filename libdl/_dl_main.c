@@ -670,29 +670,32 @@ static char*_dl_lib_strdup(const char*s) {
   return ret;
 }
 
-#ifdef __GDB_SUPPORT__
-volatile void _dl_debug_state(void);
+#ifdef WANT_LD_SO_GDB_SUPPORT
 /* gdb debug break point */
-void _dl_debug_state() {}
+static volatile void _dl_debug_state(void) {
+#ifdef DEBUG
+  struct _dl_handle*tmp;
+  pf(__FUNCTION__); pf(": r_state "); ph(_r_debug.r_state); pf("\n");
+  for (tmp=_r_debug.r_map;tmp;tmp=tmp->next) {
+    pf("link_map "); ph((unsigned long)tmp);
+    pf(" l_addr "); ph((unsigned long)tmp->mem_base);
+    pf(" l_name "); pf(tmp->l_name ? tmp->l_name : "<null>");
+    pf(" l_ld "); ph((unsigned long)tmp->dynamic); pf("\n");
+  }
+#endif
+}
 
 /* gdb debug init stuff */
-struct r_debug _r_debug;
-static struct r_debug* _dl_debug_init(Elf_Addr dl_base) {
-  if (_r_debug.r_brk==0) {
-    _r_debug.r_version	= 1;
-    _r_debug.r_ldbase	= dl_base;
-    _r_debug.r_map	= _dl_root_handle;	/* this my be wrong */
-    _r_debug.r_brk	= (Elf_Addr)&_dl_debug_state;
-  }
-  return &_r_debug;
-}
+static struct r_debug _r_debug;
 #endif
 
 /* now reuse some unchanged sources */
 #include "dlerror.c"
 #include "_dl_alloc.c"
+#include "_dl_fmt_xlong0.c"
 
 #include "dlsym.c"
+#include "dladdr.c"
 
 #include "_dl_search.c"
 
@@ -773,7 +776,6 @@ static struct _dl_handle*_dl_map_lib(const char*fn,const char*pathname,int fd,in
   Elf_Phdr*ld[4]={0,0,0,0};
   Elf_Phdr*dyn=0;
 
-  if (0) { pathname=0; }	/* no unused parameter */
   if (fd==-1) return 0;
 
   if (_dl_sys_fstat(fd,&st)<0) {
@@ -871,10 +873,13 @@ err_out_free:
 
   if (ret) {
     ++ret->lnk_count;
-    if (flags&RTLD_USER)
+    if (flags&RTLD_USER) {
+      ret->l_name=strdup(pathname);
       ret->name=strdup(fn);
-    else
+    } else {
+      ret->l_name=_dl_lib_strdup(pathname);
       ret->name=_dl_lib_strdup(fn);
+    }
     ret->flags=flags;
     ret->dynamic=(Elf_Dyn*)(m+dyn->p_vaddr);
   }
@@ -1086,7 +1091,7 @@ static struct _dl_handle* _dl_dyn_scan(struct _dl_handle*dh,Elf_Dyn*_dynamic) {
 #ifdef DEBUG
     pf(__FUNCTION__); pf(": rel plt/got\n");
 #endif
-    for(tmp=plt_rel;tmp<max;(char*)tmp=((char*)tmp)+sizeof(_dl_rel_t)) {
+    for(tmp=plt_rel;tmp<max;tmp=(void*)(((char*)tmp)+sizeof(_dl_rel_t))) {
       if ((dh->flags&RTLD_NOW)) {
 	unsigned long sym=(unsigned long)_dl_sym(dh,ELF_R_SYM(tmp->r_info));
 	if (sym) *((unsigned long*)(dh->mem_base+tmp->r_offset))=sym;
@@ -1121,6 +1126,14 @@ static void*_dl_load(const char*fn,const char*pathname,int fd,int flags) {
   struct _dl_handle*ret=0;
   if ((ret=_dl_map_lib(fn,pathname,fd,flags))) {
     ret=_dl_dyn_scan(ret,ret->dynamic);
+#ifdef WANT_LD_SO_GDB_SUPPORT
+    if (ret) {
+      _r_debug.r_state=RT_ADD;
+      _dl_debug_state();
+      _r_debug.r_state=RT_CONSISTENT;
+      _dl_debug_state();
+    }
+#endif
   }
   return ret;
 }
@@ -1282,6 +1295,7 @@ unsigned long _dl_main(int argc,char*argv[],char*envp[],unsigned long _dynamic) 
   my_dh.mem_base=(char*)loadaddr;
   my_dh.mem_size=0;
   my_dh.lnk_count=1024;
+  my_dh.l_name=0; /* filled in later from PT_INTERP */
   my_dh.name="libdl.so";
   my_dh.flags=LDSO_FLAGS;
 
@@ -1323,7 +1337,9 @@ unsigned long _dl_main(int argc,char*argv[],char*envp[],unsigned long _dynamic) 
   for(i=0;(i<prog_ph_num);++i) {
     if (prog_ph[i].p_type==PT_DYNAMIC) {
       prog_dynamic=(Elf_Dyn*)prog_ph[i].p_vaddr;
-      break;
+    }
+    if (prog_ph[i].p_type==PT_INTERP) {
+      mydh->l_name=(char*)prog_ph[i].p_vaddr;
     }
   }
   if (prog_dynamic==0) {
@@ -1331,6 +1347,7 @@ unsigned long _dl_main(int argc,char*argv[],char*envp[],unsigned long _dynamic) 
     pf(" error with program: no dynamic section ?\n");
     return (unsigned long)_DIE_;
   }
+  prog->l_name=0;
   prog->name=0;
   prog->lnk_count=1024;
   prog->dynamic=prog_dynamic;
@@ -1344,6 +1361,24 @@ unsigned long _dl_main(int argc,char*argv[],char*envp[],unsigned long _dynamic) 
     pf(dlerror()); pf("\n");
     return (unsigned long)_DIE_;
   }
+
+#ifdef WANT_LD_SO_GDB_SUPPORT
+  _r_debug.r_version=1;
+  _r_debug.r_map=_dl_root_handle;
+  _r_debug.r_brk=&_dl_debug_state;
+  _r_debug.r_state=RT_CONSISTENT;
+  _r_debug.r_ldbase=loadaddr;
+  if (prog_dynamic) {
+    for (i=0;prog_dynamic[i].d_tag;++i)
+      if (prog_dynamic[i].d_tag==DT_DEBUG) {
+	prog_dynamic[i].d_un.d_ptr=(Elf_Addr)&_r_debug;
+#ifdef DEBUG
+	pf(__FUNCTION__); pf(": set DT_DEBUG @ "); ph(prog_dynamic[i].d_un.d_val); pf("\n");
+#endif
+      }
+  }
+  _dl_debug_state();
+#endif
 
   /* now start the program */
 #ifdef DEBUG

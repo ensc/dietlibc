@@ -37,6 +37,10 @@ __BEGIN_DECLS
 /* Nonzero if STATUS indicates the child dumped core. */
 #define WCOREDUMP(status) ((status) & 0x80)
 
+#ifdef _BSD_SOURCE
+#define W_STOPCODE(sig) ((sig) << 8 | 0x7f)
+#endif
+
 pid_t wait(int *status) __THROW;
 pid_t waitpid(pid_t pid, int *status, int options) __THROW;
 

@@ -517,6 +517,11 @@ int sigsuspend(const sigset_t *mask) __THROW;
 int sigpending(sigset_t *set) __THROW;
 int sigprocmask(int how, const sigset_t *set, sigset_t *oldset) __THROW;
 
+#ifdef _GNU_SOURCE
+int sigisemptyset(const sigset_t *set) __THROW __pure;
+int sigorset(sigset_t *set, const sigset_t *left, const sigset_t *right) __THROW;
+int sigandset(sigset_t *set, const sigset_t *left, const sigset_t *right) __THROW;
+#endif
 
 sighandler_t signal(int signum, sighandler_t action);
 

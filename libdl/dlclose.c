@@ -33,6 +33,12 @@ int dlclose(void*handle) {
     if (munmap(dh->mem_base,dh->mem_size)==-1) return -1;
 #endif
     _dl_free_handle(handle);
+#ifdef WANT_LD_SO_GDB_SUPPORT
+    _r_debug.r_state=RT_DELETE;
+    _dl_debug_state();
+    _r_debug.r_state=RT_CONSISTENT;
+    _dl_debug_state();
+#endif
   }
   return 0;
 }

@@ -25,6 +25,10 @@
     - fixing the mmap64 stuff & arm/dyn_syscalls had no mmap2 (Gerrit Pape)
   tzfile parser fix (John K. Hohm)
   ppc64 fixes (Gwenole Beauchesne)
+  add sigisemptyset, sigandset and sigorset (John K. Hohm)
+  minor additions to make gdb 6.3 happy (John K. Hohm)
+  ld.so support for gdb (John K. Hohm)
+  implement nice(2) via setpriority() if there is no nice syscall
 
 0.27:
   change DNS routines to look for ip6.arpa instead of ip6.int

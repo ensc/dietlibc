@@ -1,6 +1,8 @@
 #ifndef ___DL_INT_H__
 #define ___DL_INT_H__
 
+#include "dietfeatures.h"
+
 #if defined(__alpha__) || defined(__sparc64__) || defined(__x86_64__)
 #define ELF_CLASS ELFCLASS64
 #else
@@ -8,6 +10,7 @@
 #endif
 
 #include <elf.h>
+#define _GNU_SOURCE
 #include <dlfcn.h>
 
 #include "_dl_rel.h"
@@ -52,8 +55,8 @@
 #ifdef DEBUG
 #ifndef __DIET_LD_SO__
 #include <stdio.h>
-#define pf(s)	write(2,s,strlen(s))
-#define ph(l)	fdprintf(2,"%08lx",(l))
+#define pf(s)	_dl_sys_write(2,s,strlen(s))
+#define ph(l)	do { char s[8]; _dl_fmt_xlong0(s,(l)); _dl_sys_write(2,s,8); } while(0)
 #endif
 #endif
 
@@ -97,14 +100,17 @@ struct _dl_handle {
 struct r_debug {
   int r_version;
   struct _dl_handle* r_map;
-  unsigned long r_brk;
+  void(*r_brk)();
   enum {
     RT_CONSISTENT,	/* mapping complete */
     RT_ADD,		/* begin add object */
     RT_DELETE,		/* begin del object */
   } r_state;
-  unsigned long r_ldbase;
+  Elf_Addr r_ldbase;
 };
+#ifdef WANT_LD_SO_GDB_SUPPORT
+extern struct r_debug _r_debug;
+#endif
 
 #define HASH_BUCKET_LEN(p)	(*((p)))
 #define HASH_BUCKET(p)		((p)+2)
@@ -134,9 +140,10 @@ const char* _dl_get_rpath();
 int _dl_search(char *buf, int len, const char *filename);
 
 /* dlsym.c */
-void *_dlsym(void*dh,char*symbol);
-void *_dl_sym_search_str(struct _dl_handle*h,char*name);
+void *_dlsym(void*dh,const char*symbol);
+void *_dl_sym_search_str(struct _dl_handle*h,const char*name);
 void *_dl_sym(struct _dl_handle * h, int symbol);
+void *_dl_sym_next(struct _dl_handle * h, int symbol);
 
 /* _dl_queue.c */
 int _dl_queue_lib(const char* name, int flags);

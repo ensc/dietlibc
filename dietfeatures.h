@@ -28,6 +28,9 @@
 /* make the startcode, etc. dynamic aware ({con,de}structors) */
 /* #define WANT_DYNAMIC */
 
+/* GDB support in the dynamic linker */
+#define WANT_LD_SO_GDB_SUPPORT
+
 /* do you want smaller or faster string routines? */
 /* #define WANT_FASTER_STRING_ROUTINES */
 
