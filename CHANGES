@@ -19,6 +19,8 @@
   Enrico Scholz reported several bugs in the header files.
   change __malloc__ to __attribute_malloc__
   add pa-risc socketcall (but see TODO) (Felix J. Ogris)
+  fix *rand48 initialization (Kevin Ryde)
+  fnmatch infinite loop fix (Piotr Esden-Tempski)
 
 0.17:
   fix several bugs in getservent_r

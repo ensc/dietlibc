@@ -25,5 +25,6 @@ main() {
 #ifdef FNM_CASEFOLD
   if (fnmatch("*.c","foo.C",FNM_CASEFOLD)) die("FNM_CASEFOLD does not work");
 #endif
+  if (fnmatch("-O[01]","-O1",0)) die("fnmatch did not match -O[01] to -O1");
   return 0;
 }

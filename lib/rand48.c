@@ -1,11 +1,12 @@
 #include <stdlib.h>
 
 static randbuf rand48buf;
-static randbuf a;
-static unsigned short c;
-#define A {0x5, 0xDEEC, 0xE66D}
+#define A_0  0xE66D
+#define A_1  0xDEEC
+#define A_2  0x5
 #define C 0xB
-static randbuf a_init = A;
+static randbuf a = { A_0, A_1, A_2 };
+static unsigned short c = C;
 
 static void calc_next(randbuf buf) {
 	randbuf tmp;
@@ -39,9 +40,9 @@ void srand48(long seed) {
 	rand48buf[1] = (seed >> 16) & 0xffff;
 	rand48buf[2] = seed & 0xffff;
 	rand48buf[0] = 0x330e;
-	a[0] = a_init[0];
-	a[1] = a_init[1];
-	a[2] = a_init[2];
+	a[0] = A_0;
+	a[1] = A_1;
+	a[2] = A_2;
 	c = C;
 }
 
@@ -52,9 +53,9 @@ unsigned short *seed48(randbuf buf) {
 		oldx[i] = rand48buf[i];
 		rand48buf[i] = buf[i];
 	}
-	a[0] = a_init[0];
-	a[1] = a_init[1];
-	a[2] = a_init[2];
+	a[0] = A_0;
+	a[1] = A_1;
+	a[2] = A_2;
 	c = C;
 	return (unsigned short *)&oldx;
 }

@@ -12,7 +12,7 @@ static int match(char c,char d,int flags) {
 }
 
 int fnmatch(const char *pattern, const char *string, int flags) {
-//  printf("fnmatch(\"%s\",\"%s\")\n",pattern,string);
+  /*printf("fnmatch(\"%s\",\"%s\")\n",pattern,string);*/
   if (*string==0) {
     while (*pattern=='*') ++pattern;
     return (!!*pattern);
@@ -40,14 +40,16 @@ int fnmatch(const char *pattern, const char *string, int flags) {
 	  if (flags&FNM_CASEFOLD) {
 	    if (tolower(*string)>=tolower(*pattern) && tolower(*string)<=tolower(pattern[2])) res=1;
 	  }
-	} else
+	  pattern+=3;
+	} else {
 	  res=match(*pattern,*string,flags);
+	  ++pattern;
+	}
 	if (res ^ neg) {
 	  while (*pattern && *pattern!=']') ++pattern;
 	  return fnmatch(pattern+1,string+1,flags);
 	}
       }
-      ++pattern;
     }
     break;
   case '\\':
