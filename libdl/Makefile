@@ -4,7 +4,7 @@ SRC = $(wildcard *.c) test/test.c
 OBJ = _dl_jump.o $(SRC:.c=.o)
 
 #CFLAGS = -Wall -O2
-CFLAGS = -g
+CFLAGS = -Wall -g
 
 %.o : %.S
 	$(HOME)/bin/diet gcc $(CFLAGS) -c -o $@ $^

@@ -8,9 +8,7 @@ void *dlsym(void *handle, char *symbol)
     int hash = elf_hash(symbol);
     unsigned long  bhash = hash%HASH_BUCKET_LEN(h->hash_tab);
     unsigned long* chain = HASH_CHAIN(h->hash_tab);
-
     unsigned long  ind;
-    Elf32_Sym *msym;
 
 //    printf("bucket(%08x,\"%s\")\n",bhash,symbol);
 

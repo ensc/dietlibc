@@ -4,6 +4,9 @@
 #include <elf.h>
 
 struct _dl_handle {
+  struct _dl_handle *next;
+  struct _dl_handle *prev;
+
   /* basic */
   void *	mem_base;	/* base address of maped *.so */
   unsigned long mem_size;	/* len of mem block */
@@ -12,9 +15,11 @@ struct _dl_handle {
   /* symbol resolve helper */
   unsigned long*hash_tab;	/* hash table */
 
-  Elf32_Sym *	dyn_sym_tab;	/* dynamic symbol table */
+  unsigned long*got;		/* global offset table */
+
   char *	dyn_str_tab;	/* dyn_name table */
 
+  Elf32_Sym *	dyn_sym_tab;	/* dynamic symbol table */
   Elf32_Rel *	plt_rel;	/* PLT relocation table */
 
   /* FINI */

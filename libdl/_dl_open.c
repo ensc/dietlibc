@@ -10,7 +10,33 @@
 #define _ELF_UP_ROUND(ps,n)	((((n)&((ps)-1))?(ps):0)+ _ELF_DWN_ROUND((ps),(n)))
 #define _ELF_RST_ROUND(ps,n)	((n)&((ps)-1))
 
+/* this is an arch specific "return jump" for the relocation */
 void _dl_jump();
+
+/* malloc like code */
+static struct _dl_handle* root_dl_handle=0;
+static struct _dl_handle* free_dl_handles=0;
+
+static free_dl_handle(struct _dl_handle* dh) {
+  memset(dh,0,sizeof(struct _dl_handle));
+  dh->next=free_dl_handles;
+  free_dl_handles=dh;
+}
+
+static struct _dl_handle* get_dl_handle() {
+  struct _dl_handle* tmp;
+  if (free_dl_handle==0) {
+    register int i,m;
+    tmp = (struct _dl_handle *)mmap(0, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0);
+    m=4096/sizeof(struct _dl_handle);
+    for (i=m;i;) {
+      free_dl_handle(tmp+(--i));
+    }
+  }
+  tmp = free_dl_handles;
+  free_dl_handles = tmp->next;
+  return tmp;
+}
 
 /*
  * this file is a Q. & D. hack ... don't think this is bug free or meaningfull
@@ -175,6 +201,7 @@ void *_dl_open(const char*pathname, int fd, int flag)
       }
       if (dyn_tab[i].d_tag==DT_PLTGOT) {
 	got=(unsigned long*)(m+dyn_tab[i].d_un.d_val);
+	ret->got=got;
       }
       if (dyn_tab[i].d_tag==DT_PLTREL) {
 	pltreltype=dyn_tab[i].d_un.d_val;
@@ -184,19 +211,26 @@ void *_dl_open(const char*pathname, int fd, int flag)
       }
       if (dyn_tab[i].d_tag==DT_JMPREL) {
 	jmprel=(m+dyn_tab[i].d_un.d_val);
-	dl_test->plt_rel=jmprel;
+	ret->plt_rel=jmprel;
       }
     }
     /* GOT */
-    got[0]+=(unsigned long)m;
+    got[0]+=(unsigned long)m;	/* reloc dynamic pointer */
     got[1]=(unsigned long)dl_test;
-    got[2]=(unsigned long)(_dl_jump);
+    got[2]=(unsigned long)(_dl_jump);	/* sysdep jump to _dl_rel */
     /* */
 
     if (pltreltype == DT_REL) {
       Elf32_Rel *tmp = jmprel;
       for (;(char*)tmp<(((char*)jmprel)+pltrelsize);(char*)tmp=((char*)tmp)+sizeof(Elf32_Rel)) {
 	*((unsigned long*)(m+tmp->r_offset))+=(unsigned long)m;
+	printf("rel @ %08x with type %d -> %d\n",tmp->r_offset,ELF32_R_TYPE(tmp->r_info),ELF32_R_SYM(tmp->r_info));
+      }
+    }
+    if (pltreltype == DT_RELA) {
+      Elf32_Rela *tmp = jmprel;
+      for (;(char*)tmp<(((char*)jmprel)+pltrelsize);(char*)tmp=((char*)tmp)+sizeof(Elf32_Rel)) {
+	*((unsigned long*)(m+tmp->r_offset))=(unsigned long)(m+tmp->r_addend);
 	printf("rel @ %08x with type %d -> %d\n",tmp->r_offset,ELF32_R_TYPE(tmp->r_info),ELF32_R_SYM(tmp->r_info));
       }
     }

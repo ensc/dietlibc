@@ -56,7 +56,13 @@ int _dl_search(char *buf, int len, const char *filename)
 {
   int fd;
 
-  /* 1. search the LD_RUN_PATH (from the executable */
+  /* 0. if filename contains a slash use filename to open */
+  if (strchr(filename,'/')) {
+    if ((fd=open(buf,O_RDONLY))!=-1) return fd;
+    if (filename[0]=='/') return -1;	/* absolute path stop it now */
+  }
+
+  /* 1. search the LD_RUN_PATH (from the executable) */
   if (_dl_search_rpath) {
     if ((fd=_dl_search_path(buf,len,_dl_search_rpath,strlen(_dl_search_rpath),filename))!=-1) return fd;
   }
