@@ -31,11 +31,17 @@
 int foo;
 
 int main(int argc,char *argv[]) {
+  char type[64];
+  int len;
+  printf("%d\n",sscanf("\n","%63s%n",type,&len));
+  printf("%s %d\n",type,len);
+#if 0
   char buf[100];
   char ip[16];
   memset(ip,0,16);
   printf("%p %p\n",inet_ntop(AF_INET6,ip,buf,100),buf);
   puts(buf);
+#endif
 #if 0
   struct addrinfo *ai;
   struct addrinfo hints;

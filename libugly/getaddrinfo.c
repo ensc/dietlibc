@@ -33,7 +33,7 @@ int getaddrinfo(const char *node, const char *service, const struct addrinfo *hi
 	h.h_name=0;
 	h.h_addr_list[0]=buf;
 	memset(buf,0,16);
-	if (hints && hints->ai_flags&AI_PASSIVE) {
+	if (hints && !(hints->ai_flags&AI_PASSIVE)) {
 	  if (family==AF_INET) {
 	    buf[0]=127; buf[3]=1;
 	  } else
@@ -56,7 +56,7 @@ int getaddrinfo(const char *node, const char *service, const struct addrinfo *hi
 	foo->ai.ai_next=0;
 	foo->ai.ai_socktype=SOCK_STREAM;
 	foo->ai.ai_protocol=IPPROTO_TCP;
-	foo->ai.ai_addrlen=family==PF_INET6?16:4;
+	foo->ai.ai_addrlen=family==PF_INET6?sizeof(struct sockaddr_in6):sizeof(struct sockaddr_in);
 	foo->ai.ai_addr=(struct sockaddr*)&foo->ip;
 	foo->ip.ip6.sin6_family=foo->ai.ai_family=family;
 	if (family==PF_INET6) {

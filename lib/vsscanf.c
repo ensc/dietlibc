@@ -213,10 +213,10 @@ inn_vsscanf:
 	if (!flag_discard)
 	{
 	  s=(char *)va_arg(arg_ptr,char*);
-	  ++n;
 	}
 	if (*(str=skip_ws(str)))
 	{
+	  ++n;
 	  while (width && (!isspace(*str)))
 	  {
 	    if (!flag_discard) *(s++)=*(str);

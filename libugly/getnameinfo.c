@@ -28,7 +28,7 @@ int getnameinfo(const struct sockaddr *sa, socklen_t salen, char *host,
   if (serv && servlen>0) {
     register short int port=(f==AF_INET6)?((struct sockaddr_in6*)sa)->sin6_port:((struct sockaddr_in*)sa)->sin_port;
     if (flags&NI_NUMERICSERV) {
-      __ltostr(serv,servlen,port,10,0);
+      __ltostr(serv,servlen,ntohs(port),10,0);
     } else {
       struct servent *s;
       if (!(s=getservbyport(port,flags&NI_DGRAM?"udp":"tcp")))
