@@ -3,7 +3,7 @@
 #include <errno.h>
 #include <stdlib.h>
 
-int execl( const char *path, ...) {
+int execl( const char *path,...) {
   va_list ap;
   int n,i;
   char **argv,*tmp;

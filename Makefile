@@ -2,7 +2,7 @@ ARCH=$(shell uname -m | sed 's/i[4-9]86/i386/')
 
 OBJDIR=bin-$(ARCH)
 
-all: $(OBJDIR) $(OBJDIR)/start.o $(OBJDIR)/dietlibc.a $(OBJDIR)/liblatin1.a $(OBJDIR)/elftrunc $(OBJDIR)/diet
+all: $(OBJDIR) $(OBJDIR)/start.o $(OBJDIR)/dietlibc.a $(OBJDIR)/liblatin1.a $(OBJDIR)/elftrunc $(OBJDIR)/diet r
 
 CFLAGS=-pipe
 CROSS=
@@ -146,3 +146,6 @@ ungetc.o: dietfeatures.h
 
 # these depend on dietfeatures.h for WANT_TZFILE_PARSER
 localtime_r.o: dietfeatures.h
+
+r: r.c
+	$(CROSS)$(CC) -g $(CFLAGS) -fno-builtin -nostdlib -Iinclude -o r r.c $(OBJDIR)/start.o $(OBJDIR)/dietlibc.a -lgcc -Wl,-Map,mapfile
