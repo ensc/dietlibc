@@ -4,6 +4,10 @@
 #include <errno.h>
 #include "dietfeatures.h"
 
+#ifndef O_NOFOLLOW
+#define O_NOFOLLOW 0
+#endif
+
 int mkstemp(char* template) {
   char *tmp=template+strlen(template)-6;
   int randfd;
@@ -17,7 +21,7 @@ int mkstemp(char* template) {
       int hexdigit=(random>>(i*5))&0x1f;
       tmp[i]=hexdigit>9?hexdigit+'a'-10:hexdigit+'0';
     }
-    res=open(template,O_CREAT|O_RDWR|O_EXCL,0600);
+    res=open(template,O_CREAT|O_RDWR|O_EXCL|O_NOFOLLOW,0600);
     if (res>=0) break;
   }
   close(randfd);
