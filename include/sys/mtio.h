@@ -54,6 +54,8 @@ struct mtop {
 
 /* structure for MTIOCGET - mag tape get status command */
 
+typedef int daddr_t;
+
 struct mtget {
   long int mt_type;	/* type of magtape device */
   long int mt_resid;	/* residual count: (not sure)
