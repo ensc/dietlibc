@@ -36,6 +36,7 @@ __unified_syscall:
 
 #include "../syscalls.s/__getpagesize.S"
 #include "../syscalls.s/__pread.S"
+#include "../syscalls.s/__pwrite.S"
 #include "../syscalls.s/__reboot.S"
 #include "../syscalls.s/_llseek.S"
 #include "../syscalls.s/access.S"
@@ -110,7 +111,6 @@ __unified_syscall:
 #include "../syscalls.s/personality.S"
 #include "../syscalls.s/pipe.S"
 #include "../syscalls.s/poll.S"
-#include "../syscalls.s/pwrite.S"
 #include "../syscalls.s/query_module.S"
 #include "../syscalls.s/init_module.S"
 #include "../syscalls.s/delete_module.S"

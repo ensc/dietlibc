@@ -23,6 +23,10 @@ __write1:
 	pushl	%edx
 	pushl	%eax
 	pushl	%ecx
+#ifdef __DYN_LIB
+	call 	write@PLT
+#else
 	call 	write			# alles ruf uf dn Stack und ab damit
+#endif
 	addl	$12,%esp		# und das leidvolle Putzen
 	ret
