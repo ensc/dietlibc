@@ -25,6 +25,7 @@ double difftime(time_t time1, time_t time0) __THROW __attribute__((const));
 #define CLOCKS_PER_SEC 1000000l
 
 extern long int timezone;
+extern int daylight;
 extern char* tzname[2];
 
 struct tm* localtime(const time_t* t) __THROW;

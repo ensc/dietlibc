@@ -7,5 +7,5 @@
 .long __you_tried_to_link_a_dietlibc_object_against_glibc
 .previous
 #else
-asm (".section .note\n\t.long __you_tried_to_link_a_dietlibc_object_against_glibc\n\t.previous");
+__asm__ (".section .note\n\t.long __you_tried_to_link_a_dietlibc_object_against_glibc\n\t.previous");
 #endif

@@ -102,9 +102,13 @@ extern char* strcpy2(char*a,char*b);
      __asm__ __volatile__ ("rdtsc" : "=a" (low) : : "edx")
 
 int main(int argc,char *argv[]) {
+  tzset();
+  printf("%d\n",daylight);
+#if 0
   struct in_addr addr;
   inet_aton("10.0.0.100\t",&addr);
   printf("%s\n",inet_ntoa(addr));
+#endif
 #if 0
   printf("%u\n",getuid32());
 #endif

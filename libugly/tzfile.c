@@ -26,8 +26,6 @@ void __maplocaltime(void) {
   tzlen=len;
 }
 
-char *tzset(void)	__attribute__((weak,alias("__maplocaltime")));
-
 static unsigned long __myntohl(const unsigned char* c) {
   return (((unsigned long)c[0])<<24) +
          (((unsigned long)c[1])<<16) +
@@ -75,7 +73,8 @@ time_t __tzfile_map(time_t t, int *isdst) {
 #endif
 
   tmp=tzfile+20+6*4;
-  for (i=0; i<tzh_timecnt; ++i)
+  daylight=(tzh_timecnt>0);
+  for (i=0; i<tzh_timecnt; ++i) {
     if ((time_t)__myntohl(tmp+i*4) >= t) {
       char* tz=tmp;
 /*      printf("match at %d\n",i); */
@@ -90,8 +89,16 @@ time_t __tzfile_map(time_t t, int *isdst) {
       tzname[0]=tz+tmp[5];
       return t+(timezone=__myntohl(tmp));
     }
+  }
   return t;
 }
+
+void tzset(void) {
+  int isdst;
+  __maplocaltime();
+  __tzfile_map(time(0),&isdst);
+}
+
 #else
 void tzset(void)	__attribute__((weak,alias("return0")));
 #endif
