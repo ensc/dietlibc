@@ -1,5 +1,5 @@
 
 CFLAGS+=-Os -fstrict-aliasing -fno-pic -mno-abicalls -BE
-VPATH:=mips:syscalls.s:lib:$(VPATH)
+VPATH:=mips:syscalls.s:$(VPATH)
 
 dietlibc.a: setjmp_aux.o

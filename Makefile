@@ -5,11 +5,13 @@ ARCH=$(shell uname -m | sed 's/i[4-9]86/i386/')
 CFLAGS=-pipe
 CROSS=
 
-VPATH=syscalls.c
+VPATH=lib:libstdio:libugly:syscalls.c
 
 SYSCALLOBJ=$(patsubst syscalls.s/%.S,%.o,$(wildcard syscalls.s/*.S))
 
 LIBOBJ=$(patsubst lib/%.c,%.o,$(wildcard lib/*.c))
+LIBUGLYOBJ=$(patsubst libugly/%.c,%.o,$(wildcard libugly/*.c))
+LIBSTDIOOBJ=$(patsubst libstdio/%.c,%.o,$(wildcard libstdio/*.c))
 
 include $(ARCH)/Makefile.add
 
@@ -32,7 +34,7 @@ CFLAGS += -Wall
 	$(CROSS)gcc -I. -Iinclude $(CFLAGS) -c $<
 #	$(CROSS)strip -x -R .comment -R .note $@
 
-DIETLIBC_OBJ = $(SYSCALLOBJ) $(LIBOBJ) \
+DIETLIBC_OBJ = $(SYSCALLOBJ) $(LIBOBJ) $(LIBSTDIOOBJ) $(LIBUGLYOBJ) \
 __longjmp.o setjmp.o unified.o mmap.o clone.o
 
 dietlibc.a: $(DIETLIBC_OBJ) start.o

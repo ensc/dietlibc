@@ -37,6 +37,14 @@ pid_t getpid(void) __attribute__((const)) __THROW;
 pid_t getppid(void) __THROW;
 int kill(pid_t pid, int sig) __THROW;
 
+int setpgid (pid_t pid,pid_t pgid) __THROW;
+pid_t getpgid (pid_t pid) __THROW;
+int setpgrp (void) __THROW;
+pid_t getpgrp (void) __THROW;
+pid_t setsid (void) __THROW;
+int dup (int oldfd) __THROW;
+int dup2 (int oldfd,int newfd) __THROW;
+
 int mknod(const char *pathname, mode_t mode, dev_t dev) __THROW;
 
 int getdents(unsigned int fd, struct dirent *dirp, unsigned int count) __THROW;
@@ -63,5 +71,7 @@ int gethostname(char *name, size_t len) __THROW;
 int usleep (unsigned long usec) __THROW;
 unsigned int alarm (unsigned int seconds) __THROW;
 int sync (void) __THROW;
+
+extern int daemon (int nochdir,int noclose) __THROW;
 
 #endif

@@ -1,6 +1,14 @@
 0.7.2:
   added several prototypes to already implemented functions and
     <sys/reboot.h>.  Thanks for Abraham for pointing this out.
+  added prototypes for process group and dup syscalls.  Thanks to
+    Abraham again.  He also contributed an implementation for daemon(),
+    an ugly BSD hack.  I decided to diversify the lib/ directory a
+    little and now created a libugly/ directory for stuff like system()
+    and daemon() ;-)
+  added libstdio and moved all that stdio crap from lib/ there.  The
+    idea is to start separating now what we will separate for shared
+    libraries anyway.
 
 0.7.1:
   optimized away the static arrays from __ltostr and __lltostr.
