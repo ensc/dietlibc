@@ -215,10 +215,14 @@ __extension__ (*({							   \
 
 #elif defined(__alpha__)
 
-typedef char* va_list;
+typedef struct {
+  char *__base;			/* Pointer to first integer register. */
+  int __offset;			/* Byte offset of args so far. */
+} va_list;
+
 #define va_start(pvar, firstarg)				\
   (__builtin_next_arg (firstarg),				\
-   (pvar) = __builtin_saveregs ())
+   (pvar) = *(va_list *) __builtin_saveregs ())
 #define va_end(__va)	((void) 0)
 
 enum {
@@ -249,8 +253,11 @@ enum {
     / __extension__ sizeof (long long)) * __extension__ sizeof (long long))
 
 #define va_arg(__va, __type)						\
-(*(((__va) += __va_tsize (__type)),					\
-   (__type *)(void *)((__va) - __va_tsize (__type))))
+(*(((__va).__offset += __va_tsize (__type)),				\
+   (__type *)(void *)((__va).__base + (__va).__offset			\
+	      - (((__builtin_classify_type (* (__type *) 0)		\
+		   == __real_type_class) && (__va).__offset <= (6 * 8))	\
+		 ? (6 * 8) + 8 : __va_tsize (__type)))))
 
 #else	/* !__sparc__ && !__powerpc__ && !__mips__ && !__alpha__*/
 
