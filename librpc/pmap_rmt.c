@@ -279,7 +279,7 @@ resultproc_t eachresult;		/* call with each result obtained */
 	mask = (1 << sock);
 #endif							/* def FD_SETSIZE */
 	nets = getbroadcastnets(addrs, sock, inbuf);
-	bzero((char *) &baddr, sizeof(baddr));
+	memset((char*)&baddr,0,sizeof(baddr));
 	baddr.sin_family = AF_INET;
 	baddr.sin_port = htons(PMAPPORT);
 	baddr.sin_addr.s_addr = htonl(INADDR_ANY);

@@ -76,7 +76,7 @@ xdrproc_t proc;					/* xdr routine to handle the object */
 				(void) fprintf(stderr, "xdr_reference: out of memory\n");
 				return (FALSE);
 			}
-			bzero(loc, (int) size);
+			memset(loc, 0, (int) size);
 			break;
 		}
 

@@ -40,10 +40,6 @@ char *strsep(char **stringp, const char *delim) __THROW;
 void* memset(void *s, int c, size_t n) __THROW;
 void* memchr(const void *s, int c, size_t n) __THROW;
 
-#define bzero(s,n) memset(s,0,n)
-#define bcopy(src,dest,n) memmove(dest,src,n)
-#define bcmp(a,b,n) memcmp(a,b,n)
-
 const char *strerror(int errnum) __THROW;
 const char *strsignal(int signum) __THROW;
 
@@ -56,5 +52,13 @@ size_t strlcpy(char *dst, const char *src, size_t size) __THROW;
 size_t strlcat(char *dst, const char *src, size_t size) __THROW;
 
 int strcoll(const char *s1, const char *s2) __THROW;
+
+#ifdef _BSD_SOURCE
+#define bzero(s,n) memset(s,0,n)
+#define bcopy(src,dest,n) memmove(dest,src,n)
+#define bcmp(a,b,n) memcmp(a,b,n)
+#define index(a,b) strchr(a,b)
+#define rindex(a,b) strrchr(a,b)
+#endif
 
 #endif
