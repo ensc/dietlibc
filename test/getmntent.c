@@ -1,7 +1,7 @@
 #include <mntent.h>
 
 main() {
-  FILE* f=fopen("/etc/fstab","r");
+  FILE* f=fopen("test/fstab","r");
   struct mntent* e;
   while ((e=getmntent(f))) {
 #if 0

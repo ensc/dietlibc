@@ -20,7 +20,7 @@ struct mntent *getmntent(FILE *filep) {
       case 4: m.mnt_freq=strtol(tmp,&tmp,0); if (*tmp!=' ' && *tmp!='\t') continue; break;
       case 5: m.mnt_passno=strtol(tmp,&tmp,0); if (*tmp=='\n') return &m; break;
       }
-      while (*tmp && *tmp!=' ' && *tmp!='\n') ++tmp;
+      while (*tmp && *tmp!=' ' && *tmp!='\n' && *tmp!='\t') ++tmp;
       if (*tmp) {
 	if (num<4) *tmp++=0;
 	while (*tmp==' ' || *tmp=='\t') ++tmp;
