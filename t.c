@@ -111,9 +111,12 @@ int traverse(const char* file, const struct stat* sb, int flag) {
 #endif
 
 int main(int argc,char *argv[]) {
+  puts(getpass("Password: "));
+#if 0
   struct timeval a,b;
   a.tv_sec=0; a.tv_usec=0;
   printf("%d\n",adjtime(&a,&b));
+#endif
 #if 0
   fd_set f;
   struct timeval tv;

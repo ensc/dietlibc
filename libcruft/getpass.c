@@ -9,7 +9,7 @@ char *getpass(const char* prompt) {
   int out,in=open("/dev/tty",O_RDWR);
   int doclose=(in>=0);
   static char buf[PASS_MAX];
-  if (doclose) { in=0; out=2; } else out=in;
+  if (!doclose) { in=0; out=2; } else out=in;
   if (!tcgetattr(in,&old)) {
     tmp=old;
     tmp.c_lflag &= ~(ECHO|ISIG);
