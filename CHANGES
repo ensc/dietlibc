@@ -27,7 +27,12 @@
   add sysinfo, recvmsg, sendmsg.
   add endmntent, getmntent, setmntent.
   fix fnmatch (thanks, Guillaume Cottenceau!)
-  add setenv
+  add setenv.
+  remove __restrict from mntent.h, add __restrict__ removal alias for
+    older gcc versions in sys/cdefs.h.
+  add rlim_t, sig_atomic_t declarations.
+  add sigsetjmp #define for __sigsetjmp (oops).
+    (Thanks to Chris Siebenmann for these three bug reports)
 
 0.9:
   fixed initgroups (oops)

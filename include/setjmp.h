@@ -115,7 +115,10 @@ extern void siglongjmp (sigjmp_buf __env, int __val)
      __THROW __attribute__ ((__noreturn__));
 
 #define setjmp(env) __sigsetjmp(env,0)
+#define sigsetjmp(env) sigsetjmp(env,0)
 
 #endif
+
+typedef int sig_atomic_t;
 
 #endif

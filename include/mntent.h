@@ -38,33 +38,33 @@ struct mntent
 
 /* Prepare to begin reading and/or writing mount table entries from the
    beginning of FILE.  MODE is as for `fopen'.  */
-extern FILE *setmntent (__const char *__file, __const char *__mode) __THROW;
+extern FILE *setmntent (const char *file, const char *mode) __THROW;
 
 /* Read one mount table entry from STREAM.  Returns a pointer to storage
    reused on the next call, or null for EOF or error (use feof/ferror to
    check).  */
-extern struct mntent *getmntent (FILE *__stream) __THROW;
+extern struct mntent *getmntent (FILE* stream) __THROW;
 
 #ifdef __USE_MISC
 /* Reentrant version of the above function.  */
-extern struct mntent *getmntent_r (FILE *__restrict __stream,
-				   struct mntent *__restrict __result,
-				   char *__restrict __buffer,
-				   int __bufsize) __THROW;
+extern struct mntent *getmntent_r (FILE* stream,
+				   struct mntent* result,
+				   char* buffer,
+				   int bufsize) __THROW;
 #endif
 
 /* Write the mount table entry described by MNT to STREAM.
    Return zero on success, nonzero on failure.  */
-extern int addmntent (FILE *__restrict __stream,
-		      __const struct mntent *__restrict __mnt) __THROW;
+extern int addmntent (FILE* stream,
+		      const struct mntent* mnt) __THROW;
 
 /* Close a stream opened with `setmntent'.  */
-extern int endmntent (FILE *__stream) __THROW;
+extern int endmntent (FILE *stream) __THROW;
 
 /* Search MNT->mnt_opts for an option matching OPT.
    Returns the address of the substring, or null if none found.  */
-extern char *hasmntopt (__const struct mntent *__mnt,
-			__const char *__opt) __THROW;
+extern char *hasmntopt (const struct mntent *__mnt,
+			const char *opt) __THROW;
 
 
 __END_DECLS

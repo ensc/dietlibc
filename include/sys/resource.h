@@ -11,4 +11,6 @@ int getrlimit (int resource, struct rlimit *rlim);
 int getrusage (int who, struct rusage *usage);
 int setrlimit (int resource, const struct rlimit *rlim);
 
+typedef unsigned long rlim_t;
+
 #endif
