@@ -72,7 +72,8 @@
   Add a few i386 math routines contributed by Frank Klemm.
   Fixed getservent (did not allow _ and - in the aliases).
     Thanks, Oden Eriksson
-  Added a float.h (ugh!)
+  Added a float.h so configure believes we have ANSI header files.
+  Fix a lot more stdio bugs that Uwe Ohse pointed out.
 
 0.10:
   update getpagesize.
