@@ -56,5 +56,12 @@ struct arg_scanf {
 
 int __v_scanf(struct arg_scanf* fn, const unsigned char *format, va_list arg_ptr);
 
+struct arg_printf {
+  void *data;
+  int (*put)(void*,size_t,size_t,void*);
+};
+
+int __v_printf(struct arg_printf* fn, const unsigned char *format, va_list arg_ptr);
+
 extern FILE *__stdio_root;
 
