@@ -1,7 +1,6 @@
 #include "dietfeatures.h"
 #include "PIC.h"
 
-#ifdef __i386__
 .text
 .global _start
 _start:
@@ -49,5 +48,4 @@ _start:
 	hlt	/* die now ! will ya ... */
 .Lstart:
 	.size	 _start,.Lstart-_start
-#endif
 

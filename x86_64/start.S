@@ -1,6 +1,5 @@
 #include "dietfeatures.h"
 
-#ifdef __x86_64__
 .text
 .global _start
 _start:
@@ -36,5 +35,4 @@ _start:
 	hlt
 .Lstart:
 	.size	 _start,.Lstart-_start
-#endif
 
