@@ -2,6 +2,7 @@
 #define _SYS_MTIO_H
 
 #include <sys/ioctl.h>
+#include <sys/types.h>	/* for daddr_t */
 
 __BEGIN_DECLS
 
@@ -55,8 +56,6 @@ struct mtop {
 #define MTMKPART  34	/* Format the tape with one or two partitions */
 
 /* structure for MTIOCGET - mag tape get status command */
-
-typedef int daddr_t;
 
 struct mtget {
   long int mt_type;	/* type of magtape device */

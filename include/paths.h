@@ -20,4 +20,9 @@
 /* puke */
 #define _PATH_MAILDIR	"/var/mail"
 
+#define _PATH_TTY	"/dev/tty"
+#define _PATH_MNTTAB	"/etc/fstab"
+#define _PATH_MOUNTED	"/etc/mtab"
+#define	_PATH_DEV	"/dev/"
+
 #endif

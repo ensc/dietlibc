@@ -228,6 +228,10 @@ typedef void (*sighandler_t)(int);
 typedef sighandler_t sig_t;
 #endif
 
+#ifdef _GNU_SOURCE
+typedef sighandler_t __sighandler_t;	/* shoot the glibc people! */
+#endif
+
 #define SIG_DFL ((sighandler_t)0)	/* default signal handling */
 #define SIG_IGN ((sighandler_t)1)	/* ignore signal */
 #define SIG_ERR ((sighandler_t)-1)	/* error return from signal */

@@ -2,6 +2,9 @@
 
 extern const short  __spm [];
 
+/* apparently mktime is expected to treat the time as local time.
+ * I don't understand what that is supposed to mean, though */
+
 time_t  mktime ( register struct tm* const t )
 {
     register time_t  day;
@@ -24,6 +27,8 @@ time_t  mktime ( register struct tm* const t )
     i = 60;
     return ((day + t->tm_hour) * i + t->tm_min) * i + t->tm_sec;
 }
+
+time_t timelocal(struct tm* const t) __attribute__((alias("mktime")));
 
 #if 0
 

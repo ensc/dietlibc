@@ -35,6 +35,8 @@
   replace qsort with new quicksort with three-way partitioning
   parisc start.S fix (Gerrit Pape)
   check fflush return code (Manuel Novoa III)
+  add el-cheapo strptime and more BSD legacy crap to get more of
+    e2fsutils, dump and util-linux compiled
 
 0.23:
   update sys/soundcard.h

@@ -131,6 +131,13 @@ typedef uint32_t ulong __attribute_dontuse__;
 typedef uint32_t nlong __attribute_dontuse__;
 typedef uint32_t ntime __attribute_dontuse__;
 typedef uint16_t nshort __attribute_dontuse__;
+
+/* never heard of these two, but dump uses them */
+typedef int64_t quad_t __attribute_dontuse__;
+typedef uint64_t u_quad_t __attribute_dontuse__;
+typedef long daddr_t __attribute_dontuse__;
+
+typedef daddr_t __daddr_t __attribute_dontuse__;
 #endif
 
 #ifdef _GNU_SOURCE

@@ -39,6 +39,13 @@ struct tm* gmtime_r(const time_t* t, struct tm* r) __THROW;
 
 clock_t clock(void);
 
+char *strptime(const char *s, const char *format, struct tm *tm);
+
+#ifdef _GNU_SOURCE
+time_t timegm(struct tm *timeptr) __THROW __attribute_dontuse__ __pure ;
+time_t timelocal(struct tm *timeptr) __THROW __attribute_dontuse__ __pure;
+#endif
+
 __END_DECLS
 
 #endif
