@@ -1,4 +1,5 @@
 0.17:
+  fix several bugs in getservent_r
 
 0.16:
   "diet -v" or "diet -Os" segfaulted without further arguments.

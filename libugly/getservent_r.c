@@ -36,8 +36,8 @@ again:
     if (__ps.cur>=__ps.buflen) { if (i==2) break; else goto error; }
     j=__parse_nws(&__ps);
     if (!isblank(found=__ps.buffirst[__ps.cur+j])) {
-      if (i==2) break;	/* it's ok, no (more) aliases necessary */
-      if (i>1 || found!='\n') {
+      if (i==2 && found=='#') break;
+      if (found=='#' || (i>1 && found!='\n')) {
 parseerror:
 	while (__ps.cur+j<__ps.buflen) {
 	  if (__ps.buffirst[__ps.cur+j]=='\n') {
@@ -46,12 +46,14 @@ parseerror:
 	  }
 	  ++j;
 	}
+	goto error;
       }
     }
     switch (i) {
     case 0:
       res->s_name=buf+n;
 copy:
+      if (!j) goto parseerror;
       if ((size_t)buflen<=n+j) goto error;
       memcpy(buf+n,__ps.buffirst+__ps.cur,j);
       buf[n+j]=0;
@@ -62,7 +64,9 @@ copy:
       {
 	int k;
 	k=scan_ulong(__ps.buffirst+__ps.cur,&l);
-	if (__ps.buffirst[__ps.cur+k]!='/') goto parseerror;
+	if (__ps.buffirst[__ps.cur+k]!='/') {
+	  goto parseerror;
+	}
 	res->s_port=htons(l);
 	res->s_proto=buf+n;
 	j-=k+1; __ps.cur+=k+1;
