@@ -76,6 +76,12 @@ void closelog(void) {
 #endif
 
 int main(int argc,char *argv[]) {
+  int i;
+  for (i=0; i<255; ++i) {
+    int a=isalpha(i);
+    int b=(i>='a' && i<='z') || (i>='A' && i<='Z');
+    if (a!=b) printf("%d: %d %d\n",i,a,b);
+  }
 #if 0
   char* name;
   int ptyfd,ttyfd;
@@ -121,7 +127,7 @@ int main(int argc,char *argv[]) {
 #endif
 //  putchar('c');
 //  write(1,"fnord\n",6);
-#if 1
+#if 0
   struct addrinfo *ai;
   getaddrinfo("nagus","22",0,&ai);
 #endif
