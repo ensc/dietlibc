@@ -100,4 +100,6 @@ char *ptsname (int fd) __THROW;
 
 #define RAND_MAX 	((1<<31) -2)
 
+#define MB_CUR_MAX 1
+
 #endif
