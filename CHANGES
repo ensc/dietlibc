@@ -9,6 +9,7 @@
   Port parts of glibc test suite (Florian Westphal)
     Now we need more manpower to fix the bugs it uncovers ;-)
   add linux/if_ether.h and net/ethernet.h for sniffers
+  faster string routines and a small fix for alloc (Thomas Ogrisegg)
 
 0.24:
   work around incompatible Linux select() modifying the timeout in

@@ -1,14 +1,49 @@
-#include <sys/types.h>
+/* fast memcpy -- Copyright (C) 2003 Thomas M. Ogrisegg <tom@hi-tek.fnord.at> */
 
-/* gcc is broken and has a non-SUSv2 compliant internal prototype.
- * This causes it to warn about a type mismatch here.  Ignore it. */
-void* memcpy(void* dst, const void* src, size_t count) {
-  register char *d=dst;
-  register const char *s=src;
-  ++count;	/* this actually produces better code than using count-- */
-  while (__likely(--count)) {
-    *d = *s;
-    ++d; ++s;
-  }
-  return dst;
+#include <string.h>
+#include "dietfeatures.h"
+#include "dietstring.h"
+
+void *
+memcpy (void *dst, const void *src, size_t n)
+{
+    void           *res = dst;
+    unsigned char  *c1, *c2;
+#ifdef WANT_SMALL_STRING_ROUTINES
+    c1 = (unsigned char *) dst;
+    c2 = (unsigned char *) src;
+    while (n--) *c1++ = *c2++;
+    return (res);
+#else
+    int             tmp;
+    unsigned long  *lx1 = NULL;
+    const unsigned long *lx2 = NULL;
+
+    if (!UNALIGNED(dst, src) && n > sizeof(unsigned long)) {
+
+	if ((tmp = STRALIGN(dst))) {
+	    c1 = (unsigned char *) dst;
+	    c2 = (unsigned char *) src;
+	    while (tmp-- && n--)
+		*c1++ = *c2++;
+	    if (n == (size_t) - 1)
+		return (res);
+	}
+
+	lx1 = (unsigned long *) dst;
+	lx2 = (unsigned long *) src;
+
+	for (; n >= sizeof(unsigned long); n -= sizeof(unsigned long))
+	    *lx1++ = *lx2++;
+    }
+
+    if (n) {
+	c1 = (unsigned char *) (lx1?lx1:dst);
+	c2 = (unsigned char *) (lx1?lx2:src);
+	while (n--)
+	    *c1++ = *c2++;
+    }
+
+    return (res);
+#endif
 }

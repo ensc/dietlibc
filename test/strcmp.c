@@ -13,5 +13,8 @@ int main() {
   if (strcmp(buf,buf)) die("strcmp say a != a");
   if (strcmp(buf,buf2)>=0) die("strcmp said fnord > fnort");
   if (strcmp(buf2,buf)<=0) die("strcmp said fnort < fnord");
+  if (strcmp(buf+1,buf2+1)>=0) die("unaligned strcmp is broken");
+  if (strcmp(buf+2,buf2+2)>=0) die("unaligned strcmp is broken");
+  if (strcmp(buf+3,buf2+3)>=0) die("unaligned strcmp is broken");
   return 0;
 }
