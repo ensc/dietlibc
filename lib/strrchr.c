@@ -16,3 +16,5 @@ char *strrchr(const char *t, int c) {
   }
   return (char*)l;
 }
+
+char *rindex(const char *t,int c)	__attribute__((weak,alias("strrchr")));
