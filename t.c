@@ -12,7 +12,9 @@
 #include <arpa/inet.h>
 #include <sys/sem.h>
 #include <sys/shm.h>
+#include <math.h>
 
+#if 0
 int compint(const void *a,const void *b) {
 /*  printf("comparing %d with %d\n",*(int*)a,*(int*)b); */
   return (*(int*)a-*(int*)b);
@@ -31,8 +33,14 @@ static unsigned int seed=1;
 static int rand() {
   return ((seed = seed * 1103515245 + 12345) % ((unsigned int)RAND_MAX + 1));
 }
+#endif
 
 int main(int argc,char *argv[]) {
+  double d=0.0;
+  long long t=0x12345678ABCDEF01;
+  d/=0.0;
+  printf("%d %llx\n",__isnan(d),t,*(long long*)&d);
+#if 0
   int i,j;
   long a,b,c;
   int *res;
@@ -55,6 +63,7 @@ int main(int argc,char *argv[]) {
   if (*res!=j)
     printf("besearch does not work, returned %p (%d) instead of %p (%d)\n",res,res?*res:-1,array+LOOKFOR,j);
 /*  printf("array={%d,%d,%d,%d,%d}\n",array[0],array[1],array[2],array[3],array[4]); */
+#endif
 #if 0
   struct in_addr duh;
   printf("%d\n",inet_aton(argv[1]?argv[1]:"10.0.0.1",&duh));

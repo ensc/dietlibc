@@ -44,6 +44,7 @@ int fputs(const char *s, FILE *stream) __THROW;
 #define putchar(c) fputc(c,stdout)
 
 #define getchar() fgetc(stdin)
+#define getc(stream) fgetc(stream)
 
 int puts(const char *s) __THROW;
 
