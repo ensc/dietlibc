@@ -50,6 +50,9 @@ extern double atof(const char *c);
 
 
 int main(int argc,char *argv[]) {
+  printf("%d\n",clock());
+  sleep(1);
+  printf("%d\n",clock());
 #if 0
   struct hostent * host;
   struct in_addr i;
@@ -95,7 +98,7 @@ int main(int argc,char *argv[]) {
   printf("%d\n",setenv("foo","bar",1));
   execlp("printenv","printenv","foo",0);
 #endif
-#if 1
+#if 0
   printf("%d\n",fnmatch("*c*","bin",0));
   if (!fnmatch("s*", "sub", 0))
     printf("s* sub\n");

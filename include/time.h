@@ -21,4 +21,6 @@ time_t time(time_t *t) __THROW;
 
 int stime(time_t *t) __THROW;
 
+#define CLOCKS_PER_SEC 1000000l
+
 #endif
