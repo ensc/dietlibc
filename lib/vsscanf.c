@@ -226,6 +226,7 @@ inn_vsscanf:
 	}
 	break;
 
+#ifdef WANT_CHARACTER_CLASSES_IN_SCANF
       case '[':
 	{
 	  char cset[256];
@@ -284,6 +285,7 @@ inn_vsscanf:
 	break;
       }
       break;
+#endif
 
     default:
       if (prevfmt<format) {

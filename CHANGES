@@ -4,6 +4,7 @@
   imported vfprintf fix from James Antill.
   add fnmatch
   change index, rindex and bcmp as weak ELF symbols (were #defined before)
+  Olaf added character classes to *scanf.
 
 0.8:
   vsnprintf(0,...) estimated the length of strings with a padding width
