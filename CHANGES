@@ -47,6 +47,7 @@
   add getusershell, setusershell, endusershell (for vs_ftpd)
   add prctl, dirfd (also for vs_ftpd)
   fixed strftime (was completely hosed)
+  added real make install target
 
 0.11:
   fix major oops in DNS routines (only with WANT_FULL_RESOLV_CONF enabled).
