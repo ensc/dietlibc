@@ -49,14 +49,21 @@ static char sccsid[] = "@(#)svc_udp.c 1.24 87/08/11 Copyr 1984 Sun Micro";
 
 #define rpc_buffer(xprt) ((xprt)->xp_p1)
 
-static bool_t svcudp_recv();
-static bool_t svcudp_reply();
-static enum xprt_stat svcudp_stat();
-static bool_t svcudp_getargs();
-static bool_t svcudp_freeargs();
-static void svcudp_destroy();
+static bool_t svcudp_recv(register SVCXPRT *xprt, struct rpc_msg *msg);
+static bool_t svcudp_reply(register SVCXPRT *xprt, struct rpc_msg *msg);
+static enum xprt_stat svcudp_stat(SVCXPRT *xprt);
+static bool_t svcudp_getargs(SVCXPRT *xprt, xdrproc_t xdr_args, char* args_ptr);
+static bool_t svcudp_freeargs(SVCXPRT *xprt, xdrproc_t xdr_args, char* args_ptr);
+static void svcudp_destroy(register SVCXPRT *xprt);
 
-static struct xp_ops svcudp_op;
+static struct xp_ops svcudp_op = {
+        svcudp_recv,
+        svcudp_stat,
+        svcudp_getargs,
+        svcudp_reply,
+        svcudp_freeargs,
+        svcudp_destroy
+};
 
 /*
  * kept in xprt->xp_p2
@@ -175,7 +182,7 @@ struct rpc_msg *msg;
 					&(xprt->xp_addrlen));
 	if (rlen == -1 && errno == EINTR)
 		goto again;
-	if (rlen < 4 * sizeof(unsigned long))
+	if (rlen < (int)(4 * sizeof(unsigned long)))
 		return (FALSE);
 	xdrs->x_op = XDR_DECODE;
 	XDR_SETPOS(xdrs, 0);
@@ -325,7 +332,7 @@ struct udp_cache {
  * Enable use of the cache. 
  * Note: there is no disable.
  */
-int svcudp_enablecache(SVCXPRT* transp, unsigned long size)
+static int svcudp_enablecache(SVCXPRT* transp, unsigned long size)
 {
 	struct svcudp_data *su = su_data(transp);
 	struct udp_cache *uc;
@@ -455,13 +462,4 @@ static int cache_get(SVCXPRT* xprt, struct rpc_msg* msg, char** replyp, unsigned
 	uc->uc_addr = xprt->xp_raddr;
 	return (0);
 }
-
-static struct xp_ops svcudp_op = {
-	svcudp_recv,
-	svcudp_stat,
-	svcudp_getargs,
-	svcudp_reply,
-	svcudp_freeargs,
-	svcudp_destroy
-};
 

@@ -50,12 +50,18 @@ static char sccsid[] = "@(#)clnt_udp.c 1.39 87/08/11 Copyr 1984 Sun Micro";
 /*
  * UDP bases client side rpc operations
  */
-static enum clnt_stat clntudp_call();
-static void clntudp_abort();
-static void clntudp_geterr();
-static bool_t clntudp_freeres();
-static bool_t clntudp_control();
-static void clntudp_destroy();
+static enum clnt_stat clntudp_call(register CLIENT *cl,         /* client handle */
+		unsigned long proc,                             /* procedure number */
+		xdrproc_t xargs,                                /* xdr routine for args */
+		char* argsp,                                    /* pointer to args */
+		xdrproc_t xresults,                             /* xdr routine for results */
+		char* resultsp,                                 /* pointer to results */
+		struct timeval utimeout);
+static void clntudp_abort(void);
+static void clntudp_geterr(CLIENT *, struct rpc_err *);
+static bool_t clntudp_freeres(CLIENT *, xdrproc_t, char*);
+static bool_t clntudp_control(CLIENT *, int, char *);
+static void clntudp_destroy(CLIENT *);
 
 static struct clnt_ops udp_ops = {
 	clntudp_call,
@@ -113,7 +119,7 @@ unsigned int sendsz;
 unsigned int recvsz;
 {
 	CLIENT *cl;
-	register struct cu_data *cu;
+	register struct cu_data *cu = NULL;
 	struct timeval now;
 	struct rpc_msg call_msg;
 

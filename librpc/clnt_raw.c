@@ -57,12 +57,15 @@ static struct clntraw_private {
 	unsigned int mcnt;
 } *clntraw_private;
 
-static enum clnt_stat clntraw_call();
-static void clntraw_abort();
-static void clntraw_geterr();
-static bool_t clntraw_freeres();
-static bool_t clntraw_control();
-static void clntraw_destroy();
+static enum clnt_stat clntraw_call(CLIENT *h, unsigned long proc, 
+		xdrproc_t xargs, char* argsp, xdrproc_t xresults, 
+		char* resultsp, struct timeval timeout);
+static void clntraw_abort(void);
+static void clntraw_geterr(CLIENT *, struct rpc_err *);
+static bool_t clntraw_freeres(CLIENT *cl, xdrproc_t xdr_res, char* res_ptr);
+
+static bool_t clntraw_control(CLIENT *, int, char *);
+static void clntraw_destroy(CLIENT *);
 
 static struct clnt_ops client_ops = {
 	clntraw_call,
@@ -192,7 +195,7 @@ struct timeval timeout;
 	return (status);
 }
 
-static void clntraw_geterr()
+static void clntraw_geterr(CLIENT *x, struct rpc_err *x1)
 {
 }
 
@@ -214,16 +217,16 @@ char* res_ptr;
 	return ((*xdr_res) (xdrs, res_ptr));
 }
 
-static void clntraw_abort()
+static void clntraw_abort(void)
 {
 }
 
-static bool_t clntraw_control()
+static bool_t clntraw_control(CLIENT *x, int x1, char *x2)
 {
 	return (FALSE);
 }
 
-static void clntraw_destroy()
+static void clntraw_destroy(CLIENT *x)
 {
 }
 

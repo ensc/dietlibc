@@ -54,16 +54,16 @@ static struct proglst {
 	xdrproc_t p_inproc, p_outproc;
 	struct proglst *p_nxt;
 } *proglst;
-static void universal();
+static void universal(struct svc_req *rqstp, SVCXPRT *transp);
 static SVCXPRT *transp;
 struct proglst *pl;
 
-int registerrpc(int prognum, int versnum, int procnum, char *(*progname)(), xdrproc_t inproc, xdrproc_t outproc)
+static int registerrpc(int prognum, int versnum, int procnum, char *(*progname)(), xdrproc_t inproc, xdrproc_t outproc)
 {
 
 	if (procnum == NULLPROC) {
 		(void) fprintf(stderr,
-					   "can't reassign procedure number %d\n", NULLPROC);
+					   "can't reassign procedure number %ld\n", NULLPROC);
 		return (-1);
 	}
 	if (transp == 0) {

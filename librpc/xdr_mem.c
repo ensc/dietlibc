@@ -65,7 +65,9 @@ static struct xdr_ops xdrmem_ops = {
 	xdrmem_getpos,
 	xdrmem_setpos,
 	xdrmem_inline,
-	xdrmem_destroy
+	xdrmem_destroy,
+	NULL,
+	NULL
 };
 
 
@@ -129,8 +131,7 @@ xdrmem_putbytes (XDR *xdrs, const char *addr, unsigned int len)
   return (TRUE);
 }
 
-static unsigned int
-xdrmem_getpos (const XDR *xdrs)
+static unsigned int xdrmem_getpos (const XDR *xdrs)
 {
 	return ((unsigned long) xdrs->x_private - (unsigned long) xdrs->x_base);
 }

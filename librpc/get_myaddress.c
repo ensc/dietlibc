@@ -42,6 +42,7 @@ static char sccsid[] =
 
 #include <rpc/types.h>
 #include <rpc/pmap_prot.h>
+#include <rpc/clnt.h>
 #include <sys/socket.h>
 #include <stdio.h>
 //#include <net/if.h>

@@ -74,7 +74,9 @@ static struct xdr_ops xdrrec_ops = {
 	xdrrec_getpos,
 	xdrrec_setpos,
 	xdrrec_inline,
-	xdrrec_destroy
+	xdrrec_destroy,
+	NULL,
+	NULL
 };
 
 
@@ -370,7 +372,7 @@ xdrrec_getbytes (XDR *xdrs, char *addr, unsigned int len)
 				return (FALSE);
 			continue;
 		}
-		current = (len < current) ? len : current;
+		current = ((int)len < current) ? len : current;
 		if (!get_input_bytes(rstrm, addr, current))
 			return (FALSE);
 		addr += current;
@@ -476,7 +478,7 @@ static int32_t *xdrrec_inline(XDR* xdrs, unsigned int len)
 		break;
 
 	case XDR_DECODE:
-		if ((len <= rstrm->fbtbc) &&
+		if (((long)len <= rstrm->fbtbc) &&
 			((rstrm->in_finger + len) <= rstrm->in_boundry)) {
 			buf = (int32_t *) rstrm->in_finger;
 			rstrm->fbtbc -= len;

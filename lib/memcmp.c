@@ -6,8 +6,9 @@ int memcmp(const void *dst, const void *src, size_t count) {
   register int r;
   register const char *d=dst;
   register const char *s=src;
-  while (count--) {
-    if ((r=(*d - *s)))
+  ++count;
+  while (__likely(--count)) {
+    if (__unlikely(r=(*d - *s)))
       return r;
     ++d;
     ++s;

@@ -80,7 +80,7 @@ register des_block *blkp;
 /*
  * XDR the MSG_ACCEPTED part of a reply message union
  */
-bool_t xdr_accepted_reply(xdrs, ar)
+static bool_t xdr_accepted_reply(xdrs, ar)
 register XDR *xdrs;
 register struct accepted_reply *ar;
 {
@@ -106,7 +106,7 @@ register struct accepted_reply *ar;
 /*
  * XDR the MSG_DENIED part of a reply message union
  */
-bool_t xdr_rejected_reply(xdrs, rr)
+static bool_t xdr_rejected_reply(xdrs, rr)
 register XDR *xdrs;
 register struct rejected_reply *rr;
 {

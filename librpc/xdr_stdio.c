@@ -47,14 +47,14 @@ static char sccsid[] =
 #include <stdio.h>
 #include <rpc/xdr.h>
 
-static bool_t xdrstdio_getlong();
-static bool_t xdrstdio_putlong();
-static bool_t xdrstdio_getbytes();
-static bool_t xdrstdio_putbytes();
-static unsigned int xdrstdio_getpos();
-static bool_t xdrstdio_setpos();
-static int32_t *xdrstdio_inline();
-static void xdrstdio_destroy();
+static bool_t xdrstdio_getlong(XDR *xdrs, register long *lp);
+static bool_t xdrstdio_putlong(XDR *xdrs, const long *lp);
+static bool_t xdrstdio_getbytes(XDR *xdrs, char* addr, unsigned int len);
+static bool_t xdrstdio_putbytes(XDR *xdrs, const char* addr, unsigned int len);
+static unsigned int xdrstdio_getpos(const XDR *xdrs);
+static bool_t xdrstdio_setpos(XDR *xdrs, unsigned int pos);
+static int32_t *xdrstdio_inline(XDR* xdrs, unsigned int len);
+static void xdrstdio_destroy(register XDR *xdrs);
 
 /*
  * Ops vector for stdio type XDR
@@ -67,7 +67,9 @@ static struct xdr_ops xdrstdio_ops = {
 	xdrstdio_getpos,			/* get offset in the stream */
 	xdrstdio_setpos,			/* set offset in the stream */
 	xdrstdio_inline,			/* prime stream for inline macros */
-	xdrstdio_destroy			/* destroy stream */
+	xdrstdio_destroy,			/* destroy stream */
+	NULL,
+	NULL
 };
 
 
@@ -116,7 +118,7 @@ register long *lp;
 
 static bool_t xdrstdio_putlong(xdrs, lp)
 XDR *xdrs;
-long *lp;
+const long *lp;
 {
 
 #ifndef mc68000
@@ -144,7 +146,7 @@ unsigned int len;
 
 static bool_t xdrstdio_putbytes(xdrs, addr, len)
 XDR *xdrs;
-char* addr;
+const char* addr;
 unsigned int len;
 {
 
@@ -155,7 +157,7 @@ unsigned int len;
 }
 
 static unsigned int xdrstdio_getpos(xdrs)
-XDR *xdrs;
+const XDR *xdrs;
 {
 
 	return ((unsigned int) ftell((FILE *) xdrs->x_private));

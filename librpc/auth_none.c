@@ -46,10 +46,10 @@ static char sccsid[] =
 #include <rpc/auth.h>
 #define MAX_MARSHEL_SIZE 20
 
-static void authnone_verf();
-static bool_t authnone_validate();
-static bool_t authnone_refresh();
-static void authnone_destroy();
+static void authnone_verf(AUTH *);
+static bool_t authnone_validate(AUTH *, struct opaque_auth *);
+static bool_t authnone_refresh(AUTH *);
+static void authnone_destroy(AUTH *);
 static bool_t authnone_marshal(AUTH *client, XDR *xdrs);
 
 static struct auth_ops ops = {
@@ -104,23 +104,23 @@ XDR *xdrs;
 										ap->marshalled_client, ap->mcnt));
 }
 
-static void authnone_verf()
+static void authnone_verf(AUTH *x)
 {
 }
 
-static bool_t authnone_validate()
+static bool_t authnone_validate(AUTH *x, struct opaque_auth *x1)
 {
 
 	return (TRUE);
 }
 
-static bool_t authnone_refresh()
+static bool_t authnone_refresh(AUTH *x)
 {
 
 	return (FALSE);
 }
 
-static void authnone_destroy()
+static void authnone_destroy(AUTH *x)
 {
 }
 

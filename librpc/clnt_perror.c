@@ -48,7 +48,7 @@ static char sccsid[] =
 //extern char *sys_errlist[];
 //static char *auth_errmsg();
 
-extern char *strcpy();
+//extern char *strcpy();
 
 #if 0
 static char *buf;

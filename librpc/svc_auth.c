@@ -56,7 +56,7 @@ static char sccsid[] =
  *
  */
 
-enum auth_stat _svcauth_null();		/* no authentication */
+enum auth_stat _svcauth_null(void);		/* no authentication */
 enum auth_stat _svcauth_unix();		/* unix style (uid, gids) */
 enum auth_stat _svcauth_short();	/* short hand unix style */
 
@@ -106,7 +106,7 @@ struct rpc_msg *msg;
 	return (AUTH_REJECTEDCRED);
 }
 
-enum auth_stat _svcauth_null( /*rqst, msg */ )
+enum auth_stat _svcauth_null( void/*rqst, msg */ )
 	/*struct svc_req *rqst;
 	   struct rpc_msg *msg; */
 {

@@ -34,12 +34,12 @@ static char sccsid[] =
 #endif
 
 #include <unistd.h>
-
+#include <rpc/clnt.h>
 /*
  * Cache the result of getdtablesize(), so we don't have to do an
  * expensive system call every time.
  */
-int _rpc_dtablesize()
+int _rpc_dtablesize(void)
 {
 	static int size;
 

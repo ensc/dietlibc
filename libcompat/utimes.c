@@ -2,6 +2,7 @@
  * (c) 2003 Andreas Krennmair <krennmair@webdynamite.com>
  */
 #include <dietwarning.h>
+#define _BSD_SOURCE
 #include <sys/time.h>
 #include <utime.h>
 #include <sys/types.h>

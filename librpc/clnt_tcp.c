@@ -61,15 +61,13 @@ static char sccsid[] = "@(#)clnt_tcp.c 1.37 87/10/05 Copyr 1984 Sun Micro";
 
 #define MCALL_MSG_SIZE 24
 
-static int readtcp();
-static int writetcp();
-
-static enum clnt_stat clnttcp_call();
-static void clnttcp_abort();
-static void clnttcp_geterr();
-static bool_t clnttcp_freeres();
-static bool_t clnttcp_control();
-static void clnttcp_destroy();
+static enum clnt_stat clnttcp_call(CLIENT *, unsigned long, xdrproc_t, char*, xdrproc_t,
+		                               char*, struct timeval);
+static void clnttcp_abort(void);
+static void clnttcp_geterr(CLIENT *, struct rpc_err *);
+static bool_t clnttcp_freeres(CLIENT *, xdrproc_t, char*);
+static bool_t clnttcp_control(CLIENT *, int, char *);
+static void clnttcp_destroy(CLIENT *);
 
 static struct clnt_ops tcp_ops = {
 	clnttcp_call,
@@ -92,6 +90,8 @@ struct ct_data {
 	XDR ct_xdrs;
 };
 
+static int readtcp(char *ct_char, char* buf, register int len);
+static int writetcp(char *ct_char, char* buf, int len);
 /*
  * Create a client handle for a tcp/ip connection.
  * If *sockp<0, *sockp is set to a newly created TCP socket and it is
@@ -114,20 +114,20 @@ register int *sockp;
 unsigned int sendsz;
 unsigned int recvsz;
 {
-	CLIENT *h;
-	register struct ct_data *ct;
+	CLIENT *h = NULL;
 	struct timeval now;
 	struct rpc_msg call_msg;
+        register struct ct_data *ct;
 
-	h = (CLIENT *) mem_alloc(sizeof(*h));
-	if (h == NULL) {
-		(void) fprintf(stderr, "clnttcp_create: out of memory\n");
-		rpc_createerr.cf_stat = RPC_SYSTEMERROR;
-		rpc_createerr.cf_error.re_errno = errno;
-		goto fooy;
-	}
 	ct = (struct ct_data *) mem_alloc(sizeof(*ct));
 	if (ct == NULL) {
+                (void) fprintf(stderr, "clnttcp_create: out of memory\n");
+                rpc_createerr.cf_stat = RPC_SYSTEMERROR;
+                rpc_createerr.cf_error.re_errno = errno;
+                goto fooy;
+        }
+	h = (CLIENT *) mem_alloc(sizeof(*h));
+	if (h == NULL) {
 		(void) fprintf(stderr, "clnttcp_create: out of memory\n");
 		rpc_createerr.cf_stat = RPC_SYSTEMERROR;
 		rpc_createerr.cf_error.re_errno = errno;
@@ -389,11 +389,12 @@ CLIENT *h;
  * Behaves like the system calls, read & write, but keeps some error state
  * around for the rpc level.
  */
-static int readtcp(ct, buf, len)
-register struct ct_data *ct;
+static int readtcp(ct_char, buf, len)
+char *ct_char;
 char* buf;
 register int len;
 {
+	struct ct_data *ct=(struct ct_data *)ct_char;
 #ifdef FD_SETSIZE
 	fd_set mask;
 	fd_set readfds;
@@ -445,13 +446,13 @@ register int len;
 	return (len);
 }
 
-static int writetcp(ct, buf, len)
-struct ct_data *ct;
+static int writetcp(ct_char, buf, len)
+char *ct_char;
 char* buf;
 int len;
 {
 	register int i, cnt;
-
+	struct ct_data *ct=(struct ct_data *)ct_char;
 	for (cnt = len; cnt > 0; cnt -= i, buf += i) {
 		if ((i = write(ct->ct_sock, buf, cnt)) == -1) {
 			ct->ct_error.re_errno = errno;

@@ -5,8 +5,8 @@
 #ifdef WANT_SMALL_STRING_ROUTINES
 size_t strlen(const char *s) {
   register size_t i;
-  if (!s) return 0;
-  for (i=0; *s; ++s) ++i;
+  if (__unlikely(!s)) return 0;
+  for (i=0; __likely(*s); ++s) ++i;
   return i;
 }
 #else
@@ -28,7 +28,7 @@ size_t strlen(const char *s)
     word = *((unsigned long *) t); t += 4;
     word = (word - magic) &~ word;
     word &= (magic << 7);
-  } while (word == 0);
+  } while (__likely(word == 0));
 
 #if BYTE_ORDER == LITTLE_ENDIAN
   /* word & 0x80808080 == word */

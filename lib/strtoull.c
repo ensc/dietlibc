@@ -19,13 +19,17 @@ unsigned long long int strtoull(const char *nptr, char **endptr, int base)
     else
       base=10;
   }
-  while(*nptr) {
+  while(__likely(*nptr)) {
     register unsigned char c=*nptr;
     c=(c>='a'?c-'a'+10:c>='A'?c-'A'+10:c-'0');
-    if (c>=base) break;
+    if (__unlikely(c>=base)) break;
     v=v*base+c;
     ++nptr;
   }
   if (endptr) *endptr=(char *)nptr;
   return v;
 }
+
+/* die, BSD, die!!! */
+unsigned long long int strtouq(const char *nptr, char **endptr, int base)
+	__attribute__((weak,alias("strtoull")));

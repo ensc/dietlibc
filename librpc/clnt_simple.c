@@ -50,7 +50,7 @@ static char sccsid[] =
 static struct callrpc_private {
 	CLIENT *client;
 	int socket;
-	int oldprognum, oldversnum, valid;
+	unsigned long oldprognum, oldversnum, valid;
 	char *oldhost;
 } *callrpc_private;
 

@@ -51,7 +51,7 @@ static char sccsid[] =
 /*
  * Unix longhand authenticator
  */
-enum auth_stat _svcauth_unix(rqst, msg)
+static enum auth_stat _svcauth_unix(rqst, msg)
 register struct svc_req *rqst;
 register struct rpc_msg *msg;
 {
@@ -103,7 +103,7 @@ register struct rpc_msg *msg;
 		 * five is the smallest unix credentials structure -
 		 * timestamp, hostname len (0), uid, gid, and gids len (0).
 		 */
-		if ((5 + gid_len) * BYTES_PER_XDR_UNIT + str_len > auth_len) {
+		if ((unsigned int)((5 + gid_len) * BYTES_PER_XDR_UNIT + str_len) > auth_len) {
 			(void) printf("bad auth_len gid %d str %d auth %d\n",
 						  gid_len, str_len, auth_len);
 			stat = AUTH_BADCRED;
@@ -128,7 +128,7 @@ register struct rpc_msg *msg;
  * Shorthand unix authenticator
  * Looks up longhand in a cache.
  */
- /*ARGSUSED*/ enum auth_stat _svcauth_short(rqst, msg)
+ /*ARGSUSED*/ static enum auth_stat _svcauth_short(rqst, msg)
 struct svc_req *rqst;
 struct rpc_msg *msg;
 {

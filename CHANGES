@@ -56,6 +56,8 @@
   RPC 64-bit cleanliness fixes (Gwenole Beauchesne)
   sysctl fix (Thomas Ogrisegg)
   make header files C++ compliant (__BEGIN_DECLS and __END_DECLS)
+  remove more warnings (Yuri Kozlov)
+  use expect() in a few strategic places
 
 0.22:
   fix i386 libm
