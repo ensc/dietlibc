@@ -9,6 +9,7 @@
   add execl and sigdelset prototypes.
   add getopt_long stuff to getopt.h (may compile but won't link).
   add RPC headers (no code yet).
+  add mlockall, munlockall
 
 0.9:
   fixed initgroups (oops)
