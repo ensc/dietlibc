@@ -77,12 +77,14 @@ void closelog(void) {
 #endif
 
 int main(int argc,char *argv[]) {
+#if 0
   char* paths[]={"/usr/lib","/usr/","usr","/",".",".."};
   char* want[]={"/usr","/",".","/",".","."};
   int i;
   for (i=0; i<6; ++i) {
     printf("%s\t%s\t%s\n",paths[i],want[i],dirname(strdup(paths[i])));
   }
+#endif
 #if 0
   char* paths[]={"/usr/lib","/usr/","usr","/",".",".."};
   char* want[]={"lib","usr","usr","/",".",".."};
@@ -422,8 +424,8 @@ int main(int argc,char *argv[]) {
   time_t t=time(0);
   puts(asctime(localtime(&t)));
 #endif
-#if 0
-  struct servent *foo=getservbyname("ident","tcp");
+#if 1
+  struct servent *foo=getservbyname("pop-3","tcp");
   if (foo)
     printf("found service %s on port %d\n",foo->s_name,foo->s_port);
 #endif

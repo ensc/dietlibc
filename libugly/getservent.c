@@ -64,7 +64,7 @@ again:
   for (aliasidx=0;aliasidx<10;++aliasidx) {
     while (cur<last && isblank(*cur)) ++cur;
     aliases[aliasidx]=cur;
-    while (cur<last && isalpha(*cur)) ++cur;
+    while (cur<last && !isspace(*cur)) ++cur;
     if (*cur=='\n') { *cur++=0; ++aliasidx; break; }
     if (cur>=last || !isblank(*cur)) break;
     *cur++=0;
@@ -116,11 +116,12 @@ struct servent *getservbyname(const char *name, const char *proto) {
     write(1,"/",1);
     write(1,s->s_proto,strlen(s->s_proto));
     write(1,"\n",1);
-    if (!strcmp(s->s_name,"ssh")) {
+    if (!strcmp(s->s_name,"pop3")) {
       write(2,"ssh!\n",5);
     }
 #endif
-    if (!strcmp(name,s->s_name) && !strcmp(proto,s->s_proto))
+    if (strcmp(proto,s->s_proto)) continue;
+    if (!strcmp(name,s->s_name))
       return s;
     tmp=s->s_aliases;
     while (*tmp)
