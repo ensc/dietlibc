@@ -6,7 +6,6 @@ extern char __shadow_buf[1000];
 
 struct spwd *getspnam(const char* name) {
   struct spwd *tmp;
-  if (getspnam_r(name,&__shadow_pw,__shadow_buf,sizeof(__shadow_buf),&tmp)==0)
-    return tmp;
-  return 0;
+  getspnam_r(name,&__shadow_pw,__shadow_buf,sizeof(__shadow_buf),&tmp);
+  return tmp;
 }

@@ -6,7 +6,6 @@ extern char __group_buf[1000];
 
 struct group *getgrnam(const char* name) {
   struct group *tmp;
-  if (getgrnam_r(name,&__group_pw,__group_buf,sizeof(__group_buf),&tmp)==0)
-    return tmp;
-  return 0;
+  getgrnam_r(name,&__group_pw,__group_buf,sizeof(__group_buf),&tmp);
+  return tmp;
 }

@@ -5,7 +5,6 @@ extern char __protoent_buf[1000];
 
 struct protoent *getprotoent(void) {
   struct protoent* tmp;
-  if (getprotoent_r(&__protoent_pw,__protoent_buf,sizeof(__protoent_buf),&tmp)==0)
-    return tmp;
-  return 0;
+  getprotoent_r(&__protoent_pw,__protoent_buf,sizeof(__protoent_buf),&tmp);
+  return tmp;
 }

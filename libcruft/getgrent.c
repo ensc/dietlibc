@@ -5,7 +5,6 @@ extern char __group_buf[1000];
 
 struct group *getgrent(void) {
   struct group* tmp;
-  if (getgrent_r(&__group_pw,__group_buf,sizeof(__group_buf),&tmp)==0)
-    return tmp;
-  return 0;
+  getgrent_r(&__group_pw,__group_buf,sizeof(__group_buf),&tmp);
+  return tmp;
 }
