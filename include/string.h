@@ -14,7 +14,7 @@ int memccmp(const void *s1, const void *s2, int c, size_t n) __THROW __pure__;
 /* gcc unfortunately has some internal prototypes that are not compliant
  * to the single unix specification and if we define the correct
  * prototypes here, gcc emits warnings. */
-#if !defined(__GNUC__) || defined(__mips__) || defined(__alpha__) || defined(__arm__) || defined(__x86_64__)
+#if __GNUC__ > 2 || defined(__mips__) || defined(__alpha__) || defined(__arm__) || defined(__x86_64__)
 void* memset(void *s, int c, size_t n) __THROW;
 int memcmp(const void *s1, const void *s2, size_t n) __THROW __pure__;
 void* memcpy(void *dest, const void *src, size_t n) __THROW;

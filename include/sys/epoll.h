@@ -10,11 +10,41 @@
 #define EPOLL_CTL_DEL 2	/* Remove a file decriptor from the interface */
 #define EPOLL_CTL_MOD 3	/* Change file decriptor epoll_event structure */
 
+enum EPOLL_EVENTS {
+	EPOLLIN = 0x001,
+#define EPOLLIN EPOLLIN
+	EPOLLPRI = 0x002,
+#define EPOLLPRI EPOLLPRI
+	EPOLLOUT = 0x004,
+#define EPOLLOUT EPOLLOUT
+
+#ifdef __USE_XOPEN
+	EPOLLRDNORM = 0x040,
+#define EPOLLRDNORM EPOLLRDNORM
+	EPOLLRDBAND = 0x080,
+#define EPOLLRDBAND EPOLLRDBAND
+	EPOLLWRNORM = 0x100,
+#define EPOLLWRNORM EPOLLWRNORM
+	EPOLLWRBAND = 0x200,
+#define EPOLLWRBAND EPOLLWRBAND
+#endif /* #ifdef __USE_XOPEN */
+
+#ifdef __USE_GNU
+	EPOLLMSG = 0x400,
+#define EPOLLMSG EPOLLMSG
+#endif /* #ifdef __USE_GNU */
+
+	EPOLLERR = 0x008,
+#define EPOLLERR EPOLLERR
+	EPOLLHUP = 0x010
+#define EPOLLHUP EPOLLHUP
+};
+
 typedef union epoll_data {
   void *ptr;
   int fd;
-  __uint32_t u32;
-  __uint64_t u64;
+  uint32_t u32;
+  uint64_t u64;
 } epoll_data_t;
 
 struct epoll_event {
