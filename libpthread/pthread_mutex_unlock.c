@@ -7,8 +7,7 @@
 
 /* will never return EINVAL ! */
 
-int pthread_mutex_unlock(pthread_mutex_t*mutex) {
-  _pthread_descr this=__thread_self();
+static int __thread_mutex_unlock(pthread_mutex_t*mutex,_pthread_descr this) {
   if (mutex->owner==this) {
     if (mutex->kind==PTHREAD_MUTEX_RECURSIVE_NP) {
       if (--(mutex->count)) return 0;
@@ -20,4 +19,10 @@ int pthread_mutex_unlock(pthread_mutex_t*mutex) {
     return EPERM;
   }
   return 0;
+}
+int __pthread_mutex_unlock(pthread_mutex_t*mutex,_pthread_descr this)
+__attribute__((alias("__thread_mutex_unlock")));
+
+int pthread_mutex_unlock(pthread_mutex_t*mutex) {
+  return __thread_mutex_unlock(mutex,__thread_self());
 }

@@ -7,8 +7,7 @@
 
 /* will never return EINVAL ! */
 
-int pthread_mutex_lock(pthread_mutex_t*mutex) {
-  _pthread_descr this=__thread_self();
+static int __thread_mutex_lock(pthread_mutex_t*mutex,_pthread_descr this) {
   if (mutex->owner!=this) {
     /* wait for mutex to free */
     LOCK(mutex);
@@ -18,4 +17,10 @@ int pthread_mutex_lock(pthread_mutex_t*mutex) {
   else if (mutex->kind==PTHREAD_MUTEX_ERRORCHECK_NP) return EDEADLK;
   if (mutex->kind==PTHREAD_MUTEX_RECURSIVE_NP) ++(mutex->count);
   return 0;
+}
+int __pthread_mutex_lock(pthread_mutex_t*mutex,_pthread_descr this)
+__attribute__((alias("__thread_mutex_lock")));
+
+int pthread_mutex_lock(pthread_mutex_t*mutex) {
+  return __thread_mutex_lock(mutex,__thread_self());
 }

@@ -18,6 +18,12 @@
 
 #define MAX_LOGTAG 1000
 
+/* declare internal functions */
+int __libc_open(const char*name,int flags, ...);
+int __libc_write(int fd,void*buf,int len);
+int __libc_fcntl(int fd,int op,...);
+int __libc_close(int fd);
+
 /* those have to be global *sigh* */
 static volatile int	connected;	/* have done connect */
 static volatile int	LogMask = 0xff; /* mask of priorities to be logged */
@@ -32,7 +38,7 @@ static struct sockaddr	SyslogAddr;	/* AF_UNIX address of local logger */
 static void closelog_intern(void)
 {
   if (!connected) return;
-  close(LogFile);
+  __libc_close(LogFile);
   LogFile = -1;
   connected = 0;
 }
@@ -61,14 +67,14 @@ static void openlog_intern(int option, int facility)
       if (LogStat & LOG_NDELAY)
       {
 	if ((LogFile = socket(AF_UNIX, LogType, 0)) == -1) return;
-	fcntl(LogFile, F_SETFD, 1);
+	__libc_fcntl(LogFile, F_SETFD, 1);
       }
     }
     if ((LogFile != -1) && !connected) {
       int old_errno=errno;
       if(connect(LogFile, &SyslogAddr, sizeof(SyslogAddr)) == -1) {
 	int saved_errno=errno;
-	close(LogFile);
+	__libc_close(LogFile);
 	LogFile = -1;
 	if((LogType == SOCK_DGRAM) && (saved_errno == EPROTOTYPE)) {
 	  /* retry with SOCK_STREAM instead of SOCK_DGRAM */
@@ -149,8 +155,8 @@ void __libc_vsyslog(int priority, const char *format, va_list arg_ptr)
     buflen = vsnprintf(buffer+headerlen, BUF_SIZE - headerlen, format, arg_ptr);
   }
   if (LogStat & LOG_PERROR) {
-    write(1, buffer+headerlen, buflen);
-    if (buffer[headerlen+buflen] != '\n') write(1,"\n", 1);
+    __libc_write(1, buffer+headerlen, buflen);
+    if (buffer[headerlen+buflen] != '\n') __libc_write(1,"\n", 1);
   }
 
   /* prepare for broken connection */
@@ -176,10 +182,11 @@ void __libc_vsyslog(int priority, const char *format, va_list arg_ptr)
      * is the one from the syslogd failure.
      */
     if ((LogStat & LOG_CONS) &&
-       ((fd = open(_PATH_CONSOLE, O_WRONLY|O_NOCTTY, 0)) >= 0))
+       ((fd = __libc_open(_PATH_CONSOLE, O_WRONLY|O_NOCTTY, 0)) >= 0))
     {
-      write(fd, buffer, buflen+headerlen);
-      write(fd, "\r\n", 2);
+      __libc_write(fd, buffer, buflen+headerlen);
+      __libc_write(fd, "\r\n", 2);
+      __libc_close(fd);
     }
   }
 

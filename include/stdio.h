@@ -40,8 +40,8 @@ int vfscanf(FILE *stream, const char *format, va_list ap) __THROW __attribute__(
 int fgetc(FILE *stream) __THROW;
 int fgetc_unlocked(FILE *stream) __THROW;
 char *fgets(char *s, int size, FILE *stream) __THROW;
-int getc(FILE *stream) __THROW;
-int getchar(void) __THROW;
+char *fgets_unlocked(char *s, int size, FILE *stream) __THROW;
+
 char *gets(char *s) __THROW;
 int ungetc(int c, FILE *stream) __THROW;
 int ungetc_unlocked(int c, FILE *stream) __THROW;
@@ -49,15 +49,22 @@ int ungetc_unlocked(int c, FILE *stream) __THROW;
 int fputc(int c, FILE *stream) __THROW;
 int fputc_unlocked(int c, FILE *stream) __THROW;
 int fputs(const char *s, FILE *stream) __THROW;
+int fputs_unlocked(const char *s, FILE *stream) __THROW;
 
+int getc(FILE *stream) __THROW;
+int getchar(void) __THROW;
 int putchar(int c) __THROW;
+int putchar_unlocked(int c) __THROW;
 
 #define putc(c,stream) fputc(c,stream)
 #define putchar(c) fputc(c,stdout)
+#define putc_unlocked(c,stream) fputc_unlocked(c,stream)
+#define putchar_unlocked(c) fputc_unlocked(c,stdout)
 
-#define getchar() fgetc(stdin)
 #define getc(stream) fgetc(stream)
+#define getchar() fgetc(stdin)
 #define getc_unlocked(stream) fgetc_unlocked(stream)
+#define getchar_unlocked() fgetc_unlocked(stdin)
 
 int puts(const char *s) __THROW;
 
@@ -76,7 +83,7 @@ int fseeko64_unlocked(FILE *stream, loff_t offset, int whence) __THROW;
 loff_t ftello64(FILE *stream) __THROW;
 loff_t ftello64_unlocked(FILE *stream) __THROW;
 
-#if defined _FILE_OFFSET_BITS && _FILE_OFFSET_BITS == 64
+#if _FILE_OFFSET_BITS == 64
 #define off_t loff_t
 #define fseeko(foo,bar,baz) fseeko64(foo,bar,baz)
 #define ftello(foo) ftello64(foo)
@@ -100,9 +107,12 @@ int fflush_unlocked(FILE *stream) __THROW;
 int fclose(FILE *stream) __THROW;
 int fclose_unlocked(FILE *stream) __THROW;
 
-int feof (FILE *stream) __THROW;
+int feof(FILE *stream) __THROW;
+int feof_unlocked(FILE *stream) __THROW;
 int ferror(FILE *stream) __THROW;
+int ferror_unlocked(FILE *stream) __THROW;
 int fileno(FILE *stream) __THROW;
+int fileno_unlocked(FILE *stream) __THROW;
 void clearerr(FILE *stream) __THROW;
 void clearerr_unlocked(FILE *stream) __THROW;
 

@@ -11,8 +11,8 @@ FILE *freopen_unlocked(const char *path, const char *mode, FILE *stream) {
   if (stream) {
     int f=__stdio_parse_mode(mode);
     fflush_unlocked(stream);
-    close(stream->fd);
-    if ((stream->fd=open(path,f,0666))!=-1) {
+    __libc_close(stream->fd);
+    if ((stream->fd=__libc_open(path,f,0666))!=-1) {
       struct stat st;
       fstat(stream->fd,&st);
       stream->flags=(S_ISFIFO(st.st_mode))?FDPIPE:0;

@@ -112,6 +112,9 @@ int __pthread_unlock(struct _pthread_fastlock*lock);
 #define TRYLOCK(td) __pthread_trylock(&((td)->lock))
 #define UNLOCK(td)  __pthread_unlock(&((td)->lock))
 
+int __pthread_mutex_lock(pthread_mutex_t*mutex,_pthread_descr this);
+int __pthread_mutex_unlock(pthread_mutex_t*mutex,_pthread_descr this);
+
 int __clone(void*(*fn)(void*),void*stack,int flags,void*arg);
 void __thread_manager_close(void);
 
