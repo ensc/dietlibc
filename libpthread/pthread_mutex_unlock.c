@@ -17,8 +17,7 @@ int pthread_mutex_unlock(pthread_mutex_t *mutex)
 
   if (this==mutex->owner) {
     if (mutex->kind==PTHREAD_MUTEX_RECURSIVE_NP) {
-      if (--(mutex->count))
-	return 0;
+      if (--(mutex->count)) return 0;
     }
 
     mutex->owner=0;

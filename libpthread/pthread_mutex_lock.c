@@ -15,18 +15,18 @@ int pthread_mutex_lock(pthread_mutex_t *mutex)
 
   this = __thread_self();
 
-  if (this!=mutex->owner) {
-    /* wait for mutex to free */
-    __pthread_lock(&(mutex->lock));
-
-    mutex->owner=this;
-  }
-  else if (mutex->kind==PTHREAD_MUTEX_ERRORCHECK_NP)
-  {
-    return EDEADLK;
+  if (this==mutex->owner) {
+    if (mutex->kind==PTHREAD_MUTEX_ERRORCHECK_NP)
+      return EDEADLK;
+    if (mutex->kind==PTHREAD_MUTEX_RECURSIVE_NP) {
+      ++(mutex->count);
+      return 0;
+    }
   }
 
-  if (mutex->kind==PTHREAD_MUTEX_RECURSIVE_NP) ++(mutex->count);
+  /* wait for mutex to free */
+  __pthread_lock(&(mutex->lock));
+  mutex->owner=this;
 
   return 0;
 }
