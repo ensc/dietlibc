@@ -62,6 +62,7 @@ int main(int argc,char *argv[]) {
   const char *nostdlib="-nostdlib";
   const char *libgcc="-lgcc";
   char dashL[1000]="-L";
+  char dashstatic[]="-static";
   int i;
   int mangleopts=0;
 
@@ -176,7 +177,7 @@ int main(int argc,char *argv[]) {
       dest=newargv;
       *dest++=argv[1];
 #ifndef __DYN_LIB
-      if (_link) { *dest++=(char*)nostdlib; *dest++=dashL; }
+      if (_link) { *dest++=(char*)nostdlib; *dest++=dashstatic; *dest++=dashL; }
 #else
       if (_link || shared) { *dest++=(char*)nostdlib; *dest++=dashL; }
 #endif

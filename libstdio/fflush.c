@@ -33,14 +33,15 @@ int fflush(FILE *stream) {
     register int tmp;
     if ((tmp=stream->bm-stream->bs)) {
       lseek(stream->fd,tmp,SEEK_CUR);
-      stream->bs=0;
     }
-  } else
+    stream->bs=stream->bm=0;
+  } else {
     if (stream->bm && write(stream->fd,stream->buf,stream->bm)!=(int)stream->bm) {
       stream->flags|=ERRORINDICATOR;
       return -1;
     }
-  stream->bm=0;
+    stream->bm=0;
+  }
   return 0;
 }
 

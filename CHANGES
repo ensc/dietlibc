@@ -4,6 +4,8 @@
   Olaf: port to s/390!
   me: fix vfork (it was put into dietlibc.a twice)
   res_query did not initialize last
+  diet (not diet-dyn, of course) now adds -static to the gcc command line.
+  fixed fflush on input streams (tic from ncurses exposed this)
 
 0.12:
   more contributions from Frank Klemm.
