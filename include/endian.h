@@ -9,7 +9,7 @@
 #define __FLOAT_WORD_ORDER	__BYTE_ORDER
 #endif
 
-#if (defined(__mips__) && !defined(__MIPSEB)) || (defined(__arm__) && !defined(__ARMEB__)) || ((defined(powerpc) || defined(__sparc__)) && defined(__LITTLE_ENDIAN__))
+#if (defined(__mips__) && !defined(__MIPSEB)) || (defined(__arm__) && !defined(__ARMEB__)) || ((defined(__powerpc__) || defined(__sparc__)) && defined(__LITTLE_ENDIAN__))
 #define __BYTE_ORDER		__LITTLE_ENDIAN
 #define __FLOAT_WORD_ORDER	__BYTE_ORDER
 #endif

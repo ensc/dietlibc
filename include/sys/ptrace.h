@@ -637,7 +637,7 @@ struct sparc_stackf {
 
 #define PTRACE_GETUCODE           29  /* stupid bsd-ism */
 
-#elif defined(powerpc) || defined (__powerpc64__)
+#elif defined(__powerpc__) || defined (__powerpc64__)
 
 #include <asm/sigcontext.h>
 

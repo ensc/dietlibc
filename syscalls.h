@@ -11,7 +11,7 @@
 #include "sparc/syscalls.h"
 #endif
 
-#elif defined(powerpc)
+#elif defined(__powerpc__)
 #include "ppc/syscalls.h"
 
 #elif defined(__powerpc64__)

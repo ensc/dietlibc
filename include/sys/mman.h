@@ -73,7 +73,7 @@ __BEGIN_DECLS
 #define MADV_SEQUENTIAL	0x2		/* read-ahead aggressively */
 #define MADV_WILLNEED	0x3		/* pre-fault pages */
 #define MADV_DONTNEED	0x4		/* discard these pages */
-#elif defined(__sparc__) || defined (powerpc) || defined (__powerpc64__)
+#elif defined(__sparc__) || defined (__powerpc__) || defined (__powerpc64__)
 #define MAP_FIXED	0x10		/* Interpret addr exactly */
 #define MAP_ANONYMOUS	0x20		/* don't use a file */
 #define MAP_RENAME	MAP_ANONYMOUS	/* In SunOS terminology */

@@ -109,7 +109,7 @@ typedef char * va_list;
 #endif
 #endif
 
-#elif defined(powerpc)
+#elif defined(__powerpc__)
 
 typedef struct __va_list_tag {
   unsigned char gpr;		/* index into the array of 8 GPRs stored in the
@@ -275,7 +275,7 @@ typedef struct {
 		   == __real_type_class) && (__va).__offset <= (6 * 8))	\
 		 ? (6 * 8) + 8 : __va_tsize (__type)))))
 
-#else	/* !__sparc__ && !powerpc && !__mips__ && !__alpha__*/
+#else	/* !__sparc__ && !__powerpc__ && !__mips__ && !__alpha__*/
 
 typedef char* va_list;
 

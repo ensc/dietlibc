@@ -5,6 +5,7 @@
     proper endian.h recognition for __s390x__
     rem and sdiv for sparc
   fix stupid dns decoding bug (Gernot Tenchio)
+  #ifdef powerpc -> #ifdef __powerpc__ (Enrico Scholz)
 
 0.28:
   add tcgetsid (Yuri Kozlov)

@@ -137,7 +137,7 @@ int main(int argc,char *argv[]) {
       shortplatform="sparc";
 #endif
 #endif
-#ifdef powerpc
+#ifdef __powerpc__
       shortplatform="ppc";
 #endif
 #ifdef __powerpc64__

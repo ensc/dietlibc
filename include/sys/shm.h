@@ -60,7 +60,7 @@ struct shm_info {
   unsigned long swap_successes;
 };
 
-#if defined(__i386__) || defined(__mips__) || defined(__arm__) || defined(powerpc) || defined (__powerpc64__) || defined(__s390__) || defined(__hppa__) || defined(__x86_64__) || defined(__ia64__)
+#if defined(__i386__) || defined(__mips__) || defined(__arm__) || defined(__powerpc__) || defined (__powerpc64__) || defined(__s390__) || defined(__hppa__) || defined(__x86_64__) || defined(__ia64__)
 #define PAGE_SIZE 4096UL
 #define PAGE_SHIFT 12
 #elif defined(__alpha__) || defined(__sparc__)

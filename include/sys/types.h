@@ -67,7 +67,7 @@ typedef unsigned long int clock_t;	/* Used for system times in
     typedef unsigned int mode_t;
     typedef int nlink_t;
     typedef int uid_t;
-#elif defined(powerpc)
+#elif defined(__powerpc__)
     typedef unsigned int dev_t;
     typedef unsigned int gid_t;
     typedef unsigned int mode_t;

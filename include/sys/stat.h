@@ -248,8 +248,8 @@ __extension__ long long	st_size;
 	unsigned long	st_pad2;
 __extension__ long long	st_blocks;
 };
-#elif defined(powerpc) || defined(__powerpc64__)
-#if defined(powerpc)
+#elif defined(__powerpc__) || defined(__powerpc64__)
+#if defined(__powerpc__)
 struct stat {
 	dev_t		st_dev;
 	ino_t		st_ino;

@@ -15,7 +15,7 @@ __BEGIN_DECLS
 #include <sys/sparc-ioctl.h>
 #elif defined(__mips__)
 #include <sys/mips-ioctl.h>
-#elif defined(powerpc) || defined(__powerpc64__)
+#elif defined(__powerpc__) || defined(__powerpc64__)
 #include <sys/ppc-ioctl.h>
 #elif defined(__s390__)
 #include <sys/s390-ioctl.h>

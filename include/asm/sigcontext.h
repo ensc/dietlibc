@@ -21,7 +21,7 @@ __BEGIN_DECLS
 #include <asm/mips-sigcontext.h>
 #endif
 
-#if defined(powerpc) || defined(__powerpc64__)
+#if defined(__powerpc__) || defined(__powerpc64__)
 #include <asm/ppc-sigcontext.h>
 #endif
 

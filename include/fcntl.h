@@ -322,7 +322,7 @@ struct flock64 {
 };
 #endif
 
-#elif defined(powerpc) || defined(__powerpc64__)
+#elif defined(__powerpc__) || defined(__powerpc64__)
 
 /* open/fcntl - O_SYNC is only implemented on blocks devices and on files
    located on an ext2 file system */

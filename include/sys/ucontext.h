@@ -10,7 +10,7 @@ __BEGIN_DECLS
 typedef struct sigcontext mcontext_t;
 #endif
 
-#if defined(__i386__) || defined(__arm__) || defined(__mips__) || defined(__mips64__) || defined(powerpc) || defined(__powerpc64__) || defined(__hppa__)
+#if defined(__i386__) || defined(__arm__) || defined(__mips__) || defined(__mips64__) || defined(__powerpc__) || defined(__powerpc64__) || defined(__hppa__)
 struct ucontext {
   unsigned long		uc_flags;
   struct ucontext	*uc_link;
