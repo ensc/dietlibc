@@ -12,6 +12,7 @@
   added putc and putchar as macros.
   added strcasecmp and strncasecmp (thanks to Abraham vd Merwe for
     insightful discussions and patches I partially used for the last three)
+  added getpriority and setpriority (also by Abraham)
 
 0.7:
   clone support for i386,alpha,arm and sparc by Olaf.
