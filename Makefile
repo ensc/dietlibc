@@ -180,7 +180,7 @@ $(OBJDIR)/libm.a: $(LIBMATHOBJ)
 $(OBJDIR)/libdietc.so: $(OBJDIR)/dietlibc.a
 	$(CROSS)ld -whole-archive -shared -o $@ $^
 
-dyn: dynlinker/diet-linux.so dyn_lib
+dyn: dyn_lib
 
 #dyn: dynlinker/diet-linux.so dyn_lib
 

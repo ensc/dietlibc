@@ -43,3 +43,5 @@ strlen:
 .Lmagic:
 	.word	0x01010101
 
+.Lstrlen:
+	.size	strlen,.Lstrlen-strlen

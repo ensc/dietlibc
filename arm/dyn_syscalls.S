@@ -24,6 +24,7 @@ __unified_syscall:
 	str	r1, [r0]
 
 	mvn	r0, #0
+#include "dietuglyweaks.h"
 	mov	pc, lr
 
 /* ok now include all syscalls.s (*.S) and sysdep *.S */
@@ -147,7 +148,7 @@ __unified_syscall:
 #include "../syscalls.s/setsid.S"
 #include "../syscalls.s/setuid.S"
 #include "../syscalls.s/sigaltstack.S"
-#include "../syscalls.s/signal.S"
+//#include "../syscalls.s/signal.S"
 #include "../syscalls.s/socketcall.S"
 #include "../syscalls.s/stat.S"
 #include "../syscalls.s/stat64.S"
@@ -197,6 +198,9 @@ __unified_syscall:
 #include "../syscalls.s/truncate64.S"
 
 /* other asm-files w.o. changes ... */
+__exit:
+	swi	$__NR_exit
+	eor	pc,lr,lr
 #define _exit __exit
 #include "clone.S"
 #undef _exit
