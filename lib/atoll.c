@@ -5,7 +5,7 @@
 long long int atoll(const char* s) {
   long long int v=0;
   int sign=1;
-  while (isspace(*s)) ++s;
+  while ( *s == ' '  ||  (unsigned int)(*s - 9) < 5u) ++s;
   switch (*s) {
   case '-': sign=-1;
   case '+': ++s;

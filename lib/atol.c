@@ -3,8 +3,8 @@
 
 long int atol(const char* s) {
   long int v=0;
-  int sign=1;
-  while (isspace(*s)) ++s;
+  int sign=0;
+  while ( *s == ' '  ||  (unsigned int)(*s - 9) < 5u) ++s;
   switch (*s) {
   case '-': sign=-1;
   case '+': ++s;
@@ -12,7 +12,7 @@ long int atol(const char* s) {
   while ((unsigned int) (*s - '0') < 10u) {
     v=v*10+*s-'0'; ++s;
   }
-  return sign==-1?-v:v;
+  return sign?-v:v;
 }
 
 #if __WORDSIZE == 64
