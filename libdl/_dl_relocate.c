@@ -1,18 +1,22 @@
 #include "_dl_int.h"
 
 #if 0
-  R_386_NONE:		// 0
-  R_386_32:		// 1
-  R_386_GLOB_DAT:	// 6
-  R_386_JMP_SLOT:	// 7
-  R_386_RELATIVE:	// 8
+/*--- are other relocation types vital to shared objects ? ---*/
 
---- are this relocation types vital to shared objects ? ---
-  R_386_PC32
-  R_386_PLT32
-  R_386_GOTPC:
-  R_386_GOT32:
-  R_386_GOTOFF:
+  R_386_NONE		 0	/* No reloc */
+  R_386_32		 1	/* Direct 32 bit  */
+  R_386_COPY		 5	/* Copy symbol at runtime ?!? */
+  R_386_GLOB_DAT	 6	/* Create GOT entry */
+  R_386_JMP_SLOT	 7	/* Create PLT entry */
+  R_386_RELATIVE	 8	/* Adjust by program base */
+
+  R_ARM_NONE		 0	/* No reloc */
+  R_ARM_ABS32		 2	/* Direct 32 bit  */
+  R_ARM_COPY		20	/* Copy symbol at runtime */
+  R_ARM_GLOB_DAT	21	/* Create GOT entry */
+  R_ARM_JUMP_SLOT	22	/* Create PLT entry */
+  R_ARM_RELATIVE	23	/* Adjust by program base */
+
 #endif
 
 int _dl_apply_relocate(struct _dl_handle* dh, Elf32_Rel *rel) {
@@ -26,8 +30,11 @@ int _dl_apply_relocate(struct _dl_handle* dh, Elf32_Rel *rel) {
 
   typ = ELF32_R_TYPE(rel->r_info);
 
-  if (typ==R_386_32) {		/* 1 */
+#ifdef __i386__
+  if (typ==R_386_32) {			/* 1 */
     *loc = (unsigned long)(dh->mem_base+dh->dyn_sym_tab[ELF32_R_SYM(rel->r_info)].st_value);
+  } else if (typ==R_386_COPY)  {	/* 5 */
+    *loc = *(unsigned long*)_dl_sym(dh, ELF32_R_SYM(rel->r_info));
   } else if (typ==R_386_GLOB_DAT) {	/* 6 */
     *loc = (unsigned long)_dl_sym(dh, ELF32_R_SYM(rel->r_info));
   } else if (typ==R_386_JMP_SLOT) {	/* 7 */
@@ -37,6 +44,22 @@ int _dl_apply_relocate(struct _dl_handle* dh, Elf32_Rel *rel) {
   } else if (typ==R_386_NONE) {		/* 0 */
   } else
     ret=1;
+#endif
+#ifdef __arm__
+  if (typ==R_ARM_ABS32) {		/*  2 */
+    *loc = (unsigned long)(dh->mem_base+dh->dyn_sym_tab[ELF32_R_SYM(rel->r_info)].st_value);
+  } else if (typ==R_ARM_COPY)  {	/* 20 */
+    *loc = *(unsigned long*)_dl_sym(dh, ELF32_R_SYM(rel->r_info));
+  } else if (typ==R_ARM_GLOB_DAT) {	/* 21 */
+    *loc = (unsigned long)_dl_sym(dh, ELF32_R_SYM(rel->r_info));
+  } else if (typ==R_ARM_JMP_SLOT) {	/* 22 */
+    *loc += (unsigned long)dh->mem_base;
+  } else if (typ==R_ARM_RELATIVE) {	/* 23 */
+    *loc += (unsigned long)dh->mem_base;
+  } else if (typ==R_ARM_NONE) {		/*  0 */
+  } else
+    ret=1;
+#endif
 
   DEBUG("_dl_apply_relocate @ %08lx val %08lx\n",(unsigned long)loc,*(unsigned long*)loc);
   return ret;
