@@ -73,6 +73,6 @@ int __thread_create(void *(*__start_routine) (void *),
 extern pthread_once_t __thread_inited;
 void __thread_init();
 #define __THREAD_INIT() __pthread_once(&__thread_inited, __thread_init)
-#define __THREAD_CNACEL() pthread_testcancel()
+#define __TEST_CNACEL() pthread_testcancel()
 
 #endif

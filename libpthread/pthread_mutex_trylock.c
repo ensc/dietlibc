@@ -22,7 +22,6 @@ int pthread_mutex_trylock(pthread_mutex_t *mutex)
       return -1;
     }
 
-    mutex->lock.__status=1;	/* why do I have this ? */
     mutex->owner=this;
   }
   else if (mutex->kind==PTHREAD_MUTEX_ERRORCHECK_NP)
