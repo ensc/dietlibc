@@ -210,6 +210,24 @@ __unified_syscall:
 #include "../syscalls.s/unlink.S"
 #include "../syscalls.s/utime.S"
 #include "../syscalls.s/vhangup.S"
+
+#include "../syscalls.s/chown32.S"
+#include "../syscalls.s/fchown32.S"
+#include "../syscalls.s/getegid32.S"
+#include "../syscalls.s/geteuid32.S"
+#include "../syscalls.s/getgid32.S"
+#include "../syscalls.s/getgroups32.S"
+#include "../syscalls.s/getresgid32.S"
+#include "../syscalls.s/getuid32.S"
+#include "../syscalls.s/lchown32.S"
+#include "../syscalls.s/setfsgid32.S"
+#include "../syscalls.s/setfsuid32.S"
+#include "../syscalls.s/setgid32.S"
+#include "../syscalls.s/setregid32.S"
+#include "../syscalls.s/setresgid32.S"
+#include "../syscalls.s/setreuid32.S"
+#include "../syscalls.s/setuid32.S"
+
 /* so now this was the last u.s.c. */
 
 /* other asm-files ... */
