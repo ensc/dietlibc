@@ -1,3 +1,3 @@
 #include "syscalls.h"
 
-syscall(syslog,__syscall_syslog)
+syscall_weak(syslog,__syscall_syslog,klogctl)

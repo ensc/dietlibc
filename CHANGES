@@ -4,6 +4,9 @@
   Imported several x86 assembly routines from Wouter van Kleunen.
   Lots of bug fixes, and several more i386 specific versions of common
     routines to make them smaller.
+  add memmem (a GNU extension that looks useful)
+  several changes from Michael Ludvig: inttypes.h gets C99 macros,
+    add pivot_root syscall, %n for *scanf.
 
 0.11:
   fix major oops in DNS routines (only with WANT_FULL_RESOLV_CONF enabled).

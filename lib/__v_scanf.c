@@ -9,8 +9,16 @@
 #include "dietstdio.h"
 #include "dietwarning.h"
 
-#define A_GETC(fn)	((fn)->getch((fn)->data))
+static unsigned int consumed;
+
+#define A_GETC_2(fn)	((fn)->getch((fn)->data))
 #define A_PUTC(c,fn)	((fn)->putch((c),(fn)->data))
+
+static inline int A_GETC(struct arg_scanf* fn)
+{
+	consumed++;
+	return A_GETC_2(fn);
+}
 
 int __v_scanf(struct arg_scanf* fn, const unsigned char *format, va_list arg_ptr)
 {
@@ -28,7 +36,11 @@ int __v_scanf(struct arg_scanf* fn, const unsigned char *format, va_list arg_ptr
   char    *s;
 
   /* get one char */
-  int tpch = A_GETC(fn);
+  int tpch;
+
+  consumed=0;
+  
+  tpch= A_GETC(fn);
 
   while ((tpch!=-1)&&(*format))
   {
@@ -116,6 +128,7 @@ in_scan:
 	case 'i':
 	  {
 	    unsigned long v=0;
+		 unsigned int consumedsofar=consumed;
 	    int neg=0;
 	    while(isspace(tpch)) tpch=A_GETC(fn);
 	    if (tpch=='-') {
@@ -167,6 +180,7 @@ scan_hex:
 		pi=(int *)va_arg(arg_ptr,int*);
 		*pi=v;
 	      }
+			if(consumedsofar<consumed-1)
 	      ++n;
 	    }
 	  }
@@ -265,7 +279,16 @@ exp_out:
 	    --width;
 	    tpch=A_GETC(fn);
 	  }
-	  if (!flag_discard) *s=0;
+	  if (!flag_discard) { *s=0; n++; }
+	  break;
+
+	/* consumed-count */
+	case 'n':
+	  if (!flag_discard) {
+	    s=(char *)va_arg(arg_ptr,char*);
+//	    ++n;	/* in accordance to ANSI C we don't count this conversion */
+	  }
+	  if (!flag_discard) *(s++)=consumed-1;
 	  break;
 
 #ifdef WANT_CHARACTER_CLASSES_IN_SCANF
