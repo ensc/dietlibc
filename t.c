@@ -35,18 +35,21 @@
 #include <fnmatch.h>
 
 int main(int argc,char *argv[]) {
+#if 0
   printf("%d\n",fnmatch("*.o", "x.o", FNM_PATHNAME));
   printf("%d\n",fnmatch("a/b/*", "a/b/c/d", FNM_PATHNAME));
+#endif
 #if 0
   char buf[1024];
   int len;
   len=res_search("fu-berlin.de",ns_c_in,ns_t_ns,buf,sizeof(buf));
 #endif
-#if 0
+#if 1
   regex_t t;
   regmatch_t rm;
-  regcomp(&t,"abc",0);
-  printf("%d\n",regexec(&t,"xabc",1,&rm,0));
+//  regcomp(&t,"^ *read",0);
+  regcomp(&t,"^ *read",0);
+  printf("%d\n",regexec(&t,"    read",1,&rm,0));
   printf("ofs %d\n",rm.rm_so);
 #endif
 #if 0

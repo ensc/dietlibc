@@ -216,6 +216,7 @@ static int matchpiece(void*__restrict__ x,const char*__restrict__ s,int ofs,stru
   int tmp,num=0;
   unsigned int *offsets=alloca(sizeof(int)*a->max);
   offsets[0]=0;
+//  printf("allocating %d offsets...\n",a->max);
 //  printf("matchpiece \"%s\"...\n",s);
   /* first, try to match the atom as often as possible, up to a->max times */
   if (a->max == 1 && a->min == 1)
@@ -227,6 +228,7 @@ static int matchpiece(void*__restrict__ x,const char*__restrict__ s,int ofs,stru
       a->a.next=save;
       ++num;
       matchlen+=tmp;
+//      printf("setting offsets[%d] to %d\n",num,tmp);
       offsets[num]=tmp;
     } else {
       a->a.next=save;
@@ -235,12 +237,13 @@ static int matchpiece(void*__restrict__ x,const char*__restrict__ s,int ofs,stru
   }
   if (num<a->min) return -1;		/* already at minimum matches; signal mismatch */
   /* then, while the rest does not match, back off */
-  for (;;) {
+  for (;num>=0;) {
     if (a->next)
       tmp=((struct atom*)(a->next))->m(a->next,s+matchlen,ofs+matchlen,preg,plus+matchlen,eflags);
     else
       tmp=plus+matchlen;
     if (tmp>=0) break;	/* it did match; don't back off any further */
+//    printf("using offsets[%d] (%d)\n",num,offsets[num]);
     matchlen-=offsets[num];
     --num;
   }

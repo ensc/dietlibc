@@ -17,6 +17,7 @@
   Fix regexec offset return.  autoconf now believes that diet libc has
     POSIX regular expressions.
   Fix fnmatch (a/b/* matched a/b/c/d even if FNM_PATHNAME was set)
+  Fix regular expression match for x* when there is no x at all.
 
 0.10:
   update getpagesize.
