@@ -40,9 +40,6 @@ char *strsep(char **stringp, const char *delim) __THROW;
 void* memset(void *s, int c, size_t n) __THROW;
 void* memchr(const void *s, int c, size_t n) __THROW;
 
-#undef NULL
-#define NULL (void*)0
-
 #define bzero(s,n) memset(s,0,n)
 #define bcopy(src,dest,n) memmove(dest,src,n)
 #define bcmp(a,b,n) memcmp(a,b,n)

@@ -52,7 +52,6 @@ typedef unsigned short mode_t;		/* Used for some file attributes. */
 typedef unsigned short nlink_t;		/* Used for link counts. */
 typedef signed long off_t;		/* Used for file sizes. */
 typedef signed int pid_t;		/* Used for process IDs and process group IDs. */
-typedef unsigned int size_t;		/* Used for sizes of objects. */
 typedef signed int ssize_t;		/* Used for a count of bytes or an error indication. */
 typedef signed long suseconds_t;	/* Used for time in microseconds. */
 typedef signed long time_t;		/* Used for time in seconds. */
