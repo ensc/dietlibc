@@ -3,6 +3,7 @@
 
 #include <sys/cdefs.h>
 #include <sys/types.h>
+#include <limits.h>
 
 #include <linux/dirent.h>
 
@@ -22,5 +23,7 @@ struct dirent64 *readdir64 (DIR *__dirp) __THROW;
 void rewinddir (DIR *__dirp) __THROW;
 void seekdir (DIR *__dirp, long int __pos) __THROW;
 long int telldir (DIR *__dirp) __THROW;
+
+#define MAXNAMLEN NAME_MAX
 
 #endif
