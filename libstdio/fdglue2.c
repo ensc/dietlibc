@@ -1,5 +1,6 @@
 #include <unistd.h>
 #include <fcntl.h>
+#include <sys/stat.h>
 #include <errno.h>
 #include "dietstdio.h"
 #include <stdlib.h>
@@ -23,7 +24,12 @@ err_out:
   tmp->bm=0;
   tmp->bs=0;
   tmp->buflen=BUFSIZE;
-  tmp->flags=0;
+  {
+    struct stat st;
+    fstat(fd,&st);
+    tmp->flags=(S_ISFIFO(st.st_mode))?FDPIPE:0;
+  }
+  tmp->popen_kludge=0;
   if (__stdio_atexit==0) {
     __stdio_atexit=1;
     atexit(__stdio_flushall);

@@ -17,7 +17,7 @@ size_t fread( void *ptr, size_t size, size_t nmemb, FILE *stream) {
   if (!j) return 1;
 
 #ifdef WANT_FREAD_OPTIMIZATION
-  if (j>stream->buflen) {
+  if ( !(stream->flags&FDPIPE) && (j>stream->buflen)) {
     size_t tmp=j-i;
     int res;
     fflush(stream);

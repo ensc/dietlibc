@@ -36,6 +36,7 @@ struct __stdio_file {
 #define BUFLINEWISE 8
 #define NOBUF 16
 #define STATICBUF 32
+#define FDPIPE 64
 
 #define _IONBF 0
 #define _IOLBF 1

@@ -1,4 +1,4 @@
-#if defined(__sparc__) || defined(__alpha__)
+#if defined(__sparc__) || defined(__alpha__) || defined(__mips__)
 enum {
   __no_type_class = -1,
   __void_type_class,
