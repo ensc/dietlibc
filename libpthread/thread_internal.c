@@ -49,16 +49,17 @@ _pthread_descr __thread_self()
 }
 
 /* SIGHUP handler (thread cnacel) PTHREAD_CANCEL_ASYNCHRONOUS */
-void __thread_cancel_handler(int sig)
+static void __thread_cancel_handler(int sig)
 {
   _pthread_descr this;
   this = __thread_self();
   if (this->canceltype==PTHREAD_CANCEL_ASYNCHRONOUS)
     pthread_exit(PTHREAD_CANCELED);
+  signal( SIGHUP, __thread_cancel_handler );
 }
 
 /* SIGCHLD handler (thread exited) free thread struct */
-void __thread_slaughter(int sig)
+static void __thread_slaughter(int sig)
 {
   int pid, status, i;
 
@@ -98,7 +99,7 @@ void __thread_wait_some_time()
 }
 
 /* thread stop */
-void __thread_main_exit()
+static void __thread_main_exit()
 {
   int i;
   unsigned int c=1;
@@ -117,7 +118,7 @@ void __thread_main_exit()
     if (threads[i].pid>1)
     {
       threads[i].canceled=1;
-      printf("CNACEL ! %d\n",threads[i].pid);
+      printf("CANCEL ! %d\n",threads[i].pid);
       c++;
     }
   }

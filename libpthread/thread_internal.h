@@ -49,8 +49,6 @@ int __pthread_unlock(struct _pthread_fastlock * lock);
 
 int __clone(void* (*fn)(void*), void* stack, int flags, void *arg);
 
-void __thread_slaughter(int sig);			/* kill thread */
-
 int __find_thread_id(int pid);
 _pthread_descr __get_thread_struct(int id);
 _pthread_descr __thread_get_free();
@@ -58,9 +56,10 @@ _pthread_descr __thread_self();
 
 void __thread_wait_some_time();
 
-int __thread_create(void *(*__start_routine) (void *), void *__arg,
-		  char* stack, unsigned long stacksize);
-//int __thread_join(pthread_t th, void **thread_return);
+int __thread_create(void *(*__start_routine) (void *),
+		void *__arg,
+		char* stack,
+		unsigned long stacksize);
 
 /* init stuff */
 extern pthread_once_t __thread_inited;
