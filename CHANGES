@@ -1,4 +1,5 @@
 0.13:
+  add readdir64 and automatic mapping if _FILE_OFFSET_BITS == 64
 
 0.12:
   more contributions from Frank Klemm.

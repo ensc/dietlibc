@@ -50,4 +50,9 @@ int alphasort(const struct dirent **a, const struct dirent **b) __THROW __attrib
 extern int dirfd(DIR *dirp) __THROW;
 #endif
 
+#if _FILE_OFFSET_BITS == 64
+#define dirent dirent64
+#define readdir readdir64
+#endif
+
 #endif
