@@ -8,8 +8,8 @@
 .global __sigsetjmp
 .type __sigsetjmp,@function
 __sigsetjmp:
+	la	t9, __sigsetjmp_aux
 	move	a2, sp
 	move	a3, fp
-	la	t9, __sigsetjmp_aux
 	jr	t9
 
