@@ -40,6 +40,7 @@
     - changing type of stream-mutex to recursive
     - sparc/sparc64: shrink of the unified syscall and the special syscalls
       (fork/pipe) to use the "unified_syscall_error_handler"
+  add sendfile64 backwards compatibility glue
 
 0.22:
   fix i386 libm
