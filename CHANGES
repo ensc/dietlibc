@@ -29,6 +29,9 @@
     you can remove all the references with "strip -R .note" from
     the binaries in the end (which you should do anyway).
   fix ARM unified syscall (select did not work).
+  add getpwent_r ala glibc and replace getpwent
+  do the same for getgrent and getspent
+  remove entlib (new code is smaller)
 
 0.11:
   fix major oops in DNS routines (only with WANT_FULL_RESOLV_CONF enabled).

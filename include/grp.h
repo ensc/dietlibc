@@ -18,6 +18,8 @@ extern struct group *getgrnam (const char *name) __THROW;
 extern struct group *getgrent(void) __THROW;
 extern void setgrent(void) __THROW;
 extern void endgrent(void) __THROW;
+int getgrent_r(struct group *res, char *buf, size_t buflen,
+	       struct group **res_sig) __THROW;
 
 extern int setgroups(size_t n, const gid_t *groups) __THROW;
 extern int setgroups32(size_t n, const gid32_t *groups) __THROW;

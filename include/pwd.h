@@ -23,5 +23,7 @@ extern void setpwent(void) __THROW;
 extern void endpwent(void) __THROW;
 extern int putpwent(const struct passwd *p, FILE *stream) __THROW;
 
+int getpwent_r(struct passwd *res, char *buf, size_t buflen,
+	       struct passwd **res_sig) __THROW;
 
 #endif

@@ -110,12 +110,24 @@ int traverse(const char* file, const struct stat* sb, int flag) {
 }
 #endif
 
+#include <shadow.h>
+
 int main(int argc,char *argv[]) {
+  struct spwd sp,*tmp;
+  char buf[1000];
+  while (getspent_r(&sp,buf,sizeof(buf),&tmp)==0) {
+    int i;
+    printf("name %s\tpassword %s\n",sp.sp_namp,sp.sp_pwdp);
+    printf("  %ld %d %d %d %d %d %d\n",sp.sp_lstchg, sp.sp_min,
+	   sp.sp_max, sp.sp_warn, sp.sp_inact, sp.sp_expire, sp.sp_flag);
+  }
+#if 0
   fd_set f;
   struct timeval tv;
   FD_ZERO(&f);
   tv.tv_sec=3; tv.tv_usec=0;
   select(1,&f,0,0,&tv);
+#endif
 #if 0
   char server_version_string[]="SSH-1.99-OpenSSH_2.9p2\n";
   int remote_major, remote_minor;
