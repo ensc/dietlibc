@@ -8,6 +8,7 @@
   fix missing pthread stdio external (Gernot Tenchio)
   Port parts of glibc test suite (Florian Westphal)
     Now we need more manpower to fix the bugs it uncovers ;-)
+  add linux/if_ether.h and net/ethernet.h for sniffers
 
 0.24:
   work around incompatible Linux select() modifying the timeout in
