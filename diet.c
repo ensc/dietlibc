@@ -30,7 +30,7 @@ static const char* Os[] = {
 	 "-malign-loops=1","-fomit-frame-pointer",0,
   "x86_64","-Os","-fno-omit-frame-pointer",0,
   "sparc","-Os","-mcpu=supersparc",0,
-  "sparc64","-Os","-m64",0,
+  "sparc64","-Os","-m64","-mhard-quad-float",0,
   "alpha","-Os","-fomit-frame-pointer",0,
   "arm","-Os","-fomit-frame-pointer",0,
   "mips","-Os","-fomit-frame-pointer","-mno-abicalls","-fno-pic","-G","0",0,
@@ -40,7 +40,7 @@ static const char* Os[] = {
   "s390x","-Os","-fomit-frame-pointer",0,
   "sh","-Os","-fomit-frame-pointer",0,
   "ia64","-Os","-fno-omit-frame-pointer",0,
-  "x86_64","-Os","-fstrict-aliasing","-momit-leaf-frame-pointer","-mfance-math-387",0,
+  "x86_64","-Os","-fstrict-aliasing","-momit-leaf-frame-pointer","-mfancy-math-387",0,
   0};
 
 static void usage(void) {
