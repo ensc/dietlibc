@@ -24,6 +24,8 @@
   Make %h work for signed numbers and add %hh to vsnprintf.
   initgroups ignored the group argument :-(
   remove printf references and nested functions from glob.
+  added an errno in libpthread that will display a prominent linker
+    warning.
 
 0.10:
   update getpagesize.

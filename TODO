@@ -17,3 +17,5 @@ FPU exception handling (for mawk)
 
 gethostbyname/gethostbyname2: move static hostent to dynamic buffer so
 they can be free()d.
+
+mkdtemp

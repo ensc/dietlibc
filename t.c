@@ -34,7 +34,10 @@
 #include <resolv.h>
 #include <fnmatch.h>
 
+extern int errno;
+
 int main(int argc,char *argv[]) {
+  errno=0;
 #if 0
   printf("%hd %hhd\n",-5,-1234567);
 #endif
@@ -157,7 +160,7 @@ int main(int argc,char *argv[]) {
   printf("%p %p\n",inet_ntop(AF_INET6,ip,buf,100),buf);
   puts(buf);
 #endif
-#if 1
+#if 0
   struct addrinfo *ai;
   struct addrinfo hints;
   char buf[16];
