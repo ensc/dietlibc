@@ -90,7 +90,6 @@ double yn(int n, double x);
 double erf(double x);
 double erfc(double x);
 double lgamma(double x);
-double ipow(double mant, int expo);
 
 double rint(double x);
 
