@@ -3,7 +3,7 @@ start code and fork().  Olaf also did the printf and scanf routines and
 he implemented pthreads (wow!) and his now writing a dynamic linker, and
 he ported the diet libc to S/390.
 
-Thomas Oggriseg ported the diet libc to PA-RISC and fixed a few things.
+Thomas Ogrisegg ported the diet libc to PA-RISC and fixed a few things.
 
 I initially took some syscalls from Redhat minilibc, but the code has
 been completely replaced now.
