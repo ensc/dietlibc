@@ -31,6 +31,8 @@
 int foo;
 
 int main(int argc,char *argv[]) {
+  printf("%p\n",mmap(0,23,PROT_READ,MAP_PRIVATE,0,0));
+#if 0
   struct addrinfo *ai;
   printf("%d\n",getaddrinfo("knuth.fefe.de","ssh",0,&ai));
   while (ai) {
@@ -41,6 +43,7 @@ int main(int argc,char *argv[]) {
 	   ai->ai_socktype==SOCK_STREAM?"SOCK_STREAM":"SOCK_DGRAM");
     ai=ai->ai_next;
   }
+#endif
 #if 0
   int i=foo;
   printf("load average is %3.2f\n",0.0);

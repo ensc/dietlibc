@@ -2,11 +2,7 @@
 #include <linux/types.h>
 #include <linux/unistd.h>
 
-static inline char* _mmap(unsigned long *buffer) {
-  register char* res;
-  asm("jmp __unified_syscall" : "=a" (res) : "a" (__NR_mmap));
-  return res;
-}
+extern char* __mmap(unsigned long* buffer);
 
 char *mmap(char *addr, size_t len, int prot, int flags, int fd, unsigned long off) {
   unsigned long buffer[6];
@@ -16,5 +12,5 @@ char *mmap(char *addr, size_t len, int prot, int flags, int fd, unsigned long of
   buffer[3] = (unsigned long)flags;
   buffer[4] = (unsigned long)fd;
   buffer[5] = (unsigned long)off;
-  return (char*) _mmap(buffer);
+  return (char*) __mmap(buffer);
 }
