@@ -692,7 +692,6 @@ static struct r_debug _r_debug;
 /* now reuse some unchanged sources */
 #include "dlerror.c"
 #include "_dl_alloc.c"
-#include "_dl_fmt_xlong0.c"
 
 #include "dlsym.c"
 #include "dladdr.c"

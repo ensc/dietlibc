@@ -1,6 +1,8 @@
 #ifndef ___DL_INT_H__
 #define ___DL_INT_H__
 
+//#define DEBUG
+
 #include "dietfeatures.h"
 
 #if defined(__alpha__) || defined(__sparc64__) || defined(__x86_64__)
@@ -49,15 +51,6 @@
 #define ELF_ST_BIND(x)	ELF64_ST_BIND((x))
 #define ELF_ST_TYPE(x)	ELF64_ST_TYPE((x))
 
-#endif
-
-//#define DEBUG
-#ifdef DEBUG
-#ifndef __DIET_LD_SO__
-#include <stdio.h>
-#define pf(s)	_dl_sys_write(2,s,strlen(s))
-#define ph(l)	do { char s[8]; _dl_fmt_xlong0(s,(l)); _dl_sys_write(2,s,8); } while(0)
-#endif
 #endif
 
 #define RTLD_USER	0x10000000
