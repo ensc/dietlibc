@@ -170,7 +170,7 @@ typedef int __jmp_buf[24];
 #endif
 #endif
 
-#ifdef __powerpc__
+#if defined(powerpc) || defined(__powerpc64__)
 # define JB_GPR1   0  /* Also known as the stack pointer */
 # define JB_GPR2   1
 # define JB_LR     2  /* The address we will return to */

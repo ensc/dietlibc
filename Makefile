@@ -26,6 +26,9 @@ else
 ifeq ($(MYARCH),ppc)
 ARCH=ppc
 else
+ifeq ($(MYARCH),ppc64)
+ARCH=ppc64
+else
 ifeq ($(MYARCH),arm)
 ARCH=arm
 else
@@ -37,6 +40,9 @@ ARCH=sparc64
 else
 ifeq ($(MYARCH),s390)
 ARCH=s390
+else
+ifeq ($(MYARCH),s390x)
+ARCH=s390x
 else
 ifeq ($(MYARCH),mipsel)
 ARCH=mipsel
@@ -55,6 +61,8 @@ ifeq ($(MYARCH),ia64)
 ARCH=ia64
 else
 $(error unknown architecture, please fix Makefile)
+endif
+endif
 endif
 endif
 endif

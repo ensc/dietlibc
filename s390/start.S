@@ -18,6 +18,14 @@ _start:
 	sll	%r4,2
 	la	%r4,8(%r4,%r15)
 
+/* align the stack to a double word boundary */
+	lhi     %r0,-8
+	nr      %r15,%r0
+
+/* Setup a stack frame and a parameter area */
+	ahi     %r15,-104               # make room on stack
+	xc      0(4,%r15),0(%r15)       # clear back-chain
+
 /* environ = envp */
 	l	%r1,8(%r13)
 	st	%r4,0(%r1)

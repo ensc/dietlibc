@@ -40,6 +40,6 @@ _start:
 	br.call.sptk.few rp = main  /* call main */
 	;;
 	mov r32 = r8                /* store return code */
-	br _exit                    /* branch to _exit */
+	br exit                     /* branch to exit */
 .endp _start
 .size _start, . - _start

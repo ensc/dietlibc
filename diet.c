@@ -35,7 +35,9 @@ static const char* Os[] = {
   "arm","-Os","-fomit-frame-pointer",0,
   "mips","-Os","-fomit-frame-pointer","-mno-abicalls","-fno-pic","-G","0",0,
   "ppc","-Os","-fomit-frame-pointer","-mpowerpc-gpopt","-mpowerpc-gfxopt",0,
+  "ppc64","-Os","-fomit-frame-pointer","-mpowerpc-gpopt","-mpowerpc-gfxopt",0,
   "s390","-Os","-fomit-frame-pointer",0,
+  "s390x","-Os","-fomit-frame-pointer",0,
   "sh","-Os","-fomit-frame-pointer",0,
   "ia64","-Os","-fno-omit-frame-pointer",0,
   "x86_64","-Os","-fstrict-aliasing","-momit-leaf-frame-pointer","-mfance-math-387",0,
@@ -125,8 +127,11 @@ usage:
       shortplatform="sparc";
 #endif
 #endif
-#ifdef __powerpc__
+#ifdef powerpc
       shortplatform="ppc";
+#endif
+#ifdef __powerpc64__
+      shortplatform="ppc64";
 #endif
 #ifdef __i386__
       shortplatform="i386";
@@ -140,8 +145,12 @@ usage:
 #ifdef __mips__
       shortplatform="mips";
 #endif
+#ifdef __s390x__
+      shortplatform="s390x";
+#else
 #ifdef __s390__
       shortplatform="s390";
+#endif
 #endif
 #ifdef __sh__
       shortplatform="sh";

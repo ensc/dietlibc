@@ -32,8 +32,8 @@ __BEGIN_DECLS
 #define SIGALRM		14
 #define SIGTERM		15
 #define SIGUNUSED	31
-#if defined(__i386__) || defined(__x86_64__) || defined(__powerpc__) || defined(__arm__) \
-	|| defined(__s390__) || defined(__ia64__)
+#if defined(__i386__) || defined(__x86_64__) || defined(powerpc) || defined(__arm__) \
+	|| defined(__s390__) || defined(__ia64__) || defined(__powerpc64__)
 #define SIGBUS		 7
 #define SIGUSR1		10
 #define SIGUSR2		12

@@ -43,29 +43,42 @@ typedef unsigned long int clock_t;	/* Used for system times in
              Used for timer ID returned by timer_create().
 */
 
-#if defined(__alpha__) || defined(__mips__) || defined(__powerpc__) || defined(__hppa__) || defined(__sparc64__) \
- || defined(__x86_64__) || defined(__ia64__)
-typedef unsigned int uid_t;		/* Used for user IDs. */
-typedef unsigned int gid_t;		/* Used for group IDs. */
-typedef unsigned int dev_t;		/* Used for device IDs. */
-#else
-typedef unsigned short uid_t;		/* Used for user IDs. */
-typedef unsigned short gid_t;		/* Used for group IDs. */
-typedef unsigned short dev_t;		/* Used for device IDs. */
-#endif
-
-#if defined(__alpha__) || defined(__mips__) || defined(__powerpc__) || defined(__sparc64__) \
- || defined(__x86_64__) || defined(__ia64__)
-typedef unsigned int mode_t;		/* Used for some file attributes. */
-#else
-typedef unsigned short mode_t;		/* Used for some file attributes. */
-#endif
-
-#if defined(__alpha__) || defined(__mips__) || defined(__sparc64__) \
- || defined(__x86_64__) || defined(__ia64__)
-typedef unsigned int nlink_t;		/* Used for link counts. */
-#else
-typedef unsigned short nlink_t;		/* Used for link counts. */
+#if defined(__alpha__) || defined(__ia64__) || defined(__sparc64__) || defined(__s390x__)
+    typedef unsigned int dev_t;		/* Used for device IDs. */
+    typedef unsigned int gid_t;		/* Used for group IDs. */
+    typedef unsigned int mode_t;	/* Used for some file attributes. */
+    typedef unsigned int nlink_t;	/* Used for link counts. */
+    typedef unsigned int uid_t;		/* Used for user IDs. */
+#elif defined(__arm__) || defined(__i386__) || defined(__sparc__) || defined(__s390__) /* make sure __s390x__ hits before __s390__ */
+    typedef unsigned short dev_t;
+    typedef unsigned short gid_t;
+    typedef unsigned short mode_t;
+    typedef unsigned short nlink_t;
+    typedef unsigned short uid_t;
+#elif defined(__hppa__)
+    typedef unsigned int dev_t;
+    typedef unsigned int gid_t;
+    typedef unsigned short mode_t;
+    typedef unsigned short nlink_t;
+    typedef unsigned int uid_t;
+#elif defined(__mips__)
+    typedef unsigned int dev_t;
+    typedef int gid_t;
+    typedef unsigned int mode_t;
+    typedef int nlink_t;
+    typedef int uid_t;
+#elif defined(powerpc)
+    typedef unsigned int dev_t;
+    typedef unsigned int gid_t;
+    typedef unsigned int mode_t;
+    typedef unsigned short nlink_t;
+    typedef unsigned int uid_t;
+#elif defined(__powerpc64__) || defined(__x86_64__)
+    typedef unsigned long dev_t;
+    typedef unsigned int gid_t;
+    typedef unsigned int mode_t;
+    typedef unsigned long nlink_t;
+    typedef unsigned int uid_t;
 #endif
 
 typedef signed int id_t;		/* Used as a general identifier; can be

@@ -38,5 +38,5 @@ double  pow ( double mant, double expo )
     }
     
     /* normal case */
-    return exp2 ( log2 (mant) * expo );
+    return exp ( log (mant) * expo );
 }

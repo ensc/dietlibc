@@ -11,8 +11,11 @@
 #include "sparc/syscalls.h"
 #endif
 
-#elif defined(__powerpc__)
+#elif defined(powerpc)
 #include "ppc/syscalls.h"
+
+#elif defined(__powerpc64__)
+#include "ppc64/syscalls.h"
 
 #elif defined(__mips__)
 #include "mips/syscalls.h"
@@ -21,7 +24,11 @@
 #include "arm/syscalls.h"
 
 #elif defined(__s390__)
+#if defined(__s390x__)
+#include "s390x/syscalls.h"
+#else
 #include "s390/syscalls.h"
+#endif
 
 #elif defined(__alpha__)
 #include "alpha/syscalls.h"

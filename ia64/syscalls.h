@@ -247,6 +247,7 @@ sym: \
 wsym: \
 .globl sym; \
 sym: \
+wsym: ; \
 	mov r15 = __NR_##name; \
 	br __unified_syscall;
 

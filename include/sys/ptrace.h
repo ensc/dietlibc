@@ -637,7 +637,7 @@ struct sparc_stackf {
 
 #define PTRACE_GETUCODE           29  /* stupid bsd-ism */
 
-#elif defined(__powerpc__)
+#elif defined(powerpc) || defined (__powerpc64__)
 
 struct pt_regs {
   unsigned long gpr[32];

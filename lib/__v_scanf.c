@@ -312,10 +312,10 @@ exp_out:
 	/* consumed-count */
 	case 'n':
 	  if (!flag_discard) {
-	    s=(char *)va_arg(arg_ptr,char*);
+	    pi=(int *)va_arg(arg_ptr,int *);
 //	    ++n;	/* in accordance to ANSI C we don't count this conversion */
+            *pi=consumed-1;
 	  }
-	  if (!flag_discard) *(s++)=consumed-1;
 	  break;
 
 #ifdef WANT_CHARACTER_CLASSES_IN_SCANF
@@ -382,6 +382,16 @@ exp_out:
       break;
     }
   }
+
+  /* maybe a "%n" follows */
+  if(*format) {
+    while(isspace(*format)) format++;
+    if(format[0] == '%' && format[1] == 'n') {
+      pi = (int *) va_arg(arg_ptr, int *);
+      *pi = consumed - 1;
+    }
+  }
+
 err_out:
   if (tpch<0 && n==0) return EOF;
   A_PUTC(tpch,fn);

@@ -3,6 +3,7 @@
 #include <sys/types.h>
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 #include "dietstdio.h"
 #include "dietwarning.h"
 
@@ -29,6 +30,9 @@ static inline int write_pad(struct arg_printf* fn, int len, int padwith) {
 int __v_printf(struct arg_printf* fn, const unsigned char *format, va_list arg_ptr)
 {
   int len=0;
+#ifdef WANT_ERROR_PRINTF
+  int _errno = errno;
+#endif
 
   while (*format) {
     unsigned int sz = skip_to(format);
@@ -133,6 +137,14 @@ inn_printf:
 	A_WRITE(fn,&ch,1); ++len;
 	break;
 
+#ifdef WANT_ERROR_PRINTF
+      /* print an error message */
+      case 'm':
+      	s=strerror(_errno);
+	sz=strlen(s);
+	A_WRITE(fn,s,sz); len+=sz;
+	break;
+#endif
       /* print a string */
       case 's':
 	s=va_arg(arg_ptr,char *);

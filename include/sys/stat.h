@@ -195,7 +195,8 @@ __extension__ long long	st_size;
 	unsigned long	st_pad2;
 __extension__ long long	st_blocks;
 };
-#elif defined(__powerpc__)
+#elif defined(powerpc) || defined(__powerpc64__)
+#if defined(powerpc)
 struct stat {
 	dev_t		st_dev;
 	ino_t		st_ino;
@@ -216,9 +217,33 @@ struct stat {
 	unsigned long	__unused4;
 	unsigned long	__unused5;
 };
+#else
+struct stat {
+	unsigned long	st_dev;
+	ino_t		st_ino;
+	nlink_t		st_nlink;
+	mode_t		st_mode;
+	uid_t 		st_uid;
+	gid_t 		st_gid;
+	unsigned long	st_rdev;
+	off_t		st_size;
+	unsigned long  	st_blksize;
+	unsigned long  	st_blocks;
+	unsigned long  	st_atime;
+	unsigned long	st_atime_nsec;
+	unsigned long  	st_mtime;
+	unsigned long  	st_mtime_nsec;
+	unsigned long  	st_ctime;
+	unsigned long  	st_ctime_nsec;
+	unsigned long  	__unused4;
+	unsigned long  	__unused5;
+	unsigned long  	__unused6;
+};
+#endif
 
 /* This matches struct stat64 in glibc2.1.
  */
+//#if !defined(__powerpc64__)
 struct stat64 {
 __extension__	unsigned long long st_dev; 	/* Device.  */
 __extension__	unsigned long long st_ino;	/* File serial number.  */
@@ -241,6 +266,7 @@ __extension__	long long st_blocks;		/* Number 512-byte blocks allocated. */
 	unsigned long int __unused4;
 	unsigned long int __unused5;
 };
+//#endif
 #elif defined(__arm__)
 struct stat {
 	unsigned short	st_dev;
@@ -301,6 +327,28 @@ __extension__	long long	st_size;
 __extension__	unsigned long long	st_ino;
 };
 #elif defined(__s390__)
+#if defined(__s390x__)
+struct stat {
+        unsigned long  st_dev;
+        unsigned long  st_ino;
+        unsigned long  st_nlink;
+        unsigned int   st_mode;
+        unsigned int   st_uid;
+        unsigned int   st_gid;
+        unsigned int   __pad1;
+        unsigned long  st_rdev;
+        unsigned long  st_size;
+        unsigned long  st_atime;
+        unsigned long   __reserved0;    /* reserved for atime.nanoseconds */
+        unsigned long  st_mtime;
+        unsigned long   __reserved1;    /* reserved for mtime.nanoseconds */
+        unsigned long  st_ctime;
+        unsigned long   __reserved2;    /* reserved for ctime.nanoseconds */
+        unsigned long  st_blksize;
+        long           st_blocks;
+        unsigned long  __unused[3];
+};
+#else
 struct stat {
 	unsigned short	st_dev;
 	unsigned short	__pad1;
@@ -323,6 +371,7 @@ struct stat {
 	unsigned long	__unused4;
 	unsigned long	__unused5;
 };
+#endif
 struct stat64 {
 	unsigned char	__pad0[6];
 	unsigned short	st_dev;
