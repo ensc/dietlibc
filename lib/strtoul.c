@@ -5,7 +5,7 @@
 
 unsigned long int strtoul(const char *nptr, char **endptr, int base)
 {
-  long int v=0;
+  unsigned long int v=0;
 
   while(isspace(*nptr)) ++nptr;
   if (*nptr == '+') ++nptr;
@@ -26,7 +26,7 @@ skip0x:
     c=(c>='a'?c-'a'+10:c>='A'?c-'A'+10:c<='9'?c-'0':0xff);
     if (c>=base) break;
     {
-      register long int w=v*base;
+      register unsigned long int w=v*base;
       if (w<v) {
 	errno=ERANGE;
 	return ULONG_MAX;

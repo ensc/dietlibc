@@ -66,6 +66,7 @@
   Added a littie backwards compatibility cruft for gpm (man, do these
     sources stink!)
   Added openpty.
+  Squeeze a few bytes off the is* routines, courtesy of Peter Jones.
 
 0.10:
   update getpagesize.
