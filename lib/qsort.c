@@ -1,3 +1,4 @@
+#include <sys/cdefs.h>
 #include <stdlib.h>
 #include <assert.h>
 
@@ -32,11 +33,11 @@ void dumparray() {
 
 void isort(void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *)) {
   int i;
-  while (nmemb>1) {
+  while (expect(nmemb>1,1)) {
     char *min=base;
     char *tmp=min+size;
     for (i=1; i<nmemb; ++i) {
-      if (compar(tmp,min)<0)
+      if (expect(compar(tmp,min)<0,0))
 	min=tmp;
       tmp+=size;
     }
@@ -97,8 +98,8 @@ void qsort(void *base, size_t nmemb, size_t size, int (*compar)(const void *, co
   v=max;
   min=base; lmemb=0;
   for (;;) {
-    while (compar(min,v)<0) { min+=size; ++lmemb; }
-    while (compar(max-=size,v)>0) ;
+    while (expect(compar(min,v)<0,1)) { min+=size; ++lmemb; }
+    while (expect(compar(max-=size,v)>0,1)) ;
     if (min>=max) break;
     iswap(min,max,size);
   }

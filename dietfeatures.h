@@ -56,4 +56,8 @@
 #define WANT_SMALL_STRING_ROUTINES
 #endif
 
+#ifdef WANT_THREAD_SAFE
+#define errno (*__errno_location())
+#endif
+
 #endif

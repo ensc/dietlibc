@@ -13,7 +13,6 @@ extern char **environ;
 int __libc_fork();
 int __libc_waitpid(int pid, int *status, int options);
 int execve(const char*filename, char *const argv[], char *const envp[]);
-void __set_errno(int errno);
 int sigaction(int signum,  const  struct  sigaction  *act, struct sigaction *oldact);
 
 int __libc_system (const char *line)
@@ -29,11 +28,7 @@ int __libc_system (const char *line)
 
   if (sigaction(SIGINT,  &sa, &intr)<0) return -1;
   if (sigaction(SIGQUIT, &sa, &quit)<0) {
-#ifdef WANT_THREAD_SAFE
-    save = *(__errno_location());
-#else
     save = errno;
-#endif
     sigaction (SIGINT, &intr, (struct sigaction*)0);
     __set_errno (save);
     return -1;
@@ -43,16 +38,9 @@ int __libc_system (const char *line)
   if (pid>0)
   { /* parent */
     int n;
-#ifdef WANT_THREAD_SAFE
-    int *err = __errno_location();
-#endif
     do
       n=__libc_waitpid(pid, &ret, 0);
-#ifdef WANT_THREAD_SAFE
-    while ((n==-1) && (*err==EINTR));
-#else
     while ((n==-1) && (errno==EINTR));
-#endif
     if (n!=pid) ret=-1;
   }
   else if (!pid)
@@ -69,11 +57,7 @@ int __libc_system (const char *line)
     execve(SHELL_PATH,(char *const *)nargs, environ);
     _exit(127);
   }
-#ifdef WANT_THREAD_SAFE
-  save = *(__errno_location());
-#else
   save = errno;
-#endif
   sigaction (SIGINT,  &intr, (struct sigaction *)0);
   sigaction (SIGQUIT, &quit, (struct sigaction *)0);
   __set_errno(save);

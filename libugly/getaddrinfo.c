@@ -60,8 +60,8 @@ int getaddrinfo(const char *node, const char *service, const struct addrinfo *hi
 	foo->ai.ai_addr=(struct sockaddr*)&foo->ip;
 	foo->ip.ip6.sin6_family=foo->ai.ai_family=family;
 	if (family==PF_INET6) {
+	  memset(&foo->ip,0,sizeof(foo->ip));
 	  memmove(&foo->ip.ip6.sin6_addr,h.h_addr_list[0],16);
-	  foo->ip.ip6.sin6_flowinfo=foo->ip.ip6.sin6_scope_id=0;
 	} else {
 	  memmove(&foo->ip.ip4.sin_addr,h.h_addr_list[0],4);
 	}
