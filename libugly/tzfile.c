@@ -1,3 +1,4 @@
+#include "dietfeatures.h"
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/mman.h>
@@ -5,6 +6,7 @@
 
 #include <stdio.h>
 
+#ifdef WANT_TZFILE_PARSER
 static char *tzfile=0;
 static int tzlen=-1;
 
@@ -20,6 +22,8 @@ void __maplocaltime() {
   if (ntohl(*(int*)tzfile) != 0x545a6966) return;
   tzlen=len;
 }
+
+char *tzset(void)	__attribute__((weak,alias("__maplocaltime")));
 
 time_t __tzfile_map(time_t t, int *isdst) {
   /* "TZif" plus 16 reserved bytes. */
@@ -70,3 +74,6 @@ time_t __tzfile_map(time_t t, int *isdst) {
     }
   return t;
 }
+#else
+void tzset(void)	__attribute__((weak,alias("return0")));
+#endif

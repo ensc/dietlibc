@@ -42,12 +42,17 @@ static int rand() {
 extern double atof(const char *c);
 
 int main(int argc,char *argv[]) {
+  printf("%d\n",fgetc(stdin));
+  printf("%d\n",ungetc(23,stdin));
+  printf("%d\n",fgetc(stdin));
 #if 0
   struct passwd *p=getpwnam("leitner");
   struct spwd *s=getspnam("leitner");
   printf("%g\n",30.0123);
 #endif
+#if 0
   initgroups("root",100);
+#endif
 #if 0
   time_t t=time(0);
   puts(asctime(localtime(&t)));
