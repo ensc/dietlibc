@@ -28,6 +28,9 @@ int vfprintf(FILE *stream, const char *format, va_list ap) __THROW;
 int vsprintf(char *str, const char *format, va_list ap) __THROW;
 int vsnprintf(char *str, size_t size, const char *format, va_list ap) __THROW;
 
+int fdprintf(int fd, const char *format, ...) __THROW;
+int vfdprintf(int fd, const char *format, va_list ap) __THROW;
+
 int vscanf(const char *format, va_list ap) __THROW;
 int vsscanf(const char *str, const char *format, va_list ap) __THROW;
 int vfscanf(FILE *stream, const char *format, va_list ap) __THROW;
