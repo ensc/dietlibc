@@ -101,40 +101,7 @@ extern char* strcpy2(char*a,char*b);
 #define rdtscl(low) \
      __asm__ __volatile__ ("rdtsc" : "=a" (low) : : "edx")
 
-#if 0
-int traverse(const char* file, const struct stat* sb, int flag) {
-  __write1("found ");
-  __write1(file);
-  __write1("\n");
-  return 0;
-}
-#endif
-
 int main(int argc,char *argv[]) {
-  puts(getpass("Password: "));
-#if 0
-  struct timeval a,b;
-  a.tv_sec=0; a.tv_usec=0;
-  printf("%d\n",adjtime(&a,&b));
-#endif
-#if 0
-  fd_set f;
-  struct timeval tv;
-  FD_ZERO(&f);
-  tv.tv_sec=3; tv.tv_usec=0;
-  select(1,&f,0,0,&tv);
-#endif
-#if 0
-  char server_version_string[]="SSH-1.99-OpenSSH_2.9p2\n";
-  int remote_major, remote_minor;
-  char remote_version[1000];
-  if (sscanf(server_version_string, "SSH-%d.%d-%[^\n]\n",
-	    &remote_major, &remote_minor, remote_version) != 3) puts("punt");
-  printf("%d.%d.%.100s\n",remote_major,remote_minor,remote_version);
-#endif
-#if 0
-  ftw("/tmp",traverse,10);
-#endif
 #if 0
   printf("%u\n",getuid32());
 #endif
@@ -169,9 +136,6 @@ int main(int argc,char *argv[]) {
     }
     putchar('\n');
   }
-#endif
-#if 0
-  printf("%d\n",memchr("aaaa",'x',4));
 #endif
 #if 0
   long a,b,c;

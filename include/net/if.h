@@ -88,8 +88,15 @@ struct ifconf {
 #define ifc_buf ifc_ifcu.ifcu_buf		/* buffer address	*/
 #define ifc_req ifc_ifcu.ifcu_req		/* array of structures	*/
 
-
 unsigned int if_nametoindex (const char *ifname) __THROW;
 char *if_indextoname (unsigned int ifindex, char *ifname) __THROW;
+
+struct if_nameindex {
+  unsigned int if_index;
+  char *if_name;
+};
+
+struct if_nameindex* if_nameindex(void) __THROW;
+void if_freenameindex(struct if_nameindex* ptr) __THROW;
 
 #endif
