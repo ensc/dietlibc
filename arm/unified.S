@@ -6,7 +6,7 @@ __unified_syscall:
 	cmn	r0, #4096
 	movcc	pc, lr
 	rsb	r0, r0, #0
-#ifdef WANT_THREAD_SAVE
+#ifdef WANT_THREAD_SAFE
 	stmdb	sp!, {r0, lr}
 	bl	__errno_location
 	ldmia	sp!, {r1, lr}
@@ -18,7 +18,7 @@ __unified_syscall:
 	mvn	r0, #0
 	mov	pc, lr
 
-#ifndef WANT_THREAD_SAVE
+#ifndef WANT_THREAD_SAFE
 .L0:
 	.long errno
 #endif
