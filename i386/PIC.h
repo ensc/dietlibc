@@ -2,6 +2,8 @@
 #define __I386_PIC_H__
 #ifdef __DYN_LIB
 
+#undef __i686
+
 #if 1
 /* don't trash the athlon return stack */
 #if (__GNUC__ >= 3)	// FIXME: how do I check for the binutils version ?
