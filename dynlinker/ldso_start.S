@@ -1,8 +1,9 @@
-#ifdef __i386__
-
 .text
 .globl ldso_start
 ldso_start:
+
+#ifdef __i386__
+
 	movl %esp, %ebp			/* save stack pointer */
 	movl (%ebp), %ecx		/* %ecx = argc */
 	leal 4(%ebp), %esi		/* %esi = argv */
@@ -29,6 +30,31 @@ ldso_start:
 
 #endif
 
+#ifdef __arm__
+
+	mov	r4, sp
+	mov	fp, #0			/* clear the frame pointer */
+	ldr	a1, [sp], #4		/* argc */
+	mov	a2, sp			/* argv */
+	ldr	ip, .L0
+	add	a3, a2, a1, lsl #2	/* &argv[argc] */
+	add	a3, a3, #4		/* envp */
+	str	a3, [ip, #0]		/* environ = envp */
+	bl	main
+	mov	sp, r4			/* restore stack */
+	mov	lr, a1
+	ldr	a1, [pc, #.L1-(.+8)]	/* the dynamic fini for all *.so loaded */
+	mov	pc, lr			/* jump to entry point of program */
+
+.align 2
+.L0:
+	.word environ
+.L1:
+	.word fini_entry
+
+#endif
+
+/* common data */
 .data
 
 .section ".bss"

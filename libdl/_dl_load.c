@@ -147,6 +147,9 @@ static struct _dl_handle *_dl_map_lib(const char*fn, const char*pathname, int fd
   return ret;
 }
 
+/* local alias */
+static struct _dl_handle* __dl_dyn_scan(struct _dl_handle* dh, void* dyn_addr, int flags)
+__attribute__ ((alias("_dl_dyn_scan")));
 
 struct _dl_handle* _dl_dyn_scan(struct _dl_handle* dh, void* dyn_addr, int flags)
 {
@@ -337,7 +340,7 @@ void *_dl_load(const char*fn, const char*pathname, int fd, int flags)
 {
   struct _dl_handle* ret=0;
   if ((ret=_dl_map_lib(fn,pathname,fd,flags))) {
-    ret=_dl_dyn_scan(ret,(void*)(ret->dyn_str_tab),flags);
+    ret=__dl_dyn_scan(ret,(void*)(ret->dyn_str_tab),flags);
   }
   return ret;
 }
