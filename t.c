@@ -44,6 +44,7 @@
 #include <iconv.h>
 #include <features.h>
 #include <sys/ioctl.h>
+#include <pty.h>
 #ifdef __dietlibc__
 #include <md5.h>
 #include <write12.h>

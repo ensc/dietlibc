@@ -15,9 +15,17 @@
  *    - CHAR_BIT = 8
  *    - sizeof(word) = 4
  *    - little endian machine
+ *    - misaligned accesses are OK
+ *    - -> so far, i386 only ;)
  */
 #if (__WORDSIZE == 32) && (__BYTE_ORDER == __LITTLE_ENDIAN)
 # define NO_ENCODE_DECODE
+#ifndef __i386__
+#ifndef __arm__
+#error tell us about this architecture please!
+#endif
+#undef NO_ENCODE_DECODE
+#endif
 #endif
 
 #define S11  7
@@ -84,12 +92,7 @@ static void  Decode ( uint32_t* dst, const uint8_t* src, size_t length )
 
 #endif
 
-#ifdef USE_INTEL_ASM
-
-extern 
-void  __MD5Transform ( uint32_t state[4], const uint8_t block[64], size_t repeat );
-
-#else
+#ifndef USE_INTEL_ASM
 
 void  __MD5Transform ( uint32_t state[4], const uint8_t block[64], size_t repeat )
 {
