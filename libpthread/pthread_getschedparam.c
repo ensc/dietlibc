@@ -4,7 +4,7 @@
 #include <pthread.h>
 #include "thread_internal.h"
 
-int pthread_getschedparam(pthread_t target_thread, int *policy, const struct sched_param *param)
+int pthread_getschedparam(pthread_t target_thread, int *policy, struct sched_param *param)
 {
   int p;
   __THREAD_INIT();

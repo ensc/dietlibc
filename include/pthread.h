@@ -164,6 +164,11 @@ int pthread_attr_getstackaddr(pthread_attr_t *attr, void **stack);
 int pthread_attr_setstacksize(pthread_attr_t *attr, size_t stacksize);
 int pthread_attr_getstacksize(pthread_attr_t *attr, size_t *stacksize);
 
+int pthread_setschedparam(pthread_t target_thread, int policy,
+			  const struct sched_param *param);
+int pthread_getschedparam(pthread_t target_thread, int *policy,
+			  struct sched_param *param);
+
 /* ONCE */
 typedef int pthread_once_t;
 #define PTHREAD_ONCE_INIT	0
