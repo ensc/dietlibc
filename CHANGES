@@ -18,6 +18,7 @@
   add a few more module syscalls.  modutils-2.4.9 now compiles without changes.
   fix gethostent alias list termination.  Major oops.
   add execle and two DNS constants (from Johannes Kloos).
+  opendir did not close-on-exec (thanks, Laurent Bercot).
 
 0.11:
   fix major oops in DNS routines (only with WANT_FULL_RESOLV_CONF enabled).
