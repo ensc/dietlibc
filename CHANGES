@@ -18,6 +18,7 @@
     mipsel/syscalls.h (Samium Gromoff)
   Fix i386 unified syscall -EMEDIUMTYPE handling (Juergen Sawinski via
     Clifford Wolf)
+  vsnprintf: fix output when output does not fit (Enrico Scholz)
 
 0.24:
   work around incompatible Linux select() modifying the timeout in
