@@ -86,6 +86,7 @@ void foo(int tmp,...) {
 }
 
 int main(int argc,char *argv[]) {
+  putc('x',stdout);
 #if 0
   char template[]="/tmp/duh/fnord-XXXXXX";
   printf("%d\n",mkdtemp(template));
@@ -221,7 +222,7 @@ int main(int argc,char *argv[]) {
 #if 0
   puts(ttyname(0));
 #endif
-#if 1
+#if 0
   char buf[1024];
   struct hostent* r;
   r=gethostbyname("duh");

@@ -5,10 +5,11 @@
 #include "dietwarning.h"
 
 int setvbuf(FILE *stream, char *buf, int flags , size_t size) {
-  stream->buf=buf;
-  if (!(stream->flags&STATICBUF)) free(stream->buf);
   stream->flags|=STATICBUF;
-  stream->buf=buf;
+  if (buf) {
+    if (!(stream->flags&STATICBUF)) free(stream->buf);
+    stream->buf=buf;
+  }
   stream->buflen=size;
   stream->bm=stream->bs=0;
   switch (flags) {
