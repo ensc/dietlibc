@@ -94,7 +94,7 @@ static void __MD5Transform (uint32_t state[4], const uint32_t *in, int repeat) {
       x = tempBuffer;
 #else
       if ((long)in & 3) {
-	memcpy(tempBuffer, in, 16);
+	memcpy(tempBuffer, in, 64);
 	x = tempBuffer;
       } else
 	x = (uint32_t *) in;
