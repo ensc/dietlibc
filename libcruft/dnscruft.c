@@ -8,12 +8,17 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <resolv.h>
+#include <net/if.h>
 #include "dietfeatures.h"
 
 int __dns_fd=-1;
+#ifdef WANT_IPV6_DNS
+int __dns_fd6=-1;
+#endif
 
 /* the ad-hoc internal API from hell ;-) */
 void __dns_make_fd(void);
+void __dns_make_fd6(void);
 void __dns_readstartfiles(void);
 int __dns_decodename(unsigned char *packet,unsigned int offset,unsigned char *dest,unsigned int maxlen);
 
@@ -30,6 +35,46 @@ void __dns_make_fd(void) {
   __dns_fd=tmp;
 }
 
+#ifdef WANT_IPV6_DNS
+void __dns_make_fd6(void) {
+  int tmp;
+  struct sockaddr_in6 si;
+  if (__dns_fd>0) return;
+  tmp=socket(PF_INET6,SOCK_DGRAM,IPPROTO_UDP);
+  if (tmp<0) return;
+  si.sin6_family=AF_INET6;
+  si.sin6_port=0;
+  memset(&si.sin6_addr,0,16);
+  if (bind(tmp,(struct sockaddr*)&si,sizeof(si))) return;
+  __dns_fd6=tmp;
+}
+#endif
+
+static int parsesockaddr(const char* c,void* x) {
+  struct sockaddr_in to;
+  if (inet_aton(c,&to.sin_addr)) {
+    to.sin_port=htons(53);
+    to.sin_family=AF_INET;
+    memmove(x,&to,sizeof(struct sockaddr_in_pad));
+    return 1;
+#ifdef WANT_IPV6_DNS
+  } else {
+    struct sockaddr_in6 to6;
+    char* d=strchr(c,'%');
+    to6.sin6_flowinfo=to6.sin6_scope_id=0;
+    if (d)
+      to6.sin6_scope_id=if_nametoindex(d+1);
+    if (inet_pton(AF_INET6,c,&to6.sin6_addr)) {
+      to6.sin6_port=htons(53);
+      to6.sin6_family=AF_INET6;
+      memmove(x,&to6,sizeof(struct sockaddr_in_pad));
+      return 1;
+    }
+#endif
+  }
+  return 0;
+}
+
 #ifdef WANT_FULL_RESOLV_CONF
 int __dns_search;
 char *__dns_domains[8];
@@ -43,18 +88,16 @@ void __dns_readstartfiles(void) {
   if (_res.nscount>0) return;
   {
     struct sockaddr_in to;
+#ifdef WANT_IPV6_DNS
+    struct sockaddr_in6 to6;
+#endif
     char *cacheip=getenv("DNSCACHEIP");
 #ifdef WANT_FULL_RESOLV_CONF
     __dns_search=0;
 #endif
-    if (cacheip) {
-      to.sin_port=htons(53);
-      to.sin_family=AF_INET;
-      if (inet_aton(cacheip,&to.sin_addr)) {
-	memmove(_res.nsaddr_list,&to,sizeof(struct sockaddr));
+    if (cacheip)
+      if (parsesockaddr(cacheip,_res.nsaddr_list))
 	++_res.nscount;
-      }
-    }
   }
   _res.options=RES_RECURSE;
   if ((fd=open("/etc/resolv.conf",O_RDONLY))<0) return;
@@ -75,12 +118,8 @@ void __dns_readstartfiles(void) {
 	    if (buf>=last) break;
 	    save=*buf;
 	    *buf=0;
-	    if (inet_aton(tmp,&i.sin_addr)) {
-	      i.sin_family=AF_INET;
-	      i.sin_port=htons(53);
-	      memmove(&_res.nsaddr_list[_res.nscount],&i,sizeof(struct sockaddr));
+	    if (parsesockaddr(tmp,&_res.nsaddr_list[_res.nscount]))
 	      if (_res.nscount<MAXNS) ++_res.nscount;
-	    }
 	    *buf=save;
 	  }
 	}

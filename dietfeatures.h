@@ -52,6 +52,9 @@
  * embedded environments. */
 #define WANT_FULL_RESOLV_CONF
 
+/* do you want IPv6 transport support in the DNS resolver? */
+#define WANT_IPV6_DNS
+
 /* do you want gethostbyname and friends to consult /etc/hosts? */
 #define WANT_ETC_HOSTS
 
@@ -65,7 +68,7 @@
 #define WANT_CRYPT_MD5
 
 /* do you want diet to include a safeguard dependency to make linking
- * against glibc fail? */
+ * against glibc fail?  This may fail with older binutils. */
 #define WANT_SAFEGUARD
 
 /* dy you want that malloc(0) return a pointer to a "zero-length" object

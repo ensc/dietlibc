@@ -92,7 +92,8 @@ int inet_pton(int AF, const char *CP, void *BUF) {
       return 0;
   } else if (AF==AF_INET6) {
     if (CP[len=scan_ip6(CP,BUF)])
-      return 0;
+      if (CP[len]!='%')	/* allow "fe80::220:e0ff:fe69:ad92%eth0" */
+	return 0;
   } else {
     errno=EAFNOSUPPORT;
     return -1;

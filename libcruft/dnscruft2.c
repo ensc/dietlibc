@@ -13,9 +13,6 @@
 #include "dietfeatures.h"
 #include "dietdns.h"
 
-extern void __dns_make_fd(void);
-extern int __dns_fd;
-
 extern void __dns_readstartfiles(void);
 
 extern int __dns_decodename(unsigned char *packet,unsigned int offset,unsigned char *dest,unsigned int maxlen);

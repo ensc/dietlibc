@@ -189,6 +189,15 @@ struct sockaddr_in6 {
   uint32_t		sin6_scope_id;  /* scope id (new in RFC2553) */
 };
 
+struct sockaddr_in_pad {
+  sa_family_t		sin_family;	/* Address family		*/
+  in_port_t		sin_port;	/* Port number			*/
+  struct in_addr	sin_addr;	/* Internet address		*/
+  /* Pad to size of `struct sockaddr_in6'. */
+  unsigned char		sin_zero[sizeof(struct sockaddr_in6) - sizeof(short int) -
+			sizeof(unsigned short int) - sizeof(struct in_addr)];
+};
+
 struct ipv6_mreq {
   /* IPv6 multicast address of group */
   struct in6_addr ipv6mr_multiaddr;
