@@ -23,7 +23,7 @@ strchr:
 	b,n .Lfoobar
 	uxor,sbz %r0, %r20, %r0
 	b,n .Lmdoit
-	bv,n %r0(%rp)
+	bv %r0(%rp)
 	or %r0, %r0, %r28
 .Lfoobar:
 	addi -4, %r26, %r26
