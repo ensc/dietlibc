@@ -173,6 +173,7 @@ __unified_syscall:
 #include "../syscalls.s/getrusage.S"
 #include "../syscalls.s/getsid.S"
 #include "../syscalls.s/gettimeofday.S"
+#include "../syscalls.s/settimeofday.S"
 #include "../syscalls.s/ioperm.S"
 #include "../syscalls.s/iopl.S"
 #include "../syscalls.s/ipc.S"
