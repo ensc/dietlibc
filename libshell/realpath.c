@@ -5,14 +5,16 @@
 #include <string.h>
 #include "dietfeatures.h"
 
-char *realpath(const char *path, char *resolved_path) {
+char* realpath(const char *path, char *resolved_path) {
   int fd=open(".",O_RDONLY);
-  char *tmp=(char*)"";
+  char* tmp=(char*)"";
   if (fd<0) return 0;
   if (chdir(path)) {
     if (errno==ENOTDIR)
     {
-      if ((tmp=strrchr(path,'/'))) {
+      char* match;
+      if ((match=strrchr(path,'/'))) {
+	tmp=match;
 	memmove(resolved_path,path,tmp-path);
 	resolved_path[tmp-path]=0;
 	if (chdir(resolved_path)) { resolved_path=0; goto abort; }

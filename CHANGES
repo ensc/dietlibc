@@ -2,6 +2,7 @@
   umount and stime for x86_64 (Gwenole Beauchesne)
   some malloc fixes for very big numbers (Enrico Scholz, me)
   x86_64 unified syscall did not preserve rbx violating ABI (Gwenole)
+  realpath fix if path did not contain a slash (Gwenole)
 
 0.19:
   current gcc cvs makes __thread a keyword (Eric Troan)

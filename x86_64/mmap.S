@@ -6,5 +6,4 @@
 mmap:
 	mov	%rcx,%r10
 	mov	$__NR_mmap,%rax
-	call	__unified_syscall
-	ret
+	jmp	__unified_syscall
