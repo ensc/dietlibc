@@ -4,9 +4,7 @@
 #include <sys/wait.h>
 #include "dietwarning.h"
 #include "dietfeatures.h"
-
-#define SHELL_PATH      "/bin/sh"       /* Path of the shell.  */
-#define SHELL_NAME      "sh"            /* Name to give it.  */
+#include "binshstr.h"
 
 extern char **environ;
 
@@ -53,7 +51,7 @@ undo:
   else if (!pid)
   { /* child */
     const char *nargs[4];
-    nargs[0] = SHELL_NAME;
+    nargs[0] = __sh;
     nargs[1] = "-c";
     nargs[2] = line;
     nargs[3] = 0;
@@ -62,7 +60,7 @@ undo:
     sigaction(SIGQUIT, &quit, (struct sigaction*)0);
     sigprocmask(SIG_SETMASK,&omask,0);
 
-    execve(SHELL_PATH,(char *const *)nargs, environ);
+    execve(__binsh,(char *const *)nargs, environ);
     _exit(127);
   }
   save = errno;

@@ -1,6 +1,7 @@
 #include "dietstdio.h"
 #include <unistd.h>
 #include <fcntl.h>
+#include "binshstr.h"
 
 extern char **environ;
 
@@ -23,11 +24,11 @@ FILE *popen(const char *command, const char *type) {
     return 0;
   }
   if (!pid) {	/* child */
-    const char *argv[]={"sh","-c",0,0};
+    const char *argv[]={__sh,"-c",0,0};
     close(pfd[!fd0]); close(fd0);
     dup2(pfd[fd0],fd0); close(pfd[fd0]);
     argv[2]=command;
-    execve("/bin/sh",(char*const*)argv,environ);
+    execve(__binsh,(char*const*)argv,environ);
     _exit(127);
   }
   close(pfd[fd0]);

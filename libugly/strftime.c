@@ -1,4 +1,3 @@
-#include "dietfeatures.h"
 #include <sys/types.h>
 #include <time.h>
 
