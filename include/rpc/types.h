@@ -52,10 +52,6 @@ typedef unsigned long rpcport_t;
 #      define  TRUE    (1)
 #endif
 
-#ifndef NULL
-#      define  NULL 0
-#endif
-
 #include <stdlib.h>		/* For malloc decl.  */
 #define mem_alloc(bsize)	malloc(bsize)
 #define mem_free(ptr, bsize)	free(ptr)

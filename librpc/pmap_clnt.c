@@ -77,7 +77,7 @@ unsigned short port;
 	parms.pm_vers = version;
 	parms.pm_prot = protocol;
 	parms.pm_port = port;
-	if (CLNT_CALL(client, PMAPPROC_SET, (xdrproc_t)xdr_pmap, (char*)&parms, (xdrproc_t)xdr_bool, (caddr_t)&rslt,
+	if (CLNT_CALL(client, PMAPPROC_SET, (xdrproc_t)xdr_pmap, (char*)&parms, (xdrproc_t)xdr_bool, (void*)&rslt,
 				  tottimeout) != RPC_SUCCESS) {
 		clnt_perror(client, "Cannot register service");
 		return (FALSE);
@@ -110,7 +110,7 @@ unsigned long version;
 	parms.pm_prog = program;
 	parms.pm_vers = version;
 	parms.pm_port = parms.pm_prot = 0;
-	CLNT_CALL(client, PMAPPROC_UNSET, (xdrproc_t)xdr_pmap, (char*)&parms, (xdrproc_t)xdr_bool, (caddr_t)&rslt,
+	CLNT_CALL(client, PMAPPROC_UNSET, (xdrproc_t)xdr_pmap, (char*)&parms, (xdrproc_t)xdr_bool, (void*)&rslt,
 			  tottimeout);
 	CLNT_DESTROY(client);
 	(void) close(socket);
