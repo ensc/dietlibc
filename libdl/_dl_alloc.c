@@ -27,8 +27,9 @@ struct _dl_handle* _dl_get_handle() {
 
   if (_dl_free_list==0) {
     register int i,m;
-    tmp = (struct _dl_handle *)mmap(0, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0);
-    m=4096/sizeof(struct _dl_handle);
+    int ps=getpagesize();
+    tmp = (struct _dl_handle *)mmap(0, ps, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0);
+    m=ps/sizeof(struct _dl_handle);
     for (i=m;i;) {
       _dl_free_handle(tmp+(--i));
     }

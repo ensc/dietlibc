@@ -1,6 +1,6 @@
 # local "test" make file
 
-SRC = $(wildcard *.c) test/test.c
+SRC = $(wildcard *.c) # test/test.c
 OBJ = _dl_jump.o $(SRC:.c=.o)
 
 #CFLAGS = -Wall -O2
@@ -14,10 +14,13 @@ CFLAGS = -Wall -g -O
 
 all: test.out
 
-test.g: test.c
+libdl.a: $(OBJ)
+	ar cru $@ $^
+
+test.g: test/test.c
 	gcc -o $@ $^ -ldl
 
-test.out: $(OBJ)
+test.out: $(OBJ) test/test.o
 	$(HOME)/bin/diet gcc -o $@ $^
 
 clean:
