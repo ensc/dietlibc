@@ -171,7 +171,7 @@ scan_hex:
 		pi=(int *)va_arg(arg_ptr,int*);
 		*pi=v;
 	      }
-			if(consumedsofar<consumed-1)
+	      if(consumedsofar<consumed)
 	      ++n;
 	    }
 	  }
