@@ -26,3 +26,4 @@ pic-s390
 pic-sparc64
 bin-ia64
 bin-x86_64
+cycles
