@@ -6,7 +6,7 @@ static void dummy(unsigned long t) {
 }
 #endif
 
-static void *_dl_sym_search(struct _dl_handle * h, int symbol)
+void *_dl_sym_search(struct _dl_handle * h, int symbol)
 {
   void *sym=0;
   struct _dl_handle * tmp;

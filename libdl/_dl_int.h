@@ -4,7 +4,6 @@
 #include <elf.h>
 #include <dlfcn.h>
 
-
 #if 0
 #include <stdio.h>
 #define DEBUG(x, args...)	printf(x , ## args )
@@ -70,6 +69,7 @@ int _dl_search(char *buf, int len, const char *filename);
 /* _dl_sym.c */
 void *_dl_sym(struct _dl_handle * h, int symbol);
 /* dlsym.c */
+void *_dl_sym_search(struct _dl_handle * h, int symbol);
 void *_dlsym(void * h, char* symbol);
 
 /* _dl_queue.c */

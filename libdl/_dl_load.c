@@ -266,15 +266,6 @@ struct _dl_handle* _dl_dyn_scan(struct _dl_handle* dh, void* dyn_addr, int flags
     return 0;
   }
 
-  if (rel) {
-    DEBUG("_dl_load try to relocate some values\n");
-    if (_dl_relocate(dh,(Elf32_Rel*)rel,relsize/relent)) {
-      munmap(dh->mem_base,dh->mem_size);
-      _dl_free_handle(dh);
-      return 0;
-    }
-  }
-
   /* load other libs */
   for(i=0;dyn_tab[i].d_tag;i++) {
     if (dyn_tab[i].d_tag==DT_NEEDED) {
@@ -287,6 +278,16 @@ struct _dl_handle* _dl_dyn_scan(struct _dl_handle* dh, void* dyn_addr, int flags
   if (_dl_open_dep()) {
     _dl_error = 0;
     return 0;
+  }
+
+  /* relocate */
+  if (rel) {
+    DEBUG("_dl_load try to relocate some values\n");
+    if (_dl_relocate(dh,(Elf32_Rel*)rel,relsize/relent)) {
+      munmap(dh->mem_base,dh->mem_size);
+      _dl_free_handle(dh);
+      return 0;
+    }
   }
 
   /* do PTL / GOT relocation */
