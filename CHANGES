@@ -19,7 +19,7 @@
   Fix i386 unified syscall -EMEDIUMTYPE handling (Juergen Sawinski via
     Clifford Wolf)
   vsnprintf: fix output when output does not fit (Enrico Scholz)
-  new dirname with test suite entry (Yuro Kozlov)
+  new dirname with test suite entry (Yuri Kozlov)
 
 0.24:
   work around incompatible Linux select() modifying the timeout in

@@ -18,7 +18,7 @@ static char *dot=".";
 char *dirname(char *path)
 {
   char *c;
-  if ( path  == NULL || *path == EOL ) return dot;
+  if ( path  == NULL ) return dot;
   for(;;) {
     if ( !(c=strrchr(path,SLASH)) ) return dot; /* no slashes */
     if ( c[1]==EOL && c!=path ) {   /* remove trailing slashes */
