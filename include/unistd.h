@@ -253,6 +253,11 @@ extern char **__environ;
 
 #ifdef _GNU_SOURCE
 int pivot_root(const char *new_root, const char *put_old) __THROW;
+/* Linux 2.6 module loading infrastructure:
+ * init_module takes a buffer where you read the module file into */
+long init_module(void *module, unsigned long len, const char *options) __THROW;
+/* flags can be O_NONBLOCK | O_TRUNC (forced unloading) */
+long delete_module(const char* name,unsigned int flags) __THROW;
 #endif
 
 __END_DECLS
