@@ -32,12 +32,6 @@
 /* read the comment in lib/strncat.c for an explanation */
 /* #define WANT_NON_COMPLIANT_STRNCAT */
 
-/* strsep, according to the Linux man page, when called on "foo,bar"
- * with separator ",", should return "foo" and then NULL.  glibc,
- * however, returns "foo", then "bar", and then NULL.  The man page
- * behaviour breaks openssh, so you might want to have glibc behaviour. */
-#define WANT_BUGGY_GLIBC_STRSEP
-
 #define WANT_LINKER_WARNINGS
 
 /* you need to define this if you want to run your programs with large

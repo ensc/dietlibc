@@ -17,6 +17,8 @@
     Oops, this was reported 6 weeks ago but I overlooked the email.
     Thanks, Denis Rachal!
   vsnprintf's zero termination was broken.
+  Remove WANT_BUGGY_GLIBC_STRSEP.  The Linux man page is broken, glibc
+    does it correctly.
 
 0.14:
   fix brk again (missing __brk, trivial oversight)
