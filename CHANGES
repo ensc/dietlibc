@@ -23,6 +23,7 @@
   added gethostbyname
   added h_errno and __h_errno_location
   added inet_ntoa
+  added setpgrp and getpgrp, strsignal and execv (thanks, Olaf)
 
 0.7.2:
   added several prototypes to already implemented functions and
