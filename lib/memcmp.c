@@ -4,8 +4,8 @@
  * This causes it to warn about a type mismatch here.  Ignore it. */
 int memcmp(const void *dst, const void *src, size_t count) {
   register int r;
-  register const char *d=dst;
-  register const char *s=src;
+  register const unsigned char *d=dst;
+  register const unsigned char *s=src;
   ++count;
   while (__likely(--count)) {
     if (__unlikely(r=(*d - *s)))

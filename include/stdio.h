@@ -132,6 +132,8 @@ FILE* tmpfile(void) __THROW;
 #define FILENAME_MAX 4095
 #define FOPEN_MAX 16
 
+#define TMP_MAX 10000
+
 /* this is so bad, we moved it to -lcompat */
 #define L_ctermid 9
 char* ctermid(char* s); /* returns "/dev/tty" */

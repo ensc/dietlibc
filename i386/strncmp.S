@@ -1,28 +1,33 @@
 .text
-.align 0 
 .global strncmp
-.type	 strncmp,@function
+.type	strncmp,function
 strncmp:
-	push %ebx
-	movl %esp,%ebx
-	movl 12(%ebx),%edx
-	movl 16(%ebx),%ecx
-	movl 8(%ebx),%ebx
+	pushl	%esi
+	pushl	%edi
+	movl	%esp,%ecx
+	movl	12(%ecx),%esi
+	movl	16(%ecx),%edi
+	movl	20(%ecx),%ecx
+	jecxz	.Lequal
 .Lloop:
-	jecxz .Ldone
-	decl %ecx
-	movb (%ebx),%al
-	incl %edx
-	incl %ebx
-	movb %al,%ah
-	subb -1(%edx),%al
-	jnz .Lnotequal
-	testb %ah,%ah
-	jnz .Lloop
+	movzbl	(%esi),%eax
+	movzbl	(%edi),%edx
+	incl	%esi
+	incl	%edi
+	/* !equal ? */
+	subl	%edx,%eax
+	jnz	.Lout
+	/* end of c-string ? */
+	test	%edx,%edx
+	jz	.Lequal
+	/* do loop */
+	decl	%ecx
+	jnz	.Lloop
 
-.Ldone:
-	xorl %eax,%eax
-.Lnotequal:
-	movsx %al, %eax
-	popl %ebx
+.Lequal:
+	xorl	%eax,%eax
+.Lout:
+	popl %edi
+	popl %esi
 	ret
+.size	strncmp,.-strncmp

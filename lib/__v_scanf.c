@@ -227,6 +227,7 @@ scan_hex:
 	  {
 	    double d=0.0;
 	    int neg=0;
+	    unsigned int consumedsofar;
 
 	    while(isspace(tpch)) tpch=A_GETC(fn);
 
@@ -236,7 +237,7 @@ scan_hex:
 	    }
 	    if (tpch=='+') tpch=A_GETC(fn);
 
-	    if (tpch==-1) return n;	/* end of scan -> error */
+	    consumedsofar=consumed;
 
 	    while (isdigit(tpch)) {
 	      d=d*10+(tpch-'0');
@@ -244,6 +245,7 @@ scan_hex:
 	    }
 	    if (tpch=='.') {
 	      double factor=.1;
+	      consumedsofar++;
 	      tpch=A_GETC(fn);
 	      while (isdigit(tpch)) {
 		d=d+(factor*(tpch-'0'));
@@ -251,6 +253,7 @@ scan_hex:
 		tpch=A_GETC(fn);
 	      }
 	    }
+	    if (consumedsofar==consumed) return n;	/* error */
 	    if ((tpch|0x20)=='e') {
 	      int exp=0, prec=tpch;
 	      double factor=10;
@@ -266,10 +269,12 @@ scan_hex:
 		tpch=prec;
 		goto exp_out;
 	      }
+	      consumedsofar=consumed;
 	      while (isdigit(tpch)) {
 		exp=exp*10+(tpch-'0');
 		tpch=A_GETC(fn);
 	      }
+	      if (consumedsofar==consumed) return n;	/* error */
 	      while (exp) {	/* as in strtod: XXX: this introduces rounding errors */
 		d*=factor; --exp;
 	      }
@@ -307,7 +312,7 @@ exp_out:
 	case 's':
 	  if (!flag_discard) s=(char *)va_arg(arg_ptr,char*);
 	  while(isspace(tpch)) tpch=A_GETC(fn);
-	  if (tpch==-1) break;		/* end of scan -> error // OD */
+	  if (tpch==-1) break;		/* end of scan -> error */
 	  while (width && (tpch!=-1) && (!isspace(tpch))) {
 	    if (!flag_discard) *s=tpch;
 	    if (tpch) ++s; else break;

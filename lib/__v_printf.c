@@ -87,10 +87,6 @@ inn_printf:
 	++flag_long;
 	goto inn_printf;
 
-      case '0':
-	padwith='0';
-	goto inn_printf;
-
       case '-':
 	flag_left=1;
 	goto inn_printf;
@@ -103,6 +99,7 @@ inn_printf:
 	flag_sign=1;
 	goto inn_printf;
 
+      case '0':
       case '1':
       case '2':
       case '3':
@@ -114,6 +111,7 @@ inn_printf:
       case '9':
 	if(flag_dot) return -1;
 	width=strtoul(format-1,(char**)&s,10);
+	if (ch=='0' && !flag_left) padwith='0';
 	format=s;
 	goto inn_printf;
 
@@ -157,38 +155,58 @@ inn_printf:
 	sz = strlen(s);
 	if (flag_dot && sz>preci) sz=preci;
 	flag_dot^=flag_dot;
+	padwith=' ';
 
 print_out:
-	len+=sz;
-	if (width || preci) {
-	  int todo=0, padlen=0;
-	  if (flag_in_sign) ++todo;
-	  if (flag_hash>0) todo+=flag_hash;
+      {
+	char *sign=s;
+	int todo=0;
+	if (! (width||preci) ) {
+	  A_WRITE(fn,s,sz);
+	  break;
+	}
+	if (flag_in_sign) todo=1;
+	if (flag_hash>0)  todo=flag_hash;
+	if (todo) {
+	  s+=todo;
+	  sz-=todo;
+	  width-=todo;
+	}
+	if (!flag_left) {
 	  if (flag_dot) {
+	    len+=write_pad(fn,(signed int)width-(signed int)preci,' ');
 	    if (todo) {
-	      sz-=todo; width-=todo; len+=todo;
+	      A_WRITE(fn,sign,todo);
+	      len+=todo;
 	    }
-	    if (flag_left) {
-	      if (todo) { A_WRITE(fn,s,todo); s+=todo; }
-	      len+=write_pad(fn,(signed int)preci-(signed int)sz,'0');
-	      padlen=(signed int)width-(signed int)preci;
-	    } else {
-	      len+=write_pad(fn,(signed int)width-(signed int)preci,padwith);
-	      if (todo) { A_WRITE(fn,s,todo); s+=todo; }
-	      padlen=(signed int)preci-(signed int)sz;
-	      padwith='0';
-	    }
-	  } else padlen=(signed int)width-(signed int)sz;
-
-	  if (flag_left) {
-	    A_WRITE(fn,s,sz);
-	    len+=write_pad(fn, padlen, padwith);
+	    len+=write_pad(fn,(signed int)preci-(signed int)sz,'0');
 	  } else {
-	    len+=write_pad(fn, padlen, padwith);
-	    A_WRITE(fn,s,sz);
+	    if (todo && padwith=='0') {
+	      A_WRITE(fn,sign,todo);
+	      len+=todo; todo=0;
+	    }
+	    len+=write_pad(fn,(signed int)width-(signed int)sz, padwith);
+	    if (todo) {
+	      A_WRITE(fn,sign,todo);
+	      len+=todo;
+	    }
 	  }
-	} else A_WRITE(fn,s,sz);
+	  A_WRITE(fn,s,sz);
+	} else if (flag_left) {
+	  int remain;
+	  if (todo) {
+	    A_WRITE(fn,sign,todo);
+	    len+=todo;
+	  }
+	  len+=write_pad(fn,(signed int)preci-(signed int)sz, '0');
+	  A_WRITE(fn,s,sz);
+	  remain=preci>sz?preci:sz;
+	  len+=write_pad(fn,(signed int)width-(signed int)remain, ' ');
+	} else {
+	  A_WRITE(fn,s,sz);
+	}
 	break;
+      }
 
       /* print an integer value */
       case 'b':
@@ -210,6 +228,7 @@ print_out:
 	  flag_hash=2;
 	  sz=2;
 	}
+	if (preci>width) width=preci;
 	goto num_printf;
       case 'd':
       case 'i':
@@ -293,7 +312,7 @@ num_printf:
 	  }
 	  if (g) {
 	    char *tmp,*tmp1;	/* boy, is _this_ ugly! */
-	    if ((tmp=strchr(buf,'.'))) {
+	    if ((tmp=strchr(s,'.'))) {
 	      tmp1=strchr(tmp,'e');
 	      while (*tmp) ++tmp;
 	      if (tmp1) tmp=tmp1;
@@ -307,8 +326,8 @@ num_printf:
 	    *(--s)=(flag_sign)?'+':' ';
 	    ++sz;
 	  }
-	  preci=strlen(s);
-
+	  sz=strlen(s);
+	  flag_dot=0;
 	  goto print_out;
 	}
 #endif

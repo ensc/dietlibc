@@ -25,6 +25,9 @@
    - fixing the strtoul/strtoull bug (reported by Gernot Tenchio)
    - adding the patch to printf (Gernot Tenchio)
    - fixing snprintf (Gernot Tenchio)
+   - fixing memccpy,memcmp,strncmp (reported by Gernot Tenchio)
+   - fixing strtoXXX (Gernot Tenchio, patch modified)
+   - fixing the *scanf return behavior (reported by Enrico Scholz)
 
 0.23:
   update sys/soundcard.h

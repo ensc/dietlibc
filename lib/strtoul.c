@@ -1,7 +1,7 @@
 #include <ctype.h>
+#include <stdlib.h>
 #include <errno.h>
 #include <limits.h>
-#include <stdlib.h>
 
 unsigned long int strtoul(const char *ptr, char **endptr, int base)
 {
@@ -11,10 +11,15 @@ unsigned long int strtoul(const char *ptr, char **endptr, int base)
   const char* nptr=ptr;
 
   while(isspace(*nptr)) ++nptr;
+
   if (*nptr == '-') { neg=1; nptr++; }
-  if (*nptr == '+') ++nptr;
+  else if (*nptr == '+') ++nptr;
+  orig=nptr;
   if (base==16 && nptr[0]=='0') goto skip0x;
-  if (!base) {
+  if (base) {
+    register unsigned int b=base-2;
+    if (__unlikely(b>34)) { errno=EINVAL; return 0; }
+  } else {
     if (*nptr=='0') {
       base=8;
 skip0x:
@@ -25,7 +30,6 @@ skip0x:
     } else
       base=10;
   }
-  orig=nptr;
   while(__likely(*nptr)) {
     register unsigned char c=*nptr;
     c=(c>='a'?c-'a'+10:c>='A'?c-'A'+10:c<='9'?c-'0':0xff);
@@ -39,6 +43,7 @@ skip0x:
     ++nptr;
   }
   if (__unlikely(nptr==orig)) {		/* no conversion done */
+err_conv:
     nptr=ptr;
     errno=EINVAL;
     v=0;
@@ -48,6 +53,5 @@ skip0x:
     errno=ERANGE;
     return ULONG_MAX;
   }
-  if (v==ULONG_MAX) errno=0;
   return (neg?-v:v);
 }

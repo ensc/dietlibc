@@ -19,9 +19,10 @@ memccpy:
 		movl %esp, %ecx
 		movl 0x0c(%ecx), %edi
 		movl 0x10(%ecx), %esi
-		movb 0x14(%ecx), %dl
+		movl 0x14(%ecx), %edx
 		movl 0x18(%ecx), %ecx
 		cld
+		jecxz	.Lerr
 .Lloop:
 		lodsb
 		stosb
@@ -29,6 +30,7 @@ memccpy:
 		jz .Lout
 		decl %ecx
 		jnz .Lloop
+.Lerr:
 		xorl %edi, %edi
 .Lout:
 		movl %edi, %eax

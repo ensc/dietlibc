@@ -13,22 +13,26 @@ unsigned long long int strtoull(const char *ptr, char **endptr, int base)
   while(isspace(*nptr)) ++nptr;
 
   if (*nptr == '-') { neg=1; nptr++; }
-  if (*nptr == '+') ++nptr;
-  if (!base) {
+  else if (*nptr == '+') ++nptr;
+  orig=nptr;
+  if (base==16 && nptr[0]=='0') goto skip0x;
+  if (base) {
+    register unsigned int b=base-2;
+    if (__unlikely(b>34)) { errno=EINVAL; return 0; }
+  } else {
     if (*nptr=='0') {
       base=8;
+skip0x:
       if ((*(nptr+1)=='x')||(*(nptr+1)=='X')) {
 	nptr+=2;
 	base=16;
       }
-    }
-    else
+    } else
       base=10;
   }
-  orig=nptr;
   while(__likely(*nptr)) {
     register unsigned char c=*nptr;
-    c=(c>='a'?c-'a'+10:c>='A'?c-'A'+10:c-'0');
+    c=(c>='a'?c-'a'+10:c>='A'?c-'A'+10:c<='9'?c-'0':0xff);
     if (__unlikely(c>=base)) break;	/* out of base */
     {
       register unsigned long x=(v&0xff)*base+c;
@@ -39,6 +43,7 @@ unsigned long long int strtoull(const char *ptr, char **endptr, int base)
     ++nptr;
   }
   if (__unlikely(nptr==orig)) {		/* no conversion done */
+err_conv:
     nptr=ptr;
     errno=EINVAL;
     v=0;
@@ -46,7 +51,7 @@ unsigned long long int strtoull(const char *ptr, char **endptr, int base)
   if (endptr) *endptr=(char *)nptr;
   if (overflow) {
     errno=ERANGE;
-    return ULONG_MAX;
+    return ULLONG_MAX;
   }
   return (neg?-v:v);
 }
