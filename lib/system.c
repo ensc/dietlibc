@@ -56,10 +56,8 @@ int system (const char *line)
     _exit(127);
   }
   save = errno;
-  if ((sigaction (SIGINT,  &intr, (struct sigaction *)0) | sigaction (SIGQUIT, &quit, (struct sigaction *)0)))
-  {
-    if (errno==ENOSYS) __set_errno (save);
-    else return -1;
-  }
+  sigaction (SIGINT,  &intr, (struct sigaction *)0);
+  sigaction (SIGQUIT, &quit, (struct sigaction *)0);
+  __set_errno(save);
   return ret;
 }
