@@ -27,7 +27,7 @@ size_t strlen(const char *s) __THROW __pure;
 
 char *strstr(const char *haystack, const char *needle) __THROW __pure;
 
-char *strdup(const char *s) __attribute_malloc__ __THROW;
+char *strdup(const char *s) __THROW __attribute_malloc__ ;
 
 char *strchr(const char *s, int c) __THROW __pure;
 char *strrchr(const char *s, int c) __THROW __pure;
@@ -55,7 +55,7 @@ char *strerror(int errnum) __THROW;
 const char *strsignal(int signum) __THROW;
 void *memmem(const void *haystack, size_t haystacklen, const void *needle, size_t needlelen) __THROW;
 
-char *strndup(const char *s,size_t n) __attribute_malloc__ __THROW;
+char *strndup(const char *s,size_t n) __THROW __attribute_malloc__ ;
 #endif
 
 char *strtok(char *s, const char *delim) __THROW;
