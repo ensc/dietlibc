@@ -168,7 +168,7 @@ strtod:
 .Lquad:
         fmul    %st(0),%st(0)
 .Lexpend:
-        shrl    $1,%edx
+        shrl    %edx
         jnc     .Lnomul
         fmul    %st(0),%st(1)
 .Lnomul:jnz     .Lquad                                                  # stuff         integer.frac E expo

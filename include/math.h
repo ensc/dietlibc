@@ -74,5 +74,6 @@ double copysign(double value, double sign) __attribute__((__const__));
 
 #ifdef _GNU_SOURCE
 void sincos(double x, double* sinx, double* cosx);
+double ipow (double mant, int expo);
 #endif
 #endif
