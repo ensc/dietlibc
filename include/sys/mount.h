@@ -4,7 +4,6 @@
 #include <sys/cdefs.h>
 #include <sys/types.h>
 #define _LINUX_CONFIG_H
-#include <linux/fs.h>
 
 #define BLOCK_SIZE	1024
 #define BLOCK_SIZE_BITS	10

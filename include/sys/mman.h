@@ -3,12 +3,99 @@
 
 #include <sys/cdefs.h>
 #include <sys/types.h>
-#include <linux/mman.h>
-#include <asm/page.h>
 
-#ifndef PAGE_SIZE
-#warning PAGE_SIZE undefined
+#define MREMAP_MAYMOVE	1
+#define MREMAP_FIXED	2
+
+#define PROT_READ	0x1		/* page can be read */
+#define PROT_WRITE	0x2		/* page can be written */
+#define PROT_EXEC	0x4		/* page can be executed */
+#define PROT_NONE	0x0		/* page can not be accessed */
+
+#define MAP_SHARED	0x01		/* Share changes */
+#define MAP_PRIVATE	0x02		/* Changes are private */
+
+#ifdef __alpha__
+#define MAP_FIXED	0x100		/* Interpret addr exactly */
+#define MAP_ANONYMOUS	0x10		/* don't use a file */
+#define MAP_GROWSDOWN	0x1000		/* stack-like segment */
+#define MAP_DENYWRITE	0x2000		/* ETXTBSY */
+#define MAP_EXECUTABLE	0x4000		/* mark it as an executable */
+#define MAP_LOCKED	0x8000		/* lock the mapping */
+#define MAP_NORESERVE	0x10000		/* don't check for reservations */
+#define MS_ASYNC	1		/* sync memory asynchronously */
+#define MS_SYNC		2		/* synchronous memory sync */
+#define MS_INVALIDATE	4		/* invalidate the caches */
+#define MCL_CURRENT	 8192		/* lock all currently mapped pages */
+#define MCL_FUTURE	16384		/* lock all additions to address space */
+#define MADV_NORMAL	0		/* no further special treatment */
+#define MADV_RANDOM	1		/* expect random page references */
+#define MADV_SEQUENTIAL	2		/* expect sequential page references */
+#define MADV_WILLNEED	3		/* will need these pages */
+#define MADV_SPACEAVAIL	5		/* ensure resources are available */
+#define MADV_DONTNEED	6		/* dont need these pages */
+#else
+#define MAP_FIXED	0x10		/* Interpret addr exactly */
+#define MAP_ANONYMOUS	0x20		/* don't use a file */
 #endif
+
+#if defined(__i386__)
+#define MAP_GROWSDOWN	0x0100		/* stack-like segment */
+#define MAP_DENYWRITE	0x0800		/* ETXTBSY */
+#define MAP_EXECUTABLE	0x1000		/* mark it as an executable */
+#define MAP_LOCKED	0x2000		/* pages are locked */
+#define MAP_NORESERVE	0x4000		/* don't check for reservations */
+#define MS_ASYNC	1		/* sync memory asynchronously */
+#define MS_INVALIDATE	2		/* invalidate the caches */
+#define MS_SYNC		4		/* synchronous memory sync */
+#define MCL_CURRENT	1		/* lock all current mappings */
+#define MCL_FUTURE	2		/* lock all future mappings */
+#define MADV_NORMAL	0x0		/* default page-in behavior */
+#define MADV_RANDOM	0x1		/* page-in minimum required */
+#define MADV_SEQUENTIAL	0x2		/* read-ahead aggressively */
+#define MADV_WILLNEED	0x3		/* pre-fault pages */
+#define MADV_DONTNEED	0x4		/* discard these pages */
+#elif defined(__sparc__) || defined (__powerpc__)
+#define MAP_RENAME      MAP_ANONYMOUS   /* In SunOS terminology */
+#define MAP_NORESERVE   0x40            /* don't reserve swap pages */
+#define MAP_INHERIT     0x80            /* SunOS doesn't do this, but... */
+#define MAP_LOCKED      0x100           /* lock the mapping */
+#define _MAP_NEW        0x80000000      /* Binary compatibility is fun... */
+#define MAP_GROWSDOWN	0x0100		/* stack-like segment */
+#define MAP_DENYWRITE	0x0800		/* ETXTBSY */
+#define MAP_EXECUTABLE	0x1000		/* mark it as an executable */
+#define MS_ASYNC	1		/* sync memory asynchronously */
+#define MS_INVALIDATE	2		/* invalidate the caches */
+#define MS_SYNC		4		/* synchronous memory sync */
+#define MCL_CURRENT     0x2000          /* lock all currently mapped pages */
+#define MCL_FUTURE      0x4000          /* lock all additions to address space */
+#define MADV_NORMAL	0x0		/* default page-in behavior */
+#define MADV_RANDOM	0x1		/* page-in minimum required */
+#define MADV_SEQUENTIAL	0x2		/* read-ahead aggressively */
+#define MADV_WILLNEED	0x3		/* pre-fault pages */
+#define MADV_DONTNEED	0x4		/* discard these pages */
+#define MADV_FREE	0x5		/* (Solaris) contents can be freed */
+#elif defined (__arm__)
+#define MAP_GROWSDOWN	0x0100		/* stack-like segment */
+#define MAP_DENYWRITE	0x0800		/* ETXTBSY */
+#define MAP_EXECUTABLE	0x1000		/* mark it as an executable */
+#define MAP_LOCKED	0x2000		/* pages are locked */
+#define MAP_NORESERVE	0x4000		/* don't check for reservations */
+#define MS_ASYNC	1		/* sync memory asynchronously */
+#define MS_INVALIDATE	2		/* invalidate the caches */
+#define MS_SYNC		4		/* synchronous memory sync */
+#define MCL_CURRENT	1		/* lock all current mappings */
+#define MCL_FUTURE	2		/* lock all future mappings */
+#define MADV_NORMAL	0x0		/* default page-in behavior */
+#define MADV_RANDOM	0x1		/* page-in minimum required */
+#define MADV_SEQUENTIAL	0x2		/* read-ahead aggressively */
+#define MADV_WILLNEED	0x3		/* pre-fault pages */
+#define MADV_DONTNEED	0x4		/* discard these pages */
+#endif
+
+/* compatibility flags */
+#define MAP_ANON	MAP_ANONYMOUS
+#define MAP_FILE	0
 
 #define MAP_FAILED      ((void *) -1)
 
