@@ -9,7 +9,7 @@ Q: How do I install it?  make install?
 A: Yep.  It will then install itself to /opt/diet, with the wrapper in
    /opt/diet/bin/diet.  Or you don't install it at all.
    The diet libc comes with a wrapper called "diet", which can be found
-   in $(ARCH)-bin/diet, i.e.  i386-bin/diet for most of us.  Copy this
+   in bin-$(ARCH)/diet, i.e.  bin-i386/diet for most of us.  Copy this
    wrapper somewhere in your path (for example ~/bin) and then just
    compile stuff by prepending diet to the command line, e.g. "diet gcc
    -pipe -g -o t t.c".
