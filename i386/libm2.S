@@ -126,7 +126,7 @@ __cbrt:
 # x^y; st(0)=x, st(1)=y (x > 0)
 finpow:
 	fyl2x
-	jmp finexp
+	jmp __finexp
 
 .global exp2f,exp2,exp2l
 	.type	 exp2f,@function
@@ -134,13 +134,13 @@ finpow:
 	.type	 exp2l,@function
 exp2f:
 	flds 4(%esp)
-	jmp finexp
+	jmp __finexp
 exp2:
 	fldl 4(%esp)
-	jmp finexp
+	jmp __finexp
 exp2l:
 	fldt 4(%esp)
-	jmp finexp
+	jmp __finexp
 
 .global exp10f,exp10,exp10l	#,pow10f,pow10,pow10l
 	.type	 exp10f,@function
@@ -153,18 +153,18 @@ exp10f:
 #pow10f:
 	fldl2t
 	fmuls 4(%esp)
-	jmp finexp
+	jmp __finexp
 exp10:
 #pow10:
 	fldl2t
 	fmull 4(%esp)
-	jmp finexp
+	jmp __finexp
 exp10l:
 #pow10l:
 	fldl2t
 	fldt 4(%esp)
 	fmulp
-	jmp finexp
+	jmp __finexp
 
 # exp(x)-1
 .global expm1f,expm1,expm1l
@@ -195,7 +195,7 @@ finem1:
 	jc 1f
 	f2xm1
 	ret
-1:	call finexp
+1:	call __finexp
 	fld1
 	fsubrp
 	ret
@@ -215,7 +215,7 @@ sinh:
 	fldl2e
 	fmull 4(%esp)
 finsinh:
-	call finexp
+	call __finexp
 	fld1
 	fdiv %st(1),%st(0)	# st(0)=1/exp(x), st(1)=exp(x)
 	fsubrp %st(0),%st(1)
@@ -243,7 +243,7 @@ cosh:
 	fldl2e
 	fmull 4(%esp)
 fincosh:
-	call finexp
+	call __finexp
 	fld1
 	fdiv %st(1),%st(0)	# st(0)=1/exp(x), st(1)=exp(x)
 	faddp %st,%st(1)
@@ -266,12 +266,12 @@ coshl:
 tanhf:
 	fldl2e
 	fmuls 4(%esp)
-	call finexp
+	call __finexp
 	jmp fintanh
 tanh:
 	fldl2e
 	fmull 4(%esp)
-	call finexp
+	call __finexp
 fintanh:
 	fld1
 	fdiv %st(1),%st	# st(0)=1/exp(x), st(1)=exp(x)
@@ -286,7 +286,7 @@ tanhl:
 	fldl2e
 	fldt 4(%esp)
 	fmulp
-	call finexp
+	call __finexp
 	jmp fintanh
 
 .global hypotf,hypot,hypotl	# ,__hypot

@@ -34,7 +34,7 @@ pow:
 	fstsw %ax
 	sahf
 	jz 1f
-	jnc finpow	# x > 0
+	jnc .Lfinpow	# x > 0
 	fxch		# st(0)=y, st(1)=x
 	fld %st(0)	# st(0)=y, st(1)=y, st(2)=x
 	frndint		# st(0)=int(y)
@@ -42,7 +42,7 @@ pow:
 	fstsw %ax
 	fxch
 	sahf
-	jnz finpow	# fyl2x -> st(0) = NaN
+	jnz .Lfinpow	# fyl2x -> st(0) = NaN
 # y even or odd ?
 	fld1
 	fadd %st(0)	# st(0) = 2
@@ -53,10 +53,13 @@ pow:
 	fstsw %ax
 	fchs		# st(0) = -x
 	sahf
-	jz finpow	# y even
-	call finpow	# y odd
+	jz .Lfinpow	# y even
+	call .Lfinpow	# y odd
 	fchs
 1:	ret
+.Lfinpow:
+	fyl2x
+	jmp __finexp
 
 .Lende:
 .size    pow,.Lende-pow
