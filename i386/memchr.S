@@ -1,0 +1,22 @@
+.text
+.align 0
+.global memchr
+.type	 memchr,@function
+memchr:
+	pushl %edi
+	movl 8(%esp),%edi
+	movl 12(%esp),%eax
+	movl 16(%esp),%ecx
+	cld
+
+	repne scasb
+
+	je .Lfound
+	xorl %edi, %edi
+	incl %eax
+.Lfound:
+	movl %edi, %eax
+	decl %eax
+
+	popl %edi
+	ret

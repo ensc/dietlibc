@@ -86,7 +86,11 @@ void foo(int tmp,...) {
 }
 
 int main(int argc,char *argv[]) {
-  printf("%s\n",memchr("fnordhausen",'h',5));
+  char buf[10]="fnord";
+  char*t;
+  printf("%p %p\n",buf,"duh");
+  t=memcpy(buf,"duh",3);
+  printf("%p %p\n",buf,t);
 #if 0
   regex_t r;
 //  printf("regcomp %d\n",regcomp(&r,"^(re([\\[0-9\\]+])*|aw):[ \t]*",REG_EXTENDED));
