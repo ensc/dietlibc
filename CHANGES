@@ -68,6 +68,7 @@
   fnmatch used [^e] instead of [!e] for negation (Heiko Berges)
   add sparc and parisc assembly routines (Thomas Ogrisegg)
   add swab (Johannes Stezenbach)
+  make a{4} match exactly and not at least 4 times a (Ingo Oeser)
 
 0.22:
   fix i386 libm

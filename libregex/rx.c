@@ -300,7 +300,8 @@ static const char* parsepiece(struct piece*__restrict__ p,const char*__restrict_
 	  p->max=*tmp-'0';
 	  while (isdigit(*++tmp)) p->max=p->max*10+*tmp-'0';
 	}
-      }
+      } else
+	p->max=p->min;
       if (*tmp!='}') return s;
       ++tmp;
     }
