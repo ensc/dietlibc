@@ -1,5 +1,7 @@
 .text
 .globl strrchr
+.type strrchr,@function
+
 strrchr:
 	movl 0x4(%esp), %edx
 	movb 0x8(%esp), %cl

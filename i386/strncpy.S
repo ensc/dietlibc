@@ -13,6 +13,7 @@
 
 .text
 .globl strncpy
+.type strncpy,@function
 
 strncpy:
 		pushl %esi
