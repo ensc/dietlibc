@@ -46,6 +46,17 @@ void abort(void) __THROW;
 extern int rand(void) __THROW;
 extern void srand(unsigned int seed) __THROW;
 
+typedef unsigned short randbuf[3];
+double drand48(void) __THROW;
+long lrand48(void) __THROW;
+long mrand48(void) __THROW;
+void srand48(long seed) __THROW;
+unsigned short *seed48(randbuf buf) __THROW;
+void lcong48(unsigned short param[7]) __THROW;
+long jrand48(randbuf buf) __THROW;
+long nrand48(randbuf buf) __THROW;
+double erand48(randbuf buf) __THROW;
+
 void qsort(void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *)) __THROW;
 void *bsearch(const void *key, const void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *)) __THROW;
 
