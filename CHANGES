@@ -9,6 +9,7 @@
     add pivot_root syscall, %n for *scanf.
   add adjtimex (thanks, Laurent BERCOT)
   add Frank Klemm's optimized md5
+  add -Os option to diet (see diet.1).
 
 0.11:
   fix major oops in DNS routines (only with WANT_FULL_RESOLV_CONF enabled).

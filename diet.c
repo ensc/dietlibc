@@ -22,6 +22,17 @@ static void error(const char *message) {
   exit(1);
 }
 
+static const char* Os[] = {
+  "i386","-Os","-mpreferred-stack-boundary=2",
+	 "-malign-functions=0","-malign-jumps=0",
+	 "-malign-loops=0","-fomit-frame-pointer",0,
+  "sparc","-Os","-mcpu=supersparc",0,
+  "alpha","-Os","-fomit-frame-pointer",0,
+  "arm","-Os","-fomit-frame-pointer",0,
+  "mips","-Os","-fomit-frame-pointer","-fno-pic",0,
+  "ppc","-Os","-fomit-frame-pointer","-mpowerpc-gpopt","-mpowerpc-gfxopt",0,
+  0};
+
 int main(int argc,char *argv[]) {
   int _link=0;
   int compile=0;
@@ -31,11 +42,16 @@ int main(int argc,char *argv[]) {
   const char *libgcc="-lgcc";
   char dashL[1000]="-L";
   int i;
+  int mangleopts=0;
 
   if (argc<2) {
     error("usage: diet [gcc command line]\n"
 	  "e.g.   diet gcc -c t.c\n"
 	  "or     diet sparc-linux-gcc -o foo foo.c bar.o\n");
+  }
+  if (!strcmp(argv[1],"-Os")) {
+    ++argv; --argc;
+    mangleopts=1;
   }
   {
     char *tmp=strchr(argv[1],0)-2;
@@ -48,6 +64,7 @@ int main(int argc,char *argv[]) {
       if (tmp2-cc>90) error("platform name too long!\n");
       memmove(platform+len,argv[1],tmp2-cc);
       platform[tmp2-cc+len]=0;
+      if (platform[0]=='i' && platform[2]=='8' && platform[3]=='6') platform[1]='3';
 /*      printf("found platform %s\n",platform); */
     } else {
 #ifdef __sparc__
@@ -88,7 +105,7 @@ int main(int argc,char *argv[]) {
 	if (!strcmp(argv[i],"-o"))
 	  if (!compile) _link=1;
 #endif
-      newargv=alloca(sizeof(char*)*(argc+8));
+      newargv=alloca(sizeof(char*)*(argc+20));
       a=alloca(strlen(diethome)+20);
       b=alloca(strlen(platform)+20);
       c=alloca(strlen(platform)+20);
@@ -112,8 +129,25 @@ int main(int argc,char *argv[]) {
 #ifdef WANT_DYNAMIC
       if (_link) { *dest++=d; }
 #endif
-      for (i=2; i<argc; ++i)
+      for (i=2; i<argc; ++i) {
+	if (mangleopts)
+	  if (argv[i][0]=='-' && (argv[i][1]=='O' || argv[i][1]=='f' || argv[i][1]=='m'))
+	    continue;
 	*dest++=argv[i];
+      }
+      if (mangleopts) {
+	const char **o=Os;
+	for (o=Os;*o;) {
+	  if (strcmp(*o,platform)) {
+	    ++o;
+	    while (*o) {
+	      *dest++=*o;
+	      ++o;
+	    }
+	  } else
+	    while (*o) ++o;
+	}
+      }
       if (_link) { *dest++=c; *dest++=(char*)libgcc; }
 #ifdef WANT_DYNAMIC
       if (_link) { *dest++=e; }
