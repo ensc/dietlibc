@@ -45,6 +45,13 @@ int main(int argc,char *argv[]) {
 				   ((struct sockaddr_in*)ai->ai_addr)->sin_port),
 	   ai->ai_family==AF_INET6?"PF_INET6":"PF_INET",
 	   ai->ai_socktype==SOCK_STREAM?"SOCK_STREAM":"SOCK_DGRAM");
+    {
+      char buf[100];
+      inet_ntop(ai->ai_family,ai->ai_family==AF_INET6?
+		(char*)&(((struct sockaddr_in6*)ai->ai_addr)->sin6_addr):
+		(char*)&(((struct sockaddr_in*)ai->ai_addr)->sin_addr),buf,100);
+      printf("  %s\n",buf);
+    }
     ai=ai->ai_next;
   }
 #if 0
