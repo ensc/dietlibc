@@ -77,6 +77,11 @@ void closelog(void) {
 #endif
 
 int main(int argc,char *argv[]) {
+  char x[5];
+  x[4]='x';
+  fgets(x,4,stdin);
+  puts(x);
+  printf("%c\n",x[4]);
 #if 0
   char* paths[]={"/usr/lib","/usr/","usr","/",".",".."};
   char* want[]={"/usr","/",".","/",".","."};
@@ -424,7 +429,7 @@ int main(int argc,char *argv[]) {
   time_t t=time(0);
   puts(asctime(localtime(&t)));
 #endif
-#if 1
+#if 0
   struct servent *foo=getservbyname("pop-3","tcp");
   if (foo)
     printf("found service %s on port %d\n",foo->s_name,foo->s_port);
