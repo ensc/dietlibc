@@ -127,7 +127,7 @@ int main(int argc,char *argv[]) {
 #if 0
   printf("%s\n",crypt("test","$1$"));
 #endif
-#if 1
+#if 0
   MD5_CTX x;
   unsigned char md5[16];
   MD5Init(&x);
@@ -320,10 +320,10 @@ int main(int argc,char *argv[]) {
 #if 0
   puts(ttyname(0));
 #endif
-#if 0
+#if 1
   char buf[1024];
   struct hostent* r;
-  r=gethostbyname("duh");
+  r=gethostbyname("borg");
   {
 /*  while (r=gethostent_r(buf,1024)) { */
     if (r && r->h_name) {
