@@ -100,5 +100,5 @@ void tzset(void) {
 }
 
 #else
-void tzset(void)	__attribute__((weak,alias("return0")));
+void tzset(void)	__attribute__((weak,alias("__nop")));
 #endif

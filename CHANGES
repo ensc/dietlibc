@@ -11,6 +11,11 @@
   Put up new mipsel target to cross compile for little endian mips.
   The mips target will again explicitly set endianness to big endian.
   Compiling natively on a MIPS box should not touch the endianness.
+  Duh, when we removed return0, we broke tzset when the time zone parser
+    was disabled.  Uwe Ohse noticed this.  Thanks!
+  Fix gethostbyname to match host names case insensitively in /etc/hosts.
+    Oops, this was reported 6 weeks ago but I overlooked the email.
+    Thanks, Denis Rachal!
 
 0.14:
   fix brk again (missing __brk, trivial oversight)

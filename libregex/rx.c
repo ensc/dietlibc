@@ -4,8 +4,6 @@
 #include <sys/types.h>
 #include <string.h>
 
-#undef DEBUG
-
 /* this is ugly.
  * the idea is to build a parse tree, then do some poor man's OOP with a
  * generic matcher function call that is always that the start of each

@@ -26,7 +26,7 @@ int gethostbyname_r(const char* name, struct hostent* result,
     struct hostent* r;
     while ((r=gethostent_r(buf,buflen))) {
       int i;
-      if (r->h_addrtype==AF_INET && !strcmp(r->h_name,name)) {	/* found it! */
+      if (r->h_addrtype==AF_INET && !strcasecmp(r->h_name,name)) {	/* found it! */
 found:
 	memmove(result,r,sizeof(struct hostent));
 	*RESULT=result;
@@ -36,7 +36,7 @@ found:
       }
       for (i=0; i<16; ++i) {
 	if (r->h_aliases[i]) {
-	  if (!strcmp(r->h_aliases[i],name)) goto found;
+	  if (!strcasecmp(r->h_aliases[i],name)) goto found;
 	} else break;
       }
     }
