@@ -12,11 +12,15 @@ int getaddrinfo(const char *node, const char *service, const struct addrinfo *hi
   struct addrinfo **tmp;
   int family;
   tmp=res; *res=0;
+  if (hints) {
+    if (hints->ai_family && hints->ai_family != PF_INET6 && hints->ai_family != PF_INET) return EAI_FAMILY;
+    if (hints->ai_socktype && hints->ai_socktype != SOCK_STREAM && hints->ai_socktype != SOCK_DGRAM) return EAI_SOCKTYPE;
+  }
   for (family=PF_INET6; ; family=PF_INET) {
     if (!hints || hints->ai_family==family || hints->ai_family==AF_UNSPEC) {	/* IPv6 addresses are OK */
       struct hostent h;
       struct hostent *H;
-      int herrno;
+      int herrno=0;
       char buf[4096];
       int lookupok=0;
       h.h_addr_list=(char**)buf+16;
@@ -28,6 +32,8 @@ int getaddrinfo(const char *node, const char *service, const struct addrinfo *hi
 	} else if ((!hints || !(hints->ai_flags&AI_NUMERICHOST)) &&
 		   !gethostbyname2_r(node,family,&h,buf,4096,&H,&herrno)) {
 	  lookupok=1;
+	} else {
+	  if (herrno==TRY_AGAIN) { freeaddrinfo(*res); return EAI_AGAIN; }
 	}
       } else {
 	h.h_name=0;
@@ -89,6 +95,9 @@ int getaddrinfo(const char *node, const char *service, const struct addrinfo *hi
 	      foo->ai.ai_addr=(struct sockaddr*)&foo->ip;
 	      if (foo->ai.ai_canonname)
 		foo->ai.ai_canonname=foo->name;
+	    } else {
+	      freeaddrinfo(*res);
+	      return EAI_SERVICE;
 	    }
 	  } else goto blah1;
 	}
@@ -112,6 +121,9 @@ int getaddrinfo(const char *node, const char *service, const struct addrinfo *hi
 	      tmp=&(*tmp)->ai_next;
 	      foo->ai.ai_addr=(struct sockaddr*)&foo->ip;
 	      foo->ai.ai_canonname=foo->name;
+	    } else {
+	      freeaddrinfo(*res);
+	      return EAI_SERVICE;
 	    }
 	  } else goto blah2;
 	}
@@ -124,5 +136,5 @@ int getaddrinfo(const char *node, const char *service, const struct addrinfo *hi
   return 0;
 error:
   freeaddrinfo(*res);
-  return -1;
+  return EAI_MEMORY;
 }

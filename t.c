@@ -322,7 +322,7 @@ int main(int argc,char *argv[]) {
 #if 0
   puts(ttyname(0));
 #endif
-#if 1
+#if 0
   char buf[1024];
   struct hostent* r;
   r=gethostbyname("xorn.qontinuum");
@@ -366,9 +366,10 @@ int main(int argc,char *argv[]) {
 #endif
 /*  putchar('c');
   write(1,"fnord\n",6); */
-#if 0
+#if 1
   struct addrinfo *ai;
-  getaddrinfo("nagus","22",0,&ai);
+//  getaddrinfo("xorn","22",0,&ai);
+  puts(gai_strerror(getaddrinfo("xorn","22",0,&ai)));
 #endif
 #if 0
   struct hostent host,*res;
