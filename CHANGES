@@ -13,6 +13,8 @@
     actually large enough (Enrico Scholz)
   add waitpid wrapper around wait4 for arm-linux (Avinash Bhatia)
   make res_mkquery reject invalid domains (label>64, name>255) (Nikola Vladov)
+  make res_query return TRY_AGAIN instead of NO_DATA if no answer was
+    received (Nikola Vladov)
 
 0.27:
   change DNS routines to look for ip6.arpa instead of ip6.int

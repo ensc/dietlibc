@@ -145,7 +145,7 @@ nxdomain:
       }
     }
   }
-  h_errno=NO_DATA;
+  h_errno=TRY_AGAIN;
   return -1;
 }
 
