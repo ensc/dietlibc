@@ -32,6 +32,23 @@ _start:
 	addl	$0x8, %esp
 #endif
 
+#ifdef WANT_SYSENTER
+	movl	%eax,%edx
+	xorl	%esi,%esi
+1:
+	add	$4,%edx
+	cmpl	%esi,-4(%edx)
+	jne	1b
+1:
+	movl	(%edx),%edi
+	test	%edi,%edi
+	jz 1f
+	cmpl	$32,%edi
+	movl	4(%edx),%edi
+	PUT_VAR %edi, __vsyscall, %edx
+1:
+#endif
+
 #ifdef WANT_DYNAMIC
 	call	_dyn_start
 #else

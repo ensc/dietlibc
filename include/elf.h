@@ -168,6 +168,12 @@ typedef int64_t		Elf64_Sxword;
 #define AT_PLATFORM	15	/* string identifying CPU for optimizations */
 #define AT_HWCAP	16	/* arch dependent hints at CPU capabilities */
 #define AT_CLKTCK	17	/* frequency at which times() increments */
+#define AT_FPUCW	18	/* Used FPU control word.  */
+#define AT_DCACHEBSIZE	19	/* Data cache block size.  */
+#define AT_ICACHEBSIZE	20	/* Instruction cache block size.  */
+#define AT_UCACHEBSIZE	21	/* Unified cache block size.  */
+#define AT_IGNOREPPC	22	/* Entry should be ignored */
+#define AT_SYSINFO	32	/* pointer to global system page */
 
 typedef struct dynamic{
   Elf32_Sword d_tag;

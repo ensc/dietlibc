@@ -1248,6 +1248,9 @@ static void _dl_elfaux(register unsigned long*ui) {
       break;
 #endif
 
+    case AT_SYSINFO:
+      /* TODO: rewrite unified syscall to use this value */
+
     default:
       break;
     }
