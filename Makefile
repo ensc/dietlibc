@@ -13,6 +13,7 @@ MYARCH=$(shell uname -m | sed -e 's/i[4-9]86/i386/' -e 's/armv[3-6][lb]/arm/')
 # This extra-ugly cruft is here so make will not run uname and sed each
 # time it looks at $(OBJDIR).  This alone sped up running make when
 # nothing has to be done from 1 sec to 0.12 sec on a 900 MHz Athlon.
+# We don't use ARCH:=$(MYARCH) so we can detect unknown architectures.
 ifeq ($(MYARCH),i386)
 ARCH=i386
 else

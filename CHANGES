@@ -1,4 +1,7 @@
+0.15:
+
 0.14:
+  fix brk again (missing __brk, trivial oversight)
   a new i386/atol.S that is 4 bytes smaller (and faster, too!).  Thanks,
     Thomas Ogrisegg!
   Thomas also contributed a PA-RISC port including testandset, so
