@@ -70,6 +70,11 @@ struct in_addr {
 #define IP_DEFAULT_MULTICAST_TTL        1
 #define IP_DEFAULT_MULTICAST_LOOP       1
 
+#define IN6ADDR_ANY_INIT {{{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }}}
+#define IN6ADDR_LOOPBACK_INIT {{{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 }}}
+extern const struct in6_addr in6addr_any;
+extern const struct in6_addr in6addr_loopback;
+
 struct ip_mreq {
   struct in_addr imr_multiaddr;	/* IP multicast address of group */
   struct in_addr imr_interface;	/* local IP address of interface */

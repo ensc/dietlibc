@@ -7,7 +7,7 @@
  *    - md5asm.S is available
  *    - CPU is a i386
  */
-#define USE_INTEL_ASM
+# define USE_INTEL_ASM
 #endif
 
 /*
@@ -17,22 +17,22 @@
  *    - little endian machine
  */
 #if (__WORDSIZE == 32) && (__BYTE_ORDER == __LITTLE_ENDIAN)
-#define NO_ENCODE_DECODE
+# define NO_ENCODE_DECODE
 #endif
 
-#define S11 7
+#define S11  7
 #define S12 12
 #define S13 17
 #define S14 22
-#define S21 5
-#define S22 9
+#define S21  5
+#define S22  9
 #define S23 14
 #define S24 20
-#define S31 4
+#define S31  4
 #define S32 11
 #define S33 16
 #define S34 23
-#define S41 6
+#define S41  6
 #define S42 10
 #define S43 15
 #define S44 21
@@ -44,42 +44,40 @@
 
 #define ROTATE_LEFT(x, n)  (((x) << (n)) | ((x) >> (32-(n))))
 
-#define FF(a, b, c, d, x, s, ac) { (a) += F (b, c, d) + (x) + (word)(ac); (a) = ROTATE_LEFT (a, s); (a) += (b); }
-#define GG(a, b, c, d, x, s, ac) { (a) += G (b, c, d) + (x) + (word)(ac); (a) = ROTATE_LEFT (a, s); (a) += (b); }
-#define HH(a, b, c, d, x, s, ac) { (a) += H (b, c, d) + (x) + (word)(ac); (a) = ROTATE_LEFT (a, s); (a) += (b); }
-#define II(a, b, c, d, x, s, ac) { (a) += I (b, c, d) + (x) + (word)(ac); (a) = ROTATE_LEFT (a, s); (a) += (b); }
+#define FF(a, b, c, d, x, s, ac) { (a) += F (b, c, d) + (x) + (uint32_t)(ac); (a) = ROTATE_LEFT (a, s); (a) += (b); }
+#define GG(a, b, c, d, x, s, ac) { (a) += G (b, c, d) + (x) + (uint32_t)(ac); (a) = ROTATE_LEFT (a, s); (a) += (b); }
+#define HH(a, b, c, d, x, s, ac) { (a) += H (b, c, d) + (x) + (uint32_t)(ac); (a) = ROTATE_LEFT (a, s); (a) += (b); }
+#define II(a, b, c, d, x, s, ac) { (a) += I (b, c, d) + (x) + (uint32_t)(ac); (a) = ROTATE_LEFT (a, s); (a) += (b); }
 
-typedef unsigned int   word;
-typedef unsigned char  byte;
 
 #ifndef NO_ENCODE_DECODE
-/* Encodes input (word) into output (byte). len is in words */
+/* Encodes input (32 bit) into output (8 bit). len is in 32 bit units */
 
-static void  Encode ( byte* dst, const word* src, size_t length )
+static void  Encode ( uint8_t* dst, const uint32_t* src, size_t length )
 {
-    word  val;
+    uint32_t  val;
     
     while ( length-- ) {
         val = *src++;
-	*dst++ = (byte) ((val >>  0) & 0xff);
-	*dst++ = (byte) ((val >>  8) & 0xff);
-	*dst++ = (byte) ((val >> 16) & 0xff);
-	*dst++ = (byte) ((val >> 24) & 0xff);
+	*dst++ = (uint8_t) ((val >>  0) & 0xff);
+	*dst++ = (uint8_t) ((val >>  8) & 0xff);
+	*dst++ = (uint8_t) ((val >> 16) & 0xff);
+	*dst++ = (uint8_t) ((val >> 24) & 0xff);
     }
 }
 
 
-/* Decodes input (byte) into output (word). len is in words */
+/* Decodes input (8 bit) into output (32 bit). len is in 32 bit units */
 
-static void  Decode ( word* dst, const byte* src, size_t length )
+static void  Decode ( uint32_t* dst, const uint8_t* src, size_t length )
 {
-    word  val;
+    uint32_t  val;
     
     while ( length-- ) {
-	val  = (word)(*src++) <<  0;
-	val |= (word)(*src++) <<  8;
-	val |= (word)(*src++) << 16;
-	val |= (word)(*src++) << 24;
+	val  = (uint32_t)(*src++) <<  0;
+	val |= (uint32_t)(*src++) <<  8;
+	val |= (uint32_t)(*src++) << 16;
+	val |= (uint32_t)(*src++) << 24;
 	*dst++ = val;
     }
 }
@@ -88,25 +86,25 @@ static void  Decode ( word* dst, const byte* src, size_t length )
 
 #ifdef USE_INTEL_ASM
 
-extern void  __MD5Transform ( word state[4], const byte block[64], size_t repeat );
-
-void  MD5Transform  (uint32_t state[4], const unsigned char block[64]) {
-  (void)__MD5Transform(state,block,1);
-}
+extern 
+void  __MD5Transform ( uint32_t state[4], const uint8_t block[64], size_t repeat );
 
 #else
 
-void  __MD5Transform ( uint32_t state[4], const unsigned char block[64], size_t repeat )
+void  __MD5Transform ( uint32_t state[4], const uint8_t block[64], size_t repeat )
 {
 #ifdef NO_ENCODE_DECODE
-    register const word*  x;
+    register const uint32_t*  x;
 #else    
-    word         x [16];
+    uint32_t                  x [16];
 #endif    
-    register word         a;
-    register word         b;
-    register word         c;
-    register word         d;
+    register uint32_t         a;
+    register uint32_t         b;
+    register uint32_t         c;
+    register uint32_t         d;
+    
+    if (rep == 0)
+        return;
     
 rep:
     
@@ -116,7 +114,7 @@ rep:
     d = state [3];
     
 #ifdef NO_ENCODE_DECODE
-    x = (const word*)block;
+    x = (const uint32_t*)block;
 #else    
     Decode ( x, block, 16 );
 #endif    
@@ -208,12 +206,6 @@ rep:
 #endif    
 }
 
-
-void  MD5Transform  (uint32_t state[4], const unsigned char block[64]) {
-  (void)__MD5Transform(state,block,1);
-}
-
-
 void  MD5Init ( MD5_CTX* context )
 {
     context->count[0] = 0;
@@ -228,12 +220,12 @@ void  MD5Init ( MD5_CTX* context )
 
 /* MD5 block update operation: Continues an MD5 message-digest operation, processing another message block, and updating the context */
 
-void  MD5Update ( MD5_CTX* context, const byte* input, size_t inputBytes )
+void  MD5Update ( MD5_CTX* context, const uint8_t* input, size_t inputBytes )
 {
-    word  i;
-    word  ByteIndex;
-    word  partLen;
-    word  len;
+    uint32_t  i;
+    uint32_t  ByteIndex;
+    uint32_t  partLen;
+    uint32_t  len;
 
     /* Compute number of bytes mod 64 */
     ByteIndex = (context->count[0] >> 3) & 0x3F;
@@ -250,7 +242,7 @@ void  MD5Update ( MD5_CTX* context, const byte* input, size_t inputBytes )
 	memcpy ( context->buffer + ByteIndex, input, partLen );
 	__MD5Transform ( context->state, context->buffer, 1 );
         len = (inputBytes - partLen) / 64;
-	if (len) __MD5Transform ( context->state, input+partLen, len );
+	__MD5Transform ( context->state, input+partLen, len );
 	i = partLen + 64 * len;
 	ByteIndex = 0;
     } else {
@@ -263,12 +255,17 @@ void  MD5Update ( MD5_CTX* context, const byte* input, size_t inputBytes )
 
 #endif
 
-void  MD5Final ( byte digest[16], MD5_CTX* context ) 
+void  MD5Transform ( uint32_t state[4], const uint8_t block[64] ) 
 {
-    static byte  padding [64];
-    byte         bits [8];
-    word         index;
-    word         padLen;
+    __MD5Transform ( state, block, 1 );
+}
+
+void  MD5Final ( uint8_t digest[16], MD5_CTX* context ) 
+{
+    static uint8_t  padding [64];
+    uint8_t         bits     [8];
+    uint32_t        index;
+    uint32_t        padLen;
     
     /* Save number of bits */
 #ifdef NO_ENCODE_DECODE
@@ -299,3 +296,4 @@ void  MD5Final ( byte digest[16], MD5_CTX* context )
     memset ( context, 0, sizeof (*context) );
 }
 
+/* end of md5.c */
