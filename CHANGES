@@ -17,6 +17,7 @@
     worms.  So I ripped it out.  I also changed the readdir64 emulation
     to work if there is no getdents64.
   fix ia64 start.S (Thanks to Volker Birk for an account on his ia64 box)
+  many ia64 fixes (waitpid, nice, fork, vfork, time, utime ...)
 
 0.21:
   use gcc's size_t, ptrdiff_t and wchar_t types (Olaf)
