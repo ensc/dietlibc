@@ -12,6 +12,12 @@ long sysconf(int name)
        getrlimit(RLIMIT_NOFILE, &limit);
        return limit.rlim_cur;
        }
+   case _SC_CLK_TCK:
+#ifdef __alpha__
+       return 1024;
+#else
+       return 100;
+#endif
    }
 
   return -1;

@@ -116,7 +116,6 @@ void _exit(int status) __THROW __attribute__((noreturn));
 extern int daemon (int nochdir,int noclose) __THROW;
 
 int pause(void) __THROW;
-int reboot (int flag) __THROW;
 
 #if _FILE_OFFSET_BITS == 64
 #define open open64
@@ -174,6 +173,7 @@ struct __sysctl_args;
 int _sysctl(struct __sysctl_args *args) __THROW;
 
 #define _SC_OPEN_MAX 4
+#define _SC_CLK_TCK 1
 long sysconf(int name) __THROW;
 
 #endif

@@ -39,4 +39,6 @@
 
 #define __P(x) x
 
+#define __ptr_t void*
+
 #endif

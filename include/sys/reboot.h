@@ -14,6 +14,6 @@
 #define	LINUX_REBOOT_CMD_RESTART2	0xA1B2C3D4
 
 /* Reboot or halt the system.  */
-int reboot (int flag, void *arg);
+int reboot (int flag);
 
 #endif	/* _SYS_REBOOT_H */
