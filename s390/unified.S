@@ -7,6 +7,8 @@ __unified_syscall:
 	clr	%r2,%r4
 	jm	.Lnoerror
 
+.global __error_unified_syscall
+__error_unified_syscall:
 #ifdef WANT_THREAD_SAFE
 	stm	%r11,%r15,44(%r15)
 	lr	%r0,%r15
