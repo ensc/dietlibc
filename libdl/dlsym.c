@@ -47,7 +47,7 @@ void *_dlsym(void* handle,const char* symbol) {
 #ifdef __DIET_LD_SO__
 static
 #endif
-void*_dl_sym_search_str(struct _dl_handle*dh_begin,char*name) {
+void*_dl_sym_search_str(struct _dl_handle*dh_begin,const char*name) {
   void *sym=0;
   struct _dl_handle*tmp;
 #ifdef DEBUG
