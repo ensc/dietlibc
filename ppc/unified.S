@@ -9,7 +9,11 @@ __unified_syscall:
 	mr	0,3
 	beq	.L1
 #ifdef WANT_THREAD_SAFE
-	bl	__set_errno
+	mr.	5,3
+	mflr	4
+	bl	__errno_location
+	stw	5,0(3)
+	mtlr	4
 #else
 	lis	9,errno@ha
 	stw	3,errno@l(9)
