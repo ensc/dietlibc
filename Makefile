@@ -44,6 +44,10 @@ else
 ifeq ($(MYARCH),parisc)
 ARCH=parisc
 else
+ifeq ($(MYARCH),parisc64)
+ARCH=parisc
+MYARCH=parisc
+else
 ifeq ($(MYARCH),x86_64)
 ARCH=x86_64
 else
@@ -51,6 +55,7 @@ ifeq ($(MYARCH),ia64)
 ARCH=ia64
 else
 $(error unknown architecture, please fix Makefile)
+endif
 endif
 endif
 endif

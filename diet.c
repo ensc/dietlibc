@@ -325,7 +325,11 @@ pp:
 incorporated:
       if (_link) {
 	if (profile) *dest++="-lgmon";
-	*dest++=c; *dest++=(char*)libgcc;
+	if (!strcmp(shortplatform,"sparc") || !strcmp(shortplatform,"sparc64")) {
+	  *dest++=(char*)libgcc; *dest++=c;
+	} else {
+	  *dest++=c; *dest++=(char*)libgcc;
+	}
       }
 #ifdef WANT_DYNAMIC
       if (_link) { *dest++=e; }

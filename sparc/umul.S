@@ -25,8 +25,6 @@
         C_LABEL(name);\
         .type name,@function;
 
-#define LOC(name)  . ## L ## name
-
 #define END(name) \
         .size name, . - name
 
@@ -34,7 +32,7 @@ ENTRY(.umul)
 	or	%o0, %o1, %o4
 	mov	%o0, %y			! multiplier -> Y
 	andncc	%o4, 0xfff, %g0		! test bits 12..31 of *both* args
-	be	LOC(mul_shortway)	! if zero, can do it the short way
+	be	.Lmul_shortway	! if zero, can do it the short way
 	 andcc	%g0, %g0, %o4		! zero the partial product; clear N & V
 
 	/*
@@ -124,7 +122,7 @@ ENTRY(.umul)
 	 addcc	%o4, %o2, %o1	! add compensation and put upper half in place
 #endif
 
-LOC(mul_shortway):
+.Lmul_shortway:
 	/*
 	 * Short multiply.  12 steps, followed by a final shift step.
 	 * The resulting bits are off by 12 and (32-12) = 20 bit positions,

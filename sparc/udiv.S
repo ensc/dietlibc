@@ -48,8 +48,6 @@
         C_LABEL(name);\
         .type name,@function;
 
-#define LOC(name)  .L ## name
-
 #define END(name) \
         .size name, . - name
 
@@ -70,11 +68,11 @@ ENTRY(.udiv)
 
 1:
 	cmp	%o3, %o5			! if %o1 exceeds %o0, done
-	blu	LOC(got_result)		! (and algorithm fails otherwise)
+	blu	.Lgot_result		! (and algorithm fails otherwise)
 	clr	%o2
 	sethi	%hi(1 << (32 - 4 - 1)), %g1
 	cmp	%o3, %g1
-	blu	LOC(not_really_big)
+	blu	.Lnot_really_big
 	clr	%o4
 
 	! Here the dividend is >= 2**(31-N) or so.  We must be careful here,
@@ -92,7 +90,7 @@ ENTRY(.udiv)
 
 	! Now compute %g2.
 	2:	addcc	%o5, %o5, %o5
-		bcc	LOC(not_too_big)
+		bcc	.Lnot_too_big
 		add	%g2, 1, %g2
 
 		! We get here if the %o1 overflowed while shifting.
@@ -101,14 +99,14 @@ ENTRY(.udiv)
 		sll	%g1, 4, %g1	! high order bit
 		srl	%o5, 1, %o5		! rest of %o5
 		add	%o5, %g1, %o5
-		b	LOC(do_single_div)
+		b	.Ldo_single_div
 		sub	%g2, 1, %g2
 
-	LOC(not_too_big):
+	.Lnot_too_big:
 	3:	cmp	%o5, %o3
 		blu	2b
 		nop
-		be	LOC(do_single_div)
+		be	.Ldo_single_div
 		nop
 	/* NB: these are commented out in the V8-Sparc manual as well */
 	/* (I do not understand this) */
@@ -123,15 +121,15 @@ ENTRY(.udiv)
 	! order bit set in the first step, just falling into the regular
 	! division loop will mess up the first time around.
 	! So we unroll slightly...
-	LOC(do_single_div):
+	.Ldo_single_div:
 		subcc	%g2, 1, %g2
-		bl	LOC(end_regular_divide)
+		bl	.Lend_regular_divide
 		nop
 		sub	%o3, %o5, %o3
 		mov	1, %o2
-		b	LOC(end_single_divloop)
+		b	.Lend_single_divloop
 		nop
-	LOC(single_divloop):
+	.Lsingle_divloop:
 		sll	%o2, 1, %o2
 		bl	1f
 		srl	%o5, 1, %o5
@@ -143,66 +141,66 @@ ENTRY(.udiv)
 		add	%o3, %o5, %o3
 		sub	%o2, 1, %o2
 	2:
-	LOC(end_single_divloop):
+	.Lend_single_divloop:
 		subcc	%g2, 1, %g2
-		bge	LOC(single_divloop)
+		bge	.Lsingle_divloop
 		tst	%o3
-		b,a	LOC(end_regular_divide)
+		b,a	.Lend_regular_divide
 
-LOC(not_really_big):
+.Lnot_really_big:
 1:
 	sll	%o5, 4, %o5
 	cmp	%o5, %o3
 	bleu	1b
 	addcc	%o4, 1, %o4
-	be	LOC(got_result)
+	be	.Lgot_result
 	sub	%o4, 1, %o4
 
 	tst	%o3	! set up for initial iteration
-LOC(divloop):
+.Ldivloop:
 	sll	%o2, 4, %o2
 		! depth 1, accumulated bits 0
-	bl	LOC(1.16)
+	bl	.L1.16
 	srl	%o5,1,%o5
 	! remainder is positive
 	subcc	%o3,%o5,%o3
 			! depth 2, accumulated bits 1
-	bl	LOC(2.17)
+	bl	.L2.17
 	srl	%o5,1,%o5
 	! remainder is positive
 	subcc	%o3,%o5,%o3
 			! depth 3, accumulated bits 3
-	bl	LOC(3.19)
+	bl	.L3.19
 	srl	%o5,1,%o5
 	! remainder is positive
 	subcc	%o3,%o5,%o3
 			! depth 4, accumulated bits 7
-	bl	LOC(4.23)
+	bl	.L4.23
 	srl	%o5,1,%o5
 	! remainder is positive
 	subcc	%o3,%o5,%o3
 		b	9f
 		add	%o2, (7*2+1), %o2
 	
-LOC(4.23):
+.L4.23:
 	! remainder is negative
 	addcc	%o3,%o5,%o3
 		b	9f
 		add	%o2, (7*2-1), %o2
 	
 	
-LOC(3.19):
+.L3.19:
 	! remainder is negative
 	addcc	%o3,%o5,%o3
 			! depth 4, accumulated bits 5
-	bl	LOC(4.21)
+	bl	.L4.21
 	srl	%o5,1,%o5
 	! remainder is positive
 	subcc	%o3,%o5,%o3
 		b	9f
 		add	%o2, (5*2+1), %o2
 	
-LOC(4.21):
+.L4.21:
 	! remainder is negative
 	addcc	%o3,%o5,%o3
 		b	9f
@@ -210,41 +208,41 @@ LOC(4.21):
 	
 	
 	
-LOC(2.17):
+.L2.17:
 	! remainder is negative
 	addcc	%o3,%o5,%o3
 			! depth 3, accumulated bits 1
-	bl	LOC(3.17)
+	bl	.L3.17
 	srl	%o5,1,%o5
 	! remainder is positive
 	subcc	%o3,%o5,%o3
 			! depth 4, accumulated bits 3
-	bl	LOC(4.19)
+	bl	.L4.19
 	srl	%o5,1,%o5
 	! remainder is positive
 	subcc	%o3,%o5,%o3
 		b	9f
 		add	%o2, (3*2+1), %o2
 	
-LOC(4.19):
+.L4.19:
 	! remainder is negative
 	addcc	%o3,%o5,%o3
 		b	9f
 		add	%o2, (3*2-1), %o2
 	
 	
-LOC(3.17):
+.L3.17:
 	! remainder is negative
 	addcc	%o3,%o5,%o3
 			! depth 4, accumulated bits 1
-	bl	LOC(4.17)
+	bl	.L4.17
 	srl	%o5,1,%o5
 	! remainder is positive
 	subcc	%o3,%o5,%o3
 		b	9f
 		add	%o2, (1*2+1), %o2
 	
-LOC(4.17):
+.L4.17:
 	! remainder is negative
 	addcc	%o3,%o5,%o3
 		b	9f
@@ -253,46 +251,46 @@ LOC(4.17):
 	
 	
 	
-LOC(1.16):
+.L1.16:
 	! remainder is negative
 	addcc	%o3,%o5,%o3
 			! depth 2, accumulated bits -1
-	bl	LOC(2.15)
+	bl	.L2.15
 	srl	%o5,1,%o5
 	! remainder is positive
 	subcc	%o3,%o5,%o3
 			! depth 3, accumulated bits -1
-	bl	LOC(3.15)
+	bl	.L3.15
 	srl	%o5,1,%o5
 	! remainder is positive
 	subcc	%o3,%o5,%o3
 			! depth 4, accumulated bits -1
-	bl	LOC(4.15)
+	bl	.L4.15
 	srl	%o5,1,%o5
 	! remainder is positive
 	subcc	%o3,%o5,%o3
 		b	9f
 		add	%o2, (-1*2+1), %o2
 	
-LOC(4.15):
+.L4.15:
 	! remainder is negative
 	addcc	%o3,%o5,%o3
 		b	9f
 		add	%o2, (-1*2-1), %o2
 	
 	
-LOC(3.15):
+.L3.15:
 	! remainder is negative
 	addcc	%o3,%o5,%o3
 			! depth 4, accumulated bits -3
-	bl	LOC(4.13)
+	bl	.L4.13
 	srl	%o5,1,%o5
 	! remainder is positive
 	subcc	%o3,%o5,%o3
 		b	9f
 		add	%o2, (-3*2+1), %o2
 	
-LOC(4.13):
+.L4.13:
 	! remainder is negative
 	addcc	%o3,%o5,%o3
 		b	9f
@@ -300,41 +298,41 @@ LOC(4.13):
 	
 	
 	
-LOC(2.15):
+.L2.15:
 	! remainder is negative
 	addcc	%o3,%o5,%o3
 			! depth 3, accumulated bits -3
-	bl	LOC(3.13)
+	bl	.L3.13
 	srl	%o5,1,%o5
 	! remainder is positive
 	subcc	%o3,%o5,%o3
 			! depth 4, accumulated bits -5
-	bl	LOC(4.11)
+	bl	.L4.11
 	srl	%o5,1,%o5
 	! remainder is positive
 	subcc	%o3,%o5,%o3
 		b	9f
 		add	%o2, (-5*2+1), %o2
 	
-LOC(4.11):
+.L4.11:
 	! remainder is negative
 	addcc	%o3,%o5,%o3
 		b	9f
 		add	%o2, (-5*2-1), %o2
 	
 	
-LOC(3.13):
+.L3.13:
 	! remainder is negative
 	addcc	%o3,%o5,%o3
 			! depth 4, accumulated bits -7
-	bl	LOC(4.9)
+	bl	.L4.9
 	srl	%o5,1,%o5
 	! remainder is positive
 	subcc	%o3,%o5,%o3
 		b	9f
 		add	%o2, (-7*2+1), %o2
 	
-LOC(4.9):
+.L4.9:
 	! remainder is negative
 	addcc	%o3,%o5,%o3
 		b	9f
@@ -344,16 +342,16 @@ LOC(4.9):
 	
 	
 	9:
-LOC(end_regular_divide):
+.Lend_regular_divide:
 	subcc	%o4, 1, %o4
-	bge	LOC(divloop)
+	bge	.Ldivloop
 	tst	%o3
-	bl,a	LOC(got_result)
+	bl,a	.Lgot_result
 	! non-restoring fixup here (one instruction only!)
 	sub	%o2, 1, %o2
 
 
-LOC(got_result):
+.Lgot_result:
 
 	retl
 	mov %o2, %o0
