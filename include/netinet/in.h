@@ -399,6 +399,6 @@ unsigned short int ntohs(unsigned short int netshort);
 	 && (((__const uint32_t *) (a))[3] == ((__const uint32_t *) (b))[3]))
 
 /* old legacy bullshit */
-int bindresvport(int sd, struct sockaddr_in* sin);
+int bindresvport(int sd, struct sockaddr_in* _sin);
 
 #endif
