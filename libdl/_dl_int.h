@@ -10,6 +10,8 @@
 #include <elf.h>
 #include <dlfcn.h>
 
+#include "_dl_rel.h"
+
 #if ELF_CLASS == ELFCLASS32
 
 #define Elf_Addr	Elf32_Addr
@@ -75,7 +77,7 @@ struct _dl_handle {
   char *	dyn_str_tab;	/* dyn_name table */
 
   Elf_Sym *	dyn_sym_tab;	/* dynamic symbol table */
-  Elf_Rel *	plt_rel;	/* PLT relocation table */
+  _dl_rel_t*	plt_rel;	/* PLT relocation table */
 
   /* INIT / FINI */
   void (*fini)(void);
@@ -91,6 +93,7 @@ struct _dl_handle {
 extern struct _dl_handle* _dl_root_handle;
 extern struct _dl_handle* _dl_top_handle;
 extern struct _dl_handle* _dl_free_list;
+#ifndef __OD_CLEAN_ROOM
 void _dl_free_handle(struct _dl_handle* dh);
 struct _dl_handle* _dl_get_handle();
 struct _dl_handle* _dl_find_lib(const char* name);
@@ -118,11 +121,12 @@ int _dl_queue_lib(const char* name, int flags);
 int _dl_open_dep();
 
 /* _dl_relocate.c */
-int _dl_relocate(struct _dl_handle* dh, Elf_Rel *rel, int num);
+int _dl_relocate(struct _dl_handle* dh, _dl_rel_t *rel, int num);
 
 /* dlerror.c */
 extern int   _dl_error;
 extern const char* _dl_error_location;
 extern const char* _dl_error_data;
+#endif
 
 #endif

@@ -1,5 +1,7 @@
 #include "_dl_int.h"
 
+#include "_dl_rel.h"
+
 #if 0
 /*--- are other relocation types vital to shared objects ? ---*/
 
@@ -19,7 +21,7 @@
 
 #endif
 
-int _dl_apply_relocate(struct _dl_handle* dh, Elf_Rel *rel) {
+static int _dl_apply_relocate(struct _dl_handle* dh, _dl_rel_t *rel) {
   int typ,ret=0;
   Elf_Addr *loc;
 
@@ -36,7 +38,7 @@ int _dl_apply_relocate(struct _dl_handle* dh, Elf_Rel *rel) {
   } else if (typ==R_386_COPY)  {	/* 5 */
     int len=dh->dyn_sym_tab[ELF_R_SYM(rel->r_info)].st_size;
     DEBUG("_dl_apply_relocate: R_386_COPY !\n");
-    memcpy(loc,(unsigned long)_dl_sym_search(dh, ELF_R_SYM(rel->r_info)),len);
+    memcpy(loc,(void*)(unsigned long)_dl_sym_search(dh, ELF_R_SYM(rel->r_info)),len);
   } else if (typ==R_386_GLOB_DAT) {	/* 6 */
     *loc = (unsigned long)_dl_sym(dh, ELF_R_SYM(rel->r_info));
   } else if (typ==R_386_JMP_SLOT) {	/* 7 */
@@ -53,7 +55,7 @@ int _dl_apply_relocate(struct _dl_handle* dh, Elf_Rel *rel) {
   } else if (typ==R_ARM_COPY)  {	/* 20 */
     int len=dh->dyn_sym_tab[ELF_R_SYM(rel->r_info)].st_size;
     DEBUG("_dl_apply_relocate: R_ARM_COPY !\n");
-    memcpy(loc,(unsigned long)_dl_sym_search(dh, ELF_R_SYM(rel->r_info)),len);
+    memcpy(loc,(void*)(unsigned long)_dl_sym_search(dh, ELF_R_SYM(rel->r_info)),len);
   } else if (typ==R_ARM_GLOB_DAT) {	/* 21 */
     *loc = (unsigned long)_dl_sym(dh, ELF_R_SYM(rel->r_info));
   } else if (typ==R_ARM_JUMP_SLOT) {	/* 22 */
@@ -69,7 +71,7 @@ int _dl_apply_relocate(struct _dl_handle* dh, Elf_Rel *rel) {
   return ret;
 }
 
-int _dl_relocate(struct _dl_handle* dh, Elf_Rel *rel, int num) {
+int _dl_relocate(struct _dl_handle* dh, _dl_rel_t *rel, int num) {
   int i;
   for (i=0;i<num;i++) {
     if (_dl_apply_relocate(dh,rel+i)) {
