@@ -1,5 +1,9 @@
 #include "dietfeatures.h"
 
+#if defined(__i386__) && defined(__DYN_LIB)
+#include "PIC.h"
+#endif
+
 .text
 .globl syscall
 #ifdef __arm__
@@ -28,7 +32,12 @@ syscall:
 	negl %eax
 #ifdef WANT_THREADSAFE
 	movl %eax, %ebx
+#ifdef __DYN_LIB
+	PIC_INIT
+	call __errno_location@PLT
+#else
 	call __errno_location
+#endif
 	movl %ebx, (%eax)
 	xorl %eax, %eax
 	decl %eax
