@@ -315,7 +315,9 @@ pp:
 	    if (strlen(tmp)+strlen(cc)<900) {
 	      strcpy(manglebuf,tmp);
 	      strcat(manglebuf,"/.diet/");
-	      strcat(manglebuf,cc);
+	      tmp=strrchr(cc,'/');
+	      if (tmp) ++tmp; else tmp=cc;
+	      strcat(manglebuf,tmp);
 	      if ((fd=open(manglebuf,O_RDONLY))>=0) {
 		int len=read(fd,manglebuf,1023);
 		if (len>0) {

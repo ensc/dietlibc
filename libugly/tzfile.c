@@ -96,7 +96,7 @@ time_t __tzfile_map(time_t t, int *isdst, int forward) {
 	i=tmp[i-1];
   /*      printf("using index %d\n",i); */
 	tmp+=tzh_timecnt;
-	tz+=tzh_timecnt*5+tzh_leapcnt*4+tzh_typecnt*6;
+	tz+=tzh_timecnt*5+tzh_typecnt*6;
 	tmp+=i*6;
   /*      printf("(%lu,%d,%d)\n",ntohl(*(int*)tmp),tmp[4],tmp[5]); */
 	*isdst=tmp[4];

@@ -268,3 +268,39 @@ A: This is a shortcoming of User Mode Linux.
    Edit dietfeatures.h, remove the WANT_SYSENTER #define, and then
    recompile the diet libc and your program.  Oh, and bug the user mode
    linux people about this, it's their fault! ;)
+
+
+Q: dietlibc.a does not look so small to me!  It's almost 600k!
+A: Use size(1) to find the real size, like this:
+
+   $ ls -l bin-i386/dietlibc.a
+   -rw-r--r--    1 leitner  users      597204 Nov 30 16:36 bin-i386/dietlibc.a
+   $ size --totals bin-i386/dietlibc.a
+      text    data     bss     dec     hex filename
+        62       4       0      66      42 unified.o (ex bin-i386/dietlibc.a)
+   [...]
+       100       0       0     100      64 stackgap.o (ex bin-i386/dietlibc.a)
+     73908    1163    9298   84369   14991 (TOTALS)
+
+   "text" is the code in the library, "data" is the variables, "bss" are
+   the constants (string constants, mostly).  So there are really only
+   70k code in the whole library, and you will probably only use a small
+   part of it in your code.
+
+
+Q: I get an error message at link time, that "main" can not be found.
+A: Disable WANT_STACKGAP in dietfeautres.h or try upgrading your binutils.
+
+
+Q: I want to have a gcc that uses the diet libc by default.
+A: You will have to edit the "specs" file from gcc then.  John K. Hohm
+   sent these lines to use gcc with the dynamic diet libc (make dyn and
+   make sure you have WANT_DYNAMIC in dietfeatures.h):
+
+   *endfile:
+   %{shared:dyn_dstop.o%s}%{!shared:%{static:dyn_stop.o%s}%{!static:dyn_dstop.o%s}}
+
+   *startfile:
+   %{shared:dyn_so_start.o%s}%{!shared:%{static:start.o%s dyn_start.o%s}%{!static:dstart.o%s dyn_dstart.o%s}}
+
+
