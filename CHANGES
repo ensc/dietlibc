@@ -1,5 +1,9 @@
 0.29
   oops, fix LD_RUN_PATH unsetting (Enrico Scholz)
+  Markus Oberhumer sent the following diffs:
+    dl_iterate_phdr for libgcc_eh
+    proper endian.h recognition for __s390x__
+    rem and sdiv for sparc
 
 0.28:
   add tcgetsid (Yuri Kozlov)

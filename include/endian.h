@@ -4,37 +4,21 @@
 #define	__LITTLE_ENDIAN	1234
 #define	__BIG_ENDIAN	4321
 
-#if defined(__i386__) || defined(__x86_64__) || defined(__ia64__)
+#if defined(__i386__) || defined(__x86_64__) || defined(__ia64__) || defined(__alpha__)
 #define __BYTE_ORDER		__LITTLE_ENDIAN
 #define __FLOAT_WORD_ORDER	__BYTE_ORDER
 #endif
 
-#ifdef __sparc__
-#define __BYTE_ORDER		__BIG_ENDIAN
+#if (defined(__mips__) && !defined(__MIPSEB)) || (defined(__arm__) && !defined(__ARMEB__)) || ((defined(powerpc) || defined(__sparc__)) && defined(__LITTLE_ENDIAN__))
+#define __BYTE_ORDER		__LITTLE_ENDIAN
 #define __FLOAT_WORD_ORDER	__BYTE_ORDER
 #endif
 
-#ifdef __hppa__
-/* I hope this is correct...? */
-#define __BYTE_ORDER		__BIG_ENDIAN
-#define __FLOAT_WORD_ORDER	__BYTE_ORDER
-#endif
-
-#ifdef __mips__
-#ifdef __MIPSEB__
-#define __BYTE_ORDER		__BIG_ENDIAN
-#define __FLOAT_WORD_ORDER	__BYTE_ORDER
-#endif
-#endif
+/* rest is big endian */
 
 #ifndef __BYTE_ORDER
-#ifdef __BIG_ENDIAN__
 #define __BYTE_ORDER		__BIG_ENDIAN
 #define __FLOAT_WORD_ORDER	__BYTE_ORDER
-#else
-#define __BYTE_ORDER		__LITTLE_ENDIAN
-#define __FLOAT_WORD_ORDER	__BYTE_ORDER
-#endif
 #endif
 
 #define LITTLE_ENDIAN		__LITTLE_ENDIAN
@@ -47,7 +31,7 @@
 # define __LONG_LONG_PAIR(HI, LO) HI, LO
 #endif
 
-#if defined(__alpha__) || defined(__mips64) || defined(__sparc_v9__) || defined(__x86_64__) || defined(__ia64__) || defined(__powerpc64__)
+#if defined(__alpha__) || defined(__mips64) || defined(__sparc_v9__) || defined(__x86_64__) || defined(__ia64__) || defined(__powerpc64__) || defined(__s390x__)
 #define __WORDSIZE 64
 #endif
 
