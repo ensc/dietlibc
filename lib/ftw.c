@@ -5,6 +5,7 @@
 #include <dirent.h>
 #include <string.h>
 #include <stdlib.h>
+#include "dietdirent.h"
 
 int ftw(const char*dir,int(*f)(const char*file,const struct stat*sb,int flag),int dpth){
   char* cd;
@@ -38,7 +39,7 @@ int ftw(const char*dir,int(*f)(const char*file,const struct stat*sb,int flag),in
     if(r){closedir(d);return r;}
     if(flg==FTW_D&&dpth){
       r=ftw(filename,f,dpth-1);
-      chdir(dir);
+      fchdir(d->fd);
       if (r){closedir(d);return r;}
     }
   }
