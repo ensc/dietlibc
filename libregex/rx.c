@@ -70,7 +70,7 @@ static int issetcc(unsigned int* x,unsigned int bit) {
   return x[bit/32] & (1<<((bit%32)-1));
 }
 
-static const char* parsebracketed(struct bracketed* b,const char* s) {
+static const char* parsebracketed(struct bracketed* b,const char* s,regex_t* rx) {
   const char* t;
   int i,negflag=0;
   if (*s!='[') return s;
@@ -79,9 +79,9 @@ static const char* parsebracketed(struct bracketed* b,const char* s) {
   if (*t=='^') { negflag=1; ++t; }
   do {
     if (*t==0) return s;
-    setcc(b->cc,*t);
+    setcc(b->cc,rx->cflags&REG_ICASE?*t:tolower(*t));
     if (t[1]=='-' && t[2]!=']') {
-      for (i=*t+1; i<=t[2]; ++i) setcc(b->cc,i);
+      for (i=*t+1; i<=t[2]; ++i) setcc(b->cc,rx->cflags&REG_ICASE?i:tolower(i));
       t+=2;
     }
     ++t;
@@ -90,7 +90,7 @@ static const char* parsebracketed(struct bracketed* b,const char* s) {
   return t+1;
 }
 
-static const char* parseregex(struct regex* r,const char* s,int* bnum);
+static const char* parseregex(struct regex* r,const char* s,regex_t* rx);
 
 static int matchatom(void* x,const char* s,int ofs,regmatch_t* matches,int plus) {
   register struct atom* a=(struct atom*)x;
@@ -145,19 +145,19 @@ match:
     return plus+matchlen;
 }
 
-static const char* parseatom(struct atom* a,const char* s,int* bnum) {
+static const char* parseatom(struct atom* a,const char* s,regex_t* rx) {
   const char *tmp;
   a->m=matchatom;
   a->bnum=-1;
   switch (*s) {
   case '(':
-    a->bnum=*++bnum;
+    a->bnum=++rx->brackets;
     if (s[1]==')') {
       a->type=EMPTY;
       return s+2;
     }
     a->type=REGEX;
-    if ((tmp=parseregex(&a->u.r,s+1,bnum))!=s) {
+    if ((tmp=parseregex(&a->u.r,s+1,rx))!=s) {
       if (*tmp==')')
 	return tmp+1;
     }
@@ -167,7 +167,7 @@ static const char* parseatom(struct atom* a,const char* s,int* bnum) {
     return s;
   case '[':
     a->type=BRACKET;
-    if ((tmp=parsebracketed(&a->u.b,s))!=s)
+    if ((tmp=parsebracketed(&a->u.b,s,rx))!=s)
       return tmp;
     return s;
   case '.':
@@ -183,7 +183,7 @@ static const char* parseatom(struct atom* a,const char* s,int* bnum) {
     if (!*++s) return s;
   default:
     a->type=CHAR;
-    a->u.c=*s;
+    a->u.c=rx->cflags&REG_ICASE?*s:tolower(*s);
     return s+1;
   }
 }
@@ -224,8 +224,8 @@ static int matchpiece(void* x,const char* s,int ofs,regmatch_t* matches,int plus
   return tmp;
 }
 
-static const char* parsepiece(struct piece* p,const char* s,int* bnum) {
-  const char* tmp=parseatom(&p->a,s,bnum);
+static const char* parsepiece(struct piece* p,const char* s,regex_t* rx) {
+  const char* tmp=parseatom(&p->a,s,rx);
   if (tmp==s) return s;
   p->m=matchpiece;
   p->min=p->max=1;
@@ -266,7 +266,7 @@ static int matchbranch(void* x,const char* s,int ofs,regmatch_t* matches,int plu
   return -1;
 }
 
-static const char* parsebranch(struct branch* b,const char* s,int* bnum,int* pieces) {
+static const char* parsebranch(struct branch* b,const char* s,regex_t *rx,int* pieces) {
   struct piece p;
   const char *tmp;
   b->m=matchbranch;
@@ -279,7 +279,7 @@ static const char* parsebranch(struct branch* b,const char* s,int* bnum,int* pie
 	p.min=p.max=1;
       }
     } else {
-      tmp=parsepiece(&p,s,bnum);
+      tmp=parsepiece(&p,s,rx);
       if (tmp==s) return s;
     }
     if (!(b->p=realloc(b->p,++b->num*sizeof(p)))) return s;
@@ -307,13 +307,13 @@ static int matchregex(void* x,const char* s,int ofs,regmatch_t* matches,int plus
   return -1;
 }
 
-static const char* parseregex(struct regex* r,const char* s,int* bnum) {
+static const char* parseregex(struct regex* r,const char* s,regex_t *p) {
   struct branch b;
   const char *tmp;
   r->m=matchregex;
   r->num=0; r->b=0; r->pieces=0;
   for (;;) {
-    tmp=parsebranch(&b,s,bnum,&r->pieces);
+    tmp=parsebranch(&b,s,p,&r->pieces);
     if (tmp==s) return s;
     if (!(r->b=realloc(r->b,++r->num*sizeof(b)))) return s;
     r->b[r->num-1]=b;
@@ -358,7 +358,7 @@ static void regex_putnext(struct regex* r,void* next) {
 
 
 int regcomp(regex_t* preg, const char* regex, int cflags) {
-  const char* t=parseregex(&preg->r,regex,&preg->brackets);
+  const char* t=parseregex(&preg->r,regex,preg);
   if (t==regex) return -1;
   regex_putnext(&preg->r,0);
   preg->cflags=cflags;
