@@ -41,7 +41,7 @@ static char sccsid[] = "@(#)svc.c 1.41 87/10/13 Copyr 1984 Sun Micro";
  * Copyright (C) 1984, Sun Microsystems, Inc.
  */
 
-#include <sys/errno.h>
+#include <errno.h>
 #include <rpc/rpc.h>
 #include <rpc/pmap_clnt.h>
 #ifdef __linux__
