@@ -31,7 +31,7 @@ typedef struct _pthread_descr_struct*_pthread_descr;
 typedef int pthread_t;
 
 /* Fast locks */
-#ifdef __parisc__
+#ifdef __hppa__
 struct _pthread_fastlock { int __spinlock; } __attribute__((aligned(16)));
 
 #define PTHREAD_SPIN_LOCKED 0
