@@ -33,8 +33,10 @@ int foo;
 int main(int argc,char *argv[]) {
   struct addrinfo *ai;
   struct addrinfo hints;
+  char buf[16];
+  printf("%d\n",inet_pton(AF_INET6,"hellhound",buf));
   hints.ai_family = AF_UNSPEC;
-  hints.ai_flags = AI_PASSIVE;
+  hints.ai_flags = AI_PASSIVE|AI_CANONNAME;
   hints.ai_socktype = SOCK_STREAM;
   printf("%d\n",getaddrinfo(0,"80",&hints,&ai));
   while (ai) {

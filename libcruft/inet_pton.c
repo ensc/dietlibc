@@ -87,7 +87,7 @@ int inet_pton(int AF, const char *CP, void *BUF) {
     if (!inet_aton(CP,(struct in_addr*)BUF))
       return 0;
   } else if (AF==AF_INET6) {
-    if (CP[scan_ip6(CP,BUF)])
+    if (!CP[scan_ip6(CP,BUF)])
       return 0;
   } else {
     errno=EAFNOSUPPORT;

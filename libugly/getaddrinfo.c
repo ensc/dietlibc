@@ -19,7 +19,7 @@ int getaddrinfo(const char *node, const char *service, const struct addrinfo *hi
       int herrno;
       char buf[4096];
       int lookupok=0;
-      h.h_addr_list=buf+16;
+      h.h_addr_list=(char**)buf+16;
       if (node) {
 	if (inet_pton(family,node,buf)>=0) {
 	  h.h_name=(char*)node;
@@ -30,7 +30,7 @@ int getaddrinfo(const char *node, const char *service, const struct addrinfo *hi
 	  lookupok=1;
 	}
       } else {
-	h.h_name="";
+	h.h_name=0;
 	h.h_addr_list[0]=buf;
 	memset(buf,0,16);
 	if (hints && hints->ai_flags&AI_PASSIVE) {
@@ -51,14 +51,13 @@ int getaddrinfo(const char *node, const char *service, const struct addrinfo *hi
 	  char name[1];
 	} *foo;
 	unsigned short port;
-	int len=sizeof(struct ai_v6)+strlen(h.h_name);
+	int len=sizeof(struct ai_v6)+(h.h_name?strlen(h.h_name):0);
 	if (!(foo=malloc(len))) goto error;
 	foo->ai.ai_next=0;
 	foo->ai.ai_socktype=SOCK_STREAM;
 	foo->ai.ai_protocol=IPPROTO_TCP;
 	foo->ai.ai_addrlen=family==PF_INET6?16:4;
 	foo->ai.ai_addr=(struct sockaddr*)&foo->ip;
-	foo->ai.ai_canonname=foo->name;
 	foo->ip.ip6.sin6_family=foo->ai.ai_family=family;
 	if (family==PF_INET6) {
 	  memmove(&foo->ip.ip6.sin6_addr,h.h_addr_list[0],16);
@@ -66,10 +65,14 @@ int getaddrinfo(const char *node, const char *service, const struct addrinfo *hi
 	} else {
 	  memmove(&foo->ip.ip4.sin_addr,h.h_addr_list[0],4);
 	}
-	memmove(foo->name,h.h_name,strlen(h.h_name)+1);
+	if (h.h_name) {
+	  foo->ai.ai_canonname=foo->name;
+	  memmove(foo->name,h.h_name,strlen(h.h_name)+1);
+	} else
+	  foo->ai.ai_canonname=0;
 	if (!hints || hints->ai_socktype!=SOCK_DGRAM) {	/* TCP is OK */
 	  char *x;
-	  port=htons(strtol(service,&x,0));
+	  port=htons(strtol(service?service:"0",&x,0));
 	  if (*x) {	/* service is not numeric :-( */
 	    struct servent* se;
 	    if ((se=getservbyname(service,"tcp"))) {	/* found a service. */
@@ -84,7 +87,8 @@ int getaddrinfo(const char *node, const char *service, const struct addrinfo *hi
 	      memmove(foo,*tmp,len);
 	      tmp=&(*tmp)->ai_next;
 	      foo->ai.ai_addr=(struct sockaddr*)&foo->ip;
-	      foo->ai.ai_canonname=foo->name;
+	      if (foo->ai.ai_canonname)
+		foo->ai.ai_canonname=foo->name;
 	    }
 	  } else goto blah1;
 	}
@@ -92,7 +96,7 @@ int getaddrinfo(const char *node, const char *service, const struct addrinfo *hi
 	foo->ai.ai_protocol=IPPROTO_UDP;
 	if (!hints || hints->ai_socktype!=SOCK_STREAM) {	/* UDP is OK */
 	  char *x;
-	  port=htons(strtol(service,&x,0));
+	  port=htons(strtol(service?service:"0",&x,0));
 	  if (*x) {	/* service is not numeric :-( */
 	    struct servent* se;
 	    if ((se=getservbyname(service,"udp"))) {	/* found a service. */
