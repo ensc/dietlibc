@@ -42,6 +42,9 @@ void* memset(void *s, int c, size_t n) __THROW;
 #define bcmp(s1,s2,n) memcmp(s1,s2,n)
 #define bcopy(src,dest,n) memcpy(dest,src,n)
 
+#define index(s,c) strchr(s,c)
+#define rindex(s,c) strrchr(s,c)
+
 char *strerror(int errnum) __THROW;
 char *strsignal(int signum) __THROW;
 
