@@ -181,6 +181,7 @@ int glob(const char *pattern, int flags, int errfunc(const char * epath, int eer
 					break;
 				}
 			}
+			entpwent();
 		}
 		if (home_dir != NULL) {
 			i = strlen(home_dir) + strlen(pattern_); /* pessimistic (the ~ case) */

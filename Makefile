@@ -73,7 +73,7 @@ $(OBJDIR)/libdietc.so: $(OBJDIR)/dietlibc.a
 $(SYSCALLOBJ): syscalls.h
 
 $(OBJDIR)/elftrunc: contrib/elftrunc.c $(OBJDIR)/start.o $(OBJDIR)/dietlibc.a
-	$(CROSS)$(CC) -Iinclude $(CFLAGS) -nostdlib -o $@ $^
+	$(CROSS)$(CC) -Iinclude $(CFLAGS) -nostdlib -o $@ $^ -lgcc
 
 $(OBJDIR)/diet: diet.c $(OBJDIR)/start.o $(OBJDIR)/dietlibc.a
 	$(CROSS)$(CC) -Iinclude $(CFLAGS) -nostdlib -o $@ $^ -DDIETHOME=\"$(PWD)\"
