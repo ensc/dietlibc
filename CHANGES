@@ -2,6 +2,8 @@
   update getpagesize.
   add personality.
   add "%*s" and "%*.*s" support to vsnprintf.
+  add putchar (apparently arm-linux-gcc will substitute printf("\n")
+    with putchar('\n') behind your back...?!
 
 0.9:
   fixed initgroups (oops)
