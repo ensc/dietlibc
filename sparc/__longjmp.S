@@ -1,7 +1,10 @@
-#define _ASM
-#define _SETJMP_H
-#include <bits/setjmp.h>
+//#define _ASM
+//#define _SETJMP_H
+//#include <bits/setjmp.h>
 
+#define JB_SP  0
+#define JB_FP  1
+#define JB_PC  2
 
 #define ENV(base,reg) [%base + (reg * 4)]
 #define ST_FLUSH_WINDOWS 3
