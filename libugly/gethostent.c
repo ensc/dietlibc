@@ -34,7 +34,7 @@ struct hostent* gethostent_r(char* buf, int len) {
   }
   last=hostmap+hostlen;
 again:
-  if (len<sizeof(struct hostent)+11*sizeof(char*)) goto nospace;
+  if ((size_t)len<sizeof(struct hostent)+11*sizeof(char*)) goto nospace;
   dest=buf+sizeof(struct hostent);
   pe->h_name=0;
   pe->h_aliases=(char**)dest; pe->h_aliases[0]=0; dest+=10*sizeof(char*);
@@ -77,7 +77,7 @@ again:
       int len=cur-from;
       if (max-dest<len+2) goto nospace;
       pe->h_aliases[aliasidx]=dest;
-      memmove(dest,from,cur-from);
+      memmove(dest,from,(size_t)(cur-from));
       dest+=len;
       *dest=0; ++dest;
     }
@@ -105,6 +105,7 @@ __error:
 }
 
 void sethostent(int stayopen) {
+  (void)stayopen;
   cur=hostmap;
 }
 
