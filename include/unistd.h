@@ -75,6 +75,8 @@ void *sbrk(ptrdiff_t increment) __THROW;
 int gethostname(char *name, size_t len) __THROW;
 
 void usleep(unsigned long usec) __THROW;
+unsigned int sleep(unsigned int seconds) __THROW;
+
 unsigned int alarm(unsigned int seconds) __THROW;
 int sync(void) __THROW;
 

@@ -2,4 +2,4 @@ provide __divq for Alpha.
 
 popen, pclose -> libdietugly
 
-sem* for Alpha.
+resolver only asks first server from /etc/resolv.conf
