@@ -24,15 +24,15 @@ _start:
 	adds out1 = 16, sp    /* base arguments */
 	movl gp = @gprel(0f)  /* base offset */
 	;;
-	adds out2 = 24, out1  /* get offset to environ/envp */
-	;;
 0:	
 	ld8 out0 = [out1], 8  /* load argc and set argv */
 	mov r9 = ip
 	;;
+	shladd out2=out0,3,out1	/* envp = argv+8*argc */
 	sub gp = r9, gp       /* subtract program counter */
 	;;
 	addl r15 = @ltoff(environ#), gp /* offset to environ */
+	adds out2 = 8, out2	/* envp += 8 */
 	;;
 	ld8  r14 = [r15]
 	;;
