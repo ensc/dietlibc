@@ -1,4 +1,10 @@
 #include <time.h>
+
+/* fix broken kernel header */
+struct list_head {
+  struct list_head *next, *prev;
+};
+
 #include <linux/sched.h>
 
 int __sched_setparam(pid_t pid, const struct sched_param *p);
