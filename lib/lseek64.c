@@ -1,7 +1,6 @@
 #include <errno.h>
 #include "dietfeatures.h"
 
-#ifdef WANT_LARGEFILE_BACKCOMPAT
 #include <sys/stat.h>
 #ifndef __NO_STAT64
 #include <unistd.h>
@@ -14,5 +13,4 @@ loff_t lseek64(int fildes, loff_t offset, int whence) {
   }
   return tmp;
 }
-#endif
 #endif
