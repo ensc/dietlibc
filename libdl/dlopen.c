@@ -2,8 +2,7 @@
 #include <dlfcn.h>
 #include <limits.h>
 
-int _dl_search(char*buf, int bufsize, const char*filename);
-void *_dl_open(const char*pathname, int fd, int flag);
+#include "_dl_int.h"
 
 void *dlopen (const char *filename, int flag)
 {

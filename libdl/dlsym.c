@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include "_dl_int.h"
 
 void *dlsym(void *handle, char *symbol)
@@ -25,7 +27,7 @@ void *dlsym(void *handle, char *symbol)
       }
       ind = chain[ind];
     }
-    printf("symbol \"%s\" @ %08x\n",symbol,ret);
+    printf("symbol \"%s\" @ %08lx\n",symbol,(long)ret);
 
   }
   return ret;

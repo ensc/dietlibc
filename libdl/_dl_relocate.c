@@ -1,7 +1,8 @@
+#include <stdio.h>
+
 #include "_dl_int.h"
 
-int _dl_apply_relocate(struct _dl_handle* dh, Elf32_Rel *rel, Elf32_Addr v)
-{
+int _dl_apply_relocate(struct _dl_handle* dh, Elf32_Rel *rel, Elf32_Addr v) {
   int ret=0;
   Elf32_Addr *loc = (Elf32_Addr *)(dh->mem_base+rel->r_offset );
 
@@ -58,3 +59,12 @@ int _dl_apply_relocate(struct _dl_handle* dh, Elf32_Rel *rel, Elf32_Addr v)
   }
   return ret;
 }
+
+int _dl_relocate(struct _dl_handle* dh, Elf32_Rel *rel, int num) {
+  int i;
+  for (i=0;i<num;i++) {
+//    _dl_apply_relocate(dh,rel,0);
+  }
+  return 0;
+}
+
