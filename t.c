@@ -90,6 +90,12 @@ void foo(int tmp,...) {
   if (l!=-1) write(2,"kaputt\n",7);
 }
 
+int compint(const void *a, const void *b) {
+  register int* A=a;
+  register int* B=b;
+  return *B-*A;
+}
+
 extern char* strcpy2(char*a,char*b);
 
 #define rdtscl(low) \
@@ -366,7 +372,7 @@ int main(int argc,char *argv[]) {
 #endif
 /*  putchar('c');
   write(1,"fnord\n",6); */
-#if 1
+#if 0
   struct addrinfo *ai;
 //  getaddrinfo("xorn","22",0,&ai);
   puts(gai_strerror(getaddrinfo("xorn","22",0,&ai)));
@@ -684,10 +690,21 @@ int main(int argc,char *argv[]) {
   d/=0.0;
   printf("%d %llx\n",__isnan(d),t,*(long long*)&d);
 #endif
-#if 0
+#if 1
+#define SIZE 1000
+  int array[SIZE],array2[SIZE];
   int i,j;
   long a,b,c;
-  int *res;
+  int *k;
+  for (i=0; i<SIZE; ++i) array[i]=rand();
+  memcpy(array2,array,sizeof(array));
+  qsort(array,SIZE,sizeof(int),compint);
+  for (i=0; i<SIZE-1; ++i)
+    assert(array[i]>array[i+1]);
+  k=bsearch(array+10,array,SIZE,sizeof(int),compint);
+  printf("%d\n",*k);
+#endif
+#if 0
   printf("%p\n",malloc(0));
   qsort(array,2,sizeof(int),compint);
   for (i=0; i<SIZE; ++i)
