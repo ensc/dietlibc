@@ -1,4 +1,3 @@
-#include "start.h"
 #include <errno.h>
 #include "syscalls.h"
 
