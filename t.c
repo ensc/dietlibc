@@ -77,11 +77,14 @@ void closelog(void) {
 #endif
 
 int main(int argc,char *argv[]) {
+  fwrite("foobar",6,1,stdout);
+#if 0
   char x[5];
   x[4]='x';
   fgets(x,4,stdin);
   puts(x);
   printf("%c\n",x[4]);
+#endif
 #if 0
   char* paths[]={"/usr/lib","/usr/","usr","/",".",".."};
   char* want[]={"/usr","/",".","/",".","."};
