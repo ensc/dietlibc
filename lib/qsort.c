@@ -48,6 +48,7 @@ void isort(void *base, size_t nmemb, size_t size, int (*compar)(const void *, co
   }
 }
 
+#if OLD_AND_SLOW_FOR_MAKE
 void qsort(void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *)) {
 #ifdef DEBUG
   char *dbase=base;
@@ -125,3 +126,39 @@ void qsort(void *base, size_t nmemb, size_t size, int (*compar)(const void *, co
   }
 //  --level;
 }
+#else
+
+static inline char* idx(void* base,size_t size,size_t x) {
+  return ((char*)base)+x*size;
+}
+
+static void Qsort(void *base, size_t nmemb, size_t size,long l,long r,
+		  int (*compar)(const void *, const void *)) {
+  long i,j,k,p,q;
+  char* v;
+  if (r-l<10) {
+    isort(idx(base,size,l),r-l+1,size,compar);
+    return;
+  }
+  v=idx(base,size,r);
+  i=l-1; j=r; p=l-1; q=r;
+  for (;;) {
+    while (compar(idx(base,size,++i),v)<0) ;
+    while (compar(idx(base,size,--j),v)>0) if (j==l) break;
+    if (i>=j) break;
+    swap(base,size,i,j);
+    if (compar(idx(base,size,i),v)==0) { ++p; swap(base,size,p,i); }
+    if (compar(idx(base,size,j),v)==0) { --q; swap(base,size,q,j); }
+  }
+  swap(base,size,i,r); j=i-1; ++i;
+  for (k=l; k<p; ++k,--j) swap(base,size,k,j);
+  for (k=r-1; k>q; --k,++i) swap(base,size,k,i);
+  if (j>l) Qsort(base,nmemb,size,l,j,compar);
+  if (r>i) Qsort(base,nmemb,size,i,r,compar);
+}
+
+void qsort(void *base, size_t nmemb, size_t size,
+	   int (*compar)(const void *, const void *)) {
+  Qsort(base,nmemb,size,0,nmemb-1,compar);
+}
+#endif
