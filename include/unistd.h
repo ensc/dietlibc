@@ -4,6 +4,7 @@
 #include <dirent.h>
 #include <sys/cdefs.h>
 #include <sys/types.h>
+#include <getopt.h>
 
 #define SEEK_SET 0
 #define SEEK_CUR 1
