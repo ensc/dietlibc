@@ -642,7 +642,7 @@ typedef struct elf64_phdr {
 #define SHF_EXECINSTR		0x4
 #define SHF_MASKPROC		0xf0000000
 #define SHF_MIPS_GPREL		0x10000000
-#define SHR_ALPHA_GPREL		0x10000000
+#define SHF_ALPHA_GPREL		0x10000000
 
 /* special section indexes */
 #define SHN_UNDEF		0
