@@ -250,7 +250,7 @@ struct timeval utimeout;		/* seconds to wait before giving up */
 	/*
 	 * the transaction is the first thing in the out buffer
 	 */
-	(*(unsigned short *) (cu->cu_outbuf))++;
+	(*(uint32_t *) (cu->cu_outbuf))++;
 	if ((!XDR_PUTLONG(xdrs, (long *) &proc)) ||
 		(!AUTH_MARSHALL(cl->cl_auth, xdrs)) || (!(*xargs) (xdrs, argsp)))
 		return (cu->cu_error.re_status = RPC_CANTENCODEARGS);
@@ -324,10 +324,10 @@ struct timeval utimeout;		/* seconds to wait before giving up */
 			cu->cu_error.re_errno = errno;
 			return (cu->cu_error.re_status = RPC_CANTRECV);
 		}
-		if (inlen < sizeof(unsigned long))
+		if (inlen < 4)
 			continue;
 		/* see if reply transaction id matches sent id */
-		if (*((unsigned long *) (cu->cu_inbuf)) != *((unsigned long *) (cu->cu_outbuf)))
+		if (*((uint32_t *) (cu->cu_inbuf)) != *((uint32_t *) (cu->cu_outbuf)))
 			continue;
 		/* we now assume we have the proper reply */
 		break;

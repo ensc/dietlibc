@@ -160,6 +160,7 @@ unsigned int recvsz;
 						sizeof(*raddr)) < 0)) {
 			rpc_createerr.cf_stat = RPC_SYSTEMERROR;
 			rpc_createerr.cf_error.re_errno = errno;
+			if (*sockp >= 0)
 			(void) close(*sockp);
 			goto fooy;
 		}
@@ -236,7 +237,7 @@ struct timeval timeout;
 	register XDR *xdrs = &(ct->ct_xdrs);
 	struct rpc_msg reply_msg;
 	unsigned long x_id;
-	unsigned long *msg_x_id = (unsigned long *) (ct->ct_mcall);	/* yuk */
+	uint32_t *msg_x_id = (uint32_t *) (ct->ct_mcall);	/* yuk */
 	register bool_t shipnow;
 	int refreshes = 2;
 
@@ -289,7 +290,7 @@ struct timeval timeout;
 				continue;
 			return (ct->ct_error.re_status);
 		}
-		if (reply_msg.rm_xid == x_id)
+		if ((uint32_t)reply_msg.rm_xid == (uint32_t)x_id)
 			break;
 	}
 
