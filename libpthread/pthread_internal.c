@@ -49,6 +49,13 @@ int *__errno_location(void)
     return &threads[id].errno;
 }
 
+/* thread errno location */
+void *set_errno(int error)
+{
+  int *errno=__errno_location();
+  if (errno) errno=error;
+}
+
 /* thread self */
 _pthread_descr __thread_self()
 {
