@@ -1,7 +1,9 @@
 #include "dietfeatures.h"
 
 #if defined(__i386__) && defined(__DYN_LIB)
-#include "PIC.h"
+#include "i386/PIC.h"
+#undef WANT_THREADSAFE
+#define WANT_THREADSAFE
 #endif
 
 .text
