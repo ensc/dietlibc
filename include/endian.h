@@ -4,6 +4,8 @@
 #define	__LITTLE_ENDIAN	1234
 #define	__BIG_ENDIAN	4321
 
+#define __ARCHBITS 32
+
 #ifdef __i386__
 #define __BYTE_ORDER __LITTLE_ENDIAN
 #define __FLOAT_WORD_ORDER __BYTE_ORDER
@@ -18,6 +20,11 @@
 #ifdef __MIPSEB__
 #define __BIG_ENDIAN__
 #endif
+#endif
+
+#ifdef __alpha__
+#undef __ARCHBITS
+#define __ARCHBITS 64
 #endif
 
 #ifndef __BYTE_ORDER
