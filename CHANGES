@@ -9,6 +9,7 @@
   PowerPC build fix (Gerrit Pape)
   Olaf: added missing settimeofday
   add netinet/ether.h and netinet/if_ether.h
+  add linux/fd.h
 
 0.26:
   iconv UTF-8 fix (Kuba Winnicki)
