@@ -1,6 +1,8 @@
 #ifndef _NET_IF_ARP_H
 #define _NET_IF_ARP_H
 
+#include <sys/socket.h>
+
 #define MAX_ADDR_LEN	7
 
 /* ARP protocol HARDWARE identifiers. */

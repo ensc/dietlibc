@@ -2,6 +2,7 @@
 .globl __isleap
 .type    __isleap,@function
 
+__isleap:
         movl    4(%esp),%eax
         testb   $3,%al
         jne     .Lretzero

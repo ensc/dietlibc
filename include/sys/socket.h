@@ -398,4 +398,8 @@ const char *gai_strerror(int errcode) __THROW;
 #define SIOCADDDLCI	0x8980		/* Create new DLCI device	*/
 #define SIOCDELDLCI	0x8981		/* Delete DLCI device		*/
 
+#define SIOCDEVPRIVATE	0x89F0		/* to 89FF */
+
+#define _LINUX_SOCKET_H
+
 #endif

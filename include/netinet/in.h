@@ -321,6 +321,10 @@ struct ipv6hdr {
 #define IPPORT_RESERVED 1024
 #define INET6_ADDRSTRLEN 46
 
+#undef htonl
+#undef htons
+#undef ntohl
+#undef ntohs
 unsigned long int htonl(unsigned long int hostlong);
 unsigned short int htons(unsigned short int hostshort);
 unsigned long int ntohl(unsigned long int netlong);
