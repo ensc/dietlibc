@@ -1,0 +1,288 @@
+0.6.15:
+  clone support for i386 and alpha by Olaf.
+  Initial dynamic loading glue for i386, also by Olaf.
+  We don't have a dynamic loader yet, so this is not yet usable.
+  added readv, sigdelset, sigaltstack, sigfillset, sigismember, usleep,
+    vsprintf, writev, all by Olaf.
+
+0.6.14:
+  *scanf did not append the 0 byte for %s.
+  added creat and changed creat to call open directly instead of open64.
+  did for fread what 0.6.10 did for fwrite.
+  repaired buffered stdio a little (line buffering is still not
+    supported).
+  [All of these bugs have been reported by Guillaume.  Thanks!]
+  added __pure__ to strchr and strrchr in <string.h>
+
+0.6.13:
+  included COPYING to make clear that the diet libc is covered by the
+    GNU General Public License (and _not_ the LGPL).  That means that
+    you need to obtain a license from me if you want to use the diet
+    libc in a proprietary program that you want to distribute.
+  The x86 unified syscall swapped arguments #4 and #5 and noone
+    noticed until now!  Thanks to Guillaume Cottenceau for reporting
+    this!
+  The malloc had a subtle bug with small allocations that could cause
+    segfault.  Guillaume reported it, Olaf fixed it.
+
+0.6.12:
+  added assert, statfs and fstatfs
+  added include/net/if.h so fget compiles again.
+
+0.6.11:
+  added putenv.
+
+0.6.10:
+  fixed fwrite.  It returned the number of bytes written, not the number
+    of records.  Thanks to Albert D. Cahalan for pointing this out.
+  fixed fgets.  It returned EOF on empty lines.  Thanks, Erik Frey.
+  added brk and sbrk.  harold@nb.com.sg made me do it.
+
+0.6.9:
+  fixed execvp not to return on ENOENT
+  did for {open|read|close|seek|tell}dir what I did for stat before.
+    The glibc compatibility part is currently non-functional.
+  fixed white space handling in sscanf " (" would not match " (".
+  fixed printf to accept 'l' flag.
+  fixed getpwuid (ignored last line)
+
+0.6.8:
+  Olaf contributed initial thread-safe syscalls for i386, alpha, sparc,
+    mips and arm.  I did the one for ppc.  They can be enabled in dietfeatures.h.
+  added strlcpy and strlcat from OpenBSD.
+  added stat64, fstat64 and lstat64.
+  added endian.h and made ending of strlen.c endianness-aware
+  added string routines size tweak to dietfeatures.h.  Most of the
+    string routines have been unrolled.  This is up to three times as
+    fast but creates up to three times larger code.  Now you can disable
+    the unrolling.
+  added sendfile.
+  I also added pread.  It works on x86 and sparc but not on ppc and mips.
+    I have no idea what's going on.  strace disagrees with the kernel.
+    Can anyone help?  I asked the Linux kernel mailing list for help, too.
+  added a few aliases of the type __libc_open for open.  nm on
+    libpthreads.so indicates that we will need them.
+
+0.6.7:
+  the sources now compile without warnings with -Wall.
+  printf now prints "(null)" when %s is passed NULL.  This can be
+    removed with WANT_NULL_PRINTF in dietfeatures.h
+  added vfprintf, execl, ttyname.
+  stat, lstat and fstat are now #defined to __dietstat, __dietlstat and
+    __dietfstat so they can use the normal kernel struct stat.
+    stat, lstat and fstat are now C wrappers that convert to the glibc
+    struct stat.  So we can avoid that overhead for programs that use
+    dietlibc headers.
+
+0.6.6:
+  changed the Makefiles so you can now set CFLAGS on the command line
+  added memccmp (analogous to memccpy) and strncmp.
+  Olaf fixed another bug in the sparc unified syscall.
+  Paul Clifford contributed a C version of his strlen.S that is much
+    more efficient than the previous strlen on all platforms!  It also
+    looks like technology from Roswell. ;-}
+  added a "real" stdio.  Well, almost.  Please contribute!
+  added dietfeatures.h so you can remove features you don't need.
+  removed debug code from vsnprintf that changed \0 to ' ' (argh!).
+  stdio now works with simple programs and minigzip from libz.
+  stdio uses some major trickery to avoid linking the stdio, stderr and
+    stdout (and reserving space for them) when they are not used.
+
+0.6.5:
+  Red Plait <redplait@ixcelerator.com> found several bugs in diet libc,
+    most of them bugs in the new header files, but also missing sigset
+    functions.
+  Paul Clifford contributed an assembly strlen.S for ARM and fixed
+    several bugs.
+  Fixed ppc/setjmp and mips/pipe.
+  Olaf contributed a new sparc unified syscall.
+
+0.6.4:
+  declared is* static inline in getservent.
+  added assert_fail, strtoul, isalpha, isdigit, isalnum, isascii.
+  changed strlen to return 0 when passed NULL.
+  new, much smaller unified syscall for MIPS.  Thanks to Olaf the Mad
+    Scientist who actually implemented this without access to a MIPS
+    box, just from reading the architecture manual.  And it worked out
+    of the box.
+  started a set of system includes, mainly so that I can use lcc and
+    my alpha-linux cross compiler (which is unable to cross-compile
+    glibc).  diet libc can now be compiled without any include files
+    from a normal libc.  The includes do declare more than diet libc
+    currently delivers and they are still far from complete for real
+    applications.
+  I will only add assembly versions that are smaller _and_ faster than
+    the C version.  Larger routines are only accepted if they are called
+    very often and are substantially faster.
+  added i386 assembly strchr, which is smaller and faster than the old
+    version.  It is, however, larger than the version contributed by
+    proton (thanks, anyway).
+  added i386 strlen (31% faster, 14% smaller)
+  "make t" will now create a map file called "mapfile".
+
+0.6.3:
+  added sys_errlist, strerror and perror
+  added isblank
+  added atol
+
+0.6.2:
+  mmap for ARM didn't compile.  Thanks, Paul!
+
+0.6.1:
+  split mmap into the architecture specific subdirectories.
+  getenv now copes with environ==NULL, thanks Paul Clifford.
+  Paul also contributed a smaller ARM startup code.
+
+0.6:
+  strcat returned the wrong result.  Thanks, Dietz Pröpper.
+  strtod now understands a negative exponent (oops, thanks Bertram Barth)
+  Port to arm-linux-gnu, but on the Netwinder I use for testing the
+    __dtostr does not work (I have no idea why!)
+  The MIPS port now uses (much smaller) non-PIC code.  That means that
+    the applications you link against diet libc also have to be compiled
+    non-PIC.  I suggest copying the CFLAGS from the diet libc Makefile.
+    Thanks to Ralf Bächle for helping me with this!
+  I made subdirectories for the architectures and use VPATH to override
+    VPATH so that make finds the source file automatically.  That should
+    simplify the sources greatly.
+  Olaf Dreesen contributed Alpha support including setjmp and longjmp!
+  ARM and MIPS now also have setjmp and longjmp
+  "compile" and "load" are now make targets.  Use them for djb programs.
+  added contrib/elftrunc.c which will remove unnecessary ELF headers.
+    Again, contributed from Olaf.  Great work!
+
+0.5.12:
+  printf also does signed numbers.
+  If you don't use atexit, dietlibc now does not link exit, only _exit.
+  *printf now correctly returns the number of bytes written.
+  Olaf contributed experimental sscanf and vsscanf implementations.
+  If passed NULL as buffer, snprintf will not write anything but still
+    return the number of bytes it would have written.
+  Initial MIPS port!   (Oh, the agony!)
+    No setjmp and longjmp support yet!  Please contribute!
+  I even implemented unified syscalls for MIPS.  Still, MIPS code is
+    almost twice the size of SPARC code.  If anyone knows why: please
+    tell me!
+
+0.5.11:
+  I implemented new unified syscalls for x86, sparc and ppc, this time based
+    on .s files and not .c files, and I moved the syscalls into
+    subdirectores to clean the dietlibc sources up a little.
+  A binary consisting of printf("%s is %d\n","olaf",23) is now
+    2864 bytes on sparc
+    2488 bytes on intel
+  I kludgily implemented fprintf(stdout,... and fprintf(stderr,...
+    to make a few more applications work.
+  Olaf Dreesen also implemented some unified syscall stuff for x86.
+  He discovered that with our unified syscall interface it actually
+    costs <10 bytes total to make all system calls thread safe!
+  I implemented atexit() (can register up to 4 callbacks).
+  I implemented strtod and __dtostr (the opposite).  Now we can add
+    floating point support to vsnprintf and sscanf!
+
+0.5.10:
+  I actually saw that I can not only merge the errno handling code of
+    the system calls on x86, I can also merge the rest (including the
+    arguments) except for setting the system call number.  All those
+    system calls are now just a jump to a unified system call handler.
+    I got rid of x86openclose again.  The savings are substantial:
+    chown from embutils went from 7664 to 7184 bytes!
+    If I'd move the system call wrappers to assembly language, I could
+    even reduce the alignment (does not matter since it's just a jump
+    anyway) and get rid of the "ret" behind each jump (one byte per
+    system call!)
+
+0.5.9:
+  added memchr, strpbrk, strstr, strtol, isspace (hehe)
+  fixed strdup
+  fixed return values for strcpy and strcat (thanks to Norbert Berzen)
+  Olaf Dreesen contributed a strtol and initial {sn|vsn|}printf implementation
+    (no signed integers, only strings and unsigned integers (but
+    supporting octal, hex and decimal).  Thanks, Olaf!  (by the way:
+    that code must be wonderful, I don't understand it at all *bg*)
+    Olaf's printf does understand padding like in "%08d" and "%8d" and
+    automatically pads pointers with '0'.
+  Rewrote the x86 start code, old: 22 instructions, new: 12 instructions.
+  Thanks to proton for inspiration on this.
+  The new x86 start code also does not reference exit any more, thus saving
+  64 bytes for executables that don't call exit explicitly.
+    [insert maniacal laughter] EVERY BYTE COUNTS!1!! ;-)
+  Moved errno and environ to start.S, saving no byte binary size but
+    speeding up compilation and slightly shortening dietlibc.a ;-)
+  For x86: joined open and close into one assembler file, sharing the
+    errno handling.  This is a feasibility test and it actually saves a
+    few bytes.  I think I will reimplement the _syscall[1-6] macros on
+    all platforms now to share the errno handling code for them.
+
+0.5.8:
+  fixed strchr to be able to look for 0.
+
+  added _llseek, ftruncate, getpgid, getresgid, getresuid, getsid,
+  memccpy, memmove, mprotect, setregid, setresgid, setresuid, setreuid,
+  strncpy, swapon, truncate, strtok, strtok_r, strspn, strcspn (all
+  contributed by Olaf Dreesen)
+
+  added execvp, getcwd
+
+  fixed __xmknod
+
+  Note: can it be that the ftw interface really is so broken that I
+  cannot implement it without having to implement some searching data
+  structure?  I included an experimental ftw implementation that will
+  not follow symlinks.
+
+0.5.7:
+  oops, if_nametoindex was broken!
+
+0.5.6:
+  ported to ppc-linux.
+  fixed i386 sigsetjmp (I mistyped the function name)
+  included sigjmp.c
+
+0.5.5:
+  added wait, sys_siglist, longjmp/setjmp/sigsetjmp for i386 and sparc
+  actually, it wasn't fork that wasn't working for sparc, it was pipe.
+  I fixed it now.
+  dietlibc/SPARC assumes -msupersparc (does not provide div, mul, etc)
+  fixed readdir to use getdents and not the intel inline asm
+
+0.5.4:
+  ported to sparclinux (sparc32 only).  Beware: does not work yet.
+  added raise, abort, readlink, strcat, geteuid, geteuid, wait3, access
+
+0.5.3:
+  added tcsetattr and getenv to compile e3
+
+0.5.2:
+  added vhangup, tcgetattr, isatty and memcmp for fgetty
+    (http://www.fefe.de/fgetty/)
+  added localtime from uC-libc.
+
+0.5.1:
+  stat and friends actually work now.  Yuck!  Another case of
+    translation between kernel and userland.  Why can't the kernel
+    people and the libc people simply agree on a standard?
+  removed many unnecessary includes to speed up compilation.
+  added -fomit-frame-pointer and i386 compilation target to reduce code size.
+  inlined socketcall to reduce code size.
+  "load" and "compile" are examples for djb code.
+
+0.5:
+  Olaf Dreesen contributed a much smaller implementation of malloc and friends.
+  each object file is now treated with "strip -x -R .note -R .comment"
+  split each system call into a separate object file
+  added ntohs, htons, alarm, if_indextoname and if_nametoindex
+
+0.4.1:
+  oops, the strchr implementation was wrong.  Thanks Jens Laas!
+
+0.4:
+  copied opendir and friends from uC-libc.
+  added getservent and getservby* in gerservent.c
+
+0.3:
+  remove readdir system call
+  added getdents system call
+  added getpwnam/getpwuid implementation in getpwnam.c
+  added a few string functions (in str*.c)
+

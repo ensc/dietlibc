@@ -1,0 +1,94 @@
+#include <unistd.h>
+#include <endian.h>
+#include <stdlib.h>
+#include <dirent.h>
+#include <pwd.h>
+#include <stdio.h>
+#include <assert.h>
+#include <sys/mount.h>
+
+int main() {
+  int i;
+  for (i=0; i<5; i++) {
+    fprintf(stdout,"first message\n");
+    fprintf(stdout,"second message\n");
+    fprintf(stdout,"third message\n");
+    printf("foo %d\n",i);
+  }
+#if 0
+  char buf[1024];
+  sscanf("foo bar","%s",buf);
+  printf("%s\n",buf);
+#endif
+#if 0
+  mount("/dev/scsi/host0/bus0/target2/lun0/cd", "/cd", "iso9660", MS_MGC_VAL|MS_RDONLY, NULL);
+  perror("mount");
+#endif
+#if 0
+  char *t="<4>Linux version 2.4.0-test10 (leitner@hellhound) (gcc version 2.95.2 19991024 (release))";
+  int i=strtol(t+1,&t,10);
+  printf("%d %s\n",i,t);
+#endif
+#if 0
+  char **tmp;
+  putenv("FOO");
+  assert(1==2);
+  for (tmp=environ; *tmp; tmp++)
+    puts(*tmp);
+#endif
+#if 0
+  char buf[1024];
+  printf("%d\n",fprintf(stderr,"duh\n"));
+#endif
+#if 0
+  struct passwd *p=getpwuid(100);
+  puts(p->pw_name);
+#endif
+#if 0
+  int pid;
+  char name[32];
+  sscanf("1 (init","%d (%15c",&pid,name);
+  printf("pid %d name %s\n",pid,name);
+#endif
+#if 0
+  DIR *d=opendir("/proc");
+  if (d) {
+    struct dirent *D;
+    while (D=readdir(d))
+      puts(D->d_name);
+    closedir(d);
+  }
+#endif
+#if 0
+  char buf[1024];
+  int fd=open("/etc/passwd",0);
+  pread(fd,buf,30,32);
+  close(fd);
+  write(1,buf,32);
+#endif
+#if 0
+  char *argv[] = {"echo","foo",0};
+  char buf[100];
+  buf[5]='x';
+  sprintf(buf,"foo\n");
+  if (buf[5] == 'x')
+    exit(0);
+  else
+    exit(1);
+  execvp(argv[0],argv);
+#endif
+#if 0
+  struct stat64 f;
+  char buf[128];
+  fstat64(0,&f);
+  fprintf(stderr,"%d %d\n",f.st_size,sizeof(f));
+  return 0;
+#endif
+#if 0
+  FILE *f=fopen("foo","w");
+  fputc('a',f);
+  fputc('b',f);
+  fputc('c',f);
+#endif
+/*  fprintf(stdout,"foo\n"); */
+}

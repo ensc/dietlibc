@@ -1,0 +1,5 @@
+
+CFLAGS+=-Os -fno-builtin -Iinclude -fomit-frame-pointer -fstrict-aliasing
+override VPATH=alpha:syscalls.s:lib
+
+LIBOBJ+=divq.o

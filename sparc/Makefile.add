@@ -1,0 +1,3 @@
+
+CFLAGS+=-mcpu=supersparc -Os
+override VPATH=sparc:syscalls.s:lib

@@ -1,0 +1,9 @@
+I initially took some syscalls from Redhat minilibc.
+
+The directory routines are taken from uC-libc.
+As was the localtime implementation.
+
+The malloc code was done by Olaf Dreesen, who also helped with the SPARC
+start code and fork().
+
+I also grabbed code from glibc (mostly assembly routines).

@@ -1,0 +1,3 @@
+
+CFLAGS+=-march=i386 -mcpu=i386 -Os -fomit-frame-pointer
+override VPATH=i386:syscalls.s:lib

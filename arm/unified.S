@@ -1,0 +1,24 @@
+#include <dietfeatures.h>
+
+.text
+.global __unified_syscall
+__unified_syscall:
+	cmn	r0, #4096
+	movcc	pc, lr
+	rsb	r0, r0, #0
+#ifdef WANT_THREAD_SAVE
+	stmdb	sp!, {r0, lr}
+	bl	__errno_location
+	ldmia	sp!, {r1, lr}
+	str	r1, [r0]
+#else
+	ldr	r1, .L0
+	str	r0, [r1]
+#endif
+	mvn	r0, #0
+	mov	pc, lr
+
+#ifdef WANT_THREAD_SAVE
+.L0:
+	.long errno
+#endif

@@ -1,0 +1,11 @@
+diet glibc to statically link programs that don't need all the bloat
+from glibc.
+
+malloc, printf and scanf contributed from Olaf Dreesen.
+
+Usage:
+	gcc -I~/dietlibc/include -Os -pipe -c *.c
+	gcc -nostdlib -o ncp ~/dietlibc/start.o *.o ~/dietlibc/dietlibc.a
+
+If you use the glibc includes, directory reading (and maybe other
+functions) will fail.  You have been warned!
