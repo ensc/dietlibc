@@ -1,3 +1,4 @@
+
 #include <math.h>
 
 double  pow ( double mant, double expo )
@@ -14,17 +15,17 @@ double  pow ( double mant, double expo )
         else
             return 1./mant;
     }
-
+    
     /* special cases x^n with n is integer */
-    if ( expo == (int)(e = (int) expo) ) {
-
+    if ( expo == (int) (e = (int) expo) ) {
+           
         if ( (int)e < 0 ) {
             e    = -e;
             mant = 1./mant;
         }
-
+   
         ret = 1.;
-
+        
         while (1) {
             if ( e & 1 )
                 ret *= mant;
@@ -34,7 +35,7 @@ double  pow ( double mant, double expo )
          }
         return ret;
     }
-
+    
     /* normal case */
-    return pow2 (expo * log2 (mant));
+    return exp2 ( log2 (mant) * expo );
 }

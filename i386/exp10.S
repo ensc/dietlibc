@@ -1,6 +1,12 @@
+
 .text
 .type   exp10,@function
 .global exp10
+.type   pow10,@function
+.global pow10
+
+
+pow10:
 exp10:                          # note: 10^(x) = 2^(x*log2(10))
         fldl2t
         fmull    4(%esp)        # x*log2(10)
@@ -16,4 +22,6 @@ exp10:                          # note: 10^(x) = 2^(x*log2(10))
         ret
 
 .ende:
+
 .size    exp10,.ende-exp10
+.size    pow10,.ende-pow10
