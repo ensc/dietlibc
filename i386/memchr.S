@@ -13,7 +13,7 @@ memchr:
 
 	je .Lfound
 	xorl %edi, %edi
-	incl %eax
+	incl %edi
 .Lfound:
 	movl %edi, %eax
 	decl %eax

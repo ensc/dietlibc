@@ -91,7 +91,7 @@ extern char* strcpy2(char*a,char*b);
      __asm__ __volatile__ ("rdtsc" : "=a" (low) : : "edx")
 
 int main(int argc,char *argv[]) {
-  printf("%d\n",strcmp("aaaa","aaad"));
+  printf("%d\n",memchr("aaaa",'x',4));
 #if 0
   long a,b,c;
   char buf[20]="fnord";
