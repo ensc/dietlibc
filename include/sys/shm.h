@@ -3,6 +3,11 @@
 
 #include <linux/shm.h>
 #include <sys/ipc.h>
+#include <asm/page.h>
+
+#ifndef PAGE_SIZE
+#define PAGE_SIZE getpagesize()
+#endif
 
 extern int shmget(key_t key, int size, int shmflg) __THROW;
 extern void *shmat(int shmid, const void *shmaddr, int shmflg) __THROW;

@@ -6,6 +6,7 @@
 #include <sys/types.h>
 #include <sys/time.h>
 #include <getopt.h>
+#include <linux/sysctl.h>
 
 /* Values for the second argument to access.
    These may be OR'd together.  */
@@ -142,5 +143,7 @@ void encrypt(char block[64], int edflag);
 void setkey(const char *key);
 
 size_t getpagesize(void);
+
+int _sysctl(struct __sysctl_args *args);
 
 #endif
