@@ -27,6 +27,8 @@
     Make _FILE_OFFSET_BITS includes -Wundef clean
   Andre found a typo in endian.h for big endian mips
   Ryan told me that fmod was not included in libm.  Oops.
+  strstr(whatever,"") returned NULL, not whatever.  Found by a new test
+    suite entry for strstr that I wrote.
 
 0.14:
   fix brk again (missing __brk, trivial oversight)
