@@ -1,5 +1,6 @@
 .text
-.globl strcasecmp
+.global strcasecmp
+.type	strcasecmp,@function
 
 strcasecmp:
 	pushl %esi
@@ -29,3 +30,5 @@ strcasecmp:
 .Lfinifirst:
 	subl %ecx, %eax
 	jmp .Lret
+
+.size strcasecmp,.-strcasecmp
