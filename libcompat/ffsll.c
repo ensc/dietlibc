@@ -1,4 +1,5 @@
-#include <strings.h>
+#define _GNU_SOURCE
+#include <string.h>
 
 int ffsll(long long i) {
   int plus=0;
