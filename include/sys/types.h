@@ -70,7 +70,7 @@ typedef uint32_t gid32_t;
 
 typedef long int fpos_t;
 
-#define socklen_t socklen_t
+#define __socklen_t_defined
 typedef unsigned int socklen_t;
 typedef unsigned short sa_family_t;
 
