@@ -69,8 +69,10 @@ void __dns_readstartfiles(void) {
 	  {
 	    char *tmp=buf;
 	    struct sockaddr_in i;
+	    char save;
 	    while (buf<last && !isspace(*buf)) ++buf;
 	    if (buf>=last) break;
+	    save=*buf;
 	    *buf=0;
 	    if (inet_aton(tmp,&i.sin_addr)) {
 	      i.sin_family=AF_INET;
@@ -78,6 +80,7 @@ void __dns_readstartfiles(void) {
 	      memmove(&_res.nsaddr_list[_res.nscount],&i,sizeof(struct sockaddr));
 	      if (_res.nscount<MAXNS) ++_res.nscount;
 	    }
+	    *buf=save;
 	  }
 	}
       }

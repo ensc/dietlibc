@@ -152,6 +152,7 @@ int __dns_gethostbyx_r(const char* name, struct hostent* result,
   int res;
   size_t len=strlen(name);
   int count=0;
+  __dns_readstartfiles();
   memmove(Buf,name,len);
   Buf[len]=Buf[MAXDNAME]=0;
 //  printf("appending %d: %p\n",count,__dns_domains[count]);
