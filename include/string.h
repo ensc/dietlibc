@@ -38,6 +38,7 @@ char *strpbrk(const char *s, const char *accept) __THROW;
 char *strsep(char **stringp, const char *delim) __THROW;
 
 void* memset(void *s, int c, size_t n) __THROW;
+void* memchr(const void *s, int c, size_t n) __THROW;
 
 #undef NULL
 #define NULL (void*)0
