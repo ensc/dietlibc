@@ -46,6 +46,11 @@
  * Needed for daylight saving time etc. */
 #define WANT_TZFILE_PARSER
 
+/* do you want the DNS routines to parse and use "domain" and "search"
+ * lines from /etc/resolv.conf?  Normally not used on boot floppies and
+ * embedded environments. */
+#define WANT_FULL_RESOLV_CONF
+
 /* stop uncommenting here ;-) */
 #ifndef WANT_FASTER_STRING_ROUTINES
 #define WANT_SMALL_STRING_ROUTINES

@@ -170,3 +170,6 @@ $(OBJDIR)/strsep.o: dietfeatures.h
 
 # these depend on dietfeatures.h for WANT_SMALL_STDIO_BUFS
 $(LIBSTDIOOBJ): dietfeatures.h
+
+# these depend on dietfeatures.h for WANT_FULL_RESOLV_CONF
+$(OBJDIR)/dnscruft.o $(OBJDIR)/dnscruft2.o: dietfeatures.h

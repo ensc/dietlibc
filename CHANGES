@@ -57,6 +57,8 @@
     dietfeatures.h does not define WANT_THREAD_SAFE (it's empty then).
   add getaddrinfo and freeaddrinfo (man, what a fucked up interface!)
   fix sigsuspend (syscall had completely fscked up arguments!)
+  RLIM_INFINITY from the kernel is broken.  Thanks to Chris Siebenmann
+    for sending a patch.
 
 0.9:
   fixed initgroups (oops)

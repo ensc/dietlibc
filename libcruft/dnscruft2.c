@@ -8,8 +8,8 @@
 #include <sys/poll.h>
 #include <unistd.h>
 #include <errno.h>
-
-#include <stdio.h>
+#include <arpa/nameser.h>
+#include "dietfeatures.h"
 
 extern int h_errno;
 
@@ -29,9 +29,15 @@ extern int __dns_decodename(unsigned char *packet,int offset,unsigned char *dest
  * Not one, not two, but _three_ error signalling methods!  (*h_errnop
  * nonzero?  return value nonzero?  *RESULT zero?)  The glibc goons
  * really outdid themselves with this one. */
+#ifdef WANT_FULL_RESOLV_CONF
+int __dns_gethostbyx_r_inner(const char* name, struct hostent* result,
+			char *buf, size_t buflen,
+			struct hostent **RESULT, int *h_errnop, int lookfor) {
+#else
 int __dns_gethostbyx_r(const char* name, struct hostent* result,
 			char *buf, size_t buflen,
 			struct hostent **RESULT, int *h_errnop, int lookfor) {
+#endif
   int names,ips;
   unsigned char *cur;
   unsigned char *max;
@@ -183,3 +189,31 @@ int __dns_gethostbyx_r(const char* name, struct hostent* result,
   }
   return 1;
 }
+
+#ifdef WANT_FULL_RESOLV_CONF
+extern int __dns_search;
+extern char *__dns_domains[];
+
+int __dns_gethostbyx_r(const char* name, struct hostent* result,
+			char *buf, size_t buflen,
+			struct hostent **RESULT, int *h_errnop, int lookfor) {
+  const char *tmp=name;
+  char Buf[MAXDNAME+1];
+  int res;
+  int len=strlen(name);
+  int count=0;
+  memmove(Buf,name,len);
+  Buf[len]=Buf[MAXDNAME]=0;
+//  printf("appending %d: %p\n",count,__dns_domains[count]);
+  while ((res=__dns_gethostbyx_r_inner(tmp,result,buf,buflen,RESULT,h_errnop,lookfor))) {
+    if (count==__dns_search) break;
+    Buf[len]='.';
+//    printf("appending %d: %p (%s)\n",count,__dns_domains[count],__dns_domains[count]);
+    strncat(Buf+len+1,__dns_domains[count],MAXDNAME-len-1);
+    tmp=Buf;
+    ++count;
+  }
+  return res;
+}
+#endif
+

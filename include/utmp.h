@@ -72,4 +72,15 @@ struct utmp
 #define _HAVE_UT_TV	1
 #define _HAVE_UT_HOST	1
 
+struct utmp *getutent(void) __THROW;
+struct utmp *getutid(struct utmp *ut) __THROW;
+struct utmp *getutline(struct utmp *ut) __THROW;
+
+void pututline(struct utmp *ut) __THROW;
+
+void setutent(void) __THROW;
+void endutent(void) __THROW;
+
+void utmpname(const char *file) __THROW;
+
 #endif

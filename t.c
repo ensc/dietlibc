@@ -33,6 +33,11 @@
 int foo;
 
 int main(int argc,char *argv[]) {
+#if 0
+  struct netent* n=getnetbyname("loopback");
+  printf("%s %s\n",n->n_name,inet_ntoa(*(struct in_addr*)&n->n_net));
+#endif
+#if 0
   fprintf(stdout,"foo\n");
   sleep(1);
   fprintf(stdout,"bar");
@@ -42,6 +47,7 @@ int main(int argc,char *argv[]) {
   sleep(1);
   fprintf(stdout,"\n");
   sleep(1);
+#endif
 #if 0
   sigset_t s;	/* sigsetops */
 
@@ -130,11 +136,11 @@ int main(int argc,char *argv[]) {
   foo[6]=0;
   puts(foo);
 #endif
-#if 0
+#if 1
   struct hostent * host;
   struct in_addr i;
 
-  host = gethostbyname("ftp.ciril.fr");
+  host = gethostbyname("pegasus");
 
   if (!host)
     printf("host null\n");

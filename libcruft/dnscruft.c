@@ -7,6 +7,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdlib.h>
+#include "dietfeatures.h"
 
 int __dns_fd=-1;
 
@@ -26,13 +27,18 @@ void __dns_make_fd() {
 int __dns_servers=0;
 struct sockaddr __dns_server_ips[8];
 
-int __dns_search=0;
+#ifdef WANT_FULL_RESOLV_CONF
+int __dns_search;
 char *__dns_domains[8];
+#endif
 
 void __dns_readstartfiles() {
   int fd;
   char *buf=alloca(4096);
   int len;
+#ifdef WANT_FULL_RESOLV_CONF
+  __dns_search=0;
+#endif
   if (__dns_servers>0) return;
   {
     struct sockaddr_in to;
@@ -71,9 +77,20 @@ void __dns_readstartfiles() {
 	  }
 	}
       }
+#ifdef WANT_FULL_RESOLV_CONF
       if (!strncmp(buf,"search",6) || !strncmp(buf,"domain",6)) {
 	buf+=6;
+	while (buf<last && isblank(*buf)) {
+	  while (buf<last && isblank(*buf)) ++buf;
+	  __dns_domains[__dns_search]=buf;
+	  while (buf<last && (*buf=='.' || *buf=='-' || isalnum(*buf))) ++buf;
+	  if (buf<last) *buf++=0;
+	  if ((__dns_domains[__dns_search]=strdup(__dns_domains[__dns_search])))
+	    ++__dns_search;
+	}
+	continue;
       }
+#endif
       while (buf<last && *buf!='\n') ++buf;
       while (buf<last && *buf=='\n') ++buf;
     }

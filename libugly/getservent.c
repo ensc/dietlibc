@@ -40,7 +40,6 @@ again:
   /* first, the primary name */
   if (!isalpha(*cur)) goto parseerror;
   se.s_name=cur;
-  se.s_aliases=aliases;
   while (cur<last && isalnum(*cur)) cur++;
   if (cur>=last) return 0;
   if (*cur=='\n') goto parseerror;
