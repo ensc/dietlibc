@@ -542,18 +542,28 @@ typedef struct {
 /*	Audio data formats (Note! U8=8 and S16_LE=16 for compatibility) */
 #define SNDCTL_DSP_GETFMTS		_SIOR ('P',11, int) /* Returns a mask */
 #define SNDCTL_DSP_SETFMT		_SIOWR('P',5, int) /* Selects ONE fmt*/
-#	define AFMT_QUERY		0x00000000	/* Return current fmt */
-#	define AFMT_MU_LAW		0x00000001
-#	define AFMT_A_LAW		0x00000002
-#	define AFMT_IMA_ADPCM		0x00000004
-#	define AFMT_U8			0x00000008
-#	define AFMT_S16_LE		0x00000010	/* Little endian signed 16*/
-#	define AFMT_S16_BE		0x00000020	/* Big endian signed 16 */
-#	define AFMT_S8			0x00000040
-#	define AFMT_U16_LE		0x00000080	/* Little endian U16 */
-#	define AFMT_U16_BE		0x00000100	/* Big endian U16 */
-#	define AFMT_MPEG		0x00000200	/* MPEG (2) audio */
-#	define AFMT_AC3		0x00000400	/* Dolby Digital AC3 */
+#define AFMT_QUERY		0x00000000	/* Return current fmt */
+#define AFMT_MU_LAW		0x00000001
+#define AFMT_A_LAW		0x00000002
+#define AFMT_IMA_ADPCM		0x00000004
+#define AFMT_U8			0x00000008
+#define AFMT_S16_LE		0x00000010	/* Little endian signed 16*/
+#define AFMT_S16_BE		0x00000020	/* Big endian signed 16 */
+#define AFMT_S8			0x00000040
+#define AFMT_U16_LE		0x00000080	/* Little endian U16 */
+#define AFMT_U16_BE		0x00000100	/* Big endian U16 */
+#define AFMT_MPEG		0x00000200	/* MPEG (2) audio */
+#define AFMT_AC3		0x00000400	/* Dolby Digital AC3 */
+
+#define AFMT_S24_LE		0x00000800
+#define AFMT_S24_BE		0x00001000
+#define AFMT_U24_LE		0x00002000
+#define AFMT_U24_BE		0x00004000
+#define AFMT_S32_LE		0x00008000
+#define AFMT_S32_BE		0x00010000
+#define AFMT_U32_LE		0x00020000
+#define AFMT_U32_BE		0x00040000
+
 
 /*
  * Buffer status queries.

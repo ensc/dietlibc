@@ -16,8 +16,8 @@ __unified_syscall:
 	movzbl	%al, %eax
 	mov	%rcx, %r10
 	syscall
-	cmpq	$0, %rax
-	jge	.Lnoerror
+	cmpq	$-128, %rax
+	jbe	.Lnoerror
 	negl	%eax
 	pushq	%rax
 	call	__errno_location

@@ -1,3 +1,7 @@
+0.23:
+  update sys/soundcard.h
+  various x86_64 fixes (Gwenole Beauchesne)
+
 0.22:
   fix i386 libm
   fix netinet/ip_icmp.h (Rui Prior)
