@@ -6,7 +6,6 @@ prefix=/opt/diet
 
 LIBDIR=${prefix}/lib
 BINDIR=${prefix}/bin
-INCLUDEDIR=${prefix}/include
 MAN1DIR=${prefix}/man/man1
 
 MYARCH=$(shell uname -m | sed 's/i[4-9]86/i386/')
@@ -244,7 +243,7 @@ install: $(OBJDIR)/start.o $(OBJDIR)/dietlibc.a $(OBJDIR)/liblatin1.a $(OBJDIR)/
 	$(INSTALL) $(OBJDIR)/liblatin1.a $(DESTDIR)$(LIBDIR)/libdietlatin1.a
 	$(INSTALL) $(OBJDIR)/diet $(DESTDIR)$(BINDIR)/diet
 	$(INSTALL) -m 644 diet.1 $(DESTDIR)$(MAN1DIR)/diet.1
-	for i in `find include -name \*.h`; do install -D $$i $(DESTDIR)$(INCLUDEDIR)/$$i; done
+	for i in `find include -name \*.h`; do install -m 644 -D $$i $(DESTDIR)$(prefix)/$$i; done
 
 .PHONY: sparc ppc mips arm alpha i386
 
