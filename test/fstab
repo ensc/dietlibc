@@ -17,5 +17,6 @@ tmpfs  /tmp  tmpfs  rw,mode=1777,size=64m  0 0
 # none		/dev		devfs	noauto	0 0
 # proc		/proc		proc	noauto	0 0
 # tmpfs		/service        tmpfs	noauto	0 0
+#sysfs		/sys		sysfs	noauto	0 0
 
 /dev/floppy/0	/mnt/floppy	auto	defaults,noauto	0 0

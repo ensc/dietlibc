@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <elf.h>
 
+extern char **environ;
+
 int main() {
   register struct elf_aux {
     unsigned long type, value;
@@ -15,4 +17,5 @@ int main() {
     else if (x->type==AT_SYSINFO)
       printf("vsyscall %p\n",x->value);
   }
+  return 0;
 }

@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 
 char * format[] = {
   "%",
@@ -61,7 +62,7 @@ fltchk (const char *fmt)
   (void) printf("\"\n");
 }
 
-void main()
+int main()
 {  
   char buf[256];
   int i;
@@ -146,4 +147,5 @@ void main()
     printf ("snprintf (\"%%.999999u\", 10) == %d\n",
     	    snprintf(buf2, sizeof(buf2), "%.999999u", 10));
   }
+  return 0;
 }

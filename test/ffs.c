@@ -3,7 +3,7 @@
 #include <string.h>
 #include <assert.h>
 
-main() {
+int main() {
   assert(ffs(1)==1);
   assert(ffs(2)==2);
   assert(ffs(4)==3);
@@ -12,4 +12,6 @@ main() {
   assert(ffsll(511)==1);
   assert(ffsll(256)==9);
   assert(ffsll(0x200000000ll)==34);
+
+  return 0;
 }

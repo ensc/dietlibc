@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int main(int argc,char* argv[],char* envp[]) {
+extern char **environ;
+
+int main(int argc,char* argv[]) {
   int i;
   char** x;
   for (i=0; i<=argc; ++i)

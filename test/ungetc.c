@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-main() {
+int main() {
   ungetc(23,stdin);
   if (fgetc(stdin) != 23) return 1;
   ungetc(230,stdin);

@@ -15,7 +15,7 @@ int main(int argc,char *argv[]) {
   }
 #else
   struct protoent* se;
-  while (se=getprotoent()) {
+  while ((se=getprotoent())) {
     int i;
     printf("name %s\tproto %d\n",se->p_name,se->p_proto);
     for (i=0; i<16; ++i) {

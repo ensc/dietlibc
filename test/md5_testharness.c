@@ -2,6 +2,10 @@
 #include <stdio.h>
 #include <string.h>
 
+#ifndef __dietlibc__
+#warning "You are not using diet libc, md5 test disbled"
+int main(void) { return 0; }
+#else
 #include <md5.h>
 
 
@@ -150,5 +154,5 @@ int main (int argc, char *argv[])
 
    return (errorcode);
 }
-
+#endif
 

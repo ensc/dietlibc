@@ -16,7 +16,7 @@ int main(int argc,char *argv[]) {
   }
 #else
   struct servent* se;
-  while (se=getservent()) {
+  while ((se=getservent())) {
     int i;
     printf("name %s\tport %d\tproto %s\n",se->s_name,ntohs(se->s_port),se->s_proto);
     for (i=0; i<16; ++i) {

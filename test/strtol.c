@@ -5,7 +5,7 @@
 #include <assert.h>
 #include <errno.h>
 
-main() {
+int main() {
   char* c, *s;
 
   assert(strtol(s="123",&c,0)==123 && c==s+3);

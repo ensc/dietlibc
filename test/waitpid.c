@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <sys/wait.h>
 
-main() {
+int main() {
   pid_t t;
   int status;
   switch (t=fork()) {
@@ -17,4 +17,5 @@ main() {
   }
   printf("waitpid returned %u\n",waitpid(-1,&status,0));
   printf("status was: %d\n",WEXITSTATUS(status));
+  return 0;
 }

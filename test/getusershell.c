@@ -4,7 +4,7 @@
 
 int main() {
   char* c;
-  while (c=getusershell())
+  while ((c=getusershell()))
     puts(c);
   return 0;
 }

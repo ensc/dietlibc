@@ -6,6 +6,8 @@
   make diet accept "gcc-3.3.2" and "diet -v -Os gcc" (Yuri Kozlov)
   make libcompat syscall position independent (Peter S. Mazinger)
   fix missing pthread stdio external (Gernot Tenchio)
+  Port parts of glibc test suite (Florian Westphal)
+    Now we need more manpower to fix the bugs it uncovers ;-)
 
 0.24:
   work around incompatible Linux select() modifying the timeout in

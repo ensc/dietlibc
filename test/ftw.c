@@ -8,4 +8,5 @@ int traverse(const char* file, const struct stat* sb, int flag) {
 
 int main() {
   ftw("/tmp",traverse,10);
+  return 0;
 }
