@@ -11,5 +11,5 @@ LIBOBJ+=$(OBJDIR)/setjmp_aux.o
 ifeq ($(CROSS),mips-linux-)
 ENDIAN=-EB
 endif
-CFLAGS+=$(ENDIAN) -Os -fstrict-aliasing -fno-pic -mno-abicalls
+CFLAGS+=$(ENDIAN) -Os -G 0 -fstrict-aliasing -fno-pic -mno-abicalls
 VPATH:=mips:syscalls.s:$(VPATH)
