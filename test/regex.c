@@ -11,6 +11,11 @@ int main() {
   memset(buf,'a',sizeof buf);
   strcpy(buf+sizeof(buf)-100," foo . .. bar\n");
 
+  assert(regcomp(&r,"^$",REG_EXTENDED)==0);
+  assert(regexec(&r,"",0,0,0)==0);
+  assert(matches[0].rm_so==0 && matches[0].rm_eo==0);
+  regfree(&r);
+
   assert(regcomp(&r,"abracadabra$",REG_EXTENDED)==0);
   assert(regexec(&r,"abracadabracadabra",10,matches,0)==0);
   assert(matches[0].rm_so==7 && matches[0].rm_eo==18);
@@ -61,7 +66,7 @@ int main() {
   assert(matches[0].rm_so==0 && matches[0].rm_eo==1);
   regfree(&r);
 
-  assert(regcomp(&r,"{",REG_EXTENDED)==0);
+  assert(regcomp(&r,"{",0)==0);
   assert(regexec(&r,"{",10,matches,0)==0);
   assert(matches[0].rm_so==0 && matches[0].rm_eo==1);
   regfree(&r);

@@ -450,7 +450,7 @@ int regexec(const regex_t*__restrict__ preg, const char*__restrict__ string, siz
   printf("alloca(%d)\n",sizeof(regmatch_t)*(preg->brackets+3));
 #endif
   ((regex_t*)preg)->l=alloca(sizeof(regmatch_t)*(preg->brackets+3));
-  while (*string) {
+  while (1) {
     matched=preg->r.m((void*)&preg->r,string,string-orig,(regex_t*)preg,0,eflags);
 //    printf("ebp on stack = %x\n",stack[1]);
     if (matched>=0) {
@@ -459,6 +459,7 @@ int regexec(const regex_t*__restrict__ preg, const char*__restrict__ string, siz
       if ((preg->cflags&REG_NOSUB)==0) memcpy(pmatch,preg->l,nmatch*sizeof(regmatch_t));
       return 0;
     }
+    if (!*string) break;
     ++string; eflags|=REG_NOTBOL;
   }
   return REG_NOMATCH;

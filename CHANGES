@@ -31,6 +31,8 @@
   add BSD utimes to libcompat (Andreas Krennmair)
   remove gcc 3 #ifdef kludgery from include/string.h; it works with gcc
     3.2.2+, don't know if it's gcc or us (Gerrit Pape)
+  remove _null_auth declaration in librpc/rpc_prot.c (Thayne Harbaugh)
+  fix regex bug with ^$ not matching "" (Anthony de Boer)
 
 0.22:
   fix i386 libm
