@@ -196,13 +196,14 @@ num_printf:
 	else
 	  number=va_arg(arg_ptr,int);
 
-	if (flag_in_sign && (number<0)) {
+	if (flag_in_sign) {
 #ifdef WANT_LONGLONG_PRINTF
-	  if (flag_long>1)
+	  if ((flag_long>1)&&(llnumber<0))
 	    llnumber=-llnumber;
 	  else
 #endif
-	    number=-number;
+	    if (number<0)
+	      number=-number;
 	  flag_in_sign=2;
 	}
 	if (flag_long<0) number&=0xffff;
