@@ -71,7 +71,7 @@
 #define SIGPWR		29
 #define SIGUSR1		30
 #define SIGUSR2		31
-#ifdef (__alpha__)
+#if defined(__alpha__)
 #define SIGINFO		SIGPWR
 #endif
 #elif defined(__mips__)
@@ -112,7 +112,7 @@
 #define SIGTTIN		27
 #define SIGTTOU		28
 #define SIGURG		29
-#define SIGPWR		30
+#define SIGLOST		30
 #define SIGUNUSED	31
 #define SIGRESERVE	SIGUNUSE
 #define SIGXCPU		33

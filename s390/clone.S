@@ -32,6 +32,6 @@ thread_start:
 
 .Lerror:
 	basr	%r1, %r0
-.L0:	al	%r1, [.L1-.L0](%r1)
+.L2:	al	%r1, [.L3-.L2](%r1)
 	br	%r1
-.L1:	.long	__error_unified_syscall-.L0
+.L3:	.long	__error_unified_syscall-.L0

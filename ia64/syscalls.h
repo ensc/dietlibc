@@ -202,9 +202,10 @@ sym: \
 	br __unified_syscall;
 
 #define syscall_weak(name, sym, wsym) \
-	.text; \
-	.globl sym; \
-	.weak wsym; \
+.text; \
+.weak wsym; \
+wsym: \
+.globl sym; \
 sym: \
 	mov r15 = __NR_##name; \
 	br __unified_syscall;

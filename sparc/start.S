@@ -1,4 +1,3 @@
-#ifdef __sparc__
 	.section ".text"
 	.align 4
 	.global _start
@@ -47,7 +46,5 @@ _start:
 	ret
 	nop
 
-
 	.size _start, .-_start
-#endif
 

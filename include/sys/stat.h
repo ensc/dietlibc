@@ -3,6 +3,7 @@
 
 #include <sys/cdefs.h>
 #include <sys/types.h>
+#include <endian.h>
 
 #if defined(__i386__)
 struct stat {
@@ -481,6 +482,9 @@ extern int stat(const char *__file, struct stat *__buf) __THROW;
 extern int fstat(int __fd, struct stat *__buf) __THROW;
 extern int lstat(const char *__file, struct stat *__buf) __THROW;
 
+#if __WORDSIZE == 64
+#define __NO_STAT64
+#else
 extern int stat64(const char *__file, struct stat64 *__buf) __THROW;
 extern int fstat64(int __fd, struct stat64 *__buf) __THROW;
 extern int lstat64(const char *__file, struct stat64 *__buf) __THROW;
@@ -491,6 +495,7 @@ extern int lstat64(const char *__file, struct stat64 *__buf) __THROW;
 #define stat stat64
 #define pread pread64
 #define pwrite pwrite64
+#endif
 #endif
 
 #define major(dev) (((dev)>>8) & 0xff)
