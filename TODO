@@ -24,6 +24,7 @@
  - regular expressions standards compliance; test suite from AT&T
  - fgetpwent (needed for cvm)
  - investigate putting some libgcc symbols in dietlibc.so for gcc<3
+ - wordexp, wordfree (might as well write a /bin/sh then)
 
 implement AI_V4MAPPED in getaddrinfo (not in man page, only susv3)
 

@@ -11,6 +11,7 @@
   add ftw64 (yuck!)
   #include <endian.h> in syscalls.s/environ.S to make sure environ is
     actually large enough (Enrico Scholz)
+  add waitpid wrapper around wait4 for arm-linux (Avinash Bhatia)
 
 0.27:
   change DNS routines to look for ip6.arpa instead of ip6.int
