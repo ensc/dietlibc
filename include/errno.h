@@ -526,6 +526,8 @@
 
 #ifndef __ASSEMBLER__
 
+#include <sys/cdefs.h>
+
 #ifndef _REENTRANT
 extern int errno;
 #else

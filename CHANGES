@@ -43,6 +43,7 @@
   add sendfile64 backwards compatibility glue
   add __attribute_dontuse__ to declare a few functions as deprecated
   use above to flag a few BSDisms ;-)
+  include <sys/cdefs.h> in errno.h, fixes __attribute_dontuse__ breakage
 
 0.22:
   fix i386 libm
