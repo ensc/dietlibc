@@ -11,23 +11,11 @@
 #include <stdio.h>
 #include <arpa/inet.h>
 #include <sys/sem.h>
-
-#if defined(__GNU_LIBRARY__) && !defined(_SEM_SEMUN_UNDEFINED)
-/* union semun is defined by including <sys/sem.h> */
-#else
-/* according to X/OPEN we have to define it ourselves */
-union semun {
-  int val;                    /* value for SETVAL */
-  struct semid_ds *buf;       /* buffer for IPC_STAT, IPC_SET */
-  unsigned short int *array;  /* array for GETALL, SETALL */
-  struct seminfo *__buf;      /* buffer for IPC_INFO */
-};
-#endif
-
+#include <sys/shm.h>
 
 int main(int argc,char *argv[]) {
-  union semun foo;
-  semctl(17,23,IPC_STAT,foo);
+  int foo;
+  shmctl(1,2,&foo);
 #if 0
   struct in_addr duh;
   printf("%d\n",inet_aton(argv[1]?argv[1]:"10.0.0.1",&duh));

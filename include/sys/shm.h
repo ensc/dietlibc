@@ -6,6 +6,7 @@
 
 extern int shmget(key_t key, int size, int shmflg) __THROW;
 extern void *shmat(int shmid, const void *shmaddr, int shmflg) __THROW;
-extern void int shmdt (const void *shmaddr) __THROW;
+extern int shmdt (const void *shmaddr) __THROW;
+extern int shmctl(int shmid, int cmd, struct shmid_ds *buf) __THROW;
 
 #endif
