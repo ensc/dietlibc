@@ -231,6 +231,7 @@ __unified_syscall:
 #include "../syscalls.s/setreuid32.S"
 #include "../syscalls.s/setuid32.S"
 #include "../syscalls.s/alarm.S"
+#include "../syscalls.s/ptrace.S"
 
 /* so now this was the last u.s.c. */
 
