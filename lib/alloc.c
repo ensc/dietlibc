@@ -140,7 +140,7 @@ static void _alloc_libc_free(void *ptr) {
 }
 void __libc_free(void *ptr) __attribute__((alias("_alloc_libc_free")));
 void free(void *ptr) __attribute__((weak,alias("_alloc_libc_free")));
-
+void if_freenameindex(void* ptr) __attribute__((alias("free")));
 
 static void* _alloc_libc_malloc(size_t size) {
   __alloc_t* ptr;
