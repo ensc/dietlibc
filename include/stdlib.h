@@ -55,5 +55,6 @@ div_t div(int numer, int denom) __THROW __attribute__((const));
 
 void *alloca(size_t size) __THROW; /* gcc built-in */
 
+char *realpath(const char *path, char *resolved_path) __THROW;
 
 #endif

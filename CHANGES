@@ -41,6 +41,9 @@
   add libdl fragments from Olaf (Yeah!  One step closer to dynamic linking!)
   add REG_ICASE and word start/end handling to my regular expressions.
   my regular expressions now actually match substrings (i.e. "foobar" to "bar").
+  wrap getcwd to comply to man page (the syscall returns the number of
+    bytes, not the buffer)
+  add realpath.
 
 0.9:
   fixed initgroups (oops)

@@ -1,3 +1,3 @@
 #include "syscalls.h"
 
-syscall(getcwd,getcwd)
+syscall(getcwd,__syscall_getcwd)
