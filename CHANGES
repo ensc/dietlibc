@@ -1,4 +1,6 @@
 0.24:
+  work around incompatible Linux select() modifying the timeout in
+    librpc (Patch was sent from Mike Waychison from Sun)
 
 0.23:
   update sys/soundcard.h

@@ -224,6 +224,7 @@ struct timeval utimeout;		/* seconds to wait before giving up */
 	register XDR *xdrs;
 	register int outlen;
 	register int inlen;
+	struct timeval singlewait;
 	int fromlen;
 
 #ifdef FD_SETSIZE
@@ -292,7 +293,8 @@ struct timeval utimeout;		/* seconds to wait before giving up */
 #endif							/* def FD_SETSIZE */
 	for (;;) {
 		readfds = mask;
-		switch (select(_rpc_dtablesize(), &readfds, 0, 0, &(cu->cu_wait))) {
+		singlewait = cu->cu_wait;
+		switch (select(_rpc_dtablesize(), &readfds, 0, 0, &singlewait)) {
 
 		case 0:
 			time_waited.tv_sec += cu->cu_wait.tv_sec;
