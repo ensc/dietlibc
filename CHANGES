@@ -26,6 +26,9 @@
   add epoll_create, epoll_ctl and epoll_wait
   the new x86 syscall numbers exceed 255, breaking our %al optimization
     I worked around it with conditional assembly in cpp macros.  Ugh.
+  more MIPS fixes (the stoned MIPS ABI for restartable syscalls expects
+    the instruction before the syscall to be a load immediate)
+  fix fread() from a pipe (oops, tried to lseek)
 
 0.21:
   use gcc's size_t, ptrdiff_t and wchar_t types (Olaf)
