@@ -278,6 +278,8 @@ int listen(int s, int backlog) __THROW;
 #define SHUT_RDWR 2
 int shutdown(int s, int how) __THROW;
 
+int socketpair(int d, int type, int protocol, int sv[2]);
+
 /* currently not supported: */
 #define NI_NOFQDN 1
 
