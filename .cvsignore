@@ -2,3 +2,5 @@ t
 elftrunc
 mapfile
 t1
+load
+compile
