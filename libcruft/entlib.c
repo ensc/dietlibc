@@ -12,7 +12,7 @@
 
 
 /*
- * __ent_cond_alloc
+ * __ent_start
  *
  * Allocates and zeroes the module's state structure,
  * and open a handle to /etc/passwd.
@@ -20,7 +20,7 @@
  * Returns -1 on failure and sets errno, or zero for success.
  */
 
-int __ent_cond_alloc(const char *pathname, struct __ent_state **st_ref)
+int __ent_start(const char *pathname, struct __ent_state **st_ref)
 {
 	struct __ent_state *st;
 	

@@ -12,11 +12,14 @@ struct group
     char **gr_mem;		/* Member list.	*/
   };
 
-extern struct group *getgrgid (uid_t __uid) __THROW;
-extern struct group *getgrnam (const char *__name) __THROW;
+extern struct group *getgrgid (gid_t uid) __THROW;
+extern struct group *getgrnam (const char *name) __THROW;
 
 extern struct group *getgrent(void) __THROW;
 extern void setgrent(void) __THROW;
 extern void endgrent(void) __THROW;
+
+extern int setgroups(size_t n, const gid_t *groups) __THROW;
+extern int initgroups(const char *user, gid_t group) __THROW;
 
 #endif

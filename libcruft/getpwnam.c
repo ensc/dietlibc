@@ -7,9 +7,8 @@ struct passwd *getpwnam(const char * name) {
   setpwent();
   for (;;) {
     tmp=getpwent();
+    if (!tmp) return 0;
     if (!strcmp(tmp->pw_name,name))
       return tmp;
-    free(tmp);
   }
-  return 0;
 }

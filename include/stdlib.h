@@ -11,7 +11,8 @@ void *realloc(void *ptr, size_t size) __THROW;
 
 void *alloca(size_t size);
 
-char *getenv(const char *name) __pure__;
+char *getenv(const char *name) __THROW __pure__;
+int putenv(const char *string) __THROW;
 
 int atexit(void (*function)(void)) __THROW;
 
@@ -27,6 +28,7 @@ int __lltostr(char *s, int size, unsigned long long i, int base, char UpCase) __
 #endif
 
 int atoi(const char *nptr) __THROW;
+long int atol(const char *nptr) __THROW;
 double atof(const char *nptr) __THROW;
 
 void exit(int status) __THROW __attribute__((noreturn));

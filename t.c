@@ -42,9 +42,12 @@ static int rand() {
 extern double atof(const char *c);
 
 int main(int argc,char *argv[]) {
+#if 0
   struct passwd *p=getpwnam("leitner");
-  struct shadow *s=getspnam("leitner");
+  struct spwd *s=getspnam("leitner");
   printf("%g\n",30.0123);
+#endif
+  initgroups("leitner",100);
 #if 0
   time_t t=time(0);
   puts(asctime(localtime(&t)));
