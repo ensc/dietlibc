@@ -31,6 +31,8 @@
   Olaf: added a lot of code in libdl (not yet complete), changed the
     startup code to make it work with his libdl and ld.so (needs still work
     too)
+  Olaf: added clone and a new unified_syscall for PowerPC
+    also dynlinker is now available (i386 only at this time)
 
 0.10:
   update getpagesize.

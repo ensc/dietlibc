@@ -4,10 +4,10 @@
 .global __unified_syscall
 __unified_syscall:
 	sc
-	mfcr	0
-	andis.	9,0,4096
-	mr	0,3
-	beq	.L1
+	bnslr+
+
+.global error_unified_syscall
+error_unified_syscall:
 #ifdef WANT_THREAD_SAFE
 	stwu	1,-16(1)
 	mflr	0
@@ -23,8 +23,6 @@ __unified_syscall:
 	lis	9,errno@ha
 	stw	3,errno@l(9)
 #endif
-	li	0,-1
-.L1:
-	mr	3,0
+	li	3,-1
 	blr
 
