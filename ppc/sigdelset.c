@@ -1,7 +1,7 @@
 #include <signal.h>
 
 int __sigdelset(sigset_t *set, int sig) {
-  *set &= ~(1UL << (sig-1));
+  set->sig[0] &= ~(1UL << (sig-1));
   return 0;
 }
 
