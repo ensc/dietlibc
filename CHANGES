@@ -4,6 +4,8 @@
   handle negative precision and -0 (Jens Låås)
   susv3 renamed IFNAMSIZ to IF_NAMESIZE
   make diet accept "gcc-3.3.2" and "diet -v -Os gcc" (Yuri Kozlov)
+  make libcompat syscall position independent (Peter S. Mazinger)
+  fix missing pthread stdio external (Gernot Tenchio)
 
 0.24:
   work around incompatible Linux select() modifying the timeout in
