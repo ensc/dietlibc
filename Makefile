@@ -31,10 +31,14 @@ else
 ifeq ($(MYARCH),sparc)
 ARCH=sparc
 else
+ifeq ($(MYARCH),s390)
+ARCH=s390
+else
 ifeq ($(MYARCH),mipsel)
 ARCH=mipsel
 else
 $(error unknown architecture, please fix Makefile)
+endif
 endif
 endif
 endif
@@ -250,6 +254,7 @@ install: $(OBJDIR)/start.o $(OBJDIR)/dietlibc.a $(OBJDIR)/liblatin1.a $(OBJDIR)/
 	$(INSTALL) -d $(DESTDIR)$(ILIBDIR) $(DESTDIR)$(MAN1DIR) $(DESTDIR)$(BINDIR)
 	$(INSTALL) $(OBJDIR)/start.o $(DESTDIR)$(ILIBDIR)/start.o
 	$(INSTALL) $(OBJDIR)/dietlibc.a $(DESTDIR)$(ILIBDIR)/libc.a
+	$(INSTALL) $(OBJDIR)/libpthread.a $(DESTDIR)$(ILIBDIR)/libpthread.a
 	$(INSTALL) $(OBJDIR)/liblatin1.a $(DESTDIR)$(ILIBDIR)/liblatin1.a
 	$(INSTALL) $(OBJDIR)/diet-i $(DESTDIR)$(BINDIR)/diet
 	-$(INSTALL) $(PICODIR)/diet-dyn-i $(DESTDIR)$(BINDIR)/diet-dyn
