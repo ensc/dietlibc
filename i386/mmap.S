@@ -1,4 +1,4 @@
-#include <asm/unistd.h>
+#include "syscalls.h"
 
 .text
 .global mmap

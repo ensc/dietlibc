@@ -37,7 +37,6 @@
 extern int errno;
 
 int main(int argc,char *argv[]) {
-  errno=0;
 #if 0
   printf("%hd %hhd\n",-5,-1234567);
 #endif
@@ -428,7 +427,7 @@ int main(int argc,char *argv[]) {
   sscanf("1 (init","%d (%15c",&pid,name);
   printf("pid %d name %s\n",pid,name);
 #endif
-#if 0
+#if 1
   DIR *d=opendir("/proc");
   if (d) {
     struct dirent *D;

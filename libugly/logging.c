@@ -6,7 +6,6 @@
 #include <stdarg.h>
 #include <errno.h>
 #include <unistd.h>
-#include <asm/socket.h>
 #include <fcntl.h>
 #include <syslog.h>
 #include <string.h>

@@ -1,5 +1,5 @@
-#include <linux/types.h>
-#include <linux/unistd.h>
+#include <sys/types.h>
+#include "syscalls.h"
 
 #define __SYSCALL_STRING                                                \
         "ta     0x10;"                                                  \

@@ -1,7 +1,7 @@
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>
-#include <asm/ipc.h>
+#include <unistd.h>
 
 extern void* __ipc();
 

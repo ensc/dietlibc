@@ -1,5 +1,4 @@
 #include <signal.h>
-#include <asm/errno.h>
 #include <errno.h>
 #include <unistd.h>
 #include "dietwarning.h"

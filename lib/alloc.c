@@ -2,8 +2,8 @@
  * malloc/free by O.Dreesen
  */
 
-#include <linux/unistd.h>
-#include <asm/mman.h>
+#include <unistd.h>
+#include <sys/mman.h>
 #include <errno.h>
 #include "dietfeatures.h"
 

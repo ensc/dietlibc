@@ -1,4 +1,5 @@
-#include <linux/net.h>
+#include <sys/socket.h>
+#include <linuxnet.h>
 
 extern int socketcall(int callno,long* args);
 

@@ -1,7 +1,12 @@
 #include <sys/times.h>
 #include <time.h>
 #include <unistd.h>
-#include <asm/param.h>
+
+#ifdef __alpha__
+#define HZ 1024
+#else
+#define HZ 100
+#endif
 
 clock_t clock (void) {
   struct tms buf;

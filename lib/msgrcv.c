@@ -1,9 +1,13 @@
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/msg.h>
-#include <asm/ipc.h>
 
 extern int __ipc(int,int,size_t,int,void*);
+
+struct ipc_kludge {
+  struct msgbuf *msgp;
+  long msgtyp;
+};
 
 int msgrcv(int msqid, void *msgp, size_t msgsz, long int msgtyp, int msgflg) {
   struct ipc_kludge tmp;

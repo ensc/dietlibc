@@ -9,7 +9,7 @@ all: $(OBJDIR) $(OBJDIR)/start.o $(OBJDIR)/dyn_start.o $(OBJDIR)/dyn_stop.o \
 	$(OBJDIR)/dietlibc.a $(OBJDIR)/liblatin1.a $(OBJDIR)/librpc.a $(OBJDIR)/libpthread.a \
 	$(OBJDIR)/diet $(OBJDIR)/elftrunc
 
-CFLAGS=-pipe
+CFLAGS=-pipe -nostdinc
 CROSS=
 
 CC=gcc
