@@ -1,6 +1,7 @@
 0.22:
   fix i386 libm
   fix netinet/ip_icmp.h (Rui Prior)
+  make strings.h susv3 compliant (Gunnar Ritter)
 
 0.21:
   use gcc's size_t, ptrdiff_t and wchar_t types (Olaf)

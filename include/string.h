@@ -31,9 +31,6 @@ char *strncat(char *dest, const char *src, size_t n) __THROW;
 
 int strcmp(const char *s1, const char *s2) __THROW __pure__;
 
-int strcasecmp(const char *s1, const char *s2) __THROW __pure__;
-int strncasecmp(const char *s1, const char *s2, size_t n) __THROW __pure__;
-
 size_t strlen(const char *s) __THROW __pure__;
 
 char *strstr(const char *haystack, const char *needle) __THROW __pure__;
@@ -70,8 +67,6 @@ void *memmem(const void *haystack, size_t haystacklen, const void *needle, size_
 char *strtok(char *s, const char *delim) __THROW;
 char *strtok_r(char *s, const char *delim, char **ptrptr) __THROW;
 
-int ffs(int i) __THROW __attribute__((__const__));
-
 size_t strlcpy(char *dst, const char *src, size_t size) __THROW;
 size_t strlcat(char *dst, const char *src, size_t size) __THROW;
 
@@ -79,11 +74,7 @@ int strcoll(const char *s1, const char *s2) __THROW;
 size_t strxfrm(char *dest, const char *src, size_t n) __THROW;
 
 #ifdef _BSD_SOURCE
-#define bzero(s,n) memset(s,0,n)
-#define bcopy(src,dest,n) memmove(dest,src,n)
-#define bcmp(a,b,n) memcmp(a,b,n)
-#define index(a,b) strchr(a,b)
-#define rindex(a,b) strrchr(a,b)
+#include <strings.h>
 #endif
 
 char *stpcpy(char *dest, const char *src);
