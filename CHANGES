@@ -1,4 +1,5 @@
 0.20:
+  calloc was botched
   umount and stime for x86_64 (Gwenole Beauchesne)
   some malloc fixes for very big numbers (Enrico Scholz, me)
   x86_64 unified syscall did not preserve rbx violating ABI (Gwenole)
