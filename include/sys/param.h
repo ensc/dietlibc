@@ -13,6 +13,12 @@
 #define MIN(a,b) (((a)<(b))?(a):(b))
 #define MAX(a,b) (((a)>(b))?(a):(b))
 
+#ifdef __alpha__
+#define HZ 1024
+#else
+#define HZ 100
+#endif
+
 #ifndef howmany
 # define howmany(x, y)  (((x)+((y)-1))/(y))
 #endif
