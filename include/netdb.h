@@ -62,6 +62,7 @@ extern int gethostbyname_r(const char* NAME, struct hostent* RESULT_BUF,char* BU
 #define TRY_AGAIN 2
 #define NO_RECOVERY 3
 #define NO_ADDRESS 4
+#define NO_DATA 5
 
 extern int gethostbyaddr_r(const char* addr, size_t length, int format,
 		    struct hostent* result, char *buf, size_t buflen,
