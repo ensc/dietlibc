@@ -3,6 +3,7 @@
 
 #include <sys/cdefs.h>
 #include <sys/types.h>
+#include <netinet/in.h>
 
 int inet_aton(const char *cp, struct in_addr *inp) __THROW;
 unsigned long int inet_addr(const char *cp) __THROW;

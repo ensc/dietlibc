@@ -9,9 +9,13 @@
 #include <time.h>
 #include <sys/stat.h>
 #include <stdio.h>
+#include <arpa/inet.h>
 
-int main() {
-  printf("%-19s %10lu %9lu %9lu %3d%% %s\n","/dev/ide/host0/bus0/target0/lun0/part2",8393688,705683,1337084,85,"/");
+int main(int argc,char *argv[]) {
+  struct in_addr duh;
+  printf("%d\n",inet_aton(argv[1]?argv[1]:"10.0.0.1",&duh));
+  printf("%x\n",duh.s_addr);
+/*  printf("%-19s %10lu %9lu %9lu %3d%% %s\n","/dev/ide/host0/bus0/target0/lun0/part2",8393688,705683,1337084,85,"/"); */
 #if 0
   char buf[100];
   fgets(buf,100,stdin); printf("got %d bytes\n",strlen(buf));
