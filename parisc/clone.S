@@ -8,8 +8,8 @@ __clone:
 	cmpib,= 0,%r25,.Lerror	/* stack pointer ? */
 	nop
 
-	stwm	%r26, 64(sr0,%r25)	/* upgrowing stack ... */
-	stw	%r23,-60(sr0,%r25)
+	stwm	%r26, 64(%sr0,%r25)	/* upgrowing stack ... */
+	stw	%r23,-60(%sr0,%r25)
 
 	/* syscall */
 	copy	%r24,%r26
