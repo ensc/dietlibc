@@ -162,7 +162,7 @@ int getdtablesize(void) __THROW;
 char *getpass(const char * prompt) __THROW;
 
 /* warning: linux specific: */
-int sendfile(int out_fd, int in_fd, off_t *offset, size_t count) __THROW;
+int sendfile(int out_fd, int in_fd, signed long *offset, size_t count) __THROW;
 int llseek(int fildes, unsigned long hi, unsigned long lo, loff_t* result,int whence) __THROW;
 
 /* include <linux/sysctl.h> to get all the definitions! */

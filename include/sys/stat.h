@@ -353,6 +353,8 @@ extern int lstat64(const char *__file, struct stat64 *__buf) __THROW;
 #define lstat(file,buf) lstat64(file,buf)
 #define fstat(file,buf) fstat64(file,buf)
 #define stat stat64
+#define pread(fd,buf,count,offset) pread64(fd,buf,count,offset)
+#define pwrite(fd,buf,count,offset) pwrite64(fd,buf,count,offset)
 #endif
 
 #define major(dev) (((dev)>>8) & 0xff)
