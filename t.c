@@ -111,28 +111,6 @@ int traverse(const char* file, const struct stat* sb, int flag) {
 #endif
 
 int main(int argc,char *argv[]) {
-#ifdef NEW
-  struct protoent se,*tmp;
-  char buf[1000];
-  while (getprotoent_r(&se,buf,sizeof(buf),&tmp)==0) {
-    int i;
-    printf("name %s\tproto %d\n",se.p_name,se.p_proto);
-    for (i=0; i<16; ++i) {
-      if (!se.p_aliases[i]) break;
-      printf("  alias %s\n",se.p_aliases[i]);
-    }
-  }
-#else
-  struct protoent* se;
-  while (se=getprotoent()) {
-    int i;
-    printf("name %s\tproto %d\n",se->p_name,se->p_proto);
-    for (i=0; i<16; ++i) {
-      if (!se->p_aliases[i]) break;
-      printf("  alias %s\n",se->p_aliases[i]);
-    }
-  }
-#endif
 #if 0
   fd_set f;
   struct timeval tv;
@@ -365,10 +343,10 @@ int main(int argc,char *argv[]) {
 #if 0
   puts(ttyname(0));
 #endif
-#if 0
+#if 1
   char buf[1024];
   struct hostent* r;
-  r=gethostbyname("line.org");
+  r=gethostbyname("www.convergence.de");
   if (!r) {
     printf("dns error: %s\n",hstrerror(h_errno));
   }

@@ -16,6 +16,4 @@ bizarre printf bullshit: "%8.7lx",0xfefe should yield " 000fefe"?!
 
 fix %f and %g in printf.  They are more or less completely b0rken.
 
-dnscruft2: res_mkquery -> res_query
-
-getserv/host/protoent -> parselib
+gethost/netent -> parselib
