@@ -7,7 +7,7 @@ CROSS=
 
 CC=gcc
 
-VPATH=lib:libstdio:libugly:libcruft:liblatin1:syscalls.c
+VPATH=lib:libstdio:libugly:libcruft:libcrypt:liblatin1:syscalls.c
 
 SYSCALLOBJ=$(patsubst syscalls.s/%.S,%.o,$(wildcard syscalls.s/*.S))
 
