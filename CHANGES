@@ -38,6 +38,7 @@
   add glibc macro names in sys/reboot.h.  Mentioned by Laurent G. Bercot
   getservent_r did not parse lines without aliases.  Thanks, Jaroslav
     Macodiseas!
+  fix MIPS start code (argv[0] was always corrupt)
 
 0.14:
   fix brk again (missing __brk, trivial oversight)
