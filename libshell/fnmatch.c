@@ -4,6 +4,42 @@
 
 #define NOTFIRST 128
 
+#define STRUCT_CHARCLASS(c) { #c , is##c }
+
+static struct charclass {
+  char * class;
+  int (*istype)(int);
+} allclasses[] = {
+  STRUCT_CHARCLASS(alnum),
+  STRUCT_CHARCLASS(alpha),
+  STRUCT_CHARCLASS(blank),
+  STRUCT_CHARCLASS(cntrl),
+  STRUCT_CHARCLASS(digit),
+  STRUCT_CHARCLASS(graph),
+  STRUCT_CHARCLASS(lower),
+  STRUCT_CHARCLASS(print),
+  STRUCT_CHARCLASS(punct),
+  STRUCT_CHARCLASS(space),
+  STRUCT_CHARCLASS(upper),
+  STRUCT_CHARCLASS(xdigit),
+};
+
+/* look for "class:]" in pattern */
+static struct charclass *charclass_lookup(const char *pattern) {
+  unsigned int i;
+
+  for (i = 0; i< sizeof(allclasses)/sizeof(*allclasses); i++) {
+    int len = strlen(allclasses[i].class);
+    if (!strncmp(pattern, allclasses[i].class, len)) {
+      pattern += len;
+      if (strncmp(pattern, ":]", 2)) goto noclass;
+      return &allclasses[i];
+    }
+  }
+noclass:
+  return NULL;
+}
+
 static int match(char c,char d,int flags) {
   if (flags&FNM_CASEFOLD)
     return (tolower(c)==tolower(d));
@@ -40,37 +76,28 @@ int fnmatch(const char *pattern, const char *string, int flags) {
 
 	if (*pattern==']' && pattern!=start) break;
 	if (*pattern=='[' && pattern[1]==':') {
-	  /* stupid POSIX char classes */
-	  char c=*string;
+	  /* MEMBER - stupid POSIX char classes */
+	  const struct charclass *cc;
 
-	  if (flags&FNM_CASEFOLD) c=tolower(c);
-	  pattern+=2;
-	  if (!strncmp(pattern,"alnum:]",7)) { if (isalnum(c)) res=1; pattern+=7; } else
-	  if (!strncmp(pattern,"alpha:]",7)) { if (isalpha(c)) res=1; pattern+=7; } else
-	  if (!strncmp(pattern,"blank:]",7)) { if (isblank(c)) res=1; pattern+=7; } else
-	  if (!strncmp(pattern,"cntrl:]",7)) { if (iscntrl(c)) res=1; pattern+=7; } else
-	  if (!strncmp(pattern,"digit:]",7)) { if (isdigit(c)) res=1; pattern+=7; } else
-	  if (!strncmp(pattern,"graph:]",7)) { if (isgraph(c)) res=1; pattern+=7; } else
-	  if (!strncmp(pattern,"lower:]",7)) { if (islower(c)) res=1; pattern+=7; } else
-	  if (!strncmp(pattern,"print:]",7)) { if (isprint(c)) res=1; pattern+=7; } else
-	  if (!strncmp(pattern,"punct:]",7)) { if (ispunct(c)) res=1; pattern+=7; } else
-	  if (!strncmp(pattern,"space:]",7)) { if (isspace(c)) res=1; pattern+=7; } else
-	  if (!strncmp(pattern,"upper:]",7)) {
-	    if (flags&FNM_CASEFOLD?islower(c):isupper(c)) res=1; pattern+=7;
-	  } else
-	  if (!strncmp(pattern,"xdigit:]",8)) { if (isxdigit(c)) res=1; pattern+=8; } else {
-	    pattern-=2;
-	    goto invalidclass;
+	  if (!(cc = charclass_lookup(pattern+2))) goto invalidclass;
+	  pattern += strlen(cc->class) + 4;
+	  if (flags&FNM_CASEFOLD
+	      && (cc->istype == isupper || cc->istype == islower)) {
+	    res = islower(tolower(*string));
+	  } else {
+            res = ((*(cc->istype))(*string));
 	  }
 	} else {
 invalidclass:
 	  if (pattern[1]=='-' && pattern[2]!=']') {
+	    /* MEMBER - character range */
 	    if (*string>=*pattern && *string<=pattern[2]) res=1;
 	    if (flags&FNM_CASEFOLD) {
 	      if (tolower(*string)>=tolower(*pattern) && tolower(*string)<=tolower(pattern[2])) res=1;
 	    }
 	    pattern+=3;
 	  } else {
+	    /* MEMBER - literal character match */
 	    res=match(*pattern,*string,flags);
 	    ++pattern;
 	  }
