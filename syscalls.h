@@ -1,52 +1,32 @@
-#ifdef __i386__
-
+#if defined(__i386__)
 #include "i386/syscalls.h"
 
-#endif
+#elif defined(__x86_64__)
+#include "x86_64/syscalls.h"
 
-#ifdef __sparc__
-
-#ifdef __arch64__
+#elif defined(__sparc__)
+#if defined(__arch64__)
 #include "sparc64/syscalls.h"
 #else
 #include "sparc/syscalls.h"
 #endif
 
-#endif
-
-#ifdef __powerpc__
-
+#elif defined(__powerpc__)
 #include "ppc/syscalls.h"
 
-#endif
-
-
-#ifdef __mips__
-
+#elif defined(__mips__)
 #include "mips/syscalls.h"
 
-#endif
-
-#ifdef __arm__
-
+#elif defined(__arm__)
 #include "arm/syscalls.h"
 
-#endif
-
-#ifdef __s390__
-
+#elif defined(__s390__)
 #include "s390/syscalls.h"
 
-#endif
-
-#ifdef __alpha__
-
+#elif defined(__alpha__)
 #include "alpha/syscalls.h"
 
-#endif
-
-#ifdef __hppa__
-
+#elif defined(__hppa__)
 #include "parisc/syscalls.h"
 
 #endif

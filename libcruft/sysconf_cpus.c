@@ -1,4 +1,5 @@
 #include <unistd.h>
+#include <string.h>
 #include <fcntl.h>
 #include <errno.h>
 #include "dietfeatures.h"

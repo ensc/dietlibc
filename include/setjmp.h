@@ -16,6 +16,19 @@ typedef int __jmp_buf[6];
 # define JB_SIZE 24
 #endif
 
+#ifdef __x86_64__
+#ifndef __ASSEMBLER__
+typedef long __jmp_buf[6];
+#endif
+# define JB_BX	0
+# define JB_SI	1
+# define JB_DI	2
+# define JB_BP	3
+# define JB_SP	4
+# define JB_PC	5
+# define JB_SIZE 48
+#endif
+
 #ifdef __s390__
 #ifndef __ASSEMBLER__
 typedef struct {

@@ -1,3 +1,4 @@
+#include <string.h>
 #include <sys/types.h>
 #include <sys/mman.h>
 #include <netdb.h>

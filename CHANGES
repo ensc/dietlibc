@@ -4,6 +4,10 @@
   add libm2.s from contrib to i386 (oops, how long has it been sitting
     there?)
   add truncate64 and ftruncate64 and prototype for truncate (only had ftruncate)
+  Michal Ludvig ported the diet libc to the x86_64 architecture (the
+    upcoming AMD Hammer chips!).  You can't even buy the chips yet and
+    the diet libc already supports it!  Amazing ;-)
+  Michal's patch also fixed several of the outstanding warnings.  Thanks!
 
 0.17:
   fix several bugs in getservent_r

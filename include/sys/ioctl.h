@@ -3,7 +3,7 @@
 
 #include <sys/cdefs.h>
 
-#if defined(__i386__)
+#if defined(__i386__) || defined(__x86_64__)
 #include <sys/i386-ioctl.h>
 #elif defined(__alpha__)
 #include <sys/alpha-ioctl.h>

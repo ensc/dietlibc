@@ -44,7 +44,11 @@ else
 ifeq ($(MYARCH),parisc)
 ARCH=parisc
 else
+ifeq ($(MYARCH),x86_64)
+ARCH=x86_64
+else
 $(error unknown architecture, please fix Makefile)
+endif
 endif
 endif
 endif
@@ -63,9 +67,13 @@ ILIBDIR=$(LIBDIR)-$(ARCH)
 
 HOME=$(shell pwd)
 
-all: $(OBJDIR) $(OBJDIR)/start.o $(OBJDIR)/dyn_start.o $(OBJDIR)/dyn_stop.o \
-	$(OBJDIR)/dietlibc.a $(OBJDIR)/liblatin1.a $(OBJDIR)/librpc.a $(OBJDIR)/libpthread.a \
-	$(OBJDIR)/libcompat.a $(OBJDIR)/libm.a $(OBJDIR)/diet $(OBJDIR)/diet-i $(OBJDIR)/elftrunc
+WHAT=	$(OBJDIR) $(OBJDIR)/start.o $(OBJDIR)/dyn_start.o $(OBJDIR)/dyn_stop.o \
+	$(OBJDIR)/dietlibc.a $(OBJDIR)/liblatin1.a \
+	$(OBJDIR)/libcompat.a $(OBJDIR)/libm.a \
+	$(OBJDIR)/librpc.a $(OBJDIR)/libpthread.a \
+	$(OBJDIR)/diet $(OBJDIR)/diet-i $(OBJDIR)/elftrunc
+
+all: $(WHAT)
 
 profiling: $(OBJDIR)/libgmon.a $(OBJDIR)/pstart.o
 
@@ -108,7 +116,7 @@ ifneq ($(DEBUG),)
 CFLAGS = -g
 COMMENT = :
 endif
-CFLAGS += -Wall -W -Wchar-subscripts -Wmissing-prototypes -Wmissing-declarations -Wno-switch -Wredundant-decls
+CFLAGS += -Wall -W -Wchar-subscripts -Wmissing-prototypes -Wmissing-declarations -Wno-switch -Wredundant-decls -Wno-unused
 
 PWD=$(shell pwd)
 

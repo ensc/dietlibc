@@ -27,6 +27,7 @@ static const char* Os[] = {
   "i386","-Os","-mpreferred-stack-boundary=2",
 	 "-malign-functions=0","-malign-jumps=0",
 	 "-malign-loops=0","-fomit-frame-pointer",0,
+  "x86_64","-Os","-fno-omit-frame-pointer",0,
   "sparc","-Os","-mcpu=supersparc",0,
   "sparc64","-Os","-m64",0,
   "alpha","-Os","-fomit-frame-pointer",0,
@@ -141,6 +142,9 @@ usage:
 #endif
 #ifdef __hppa__
       shortplatform="parisc";
+#endif
+#ifdef __x86_64__
+      shortplatform="x86_64";
 #endif
       {
 	char *tmp=platform+strlen(platform);
@@ -321,6 +325,6 @@ pp:
 donttouch:
   execvp(argv[1],argv+1);
 error:
-  error("execvp failed!\n");
+  error("execvp() failed!\n");
   return 1;
 }

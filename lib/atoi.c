@@ -1,5 +1,6 @@
 #include <endian.h>
 #include <ctype.h>
+#include <stdlib.h>
 
 #if __WORDSIZE == 64
 int atoi(const char* s) {

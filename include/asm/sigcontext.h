@@ -1,7 +1,7 @@
 #ifndef _ASM_SIGCONTEXT_H
 #define _ASM_SIGCONTEXT_H
 
-#ifdef __i386__
+#if defined(__i386__) || defined(__x86_64__)
 #include <asm/i386-sigcontext.h>
 #endif
 

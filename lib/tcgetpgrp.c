@@ -1,5 +1,6 @@
 #include <termios.h>
 #include <sys/ioctl.h>
+#include <unistd.h>
 
 int tcgetpgrp(int fildes)
 {

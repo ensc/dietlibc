@@ -4,7 +4,7 @@
 #include <sys/cdefs.h>
 #include <sys/types.h>
 
-#if defined(__i386__)
+#if defined(__i386__) || defined(__x86_64__)
 struct stat {
 	unsigned short st_dev;
 	unsigned short __pad1;

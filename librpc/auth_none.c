@@ -46,14 +46,11 @@ static char sccsid[] =
 #include <rpc/auth.h>
 #define MAX_MARSHEL_SIZE 20
 
-/*
- * Authenticator operations routines
- */
 static void authnone_verf();
-static void authnone_destroy();
-static bool_t authnone_marshal();
 static bool_t authnone_validate();
 static bool_t authnone_refresh();
+static void authnone_destroy();
+static bool_t authnone_marshal(AUTH *client, XDR *xdrs);
 
 static struct auth_ops ops = {
 	authnone_verf,
