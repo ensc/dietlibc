@@ -1,7 +1,3 @@
-.data
-
-ten:
-        .long  0x41200000
 
 .text
 .type   strtod,@function
@@ -61,7 +57,7 @@ strtod:
         subb    $'0',%al
         cmpb    $10,%al
         jnc     .Lintend
-        fmuls   ten
+        fmuls   __ten
         movl    %eax,(%esp)
         fiaddl  (%esp)
         incl    %ecx
@@ -89,7 +85,7 @@ strtod:
         subb    $'0',%al
         cmpb    $10,%al
         jnc     .Lfracend
-        fdivs   ten
+        fdivs   __ten
         movl    %eax,(%esp)
         fld     %st(0)
         fimull  (%esp)
@@ -112,7 +108,7 @@ strtod:
 #        expo   = 0;
 #        factor = 10.L;
 
-        flds    ten
+        flds    __ten
 
 
 #        switch (*++p) {                 // ja hier weiﬂ ich nicht, was mindestens nach einem 'E' folgenden MUSS.
