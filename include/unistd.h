@@ -125,7 +125,6 @@ int pause(void) __THROW;
 #define creat creat64
 #define truncate truncate64
 #define ftruncate ftruncate64
-#define dirent dirent64
 #define getdents getdents64
 #endif
 
