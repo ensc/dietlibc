@@ -76,6 +76,7 @@ void closelog(void) {
 #endif
 
 int main(int argc,char *argv[]) {
+  puts(ttyname(0));
 #if 0
   char buf[1024];
   struct hostent* r;
@@ -94,7 +95,7 @@ int main(int argc,char *argv[]) {
   char *tmp;
   printf("%lu\n",strtol("0xf0000000",&tmp,0));
 #endif
-#if 1
+#if 0
   struct mntent* me;
   FILE* f=fopen("/etc/fstab","r");
   while (me=getmntent(f)) {

@@ -13,7 +13,7 @@
 /* #define WANT_SMALL_STDIO_BUFS */
 
 /* this is only for meaningful for ttyname so far */
-/* #define SLASH_PROC_OK 1 */
+#define SLASH_PROC_OK 1
 
 /* use errno_location instead of errno */
 #define WANT_THREAD_SAFE

@@ -60,6 +60,10 @@ typedef unsigned long sigset_t;
 #define SA_NODEFER	0x40000000
 #define SA_RESETHAND	0x80000000
 
+/* ugh, historic Linux legacy, for gpm :-( */
+#define SA_NOMASK	SA_NODEFER
+#define SA_ONESHOT	SA_RESETHAND
+
 /* sigaltstack controls */
 #define SS_ONSTACK	1
 #define SS_DISABLE	2
