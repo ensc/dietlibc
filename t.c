@@ -102,8 +102,8 @@ extern char* strcpy2(char*a,char*b);
      __asm__ __volatile__ ("rdtsc" : "=a" (low) : : "edx")
 
 int main(int argc,char *argv[]) {
-  alarm(1);
-  sleep(2);
+  time_t t=1009921588;
+  puts(asctime(localtime(&t)));
 #if 0
   printf("%g\n",atof("30"));
 #endif
@@ -669,6 +669,7 @@ again:
 #endif
 #if 0
   time_t t=time(0);
+  printf("%lu\n",t);
   puts(asctime(localtime(&t)));
 #endif
 #if 0

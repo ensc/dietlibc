@@ -14,7 +14,7 @@ struct tm *gmtime_r(const time_t *timep, struct tm *r) {
   r->tm_wday=(4+work)%7;
   for (i=1970; ; ++i) {
     register time_t k=__isleap(i)?366:365;
-    if (work>k)
+    if (work>=k)
       work-=k;
     else
       break;

@@ -7,6 +7,7 @@
   diet (not diet-dyn, of course) now adds -static to the gcc command line
   fixed fflush on input streams (tic from ncurses exposed this)
   duh, there is an alarm system call, too, so we use it and not setitimer
+  fix comparison in gmtime_r that caused Jan 1 to be converted to Dec 32.
 
 0.12:
   more contributions from Frank Klemm.
