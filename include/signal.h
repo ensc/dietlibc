@@ -8,6 +8,7 @@ __BEGIN_DECLS
 #define __WANT_POSIX1B_SIGNALS__
 
 #include <sys/types.h>
+#include <endian.h>
 
 #define NSIG		32
 
@@ -241,7 +242,17 @@ typedef union sigval {
 } sigval_t;
 
 #define SI_MAX_SIZE	128
+#if __WORDSIZE == 64
+#define SI_PAD_SIZE	((SI_MAX_SIZE/sizeof(int)) - 4)
+#else
 #define SI_PAD_SIZE	((SI_MAX_SIZE/sizeof(int)) - 3)
+#endif
+
+#ifdef __sparc_v9__
+typedef int __band_t;
+#else
+typedef long __band_t;
+#endif
 
 typedef struct siginfo {
   int si_signo;
@@ -279,7 +290,7 @@ typedef struct siginfo {
     } _sigfault;
     /* SIGPOLL */
     struct {
-      int _band;	/* POLL_IN, POLL_OUT, POLL_MSG */
+      __band_t _band;	/* POLL_IN, POLL_OUT, POLL_MSG */
       int _fd;
     } _sigpoll;
   } _sifields;

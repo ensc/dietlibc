@@ -6,6 +6,7 @@
     rem and sdiv for sparc
   fix stupid dns decoding bug (Gernot Tenchio)
   #ifdef powerpc -> #ifdef __powerpc__ (Enrico Scholz)
+  struct siginfo was wrong for 64-bit platforms
 
 0.28:
   add tcgetsid (Yuri Kozlov)
