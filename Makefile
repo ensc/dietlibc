@@ -300,4 +300,6 @@ $(OBJDIR)/unified.o: dietuglyweaks.h
 
 $(OBJDIR)/adjtimex.o: include/sys/timex.h
 
+$(OBJDIR)/fgetc_unlocked.o $(OBJDIR)/fread.o $(OBJDIR)/ungetc.o: dietstdio.h
+
 # CFLAGS+=-W -Wshadow -Wid-clash-31 -Wpointer-arith -Wcast-align -Wstrict-prototypes -Wwrite-strings

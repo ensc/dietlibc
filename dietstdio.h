@@ -23,7 +23,7 @@ struct __stdio_file {
   char *buf;
   struct __stdio_file *next;	/* for fflush */
   pid_t popen_kludge;
-  char ungetbuf;
+  unsigned char ungetbuf;
   char ungotten;
 #ifdef WANT_THREAD_SAFE
   pthread_mutex_t m;
