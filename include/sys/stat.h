@@ -14,13 +14,19 @@
 #define __NO_STAT64
 #endif
 
-#define stat(file,buf) __dietstat(file,buf)
-#define fstat(file,buf) __dietfstat(file,buf)
-#define lstat(file,buf) __dietlstat(file,buf)
-
 #define stat64(file,buf) __dietstat64(file,buf)
 #define fstat64(file,buf) __dietfstat64(file,buf)
 #define lstat64(file,buf) __dietlstat64(file,buf)
+
+#if _FILE_OFFSET_BITS == 64
+#define stat(file,buf) __dietstat64(file,buf)
+#define lstat(file,buf) __dietlstat64(file,buf)
+#define fstat(file,buf) __dietfstat64(file,buf)
+#else
+#define stat(file,buf) __dietstat(file,buf)
+#define fstat(file,buf) __dietfstat(file,buf)
+#define lstat(file,buf) __dietlstat(file,buf)
+#endif
 
 #define major(dev) (((dev)>>8) & 0xff)
 #define minor(dev) ((dev) & 0xff)

@@ -9,16 +9,16 @@
 
 /* #define SLASH_PROC_OK */
 
-#define WANT_BUFFERED_STDIO
+/* #define WANT_BUFFERED_STDIO */
 
 /* use errno_location instead of errno */
-#define WANT_THREAD_SAVE
+/* #define WANT_THREAD_SAVE */
 
 /* make the startcode, etc. dynamic aware */
-#undef WANT_DYNAMIC
+/* #undef WANT_DYNAMIC */
 
 /* do you want smaller or faster string routines? */
-#define WANT_FASTER_STRING_ROUTINES
+/* #define WANT_FASTER_STRING_ROUTINES */
 
 #endif
 

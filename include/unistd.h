@@ -23,7 +23,9 @@ int rmdir(const char *pathname) __THROW;
 char *getcwd(char *buf, size_t size) __THROW;
 
 int open(const char* pathname,int flags, ...) __THROW;
+int open64(const char* pathname,int flags, ...) __THROW;
 int creat(const char* pathname,mode_t mode) __THROW;
+int creat64(const char* pathname,mode_t mode) __THROW;
 int write(int fd,const void* buf,size_t len) __THROW;
 int read(int fd,const void* buf,size_t len) __THROW;
 int close(int fd) __THROW;
@@ -75,5 +77,10 @@ unsigned int alarm (unsigned int seconds) __THROW;
 int sync (void) __THROW;
 
 extern int daemon (int nochdir,int noclose) __THROW;
+
+#if _FILE_OFFSET_BITS == 64
+#define open open64
+#define creat creat64
+#endif
 
 #endif
