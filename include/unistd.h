@@ -160,8 +160,6 @@ int select(int n, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct t
 
 int nice(int inc) __THROW;
 
-char **__environ;
-
 char *crypt(const char *key, const char *salt) __THROW;
 void encrypt(char block[64], int edflag) __THROW;
 void setkey(const char *key) __THROW;
@@ -235,7 +233,7 @@ void endusershell(void) __attribute_dontuse__;
 
 /* this is so bad, we moved it to -lcompat */
 #define   L_cuserid   17
-char * cuserid(char * string); /* ugh! */
+char* cuserid(char * string); /* ugh! */
 
 #define   _POSIX_VERSION  199506L
 
@@ -250,6 +248,8 @@ int lockf64 (int __fd, int __cmd, off64_t __len) __THROW;
 void swab(const void *src, void *dest, ssize_t nbytes) __THROW;
 
 int vhangup(void) __THROW;
+
+extern char **__environ;
 
 __END_DECLS
 
