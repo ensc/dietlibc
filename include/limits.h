@@ -32,6 +32,9 @@
 /* Maximum value an `unsigned long long int' can hold.  (Minimum is 0.)  */
 #define ULLONG_MAX 18446744073709551615ULL
 
+#define SSIZE_MIN INT_MIN
+#define SSIZE_MAX INT_MAX
+
 #define PASS_MAX	256
 
 #define NR_OPEN		1024
