@@ -8,6 +8,8 @@
 #include "dietfeatures.h"
 #include <sys/types.h>
 
+#include <sys/shm.h>	/* for PAGE_SIZE */
+
 #ifndef MAP_FAILED
 #define MAP_FAILED ((void*)-1)
 #endif
@@ -32,12 +34,12 @@ typedef struct t_free_head {
 } free_head;
 
 /* guess what ? the virtual block size (this is the common page size) */
-#define MEM_BLOCK_SIZE	8192
+#define MEM_BLOCK_SIZE	PAGE_SIZE
 
 /* minimum allocated bytes */
 #define MEM_ALLOC_MIN	(sizeof(free_head))
 
-/* what's the time to use mmu based mallocs ? def.: >128K */
+/* what's the time to use mmu based mallocs ? def.: >64K(32bit) */
 #define USE_BIG_MALLOC	(16*MEM_BLOCK_SIZE)
 
 /* Initial start position in memory */

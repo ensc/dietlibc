@@ -188,6 +188,7 @@ clean:
 	rm -f *.o *.a t t1 compile load elftrunc exports mapfile libdietc.so
 	rm -rf bin-* pic-*
 	$(MAKE) -C examples clean
+	$(MAKE) -C dynlinker clean
 
 tar: clean
 	rm -f armv4l
