@@ -65,4 +65,7 @@ enum __regex_errors {
   REG_ESPACE /* regcomp ran out of space */
 };
 
+char * re_comp(char * regex);
+int re_exec(char * string);
+
 #endif

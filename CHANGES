@@ -9,6 +9,8 @@
   Thomas also sent me profiling support (so far only on x86, but
     profiling/PORTING describes what needs to be done for other
     architectures)!
+  Andreas Krennmair sent a patch to add the BSD regex interface to
+    libcompat
 
 0.16:
   "diet -v" or "diet -Os" segfaulted without further arguments.
