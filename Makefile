@@ -68,7 +68,7 @@ $(OBJDIR)/elftrunc: contrib/elftrunc.c $(OBJDIR)/start.o $(OBJDIR)/dietlibc.a
 
 $(OBJDIR)/diet: diet.c $(OBJDIR)/start.o $(OBJDIR)/dietlibc.a
 	$(CROSS)$(CC) -Iinclude $(CFLAGS) -nostdlib -o $@ $^ -DDIETHOME=\"$(PWD)\"
-	$(CROSS)strip -x -R .comment -R .note $@
+	$(CROSS)strip -R .comment -R .note $@
 
 $(OBJDIR)/djb: $(OBJDIR)/compile $(OBJDIR)/load
 
