@@ -34,9 +34,9 @@ extern int access (const char *__name, int __type) __THROW;
 off_t lseek(int fildes, off_t offset, int whence) __THROW;
 #ifndef __NO_STAT64
 loff_t lseek64(int fildes, loff_t offset, int whence) __THROW;
-#endif
 #if defined _FILE_OFFSET_BITS && _FILE_OFFSET_BITS == 64
 #define lseek(fildes,offset,whence) lseek64(fildes,offset,whence)
+#endif
 #endif
 
 int chdir(const char *path) __THROW;
