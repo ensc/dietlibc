@@ -1,4 +1,5 @@
 0.26:
+  iconv UTF-8 fix (Kuba Winnicki)
 
 0.25:
   fix sprintf

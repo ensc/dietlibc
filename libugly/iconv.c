@@ -109,11 +109,11 @@ utf16le:
       j=4;
       break;
     case UTF_8:
-      if (v>0x04000000) { bits=30; *out=0xFC; j=6; } else
-      if (v>0x00200000) { bits=24; *out=0xF8; j=5; } else
-      if (v>0x00010000) { bits=18; *out=0xF0; j=4; } else
-      if (v>0x00000800) { bits=12; *out=0xE0; j=3; } else
-      if (v>0x00000080) { bits=6; *out=0xC0; j=2; } else
+      if (v>=0x04000000) { bits=30; *out=0xFC; j=6; } else
+      if (v>=0x00200000) { bits=24; *out=0xF8; j=5; } else
+      if (v>=0x00010000) { bits=18; *out=0xF0; j=4; } else
+      if (v>=0x00000800) { bits=12; *out=0xE0; j=3; } else
+      if (v>=0x00000080) { bits=6; *out=0xC0; j=2; } else
 			{ bits=0; *out=0; }
       *out|= (unsigned char)(v>>bits);
       if (*outbytesleft<j) {
