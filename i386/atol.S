@@ -24,7 +24,9 @@ atol:
 	xorb %cl, %cl
 .LSpace:
 	lodsb
-	cmpb $0x21, %al
+	or %al, %al
+	jz .Lreturn
+	cmpb $0x20, %al
 	jng .LSpace
 	cmpb $'+', %al
 	jz .Lfe5

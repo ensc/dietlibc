@@ -47,6 +47,7 @@
   endmntent now returns 1 (Florian Westphal)
   strtoul return value fixes (Jan Bobrowski)
   Olaf: fixing the diet wrapper for sparc and changing the options for mips
+  fix i386/atol (Hynek Schlawack)
 
 0.22:
   fix i386 libm
