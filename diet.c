@@ -38,7 +38,11 @@ int main(int argc,char *argv[]) {
   int compile=0;
   char diethome[]=DIETHOME;
 #ifndef __DYN_LIB
+#ifdef INSTALLVERSION
+  char platform[1000]=DIETHOME "/lib-";
+#else
   char platform[1000]=DIETHOME "/bin-";
+#endif
 #else
   char platform[1000]=DIETHOME "/pic-";
   int shared=0;
@@ -133,7 +137,11 @@ int main(int argc,char *argv[]) {
       strcpy(a,"-I"); strcat(a,diethome); strcat(a,"/include");
       strcpy(b,platform); strcat(b,"/start.o");
 #ifndef __DYN_LIB
+#ifdef INSTALLVERSION
+      strcpy(c,platform); strcat(c,"/libc.a");
+#else
       strcpy(c,platform); strcat(c,"/dietlibc.a");
+#endif
 #else
       strcpy(c,"-ldietc");
 #endif

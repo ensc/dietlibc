@@ -166,7 +166,7 @@ int main(int argc, char**argv, char**envp)
   }
   {
     struct _dl_handle* dietc;
-    if ((dietc=_dl_find_lib("libdietc.so"))) {
+    if ((dietc=_dl_find_lib("libc.so"))) {
       char***tmp;
       if ((tmp=_dlsym(dietc,"environ"))) {
 	*tmp=envp;
