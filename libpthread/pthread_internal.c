@@ -114,7 +114,7 @@ void __thread_cleanup(_pthread_descr th)
   th->pid=0;	/* mark struct as free */
 }
 
-/* SIGHUP handler (thread cnacel) PTHREAD_CANCEL_ASYNCHRONOUS */
+/* SIGHUP handler (thread cancel) PTHREAD_CANCEL_ASYNCHRONOUS */
 static void __thread_cancel_handler(int sig)
 {
   _pthread_descr this;
