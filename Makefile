@@ -7,7 +7,7 @@ CROSS=
 
 CC=gcc
 
-VPATH=lib:libstdio:libugly:libcruft:libcrypt:liblatin1:syscalls.c
+VPATH=lib:libstdio:libugly:libcruft:libcrypt:libshell:liblatin1:syscalls.c
 
 SYSCALLOBJ=$(patsubst syscalls.s/%.S,%.o,$(wildcard syscalls.s/*.S))
 
@@ -16,6 +16,7 @@ LIBUGLYOBJ=$(patsubst libugly/%.c,%.o,$(wildcard libugly/*.c))
 LIBSTDIOOBJ=$(patsubst libstdio/%.c,%.o,$(wildcard libstdio/*.c))
 LIBCRUFTOBJ=$(patsubst libcruft/%.c,%.o,$(wildcard libcruft/*.c))
 LIBCRYPTOBJ=$(patsubst libcrypt/%.c,%.o,$(wildcard libcrypt/*.c))
+LIBSHELLOBJ=$(patsubst libshell/%.c,%.o,$(wildcard libshell/*.c))
 
 include $(ARCH)/Makefile.add
 
@@ -41,7 +42,8 @@ PWD=$(shell pwd)
 #	$(CROSS)strip -x -R .comment -R .note $@
 
 DIETLIBC_OBJ = $(SYSCALLOBJ) $(LIBOBJ) $(LIBSTDIOOBJ) $(LIBUGLYOBJ) \
-$(LIBCRUFTOBJ) $(LIBCRYPTOBJ) __longjmp.o setjmp.o unified.o mmap.o clone.o
+$(LIBCRUFTOBJ) $(LIBCRYPTOBJ) $(LIBSHELLOBJ) \
+__longjmp.o setjmp.o unified.o mmap.o clone.o
 
 dietlibc.a: $(DIETLIBC_OBJ) start.o
 	$(CROSS)ar cru dietlibc.a $(DIETLIBC_OBJ)
