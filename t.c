@@ -95,12 +95,28 @@ extern char* strcpy2(char*a,char*b);
      __asm__ __volatile__ ("rdtsc" : "=a" (low) : : "edx")
 
 int main(int argc,char *argv[]) {
+  FILE *f;
+  int i;
+  char addr6p[8][5];
+  int plen, scope, dad_status, if_idx;
+  char addr6[40], devname[20];
+  if ((f = fopen("/proc/net/if_inet6", "r")) != NULL) {
+    while ((i=fscanf(f, "%4s%4s%4s%4s%4s%4s%4s%4s %02x %02x %02x %02x %20s\n",
+		addr6p[0], addr6p[1], addr6p[2], addr6p[3],
+		addr6p[4], addr6p[5], addr6p[6], addr6p[7],
+		&if_idx, &plen, &scope, &dad_status, devname)) != EOF) {
+      printf("i=%d\n",i);
+    }
+  }
+
+#if 0
   printf("%s\n",crypt("test","$1$"));
+#endif
 #if 0
   MD5_CTX x;
   unsigned char md5[16];
   MD5Init(&x);
-  MD5Update(&x,"fnord",5);
+  MD5Update(&x,"a",1);
   MD5Final(md5,&x);
   {
     int i;
@@ -109,6 +125,8 @@ int main(int argc,char *argv[]) {
     }
     putchar('\n');
   }
+#endif
+#if 0
   printf("%d\n",memchr("aaaa",'x',4));
 #endif
 #if 0

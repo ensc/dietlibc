@@ -1,6 +1,9 @@
 #ifndef _NET_ROUTE_H
 #define _NET_ROUTE_H
 
+#include <inttypes.h>
+#include <netinet/in.h>
+
 /* This structure gets passed by the SIOCADDRT and SIOCDELRT calls. */
 struct rtentry {
   unsigned long rt_pad1;
@@ -32,5 +35,18 @@ struct rtentry {
 #define RTF_WINDOW	0x0080		/* per route window clamping	*/
 #define RTF_IRTT	0x0100		/* Initial round trip time	*/
 #define RTF_REJECT	0x0200		/* Reject route			*/
+
+struct in6_rtmsg {
+  struct in6_addr rtmsg_dst;
+  struct in6_addr rtmsg_src;
+  struct in6_addr rtmsg_gateway;
+  uint32_t rtmsg_type;
+  uint16_t rtmsg_dst_len;
+  uint16_t rtmsg_src_len;
+  uint32_t rtmsg_metric;
+  unsigned long int rtmsg_info;
+  uint32_t rtmsg_flags;
+  int rtmsg_ifindex;
+};
 
 #endif

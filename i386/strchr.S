@@ -2,7 +2,9 @@
 .text
 .type   strchr,@function
 .global strchr
+.weak index
 
+index:
 strchr:
 	movl	4(%esp),%ecx
 	movb	8(%esp),%dl

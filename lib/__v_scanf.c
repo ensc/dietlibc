@@ -91,6 +91,7 @@ in_scan:
 	  goto in_scan;
 
 	/* WIDTH */
+	case '0':
 	case '1':
 	case '2':
 	case '3':
@@ -345,6 +346,7 @@ exp_out:
     }
   }
 err_out:
+  if (tpch<0 && n==0) return EOF;
   A_PUTC(tpch,fn);
   return n;
 }
