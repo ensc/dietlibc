@@ -120,6 +120,8 @@ $(OBJDIR)/libpthread.a: $(LIBPTHREAD_OBJS) dietfeatures.h
 $(OBJDIR)/libdietc.so: $(OBJDIR)/dietlibc.a
 	$(CROSS)ld -whole-archive -shared -o $@ $^
 
+dyn: dynlinker/diet-linux.so dyn_lib
+
 # added dynamic linker
 $(OBJDIR)/libdl.a: $(LIBDLOBJ)
 	$(CROSS)ar cru $@ $(LIBDLOBJ)
