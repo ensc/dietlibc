@@ -36,5 +36,5 @@ Marian Jancar added s390x and ppc64 support.
 Gerrit Pape maintains the Debian port and helped immensely by relaying
 bug reports and doing testing on platforms I didn't have access to.
 
-Manuel Novoa III reported many bugs although it really works for the
+Manuel Novoa III reported many bugs although he really works for the
 competition, uClibc ;-)
