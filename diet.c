@@ -284,7 +284,7 @@ pp:
 	*dest++=f;
       }
 #else
-      if (_link) { *dest++="-Wl,-dynamic-linker=" DIETHOME "/diet-linux.so"; }
+      if (_link) { *dest++="-Wl,-dynamic-linker=" DIETHOME "/dynlinker/diet-linux.so"; }
 #endif
 #endif
       *dest=0;

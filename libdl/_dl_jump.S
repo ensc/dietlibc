@@ -5,22 +5,32 @@ _dl_jump:
 #ifdef __i386__
 .type	_dl_jump,@function
 
-#ifdef __DYN_LIB
+	pushl	%eax		# save register args...
+	pushl	%ecx
+	pushl	%edx
+
 	pushl	%ebx
-	movl	%esp,%ebx
-	pushl	8(%ebx)
-	pushl	4(%ebx)
+
+	push	20(%esp)	# 2. arg from plt
+	push	20(%esp)	# 1. arg from plt
+#ifdef __DYN_LIB
 	call	1f
 1:	popl	%ebx
 	addl	$_GLOBAL_OFFSET_TABLE_+[.-1b],%ebx
 	call	do_rel@PLT
-	addl	$8,%esp
-	popl	%ebx
 #else
 	call	do_rel
 #endif
-	addl	$8,%esp
-	jmp	*%eax
+	add	$8, %esp
+
+	popl	%ebx
+
+	popl	%edx		# restore register args...
+	popl	%ecx
+
+	xchgl	%eax, (%esp)	# restore eax and save function pointer (for return)
+
+	ret	$8		# remove arguments from plt and jump to REAL function
 
 #endif
 

@@ -192,6 +192,7 @@ __unified_syscall:
 #include "../syscalls.s/setreuid32.S"
 #include "../syscalls.s/setuid32.S"
 #include "../syscalls.s/alarm.S"
+#include "../syscalls.s/ptrace.S"
 
 /* other asm-files w.o. changes ... */
 #define _exit __exit
