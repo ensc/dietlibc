@@ -159,7 +159,7 @@ int (*writeit) ();				/* like write, but pass it a tcp_handle, not sock */
 		return;
 	}
 	for (rstrm->out_base = rstrm->the_buffer;
-		 (unsigned int) rstrm->out_base % BYTES_PER_XDR_UNIT != 0;
+		 (unsigned long) rstrm->out_base % BYTES_PER_XDR_UNIT != 0;
 		 rstrm->out_base++);
 	rstrm->in_base = rstrm->out_base + sendsize;
 	/*
@@ -198,7 +198,7 @@ long *lp;
 
 	/* first try the inline, fast case */
 	if ((rstrm->fbtbc >= sizeof(long)) &&
-		(((int) rstrm->in_boundry - (int) buflp) >= sizeof(long))) {
+		(((long) rstrm->in_boundry - (long) buflp) >= sizeof(long))) {
 		*lp = (long) ntohl((unsigned long) (*buflp));
 		rstrm->fbtbc -= sizeof(long);
 		rstrm->in_finger += sizeof(long);
@@ -240,7 +240,7 @@ register RECSTREAM *rstrm;
 	register int len;
 
 	where = rstrm->in_base;
-	i = (unsigned int) rstrm->in_boundry % BYTES_PER_XDR_UNIT;
+	i = (unsigned long) rstrm->in_boundry % BYTES_PER_XDR_UNIT;
 	where += i;
 	len = rstrm->in_size - i;
 	if ((len = (*(rstrm->readit)) (rstrm->tcp_handle, where, len)) == -1)
@@ -261,7 +261,7 @@ register int len;
 	register int current;
 
 	while (len > 0) {
-		current = (int) rstrm->in_boundry - (int) rstrm->in_finger;
+		current = (long) rstrm->in_boundry - (long) rstrm->in_finger;
 		if (current == 0) {
 			if (!fill_input_buf(rstrm))
 				return (FALSE);
@@ -300,7 +300,7 @@ long cnt;
 	register int current;
 
 	while (cnt > 0) {
-		current = (int) rstrm->in_boundry - (int) rstrm->in_finger;
+		current = (long) rstrm->in_boundry - (long) rstrm->in_finger;
 		if (current == 0) {
 			if (!fill_input_buf(rstrm))
 				return (FALSE);
@@ -383,7 +383,7 @@ register unsigned int len;
 	register int current;
 
 	while (len > 0) {
-		current = (unsigned int) rstrm->out_boundry - (unsigned int) rstrm->out_finger;
+		current = (unsigned long) rstrm->out_boundry - (unsigned long) rstrm->out_finger;
 		current = (len < current) ? len : current;
 		bcopy(addr, rstrm->out_finger, current);
 		rstrm->out_finger += current;
@@ -404,7 +404,7 @@ register XDR *xdrs;
 	register RECSTREAM *rstrm = (RECSTREAM *) xdrs->x_private;
 	register long pos;
 
-	pos = lseek((int) rstrm->tcp_handle, (long) 0, 1);
+	pos = lseek((int)((long) rstrm->tcp_handle), (long) 0, 1);
 	if (pos != -1)
 		switch (xdrs->x_op) {
 
