@@ -12,7 +12,6 @@ int dlclose (void *handle)
     }
     if (h->fini) h->fini();
     if (munmap(h->mem_base,h->mem_size)==-1) return -1;
-//    if (munmap(handle,4096)) return -1;
     _dl_free_handle(handle);
   }
   return 0;

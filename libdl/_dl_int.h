@@ -20,6 +20,7 @@ struct _dl_handle {
   /* symbol resolve helper */
   unsigned long*hash_tab;	/* hash table */
 
+  unsigned long*pltgot;		/* PLT / GOT */
   unsigned long*got;		/* global offset table */
 
   char *	dyn_str_tab;	/* dyn_name table */
@@ -55,5 +56,8 @@ int _dl_search(char *buf, int len, const char *filename);
 
 /* _dl_sym.c */
 void *_dl_sym(struct _dl_handle * h, int symbol);
+
+/* _dl_relocate.c */
+int _dl_relocate(struct _dl_handle* dh, Elf32_Rel *rel, int num);
 
 #endif

@@ -86,10 +86,7 @@ void *_dl_open(const char*pathname, int fd, int flag)
     }
   }
 
-  /* get a little page for *.so administration
-   * (in 99% the page pre text/rodata)
-   */
-//  dl_test = (struct _dl_handle *)mmap(0, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0);
+  /* get a little space for *.so administration */
   dl_test = _dl_get_handle();
 
   if (ld_nr==1) {
@@ -191,8 +188,8 @@ void *_dl_open(const char*pathname, int fd, int flag)
 
       if (dyn_tab[i].d_tag==DT_PLTGOT) {
 	got=(unsigned long*)(m+dyn_tab[i].d_un.d_val);
-	ret->got=got;
-	printf("_dl_open have got @ %08lx\n",(long)got);
+	ret->pltgot=got;
+	printf("_dl_open have plt got @ %08lx\n",(long)got);
       }
       if (dyn_tab[i].d_tag==DT_PLTREL) {
 	pltreltype=dyn_tab[i].d_un.d_val;
@@ -205,35 +202,33 @@ void *_dl_open(const char*pathname, int fd, int flag)
       if (dyn_tab[i].d_tag==DT_JMPREL) {
 	jmprel=(m+dyn_tab[i].d_un.d_val);
 	ret->plt_rel=jmprel;
-	printf("_dl_open have plt @ %08lx\n",(long)jmprel);
+	printf("_dl_open have jmprel @ %08lx\n",(long)jmprel);
       }
 
       if (dyn_tab[i].d_tag==DT_REL) {
 	rel=dyn_tab[i].d_un.d_val;
-	printf("_dl_open have rel ?!? @ %08lx\n",(long)rel);
+	printf("_dl_open have rel @ %08lx\n",(long)rel);
       }
       if (dyn_tab[i].d_tag==DT_RELENT) {
 	relent=dyn_tab[i].d_un.d_val;
-	printf("_dl_open have relent ?!? @ %08lx\n",(long)relent);
+	printf("_dl_open have relent  @ %08lx\n",(long)relent);
       }
       if (dyn_tab[i].d_tag==DT_RELSZ) {
 	relsize=dyn_tab[i].d_un.d_val;
-	printf("_dl_open have relsize ?!? @ %08lx\n",(long)relsize);
+	printf("_dl_open have relsize @ %08lx\n",(long)relsize);
       }
 
-      if (dyn_tab[i].d_tag==DT_RELSZ) {
-	printf("_dl_open have textrel ?!?\n");
+      if (dyn_tab[i].d_tag==DT_TEXTREL) {
+	printf("_dl_open have textrel ?!? -> SUE USER ! \n");
+	_dl_free_handle(ret);
+	return 0;
       }
     }
     printf("_dl_open post dynamic scan\n");
 
-    if (!got) {
-      got=dlsym(ret,"_GLOBAL_OFFSET_TABLE_");
+    if ((got=dlsym(ret,"_GLOBAL_OFFSET_TABLE_"))) {
       ret->got=got;
-      printf("found a GOT ? @ %08lx\n",got);
-    }
-
-    if (got) {
+      printf("_dl_open found a GOT @ %08lx\n",(long)got);
       /* GOT */
       got[0]+=(unsigned long)m;	/* reloc dynamic pointer */
       got[1]=(unsigned long)dl_test;
@@ -247,9 +242,8 @@ void *_dl_open(const char*pathname, int fd, int flag)
     }
 
     if (rel) {
-      printf("_dl_open try to relocate a non PIC dynamic ! \n");
-      _dl_relocate(ret,rel,relsize/relent);
-
+      printf("_dl_open try to relocate some values \n");
+      _dl_relocate(ret,(Elf32_Rel*)rel,relsize/relent);
     }
 
 
