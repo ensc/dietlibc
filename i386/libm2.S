@@ -4,23 +4,6 @@
 #d.log1p:
 #	.long	0x3ed413cc	# < sqrt(2)-1-2^(-25)
 
-.global sqrtf,sqrt,sqrtl
-	.type	 sqrtf,@function
-	.type	 sqrt,@function
-	.type	 sqrtl,@function
-sqrtf:
-	flds 4(%esp)
-	fsqrt
-	ret
-sqrt:
-	fldl 4(%esp)
-	fsqrt
-	ret
-sqrtl:
-	fldt 4(%esp)
-	fsqrt
-	ret
-
 .global fabsf,fabs,fabsl
 	.type	fabsf,@function
 	.type	fabs,@function
@@ -37,41 +20,6 @@ fabsl:
 	fldt 4(%esp)
 	fabs
 	ret
-
-.global sinf,sin,sinl
-.type   sinf,@function
-.type   sin,@function
-.type   sinl,@function
-sinf:
-        flds    4(%esp)
-	jmp __sin
-sin:
-        fldl    4(%esp)
-__sin:
-	call	fmod2pi
-        fsin
-        ret
-sinl:
-        fldt    4(%esp)
-        jmp __sin
-
-.global cosf,cos,cosl
-.type   cosf,@function
-.type   cos,@function
-.type   cosl,@function
-
-cosf:
-        flds    4(%esp)
-        jmp __cos
-cos:
-        fldl    4(%esp)
-__cos:	
-	call	fmod2pi
-        fcos
-        ret
-cosl:
-        fldt    4(%esp)
-        jmp __cos
 
 .global sincosf,sincos,sincosl
 .type   sincosf,@function
@@ -125,51 +73,6 @@ tanl:
         fldt    4(%esp)
 	jmp __tan
 
-.global acosf,acos,acosl	# ,__acos
-	.type	 acosf,@function
-	.type	 acos,@function
-	.type	 acosl,@function
-#	.type	 __acos,@function
-acosf:
-	flds 4(%esp)
-	jmp __acos
-acosl:
-	fldt 4(%esp)
-	jmp __acos
-acos:
-	fldl 4(%esp)
-__acos:
-	fld	%st
-	fmul	%st
-	fld1
-	fsubp
-	fsqrt
-	fxch	%st(1)
-	fpatan
-	ret
-
-.global asinf,asin,asinl	# ,__asin
-	.type	 asinf,@function
-	.type	 asin,@function
-	.type	 asinl,@function
-#	.type	 __asin,@function
-asinf:
-	flds 4(%esp)
-	jmp __asin
-asinl:
-	fldt 4(%esp)
-	jmp __asin
-asin:
-	fldl 4(%esp)
-__asin:
-	fld	%st
-	fmul	%st
-	fld1
-	fsubp
-	fsqrt
-	fpatan
-	ret
-
 .global atan2f,atan2,atan2l
 	.type	 atan2f,@function
 	.type	 atan2,@function
@@ -187,26 +90,6 @@ atan2l:
 atan2:
 	fldl 4(%esp)
 	fldl 12(%esp)
-	fpatan
-	ret
-
-.global atanf,atan,atanl
-	.type	 atanf,@function
-	.type	 atan,@function
-	.type	 atanl,@function
-atanf:
-	flds 4(%esp)
-	fld1
-	fpatan
-	ret
-atan:
-	fldl 4(%esp)
-	fld1
-	fpatan
-	ret
-atanl:
-	fldt 4(%esp)
-	fld1
 	fpatan
 	ret
 
@@ -240,62 +123,6 @@ __cbrt:
 	fchs
 1:	ret
 
-# pow(x,y)
-.global powf,pow,powl
-	.type	powf,@function
-	.type	pow,@function
-	.type	powl,@function
-powf:
-	flds 4(%esp)	# x
-	flds 8(%esp)	# y
-	jmp __pow
-powl:
-	fldt 4(%esp)
-	fldt 16(%esp)
-	jmp __pow
-pow:
-	fldl 4(%esp)
-	fldl 12(%esp)
-# x^y; st(0)=y, st(1)=x
-__pow:
-	ftst		# y = 0 ?
-	fstsw %ax
-	fld1		# st(0)=1, st(1)=y, st(2)=x
-	sahf
-	jz 1f		# return 1
-	fcomp %st(1)	# y = 1 ?
-	fstsw %ax
-	fxch		# st(0)=x, st(1)=y
-	sahf
-	jz 1f		# return x
-	ftst		# x = 0 ?
-	fstsw %ax
-	sahf
-	jz 1f
-	jnc finpow	# x > 0
-	fxch		# st(0)=y, st(1)=x
-	fld %st(0)	# st(0)=y, st(1)=y, st(2)=x
-	frndint		# st(0)=int(y)
-	fcomp %st(1)	# y = int(y)?
-	fstsw %ax
-	fxch
-	sahf
-	jnz finpow	# fyl2x -> st(0) = NaN
-# y even or odd ?
-	fld1
-	fadd %st(0)	# st(0) = 2
-	fdivr %st(2),%st(0) # st(0)=st(2)/2
-	frndint
-	fadd %st(0),%st(0)
-	fcomp %st(2)	# st(0) = x, st(1) = y
-	fstsw %ax
-	fchs		# st(0) = -x
-	sahf
-	jz finpow	# y even
-	call finpow	# y odd
-	fchs
-1:	ret
-
 # x^y; st(0)=x, st(1)=y (x > 0)
 finpow:
 	fyl2x
@@ -314,33 +141,6 @@ exp2:
 exp2l:
 	fldt 4(%esp)
 	jmp finexp
-
-.global expf,exp,expl
-	.type	 expf,@function
-	.type	 exp,@function
-	.type	 expl,@function
-expf:
-	fldl2e
-	fmuls 4(%esp)
-	jmp finexp
-expl:
-	fldl2e
-	fldt 4(%esp)
-	fmulp
-	jmp finexp
-exp:
-	fldl2e
-	fmull 4(%esp)
-finexp:
-	fst	%st(1)
-	frndint
-	fst	%st(2)
-	fsubrp
-	f2xm1
-	fld1
-	faddp
-	fscale
-	ret
 
 .global exp10f,exp10,exp10l	#,pow10f,pow10,pow10l
 	.type	 exp10f,@function
@@ -511,26 +311,6 @@ __hypot:
 	fmul %st(0),%st(0)
 	faddp
 	fsqrt
-	ret
-
-.global logf,log,logl
-	.type	 logf,@function
-	.type	 log,@function
-	.type	 logl,@function
-logf:
-	fldln2
-	flds 4(%esp)
-	fyl2x
-	ret
-logl:
-	fldln2
-	fldt 4(%esp)
-	fyl2x
-	ret
-log:
-	fldln2
-	fldl 4(%esp)
-	fyl2x
 	ret
 
 .global log1pf,log1p,log1pl
@@ -775,23 +555,6 @@ copysignl:
 	fldt 16(%esp)
 	jmp __copysign
 
-.global rintf,rint,rintl
-	.type	 rintf,@function
-	.type	 rint,@function
-	.type	 rintl,@function
-rintf:
-	flds 4(%esp)
-	frndint
-	ret
-rint:
-	fldl 4(%esp)
-	frndint
-	ret
-rintl:
-	fldt 4(%esp)
-	frndint
-	ret
-
 .global fdimf,fdim,fdiml
 	.type	 fdimf,@function
 	.type	 fdim,@function
@@ -815,61 +578,6 @@ fdiml:
 	fsubp
 	jmp __fdim
 
-.global floorf,floor,floorl
-	.type floorf,@function
-	.type floor,@function
-	.type floorf,@function
-
-floorf:
-	flds 4(%esp)
-	movb $0x04,%ah
-	jmp flcetr
-
-floor:
-	fldl 4(%esp)
-	movb $0x04,%ah
-	jmp flcetr
-
-floorl:
-	fldt 4(%esp)
-	movb $0x04,%ah
-	jmp flcetr
-
-.global ceilf,ceil,ceill
-	.type ceilf,@function
-	.type ceil,@function
-	.type ceill,@function
-
-ceilf:
-	flds 4(%esp)
-	movb $0x08,%ah
-	jmp flcetr
-
-ceill:
-	fldt 4(%esp)
-	movb $0x08,%ah
-	jmp flcetr
-
-ceil:
-	fldl 4(%esp)
-	movb $0x08,%ah
-
-# Wspolny kod dla funkcji floor, ceil i trunc
-# W ah maska bitow 11 i 10 rejestru sterowania koprocesora
-flcetr:
-	xorl %ecx,%ecx	# wyzerowanie rejestru
-	movb %ah,%ch	# i utworzenie maski w cx
-	pushl %eax	# krotsze niz subl $4,%esp
-	fstcw (%esp)
-	movw (%esp),%ax
-	andb $0x03,%ah	# wyzerowanie bitow 11 i 10
-	orl %ecx,%eax	# ustawienie bitow z maski
-	movw %ax,2(%esp)
-	fldcw 2(%esp)
-	frndint
-	fldcw (%esp)	# odtworzenie rejestru sterowania
-	popl %eax	# i polozenia stosu
-	ret
 
 .global truncf,trunc,truncl
 	.type truncf,@function

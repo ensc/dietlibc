@@ -1,21 +1,23 @@
-
 .text
-.type   rint,@function
-.global rint
 
+.global rintf,rint,rintl
+	.type	 rintf,@function
+	.type	 rint,@function
+	.type	 rintl,@function
+rintf:
+	flds 4(%esp)
+	frndint
+	ret
 rint:
-        fldl   4(%esp)
-        push   %ecx
-        movl   %esp,%ecx
-        fnstcw (%ecx)
-        movw   0(%ecx),%ax
-        andb   $0xF7,%ah
-        movw   %ax,2(%ecx)
-        fldcw  2(%ecx)
-        frndint
-        fldcw  0(%ecx)
-        pop    %ecx
-        ret
+	fldl 4(%esp)
+	frndint
+	ret
+rintl:
+	fldt 4(%esp)
+	frndint
+	ret
 
 .Lende:
 .size    rint,.Lende-rint
+.size    rintl,.Lende-rintl
+.size    rintf,.Lende-rintf

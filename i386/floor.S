@@ -1,22 +1,26 @@
-
 .text
-.type   floor,@function
-.global floor
+
+.global floorf,floor,floorl
+	.type floorf,@function
+	.type floor,@function
+	.type floorf,@function
+
+floorf:
+	flds 4(%esp)
+	movb $0x04,%ah
+	jmp flcetr
+
 floor:
-        fldl   4(%esp)
-        push   %ecx
-        movl   %esp,%ecx
-        fnstcw (%ecx)
-        movw   0(%ecx),%ax
-        andb   $0xF7,%ah
-        orb    $0x04,%ah
-        movw   %ax,2(%ecx)
-        fldcw  2(%ecx)
-        frndint
-        fldcw  0(%ecx)
-        pop    %ecx
-        ret
+	fldl 4(%esp)
+	movb $0x04,%ah
+	jmp flcetr
 
-.ende:
-.size    floor,.ende-floor
+floorl:
+	fldt 4(%esp)
+	movb $0x04,%ah
+	jmp flcetr
 
+.Lende:
+.size    floor,.Lende-floor
+.size    floorl,.Lende-floorl
+.size    floorf,.Lende-floorf

@@ -1,4 +1,5 @@
 0.22:
+  fix i386 libm
 
 0.21:
   use gcc's size_t, ptrdiff_t and wchar_t types (Olaf)

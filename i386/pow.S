@@ -2,80 +2,63 @@
 .global pow
 .type   pow,@function
 
-#
-#  double  pow ( double mant, double exp );
-#
+# pow(x,y)
+.global powf,pow,powl
+	.type	powf,@function
+	.type	pow,@function
+	.type	powl,@function
+powf:
+	flds 4(%esp)	# x
+	flds 8(%esp)	# y
+	jmp .L__pow
+powl:
+	fldt 4(%esp)
+	fldt 16(%esp)
+	jmp .L__pow
+pow:
+	fldl 4(%esp)
+	fldl 12(%esp)
+# x^y; st(0)=y, st(1)=x
+.L__pow:
+	ftst		# y = 0 ?
+	fstsw %ax
+	fld1		# st(0)=1, st(1)=y, st(2)=x
+	sahf
+	jz 1f		# return 1
+	fcomp %st(1)	# y = 1 ?
+	fstsw %ax
+	fxch		# st(0)=x, st(1)=y
+	sahf
+	jz 1f		# return x
+	ftst		# x = 0 ?
+	fstsw %ax
+	sahf
+	jz 1f
+	jnc finpow	# x > 0
+	fxch		# st(0)=y, st(1)=x
+	fld %st(0)	# st(0)=y, st(1)=y, st(2)=x
+	frndint		# st(0)=int(y)
+	fcomp %st(1)	# y = int(y)?
+	fstsw %ax
+	fxch
+	sahf
+	jnz finpow	# fyl2x -> st(0) = NaN
+# y even or odd ?
+	fld1
+	fadd %st(0)	# st(0) = 2
+	fdivr %st(2),%st(0) # st(0)=st(2)/2
+	frndint
+	fadd %st(0),%st(0)
+	fcomp %st(2)	# st(0) = x, st(1) = y
+	fstsw %ax
+	fchs		# st(0) = -x
+	sahf
+	jz finpow	# y even
+	call finpow	# y odd
+	fchs
+1:	ret
 
-pow:    fld1                                    # 1
-        fldl     4(%esp)                        # mant          1
-	
-        ftst                                    # mant          1
-        fnstsw  %ax
-        andb    $0x41,%ah
-        cmpb    $0x40,%ah
-        fldl    12(%esp)                        # expo          mant            1
-        jz      .Lpow0
-	
-        pushl   %eax
-        fistl   (%esp)                          # expo          mant          1
-        ficompl (%esp)                          # mant          1
-        fnstsw  %ax                             # exponent ganzzahlig?
-        andb    $0x44,%ah
-        cmpb    $0x40,%ah
-        popl    %ecx
-        jz      .Lipow                          # ganzzahlig!
-
-                                         
-        fyl2x                                   # log2(mant)
-        fmull   12(%esp)                        # expo*log2(mant) = x
-        fld      %st(0)                         # x              x
-        frndint                                 # int(x)         x
-        fxch                                    # x              int(x)
-        fsub     %st(1),%st(0)                  # frac(x)        int(x)
-        f2xm1                                   # 2^(fract(x))-1 int(x)
-        fld1                                    # 1              2^(fract(x))-1         int(x)
-        faddp    %st(0),%st(1)                  # 2^(fract(x))   int(x)
-        fscale                                  # 2^x            int(x)
-        fstp     %st(1)                         # 2^x
-        ret
-
-###############################################################################
-
-.Lpow0:                                         # expo		0             1
-        ftst                                    # expo          0             1
-        fnstsw  %ax
-        andb    $0x41,%ah
-        jz      .Lpow0p
-        cmpb    $0x40,%ah
-        jz      .Lpow00
-.Lpow0n:fcomp                                   # 0             1
-        fdivrp                                  # inf
-        ret
-   
-
-.Lipow: andl    %ecx,%ecx                       # mant          1
-        jns     .Lstart
-        negl    %ecx
-        fdivr   %st(1),%st(0)
-        jmp     .Lstart
-
-.Lnext: fmul    %st(0),%st(0)                   # mant^(2^x)    result
-.Lstart:shrl    %ecx
-        jnc     .Lnomul
-        fmul    %st(0),%st(1)
-.Lnomul:jnz     .Lnext
-        fcomp                                   # result
-        ret
-
-################################################################################
-
-.Lpow00:
-        fcompp                                  # 1
-        ret
-
-.Lpow0p:
-        fcomp                                   # 0             1
-        fstp    %st(1)                          # 0
-        ret
-
-
+.Lende:
+.size    pow,.Lende-pow
+.size    powf,.Lende-powf
+.size    powl,.Lende-powl

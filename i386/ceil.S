@@ -1,22 +1,42 @@
-
 .text
-.type   ceil,@function
-.global ceil
+
+.global ceilf,ceil,ceill
+	.type ceilf,@function
+	.type ceil,@function
+	.type ceill,@function
+
+ceilf:
+	flds 4(%esp)
+	movb $0x08,%ah
+	jmp .Lflcetr
+
+ceill:
+	fldt 4(%esp)
+	movb $0x08,%ah
+	jmp .Lflcetr
+
 ceil:
-        fldl   4(%esp)
-        push   %ecx
-        movl   %esp,%ecx
-        fnstcw (%ecx)
-        movw   0(%ecx),%ax
-        andb   $0xFB,%ah
-        orb    $0x08,%ah
-        movw   %ax,2(%ecx)
-        fldcw  2(%ecx)
-        frndint
-        fldcw  0(%ecx)
-        pop    %ecx
-        ret
+	fldl 4(%esp)
+	movb $0x08,%ah
 
-.ende:
-.size    ceil,.ende-ceil
+# Wspolny kod dla funkcji floor, ceil i trunc
+# W ah maska bitow 11 i 10 rejestru sterowania koprocesora
+.Lflcetr:
+	xorl %ecx,%ecx	# wyzerowanie rejestru
+	movb %ah,%ch	# i utworzenie maski w cx
+	pushl %eax	# krotsze niz subl $4,%esp
+	fstcw (%esp)
+	movw (%esp),%ax
+	andb $0x03,%ah	# wyzerowanie bitow 11 i 10
+	orl %ecx,%eax	# ustawienie bitow z maski
+	movw %ax,2(%esp)
+	fldcw 2(%esp)
+	frndint
+	fldcw (%esp)	# odtworzenie rejestru sterowania
+	popl %eax	# i polozenia stosu
+	ret
 
+.Lende:
+.size    ceil,.Lende-ceil
+.size    ceill,.Lende-ceill
+.size    ceilf,.Lende-ceilf
