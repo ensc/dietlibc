@@ -22,6 +22,7 @@
   new dirname with test suite entry (Yuri Kozlov)
   fnmatch: add [:charclass:], fix negation (Michael J. Pomraning)
   make calloc a weak symbol (Martin Pohlack)
+  make NULL C++ friendly (Martin Pohlack)
 
 0.24:
   work around incompatible Linux select() modifying the timeout in
