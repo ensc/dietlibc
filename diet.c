@@ -149,10 +149,8 @@ int main(int argc,char *argv[]) {
       *dest++=argv[1];
 #ifndef __DYN_LIB
       if (_link) { *dest++=(char*)nostdlib; *dest++=dashL; }
-      if (compile || _link) *dest++=a;
 #else
       if (_link || shared) { *dest++=(char*)nostdlib; *dest++=dashL; }
-      if (compile || _link || shared) *dest++=a;
 #endif
 #ifdef WANT_SAFEGUARD
       if (compile) {
@@ -170,6 +168,11 @@ int main(int argc,char *argv[]) {
 	    continue;
 	*dest++=argv[i];
       }
+#ifndef __DYN_LIB
+      if (compile || _link) *dest++=a;
+#else
+      if (compile || _link || shared) *dest++=a;
+#endif
       if (mangleopts) {
 	const char **o=Os;
 	for (o=Os;*o;++o) {
