@@ -73,6 +73,11 @@ size_t strxfrm(char *dest, const char *src, size_t n) __THROW;
 
 char *stpcpy(char *dest, const char *src);
 
+#ifdef _GNU_SOURCE
+int ffsl(long i) __THROW;
+int ffsll(long long i) __THROW;
+#endif
+
 __END_DECLS
 
 #endif
