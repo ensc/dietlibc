@@ -25,7 +25,7 @@ __clone:
 	bne	.Lstart		/* we are the child :) */
 	nop
 	mov	%o0, %i0	/* return child pid */
-	retl
+	ret
 	restore
 
 .Lerror:
@@ -33,7 +33,7 @@ __clone:
 	nop
 	mov	EINVAL, %l0
 	st	%l0, [%o0]
-	retl
+	ret
 	restore	%g0, -1, %o0
 
 .Lstart:

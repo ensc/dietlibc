@@ -166,7 +166,7 @@ static void *__mthread_starter(void *arg)
   if (td->policy!=SCHED_OTHER) {
     struct sched_param sp;
     sp.sched_priority=td->priority;
-    sched_setscheduler(getpid(),td->policy, &sp);
+    sched_setscheduler(td->pid,td->policy, &sp);
   }
 
 #ifdef DEBUG
@@ -208,7 +208,7 @@ static void *__mthread_starter(void *arg)
 
 /* manager thread and signal handler */
 static char __manager_thread_stack[12*1024];
-static _pthread_descr __manager_thread_data;
+static volatile _pthread_descr __manager_thread_data;
 static void __manager_SIGCHLD(int sig)
 {
   int pid, status, i;
@@ -243,6 +243,7 @@ static void* __manager_thread(void *arg)
   signal(SIGTERM, __manager_SIGTERM);
   signal(SIGHUP, SIG_IGN);
 
+  __pthread_unlock(&__manager_thread_data_go_lock);	/* release init */
   while(1) {
     do {
       __thread_wait_some_time();
@@ -254,8 +255,8 @@ static void* __manager_thread(void *arg)
 	      __manager_thread_data->stack_addr,
 	      CLONE_VM | CLONE_FS | CLONE_FILES | SIGCHLD,
 	      __manager_thread_data);
-#ifdef DEBUG
     __thread_wait_some_time();
+#ifdef DEBUG
     printf("manager new thread %d\n",__manager_thread_data->pid);
 #endif
     __pthread_unlock(&__manager_thread_data_go_lock);	/* release sender */
@@ -271,7 +272,9 @@ int signal_manager_thread(_pthread_descr td)
   __pthread_lock(&__manager_thread_signal_lock);	/* lock */
 
   __manager_thread_data = td;
+  __thread_wait_some_time();
   __pthread_unlock(&__manager_thread_data_lock);	/* signal manager to start */
+  __thread_wait_some_time();
   __pthread_lock(&__manager_thread_data_go_lock);	/* wait for manager */
 
   __pthread_unlock(&__manager_thread_signal_lock);	/* unlock */
@@ -328,6 +331,6 @@ void __thread_init()
 #ifdef DEBUG
   printf("manager thread @ : %d\n",threads[1].pid);
 #endif
-  sched_yield();
+  __pthread_lock(&__manager_thread_data_go_lock);	/* wait for manager to be ready */
 }
 
