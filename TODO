@@ -16,3 +16,5 @@ glob, globfree
 realpath
 
 regerror
+
+Try to improve code size and quality with __restrict__.

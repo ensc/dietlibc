@@ -45,9 +45,16 @@ static int rand() {
 extern double atof(const char *c);
 
 int main(int argc,char *argv[]) {
+  float my_float = 9.2334;
+  char buffer[100];
+
+  sprintf(buffer, "%.2f", my_float);
+  fprintf(stdout, "%s", buffer);
+#if 0
   printf("%d\n",setenv("foo","bar",0));
   printf("%d\n",setenv("foo","bar",1));
   execlp("printenv","printenv","foo",0);
+#endif
 #if 0
   if (!fnmatch("s*", "sub", 0))
     printf("s* sub\n");

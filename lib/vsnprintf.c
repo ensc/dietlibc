@@ -202,10 +202,18 @@ num_vsnprintf:
 	goto print_out;
 
 #ifdef WANT_FLOATING_POINT_IN_PRINTF
+      case 'f':
       case 'g':
 	{
 	  double d=va_arg(arg_ptr,double);
-	  buf_len=__dtostr(d,buf,sizeof(buf),6);
+	  buf_len=__dtostr(d,buf,sizeof(buf),width?width:6);
+	  if (flag_dot) {
+	    char *tmp;
+	    if ((tmp=strchr(buf,'.'))) {
+	      while (preci>-1 && *++tmp) --preci;
+	      *tmp=0;
+	    }
+	  }
 	  pb=buf;
 	  goto print_out;
 	}

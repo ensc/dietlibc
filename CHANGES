@@ -33,6 +33,8 @@
   add rlim_t, sig_atomic_t declarations.
   add sigsetjmp #define for __sigsetjmp (oops).
     (Thanks to Chris Siebenmann for these three bug reports)
+  add a gruesome hack to printf floating point to accept %f and kludge
+    together support for %.2f.  Don't look at the code, please!
 
 0.9:
   fixed initgroups (oops)
