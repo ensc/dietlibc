@@ -93,6 +93,7 @@ void setnetent(int stayopen) __THROW;
 struct netent *getnetbyname(const char *name) __THROW;
 struct netent *getnetent(void) __THROW;
 
+extern const char *hstrerror (int err_num) __THROW;
 void herror(const char *s) __THROW;
 
 #define NI_MAXHOST 1025
