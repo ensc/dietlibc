@@ -1,5 +1,6 @@
 0.7.1:
   optimized away the static array from __ltostr and __lltostr.
+  system by Olaf.
 
 0.7:
   clone support for i386,alpha,arm and sparc by Olaf.
