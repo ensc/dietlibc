@@ -26,8 +26,6 @@ char *strncat(char *s, const char *t, size_t n) {
     if (!(*s = *t)) break; if (++s==max) break; ++t;
 #endif
   }
-#ifdef WANT_NON_COMPLIANT_STRNCAT
   *s=0;
-#endif
   return dest;
 }

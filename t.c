@@ -34,6 +34,12 @@
 int foo;
 
 int main(int argc,char *argv[]) {
+  char buf[100];
+  memset(buf,17,100);
+  buf[0]=0;
+  strncat(buf,"foobarbaz23",10);
+  puts(buf);
+#if 0
   int aflag = 0;
   int bflag = 0;
   char *cvalue = NULL;
@@ -72,7 +78,7 @@ int main(int argc,char *argv[]) {
   for (index = optind; index < argc; index++)
     printf ("Non-option argument %s\n", argv[index]);
   return 0;
-
+#endif
 #if 0
   char *t="foobar";
   char *c;

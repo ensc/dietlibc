@@ -11,6 +11,9 @@
   I wrote a new getopt.  It appears to actually work (it is POSIX
     compliant, it does not sort argv like the GNU version) and is only
     a little over 300 bytes on x86.
+  Guillaume Cottenceau just wrote me that strncat should be even more
+    broken than it already is: it should append n bytes AND THEN \0!
+    I wonder how many programmers have produces off-by-one errors here...
 
 0.10:
   update getpagesize.
