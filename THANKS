@@ -3,7 +3,7 @@ start code and fork().  Olaf also did the printf and scanf routines and
 he implemented pthreads (wow!) and his now writing a dynamic linker, and
 he ported the diet libc to S/390.
 
-Thomas Ogrisegg ported the diet libc to PA-RISC and fixed a few things.
+Thomas Ogrisegg ported the diet libc to PA-RISC and IA64 and fixed a few things.
 
 I initially took some syscalls from Redhat minilibc, but the code has
 been completely replaced now.
@@ -24,3 +24,8 @@ Erik Troan found several important bugs and sent in patches to fix them.
 
 I also grabbed code from glibc (mostly assembly routines), and looked at
 the OpenBSD libc for inspiration.
+
+Michal Ludvig did the porting to x86_64 and Gwenole Beauchesne helped
+finish the port.
+
+Johannes Stezenbach improved the MIPS port.
