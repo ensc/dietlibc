@@ -54,7 +54,6 @@ void trunc32(int fd)
   len -= n;
 
   eh32.e_shoff=0;
-  eh32.e_shentsize=0;
   eh32.e_shnum=0;
   eh32.e_shstrndx=0;
 
@@ -109,7 +108,6 @@ void trunc64(int fd)
   len -= n;
 
   eh64.e_shoff=0;
-  eh64.e_shentsize=0;
   eh64.e_shnum=0;
   eh64.e_shstrndx=0;
 
