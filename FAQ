@@ -1,0 +1,38 @@
+diet libc FAQ.
+
+
+Q: How do I compile this beast?  I don't see a configure?
+A: Just type make.
+
+
+Q: Do you have cross compiling support?
+A: Yes.  Just type something like "make ARCH=arm CROSS=arm-linux- all".
+   For arm, alpha, mips, ppc, sparc and i386, shortcuts exist.  You can
+   also use "make arm", for example.
+
+Q: I keep getting warnings about asm/posix_types.h when compiling the diet libc.
+A: The diet libc works with Linux 2.2 and Linux 2.4 headers and assumes
+   that your system-wide headers (in /usr/include) actually work.  On
+   your systems (seems to be common on Mandrake), gcc has tried to "fix"
+   the headers and broke them in the process.  If this is the case, the
+   path that gcc mentions in the warning will contain "/gcc-lib/".  You
+   can either ignore the warning (no harmful consequences as far as we
+   know) or delete the offending asm/posix_types.h from the gcc dir (NOT
+   from the kernel source tree!).
+
+Q: There are a few warnings about possibly uninitialized variables when
+   compiling the diet libc.  Can't you remove them?
+A: This type of warning can only be removed by a) compiling without
+   warnings or b) initializing the variables in question.  In all cases,
+   the variables won't actually be used uninitialized, but adding an
+   explicit initializer will add a few bytes of code.  As you know, the
+   goal of the diet libc is to not waste a single byte of code, so we
+   don't add initializers ;-)
+
+Q: Cross-Compiling on sparc fails because it tries to include a missing
+   file, asm/asm_offsets.h.  What gives?
+A: This file is dynamically generated.  As far as I know, it is not
+   needed for user space, so you could, if you wanted, just delete the
+   reference to it.  But you can also create it by going to the Linux
+   kernel directory and running "make ARCH=sparc oldconfig" and "make
+   ARCH=sparc dep".
