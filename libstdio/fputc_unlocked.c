@@ -18,6 +18,4 @@ int fputc_unlocked(int c, FILE *stream) {
   return 0;
 }
 
-#ifndef WANT_THREAD_SAFE
 int fputc(int c,FILE* stream) __attribute__((weak,alias("fputc_unlocked")));
-#endif

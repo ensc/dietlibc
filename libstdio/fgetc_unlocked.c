@@ -39,6 +39,4 @@ int fgetc_unlocked(FILE *stream) {
 #endif
 }
 
-#ifndef WANT_THREAD_SAFE
 int fgetc(FILE* stream) __attribute__((weak,alias("fgetc_unlocked")));
-#endif
