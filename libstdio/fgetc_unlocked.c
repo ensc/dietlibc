@@ -5,15 +5,12 @@ extern int feof(FILE *stream);
 
 int fgetc_unlocked(FILE *stream) {
   unsigned char c;
-#ifdef WANT_UNGETC
   if (stream->ungotten) {
     stream->ungotten=0;
     return stream->ungetbuf;
   }
-#endif
   if (feof(stream))
     return EOF;
-#ifdef WANT_BUFFERED_STDIO
   if (__fflush4(stream,BUFINPUT)) return EOF;
   if (stream->bm>=stream->bs) {
     int len=read(stream->fd,stream->buf,BUFSIZE);
@@ -30,13 +27,6 @@ int fgetc_unlocked(FILE *stream) {
   c=stream->buf[stream->bm];
   ++stream->bm;
   return c;
-#else
-  switch (read(stream->fd,&c,1)) {
-  case 0: stream->flags|=EOFINDICATOR; return EOF;
-  case -1: stream->flags|=ERRORINDICATOR; return EOF;
-  }
-  return c;
-#endif
 }
 
 int fgetc(FILE* stream) __attribute__((weak,alias("fgetc_unlocked")));

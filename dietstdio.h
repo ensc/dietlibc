@@ -16,17 +16,13 @@
 typedef struct __file {
   int fd;
   int flags;
-#ifdef WANT_BUFFERED_STDIO
   unsigned int bs;	/* read: bytes in buffer */
   unsigned int bm;	/* position in buffer */
   char buf[BUFSIZE];
   struct __file *next;	/* for fflush */
-#endif
   pid_t popen_kludge;
-#ifdef WANT_UNGETC
   char ungetbuf;
   char ungotten;
-#endif
 #ifdef WANT_THREAD_SAFE
   pthread_mutex_t m;
 #endif
@@ -85,3 +81,5 @@ int fclose(FILE *stream);
 extern FILE *stdout, *stderr, *stdin;
 
 #define EOF (int)(-1)
+
+extern int __buffered_outs(const char *s,int len);

@@ -2,13 +2,12 @@
 #include "dietstdio.h"
 #include <unistd.h>
 
-size_t fwrite( const void *ptr, size_t size, size_t nmemb, FILE *stream) {
+size_t fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream) {
   int res;
-#ifdef WANT_BUFFERED_STDIO
   long len=size*nmemb;
   long i;
   if (len>BUFSIZE || (stream->flags&NOBUF)) {
-    if (!(stream->flags&NOBUF)) fflush(stream);
+    fflush(stream);
     res=write(stream->fd,ptr,size*nmemb);
   } else {
     register const unsigned char *c=ptr;
@@ -19,16 +18,6 @@ size_t fwrite( const void *ptr, size_t size, size_t nmemb, FILE *stream) {
       }
     res=size*nmemb;
   }
-#else
-  long j;
-  if (!(j=size*nmemb)) res=0;
-  while (j) {
-    res=write(stream->fd,ptr,j);
-    if (res<=0) break;
-    j-=res;
-    ptr=((char*)ptr)+res;
-  }
-#endif
   if (res<0) {
     stream->flags|=ERRORINDICATOR;
     return 0;

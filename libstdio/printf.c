@@ -19,11 +19,7 @@ int printf(const char *format,...)
   va_start (arg_ptr, format);
   printf_buf=alloca(n+2);
   n=vsnprintf(printf_buf,n+1,format,arg_ptr);
-#ifdef WANT_BUFFERED_STDIO
   fwrite(printf_buf,n,1,stdout);
-#else
-  write(1,printf_buf,n);
-#endif
   va_end (arg_ptr);
   return n;
 }

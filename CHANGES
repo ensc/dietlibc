@@ -55,6 +55,8 @@
     same problem.
     Peter also posted a patch to atexit/exit. With some modifications it is
     now implemented.
+  Unbuffered stdio and ungetc can no longer be disabled.  I will try to
+    implement part of it using ELF weak symbols.
 
 0.10:
   update getpagesize.

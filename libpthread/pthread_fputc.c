@@ -1,7 +1,4 @@
 #include <dietstdio.h>
-#ifndef WANT_BUFFERED_STDIO
-#include <unistd.h>
-#endif
 
 int fputc(int c, FILE *stream) {
   int tmp;

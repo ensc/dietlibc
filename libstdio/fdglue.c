@@ -5,11 +5,6 @@
 #include <pthread.h>
 #include "dietstdio.h"
 
-#ifdef WANT_BUFFERED_STDIO
-extern int __stdio_atexit;
-extern void __stdio_flushall(void);
-#endif
-
 int __stdio_parse_mode(const char *mode) {
   int f=0;
   for (;;) {

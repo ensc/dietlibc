@@ -76,15 +76,20 @@ void closelog(void) {
 #endif
 
 int main(int argc,char *argv[]) {
+  puts("fnord");
+//  putchar('c');
+//  write(1,"fnord\n",6);
 #if 0
   struct addrinfo *ai;
   getaddrinfo("ftp.fu-berlin.de","ftp",0,&ai);
 #endif
+#if 0
   struct hostent host,*res;
   char buf[4096];
   int fnord;
 
   gethostbyname2_r("knuth",AF_INET,&host,buf,4096,&res,&fnord);
+#endif
 #if 0
   char buf[128];
   strcpy(buf,"/tmp/fnord/foo.XXXXXXX");

@@ -15,8 +15,6 @@
 /* this is only for meaningful for ttyname so far */
 /* #define SLASH_PROC_OK 1 */
 
-#define WANT_BUFFERED_STDIO
-
 /* use errno_location instead of errno */
 #define WANT_THREAD_SAFE
 
@@ -34,9 +32,6 @@
  * however, returns "foo", then "bar", and then NULL.  The man page
  * behaviour breaks openssh, so you might want to have glibc behaviour. */
 #define WANT_BUGGY_GLIBC_STRSEP
-
-/* do you want ungetc?  makes fgetc more complex */
-#define WANT_UNGETC
 
 #define WANT_LINKER_WARNINGS
 

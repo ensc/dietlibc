@@ -5,7 +5,6 @@
 
 FILE *__stdio_root;
 
-#ifdef WANT_BUFFERED_STDIO
 int __stdio_atexit=0;
 
 void __stdio_flushall(void) {
@@ -28,6 +27,7 @@ int fflush(FILE *stream) {
 	res=-1;
     return res;
   }
+  if (stream->flags&NOBUF) return 0;
   if (stream->flags&BUFINPUT) {
     register int tmp;
     if ((tmp=stream->bm-stream->bs)) lseek(stream->fd,tmp,SEEK_CUR);
@@ -53,10 +53,8 @@ int __fflush4(FILE *stream,int next) {
   return 0;
 }
 
-#else
-int fflush(FILE *stream) {
-  return 0;
+int __buffered_outs(const char *s,int len) {
+  return fwrite(s,1,len,stdout);
 }
-#endif
 
-link_warning("fflush","warning: your code uses stdio (several kilobytes of bloat).")
+link_warning("fflush","warning: your code uses stdio (7+k bloat).")
