@@ -1,3 +1,4 @@
+#include "dietfeatures.h"
 #include <unistd.h>
 
 /* Initial permutation, */
@@ -218,14 +219,14 @@ void encrypt(char block[64], int edflag)
      */
     for(j=0; j < 8; j++) {
       t = ((j<<1)+j)<<1;
-      k = S[j][(preS[t+0]<<5)+
+      k = S[j][(preS[t]<<5)+
 	 (preS[t+1]<<3)+
 	 (preS[t+2]<<2)+
 	 (preS[t+3]<<1)+
 	 (preS[t+4]   )+
 	 (preS[t+5]<<4)];
       t = j << 2;
-      f[t+0] = (k>>3)&01;
+      f[t  ] = (k>>3)&01;
       f[t+1] = (k>>2)&01;
       f[t+2] = (k>>1)&01;
       f[t+3] = (k   )&01;
@@ -239,9 +240,9 @@ void encrypt(char block[64], int edflag)
   }
   /* The output L and R are reversed. */
   for(j=0; j < 32; j++) {
-    t = L[j];
-    L[j] = R[j];
-    R[j] = t;
+    L[j] ^= R[j];
+    R[j] ^= L[j];
+    L[j] ^= R[j];
   }
   /* The final output gets the inverse permutation of the very original. */
   for(j=0; j < 64; j++)
@@ -292,7 +293,7 @@ char * crypt(const char *pw, const char *salt)
     c = 0;
     for(j=0; j < 6; j++) {
       c <<= 1;
-      c |= block[6*i+j];
+      c |= block[(((i<<1)+i)<<1)+j];
     }
     c += '.';
     if(c > '9')
