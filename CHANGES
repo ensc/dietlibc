@@ -59,6 +59,9 @@
   fix sigsuspend (syscall had completely fscked up arguments!)
   RLIM_INFINITY from the kernel is broken.  Thanks to Chris Siebenmann
     for sending a patch.
+  add getserv*.
+  add WANT_FULL_RESOLV_CONF so that the DNS routines use "domain" and
+    "search" from resolv.conf.
 
 0.9:
   fixed initgroups (oops)
