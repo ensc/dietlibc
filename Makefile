@@ -285,13 +285,21 @@ install: $(OBJDIR)/start.o $(OBJDIR)/dietlibc.a $(OBJDIR)/librpc.a $(OBJDIR)/lib
 	if test -f $(PICODIR)/libdietc.so -a ! -f $(DESTDIR)/etc/diet.ld.conf; then echo "$(ILIBDIR)" > $(DESTDIR)/etc/diet.ld.conf; fi
 	for i in `find include -name \*.h`; do install -m 644 -D $$i $(DESTDIR)$(prefix)/$$i; done
 
-.PHONY: sparc ppc mips arm alpha i386 s390
+.PHONY: sparc ppc mips arm alpha i386 parisc mipsel powerpc s390
 
-arm sparc ppc alpha i386 mips s390:
-	$(MAKE) ARCH=$@ CROSS=$@-linux- all t bin-$@/libdietc.so
+arm sparc ppc alpha i386 mips parisc s390:
+	$(MAKE) ARCH=$@ CROSS=$@-linux- all t
+
+# Cross compile for little endian MIPS
+mipsel:
+	$(MAKE) ARCH=$@ CROSS=mips-linux- all t
 
 mips-gnu:
-	$(MAKE) ARCH=$@ CROSS=$@-linux-gnu- all t bin-$@/libdietc.so
+	$(MAKE) ARCH=$@ CROSS=$@-linux-gnu- all t
+
+# Some people named their cross compiler toolchain powerpc-linux-gcc
+powerpc:
+	$(MAKE) ARCH=ppc CROSS=powerpc-linux- all t
 
 cross:
 	$(MAKE) arm sparc ppc alpha i386 mips

@@ -85,7 +85,7 @@ int main(int argc,char *argv[]) {
       --tmp2;
       if (tmp2-cc>90) error("platform name too long!\n");
       shortplatform=platform+len;
-      memmove(platform+len,argv[1],(size_t)(tmp2-cc));
+      memmove(shortplatform,argv[1],(size_t)(tmp2-cc));
       platform[tmp2-cc+len]=0;
       if (shortplatform[0]=='i' && shortplatform[2]=='8' && shortplatform[3]=='6') shortplatform[1]='3';
     } else {
@@ -116,7 +116,19 @@ int main(int argc,char *argv[]) {
 #ifdef __hppa__
       shortplatform="parisc";
 #endif
-      strcat(platform,shortplatform);
+      {
+	char *tmp=platform+strlen(platform);
+	strcpy(tmp,shortplatform);
+	shortplatform=tmp;
+      }
+    }
+    /* MIPS needs special handling.  If argv contains -EL, change
+     * platform name to mipsel */
+    if (!strcmp(shortplatform,"mips")) {
+      int i;
+      for (i=1; i<argc; ++i)
+	if (!strcmp(argv[i],"-EL"))
+	  strcpy(shortplatform,"mipsel");
     }
     strcat(dashL,platform);
     if (!strcmp(tmp,"cc")) {

@@ -9,6 +9,7 @@ exit:
 	.ent _exit
 _exit:
 	li	$2,__NR_exit
+	.end _exit
 	.globl	__unified_syscall
 	.ent	__unified_syscall
 __unified_syscall:

@@ -1,3 +1,15 @@
 LIBOBJ+=$(OBJDIR)/setjmp_aux.o
-CFLAGS+=-Os -fstrict-aliasing -fno-pic -mno-abicalls
+
+# Now this needs explanation.
+# mips-linux is per default big endian.  Then they ported it to little
+# endian MIPS (Windoze CE handhelds mostly) and named the architecture
+# mipsel.  However, if you build a cross compiler for mips-linux, it
+# will default to generating little endian objects.  So, if we are
+# cross compiling, we set need to set the endianness to big endian with
+# -EB because we also have a mipsel cross compiler target that is meant
+# to generate little endian code.  Confusing, eh?
+ifeq ($(CROSS),mips-linux-)
+ENDIAN=-EB
+endif
+CFLAGS+=$(ENDIAN) -Os -fstrict-aliasing -fno-pic -mno-abicalls
 VPATH:=mips:syscalls.s:$(VPATH)

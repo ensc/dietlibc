@@ -5,6 +5,12 @@
     thread-safe!
   remove vfork and add alarm to dynamic syscalls.
   fix diet-dyn to link in dyn_dstop.o and not dyn_stop.o.
+  The MD5 code generated unaligned accesses when passed an unaligned
+    pointer on little endian ARM and MIPS.
+  MIPS unified syscall didn't compile anymore.
+  Put up new mipsel target to cross compile for little endian mips.
+  The mips target will again explicitly set endianness to big endian.
+  Compiling natively on a MIPS box should not touch the endianness.
 
 0.14:
   fix brk again (missing __brk, trivial oversight)

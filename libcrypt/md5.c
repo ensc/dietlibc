@@ -21,7 +21,7 @@
 #if (__WORDSIZE == 32) && (__BYTE_ORDER == __LITTLE_ENDIAN)
 # define NO_ENCODE_DECODE
 #ifndef __i386__
-#ifndef __arm__
+#if !defined(__arm__) && !defined(__mips__)
 #error tell us about this architecture please!
 #endif
 #undef NO_ENCODE_DECODE
