@@ -8,6 +8,8 @@
 #include <sys/mount.h>
 
 int main() {
+  printf("%d\n",strcmp("ustar","ustar"));
+#if 0
   int i;
   for (i=0; i<5; i++) {
     fprintf(stdout,"first message\n");
@@ -15,6 +17,7 @@ int main() {
     fprintf(stdout,"third message\n");
     printf("foo %d\n",i);
   }
+#endif
 #if 0
   char buf[1024];
   sscanf("foo bar","%s",buf);

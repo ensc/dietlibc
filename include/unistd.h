@@ -5,11 +5,9 @@
 #include <sys/cdefs.h>
 #include <sys/types.h>
 
-const enum {
-  SEEK_SET=0,
-  SEEK_CUR=1,
-  SEEK_END=2
-} __seek_types;
+#define SEEK_SET 0
+#define SEEK_CUR 1
+#define SEEK_END 2
 
 off_t lseek(int fildes, off_t offset, int whence) __THROW;
 

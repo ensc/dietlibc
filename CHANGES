@@ -9,6 +9,7 @@
   Found a kludgy way to detect whether the kernel includes define struct
     stat64 (they also define STAT64_HAS_BROKEN_ST_INO).  If this does
     not work for you, please tell me!
+  Removed bogus __seek_types enum, it's a bunch of #defines now.
 
 0.6.14:
   *scanf did not append the 0 byte for %s.
