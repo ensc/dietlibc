@@ -29,11 +29,10 @@ strncpy:
 		stosb
 		or %al, %al
 		jnz .Lloop
-.Lout:
 #ifdef WANT_FULL_POSIX_COMPAT
-		xorl %eax, %eax
 		repnz stosb
 #endif
+.Lout:
 		movl %edx, %eax
 		popl %edi
 		popl %esi
