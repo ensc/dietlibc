@@ -1,1 +1,2 @@
 VPATH:=ia64:syscalls.s:$(VPATH)
+LIBOBJ+=$(OBJDIR)/__time.o
