@@ -7,7 +7,6 @@
 
 #include <sys/types.h>
 
-#define NSIG		32
 typedef unsigned long sigset_t;
 
 #define SIGHUP		 1
@@ -186,13 +185,8 @@ int sigpending(sigset_t *set) __THROW;
 
 extern const char *const sys_siglist[];
 
-#ifndef _NSIG
-#define _NSIG 64
-#endif
-
-#ifndef NSIG
-#define NSIG _NSIG
-#endif
+#define NSIG		32
+#define _NSIG		64
 
 #define killpg(pgrp,sig) kill(-pgrp,sig)
 
