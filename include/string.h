@@ -40,7 +40,9 @@ char *strsep(char **stringp, const char *delim) __THROW;
 void* memset(void *s, int c, size_t n) __THROW;
 void* memchr(const void *s, int c, size_t n) __THROW;
 
-const char *strerror(int errnum) __THROW;
+/* I would like to make this const, but Paul Jarc points out it has to
+ * be char* :-( */
+char *strerror(int errnum) __THROW;
 /* work around b0rken GNU crapware like tar 1.13.19 */
 #define strerror strerror
 

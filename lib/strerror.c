@@ -7,11 +7,11 @@
 
 extern const char  __sys_err_unknown [];
 
-const char*  strerror ( int errnum )
+char* strerror ( int errnum )
 {
     register const char*  message = __sys_err_unknown;
 
     if ( (unsigned int)errnum < (unsigned int)__SYS_NERR )
         message = sys_errlist [errnum];
-    return message;
+    return (char*)message;
 }
