@@ -11,7 +11,7 @@ void __prepare_parse(const char* filename,struct state* s) {
   fd=open(filename,O_RDONLY);
   if (fd>=0) {
     s->buflen=lseek(fd,0,SEEK_END);
-    s->buffirst=mmap(0,s->buflen,PROT_READ,MAP_SHARED,fd,0);
+    s->buffirst=mmap(0,s->buflen,PROT_READ,MAP_PRIVATE,fd,0);
     if (s->buffirst==(const unsigned char*)-1)
       s->buffirst=0;
     close(fd);

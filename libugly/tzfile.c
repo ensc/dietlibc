@@ -21,7 +21,7 @@ void __maplocaltime(void) {
   tzlen=0;
   if ((fd=open("/etc/localtime",O_RDONLY))<0) return;
   len=lseek(fd,0,SEEK_END);
-  if ((tzfile=mmap(0,len,PROT_READ,MAP_SHARED,fd,0))==MAP_FAILED) return;
+  if ((tzfile=mmap(0,len,PROT_READ,MAP_PRIVATE,fd,0))==MAP_FAILED) return;
   close(fd);
   if (ntohl(*(int*)tzfile) != 0x545a6966) return;
   tzlen=len;
