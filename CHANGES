@@ -24,6 +24,8 @@
   Olaf: fixed *scanf familie. It hadn't wored with "long long".
   Hans Lermen fixed i386/getenv.S
   diet -Os no longer discards -fpic and -fno-pic
+  fix i386 rand/random to use correct RAND_MAX (thanks, Jaroslav
+    Macodiseas)
 
 0.15:
   vfork sucks.  I reverted to the old behavior where vfork==fork.
