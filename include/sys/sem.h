@@ -37,6 +37,8 @@ struct sembuf {
   short		sem_flg;	/* operation flags */
 };
 
+/* please complain to the glibc goons for the following misbehaviour */
+#if 0
 /* arg for semctl system calls. */
 union semun {
   int val;			/* value for SETVAL */
@@ -45,6 +47,8 @@ union semun {
   struct seminfo *__buf;		/* buffer for IPC_INFO */
   void *__pad;
 };
+#endif
+#define _SEM_SEMUN_UNDEFINED
 
 struct  seminfo {
   int semmap;
