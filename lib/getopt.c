@@ -26,10 +26,10 @@ static int getopt_check(int c,char*o,int ol)
   return 2;
 }
 
-static int getopt_sort(char*v[],int oi)
+static void getopt_sort(char*v[],int oi)
 {
   int i;
-  char *tmp, *tmp2;
+  char *tmp, *tmp2=0;
 
   if (opt_unknown_len)
   {
@@ -56,7 +56,7 @@ int getopt(int c,char*v[],char*o)
   {
     if (nextchar)
     {
-      if (ret=*(++nextchar))
+      if (ret=(*(++nextchar)))
       {
 	switch (getopt_check(ret,o,ol))
 	{
