@@ -23,6 +23,7 @@ fmod:
 	fstsw %ax
 	sahf
 	jp .Lfmod
+	fstp %st(1)
 	ret
 
 fmodl:

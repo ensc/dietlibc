@@ -122,14 +122,6 @@ int daemon(int nochdir,int noclose) __THROW;
 
 int pause(void) __THROW;
 
-#if defined _FILE_OFFSET_BITS && _FILE_OFFSET_BITS == 64
-#define open open64
-#define creat creat64
-#define truncate truncate64
-#define ftruncate ftruncate64
-#define getdents getdents64
-#endif
-
 char* getlogin(void) __THROW;
 /* warning: the diet libc getlogin() simply returns getenv("LOGNAME") */
 
@@ -250,6 +242,14 @@ void swab(const void *src, void *dest, ssize_t nbytes) __THROW;
 int vhangup(void) __THROW;
 
 extern char **__environ;
+
+#if defined _FILE_OFFSET_BITS && _FILE_OFFSET_BITS == 64
+#define open open64
+#define creat creat64
+#define truncate truncate64
+#define ftruncate ftruncate64
+#define getdents getdents64
+#endif
 
 __END_DECLS
 

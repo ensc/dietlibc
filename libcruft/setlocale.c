@@ -2,6 +2,6 @@
 
 char *setlocale (int category, const char *locale) {
   (void)category;
-  (void)locale;
-  return 0;
+  if (locale) return 0;
+  return "C";
 }
