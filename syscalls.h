@@ -29,4 +29,7 @@
 #elif defined(__hppa__)
 #include "parisc/syscalls.h"
 
+#elif defined(__ia64__)
+#include "ia64/syscalls.h"
+
 #endif
