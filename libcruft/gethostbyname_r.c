@@ -8,8 +8,7 @@
 #include <sys/poll.h>
 #include <unistd.h>
 #include <errno.h>
-
-#include <stdio.h>
+#include "dietfeatures.h"
 
 extern int __dns_gethostbyx_r(const char* name, struct hostent* result,
 			char *buf, size_t buflen,
@@ -26,5 +25,19 @@ int gethostbyname_r(const char* name, struct hostent* result,
   result->h_name=buf;
   if (buflen<L) { *h_errnop=ERANGE; return 1; }
   strcpy(buf,name);
+#ifdef WANT_ETC_HOSTS
+  {
+    struct hostent* r;
+    while ((r=gethostent_r(buf,buflen))) {
+      if (r->h_addrtype==AF_INET && !strcmp(r->h_name,name)) {	/* found it! */
+	memmove(result,r,sizeof(struct hostent));
+	*RESULT=result;
+	*h_errnop=0;
+	return 0;
+      }
+    }
+    endhostent();
+  }
+#endif
   return __dns_gethostbyx_r(name,result,buf+L,buflen-L,RESULT,h_errnop,1);
 }

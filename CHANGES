@@ -61,6 +61,8 @@
     implement part of it using ELF weak symbols.
   Added minimal sysconf (tehe) from David Chappell.
   Added overflow handling for strtoul and strtol.
+  Added WANT_ETC_HOSTS in dietfeatures.h and made gethostbyname/2 use
+    it before falling back to DNS if enabled.
 
 0.10:
   update getpagesize.

@@ -38,6 +38,7 @@ struct hostent {
 
 extern void endhostent (void) __THROW;
 extern struct hostent *gethostent (void) __THROW;
+extern struct hostent *gethostent_r (char* buf,int len) __THROW;
 extern struct hostent *gethostbyaddr (const void *__addr, socklen_t __len,
 				      int __type) __THROW;
 extern struct hostent *gethostbyname (const char *__name) __THROW;

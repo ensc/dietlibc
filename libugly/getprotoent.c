@@ -84,7 +84,7 @@ void setprotoent(int stayopen) {
 
 struct protoent *getprotobyname(const char *name) {
   struct protoent *s;
-  setprotoent(0);
+  endprotoent();
   for (s=getprotoent(); s; s=getprotoent()) {
     char **tmp;
 #if 0
@@ -115,7 +115,7 @@ struct protoent *getprotobyname(const char *name) {
 
 struct protoent *getprotobynumber(int proto) {
   struct protoent *s;
-  setprotoent(0);
+  endprotoent();
   for (s=getprotoent(); s; s=getprotoent()) {
     if (proto==s->p_proto)
       return s;

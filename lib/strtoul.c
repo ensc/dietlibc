@@ -23,7 +23,7 @@ fnord:
   }
   while(*nptr) {
     register unsigned char c=*nptr;
-    c=(c>='a'?c-'a'+10:c>='A'?c-'A'+10:c-'0');
+    c=(c>='a'?c-'a'+10:c>='A'?c-'A'+10:c<='9'?c-'0':0xff);
     if (c>=base) break;
     {
       register long int w=v*base;

@@ -28,7 +28,7 @@ static unsigned int scan_ip6(const char *s,char ip[16])
     }
     {
       char *tmp;
-      u=strtol(s,&tmp,16);
+      u=strtoul(s,&tmp,16);
       i=tmp-s;
     }
 

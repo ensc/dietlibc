@@ -48,6 +48,9 @@
  * embedded environments. */
 #define WANT_FULL_RESOLV_CONF
 
+/* do you want gethostbyname and friends to consult /etc/hosts? */
+#define WANT_ETC_HOSTS
+
 /* stop uncommenting here ;-) */
 #ifndef WANT_FASTER_STRING_ROUTINES
 #define WANT_SMALL_STRING_ROUTINES

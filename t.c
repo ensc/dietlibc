@@ -76,8 +76,24 @@ void closelog(void) {
 #endif
 
 int main(int argc,char *argv[]) {
+#if 0
+  char buf[1024];
+  struct hostent* r;
+  while (r=gethostent_r(buf,1024)) {
+    if (r && r->h_name) {
+      printf("name %s\n", r->h_name);
+    }
+    if (r && (r->h_addr_list)[0]) {
+      struct in_addr address;
+      address = *((struct in_addr *) (r->h_addr_list)[0]);
+      printf("addr %s\n", inet_ntoa(address));
+    }
+  }
+#endif
+#if 0
   char *tmp;
   printf("%lu\n",strtol("0xf0000000",&tmp,0));
+#endif
 #if 0
   struct mntent* me;
   FILE* f=fopen("/tmp/mounts","r");
@@ -392,12 +408,12 @@ int main(int argc,char *argv[]) {
   strftime(buf,512,"%A %B %Y\n",duh);
   puts(buf);
 #endif
-#if 0
+#if 1
   struct in_addr bar;
   struct hostent *foo;
-/*  inet_aton("160.45.10.8",&bar); */
-  foo=gethostbyname("zeit.fu-berlin.de");
-/*  foo=gethostbyaddr(&bar,4,AF_INET); */
+  inet_aton("160.45.10.8",&bar);
+/*  foo=gethostbyname("zeit.fu-berlin.de"); */
+  foo=gethostbyaddr(&bar,4,AF_INET);
   if (foo)
     printf("%s -> %s\n",foo->h_name,inet_ntoa(*(struct in_addr*)foo->h_addr));
 /*  printf("%g %g\n",1e-10,1e10); */
