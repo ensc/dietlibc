@@ -33,8 +33,11 @@ getenv:
 	xchg %esi, %eax
 	movl (%esp), %ecx
 	repz cmpsb
+	jne .Lprepare
 	or %ecx, %ecx
 	jnz .Lprepare
+	cmpb $'=', (%esi)
+	jne .Lprepare
 	leal 0x1(%esi), %eax
 .Lout:
 	popl %ecx

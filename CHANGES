@@ -22,6 +22,7 @@
   *printf now recognize 'z' integer flag (and ignore it)
   Dirk Engling provided a strcpy.S for ARM.
   Olaf: fixed *scanf familie. It hadn't wored with "long long".
+  Hans Lermen fixed i386/getenv.S
 
 0.15:
   vfork sucks.  I reverted to the old behavior where vfork==fork.
