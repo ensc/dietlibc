@@ -39,7 +39,7 @@ struct _dl_handle*_dl_get_handle() {
   if (_dl_free_list==0) {
     register int i,m;
 #ifdef __DIET_LD_SO__
-    tmp = (struct _dl_handle*)mmap(0,at_pagesize,PROT_READ|PROT_WRITE,MAP_PRIVATE|MAP_ANONYMOUS,-1,0);
+    tmp = (struct _dl_handle*)_dl_sys_mmap(0,at_pagesize,PROT_READ|PROT_WRITE,MAP_PRIVATE|MAP_ANONYMOUS,-1,0);
     m=at_pagesize/sizeof(struct _dl_handle);
 #else
     int ps=getpagesize();

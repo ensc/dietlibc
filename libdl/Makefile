@@ -15,7 +15,13 @@ CFLAGS = -Wall -O2 -D__OD_CLEAN_ROOM -DNODIETREF -fPIC -frerun-loop-opt -fschedu
 %.o : %.c
 	$(DCC) $(CFLAGS) -c -o $@ $^
 
-it: _dl_main.o
+it: t.out
+
+a.out: t.out
+	gcc -O2 a.c t.out -o $@ -Wl,-dynamic-linker=`pwd`/t.out -nostdlib
+
+t.out: _dl_main.o
+	ld -shared -o $@ $? -soname=lindl.so
 
 all: test.out libdl.a
 

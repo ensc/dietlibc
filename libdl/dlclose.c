@@ -14,7 +14,7 @@ static void dec_referenced_libs(struct _dl_handle*dh) {
   }
 }
 
-int dlclose (void *handle) {
+int dlclose(void*handle) {
   if (handle) {
     struct _dl_handle*dh=handle;
     if (--(dh->lnk_count)) return 0;	/* not yet unreferenced */
@@ -22,7 +22,11 @@ int dlclose (void *handle) {
     DEBUG("dlclose: %s\n",dh->name);
     if (dh->fini) dh->fini();
     dec_referenced_libs(dh);
+#ifdef __DIET_LD_SO__
+    if (_dl_sys_munmap(dh->mem_base,dh->mem_size)<0) return -1;
+#else
     if (munmap(dh->mem_base,dh->mem_size)==-1) return -1;
+#endif
     _dl_free_handle(handle);
   }
   return 0;

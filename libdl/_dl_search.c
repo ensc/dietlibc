@@ -45,7 +45,11 @@ static int _dl_search_path(char*buf,int len,const char*path,const int pathlen,co
       buf[i+fl]=0;
 #endif
 //      DEBUG(printf("_dl_search_path: %s\n",buf);)
+#ifdef __DIET_LD_SO__
+      if ((fd=_dl_sys_open(buf,O_RDONLY,0))>-1) return fd;
+#else
       if ((fd=open(buf,O_RDONLY))!=-1) return fd;
+#endif
     }
   }
   return -1;
@@ -54,14 +58,25 @@ static int _dl_search_path(char*buf,int len,const char*path,const int pathlen,co
 /* parse the SMALL file "conf" for lib directories (aem... hang me if you can :) ) */
 static int _dl_search_conf(char*buf,int len,const char*conf,const char*filename) {
   char ld_so_conf[1024];
-  int i,l,fd=open(conf,O_RDONLY);
-  if (fd!=-1) {
+  int i,l,fd;
+#ifdef __DIET_LD_SO__
+  if ((fd=_dl_sys_open(conf,O_RDONLY,0))>-1) {
+    l=_dl_sys_read(fd,ld_so_conf,sizeof(ld_so_conf)-1);
+#else
+  if ((fd=open(conf,O_RDONLY))!=-1) {
     l=read(fd,ld_so_conf,sizeof(ld_so_conf)-1);
+#endif
     ld_so_conf[sizeof(ld_so_conf)-1]=0;
+#ifdef __DIET_LD_SO__
+    _dl_sys_close(fd);
+#else
     close(fd);
-    if (ld_so_conf[l-1]=='\n') ld_so_conf[--l]=0;
-    for (i=0;i<l;i++) if (ld_so_conf[i]=='\n') ld_so_conf[i]=':';
-    if ((fd=_dl_search_path(buf,len,ld_so_conf,l,filename))!=-1) return fd;
+#endif
+    if (l>0) {
+      if (ld_so_conf[l-1]=='\n') ld_so_conf[--l]=0;
+      for (i=0;i<l;i++) if (ld_so_conf[i]=='\n') ld_so_conf[i]=':';
+      if ((fd=_dl_search_path(buf,len,ld_so_conf,l,filename))!=-1) return fd;
+    }
   }
   return -1;
 }

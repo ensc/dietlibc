@@ -22,6 +22,9 @@ int __v_scanf(struct arg_scanf* fn, const unsigned char *format, va_list arg_ptr
   double *pd;
   float  *pf;
 #endif
+#ifdef WANT_LONGLONG_SCANF
+  long long *pll;
+#endif
   long   *pl;
   short  *ph;
   int    *pi;
@@ -118,8 +121,12 @@ in_scan:
 	case 'u':
 	case 'i':
 	  {
+#ifdef WANT_LONGLONG_SCANF
+	    unsigned long long v=0;
+#else
 	    unsigned long v=0;
-		 unsigned int consumedsofar=consumed;
+#endif
+	    unsigned int consumedsofar=consumed;
 	    int neg=0;
 	    while(isspace(tpch)) tpch=A_GETC(fn);
 	    if (tpch=='-') {
@@ -144,14 +151,31 @@ scan_hex:
 	    }
 	    while (tpch!=-1) {
 	      register unsigned long c=tpch&0xff;
+#ifdef WANT_LONGLONG_SCANF
+	      register unsigned long long d=c|0x20;
+#else
 	      register unsigned long d=c|0x20;
+#endif
 	      c=(d>='a'?d-'a'+10:c<='9'?c-'0':0xff);
 	      if (c>=_div) break;
 	      d=v*_div;
+#ifdef WANT_LONGLONG_SCANF
+	      v=(d<v)?ULLONG_MAX:d+c;
+#else
 	      v=(d<v)?ULONG_MAX:d+c;
+#endif
 	      tpch=A_GETC(fn);
 	    }
 	    if ((ch|0x20)<'p') {
+#ifdef WANT_LONGLONG_SCANF
+	      register long long l=v;
+	      if (v>=-((unsigned long long)LLONG_MIN)) {
+		l=(neg)?LLONG_MIN:LLONG_MAX;
+	      }
+	      else {
+		if (neg) v*=-1;
+	      }
+#else
 	      register long l=v;
 	      if (v>=-((unsigned long)LONG_MIN)) {
 		l=(neg)?LONG_MIN:LONG_MAX;
@@ -159,8 +183,15 @@ scan_hex:
 	      else {
 		if (neg) v*=-1;
 	      }
+#endif
 	    }
 	    if (!flag_discard) {
+#ifdef WANT_LONGLONG_SCANF
+	      if (flag_longlong) {
+		pll=(long long *)va_arg(arg_ptr,long long*);
+		*pll=v;
+	      } else
+#endif
 	      if (flag_long) {
 		pl=(long *)va_arg(arg_ptr,long*);
 		*pl=v;
