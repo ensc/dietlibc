@@ -6,6 +6,7 @@
 #include <sys/time.h>
 #include <sys/stat.h>
 #include <sys/fsuid.h>
+#include <sys/select.h>
 
 __BEGIN_DECLS
 
@@ -149,8 +150,6 @@ int ftruncate(int fd, off_t length) __THROW;
 int truncate64(const char *path, loff_t length) __THROW;
 int ftruncate64(int fd, loff_t length) __THROW;
 #endif
-
-int select(int n, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct timeval *timeout) __THROW;
 
 int nice(int inc) __THROW;
 

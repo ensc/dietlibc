@@ -2,6 +2,7 @@
 #define _SYS_SELECT_H
 
 #include <string.h>
+#include <signal.h>
 
 __BEGIN_DECLS
 
@@ -22,6 +23,11 @@ typedef struct {
 #define FD_ISSET(d, set)	(((set)->fds_bits[__FDELT(d)] & __FDMASK(d)) != 0)
 #define FD_ZERO(set)	\
   ((void) memset ((void*) (set), 0, sizeof (fd_set)))
+
+int select(int n, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct timeval *timeout) __THROW;
+
+int pselect(int n, fd_set* readfds, fd_set* writefds, fd_set* exceptfds,
+            const struct timespec *timeout, const sigset_t *sigmask) __THROW;
 
 __END_DECLS
 
