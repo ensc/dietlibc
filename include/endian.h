@@ -16,7 +16,8 @@
 
 #ifdef __mips__
 #ifdef __MIPSEB__
-#define __BIG_ENDIAN__
+#define __BYTE_ORDER__ __BIG_ENDIAN
+#define __FLOAT_WORD_ORDER __BYTE_ORDER
 #endif
 #endif
 
