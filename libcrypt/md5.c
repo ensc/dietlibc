@@ -50,6 +50,10 @@ static void CopyWithEndianSwap (uint32_t *dst, const uint32_t *src, int length) 
  *
  *  For other targets, we need to use the C versions below.
  */
+   /*
+      Test the aligned case (all hashed strings start from begining of rawdata).
+   */
+
 
 #if !(defined (__i386__) || ((defined (__arm__) && (__BYTE_ORDER == __LITTLE_ENDIAN))))
 
