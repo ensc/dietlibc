@@ -1,3 +1,3 @@
 #include "syscalls.h"
 
-syscall(msyncx,msync)
+syscall(msync,msync)
