@@ -3,5 +3,5 @@
 
 long ftell(FILE *stream) {
   fflush(stream);
-  return (lseek(stream->fd,0,SEEK_CUR));
+  return (lseek(stream->fd,0,SEEK_CUR)-stream->ungotten);
 }
