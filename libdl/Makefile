@@ -4,7 +4,7 @@ SRC = $(wildcard *.c) # test/test.c
 OBJ = _dl_jump.o $(SRC:.c=.o)
 
 #CFLAGS = -Wall -O2
-CFLAGS = -Wall -g -O
+CFLAGS = -Wall -g
 
 %.o : %.S
 	$(HOME)/bin/diet gcc $(CFLAGS) -c -o $@ $^
@@ -12,7 +12,7 @@ CFLAGS = -Wall -g -O
 %.o : %.c
 	$(HOME)/bin/diet gcc $(CFLAGS) -c -o $@ $^
 
-all: test.out
+all: test.out libdl.a
 
 libdl.a: $(OBJ)
 	ar cru $@ $^

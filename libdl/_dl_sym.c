@@ -19,7 +19,7 @@ static void *_dl_sym_search(struct _dl_handle * h, int symbol)
 #ifdef DEBUG
     printf("_dl_sym_search: searching: %08lx %08lx\n",(long)tmp, (long)h);
 #endif
-//    if (tmp==h) continue;
+    if (tmp==h) continue;
 //    if (!tmp->flag_global) continue;
 #ifdef DEBUG
     printf("_dl_sym_search: searching in %s\n",tmp->name);
@@ -37,7 +37,7 @@ static void *_dl_sym_search(struct _dl_handle * h, int symbol)
 void *_dl_sym(struct _dl_handle * h, int symbol)
 {
   void * ret=0;
-  if (ELF32_ST_TYPE(h->dyn_sym_tab[symbol].st_info)!=0) {
+  if (ELF32_ST_TYPE(h->dyn_sym_tab[symbol].st_shndx)!=0) {
     ret = h->mem_base+h->dyn_sym_tab[symbol].st_value;
   }
   else {

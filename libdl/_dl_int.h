@@ -10,8 +10,9 @@ struct _dl_handle {
   struct _dl_handle *next;
   struct _dl_handle *prev;
 
-  char *	name;
-  int		flag_global;
+  char *	name;		/* name of shared object */
+  int		flag_global;	/* global depending names can resolve to this object */
+  int		flag_system;	/* if non 0 run fini in dyn_fini */
 
   /* basic */
   char *	mem_base;	/* base address of maped *.so */

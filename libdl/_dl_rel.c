@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <dlfcn.h>
-#include <linux/elf.h>
 
 #include "_dl_int.h"
 
@@ -23,6 +22,7 @@ unsigned long do_rel(struct _dl_handle * tmp_dl, unsigned long off)
   printf("do_rel %08lx %08lx\n",(long)tmp_dl,off);
   printf("do_rel %08lx+%lx\n",(long)tmp_dl->plt_rel,off);
   printf("do_rel @ %08lx with type %d -> %d\n",(long)tmp->r_offset,ELF32_R_TYPE(tmp->r_info),sym);
+  printf("do_rel sym @ %08lx\n",(long)tmp_dl->dyn_sym_tab);
   printf("do_rel sym %08lx\n",(long)tmp_dl->dyn_sym_tab[sym].st_value);
 #endif
 
@@ -36,6 +36,7 @@ unsigned long do_rel(struct _dl_handle * tmp_dl, unsigned long off)
 #endif
   /* JUMP (arg sysdep...) */
   if (sym_val) return sym_val;
+  /* can't find symbol -> die now */
   return (unsigned long)exit_now;
 }
 

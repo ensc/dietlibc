@@ -20,9 +20,6 @@ void _dl_free_handle(struct _dl_handle* dh) {
   memset(dh,0,sizeof(struct _dl_handle));
   dh->next=_dl_free_list;
   _dl_free_list=dh;
-#ifdef DEBUG
-//  printf("_dl_free_handle: %08x\n",dh);
-#endif
 }
 
 struct _dl_handle* _dl_get_handle() {
@@ -33,9 +30,7 @@ struct _dl_handle* _dl_get_handle() {
     int ps=getpagesize();
     tmp = (struct _dl_handle *)mmap(0, ps, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0);
     m=ps/sizeof(struct _dl_handle);
-    for (i=m;i;) {
-      _dl_free_handle(tmp+(--i));
-    }
+    for (i=m;i;) _dl_free_handle(tmp+(--i));
   }
 
   tmp = _dl_free_list;
