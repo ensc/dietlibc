@@ -107,4 +107,12 @@ extern int daemon (int nochdir,int noclose) __THROW;
 extern char* getlogin() __THROW;
 /* warning: the diet libc getlogin() simply returns getenv("LOGNAME") */
 
+int chroot(const char *path) __THROW;
+
+uid_t getuid(void) __THROW;
+uid_t geteuid(void) __THROW;
+gid_t getgid(void) __THROW;
+gid_t getegid(void) __THROW;
+int setreuid(uid_t ruid, uid_t euid) __THROW;
+
 #endif
