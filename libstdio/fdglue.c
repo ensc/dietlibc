@@ -1,9 +1,9 @@
-#include "dietstdio.h"
 #include <unistd.h>
 #include <fcntl.h>
 #include <errno.h>
 #include <stdlib.h>
 #include <pthread.h>
+#include "dietstdio.h"
 
 #ifdef WANT_BUFFERED_STDIO
 extern int __stdio_atexit;

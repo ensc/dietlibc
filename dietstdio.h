@@ -1,7 +1,8 @@
 /* diet stdio -- no buffering ;-} */
 
-#include "dietfeatures.h"
+#include <sys/cdefs.h>
 #include <sys/types.h>
+#include "dietfeatures.h"
 #ifdef WANT_THREAD_SAFE
 #include <pthread.h>
 #endif

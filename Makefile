@@ -28,7 +28,7 @@ LIBSHELLOBJ=$(patsubst libshell/%.c,$(OBJDIR)/%.o,$(wildcard libshell/*.c))
 LIBRPCOBJ=$(patsubst librpc/%.c,$(OBJDIR)/%.o,$(wildcard librpc/*.c))
 LIBREGEXOBJ=$(patsubst libregex/%.c,$(OBJDIR)/%.o,$(wildcard libregex/*.c))
 
-LIBPTHREAD_OBJS=$(patsubst libpthread/%.c,$(OBJDIR)/%.o,$(wildcard libpthread/pthread_*.c)) $(OBJDIR)/__testandset.o
+LIBPTHREAD_OBJS=$(patsubst libpthread/%.c,$(OBJDIR)/%.o,$(shell ./threadsafe.sh)) $(OBJDIR)/__testandset.o
 
 include $(ARCH)/Makefile.add
 
@@ -80,6 +80,8 @@ $(OBJDIR)/liblatin1.a: $(LIBLATIN1_OBJS)
 
 $(OBJDIR)/libpthread.a: $(LIBPTHREAD_OBJS)
 	$(CROSS)ar cru $@ $^
+
+$(OBJDIR)/libpthread.a: dietfeatures.h
 
 $(OBJDIR)/libdietc.so: $(OBJDIR)/dietlibc.a
 	$(CROSS)ld -whole-archive -shared -o $@ $^

@@ -1,7 +1,7 @@
-#include "dietstdio.h"
 #include <unistd.h>
 #include <stdlib.h>
 #include "dietwarning.h"
+#include "dietstdio.h"
 
 FILE *__stdio_root;
 

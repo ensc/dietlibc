@@ -53,6 +53,8 @@
   add fake herror.
   add scandir and alphasort.
   add killpg
+  implemented a gross hack to make libpthread compile when
+    dietfeatures.h does not define WANT_THREAD_SAFE (it's empty then).
 
 0.9:
   fixed initgroups (oops)
