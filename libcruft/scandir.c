@@ -25,6 +25,8 @@ int scandir(const char *dir, struct dirent ***namelist,
 	return -1;
       }
       memccpy(tmp[num-1]->d_name,D->d_name,0,NAME_MAX);
+      tmp[num-1]->d_off=D->d_off;
+      tmp[num-1]->d_reclen=D->d_reclen;
       *namelist=tmp;
 /*      printf("%p; tmp[num-1(%d)]=%p\n",*namelist,num-1,tmp[num-1]); */
     }
