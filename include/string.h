@@ -82,9 +82,4 @@ int strcoll(const char *s1, const char *s2) __THROW;
 #define rindex(a,b) strrchr(a,b)
 #endif
 
-/* this macro causes gcc -Wall to warn about using strncpy and
- * discarding the return value.  If that bothers you, use memccpy
- * directly. */
-#define strncpy(dest,src,n) (memccpy(dest,src,0,n), dest)
-
 #endif

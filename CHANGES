@@ -4,6 +4,8 @@
     moved tcgetpgrp and tcsetpgrp to unistd.h
     adjusted lstat->lstat64 #define to make it work with function pointers
     move __dietlibc__ #define from features.h to diet
+  Thomas Ogrisegg sent x86 memccpy and strncpy routines and introduced
+    an dietfeatures.h #define WANT_FULL_POSIX_COMPAT
 
 0.16:
   "diet -v" or "diet -Os" segfaulted without further arguments.

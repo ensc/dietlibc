@@ -381,4 +381,7 @@ $(OBJDIR)/fgetc_unlocked.o $(OBJDIR)/fread.o $(OBJDIR)/ungetc.o: dietstdio.h
 $(OBJDIR)/setlinebuf.o $(OBJDIR)/bzero.o $(OBJDIR)/setegid.o \
 $(OBJDIR)/seteuid.o: dietfeatures.h
 
+# these depend on dietfeatures.h for WANT_FULL_POSIX_COMPAT
+$(OBJDIR)/strncpy.o: dietfeatures.h
+
 # CFLAGS+=-W -Wshadow -Wid-clash-31 -Wpointer-arith -Wcast-align -Wstrict-prototypes -Wwrite-strings

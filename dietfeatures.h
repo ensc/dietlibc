@@ -30,6 +30,10 @@
 /* do you want smaller or faster string routines? */
 /* #define WANT_FASTER_STRING_ROUTINES */
 
+/* define this to have strncpy zero-fill and not just zero-terminate the
+ * string */
+/* #define WANT_FULL_POSIX_COMPAT */
+
 /* read the comment in lib/strncat.c for an explanation */
 /* #define WANT_NON_COMPLIANT_STRNCAT */
 
