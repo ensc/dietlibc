@@ -10,7 +10,9 @@ __BEGIN_DECLS
 #ifdef __GNUC__
 typedef __PTRDIFF_TYPE__ ptrdiff_t;
 typedef __SIZE_TYPE__ size_t;
+#if !defined(__cplusplus)
 typedef __WCHAR_TYPE__ wchar_t;
+#endif
 #else
 typedef signed long ptrdiff_t;
 typedef unsigned long size_t;
