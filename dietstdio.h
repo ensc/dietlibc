@@ -51,7 +51,7 @@ int putc(int c, FILE *stream);
 int putchar(int c);
 int puts(const char *s);
 
-int fseek( FILE *stream, long offset, int whence);
+long fseek( FILE *stream, long offset, int whence);
 long ftell( FILE *stream);
 void rewind( FILE *stream);
 int fgetpos( FILE *stream, fpos_t *pos);

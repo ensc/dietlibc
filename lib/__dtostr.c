@@ -14,6 +14,10 @@ int __dtostr(double d,char *buf,int maxlen,int prec) {
   char *oldbuf=buf;
   int initial=1;
 
+  if (d==0.0) {
+    *buf='0'; ++buf;
+    goto done;
+  }
   if (s) { d=-d; *buf='-'; --maxlen; buf++; }
   if ((i=e10)>=0) {
     while (i>10) { tmp=tmp*1e10; i-=10; }
@@ -77,6 +81,7 @@ int __dtostr(double d,char *buf,int maxlen,int prec) {
     } else
       tmp/=10.0;
   }
+done:
   *buf=0;
   return buf-oldbuf;
 }

@@ -48,7 +48,7 @@ int fputs(const char *s, FILE *stream) __THROW;
 
 int puts(const char *s) __THROW;
 
-int fseek( FILE *stream, long offset, int whence) __THROW;
+long fseek( FILE *stream, long offset, int whence) __THROW;
 long ftell( FILE *stream) __THROW;
 void rewind( FILE *stream) __THROW;
 int fgetpos( FILE *stream, fpos_t *pos) __THROW;

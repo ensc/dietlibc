@@ -2,5 +2,5 @@
 #include <sys/types.h>
 
 speed_t cfgetospeed(struct termios *termios_p) {
-  return termios_p->c_ospeed;
+  return ((termios_p->c_iflag & (CBAUD|CBAUDEX)));
 }

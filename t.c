@@ -13,6 +13,7 @@
 #include <sys/sem.h>
 #include <sys/shm.h>
 #include <math.h>
+#include <termios.h>
 
 #if 0
 int compint(const void *a,const void *b) {
@@ -36,12 +37,8 @@ static int rand() {
 #endif
 
 int main(int argc,char *argv[]) {
-  FILE *f=fopen("duh","r+");
-  char buf[100];
-  fgets(buf,100,f);
-  printf("%s",buf);
-  fputs("bonk\n",f);
-  fclose(f);
+  double d=atof("0.10e1");
+  printf("%g %g\n",0.0,d);
 #if 0
   double d=0.0;
   long long t=0x12345678ABCDEF01;

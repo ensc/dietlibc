@@ -27,6 +27,7 @@ int __lltostr(char *s, int size, unsigned long long i, int base, char UpCase) __
 #endif
 
 int atoi(const char *nptr) __THROW;
+double atof(const char *nptr) __THROW;
 
 void abort(void) __THROW;
 

@@ -1,5 +1,5 @@
 #include "dietstdio.h"
 
 void clearerr( FILE *stream) {
-  stream->flags&=~ERRORINDICATOR;
+  stream->flags&=~(ERRORINDICATOR|EOFINDICATOR);
 }
