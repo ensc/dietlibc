@@ -15,6 +15,7 @@
   add some BSD legacy declarations to dirent.h (Bryan Henderson)
   add strtoull and strtoll as aliases to strtoull and strtoll
   use _FILE_OFFSET_BITS consistently (Indan Zupancic)
+  add support for $DIETHOME in diet, to override the compiled-in path (George)
 
 0.26:
   iconv UTF-8 fix (Kuba Winnicki)
