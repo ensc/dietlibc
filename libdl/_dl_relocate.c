@@ -34,7 +34,8 @@ int _dl_apply_relocate(struct _dl_handle* dh, Elf32_Rel *rel) {
   if (typ==R_386_32) {			/* 1 */
     *loc = (unsigned long)(dh->mem_base+dh->dyn_sym_tab[ELF32_R_SYM(rel->r_info)].st_value);
   } else if (typ==R_386_COPY)  {	/* 5 */
-    *loc = *(unsigned long*)_dl_sym(dh, ELF32_R_SYM(rel->r_info));
+    DEBUG("_dl_apply_relocate: R_386_COPY !\n");
+    ret=1;
   } else if (typ==R_386_GLOB_DAT) {	/* 6 */
     *loc = (unsigned long)_dl_sym(dh, ELF32_R_SYM(rel->r_info));
   } else if (typ==R_386_JMP_SLOT) {	/* 7 */
@@ -49,7 +50,8 @@ int _dl_apply_relocate(struct _dl_handle* dh, Elf32_Rel *rel) {
   if (typ==R_ARM_ABS32) {		/*  2 */
     *loc = (unsigned long)(dh->mem_base+dh->dyn_sym_tab[ELF32_R_SYM(rel->r_info)].st_value);
   } else if (typ==R_ARM_COPY)  {	/* 20 */
-    *loc = *(unsigned long*)_dl_sym(dh, ELF32_R_SYM(rel->r_info));
+    DEBUG("_dl_apply_relocate: R_386_COPY !\n");
+    ret=1;
   } else if (typ==R_ARM_GLOB_DAT) {	/* 21 */
     *loc = (unsigned long)_dl_sym(dh, ELF32_R_SYM(rel->r_info));
   } else if (typ==R_ARM_JMP_SLOT) {	/* 22 */
