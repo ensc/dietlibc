@@ -328,10 +328,10 @@ int main(int argc,char *argv[]) {
 #if 0
   puts(ttyname(0));
 #endif
-#if 0
+#if 1
   char buf[1024];
   struct hostent* r;
-  r=gethostbyname("xorn.qontinuum");
+  r=gethostbyname("line.org");
   if (!r) {
     printf("dns error: %s\n",hstrerror(h_errno));
   }
@@ -690,7 +690,7 @@ int main(int argc,char *argv[]) {
   d/=0.0;
   printf("%d %llx\n",__isnan(d),t,*(long long*)&d);
 #endif
-#if 1
+#if 0
 #define SIZE 1000
   int array[SIZE],array2[SIZE];
   int i,j;
