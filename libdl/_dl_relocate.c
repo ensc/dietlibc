@@ -12,6 +12,14 @@
   R_386_JMP_SLOT	 7	/* Create PLT entry */
   R_386_RELATIVE	 8	/* Adjust by program base */
 
+  R_X86_64_NONE		 0	* No reloc */
+  R_X86_64_64		 1	* Direct 64 bit  */
+  R_X86_64_COPY		 5	* Copy symbol at runtime */
+  R_X86_64_GLOB_DAT	 6	* Create GOT entry */
+  R_X86_64_JUMP_SLOT	 7	* Create PLT entry */
+  R_X86_64_RELATIVE	 8	* Adjust by program base */
+  R_X86_64_32		10	* Direct 32 bit zero extended */
+
   R_ARM_NONE		 0	/* No reloc */
   R_ARM_ABS32		 2	/* Direct 32 bit  */
   R_ARM_COPY		20	/* Copy symbol at runtime */

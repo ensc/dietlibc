@@ -1,6 +1,6 @@
 # local "test" make file
 
-CC  = gcc
+CC  = $(CROSS)gcc
 DCC = diet $(CC)
 
 SRC = $(wildcard *.c) # test/test.c
@@ -18,10 +18,10 @@ CFLAGS = -Wall -O2 -D__OD_CLEAN_ROOM -DNODIETREF -fPIC -frerun-loop-opt -fschedu
 it: t.out
 
 a.out: t.out
-	gcc -O -g test/a.c t.out -L/opt/diet/lib-i386 -lc -lgcc -o $@ -Wl,-dynamic-linker=`pwd`/t.out -nostdlib
+	$(CROSS)gcc -O -g test/a.c t.out -L/opt/diet/lib-i386 -lc -lgcc -o $@ -Wl,-dynamic-linker=`pwd`/t.out -nostdlib
 
 t.out: _dl_main.o
-	ld -shared -o $@ $? -soname=libdl.so
+	$(CROSS)ld -shared -o $@ $? -soname=libdl.so
 
 all: test.out libdl.a
 
