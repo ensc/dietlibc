@@ -1,6 +1,19 @@
 #include <dietstdio.h>
 
-static FILE __stderr = { 2, NOBUF, 0, 0, 0 };
+static FILE __stderr = {
+  .fd=2,
+  .flags=NOBUF,
+  .bs=0, .bm=0,
+  .buflen=0,
+  .buf=0,
+  .next=0,
+  .popen_kludge=0,
+  .ungetbuf=0,
+  .ungotten=0
+#ifdef WANT_THREAD_SAFE
+  , .m=PTHREAD_MUTEX_INITIALIZER
+#endif
+};
 
 FILE *stderr=&__stderr;
 

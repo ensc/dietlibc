@@ -1,4 +1,4 @@
-/* diet stdio -- no buffering ;-} */
+/* diet stdio */
 
 #include <sys/cdefs.h>
 #include <sys/types.h>

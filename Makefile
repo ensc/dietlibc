@@ -346,7 +346,8 @@ $(OBJDIR)/inet_pton.o $(OBJDIR)/mkstemp.o $(OBJDIR)/mktemp.o $(OBJDIR)/tempnam.o
 $(OBJDIR)/glob.o $(OBJDIR)/realpath.o $(OBJDIR)/fdglue.o $(OBJDIR)/fdglue2.o \
 $(OBJDIR)/getaddrinfo.o $(OBJDIR)/getnameinfo.o $(OBJDIR)/getprotoent.o \
 $(OBJDIR)/getservent.o $(OBJDIR)/iconv.o $(OBJDIR)/iconv_open.o \
-$(OBJDIR)/netent.o $(OBJDIR)/system.o: dietfeatures.h
+$(OBJDIR)/netent.o $(OBJDIR)/system.o $(OBJDIR)/stdin.o $(OBJDIR)/stdout.o \
+$(OBJDIR)/stderr.o: dietfeatures.h
 
 # these depend on dietfeatures.h for WANT_CRYPT_MD5
 $(OBJDIR)/crypt.o: dietfeatures.h
