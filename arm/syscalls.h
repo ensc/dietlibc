@@ -239,6 +239,26 @@
 #define __NR_fremovexattr		(__NR_SYSCALL_BASE+237)
 #define __NR_tkill			(__NR_SYSCALL_BASE+238)
 
+#define __NR_sendfile64			(__NR_SYSCALL_BASE+239)
+#define __NR_futex			(__NR_SYSCALL_BASE+240)
+#define __NR_sched_setaffinity		(__NR_SYSCALL_BASE+241)
+#define __NR_sched_getaffinity		(__NR_SYSCALL_BASE+242)
+#define __NR_io_setup			(__NR_SYSCALL_BASE+243)
+#define __NR_io_destroy			(__NR_SYSCALL_BASE+244)
+#define __NR_io_getevents		(__NR_SYSCALL_BASE+245)
+#define __NR_io_submit			(__NR_SYSCALL_BASE+246)
+#define __NR_io_cancel			(__NR_SYSCALL_BASE+247)
+#define __NR_exit_group			(__NR_SYSCALL_BASE+248)
+#define __NR_lookup_dcookie		(__NR_SYSCALL_BASE+249)
+#define __NR_epoll_create		(__NR_SYSCALL_BASE+250)
+#define __NR_epoll_ctl			(__NR_SYSCALL_BASE+251)
+#define __NR_epoll_wait			(__NR_SYSCALL_BASE+252)
+#define __NR_remap_file_pages		(__NR_SYSCALL_BASE+253)
+#define __NR_set_thread_area		(__NR_SYSCALL_BASE+254)
+#define __NR_get_thread_area		(__NR_SYSCALL_BASE+255)
+#define __NR_set_tid_address		(__NR_SYSCALL_BASE+256)
+
+
 /* ok the next few values are for the optimization of the unified syscalls
  * on arm.
  * If the syscall has #arguments
@@ -468,6 +488,42 @@
 #define __ARGS_mincore			0
 #define __ARGS_madvise			0
 #define __ARGS_fcntl64			0
+
+#define __ARGS_security			0
+#define __ARGS_gettid			0
+#define __ARGS_readahead		0
+#define __ARGS_setxattr			1
+#define __ARGS_lsetxattr		1
+#define __ARGS_fsetxattr		1
+#define __ARGS_getxattr			0
+#define __ARGS_lgetxattr		0
+#define __ARGS_fgetxattr		0
+#define __ARGS_listxattr		0
+#define __ARGS_llistxattr		0
+#define __ARGS_flistxattr		0
+#define __ARGS_removexattr		0
+#define __ARGS_lremovexattr		0
+#define __ARGS_fremovexattr		0
+#define __ARGS_tkill			0
+
+#define __ARGS_sendfile64		0
+#define __ARGS_futex			0
+#define __ARGS_sched_setaffinity	0
+#define __ARGS_sched_getaffinity	0
+#define __ARGS_io_setup			0
+#define __ARGS_io_destroy		0
+#define __ARGS_io_getevents		0
+#define __ARGS_io_submit		0
+#define __ARGS_io_cancel		0
+#define __ARGS_exit_group		0
+#define __ARGS_lookup_dcookie		0
+#define __ARGS_epoll_create		0
+#define __ARGS_epoll_ctl		0
+#define __ARGS_epoll_wait		0
+#define __ARGS_remap_file_pages		0
+#define __ARGS_set_thread_area		0
+#define __ARGS_get_thread_area		0
+#define __ARGS_set_tid_address		0
 
 #ifdef __ASSEMBLER__
 #define syscall_weak(name,wsym,sym) __syscall_weak $__NR_##name, wsym, sym, __ARGS_##name
