@@ -7,6 +7,8 @@
 #include <errno.h>
 #include <string.h>
 
+extern int __dietlibc_getdents64(int fd, struct dirent64 *dirp, unsigned int count);
+
 #if defined(WANT_LARGEFILE_BACKCOMPAT)
 int getdents64(int fd, struct dirent64 *dirp, unsigned int count) {
   static int trygetdents64=1;
@@ -14,7 +16,7 @@ int getdents64(int fd, struct dirent64 *dirp, unsigned int count) {
   int res;
 #ifdef __NR_getdents64
   if (trygetdents64) {
-    int res=getdents64(fd,dirp,count);
+    int res=__dietlibc_getdents64(fd,dirp,count);
     if (res==-1 && errno==ENOSYS)
       trygetdents64=0;
     else
