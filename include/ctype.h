@@ -10,4 +10,7 @@ extern int isalpha (int c) __THROW;
 extern int isdigit (int c) __THROW;
 extern int isspace (int c) __THROW;
 
+extern int tolower(int c) __THROW __attribute__ ((__const__));
+extern int toupper(int c) __THROW __attribute__ ((__const__));
+
 #endif

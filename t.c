@@ -8,9 +8,7 @@
 #include <sys/mount.h>
 
 int main() {
-  printf("%d\n",strcmp("ustar","ustar"));
-  sleep(1);
-  printf("duh\n");
+  printf("%c\n",tolower('A'));
 #if 0
   int i;
   for (i=0; i<5; i++) {

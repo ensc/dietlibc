@@ -2,6 +2,7 @@
   optimized away the static arrays from __ltostr and __lltostr.
   optimized away the static arrays (and more!) from strtoul and strtoull.
   added system (by Olaf).
+  added tolower and toupper
 
 0.7:
   clone support for i386,alpha,arm and sparc by Olaf.
