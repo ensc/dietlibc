@@ -157,23 +157,29 @@ void *_dl_open(const char*pathname, int fd, int flag)
     int pltreltype=0;
     int pltrelsize=0;
 
+    ret->flag_global = flag&RTLD_GLOBAL;
+
     printf("_dl_open IN resolv\n");
     for(i=0;dyn_tab[i].d_tag;i++) {
       if (dyn_tab[i].d_tag==DT_HASH) {
 	ret->hash_tab = (unsigned long*)(m+dyn_tab[i].d_un.d_ptr);
+	printf("_dl_open have hash @ %08lx\n",(long)ret->hash_tab);
       }
       if (dyn_tab[i].d_tag==DT_SYMTAB) {
 	ret->dyn_sym_tab = (Elf32_Sym*)(m+dyn_tab[i].d_un.d_ptr);
+	printf("_dl_open have dyn_sym_tab @ %08lx\n",(long)ret->dyn_sym_tab);
       }
       if (dyn_tab[i].d_tag==DT_STRTAB) {
 	ret->dyn_str_tab = (char*)(m+dyn_tab[i].d_un.d_ptr);
+	printf("_dl_open have dyn_str_tab @ %08lx\n",(long)ret->dyn_str_tab);
       }
       if (dyn_tab[i].d_tag==DT_FINI) {
 	ret->fini = (void(*)(void))(m+dyn_tab[i].d_un.d_val);
+	printf("_dl_open have fini @ %08lx\n",(long)ret->fini);
       }
       if (dyn_tab[i].d_tag==DT_INIT) {
 	init = (void(*)(void))(m+dyn_tab[i].d_un.d_val);
-	printf("init @ %08lx\n",(long)init);
+	printf("_dl_open have init @ %08lx\n",(long)init);
       }
       if (dyn_tab[i].d_tag==DT_PLTGOT) {
 	got=(unsigned long*)(m+dyn_tab[i].d_un.d_val);
@@ -182,16 +188,25 @@ void *_dl_open(const char*pathname, int fd, int flag)
       }
       if (dyn_tab[i].d_tag==DT_PLTREL) {
 	pltreltype=dyn_tab[i].d_un.d_val;
+	printf("_dl_open have pltreltype @ %08lx\n",(long)pltreltype);
       }
       if (dyn_tab[i].d_tag==DT_PLTRELSZ) {
 	pltrelsize=dyn_tab[i].d_un.d_val;
+	printf("_dl_open have pltrelsize @ %08lx\n",(long)pltrelsize);
       }
       if (dyn_tab[i].d_tag==DT_JMPREL) {
 	jmprel=(m+dyn_tab[i].d_un.d_val);
 	ret->plt_rel=jmprel;
+	printf("_dl_open have plt @ %08lx\n",(long)jmprel);
       }
     }
     printf("_dl_open post dynamic scan\n");
+
+    if (!got) {
+      printf("_dl_open not PIC dynamic -> SUE USER ! \n");
+      if (ret) _dl_get_handle(ret);
+      return 0;
+    }
     /* GOT */
     got[0]+=(unsigned long)m;	/* reloc dynamic pointer */
     got[1]=(unsigned long)dl_test;
@@ -200,18 +215,28 @@ void *_dl_open(const char*pathname, int fd, int flag)
 
     if (pltreltype == DT_REL) {
       Elf32_Rel *tmp = jmprel;
-      printf("_dlopen rel\n");
+      printf("_dl_open: rel got\n");
       for (;(char*)tmp<(((char*)jmprel)+pltrelsize);(char*)tmp=((char*)tmp)+sizeof(Elf32_Rel)) {
 	*((unsigned long*)(m+tmp->r_offset))+=(unsigned long)m;
-	printf("rel @ %08x with type %d -> %d\n",tmp->r_offset,ELF32_R_TYPE(tmp->r_info),ELF32_R_SYM(tmp->r_info));
+	printf("_dl_open rel @ %08x with type %d -> %d\n",tmp->r_offset,ELF32_R_TYPE(tmp->r_info),ELF32_R_SYM(tmp->r_info));
+	printf("_dl_open -> %08x\n",*((unsigned long*)(m+tmp->r_offset)));
       }
     }
     if (pltreltype == DT_RELA) {
       Elf32_Rela *tmp = jmprel;
-      printf("_dlopen rela\n");
+      printf("_dl_open: rela got\n");
       for (;(char*)tmp<(((char*)jmprel)+pltrelsize);(char*)tmp=((char*)tmp)+sizeof(Elf32_Rel)) {
 	*((unsigned long*)(m+tmp->r_offset))=(unsigned long)(m+tmp->r_addend);
-	printf("rela @ %08x with type %d -> %d\n",tmp->r_offset,ELF32_R_TYPE(tmp->r_info),ELF32_R_SYM(tmp->r_info));
+	printf("_dl_open rela @ %08x with type %d -> %d\n",tmp->r_offset,ELF32_R_TYPE(tmp->r_info),ELF32_R_SYM(tmp->r_info));
+      }
+    }
+
+    // load other libs
+    for(i=0;dyn_tab[i].d_tag;i++) {
+      if (dyn_tab[i].d_tag==DT_NEEDED) {
+	char *lib_name=ret->dyn_str_tab+dyn_tab[i].d_un.d_val;
+	printf("_dl_open needed for this lib: %s\n",lib_name);
+	dlopen(lib_name,flag);
       }
     }
 

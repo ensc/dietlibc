@@ -9,6 +9,7 @@ struct _dl_handle {
   struct _dl_handle *prev;
 
   char *	so_name;
+  int		flag_global;
 
   /* basic */
   void *	mem_base;	/* base address of maped *.so */

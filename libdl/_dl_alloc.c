@@ -35,8 +35,8 @@ struct _dl_handle* _dl_get_handle() {
   tmp = _dl_free_list;
   _dl_free_list = tmp->next;
 
+  tmp->next=0;
   if (_dl_root_handle) {
-    tmp->next=0;
     _dl_top_handle->next=tmp;
     tmp->prev=_dl_top_handle;
   } else

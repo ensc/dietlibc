@@ -7,15 +7,19 @@ static void dummy(unsigned long t) {
 
 static void *_dl_sym_search(struct _dl_handle * h, int symbol)
 {
-  void *sym;
+  void *sym=0;
   struct _dl_handle * tmp;
   char *name = h->dyn_str_tab+h->dyn_sym_tab[symbol].st_name;
-  printf("search for: %s\n",name);
+  printf("_dl_sym_search: search for: %s\n",name);
   for (tmp=_dl_root_handle;tmp && (!sym);tmp=tmp->next) {
-    if (tmp==h) continue;
-    printf("search for: %s(%s)\n",name,tmp->so_name);
+    printf("_dl_sym_search: searching: %08lx %08lx\n",(long)tmp, (long)h);
+//    if (tmp==h) continue;
+//    if (!tmp->flag_global) continue;
+    printf("_dl_sym_search: searching in %s\n",tmp->so_name);
     sym=dlsym((void*)tmp,name);
+    if (sym) printf("_dl_sym_search: found: %s @ %08lx\n",name,(long)sym);
   }
+  if (sym) return sym;
   return &dummy; // sym;
 }
 
