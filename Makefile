@@ -1,5 +1,5 @@
 INSTALL=install
-prefix=/opt/diet
+prefix?=/opt/diet
 # Set the following to install to a different root
 #DESTDIR=/tmp/fefix
 # Use "make DEBUG=1" to compile a debug version.

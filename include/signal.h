@@ -168,7 +168,7 @@
 #define SA_RESTART	SV_INTR
 #define SA_RESETHAND	SV_RESET
 #define SA_INTERRUPT	0x10
-#define SA_DEFER	0x20
+#define SA_NODEFER	0x20
 #define SA_SHIRQ	0x40
 #define SA_NOCLDWAIT	0x100	/* not supported yet */
 #define SA_SIGINFO	0x200
