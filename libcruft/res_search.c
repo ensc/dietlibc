@@ -10,7 +10,9 @@
 #include <errno.h>
 #include <arpa/nameser.h>
 #include <resolv.h>
+#include "dietfeatures.h"
 
+#ifdef WANT_FULL_RESOLV_CONF
 extern int __dns_search;
 extern char *__dns_domains[];
 
@@ -33,3 +35,4 @@ int res_search(const char *dname, int class, int type, unsigned char *answer, in
   }
   return res;
 }
+#endif

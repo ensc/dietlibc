@@ -407,7 +407,7 @@ $(OBJDIR)/localtime_r.o $(OBJDIR)/strftime.o: dietfeatures.h
 $(LIBSTDIOOBJ): dietfeatures.h include/stdio.h dietstdio.h
 
 # these depend on dietfeatures.h for WANT_FULL_RESOLV_CONF
-$(OBJDIR)/dnscruft.o $(OBJDIR)/dnscruft2.o: dietfeatures.h
+$(OBJDIR)/dnscruft.o $(OBJDIR)/dnscruft2.o $(OBJDIR)/res_search.o $(OBJDIR)/res_query.o: dietfeatures.h
 
 # these depend on dietfeatures.h for WANT_THREAD_SAFE and errno
 $(LIBRPCOBJ) $(OBJDIR)/logging.o $(OBJDIR)/alloc.o $(OBJDIR)/cfsetospeed.o $(OBJDIR)/cfsetispeed.o \
