@@ -48,6 +48,7 @@ void fnord(char*x,...) {
 
 int main(int argc,char *argv[]) {
   fnord("fnord","foo\n","bar\n",0);
+  assert(0);
 #if 0
   printf("%hd %hhd\n",-5,-1234567);
 #endif

@@ -11,7 +11,11 @@ extern void __assert_fail (const char *__assertion, const char *__file,
 #ifdef __PRETTY_FUNCTION__
 #define __ASSERT_FUNCTION __PRETTY_FUNCTION__
 #else
-#define __ASSERT_FUNCTION __func__
+#  if defined __STDC_VERSION__ && __STDC_VERSION__ >= 199901L
+#   define __ASSERT_FUNCTION	__func__
+#  else
+#   define __ASSERT_FUNCTION	((const char *) 0)
+#  endif
 #endif
 
 #undef assert
