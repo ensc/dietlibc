@@ -66,7 +66,7 @@ struct branch {
 };
 
 static void clearcc(unsigned int* x) {
-  memset(x,0,sizeof(*x));
+  memset(x,0,sizeof(struct bracketed));
 }
 
 static void setcc(unsigned int* x,unsigned int bit) {
@@ -433,10 +433,11 @@ static void regex_putnext(struct regex*__restrict__ r,void*__restrict__ next) {
 
 
 int regcomp(regex_t*__restrict__ preg, const char*__restrict__ regex, int cflags) {
-  const char* t=parseregex(&preg->r,regex,preg);
+  const char* t;
+  preg->cflags=cflags;
+  t=parseregex(&preg->r,regex,preg);
   if (t==regex) return -1;
   regex_putnext(&preg->r,0);
-  preg->cflags=cflags;
   return 0;
 }
 

@@ -14,7 +14,7 @@ main() {
   printf("regexec %d\n",regexec(&r,buf,1,0,0));
   regfree(&r);
 #endif
-#if 1
+#if 0
   printf("regcomp %d\n",regcomp(&r,"^(ksambakdeplugin|mnemisis|kylixxmlrpclib|ripunix|featurekong)@freshmeat.net",REG_EXTENDED|REG_NEWLINE|REG_ICASE));
   {
     int canary[100];
@@ -28,7 +28,15 @@ main() {
   }
   printf("\n");
 #endif
+#if 0
   printf("regcomp %d\n",regcomp(&r,"^(a|b|c|d|e)@freshmeat.net",REG_EXTENDED|REG_NEWLINE|REG_NOSUB|REG_ICASE));
   printf("regexec %d\n",regexec(&r,"a@freshmeat.net",1,0,0));
+#endif
+#if 0
+  printf("regcomp %d\n",regcomp(&r,"^([A-Za-z ]+>|[]>:|}][]>:|}]*)",REG_EXTENDED|REG_NEWLINE|REG_NOSUB|REG_ICASE));
+  printf("regexec %d\n",regexec(&r,"fnord",1,0,0));
+#endif
+  printf("regcomp %d\n",regcomp(&r,"^Subject:",REG_EXTENDED|REG_ICASE));
+  printf("regexec %d\n",regexec(&r,"Subject: duh",1,0,0));
   regfree(&r);
 }
