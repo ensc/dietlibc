@@ -29,10 +29,6 @@ static unsigned long at_gid;
 static unsigned long at_egid;
 static unsigned long at_pagesize;
 
-#warning "Ignore the warning like '`_dl_jump' used but never defined'"
-/* declare static otherwise we have a GOT access BEFOR we have the resolver */
-static void _dl_jump(void);
-
 /* this are the "local syscalls" */
 void _dl_sys_exit(int val);
 int _dl_sys_read(int fd,char*buf,unsigned long len);
@@ -126,7 +122,6 @@ _dl_sys_call3:
 	popl	%ebx
 	ret
 
-#.global _dl_jump
 .type	_dl_jump,@function
 _dl_jump:
 	pushl	%eax		# save register args...
@@ -156,6 +151,8 @@ static inline unsigned long* get_got(void) {
 }
 
 static inline int work_on_pltgot(struct _dl_handle*dh) {
+  /* declare _dl_jump static otherwise we have a GOT access BEFOR we have the resolver */
+  static void _dl_jump(void);
   if ((dh->plt_rel)&&(!(dh->flags&RTLD_NOW))) {
     unsigned long*tmp=dh->pltgot;
     /* GOT */
@@ -234,7 +231,6 @@ _dl_sys_mprotect:
 	swi	#0x900125		@ mprotect
 	mov	pc, lr
 
-@.global _dl_jump
 .type	_dl_jump,function
 _dl_jump:
 	stmdb	sp!, {r0, r1, r2, r3}	@ save arguments
@@ -258,6 +254,8 @@ static inline unsigned long* get_got(void) {
 }
 
 static inline int work_on_pltgot(struct _dl_handle*dh) {
+  /* declare _dl_jump static otherwise we have a GOT access BEFOR we have the resolver */
+  static void _dl_jump(void);
   if ((dh->plt_rel)&&(!(dh->flags&RTLD_NOW))) {
     unsigned long*tmp=dh->pltgot;
     /* GOT */
@@ -741,23 +739,6 @@ static struct _dl_handle* _dl_dyn_scan(struct _dl_handle*dh,Elf_Dyn*_dynamic) {
     _dl_error=3;
     return 0;
   }
-#if 0
-  if ((tmp=_dlsym(dh,"_GLOBAL_OFFSET_TABLE_"))) {
-    dh->got=tmp;
-#ifdef DEBUG
-    pf(__func__": found a GOT @ "); ph((unsigned long)tmp); pf("\n");
-#endif
-    /* GOT */
-    tmp[0]+=(unsigned long)dh->mem_base;	/* reloc dynamic pointer */
-    tmp[1] =(unsigned long)dh;
-    tmp[2] =(unsigned long)(_dl_jump);		/* sysdep jump to do_resolve */
-  }
-  else {
-    _dl_error_data=dh->name;
-    _dl_error=3;
-    return 0;
-  }
-#endif
 
 #ifdef DEBUG
   pf(__func__": pre load depending libraries "); ph((unsigned long)dh); pf("\n");

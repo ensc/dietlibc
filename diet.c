@@ -28,6 +28,7 @@ static const char* Os[] = {
 	 "-malign-functions=0","-malign-jumps=0",
 	 "-malign-loops=0","-fomit-frame-pointer",0,
   "sparc","-Os","-mcpu=supersparc",0,
+  "sparc64","-Os","-m64",0,
   "alpha","-Os","-fomit-frame-pointer",0,
   "arm","-Os","-fomit-frame-pointer",0,
   "mips","-Os","-fomit-frame-pointer","-mno-abicalls","-G","0","-fno-pic",0,
@@ -108,7 +109,11 @@ usage:
       if (shortplatform[0]=='i' && shortplatform[2]=='8' && shortplatform[3]=='6') shortplatform[1]='3';
     } else {
 #ifdef __sparc__
+#ifdef __arch64__
+      shortplatform="sparc64";
+#else
       shortplatform="sparc";
+#endif
 #endif
 #ifdef __powerpc__
       shortplatform="ppc";

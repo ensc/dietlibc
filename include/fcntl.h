@@ -307,7 +307,7 @@ struct flock {
   short __unused;
 };
 
-#ifdef __sparc_v9__
+#ifdef __arch64__
 #define flock64 flock
 #else
 struct flock64 {

@@ -51,6 +51,10 @@
 #define __WORDSIZE 64
 #endif
 
+#if defined(__sparc__) && (__arch64__)
+#define __WORDSIZE 64
+#endif
+
 #ifndef __WORDSIZE
 #define __WORDSIZE 32
 #endif

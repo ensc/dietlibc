@@ -76,11 +76,73 @@ typedef struct
 #endif
 
 #ifdef __sparc__
+#ifdef __arch64__
+
+#define MC_TSTATE	0
+#define MC_PC		1
+#define MC_NPC		2
+#define MC_Y		3
+#define MC_G1		4
+#define MC_G2		5
+#define MC_G3		6
+#define MC_G4		7
+#define MC_G5		8
+#define MC_G6		9
+#define MC_G7		10
+#define MC_O0		11
+#define MC_O1		12
+#define MC_O2		13
+#define MC_O3		14
+#define MC_O4		15
+#define MC_O5		16
+#define MC_O6		17
+#define MC_O7		18
+#define MC_NGREG	19
+
+#define FLAG_SAVEMASK	512
+#ifndef __ASSEMBLER__
+#include <signal.h>
+
+/* this equal to ucontext from "include/asm-sparc64/uctx.h" */
+typedef struct __sparc64_jmp_buf {
+  struct __sparc64_jmp_buf *uc_link;
+  unsigned long uc_flags;
+  sigset_t uc_sigmask;
+  struct {
+    unsigned long	mc_gregs[MC_NREGS];
+    unsigned long	mc_fp;
+    unsigned long	mc_i7;
+    struct {
+      union {
+	unsigned int	sregs[32];
+	unsigned long	dregs[32];
+	long double	qregs[16];
+      } mcfpu_fregs;
+      unsigned long	mcfpu_fsr;
+      unsigned long	mcfpu_fprs;
+      unsigned long	mcfpu_gsr;
+      struct {
+	unsigned long	*mcfq_addr;
+	unsigned int	mcfq_insn;
+      } *mcfpu_fq;
+      unsigned char	mcfpu_qcnt;
+      unsigned char	mcfpu_qentsz;
+      unsigned char	mcfpu_enab;
+    } mc_fpregs;
+  } uc_mcontext;
+} __jmp_buf[1];
+
+#endif
+
+#else
+
 #define JB_SP  0
 #define JB_FP  1
 #define JB_PC  2
 #ifndef __ASSEMBLER__
 typedef int __jmp_buf[3];
+#endif
+
 #endif
 #endif
 
