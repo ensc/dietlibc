@@ -176,6 +176,8 @@ int _sysctl(struct __sysctl_args *args) __THROW;
 
 #define _SC_OPEN_MAX 4
 #define _SC_CLK_TCK 1
+#define _SC_NPROCESSORS_ONLN 6
+#define _SC_NPROCESSORS_CONF _SC_NPROCESSORS_ONLN
 long sysconf(int name) __THROW;
 
 #endif
