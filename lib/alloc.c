@@ -43,8 +43,13 @@ typedef struct {
 #define PAGE_ALIGN(s)	(((s)+MEM_BLOCK_SIZE-1)&(unsigned long)(~(MEM_BLOCK_SIZE-1)))
 
 /* a simple mmap :) */
+#if defined(__i386__)
+#define REGPARM(x) __attribute__((regparm(x)))
+#else
+#define REGPARM(x)
+#endif
 
-static void __attribute__((regparm(1))) *do_mmap(size_t size) {
+static void REGPARM(1) *do_mmap(size_t size) {
   return mmap(0, size, PROT_READ|PROT_WRITE, MAP_ANONYMOUS|MAP_PRIVATE, -1, (size_t)0);
 }
 
@@ -63,7 +68,7 @@ static __alloc_t* __small_mem[8];
 
 static inline int __ind_shift() { return (MEM_BLOCK_SIZE==4096)?4:5; }
 
-static size_t __attribute__((regparm(1))) get_index(size_t _size) {
+static size_t REGPARM(1) get_index(size_t _size) {
   register size_t idx=0;
   if (_size) {
     register size_t size=((_size-1)&(MEM_BLOCK_SIZE-1))>>__ind_shift();
@@ -73,9 +78,9 @@ static size_t __attribute__((regparm(1))) get_index(size_t _size) {
 }
 
 /* small mem */
-static void __small_free(void*_ptr,size_t _size) __attribute__((regparm(2)));
+static void __small_free(void*_ptr,size_t _size) REGPARM(2);
 
-static void __attribute__((regparm(2))) __small_free(void*_ptr,size_t _size) {
+static void REGPARM(2) __small_free(void*_ptr,size_t _size) {
   __alloc_t* ptr=BLOCK_START(_ptr);
   size_t size=_size;
   size_t idx=get_index(size);
@@ -86,7 +91,7 @@ static void __attribute__((regparm(2))) __small_free(void*_ptr,size_t _size) {
   __small_mem[idx]=ptr;
 }
 
-static void* __attribute__((regparm(1))) __small_malloc(size_t _size) {
+static void* REGPARM(1) __small_malloc(size_t _size) {
   __alloc_t *ptr;
   size_t size=_size;
   size_t idx;

@@ -49,7 +49,12 @@ static _pthread_descr _thread_hash_tid[NR_BUCKETS];
 static inline unsigned long hash_tid(int tid) { return (tid&(NR_BUCKETS-1)); }
 
 /* O(1) */
-static void __attribute__((regparm(2))) __thread_add_tid_(_pthread_descr*root,_pthread_descr thread) {
+#if defined(__i386__)
+static void __attribute__((regparm(2))) __thread_add_tid_(_pthread_descr*root,_pthread_descr thread)
+#else
+static void __thread_add_tid_(_pthread_descr*root,_pthread_descr thread)
+#endif
+{
   _pthread_descr tmp=*root;
   thread->prev=root;
   thread->next=tmp;
