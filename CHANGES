@@ -42,6 +42,7 @@
     Macodiseas!
   fix MIPS start code (argv[0] was always corrupt)
   removed annoying -Wconversion gcc switch
+  add -v to diet.c and fix MIPS CFLAGS in diet.  Thanks, Johannes Stezenbach
 
 0.14:
   fix brk again (missing __brk, trivial oversight)

@@ -30,7 +30,7 @@ static const char* Os[] = {
   "sparc","-Os","-mcpu=supersparc",0,
   "alpha","-Os","-fomit-frame-pointer",0,
   "arm","-Os","-fomit-frame-pointer",0,
-  "mips","-Os","-fomit-frame-pointer","-fno-abicalls","-G","0","-fno-pic",0,
+  "mips","-Os","-fomit-frame-pointer","-mno-abicalls","-G","0","-fno-pic",0,
   "ppc","-Os","-fomit-frame-pointer","-mpowerpc-gpopt","-mpowerpc-gfxopt",0,
   "s390","-Os","-fomit-frame-pointer",0,
   "sh","-Os","-fomit-frame-pointer",0,
@@ -40,6 +40,7 @@ int main(int argc,char *argv[]) {
   int _link=0;
   int compile=0;
   int preprocess=0;
+  int verbose=0;
   char diethome[]=DIETHOME;
 #ifdef INSTALLVERSION
   char platform[1000]=DIETHOME "/lib-";
@@ -67,9 +68,13 @@ int main(int argc,char *argv[]) {
   int mangleopts=0;
 
   if (argc<2) {
-    error("usage: diet [gcc command line]\n"
-	  "e.g.   diet gcc -c t.c\n"
+    error("usage: diet [-v] [-Os] gcc command line\n"
+	  "e.g.   diet -Os gcc -c t.c\n"
 	  "or     diet sparc-linux-gcc -o foo foo.c bar.o\n");
+  }
+  if (!strcmp(argv[1],"-v")) {
+    ++argv; --argc;
+    verbose=1;
   }
   if (!strcmp(argv[1],"-Os")) {
     ++argv; --argc;
@@ -268,6 +273,14 @@ pp:
 #endif
 #endif
       *dest=0;
+      if (verbose) {
+	int i;
+	for (i=0; newargv[i]; i++) {
+	  write(2,newargv[i],strlen(newargv[i]));
+	  write(2," ",1);
+	}
+	write(2,"\n",1);
+      }
       execvp(newargv[0],newargv);
       goto error;
     } else if (!strcmp(tmp,"ld")) {
