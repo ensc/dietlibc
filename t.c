@@ -102,7 +102,11 @@ extern char* strcpy2(char*a,char*b);
      __asm__ __volatile__ ("rdtsc" : "=a" (low) : : "edx")
 
 int main(int argc,char *argv[]) {
+  alarm(1);
+  sleep(2);
+#if 0
   printf("%g\n",atof("30"));
+#endif
 #if 0
   char* buf[]={"FOO=FNORD","A=B","C=D","PATH=/usr/bin:/bin",0};
   environ=buf;

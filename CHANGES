@@ -1,11 +1,12 @@
 0.13:
   add readdir64 and automatic mapping if _FILE_OFFSET_BITS == 64
-  make diet not include the linker safeguard stuff when preprocessing.
+  make diet not include the linker safeguard stuff when preprocessing
   Olaf: port to s/390!
   me: fix vfork (it was put into dietlibc.a twice)
   res_query did not initialize last
-  diet (not diet-dyn, of course) now adds -static to the gcc command line.
+  diet (not diet-dyn, of course) now adds -static to the gcc command line
   fixed fflush on input streams (tic from ncurses exposed this)
+  duh, there is an alarm system call, too, so we use it and not setitimer
 
 0.12:
   more contributions from Frank Klemm.
