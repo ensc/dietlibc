@@ -16,6 +16,9 @@
   Andre has provided a largely untested patch that seems to fix the problem.
   Igor Gilitschenski sent a patch for the "%8.7lx" issue.
   abort did not flush all stdio streams
+  fix some nasty regular expression bugs
+  write a stupid malloc checker (contrib/debug-realloc.c) to help me
+    debug my regular expressions.  Please read contrib/debug-realloc.txt
 
 0.16:
   "diet -v" or "diet -Os" segfaulted without further arguments.
