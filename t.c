@@ -261,8 +261,8 @@ int main(int argc,char *argv[]) {
   char *tmp;
   printf("%x\n",strtol("0Xffff",&tmp,16));
 #endif
-//  putchar('c');
-//  write(1,"fnord\n",6);
+/*  putchar('c');
+  write(1,"fnord\n",6); */
 #if 0
   struct addrinfo *ai;
   getaddrinfo("nagus","22",0,&ai);

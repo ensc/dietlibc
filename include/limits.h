@@ -50,4 +50,7 @@
 #define RTSIG_MAX	32
 
 #define LINE_MAX	2048
+
+#define _POSIX_PATH_MAX PATH_MAX
+
 #endif

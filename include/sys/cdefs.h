@@ -4,7 +4,6 @@
 #define __dietlibc__
 
 #ifndef __cplusplus
-//#define throw ()
 #define __THROW
 #define __BEGIN_DECLS
 #define __END_DECLS
@@ -37,10 +36,20 @@
 #define expect(foo,bar) __builtin_expect(foo,bar)
 #endif
 
+#else
+
 #endif
 
 #define __P(x) x
 
 #define __ptr_t void*
+
+#ifdef __STRICT_ANSI__
+#define inline
+#endif
+
+#ifndef __GNUC__
+#define __extension__
+#endif
 
 #endif

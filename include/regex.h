@@ -61,7 +61,7 @@ enum __regex_errors {
   REG_BADPAT, /* Invalid use of pattern operators such as group or list. */
   REG_ESIZE, /* Compiled  regular  expression  requires  a  pattern  buffer
 		larger than 64Kb.  This is not defined by POSIX.2. */
-  REG_ESPACE, /* regcomp ran out of space */
+  REG_ESPACE /* regcomp ran out of space */
 };
 
 #endif

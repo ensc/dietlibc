@@ -24,10 +24,10 @@ unsigned long int strtoul(const char *nptr, char **endptr, int base) __THROW;
 extern int __ltostr(char *s, unsigned int size, unsigned long i, unsigned int base, int UpCase) __THROW;
 extern int __dtostr(double d,char *buf,unsigned int maxlen,unsigned int prec) __THROW;
 
-#ifdef __GNUC__
-long long int strtoll(const char *nptr, char **endptr, int base) __THROW;
-unsigned long long int strtoull(const char *nptr, char **endptr, int base) __THROW;
-int __lltostr(char *s, unsigned int size, unsigned long long i, unsigned int base, int UpCase) __THROW;
+#ifndef __STRICT_ANSI__
+__extension__ long long int strtoll(const char *nptr, char **endptr, int base) __THROW;
+__extension__ unsigned long long int strtoull(const char *nptr, char **endptr, int base) __THROW;
+__extension__ int __lltostr(char *s, unsigned int size, unsigned long long i, unsigned int base, int UpCase) __THROW;
 #endif
 
 int atoi(const char *nptr) __THROW;
@@ -71,6 +71,6 @@ char* mktemp(char *template);
 
 int abs(int i) __THROW __attribute__((const));
 long int labs(long int i) __THROW __attribute__((const));
-long long int llabs(long long int i) __THROW __attribute__((const));
+__extension__ long long int llabs(long long int i) __THROW __attribute__((const));
 
 #endif

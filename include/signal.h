@@ -155,22 +155,6 @@ typedef struct siginfo {
 #define si_band		_sifields._sigpoll._band
 #define si_fd		_sifields._sigpoll._fd
 
-#if 0 //#ifndef WANT_PRE_2_2_COMPAT
-
-typedef unsigned long old_sigset_t;
-
-struct old_sigaction {
-  union {
-    sighandler_t _sa_handler;
-    void (*_sa_sigaction)(int, siginfo_t*, void*);
-  } _u;
-  sigset_t sa_mask;
-  unsigned long sa_flags;
-  void (*sa_restorer)(void);
-};
-
-#endif
-
 #define _NSIG_WORDS	((_NSIG/sizeof(long))>>3)
 
 typedef struct {

@@ -59,11 +59,11 @@ typedef unsigned short uid_t;		/* Used for user IDs. */
 typedef signed long useconds_t;		/* Used for time in microseconds. */
 
 /* non-susv2 types: */
-typedef signed long long loff_t;	/* 64-bit offset */
+__extension__ typedef signed long long loff_t;	/* 64-bit offset */
 
-typedef signed long long off64_t;
-typedef unsigned long long ino64_t;
-typedef signed long long blkcnt64_t;
+__extension__ typedef signed long long off64_t;
+__extension__ typedef unsigned long long ino64_t;
+__extension__ typedef signed long long blkcnt64_t;
 
 typedef long int fpos_t;
 

@@ -44,7 +44,7 @@ struct stat64 {
 	unsigned short	st_rdev;
 	unsigned char	__pad3[10];
 
-	long long	st_size;
+__extension__	long long	st_size;
 	unsigned long	st_blksize;
 
 	unsigned long	st_blocks;	/* Number 512-byte blocks allocated. */
@@ -59,7 +59,7 @@ struct stat64 {
 	unsigned long	st_ctime;
 	unsigned long	__pad7;		/* will be high 32 bits of ctime someday */
 
-	unsigned long long	st_ino;
+__extension__	unsigned long long	st_ino;
 };
 #elif defined(__sparc__)
 struct stat {
@@ -86,7 +86,7 @@ struct stat64 {
 	unsigned char	__pad0[6];
 	unsigned short	st_dev;
 
-	unsigned long long	st_ino;
+__extension__	unsigned long long	st_ino;
 
 	unsigned int	st_mode;
 	unsigned int	st_nlink;
@@ -99,7 +99,7 @@ struct stat64 {
 
 	unsigned char	__pad3[8];
 
-	long long	st_size;
+__extension__	long long	st_size;
 	unsigned int	st_blksize;
 
 	unsigned char	__pad4[8];
@@ -177,7 +177,7 @@ struct stat64 {
 	gid_t		st_gid;
 	unsigned long	st_rdev;
 	unsigned long	st_pad1[3];	/* Reserved for st_rdev expansion  */
-	long long	st_size;
+__extension__	long long	st_size;
 	/*
 	 * Actually this should be timestruc_t st_atime, st_mtime and st_ctime
 	 * but we don't have it under Linux.
@@ -189,7 +189,7 @@ struct stat64 {
 	time_t		st_ctime;
 	unsigned long	reserved2;	/* Reserved for st_atime expansion  */
 	unsigned long	st_blksize;
-	long long	st_blocks;
+__extension__	long long	st_blocks;
 };
 #elif defined(__powerpc__)
 struct stat {
@@ -216,18 +216,18 @@ struct stat {
 /* This matches struct stat64 in glibc2.1.
  */
 struct stat64 {
-	unsigned long long st_dev; 	/* Device.  */
-	unsigned long long st_ino;	/* File serial number.  */
+__extension__	unsigned long long st_dev; 	/* Device.  */
+__extension__	unsigned long long st_ino;	/* File serial number.  */
 	unsigned int st_mode;		/* File mode.  */
 	unsigned int st_nlink;		/* Link count.  */
 	unsigned int st_uid;		/* User ID of the file's owner.  */
 	unsigned int st_gid;		/* Group ID of the file's group. */
-	unsigned long long st_rdev; 	/* Device number, if device.  */
+__extension__	unsigned long long st_rdev; 	/* Device number, if device.  */
 	unsigned short int __pad2;
-	long long st_size;		/* Size of file, in bytes.  */
+__extension__	long long st_size;		/* Size of file, in bytes.  */
 	long st_blksize;		/* Optimal block size for I/O.  */
 
-	long long st_blocks;		/* Number 512-byte blocks allocated. */
+__extension__	long long st_blocks;		/* Number 512-byte blocks allocated. */
 	long st_atime;			/* Time of last access.  */
 	unsigned long int __unused1;
 	long st_mtime;			/* Time of last modification.  */
@@ -279,7 +279,7 @@ struct stat64 {
 	unsigned short	st_rdev;
 	unsigned char	__pad3[10];
 
-	long long	st_size;
+__extension__	long long	st_size;
 	unsigned long	st_blksize;
 
 	unsigned long	st_blocks;	/* Number 512-byte blocks allocated. */
@@ -294,7 +294,7 @@ struct stat64 {
 	unsigned long	st_ctime;
 	unsigned long	__pad7;		/* will be high 32 bits of ctime someday */
 
-	unsigned long long	st_ino;
+__extension__	unsigned long long	st_ino;
 };
 #endif
 
