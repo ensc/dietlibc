@@ -19,6 +19,7 @@ static struct group gr;
 struct group *getgrent(void)
 {
 	char *parts[4], *grouplist;
+	unsigned int bufptr;
 
 	if (__ent_start(_PATH_GROUP, &st))
 		return NULL;
@@ -36,10 +37,11 @@ struct group *getgrent(void)
 	gr.gr_mem = gr_mem;
 
 	/* rewind bufptr to beginning of group list */
+	bufptr = st->bufptr;
 	st->bufptr = (int) (grouplist - st->ent_buf);
 
-	if (__ent_split(st, gr_mem, MAX_GROUP_MEMBERS, ':', 0) < 0)
-		goto err_out;
+	__ent_split(st, gr_mem, MAX_GROUP_MEMBERS, ',', 0);
+	st->bufptr = bufptr;
 
 	return &gr;
 
