@@ -1,8 +1,10 @@
+// #define NDEBUG
 #include <regex.h>
 #include <stdlib.h>
 #include <ctype.h>
 #include <sys/types.h>
 #include <string.h>
+#include <assert.h>
 
 /* this is ugly.
  * the idea is to build a parse tree, then do some poor man's OOP with a
@@ -40,7 +42,7 @@ struct regex {
 struct atom {
   matcher m;
   void* next;
-  enum { EMPTY, REGEX, BRACKET, ANY, LINESTART, LINEEND, WORDSTART, WORDEND, CHAR, } type;
+  enum { ILLEGAL, EMPTY, REGEX, BRACKET, ANY, LINESTART, LINEEND, WORDSTART, WORDEND, CHAR, } type;
   int bnum;
   union {
     struct regex r;
@@ -100,18 +102,23 @@ static const char* parseregex(struct regex* r,const char* s,regex_t* rx);
 static int matchatom(void*__restrict__ x,const unsigned char*__restrict__ s,int ofs,struct __regex_t*__restrict__ preg,int plus,int eflags) {
   register struct atom* a=(struct atom*)x;
   int matchlen=0;
+#ifdef DEBUG
+  printf("a->bnum is %d\n",a->bnum);
+#endif
+  assert(a->type!=ILLEGAL);
   switch (a->type) {
   case EMPTY:
 #ifdef DEBUG
     printf("matching atom EMPTY against \"%s\"\n",s);
 #endif
-    preg->l[a->bnum].rm_so=preg->l[a->bnum].rm_eo=ofs;
+    if (a->bnum>=0) preg->l[a->bnum].rm_so=preg->l[a->bnum].rm_eo=ofs;
     goto match;
   case REGEX:
 #ifdef DEBUG
     printf("matching atom REGEX against \"%s\"\n",s);
 #endif
     if ((matchlen=a->u.r.m(&a->u.r,s,ofs,preg,0,eflags))>=0) {
+      assert(a->bnum>=0);
       preg->l[a->bnum].rm_so=ofs;
       preg->l[a->bnum].rm_eo=ofs+matchlen;
       goto match;
@@ -234,7 +241,12 @@ static int matchpiece(void*__restrict__ x,const char*__restrict__ s,int ofs,stru
   register struct piece* a=(struct piece*)x;
   int matchlen=0;
   int tmp=0,num=0;
-  unsigned int *offsets=alloca(sizeof(int)*a->max);
+  unsigned int *offsets;
+  assert(a->max>0 && a->max<1000);
+#ifdef DEBUG
+  printf("alloca(%d)\n",sizeof(int)*a->max);
+#endif
+  offsets=alloca(sizeof(int)*a->max);
   offsets[0]=0;
 //  printf("allocating %d offsets...\n",a->max);
 //  printf("matchpiece \"%s\"...\n",s);
@@ -304,7 +316,9 @@ static int matchbranch(void*__restrict__ x,const char*__restrict__ s,int ofs,str
   int tmp;
 #ifdef DEBUG
   printf("%08p matching branch against \"%s\"\n",a,s);
+  printf("%p %p\n",&a->p->m,a->p->m);
 #endif
+  assert(a->p->m==matchpiece);
   tmp=a->p->m(a->p,s,ofs,preg,plus,eflags);
   if (tmp>=0) {
     if (a->next)
@@ -331,9 +345,11 @@ static const char* parsebranch(struct branch*__restrict__ b,const char*__restric
       tmp=parsepiece(&p,s,rx);
       if (tmp==s) return s;
     }
+//    printf("b->p from %p to ",b->p);
     if (!(b->p=realloc(b->p,++b->num*sizeof(p)))) return s;
+//    printf("%p (size %d)\n",b->p,b->num*sizeof(p));
     b->p[b->num-1]=p;
-    if (*s=='|') { ++tmp; break; }
+    if (*tmp=='|') { break; }
     s=tmp;
   }
   *pieces+=b->num;
@@ -348,6 +364,7 @@ static int matchregex(void*__restrict__ x,const char*__restrict__ s,int ofs,stru
   printf("%08p matching regex against \"%s\"\n",a,s);
 #endif
   for (i=0; i<a->num; ++i) {
+    assert(a->b[i].m==matchbranch);
     tmp=a->b[i].m(&a->b[i],s,ofs,preg,plus,eflags);
     if (tmp>=0) {
       if (a->next)
@@ -364,13 +381,15 @@ static const char* parseregex(struct regex*__restrict__ r,const char*__restrict_
   const char *tmp;
   r->m=matchregex;
   r->num=0; r->b=0; r->pieces=0;
-  p->brackets=1;
+  p->brackets=0;
   for (;;) {
     tmp=parsebranch(&b,s,p,&r->pieces);
     if (tmp==s) return s;
+//    printf("r->b from %p to ",r->b);
     if (!(r->b=realloc(r->b,++r->num*sizeof(b)))) return s;
+//    printf("%p (size %d)\n",r->b,r->num*sizeof(b));
     r->b[r->num-1]=b;
-    s=tmp;
+    s=tmp; if (*s=='|') ++s;
   }
   return tmp;
 }
@@ -385,7 +404,7 @@ static void regex_putnext(struct regex* r,void* next);
 static void atom_putnext(struct atom*__restrict__ a,void*__restrict__ next) {
   a->next=next;
   if (a->type==REGEX)
-    regex_putnext(&a->u.r,next);
+    regex_putnext(&a->u.r,0);
 }
 
 static void piece_putnext(struct piece*__restrict__ p,void*__restrict__ next) {
@@ -425,6 +444,10 @@ int regcomp(regex_t*__restrict__ preg, const char*__restrict__ regex, int cflags
 int regexec(const regex_t*__restrict__ preg, const char*__restrict__ string, size_t nmatch, regmatch_t pmatch[], int eflags) {
   int matched;
   const char *orig=string;
+  assert(preg->brackets+1>0 && preg->brackets<1000);
+#ifdef DEBUG
+  printf("alloca(%d)\n",sizeof(regmatch_t)*(preg->brackets+1));
+#endif
   ((regex_t*)preg)->l=alloca(sizeof(regmatch_t)*(preg->brackets+1));
   while (*string) {
     matched=preg->r.m((void*)&preg->r,string,string-orig,(regex_t*)preg,0,eflags);
