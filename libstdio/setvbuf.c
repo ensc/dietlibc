@@ -10,6 +10,12 @@ int setvbuf(FILE *stream, char *buf, int flags , size_t size) {
     if (!(stream->flags&STATICBUF)) free(stream->buf);
     stream->buf=buf;
   }
+  else {
+    char *tmp;
+    if (!(tmp=malloc(size))) return -1;
+    if (!(stream->flags&STATICBUF)) free(stream->buf);
+    stream->buf=tmp;
+  }
   stream->buflen=size;
   stream->bm=stream->bs=0;
   switch (flags) {
