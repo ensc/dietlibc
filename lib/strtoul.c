@@ -1,6 +1,7 @@
 #include <ctype.h>
-
-/* static char *num="0123456789abcdefghijklmnopqrstuvwxyz"; */
+#include "dietfeatures.h"
+#include <errno.h>
+#include <limits.h>
 
 unsigned long int strtoul(const char *nptr, char **endptr, int base)
 {
@@ -24,9 +25,17 @@ fnord:
     register unsigned char c=*nptr;
     c=(c>='a'?c-'a'+10:c>='A'?c-'A'+10:c-'0');
     if (c>=base) break;
-    v=v*base+c;
+    {
+      register long int w=v*base;
+      if (w<v) {
+	errno=ERANGE;
+	return ULONG_MAX;
+      }
+      v=w+c;
+    }
     ++nptr;
   }
   if (endptr) *endptr=(char *)nptr;
+  errno=0;	/* in case v==ULONG_MAX, ugh! */
   return v;
 }

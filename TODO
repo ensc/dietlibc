@@ -5,8 +5,6 @@ fscanf
 vsnprintf return value should be the number of needed characters instead
 of the (truncated) number of characters that were actually written.
 
-strtol and friends need overflow handling.
-
 real regerror
 
 real DNS errors (gai_strerror,hstrerror,...)

@@ -76,11 +76,15 @@ void closelog(void) {
 #endif
 
 int main(int argc,char *argv[]) {
+  char *tmp;
+  printf("%lu\n",strtol("0xf0000000",&tmp,0));
+#if 0
   struct mntent* me;
   FILE* f=fopen("/tmp/mounts","r");
   while (me=getmntent(f)) {
     printf("%s %s %s %s %d %d\n",me->mnt_fsname,me->mnt_dir,me->mnt_type,me->mnt_opts,me->mnt_freq,me->mnt_passno);
   }
+#endif
 #if 0
   char *tmp;
   printf("%x\n",strtol("0Xffff",&tmp,16));
