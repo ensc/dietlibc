@@ -3,5 +3,6 @@
 
 #include <sys/cdefs.h>
 #include <linux/ipc.h>
+#include <asm/page.h>
 
 #endif
