@@ -110,3 +110,14 @@ A: Wrong.  You can compile them, and you can use them.  You just can't
    redistribute the binaries.  If you are a distribution vendor and want
    to use the diet libc to make BSD licensed binaries for the install
    or rescue floppy which you sell commercially, please talk to me.
+
+
+Q: Where are the shared libaries?  make install didn't install them!
+A: You have to explicitly build them with "make dyn".  Since they are
+   experimental and only supported on a small subset of the platforms,
+   that is not default.  Also, I recommend you only use shared libraries
+   if you really know what you are doing.  For example, you can't just
+   use your system shared libraries, because they have a dependency on
+   glibc in them, so the program will crash.  And you have to explicitly
+   compile the code with -fPIC or -fpic.  You can then use them by
+   substituting "diet-dyn" for "diet" on the command line.
