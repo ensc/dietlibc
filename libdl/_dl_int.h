@@ -24,7 +24,6 @@ struct _dl_handle {
   char *	mem_base;	/* base address of maped *.so */
   unsigned long mem_size;	/* len of mem block */
   unsigned long lnk_count;	/* reference count (other libraries) */
-  unsigned long text_size;	/* text length (for DT_TEXTREL) */
 
   /* symbol resolve helper */
   unsigned long*hash_tab;	/* hash table */

@@ -136,6 +136,7 @@ static struct _dl_handle *_dl_map_lib(const char*fn, const char*pathname, int fd
   }
 
   if (ret) {
+    ret->lnk_count=1;
     ret->name=strdup(fn);
     ret->dyn_str_tab=(char*)m+dyn->p_vaddr;	/* missuse of field */
   }
@@ -161,13 +162,9 @@ struct _dl_handle* _dl_dyn_scan(struct _dl_handle* dh, void* dyn_addr, int flags
   int relent=0;
   int relsize=0;
 
-  unsigned long text_flags = dh->lnk_count;
-  int textrel=0;
-
   int i;
 
   DEBUG("_dl_load pre resolv %08lx\n",(long)dyn_tab);
-  dh->lnk_count   = 1;
   dh->dyn_str_tab = 0;
   dh->flag_global = flags&RTLD_GLOBAL;
 
