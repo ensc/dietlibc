@@ -141,6 +141,11 @@ inn_printf:
 
 print_out:
 	if (width && (!flag_left)) {
+	  if (flag_in_sign) {
+	    A_WRITE(fn,s,1); ++len;
+	    ++s; --sz;
+	    --width;
+	  }
 	  len+=write_pad(fn,(signed int)width-(signed int)sz,padwith);
 	}
 	A_WRITE(fn,s,sz); len+=sz;
@@ -184,6 +189,8 @@ print_out:
 	}
 
 num_printf:
+	s=buf+1;
+
 	if (flag_long>0) {
 #ifdef WANT_LONGLONG_PRINTF
 	  if (flag_long>1)
@@ -211,12 +218,10 @@ num_printf:
 	if (flag_long<-1) number&=0xff;
 #ifdef WANT_LONGLONG_PRINTF
 	if (flag_long>1)
-	  sz += __lltostr(buf+1+sz,sizeof(buf)-5,(unsigned long long) llnumber,base,flag_upcase);
+	  sz += __lltostr(s+sz,sizeof(buf)-5,(unsigned long long) llnumber,base,flag_upcase);
 	else
 #endif
-	  sz += __ltostr(buf+1+sz,sizeof(buf)-5,(unsigned long) number,base,flag_upcase);
-
-	s=buf+1;
+	  sz += __ltostr(s+sz,sizeof(buf)-5,(unsigned long) number,base,flag_upcase);
 
 	if (flag_in_sign==2) {
 	  *(--s)='-';
@@ -224,7 +229,7 @@ num_printf:
 	} else if ((flag_in_sign)&&(flag_sign || flag_space)) {
 	  *(--s)=(flag_sign)?'+':' ';
 	  ++sz;
-	}
+	} else flag_in_sign=0;
 
 	goto print_out;
 
