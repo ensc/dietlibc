@@ -4,9 +4,10 @@
 .type	 strncmp,@function
 strncmp:
 	push %ebx
-	movl 8(%esp),%ebx
-	movl 12(%esp),%edx
-	movl 16(%esp),%ecx
+	movl %esp,%ebx
+	movl 12(%ebx),%edx
+	movl 16(%ebx),%ecx
+	movl 8(%ebx),%ebx
 .Lloop:
 	jecxz .Ldone
 	decl %ecx
@@ -20,7 +21,7 @@ strncmp:
 	jnz .Lloop
 
 .Ldone:
-	xorb %eax,%eax
+	xorl %eax,%eax
 .Lnotequal:
 	movsx %al, %eax
 	popl %ebx
