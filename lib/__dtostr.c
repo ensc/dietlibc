@@ -16,8 +16,7 @@ int __dtostr(double d,char *buf,unsigned int maxlen,unsigned int prec,unsigned i
   union {
     unsigned long long l;
     double d;
-  } u;
-  u.d=d;
+  } u = { .d=d };
   /* step 1: extract sign, mantissa and exponent */
   signed long e=((u.l>>52)&((1<<11)-1))-1023;
 #else

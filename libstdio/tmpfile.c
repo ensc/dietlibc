@@ -1,6 +1,7 @@
 #include "dietstdio.h"
 #include <stdlib.h>
 #include <unistd.h>
+#include <fcntl.h>
 
 FILE *tmpfile (void) {
   int fd;
@@ -8,5 +9,5 @@ FILE *tmpfile (void) {
   if ((fd=mkstemp(template))<0)
     return 0;
   unlink(template);
-  return __stdio_init_file(fd,1);
+  return __stdio_init_file(fd,1,O_RDWR);
 }
