@@ -53,20 +53,22 @@ strtod:
 
 
         fldz
+        flds    __ten                                                   # 10.0     0.0
 .Lint:  movzbl  (%ecx),%eax
         subb    $'0',%al
         cmpb    $10,%al
         jnc     .Lintend
-        fmuls   __ten
+        fmul    %st(0),%st(1)
         movl    %eax,(%esp)
-        fiaddl  (%esp)
+        fild    (%esp)
         incl    %ecx
+        faddp   %st(2)
         jmp     .Lint
 
 
 #    -if ( *p == '.' ) {
 
-.Lintend:
+.Lintend:                                                               # 10.0     integer
 
         cmpb    $'.',(%ecx)
         jne     .Lnofrac
@@ -79,22 +81,22 @@ strtod:
 #        }
 #    }
 
-        fld1
+        fld1                                                            # 1.0      10.0         integer
         incl    %ecx
 .Lfrac: movzbl  (%ecx),%eax
         subb    $'0',%al
         cmpb    $10,%al
         jnc     .Lfracend
-        fdivs   __ten
+        fdiv    %st(1),%st(0)                                           # 0.1^n    10.0         integer
         movl    %eax,(%esp)
-        fld     %st(0)
-        fimull  (%esp)
-        faddp   %st(2)
+        fld     %st(0)                                                  # 0.1^n    0.1^n        10.0        integer
+        fimull  (%esp)                                                  # d*0.1^n  0.1^n        10.0        integer
+        faddp   %st(3)                                                  # 0.1^n    10.0         integer+frac
         incl    %ecx
         jmp     .Lfrac
 
 .Lfracend:
-        fcomp
+        fcomp                                                           # 10.0         integer+frac
 
 .Lnofrac:
 
@@ -108,9 +110,6 @@ strtod:
 #        expo   = 0;
 #        factor = 10.L;
 
-        flds    __ten
-
-
 #        switch (*++p) {                 // ja hier weiﬂ ich nicht, was mindestens nach einem 'E' folgenden MUSS.
 #        case '-': factor = 0.1;
 #        case '+': p++;
@@ -122,7 +121,7 @@ strtod:
 #                  goto done;
 #        }
 
-        incl    %ecx
+        incl    %ecx                                                    # 10.0         integer.frac
         movb    (%ecx),%al
         subb    $'0',%al
         cmpb    $10,%al
@@ -146,14 +145,12 @@ strtod:
 #        while ( (unsigned int)(*p - '0') < 10u )
 #            expo = 10 * expo + (*p++ - '0');
 
-        xorl    %edx,%edx
+        xorl    %edx,%edx                                               # 10.0 or 0.1   integer.frac
 
-.Lexp:    movzbl  (%ecx),%eax
+.Lexp:  movzbl  (%ecx),%eax
         subb    $'0',%al
         cmpb    $10,%al
         jnc     .Lexpend
-#        addl    %edx,%edx
-#        leal    (%edx,%edx,4),%edx
         imull   $10,%edx
         addl    %eax,%edx
         incl    %ecx
@@ -168,16 +165,15 @@ strtod:
 #        }
 #    }
 
+.Lquad:
+        fmul    %st(0),%st(0)
 .Lexpend:
         shrl    $1,%edx
         jnc     .Lnomul
         fmul    %st(0),%st(1)
-.Lnomul:jz      .Lexppop
-        fmul    %st(0),%st(0)
-        jmp     .Lexpend
+.Lnomul:jnz     .Lquad                                                  # stuff         integer.frac E expo
 
-.Lexppop:
-        fcomp
+        fcomp                                                           # integer.frac E expo
 
 .Lnoexp:
 
@@ -190,7 +186,7 @@ strtod:
 
 .Lende:
         pop     %eax
-        fimull  (%esp)
+        fimull  (%esp)                                                  # +/- integer.frac E expo
         popl    %eax
         movl    8(%esp),%eax
         andl    %eax,%eax

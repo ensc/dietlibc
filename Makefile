@@ -48,7 +48,7 @@ CROSS=
 
 CC=gcc
 
-VPATH=lib:libstdio:libugly:libcruft:libcrypt:libshell:liblatin1:libdl:librpc:libregex:syscalls.c
+VPATH=lib:libstdio:libugly:libcruft:libcrypt:libshell:liblatin1:libdl:librpc:libregex:libm:syscalls.c
 
 SYSCALLOBJ=$(patsubst syscalls.s/%.S,$(OBJDIR)/%.o,$(wildcard syscalls.s/*.S))
 
@@ -58,7 +58,7 @@ LIBSTDIOOBJ=$(patsubst libstdio/%.c,$(OBJDIR)/%.o,$(wildcard libstdio/*.c))
 LIBCRUFTOBJ=$(patsubst libcruft/%.c,$(OBJDIR)/%.o,$(wildcard libcruft/*.c))
 LIBCRYPTOBJ=$(patsubst libcrypt/%.c,$(OBJDIR)/%.o,$(wildcard libcrypt/*.c))
 LIBSHELLOBJ=$(patsubst libshell/%.c,$(OBJDIR)/%.o,$(wildcard libshell/*.c))
-LIBMATHOBJ=$(patsubst %,$(OBJDIR)/%,$(LIBMATH))
+LIBMATH=$(patsubst libm/%.c,%.o,$(wildcard libm/*.c))
 
 LIBRPCOBJ=$(patsubst librpc/%.c,$(OBJDIR)/%.o,$(wildcard librpc/*.c))
 LIBREGEXOBJ=$(patsubst libregex/%.c,$(OBJDIR)/%.o,$(wildcard libregex/*.c))
@@ -68,6 +68,8 @@ LIBDLOBJ=$(patsubst libdl/%.c,$(OBJDIR)/%.o,$(wildcard libdl/*.c)) $(OBJDIR)/_dl
 LIBPTHREAD_OBJS=$(patsubst libpthread/%.c,$(OBJDIR)/%.o,$(shell ./threadsafe.sh)) $(OBJDIR)/__testandset.o
 
 include $(ARCH)/Makefile.add
+
+LIBMATHOBJ=$(patsubst %,$(OBJDIR)/%,$(LIBMATH))
 
 ifeq ($(CFLAGS),-pipe)
 CFLAGS+=-O -fomit-frame-pointer
