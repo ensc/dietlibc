@@ -92,3 +92,28 @@ sparc ppc alpha i386:
 mips arm:
 	$(MAKE) ARCH=$@ CROSS=$@-linux-gnu- all t libdietc.so
 
+
+
+# these depend on dietfeatures.h for large file backward compatibility
+__fstat64.o __lstat64.o __stat64.o: dietfeatures.h
+
+# these depend on dietfeatures.h for thread support
+alloc.o perror.o: dietfeatures.h
+
+# these depend on dietfeatures.h for linker warnings
+assert_fail.o sprintf.o vsnprintf.o ___div.o fflush.o setvbuf.o system.o sendfile.o: dietfeatures.h
+
+# these depend on dietfeatures.h for buffered stdio
+fclose.o fdglue.o fflush.o fgetc.o fputc.o fread.o fseek.o: dietfeatures.h
+printf.o setvbuf.o stderr.o stdin.o stdout.o fwrite.o: dietfeatures.h
+
+# these depend on dietfeatures.h for fast string routines
+strcasecmp.o strcat.o strchr.o strcmp.o strcpy.o strlen.o: dietfeatures.h
+strncasecmp.o strncat.o strrchr.o: dietfeatures.h
+
+# these depend on dietfeatures.h for /proc
+tty.o: dietfeatures.h
+
+# these depend on dietfeatures.h for ungetc support ;-)
+ungetc.o: dietfeatures.h
+

@@ -1,6 +1,5 @@
 #include <linux/types.h>
 #include <linux/fcntl.h>
-#include "dietfeatures.h"
 
 #ifndef O_LARGEFILE
 #define O_LARGEFILE 0
