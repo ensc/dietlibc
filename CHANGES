@@ -49,6 +49,8 @@
   Olaf: fixing the diet wrapper for sparc and changing the options for mips
   a few i386/*.S fixes (Hynek Schlawack)
   remove =0 for static variables (Thomas Ogrisegg)
+  fix strtoul (broke getaddrinfo and ssh)
+  fix segfault in parser
 
 0.22:
   fix i386 libm
