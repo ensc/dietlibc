@@ -19,9 +19,9 @@ void logwtmp(const char *line, const char *name, const char *host) {
   ut.ut_pid = getpid ();
   ut.ut_type = name[0] ? USER_PROCESS : DEAD_PROCESS;
 
-  strncpy (ut.ut_line, line, sizeof ut.ut_line);
-  strncpy (ut.ut_name, name, sizeof ut.ut_name);
-  strncpy (ut.ut_host, host, sizeof ut.ut_host);
+  memccpy (ut.ut_line, line, 0, sizeof ut.ut_line);
+  memccpy (ut.ut_name, name, 0, sizeof ut.ut_name);
+  memccpy (ut.ut_host, host, 0, sizeof ut.ut_host);
 
   gettimeofday (&ut.ut_tv, NULL);
 

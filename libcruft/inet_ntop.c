@@ -2,8 +2,6 @@
 #include <arpa/inet.h>
 #include <string.h>
 
-extern char *inet_ntoa_r(struct in_addr in,char* buf);
-
 static const unsigned char V4mappedprefix[12]={0,0,0,0,0,0,0,0,0,0,0xff,0xff};
 
 static char tohex(char hexdigit) {

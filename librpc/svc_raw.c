@@ -60,7 +60,15 @@ static bool_t svcraw_reply();
 static bool_t svcraw_freeargs();
 static void svcraw_destroy();
 
-static struct xp_ops server_ops;
+static struct xp_ops server_ops = {
+	svcraw_recv,
+	svcraw_stat,
+	svcraw_getargs,
+	svcraw_reply,
+	svcraw_freeargs,
+	svcraw_destroy
+};
+
 
 SVCXPRT *svcraw_create()
 {
@@ -150,13 +158,4 @@ char* args_ptr;
 static void svcraw_destroy()
 {
 }
-
-static struct xp_ops server_ops = {
-	svcraw_recv,
-	svcraw_stat,
-	svcraw_getargs,
-	svcraw_reply,
-	svcraw_freeargs,
-	svcraw_destroy
-};
 

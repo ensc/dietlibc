@@ -127,3 +127,22 @@ Q: My target platform does not have a MMU.  Should I be using uClibc?
 A: I am not aware of any issues with MMU-less systems.  You should be
    able to use the diet libc just fine.  Having a MMU or not is mostly
    an issue for the kernel, not libc.
+
+
+Q: How do I make myself a cross compiler?
+A: untar binutils and gcc (I used version 2.11.2 and 3.0.4 respectively)
+   Then use the --target=arm-linux (or whatever platform you want)
+   configure options.  For gcc, add --enable-languages=c (otherwise gcc
+   will try to make C++, Objective C and Java, too, and those
+   compilations will fail because they require installed libc headers
+   which you don't have yet).  I recommend using --enable-static
+   --disable-shared, too, because otherwise the binutils shared
+   libraries will overwrite each other if you install more than one
+   cross binutils for different targets.
+   binutils$ ./configure --enable-static --disable-shared --prefix=/opt/cross --target=arm-linux
+   gcc$ ./configure --enable-static --disable-shared --prefix=/opt/cross --target=arm-linux --enable-languages=c
+   For some platforms, gcc compilation will fail while trying to compile
+   some part of libgcc.a because it depends on some libc header file.
+   This is a gcc bug and you should complain using gccbug, because you
+   can't cross-compile libc unless you successfully installed the cross
+   compiler.

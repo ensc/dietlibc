@@ -59,7 +59,17 @@ static void xdrstdio_destroy();
 /*
  * Ops vector for stdio type XDR
  */
-static struct xdr_ops xdrstdio_ops;
+static struct xdr_ops xdrstdio_ops = {
+	xdrstdio_getlong,			/* deseraialize a long int */
+	xdrstdio_putlong,			/* seraialize a long int */
+	xdrstdio_getbytes,			/* deserialize counted bytes */
+	xdrstdio_putbytes,			/* serialize counted bytes */
+	xdrstdio_getpos,			/* get offset in the stream */
+	xdrstdio_setpos,			/* set offset in the stream */
+	xdrstdio_inline,			/* prime stream for inline macros */
+	xdrstdio_destroy			/* destroy stream */
+};
+
 
 /*
  * Initialize a stdio xdr stream.
@@ -176,15 +186,4 @@ unsigned int len;
 	 */
 	return (NULL);
 }
-
-static struct xdr_ops xdrstdio_ops = {
-	xdrstdio_getlong,			/* deseraialize a long int */
-	xdrstdio_putlong,			/* seraialize a long int */
-	xdrstdio_getbytes,			/* deserialize counted bytes */
-	xdrstdio_putbytes,			/* serialize counted bytes */
-	xdrstdio_getpos,			/* get offset in the stream */
-	xdrstdio_setpos,			/* set offset in the stream */
-	xdrstdio_inline,			/* prime stream for inline macros */
-	xdrstdio_destroy			/* destroy stream */
-};
 

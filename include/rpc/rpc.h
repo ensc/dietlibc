@@ -67,6 +67,4 @@
 /* routines for parsing /etc/rpc */
 #include <rpc/netdb.h>		/* structures and routines to parse /etc/rpc */
 
-int bindresvport(int sd, struct sockaddr_in* sin) __THROW;
-
 #endif /* rpc/rpc.h */

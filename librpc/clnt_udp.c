@@ -57,7 +57,15 @@ static bool_t clntudp_freeres();
 static bool_t clntudp_control();
 static void clntudp_destroy();
 
-static struct clnt_ops udp_ops;
+static struct clnt_ops udp_ops = {
+	clntudp_call,
+	clntudp_abort,
+	clntudp_geterr,
+	clntudp_freeres,
+	clntudp_destroy,
+	clntudp_control
+};
+
 
 /* 
  * Private data kept per client handle
@@ -427,13 +435,4 @@ CLIENT *cl;
 	mem_free((char*) cu, (sizeof(*cu) + cu->cu_sendsz + cu->cu_recvsz));
 	mem_free((char*) cl, sizeof(CLIENT));
 }
-
-static struct clnt_ops udp_ops = {
-	clntudp_call,
-	clntudp_abort,
-	clntudp_geterr,
-	clntudp_freeres,
-	clntudp_destroy,
-	clntudp_control
-};
 

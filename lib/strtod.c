@@ -60,7 +60,7 @@ double strtod(const char* s, char** endptr) {
 
 done:
     if ( endptr != NULL )
-        *endptr = p;
+        *endptr = (char*)p;
 
     return value * sign;
 }

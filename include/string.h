@@ -22,7 +22,8 @@ void* memcpy(void *dest, const void *src, size_t n) __THROW;
 
 #if !defined(__GNUC__) || __GNUC__ < 3
 /* gcc 3 unfortunately has internal prototypes for these functions that
- * differ from ours. */
+ * differ from ours.  Unfortunately, gcc will complain whether we have
+ * the correct prototypes or whether we don't have prototypes :-( */
 char *strncpy(char *dest, const char *src, size_t n) __THROW;
 int strncmp(const char *s1, const char *s2, size_t n) __THROW __pure__;
 char *strncat(char *dest, const char *src, size_t n) __THROW;

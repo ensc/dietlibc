@@ -55,7 +55,13 @@ static bool_t authnone_marshal();
 static bool_t authnone_validate();
 static bool_t authnone_refresh();
 
-static struct auth_ops ops;
+static struct auth_ops ops = {
+	authnone_verf,
+	authnone_marshal,
+	authnone_validate,
+	authnone_refresh,
+	authnone_destroy
+};
 
 static struct authnone_private {
 	AUTH no_client;
@@ -120,12 +126,4 @@ static bool_t authnone_refresh()
 static void authnone_destroy()
 {
 }
-
-static struct auth_ops ops = {
-	authnone_verf,
-	authnone_marshal,
-	authnone_validate,
-	authnone_refresh,
-	authnone_destroy
-};
 
