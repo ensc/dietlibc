@@ -6,8 +6,15 @@
 #define __WANT_POSIX1B_SIGNALS__
 
 #include <sys/types.h>
+#include <sys/time.h>
 
-typedef unsigned long sigset_t;
+#define NSIG		32
+
+#ifdef __mips__
+#define _NSIG		128
+#else
+#define _NSIG		64
+#endif
 
 #define SIGHUP		 1
 #define SIGINT		 2
@@ -27,6 +34,7 @@ typedef unsigned long sigset_t;
 #define SIGTERM		15
 #define SIGSTKFLT	16
 #define SIGCHLD		17
+#define SIGCLD		SIGCHLD
 #define SIGCONT		18
 #define SIGSTOP		19
 #define SIGTSTP		20
@@ -70,9 +78,9 @@ typedef unsigned long sigset_t;
 #define MINSIGSTKSZ	2048
 #define SIGSTKSZ	8192
 
-#define SIG_BLOCK          0	/* for blocking signals */
-#define SIG_UNBLOCK        1	/* for unblocking signals */
-#define SIG_SETMASK        2	/* for setting the signal mask */
+#define SIG_BLOCK	0	/* for blocking signals */
+#define SIG_UNBLOCK	1	/* for unblocking signals */
+#define SIG_SETMASK	2	/* for setting the signal mask */
 
 typedef int sig_atomic_t;
 
@@ -147,7 +155,11 @@ typedef struct siginfo {
 #define si_band		_sifields._sigpoll._band
 #define si_fd		_sifields._sigpoll._fd
 
-struct sigaction {
+#if 0 //#ifndef WANT_PRE_2_2_COMPAT
+
+typedef unsigned long old_sigset_t;
+
+struct old_sigaction {
   union {
     sighandler_t _sa_handler;
     void (*_sa_sigaction)(int, siginfo_t*, void*);
@@ -156,6 +168,25 @@ struct sigaction {
   unsigned long sa_flags;
   void (*sa_restorer)(void);
 };
+
+#endif
+
+#define _NSIG_WORDS	((_NSIG/sizeof(long))>>3)
+
+typedef struct {
+  unsigned long sig[_NSIG_WORDS];
+} sigset_t;
+
+struct sigaction {
+  union {
+    sighandler_t _sa_handler;
+    void (*_sa_sigaction)(int, siginfo_t*, void*);
+  } _u;
+  unsigned long sa_flags;
+  void (*sa_restorer)(void);
+  sigset_t sa_mask;
+};
+
 #define sa_handler	_u._sa_handler
 #define sa_sigaction	_u._sa_sigaction
 
@@ -165,28 +196,31 @@ typedef struct sigaltstack {
   size_t ss_size;
 } stack_t;
 
+int sigaltstack(const struct sigaltstack *newstack, struct sigaltstack *oldstack) __THROW;
+
 int sigemptyset(sigset_t *set) __THROW;
 int sigfillset(sigset_t *set) __THROW;
 int sigaddset(sigset_t *set, int signum) __THROW;
 int sigdelset(sigset_t *set, int signum) __THROW;
-int sigprocmask(int how, const sigset_t *set, sigset_t *oldset) __THROW;
+
 sighandler_t signal(int signum, sighandler_t action);
+
 int raise (int sig) __THROW;
-int sigaction(int signum, const struct sigaction *act, struct sigaction *oldact) __THROW;
-int sigaltstack(const struct sigaltstack *newstack, struct sigaltstack *oldstack) __THROW;
 int kill(pid_t pid, int sig) __THROW;
+
+int sigaction(int signum, const struct sigaction *act, struct sigaction *oldact) __THROW;
 
 int sigsuspend(const sigset_t *mask) __THROW;
 int sigpending(sigset_t *set) __THROW;
+int sigprocmask(int how, const sigset_t *set, sigset_t *oldset) __THROW;
 
-#ifndef SIGCLD
-#define SIGCLD SIGCHLD
-#endif
+int sigtimedwait(const sigset_t *mask, siginfo_t *info, const struct timespec *ts) __THROW;
+int sigqueueinfo(int pid, int sig, siginfo_t *info);
+
+/* 0 is OK ! kernel puts in MAX_THREAD_TIMEOUT :) */
+#define sigwaitinfo(m, i) sigtimedwait((m),(i),0)
 
 extern const char *const sys_siglist[];
-
-#define NSIG		32
-#define _NSIG		64
 
 #define killpg(pgrp,sig) kill(-pgrp,sig)
 

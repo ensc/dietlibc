@@ -1,8 +1,17 @@
 #include <signal.h>
+#include <errno.h>
 
-int __sigaddset(sigset_t *set, int sig) {
-  *set |= (1UL << (sig-1));
-  return 0;
+#define __sigmask(sig)		( ((unsigned long)1) << (((sig)-1) % (8*sizeof(unsigned long))) )
+#define __sigword(sig)		( ((sig)-1) / (8*sizeof(unsigned long)) )
+
+int sigaddset(sigset_t *set, int signo) {
+  if ((signo<0)||(signo>SIGRTMAX)) {
+    (*__errno_location())=EINVAL;
+    return -1;
+  } else {
+    unsigned long __mask = __sigmask (signo);
+    unsigned long __word = __sigword (signo);
+    set->sig[__word]|=__mask;
+    return 0;
+  }
 }
-
-int sigaddset (sigset_t *env, int signo) __attribute__((weak,alias("__sigaddset")));
