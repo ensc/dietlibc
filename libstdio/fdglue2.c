@@ -11,7 +11,7 @@ extern void __stdio_flushall(void);
 FILE* __stdio_init_file_nothreads(int fd) {
   FILE *tmp=(FILE*)malloc(sizeof(FILE));
   if (!tmp) goto err_out;
-  tmp->buf=(FILE*)malloc(BUFSIZE);
+  tmp->buf=(char*)malloc(BUFSIZE);
   if (!tmp->buf) {
     free(tmp);
 err_out:
