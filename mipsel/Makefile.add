@@ -1,0 +1,2 @@
+include mips/Makefile.add
+ENDIAN=-EL

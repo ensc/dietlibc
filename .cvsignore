@@ -10,9 +10,13 @@ bin-i386
 bin-mips
 bin-ppc
 bin-sparc
+bin-mipsel
+bin-parisc
 pic-alpha
 pic-arm
 pic-i386
 pic-mips
 pic-ppc
 pic-sparc
+pic-mipsel
+pic-parisc
