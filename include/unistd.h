@@ -9,8 +9,8 @@
 
 __BEGIN_DECLS
 
-extern int optind,opterr;
-extern char *optarg;
+int optind,opterr;
+char *optarg;
 int getopt(int argc, char *const argv[], const char *options);
 
 /* Values for the second argument to access.
@@ -21,7 +21,7 @@ int getopt(int argc, char *const argv[], const char *options);
 #define F_OK 0 /* Test for existence.  */
 
 /* Test for access to NAME using the real UID and real GID.  */
-extern int access (const char *__name, int __type) __THROW;
+int access (const char *__name, int __type) __THROW;
 
 #ifndef SEEK_SET
 #define SEEK_SET 0
@@ -118,7 +118,7 @@ int isatty(int desc) __THROW;
 
 void _exit(int status) __THROW __attribute__((noreturn));
 
-extern int daemon(int nochdir,int noclose) __THROW;
+int daemon(int nochdir,int noclose) __THROW;
 
 int pause(void) __THROW;
 
@@ -130,7 +130,7 @@ int pause(void) __THROW;
 #define getdents getdents64
 #endif
 
-extern char* getlogin(void) __THROW;
+char* getlogin(void) __THROW;
 /* warning: the diet libc getlogin() simply returns getenv("LOGNAME") */
 
 int chroot(const char *path) __THROW;
@@ -160,7 +160,7 @@ int select(int n, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct t
 
 int nice(int inc) __THROW;
 
-extern char **__environ;
+char **__environ;
 
 char *crypt(const char *key, const char *salt) __THROW;
 void encrypt(char block[64], int edflag) __THROW;
@@ -244,10 +244,12 @@ char * cuserid(char * string); /* ugh! */
 #define F_TLOCK 2	/* Test and lock a region for exclusive use.  */
 #define F_TEST  3	/* Test a region for other processes locks.  */
 
-extern int lockf (int __fd, int __cmd, off_t __len) __THROW;
-extern int lockf64 (int __fd, int __cmd, off64_t __len) __THROW;
+int lockf (int __fd, int __cmd, off_t __len) __THROW;
+int lockf64 (int __fd, int __cmd, off64_t __len) __THROW;
 
-extern void swab(const void *src, void *dest, ssize_t nbytes) __THROW;
+void swab(const void *src, void *dest, ssize_t nbytes) __THROW;
+
+int vhangup(void) __THROW;
 
 __END_DECLS
 
