@@ -207,3 +207,7 @@ A: The diet libc is also useful for servers because it can improve
    Please see http://www.fefe.de/fnord/ (in particular .../fnord/SPEED)
    for an example and/or read http://www.fefe.de/talk.pdf for some
    benchmarks.
+
+Q: I just compiled hello world and the binary is larger than with glibc!
+A: You forgot to add the dynamic glibc to your size comparison.  Please
+   use -static when linking with glibc to see the difference.
