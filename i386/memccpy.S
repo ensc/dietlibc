@@ -31,6 +31,6 @@ memccpy:
 		xorl %edi, %edi
 .Lout:
 		movl %edi, %eax
-		popl %esi
 		popl %edi
+		popl %esi
 		ret

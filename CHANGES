@@ -21,6 +21,8 @@
     debug my regular expressions.  Please read contrib/debug-realloc.txt
   our i386 memchr,memcmp were broken for the count=0 case
   fix DNS domain search
+  i386 memccpy exchanged esi and edi :-(  I should do more checks before
+    accepting external code...
 
 0.16:
   "diet -v" or "diet -Os" segfaulted without further arguments.

@@ -37,7 +37,8 @@ char *__dns_domains[8];
 
 void __dns_readstartfiles(void) {
   int fd;
-  char *buf=alloca(4096);
+  char __buf[4096];
+  char *buf=__buf;
   int len;
   if (_res.nscount>0) return;
   {
