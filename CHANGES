@@ -4,6 +4,7 @@
   make strings.h susv3 compliant (Gunnar Ritter)
   remove stdio dependence in abort
   fix truncate64, ftruncate64 (Luc Van Oostenryck and Yuri Kozlov)
+  fix and improve erand48() (Luc Van Oostenryck)
 
 0.21:
   use gcc's size_t, ptrdiff_t and wchar_t types (Olaf)

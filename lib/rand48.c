@@ -82,7 +82,7 @@ long nrand48(randbuf buf) {
 
 double erand48(randbuf buf) {
 	double ret;
-	ret = buf[2] / 65536 + buf[1] / (65536.0 * 65536) + buf[0] / (65536.0 * 65536 * 65536);
+	ret = ((buf[0] / 65536.0 + buf[1]) / 65536.0 + buf[2]) / 65536.0;
 	calc_next(buf);
 	return ret;
 }
