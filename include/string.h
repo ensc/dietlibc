@@ -80,4 +80,6 @@ int strcoll(const char *s1, const char *s2) __THROW;
 #define rindex(a,b) strrchr(a,b)
 #endif
 
+#define strncpy(dest,src,n) memccpy(dest,src,0,n)
+
 #endif

@@ -29,6 +29,10 @@
   Ryan told me that fmod was not included in libm.  Oops.
   strstr(whatever,"") returned NULL, not whatever.  Found by a new test
     suite entry for strstr that I wrote.
+  Thomas Oggrisegg suggested the following:
+    add <asm/sigcontext.h> for profiling support.
+    make strncpy a #define in string.h to save a few bytes.
+  add a getenv test suite entry.
 
 0.14:
   fix brk again (missing __brk, trivial oversight)
