@@ -16,9 +16,9 @@ int sprintf(char *str, const char *format, ...) __THROW;
 int snprintf(char *str, size_t size, const char *format, ...) __THROW;
 int asprintf(char **ptr, const char* format, ...) __THROW;
 
-int scanf( const char *format, ...) __THROW;
-int fscanf( FILE *stream, const char *format, ...) __THROW;
-int sscanf( const char *str, const char *format, ...) __THROW;
+int scanf(const char *format, ...) __THROW;
+int fscanf(FILE *stream, const char *format, ...) __THROW;
+int sscanf(const char *str, const char *format, ...) __THROW;
 
 #include <stdarg.h>
 
@@ -27,9 +27,9 @@ int vfprintf(FILE *stream, const char *format, va_list ap) __THROW;
 int vsprintf(char *str, const char *format, va_list ap) __THROW;
 int vsnprintf(char *str, size_t size, const char *format, va_list ap) __THROW;
 
-int vscanf( const char *format, va_list ap) __THROW;
-int vsscanf( const char *str, const char *format, va_list ap) __THROW;
-int vfscanf( FILE *stream, const char *format, va_list ap) __THROW;
+int vscanf(const char *format, va_list ap) __THROW;
+int vsscanf(const char *str, const char *format, va_list ap) __THROW;
+int vfscanf(FILE *stream, const char *format, va_list ap) __THROW;
 
 int fgetc(FILE *stream) __THROW;
 int fgetc_unlocked(FILE *stream) __THROW;
@@ -51,23 +51,24 @@ int fputs(const char *s, FILE *stream) __THROW;
 
 int puts(const char *s) __THROW;
 
-long fseek( FILE *stream, long offset, int whence) __THROW;
-long ftell( FILE *stream) __THROW;
-void rewind( FILE *stream) __THROW;
-int fgetpos( FILE *stream, fpos_t *pos) __THROW;
-int fsetpos( FILE *stream, fpos_t *pos) __THROW;
+long fseek(FILE *stream, long offset, int whence) __THROW;
+long ftell(FILE *stream) __THROW;
+void rewind(FILE *stream) __THROW;
+int fgetpos(FILE *stream, fpos_t *pos) __THROW;
+int fsetpos(FILE *stream, fpos_t *pos) __THROW;
 
-size_t fread( void *ptr, size_t size, size_t nmemb, FILE *stream) __THROW;
+size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream) __THROW;
 
-size_t fwrite( const void *ptr, size_t size, size_t nmemb, FILE *stream) __THROW;
+size_t fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream) __THROW;
 
 int fflush(FILE *stream) __THROW;
 
 int fclose(FILE *stream) __THROW;
 
 int feof (FILE *stream) __THROW;
-int ferror( FILE *stream) __THROW;
-int fileno( FILE *stream) __THROW;
+int ferror(FILE *stream) __THROW;
+int fileno(FILE *stream) __THROW;
+void clearerr(FILE *stream) __THROW;
 
 int remove(const char *pathname) __THROW;
 

@@ -53,6 +53,10 @@ double log10(double d) __THROW __attribute__((__const__));
 
 double pow(double x, double y) __THROW __attribute__((__const__));
 
+double sqrt(double x) __THROW __attribute__((__const__));
+double fabs(double x) __THROW __attribute__((__const__));
+double fmod(double x, double y) __THROW __attribute__((__const__));
+
 #  define HUGE_VAL \
   (__extension__                                                              \
    ((union { unsigned __l __attribute__((__mode__(__DI__))); double __d; })   \
