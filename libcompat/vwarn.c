@@ -4,7 +4,7 @@
 #include <errno.h>
 #include <string.h>
 
-void vwarnx(const char* f, va_list a) {
+void vwarn(const char* f, va_list a) {
   vfdprintf(2,f,a);
   fdprintf(2,": %s\n",strerror(errno));
 }
