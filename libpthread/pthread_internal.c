@@ -194,7 +194,7 @@ static void *__mthread_starter(void *arg)
 #endif
   do {
     __thread_wait_some_time();
-    if (td->canceled) return 42;
+    if (td->canceled) return (void*)42;
   } while (__pthread_trylock(&td->go));
 
 //  __pthread_lock(&td->go);
