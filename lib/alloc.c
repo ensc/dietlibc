@@ -142,12 +142,18 @@ void __libc_free(void *ptr) __attribute__((alias("_alloc_libc_free")));
 void free(void *ptr) __attribute__((weak,alias("_alloc_libc_free")));
 void if_freenameindex(void* ptr) __attribute__((alias("free")));
 
-static __alloc_t zeromem[2]= {{0},{0}};
+#ifdef WANT_MALLOC_ZERO
+static __alloc_t zeromem[2]={{0},{0}};
+#endif
 
 static void* _alloc_libc_malloc(size_t size) {
   __alloc_t* ptr;
   size_t need;
+#ifdef WANT_MALLOC_ZERO
+  if (!size) return BLOCK_RET(zeromem);
+#else
   if (!size) goto retzero;
+#endif
   size+=sizeof(__alloc_t);
   if (size<=__MAX_SMALL_SIZE) {
     need=GET_SIZE(size);
@@ -187,7 +193,7 @@ void* __libc_realloc(void* ptr, size_t _size) {
 	    register __alloc_t* foo=BLOCK_START(new);
 	    size=foo->size;
 	    if (size>tmp->size) size=tmp->size;
-	    memcpy(new,ptr,size-sizeof(__alloc_t));
+	    if (size) memcpy(new,ptr,size-sizeof(__alloc_t));
 	    _alloc_libc_free(ptr);
 	  }
 	  ptr=new;

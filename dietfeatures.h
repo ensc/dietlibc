@@ -19,7 +19,7 @@
 #define WANT_THREAD_SAFE
 
 /* make the startcode, etc. dynamic aware ({con,de}structors) */
-/* #undef WANT_DYNAMIC */
+/* #define WANT_DYNAMIC */
 
 /* do you want smaller or faster string routines? */
 /* #define WANT_FASTER_STRING_ROUTINES */
@@ -63,6 +63,13 @@
 /* do you want diet to include a safeguard dependency to make linking
  * against glibc fail? */
 #define WANT_SAFEGUARD
+
+/* dy you want that malloc(0) return a pointer to a "zero-length" object
+ * that is realloc-able; means realloc(..,size) gives a NEW object (like a
+ * call to malloc(size)).
+ * WARNING: this violates C99 */
+/* #define WANT_MALLOC_ZERO */
+
 
 /* stop uncommenting here ;-) */
 #ifndef WANT_FASTER_STRING_ROUTINES
