@@ -5,8 +5,11 @@
 
 __BEGIN_DECLS
 
-#if defined(__i386__) || defined(__x86_64__)
+#if defined(__i386__)
 #include <asm/i386-sigcontext.h>
+#endif
+
+#if defined(__x86_64__)
 #endif
 
 #ifdef __sparc__

@@ -105,6 +105,16 @@ struct ucontext {
 #define uc_link		uc_mcontext.sc_gr[0]	/* wrong type; nobody cares */
 #define uc_sigmask	uc_mcontext.sc_sigmask
 #define uc_stack	uc_mcontext.sc_stack
+#elif defined(__x86_64__)
+
+struct ucontext {
+	unsigned long	  uc_flags;
+	struct ucontext  *uc_link;
+	stack_t		  uc_stack;
+	struct sigcontext uc_mcontext;
+	sigset_t	  uc_sigmask;	/* mask last for extensibility */
+};
+
 #else
 #error NEED TO PORT <sys/sigcontext.h>!
 #endif

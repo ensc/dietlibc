@@ -58,6 +58,7 @@
   make header files C++ compliant (__BEGIN_DECLS and __END_DECLS)
   remove more warnings (Yuri Kozlov)
   use expect() in a few strategic places
+  try to add sigcontext and ucontext for x86_64
 
 0.22:
   fix i386 libm
