@@ -53,6 +53,7 @@ PTHREAD_OBJS = \
 	pthread_mutexattr_setkind_np.o \
  \
 	pthread_atfork.o \
+	pthread_sys_alloc.o \
 	pthread_sys_close.o \
 	pthread_sys_create.o \
 	pthread_sys_fcntl.o \

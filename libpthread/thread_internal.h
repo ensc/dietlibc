@@ -93,6 +93,9 @@ void __thread_init();
 
 /* diet libc syscalls */
 
+void  __libc_free(void *ptr);
+void *__libc_malloc(size_t size);
+
 pid_t __libc_fork(void);
 
 int __libc_close(int fd);

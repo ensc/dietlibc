@@ -6,9 +6,6 @@
 #include <asm/mman.h>
 #include <linux/errno.h>
 #include "dietfeatures.h"
-#ifdef WANT_THREAD_SAVE
-#include <pthread.h>
-#endif
 
 #if 0
 #include <sys/mman.h>
@@ -61,12 +58,8 @@ typedef struct t_alloc_head {
 /* freelist handler */
 static alloc_head base = {&base,0};
 static char *alloc_get_end = MEM_ALLOC_START;
-#ifdef WANT_THREAD_SAVE
-static int inalloc=0;
-static pthread_mutex_t mutex_alloc = PTHREAD_MUTEX_INITIALIZER;
-#endif
 
-void free(void *ptr)
+void __libc_free(void *ptr)
 {
   alloc_head *prev,*p,*block;
 
@@ -74,9 +67,6 @@ void free(void *ptr)
 
   block=START_BLOCK(ptr);
 
-#ifdef WANT_THREAD_SAVE
-  if (!inalloc) pthread_mutex_lock(&mutex_alloc);
-#endif
   prev=&base;
   for (p=prev->ptr ; ; prev=p, p=p->ptr)
   {
@@ -102,10 +92,8 @@ void free(void *ptr)
     prev->size += block->size;
     prev->ptr   = block->ptr;
   }
-#ifdef WANT_THREAD_SAVE
-  if (!inalloc) pthread_mutex_unlock(&mutex_alloc);
-#endif
 }
+void free(void *ptr) __attribute__((weak,alias("__libc_free")));
 
 static void *alloc_get_mem(unsigned long size)
 {
@@ -138,12 +126,12 @@ static void *alloc_get_mem(unsigned long size)
   ah->size=size;
 
   /* link new free maped pages in freelist */
-  free(START_DATA(tmp));
+  __libc_free(START_DATA(tmp));
 
   return &base;
 }
 
-void *malloc(size_t size)
+void *__libc_malloc(size_t size)
 {
   alloc_head *p, *prev;
   size_t need;
@@ -151,10 +139,6 @@ void *malloc(size_t size)
   /* needed MEM_ALLOC_MIN */
   need=MIN_ALLOC(size);
 
-#ifdef WANT_THREAD_SAVE
-  pthread_mutex_lock(&mutex_alloc);
-  inalloc=1;
-#endif
   prev=&base;
   for (p=prev->ptr;;prev=p,p=p->ptr)
   {
@@ -184,10 +168,6 @@ void *malloc(size_t size)
       }
       p->ptr=p;		/* self-link */
 
-#ifdef WANT_THREAD_SAVE
-      inalloc=0;
-      pthread_mutex_unlock(&mutex_alloc);
-#endif
       return (void*)START_DATA(p);
     }
     else if (p==&base)
@@ -196,12 +176,9 @@ void *malloc(size_t size)
     }
   }
 err_out:
-#ifdef WANT_THREAD_SAVE
-  inalloc=0;
-  pthread_mutex_unlock(&mutex_alloc);
-#endif
   return NULL;
 }
+void *malloc(size_t size) __attribute__((weak,alias("__libc_malloc")));
 
 void *calloc(size_t nmemb,size_t size)
 {
