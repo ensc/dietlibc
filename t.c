@@ -54,10 +54,12 @@ char *strlcpy2(char *dest, const char *src, size_t n)
 }
 
 int main(int argc,char *argv[]) {
+#if 0
   char buf[128];
-  strcpy(buf,"/tmp/foo.XXXXXXX");
+  strcpy(buf,"/tmp/fnord/foo.XXXXXXX");
   printf("%d\n",mkdtemp(buf));
   printf("%s\n",buf);
+#endif
 #if 0
   printf("%d\n",WEXITSTATUS(system("exit 17")));
 #endif
@@ -324,9 +326,9 @@ int main(int argc,char *argv[]) {
   if (foo)
     printf("found service %s on port %d\n",foo->s_name,foo->s_port);
 #endif
-#if 0
+#if 1
   char buf[128];
-  strcpy(buf,"/tmp/foo.XXXXXXX");
+  strcpy(buf,"/tmp/blub/foo.XXXXXXX");
   printf("%d\n",mkstemp(buf));
   printf("%s\n",buf);
   unlink(buf);
