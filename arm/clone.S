@@ -23,8 +23,8 @@ __clone:
 	mov	r0, r2			@ move flags argument to r0
 	swi	__NR_clone		@ call the syscall
 	movs	r0, r0			@ set condition codes
-	blt	__unified_syscall	@ (return code  < 0): handle as an error
-	movne	pc, lr			@ (return code == 0): return to parent
+	blt	__unified_syscall	@ (return code < 0): handle as an error
+	movne	pc, lr			@ (return code > 0): return to parent
 
 	mov	fp, #0			@ clear the frame pointer
 	adr	lr, 1f			@ setup return address
