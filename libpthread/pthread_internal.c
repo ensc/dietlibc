@@ -49,8 +49,15 @@ int *__errno_location(void)
     return &threads[id].errno;
 }
 
-/* thread errno location */
-void *set_errno(int error)
+/* thread get_errno */
+int __get_errno()
+{
+  int *errno=__errno_location();
+  if (errno) return *errno;
+  return ENODATA;
+}
+/* thread set_errno */
+void __set_errno(int error)
 {
   int *errno=__errno_location();
   if (errno) *errno=error;

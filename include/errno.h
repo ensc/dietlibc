@@ -7,5 +7,6 @@ extern int errno;
 
 extern int *__errno_location(void);
 extern void __set_errno(int error);
+extern int __get_errno();
 
 #endif

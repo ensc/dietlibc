@@ -26,13 +26,41 @@ struct spwd *getspent(void)
 
 	sp.sp_namp	= parts[0];
 	sp.sp_pwdp	= parts[1];
-	sp.sp_lstchg	= atoi(parts[2]); /* XXX: atol */
-	sp.sp_min	= atoi(parts[3]);
-	sp.sp_max	= atoi(parts[4]);
-	sp.sp_warn	= atoi(parts[5]);
-	sp.sp_inact	= atoi(parts[6]);
-	sp.sp_expire	= atoi(parts[7]);
-	sp.sp_flag	= atoi(parts[8]);
+
+	if (*parts[2]!=0) 
+	  sp.sp_lstchg	= atoi(parts[2]); /* XXX: atol */
+	else
+	  sp.sp_lstchg	= -1;
+
+	if (*parts[3]!=0) 
+	  sp.sp_min	= atoi(parts[3]);
+	else
+	  sp.sp_min	= -1;
+
+	if (*parts[4]!=0) 
+	  sp.sp_max	= atoi(parts[4]);
+	else
+	  sp.sp_max	= -1;
+
+	if (*parts[5]!=0) 
+	  sp.sp_warn	= atoi(parts[5]);
+	else
+	  sp.sp_warn	= -1;
+
+	if (*parts[6]!=0) 
+	  sp.sp_inact	= atoi(parts[6]);
+	else
+	  sp.sp_inact	= -1;
+
+	if (*parts[7]!=0) 
+	  sp.sp_expire	= atoi(parts[7]);
+	else
+	  sp.sp_expire	= -1;
+
+	if (*parts[8]!=0) 
+	  sp.sp_flag	= atoi(parts[8]);
+	else
+	  sp.sp_flag	= -1;
 
 	return &sp;
 
