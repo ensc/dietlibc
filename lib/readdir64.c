@@ -22,13 +22,13 @@ struct dirent64* readdir64(DIR *d) {
 }
 #else
 struct dirent64* readdir64(DIR *d) {
-#ifndef __NR_getdents64
+#ifdef __NR_getdents64
   static int trygetdents64=1;
 #endif
   struct dirent* o;
   static struct dirent64 d64;
 again:
-#ifndef __NR_getdents64
+#ifdef __NR_getdents64
   if (!trygetdents64) {
 #endif
     if (!d->num || (d->cur += ((struct dirent*)(d->buf+d->cur))->d_reclen)>=d->num) {
@@ -43,7 +43,7 @@ again:
     strcpy(d64.d_name,o->d_name);
     d64.d_type=0;	/* is this correct? */
     return &d64;
-#ifndef __NR_getdents64
+#ifdef __NR_getdents64
   }
   if (!d->num || (d->cur += ((struct dirent64*)(d->buf+d->cur))->d_reclen)>=d->num) {
     int res=getdents64(d->fd,(struct dirent64*)d->buf,sizeof (d->buf));

@@ -14,6 +14,7 @@ _exit:
 #endif
 __unified_syscall:
 	movzbl	%al, %eax
+	mov	%rcx, %r10
 	syscall
 	cmpq	$0, %rax
 	jge	.Lnoerror
