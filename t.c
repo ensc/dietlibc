@@ -33,10 +33,21 @@
 #include <arpa/nameser.h>
 #include <resolv.h>
 #include <fnmatch.h>
+#include <stdarg.h>
 
-extern int errno;
+void fnord(char*x,...) {
+  int i;
+  va_list v;
+  va_start(v,x);
+  for (i=0; i<10; ++i) {
+    char *tmp=va_arg(v,char*);
+    if (!tmp) break;
+    write(1,tmp,strlen(tmp));
+  }
+}
 
 int main(int argc,char *argv[]) {
+  fnord("fnord","foo\n","bar\n",0);
 #if 0
   printf("%hd %hhd\n",-5,-1234567);
 #endif
@@ -427,7 +438,7 @@ int main(int argc,char *argv[]) {
   sscanf("1 (init","%d (%15c",&pid,name);
   printf("pid %d name %s\n",pid,name);
 #endif
-#if 1
+#if 0
   DIR *d=opendir("/proc");
   if (d) {
     struct dirent *D;

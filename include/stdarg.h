@@ -3,11 +3,10 @@
 
 #include <endian.h>
 
-typedef char* va_list;
-
-#define va_end(ap) ap=0
-
 #if defined(__sparc__)
+
+typedef char* va_list;
+#define va_end(ap) ap=0
 
 enum __va_type_classes {
   __no_type_class = -1,
@@ -60,7 +59,152 @@ __extension__							\
        ((TYPE *) (void *) ((char *)(pvar) - __va_rounded_size (TYPE)))));}))
 
 
-#else	/* !__sparc__ */
+#elif defined(__powerpc__)
+
+typedef struct __va_list_tag {
+  unsigned char gpr;		/* index into the array of 8 GPRs stored in the
+				   register save area gpr=0 corresponds to r3,
+				   gpr=1 to r4, etc. */
+  unsigned char fpr;		/* index into the array of 8 FPRs stored in the
+				   register save area fpr=0 corresponds to f1,
+				   fpr=1 to f2, etc. */
+  char *overflow_arg_area;	/* location on stack that holds the next
+				   overflow argument */
+  char *reg_save_area;		/* where r3:r10 and f1:f8, if saved are stored */
+} va_list[1];
+
+#define __va_overflow(AP) (AP)->overflow_arg_area
+#ifdef __OPTIMIZE__
+extern void __va_arg_type_violation(void) __attribute__((__noreturn__));
+#else
+#define __va_arg_type_violation()
+#endif
+
+typedef struct {
+  long   __gp_save[8];		/* save area for GP registers */
+  double __fp_save[8];		/* save area for FP registers */
+} __va_regsave_t;
+
+/* Macros to access the register save area */
+/* We cast to void * and then to TYPE * because this avoids
+   a warning about increasing the alignment requirement.  */
+#define __VA_FP_REGSAVE(AP,OFS,TYPE)					\
+  ((TYPE *) (void *) (&(((__va_regsave_t *)				\
+			 (AP)->reg_save_area)->__fp_save[OFS])))
+
+#define __VA_GP_REGSAVE(AP,OFS,TYPE)					\
+  ((TYPE *) (void *) (&(((__va_regsave_t *)				\
+			 (AP)->reg_save_area)->__gp_save[OFS])))
+
+#define __va_start_common(AP, FAKE) \
+  __builtin_memcpy ((AP), __builtin_saveregs (), sizeof(va_list))
+
+#define va_start(AP,LASTARG) \
+  (__builtin_next_arg (LASTARG), __va_start_common (AP, 0))
+
+#ifdef _SOFT_FLOAT
+#define __va_float_p(TYPE)	0
+#else
+#define __va_float_p(TYPE)	(__builtin_classify_type(*(TYPE *)0) == 8)
+#endif
+
+#define __va_aggregate_p(TYPE)	(__builtin_classify_type(*(TYPE *)0) >= 12)
+#define __va_size(TYPE)		((sizeof(TYPE) + sizeof (long) - 1) / sizeof (long))
+
+#define va_arg(AP,TYPE)							   \
+__extension__ (*({							   \
+  register TYPE *__ptr;							   \
+									   \
+  if (__va_float_p (TYPE) && sizeof (TYPE) < 16)			   \
+    {									   \
+      unsigned char __fpr = (AP)->fpr;					   \
+      if (__fpr < 8)							   \
+	{								   \
+	  __ptr = __VA_FP_REGSAVE (AP, __fpr, TYPE);			   \
+	  (AP)->fpr = __fpr + 1;					   \
+	}								   \
+      else if (sizeof (TYPE) == 8)					   \
+	{								   \
+	  unsigned long __addr = (unsigned long) (__va_overflow (AP));	   \
+	  __ptr = (TYPE *)((__addr + 7) & -8);				   \
+	  __va_overflow (AP) = (char *)(__ptr + 1);			   \
+	}								   \
+      else								   \
+	{								   \
+	  /* float is promoted to double.  */				   \
+	  __va_arg_type_violation ();					   \
+	}								   \
+    }									   \
+									   \
+  /* Aggregates and long doubles are passed by reference.  */		   \
+  else if (__va_aggregate_p (TYPE) || __va_float_p (TYPE))		   \
+    {									   \
+      unsigned char __gpr = (AP)->gpr;					   \
+      if (__gpr < 8)							   \
+	{								   \
+	  __ptr = * __VA_GP_REGSAVE (AP, __gpr, TYPE *);		   \
+	  (AP)->gpr = __gpr + 1;					   \
+	}								   \
+      else								   \
+	{								   \
+	  TYPE **__pptr = (TYPE **) (__va_overflow (AP));		   \
+	  __ptr = * __pptr;						   \
+	  __va_overflow (AP) = (char *) (__pptr + 1);			   \
+	}								   \
+    }									   \
+									   \
+  /* Only integrals remaining.  */					   \
+  else									   \
+    {									   \
+      /* longlong is aligned.  */					   \
+      if (sizeof (TYPE) == 8)						   \
+	{								   \
+	  unsigned char __gpr = (AP)->gpr;				   \
+	  if (__gpr < 7)						   \
+	    {								   \
+	      __gpr += __gpr & 1;					   \
+	      __ptr = __VA_GP_REGSAVE (AP, __gpr, TYPE);		   \
+	      (AP)->gpr = __gpr + 2;					   \
+	    }								   \
+	  else								   \
+	    {								   \
+	      unsigned long __addr = (unsigned long) (__va_overflow (AP)); \
+	      __ptr = (TYPE *)((__addr + 7) & -8);			   \
+	      (AP)->gpr = 8;						   \
+	      __va_overflow (AP) = (char *)(__ptr + 1);			   \
+	    }								   \
+	}								   \
+      else if (sizeof (TYPE) == 4)					   \
+	{								   \
+	  unsigned char __gpr = (AP)->gpr;				   \
+	  if (__gpr < 8)						   \
+	    {								   \
+	      __ptr = __VA_GP_REGSAVE (AP, __gpr, TYPE);		   \
+	      (AP)->gpr = __gpr + 1;					   \
+	    }								   \
+	  else								   \
+	    {								   \
+	      __ptr = (TYPE *) __va_overflow (AP);			   \
+	      __va_overflow (AP) = (char *)(__ptr + 1);			   \
+	    }								   \
+	}								   \
+      else								   \
+	{								   \
+	  /* Everything else was promoted to int.  */			   \
+	  __va_arg_type_violation ();					   \
+	}								   \
+    }									   \
+  __ptr;								   \
+}))
+
+#define va_end(AP)	((void)0)
+
+/* Copy va_list into another variable of this type.  */
+#define va_copy(dest, src) *(dest) = *(src)
+
+#else	/* !__sparc__ && !__powerpc__ */
+
+typedef char* va_list;
 
 #ifndef __i386__
 #warning "stdarg for this platform is untested!"
@@ -74,6 +218,13 @@ __extension__							\
 #endif
 #define va_arg(ap,type) (ap+=sizeof(type), *(type*)((void*)ap-sizeof(type)))
 
+#endif
+
+#ifndef va_copy
+#define va_copy(x,y) x=y
+#endif
+#ifndef va_end
+#define va_end(ap) ap=0
 #endif
 
 #endif
