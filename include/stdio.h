@@ -58,6 +58,8 @@ int fflush(FILE *stream);
 
 int fclose(FILE *stream);
 
+int feof (FILE *stream);
+
 extern FILE *stdin, *stdout, *stderr;
 
 #define EOF (int)(-1)
