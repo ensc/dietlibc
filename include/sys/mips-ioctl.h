@@ -101,8 +101,10 @@
 #define TIOCSWINSZ	_IOW('t', 103, struct winsize)	/* set window size */
 #define TIOCGWINSZ	_IOR('t', 104, struct winsize)	/* get window size */
 #define TIOCNOTTY	0x5471		/* void tty association */
+#if defined(__USE_MISC) || defined (__KERNEL__)
 #define TIOCSETD	(tIOC | 1)
 #define TIOCGETD	(tIOC | 0)
+#endif
 
 #define FIOCLEX		0x6601
 #define FIONCLEX	0x6602		/* these numbers need to be adjusted. */
