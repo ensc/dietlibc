@@ -2,8 +2,13 @@
 #  My gcc tries to align some of the strings if written the code in C. This costs a lot of bytes.
 #
 
-.globl sys_errlist
+#ifdef __DYN_LIB
+.section	.data
+#else
 .section	.rodata
+#endif
+
+.globl sys_errlist
 	.align 4
 #ifdef __arm__
 	.type	 sys_errlist,object
@@ -148,6 +153,10 @@ sys_errlist:
 sys_nerr:
 	.long 125
 
+
+#ifdef __DYN_LIB
+.section	.rodata
+#endif
 
 .LC000:	.string	"Success"
 .LC001:	.string	"Operation not permitted"

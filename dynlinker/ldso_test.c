@@ -51,7 +51,7 @@ int main(int argc, char**argv, char**envp)
     switch (ea->type) {
     case AT_EXECFD:
     case AT_NOTELF:
-      //puts("N.F.Y. This you do without ME !");
+      //write(2,"N.F.Y. This you do without ME !\n",32);
       _exit(42);
       break;
 
@@ -70,23 +70,23 @@ int main(int argc, char**argv, char**envp)
 
 #if 0
     case AT_BASE:
-      printf("base: %08x\n",ea->val);
+      DEBUG("base: %08x\n",ea->val);
       break;
     case AT_FLAGS:
-      printf("flags %08x\n",ea->val);
+      DEBUG("flags %08x\n",ea->val);
       break;
 
     case AT_UID:
-      printf(" UID: %d\n",ea->val);
+      DEBUG(" UID: %d\n",ea->val);
       break;
     case AT_EUID:
-      printf("EUID: %d\n",ea->val);
+      DEBUG("EUID: %d\n",ea->val);
       break;
     case AT_GID:
-      printf(" GID: %d\n",ea->val);
+      DEBUG(" GID: %d\n",ea->val);
       break;
     case AT_EGID:
-      printf("EGID: %d\n",ea->val);
+      DEBUG("EGID: %d\n",ea->val);
       break;
 #endif
 
@@ -102,13 +102,13 @@ int main(int argc, char**argv, char**envp)
 
 #if 0
     case AT_PLATFORM:
-      printf("CPU: %s\n",ea->val);
+      DEBUG("CPU: %s\n",ea->val);
       break;
     case AT_HWCAP:
-      printf("CPU capabilities: %08x\n",ea->val);
+      DEBUG("CPU capabilities: %08x\n",ea->val);
       break;
     case AT_CLKTCK:
-      printf("CLK per sec %d\n", ea->val);
+      DEBUG("CLK per sec %d\n", ea->val);
       break;
 #endif
 
@@ -133,7 +133,7 @@ int main(int argc, char**argv, char**envp)
   dlh = _dl_dyn_scan(dlh,(void*)o,0);
 
   if (!dlh) {
-    DEBUG("error in dyn_scan");
+    DEBUG("error in dyn_scan\n");
     _exit(23);
   }
 
@@ -141,7 +141,7 @@ int main(int argc, char**argv, char**envp)
   dlh->fini=0;
 
   if (dyn_start==ldso_start) {
-    DEBUG("error in dyn_scan");
+    DEBUG("error in dyn_scan\n");
     _exit(42);
   }
 

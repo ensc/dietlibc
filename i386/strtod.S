@@ -3,6 +3,12 @@
 .type   strtod,@function
 .global strtod
 strtod:
+#ifdef __DYN_LIB
+	pushl	%ebx
+	call	1f
+1:	popl	%ebx
+	addl	$_GLOBAL_OFFSET_TABLE_+[.-1b],%ebx
+#endif
 
 #double  strtod ( const char* s, const char** endptr )
 #{
@@ -53,7 +59,11 @@ strtod:
 
 
         fldz
+#ifdef __DYN_LIB
+	flds	__ten@GOTOFF(%ebx)					# 10.0     0.0
+#else
         flds    __ten                                                   # 10.0     0.0
+#endif
 .Lint:  movzbl  (%ecx),%eax
         subb    $'0',%al
         cmpb    $10,%al
@@ -193,6 +203,9 @@ strtod:
         jz      .Lnostore
         movl    %ecx,(%eax)
 .Lnostore:
+#ifdef __DYN_LIB
+	popl	%ebx
+#endif
         ret
 
 .Lend:

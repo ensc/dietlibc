@@ -170,6 +170,7 @@
 	ret
 
 __MD5Transform:
+__MD5TransformLocal:
 	pushal
 	movl	8+32(%esp),%ecx		// x
 	movl	4+32(%esp),%eax		// state
@@ -256,7 +257,7 @@ MD5Update:
 	leal	BUFFER, %ecx
 	pushl	%ecx
 	push	%ebx
-	call	__MD5Transform
+	call	__MD5TransformLocal
 
 //      len = (inputBytes - partLen) / 64;
 
@@ -269,7 +270,7 @@ MD5Update:
 	pushl	%ecx
 	pushl	%esi
 	pushl	%ebx
-	call	__MD5Transform
+	call	__MD5TransformLocal
 	addl	$24,%esp
 	
 //	i = partLen + 64 * len;
