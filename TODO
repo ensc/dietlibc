@@ -44,3 +44,5 @@ printf %e
 move DNS stuff to libresolv.a?
 
 x86_64: readdir and regex fail their tests (Gwenole Beauchesne)
+
+regular expressions are far from standards compliant.

@@ -26,7 +26,7 @@ int __dns_decodename(unsigned char *packet,unsigned int offset,unsigned char *de
 void __dns_make_fd(void) {
   int tmp;
   struct sockaddr_in si;
-  if (__dns_fd>0) return;
+  if (__dns_fd>=0) return;
   tmp=socket(PF_INET,SOCK_DGRAM,IPPROTO_UDP);
   if (tmp<0) return;
   si.sin_family=AF_INET;
@@ -40,7 +40,7 @@ void __dns_make_fd(void) {
 void __dns_make_fd6(void) {
   int tmp;
   struct sockaddr_in6 si;
-  if (__dns_fd>0) return;
+  if (__dns_fd6>=0) return;
   tmp=socket(PF_INET6,SOCK_DGRAM,IPPROTO_UDP);
   if (tmp<0) return;
   si.sin6_family=AF_INET6;
