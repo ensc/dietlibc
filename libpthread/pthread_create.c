@@ -73,5 +73,5 @@ int pthread_create (pthread_t *thread, const pthread_attr_t *attr,
     (*(__errno_location()))=EAGAIN;
 
   if (ret<2) return -1;
-  return ret;
+  return 0;
 }

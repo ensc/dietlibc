@@ -35,6 +35,7 @@
 #include <fnmatch.h>
 #include <stdarg.h>
 #include <sys/wait.h>
+#include <libgen.h>
 
 #include <errno.h>
 #include <syslog.h>
@@ -76,12 +77,28 @@ void closelog(void) {
 #endif
 
 int main(int argc,char *argv[]) {
+  char* paths[]={"/usr/lib","/usr/","usr","/",".",".."};
+  char* want[]={"/usr","/",".","/",".","."};
+  int i;
+  for (i=0; i<6; ++i) {
+    printf("%s\t%s\t%s\n",paths[i],want[i],dirname(strdup(paths[i])));
+  }
+#if 0
+  char* paths[]={"/usr/lib","/usr/","usr","/",".",".."};
+  char* want[]={"lib","usr","usr","/",".",".."};
+  int i;
+  for (i=0; i<6; ++i) {
+    printf("%s\t%s\t%s\n",paths[i],want[i],basename(strdup(paths[i])));
+  }
+#endif
+#if 0
   int i;
   for (i=0; i<255; ++i) {
     int a=isalpha(i);
     int b=(i>='a' && i<='z') || (i>='A' && i<='Z');
     if (a!=b) printf("%d: %d %d\n",i,a,b);
   }
+#endif
 #if 0
   char* name;
   int ptyfd,ttyfd;

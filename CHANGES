@@ -68,6 +68,7 @@
   Added openpty.
   Squeeze a few bytes off the is* routines, courtesy of Peter Jones.
   Fix fseek return value.
+  Add dirname and basename.
 
 0.10:
   update getpagesize.
