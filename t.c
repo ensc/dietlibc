@@ -48,11 +48,39 @@ static int rand() {
 
 extern double atof(const char *c);
 
+FILE* logfile;
+
+void vlog_message(const char * s, va_list args) {
+        fprintf(logfile, "* ");
+        vfprintf(logfile, s, args);
+        fprintf(logfile, "\n");
+        fflush(logfile);
+}
+
+
+void log_message(const char * s, ...) {
+        va_list args;
+        va_start(args, s);
+        vlog_message(s, args);
+        va_end(args);
+        return;
+}
+
 int main(int argc,char *argv[]) {
+  char * p = "plop";
+  int i = 3;
+
+  logfile = fopen("test-out", "w");
+
+  log_message("Hi");
+  log_message("the number is %d and the string %s", i, p);
+
+#if 0
   struct msgbuf bla;
   bla.mtype=0;
   bla.mtext[0]='x';
   msgsnd(327680,&bla,5,IPC_NOWAIT);
+#endif
 #if 0
   char buf[PATH_MAX];
   printf("%s\n",realpath("../../incoming/..///.zshrc",buf));
