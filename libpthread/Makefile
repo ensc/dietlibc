@@ -20,6 +20,9 @@ PTHREAD_OBJS = \
 	pthread_join.o pthread_self.o \
 	pthread_exit.o \
  \
+	pthread_cleanup_push.o \
+	pthread_cleanup_pop.o \
+ \
 	pthread_attr_getdetachstate.o \
 	pthread_attr_getinheritsched.o \
 	pthread_attr_getschedparam.o \
@@ -42,7 +45,9 @@ PTHREAD_OBJS = \
  \
 	pthread_mutexattr_getkind_np.o \
 	pthread_mutexattr_init.o \
-	pthread_mutexattr_setkind_np.o
+	pthread_mutexattr_setkind_np.o \
+ \
+	pthread_atfork.o
 
 %.o : %.c
 	$(CC) $(CFLAGS) -c -o $@ $?

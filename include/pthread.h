@@ -141,10 +141,10 @@ int pthread_once(pthread_once_t* once_control, void (*init_routine)(void));
 /* CANCEL */
 
 enum {
-  PTHREAD_CANCEL_DISABLE,
-#define PTHREAD_CANCEL_DISABLE PTHREAD_CANCEL_DISABLE
   PTHREAD_CANCEL_ENABLE,
 #define PTHREAD_CANCEL_ENABLE PTHREAD_CANCEL_ENABLE
+  PTHREAD_CANCEL_DISABLE,
+#define PTHREAD_CANCEL_DISABLE PTHREAD_CANCEL_DISABLE
 };
 
 enum {
@@ -170,6 +170,11 @@ void pthread_cleanup_pop (int execute);
 
 void pthread_cleanup_push_defer_np(void (*routine)(void *), void *arg);
 void pthread_cleanup_pop_restore_np(int execute);
+
+/* FORK */
+
+pid_t pthread_atfork(void (*prepare)(void), void (*parent)(void),
+		     void (*child)(void));
 
 /* THREADS */
 int pthread_create (pthread_t *__thread,

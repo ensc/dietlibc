@@ -10,7 +10,7 @@ int pthread_setcancelstate(int state, int *oldstate)
 
   __THREAD_INIT();
 
-  if ((state==PTHREAD_CANCEL_DEFERRED) || (state==PTHREAD_CANCEL_ASYNCHRONOUS))
+  if ((state==PTHREAD_CANCEL_ENABLE) || (state==PTHREAD_CANCEL_DISABLE))
   {
     thread = __thread_self();
 

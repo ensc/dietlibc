@@ -4,9 +4,9 @@
 #include <pthread.h>
 
 /* cleanup */
+#define PTHREAD_MAX_CLEANUP 4
 struct thread_cleanup_t {
-  struct thread_cleanup_t *n;
-  void (*routine)(void*);
+  void (*func)(void*);
   void *arg;
 };
 
@@ -49,6 +49,9 @@ struct _pthread_descr_struct {
 
   /* create thread / manager thread lock */
   struct _pthread_fastlock *manager_lock;
+
+  /* cleanup stack */
+  struct thread_cleanup_t cleanup_stack[PTHREAD_MAX_CLEANUP];
 
 } __attribute__ ((aligned(32)));
 
