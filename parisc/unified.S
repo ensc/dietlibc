@@ -11,6 +11,8 @@
     General system-call interface
 */
 
+#include "dietfeatures.h"
+
 .level 1.1
 
 .text
@@ -29,17 +31,21 @@ __unified_syscall:
 	nop
 	ldi -0x100, %r1
 	cmpb,>>=,n %r1, %ret0, .Lnoerr
-;	combf,>,n %r1, %ret0, .Lnoerr ; optimize with ldi -0x100
 	sub %r0, %ret0, %ret0
+#ifdef WANT_THREAD_SAFE
+	copy %r2, %r23
+	bl __errno_location, %r2
+	copy %ret0, %r20
+	stw %r20, 0(%sr0, %ret0)
+	copy %r23, %r2
+#else
 	ldil LP%errno, %r26
 	ldo  RP%errno(%r26), %r26
 	stw  %ret0, 0(%r0, %r26)
+#endif
 	ldi -1, %ret0
-	nop
 .Lnoerr:
-
 /* here we go and "reuse" the return for weak-void functions */
 #include "dietuglyweaks.h"
 
 	bv,n %r0(%rp)
-	nop
