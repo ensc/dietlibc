@@ -254,10 +254,10 @@ t:
 t1:
 	$(CROSS)$(CC) -g -o t1 t.c
 
-install: $(OBJDIR)/start.o $(OBJDIR)/dietlibc.a $(OBJDIR)/liblatin1.a $(OBJDIR)/elftrunc $(OBJDIR)/diet-i
+install: $(OBJDIR)/start.o $(OBJDIR)/dietlibc.a $(OBJDIR)/librpc.a $(OBJDIR)/liblatin1.a $(OBJDIR)/elftrunc $(OBJDIR)/diet-i
 	$(INSTALL) -d $(DESTDIR)$(ILIBDIR) $(DESTDIR)$(MAN1DIR) $(DESTDIR)$(BINDIR)
 	$(INSTALL) $(OBJDIR)/start.o $(DESTDIR)$(ILIBDIR)/start.o
-	$(INSTALL) -m 644 $(OBJDIR)/libm.a $(OBJDIR)/libpthread.a $(OBJDIR)/liblatin1.a $(DESTDIR)$(ILIBDIR)
+	$(INSTALL) -m 644 $(OBJDIR)/libm.a $(OBJDIR)/libpthread.a $(OBJDIR)/librpc.a $(OBJDIR)/liblatin1.a $(DESTDIR)$(ILIBDIR)
 	$(INSTALL) -m 644 $(OBJDIR)/dietlibc.a $(DESTDIR)$(ILIBDIR)/libc.a
 	$(INSTALL) $(OBJDIR)/diet-i $(DESTDIR)$(BINDIR)/diet
 	-$(INSTALL) $(PICODIR)/diet-dyn-i $(DESTDIR)$(BINDIR)/diet-dyn

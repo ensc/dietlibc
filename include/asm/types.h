@@ -23,8 +23,18 @@ typedef int32_t __s32;
 typedef int64_t __s64;
 #endif
 
-typedef size_t __kernel_size_t;
+#if defined(__alpha__)
+typedef unsigned long __kernel_size_t;
+#else
+typedef unsigned int __kernel_size_t;
+#endif
 
-typedef struct { int val[2]; } __kernel_fsid_t;
+typedef struct {
+#if defined(__KERNEL__) || defined(__USE_ALL)
+	int	val[2];
+#else /* !defined(__KERNEL__) && !defined(__USE_ALL) */
+	int	__val[2];
+#endif /* !defined(__KERNEL__) && !defined(__USE_ALL) */
+} __kernel_fsid_t;
 
 #endif
