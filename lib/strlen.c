@@ -4,7 +4,7 @@
 
 #ifdef WANT_SMALL_STRING_ROUTINES
 size_t strlen(const char *s) {
-  register int i;
+  register size_t i;
   if (!s) return 0;
   for (i=0; *s; ++s) ++i;
   return i;
