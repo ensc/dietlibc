@@ -42,7 +42,7 @@ int res_query(const char *dname, int class, int type, unsigned char *answer, int
       struct pollfd duh[2];
 
       if (pnpfd<0) {
-	pnpfd=socket(PF_INET,SOCK_DGRAM,IPPROTO_UDP);
+	pnpfd=socket(PF_INET6,SOCK_DGRAM,IPPROTO_UDP);
 	if (pnpfd>=0) fcntl(pnpfd,F_SETFD,FD_CLOEXEC);
       }
       pnpsa.sin6_family=AF_INET6;
