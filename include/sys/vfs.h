@@ -13,9 +13,14 @@ struct statfs {
 	long f_bsize;
 	long f_blocks;
 	long f_bfree;
+#ifndef __mips__
 	long f_bavail;
+#endif
 	long f_files;
 	long f_ffree;
+#ifdef __mips__
+	long f_bavail;
+#endif
 	__kernel_fsid_t f_fsid;
 	long f_namelen;
 	long f_spare[6];
