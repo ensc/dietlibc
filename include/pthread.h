@@ -5,9 +5,14 @@
 #include <signal.h>
 #include <setjmp.h>
 
+/* arg... kernel haeder... */
+#define ENOTSUP 524 /* Operation is not supported */
+
+#define PTHREAD_STACK_SIZE	16384
+
 #define PTHREAD_THREADS_MAX	128
 
-#define MAX_SPIN_COUNT		50
+#define MAX_SPIN_COUNT		10
 #define SPIN_SLEEP_DURATION	2000001
 
 typedef struct _pthread_descr_struct *_pthread_descr;
@@ -39,7 +44,7 @@ enum
   PTHREAD_PROCESS_PRIVATE,
 #define PTHREAD_PROCESS_PRIVATE PTHREAD_PROCESS_PRIVATE
   PTHREAD_PROCESS_SHARED
-#define PTHREAD_PROCESS_SHARED  PTHREAD_PROCESS_SHARED
+#define PTHREAD_PROCESS_SHARED PTHREAD_PROCESS_SHARED
 };
 
 #define PTHREAD_MUTEX_INITIALIZER \
@@ -72,10 +77,10 @@ typedef struct
   struct sched_param	__schedparam;
   int		__inheritsched;
   int		__scope;
-  unsigned long __guardsize;
-  int		__stackaddr_set;
   void *	__stackaddr;
   unsigned long __stacksize;
+//  unsigned long __guardsize;
+//  int		__stackaddr_set;
 } pthread_attr_t;
 
 enum
@@ -88,10 +93,10 @@ enum
 
 enum
 {
-  PTHREAD_INHERIT_SCHED,
-#define PTHREAD_INHERIT_SCHED PTHREAD_INHERIT_SCHED
-  PTHREAD_EXPLICIT_SCHED
+  PTHREAD_EXPLICIT_SCHED,
 #define PTHREAD_EXPLICIT_SCHED PTHREAD_EXPLICIT_SCHED
+  PTHREAD_INHERIT_SCHED
+#define PTHREAD_INHERIT_SCHED PTHREAD_INHERIT_SCHED
 };
 
 enum	/* for completeness */
@@ -101,6 +106,32 @@ enum	/* for completeness */
   PTHREAD_SCOPE_PROCESS
 #define PTHREAD_SCOPE_PROCESS PTHREAD_SCOPE_PROCESS
 };
+
+int pthread_attr_init(pthread_attr_t *attr);
+int pthread_attr_destroy(pthread_attr_t *attr);
+
+int pthread_attr_setdetachstate(pthread_attr_t *attr, int detachstate);
+int pthread_attr_getdetachstate(const pthread_attr_t *attr, int *detachstate);
+
+int pthread_attr_setschedpolicy(pthread_attr_t *attr, int policy);
+int pthread_attr_getschedpolicy(const pthread_attr_t *attr, int *policy);
+
+int pthread_attr_setschedparam(pthread_attr_t *attr,
+				const struct sched_param *param);
+int pthread_attr_getschedparam(const pthread_attr_t *attr,
+				struct sched_param *param);
+
+int pthread_attr_setinheritsched(pthread_attr_t *attr, int inherit);
+int pthread_attr_getinheritsched(const pthread_attr_t *attr, int *inherit);
+
+int pthread_attr_setscope(pthread_attr_t *attr, int scope);
+int pthread_attr_getscope(const pthread_attr_t *attr, int *scope);
+
+int pthread_attr_setstackaddr(pthread_attr_t *attr, void *stack);
+int pthread_attr_getstackaddr(pthread_attr_t *attr, void **stack);
+
+int pthread_attr_setstacksize(pthread_attr_t *attr, size_t stacksize);
+int pthread_attr_getstacksize(pthread_attr_t *attr, size_t *stacksize);
 
 /* ONCE */
 typedef int pthread_once_t;
