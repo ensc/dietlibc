@@ -48,7 +48,7 @@
         C_LABEL(name);\
         .type name,@function;
 
-#define LOC(name)  . ## L ## name
+#define LOC(name)  .L ## name
 
 #define END(name) \
         .size name, . - name

@@ -62,6 +62,8 @@ char *strerror(int errnum) __THROW;
 #ifdef _GNU_SOURCE
 const char *strsignal(int signum) __THROW;
 void *memmem(const void *haystack, size_t haystacklen, const void *needle, size_t needlelen) __THROW;
+
+char *strndup(const char *s,size_t n) __attribute_malloc__ __THROW;
 #endif
 
 char *strtok(char *s, const char *delim) __THROW;

@@ -40,6 +40,9 @@
   add /dev/epoll ioctl constants to sys/ioctl.h
   add linux/eventpoll.h for /dev/epoll
   fix lseek64 on 64-bit architectures
+  Olaf: fix x86_64 start-code (we have reg-args)
+    fixing some broken macros in sparc32-code (.udiv,.urem)
+    adding strndup (GNU Extension)
 
 0.21:
   use gcc's size_t, ptrdiff_t and wchar_t types (Olaf)

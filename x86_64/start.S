@@ -3,19 +3,36 @@
 .text
 .global _start
 _start:
+#ifdef WANT_DYNAMIC
+	movq	%rdx, %rcx		/* %rcx = dynamic fini */
+#endif
 	popq	%rdi			/* %rdi = argc */
 	movq	%rsp,%rsi		/* %rsi = argv */
 	pushq	%rdi
 	
 	leaq	8(%rsi,%rdi,8),%rdx	/* %rdx = envp = (8*rdi)+%rsi+8 */
 
-	movq	%rdx, environ
+#ifdef __DYN_LIB
+	movq	environ@GOTPCREL(%rip), %rax
+	movq	%rdx, (%rax)
+#else
+	movq	%rdx, environ(%rip)
+#endif
 
 #ifdef PROFILING
-	pushq	$_etext
-	pushq	$.text
+	pushq	%rdi			/* save reg args */
+	pushq	%rsi
+	pushq	%rdx
+	pushq	%rcx
+
+	leaq	_etext(%rip), %rsi	/* highpc */
+	leaq	 .text(%rip), %rdi	/* lowpc */
 	call	monitor
-	addq	$0x16, %rsp
+
+	popq	%rcx			/* restore reg args */
+	popq	%rdx
+	popq	%rsi
+	popq	%rdi
 #endif
 
 #ifdef WANT_DYNAMIC
