@@ -74,6 +74,8 @@
     Thanks, Oden Eriksson
   Added a float.h so configure believes we have ANSI header files.
   Fix a lot more stdio bugs that Uwe Ohse pointed out.
+  Olaf: has added a new scanf and printf core that is sutable for all
+    scanf and printf function implementations
 
 0.10:
   update getpagesize.
