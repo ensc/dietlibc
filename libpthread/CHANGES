@@ -1,40 +1,42 @@
 This is the pthread implementation of dietlibc.
 Written from scratch by Olaf Dreesen.
 
-Thu Apr 12 15:03:42 MEST 2001
+Thu Apr 12 16:47:12 MEST 2001
 
-added conditional variables...
-except pthread_cond_timedwait all should work man-page like
-pthread_cond_timedwait dosen't handle cancel request according to man-page
+  added conditional variables...
+  except pthread_cond_timedwait all should work man-page like
+  pthread_cond_timedwait dosen't handle cancel request according to man-page
+
+  added thread specific key handling (all according to man-page)
 
 Fri Mar 30 18:47:37 MEST 2001
 
-uff found some logic errors and fixed them.
-pthread_create had a problem with user provided stacks.
+  uff found some logic errors and fixed them.
+  pthread_create had a problem with user provided stacks.
 
 
 Fri Mar 23 14:09:54 MET 2001
 
-arg.. the kernel-header are so inconsistent...
-on x86 it works on arm and sparc not due to MISSING defines, miss-places
-includes and __KERNEL__ checks....
-the best in this category is that the kernel-header are changed that the
-buggy (g)libc haven't to change... (f..k glibc, the headers HAVE to be
-CONSISTENT)
-a public defined symbol on arch X have to be in Y to unless marked...
-that is mainly speaking SCHED.H ! arg....
+  arg.. the kernel-header are so inconsistent...
+  on x86 it works on arm and sparc not due to MISSING defines, miss-places
+  includes and __KERNEL__ checks....
+  the best in this category is that the kernel-header are changed that the
+  buggy (g)libc haven't to change... (f..k glibc, the headers HAVE to be
+  CONSISTENT)
+  a public defined symbol on arch X have to be in Y to unless marked...
+  that is mainly speaking SCHED.H ! arg....
 
 
 Wed Mar 14 04:28:45 MET 2001
 
-I have implemented the "Manager Thread" so that nested thread creation
-works. really ugly stuff... don't look at it unless you're sitting on solid
-ground.
+  I have implemented the "Manager Thread" so that nested thread creation
+  works. really ugly stuff... don't look at it unless you're sitting on solid
+  ground.
 
 
 Mon Mar 12 16:16:00 CET 2001
 
-first of all:
+  first of all:
   I strongly suggest NOT to use it yet, it's very, very, ... very
   experimental. I guess you got the point. there is still much debug code,
   incomplete functions and unusable states....

@@ -15,6 +15,9 @@
 #define MAX_SPIN_COUNT		50
 #define SPIN_SLEEP_DURATION	2000001
 
+#define PTHREAD_KEYS_MAX	7
+#define PTHREAD_DESTRUCTOR_ITERATIONS 10
+
 typedef struct _pthread_descr_struct *_pthread_descr;
 typedef unsigned long int pthread_t;
 
@@ -91,17 +94,12 @@ int pthread_condattr_getpshared(const pthread_condattr_t *attr, int *pshared);
 int pthread_condattr_setpshared(pthread_condattr_t *attr, int pshared);
 
 /* thread specific variables */
-typedef struct __pthread_key_t {
-  struct __pthread_key_t *next;
-  void (*destructor)(void*);
-  void *thk[PTHREAD_THREADS_MAX];
-} pthread_key_t;
+typedef unsigned int pthread_key_t;
 
-int pthread_key_create(pthread_key_t *key, void (*destructor)(void*));
+int pthread_key_create(pthread_key_t *key, void (*destructor)(const void*));
 int pthread_key_delete(pthread_key_t key);
 int pthread_setspecific(pthread_key_t key, const void *value);
-void *pthread_getspecific(pthread_key_t key);
-
+const void *pthread_getspecific(pthread_key_t key);
 
 
 /* Attributes for threads.  */

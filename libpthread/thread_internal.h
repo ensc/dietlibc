@@ -38,7 +38,7 @@ struct _pthread_descr_struct {
 
   /* thread exit handling */
   void  *retval;		/* thread return value */
-  int  join;			/* thread waits for other to return */
+  int   join;			/* thread waits for other to return */
   jmp_buf jmp_exit;		/* pthread_exit jump */
 
   /* thread flags */
@@ -51,7 +51,7 @@ struct _pthread_descr_struct {
 
   /* thread basics */
   void* (*func) (void* arg);	/* thread function */
-  void *arg;			/* thread argument */
+  void* arg;			/* thread argument */
 
   /* create thread / manager thread lock */
   struct _pthread_fastlock *manager_lock;
@@ -61,6 +61,14 @@ struct _pthread_descr_struct {
 
 } __attribute__ ((aligned(32)));
 
+/* thread keys */
+struct _thread_key {
+  int used;
+  void (*destructor)(const void*);
+  const void *tkd[PTHREAD_THREADS_MAX];
+};
+
+/* internal stuff */
 int __testandset(int *spinlock);
 
 void __pthread_lock(struct _pthread_fastlock * lock);
@@ -81,6 +89,7 @@ void __thread_wait_some_time();
 
 #define __NO_ASYNC_CANCEL_BEGIN { int oldtype; pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED, &oldtype);
 #define __NO_ASYNC_CANCEL_END pthread_setcanceltype(oldtype,0); pthread_testcancel(); }
+#define __NO_ASYNC_CANCEL_STOP pthread_setcanceltype(oldtype,0); }
 
 /* manager thread stuff */
 int signal_manager_thread(_pthread_descr td);

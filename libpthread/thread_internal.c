@@ -142,8 +142,10 @@ static void __kill_all_threads()
       kill(threads[i].pid, SIGTERM);	/* KILL thread */
     }
   }
-
 }
+
+__attribute__((weak)) volatile void __thread_start__key(int id) { return; }
+__attribute__((weak)) volatile void __thread_exit__key(int id) { return; }
 
 /* support for manager */
 static void *__mthread_starter(void *arg)
@@ -169,6 +171,9 @@ static void *__mthread_starter(void *arg)
     sched_setscheduler(td->pid,td->policy, &sp);
   }
 
+  /* thread_key glue */
+  __thread_start__key(td-threads);
+
 #ifdef DEBUG
   printf("in starter %d, parameter %8p\n", td->pid, td->func);
 #endif
@@ -183,6 +188,9 @@ static void *__mthread_starter(void *arg)
     }
   }
   pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED,0);
+
+  /* thread_key glue */
+  __thread_exit__key(td-threads);
 
 #ifdef DEBUG
   printf("end starter %d, retval %8p\n", td->pid, td->retval);

@@ -13,6 +13,7 @@ PTHREAD_OBJS = \
 	__testandset.o \
  \
 	thread_internal.o \
+	thread_key.o \
  \
 	pthread_once.o pthread_spinlock.o \
  \
@@ -59,6 +60,11 @@ PTHREAD_OBJS = \
 	pthread_cond_signal.o \
 	pthread_cond_timedwait.o \
 	pthread_cond_wait.o \
+ \
+	pthread_key_create.o \
+	pthread_key_delete.o \
+	pthread_getspecific.o \
+	pthread_setspecific.o \
  \
 	pthread_atfork.o \
 	pthread_sys_alloc.o \
