@@ -21,3 +21,6 @@ gethost/netent -> parselib
 s390: shouldn't we zero the frame pointer for gdb?
 
 Look at qsort (make test suite exhibits the worst case)
+
+utmp handling should work read-only, too, if it can't open utmp
+read-write
