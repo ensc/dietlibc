@@ -11,6 +11,7 @@
   add file "SECURITY".  I will document design tradeoffs that have
     security implications there.
   fixed regex LINEEND condition
+  add .size directive to i386 syscalls
 
 0.20:
   calloc was botched

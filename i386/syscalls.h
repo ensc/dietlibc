@@ -231,7 +231,9 @@ wsym: ; \
 .global sym; \
 sym: \
 	movb $__NR_##name,%al; \
-	jmp __unified_syscall
+	jmp __unified_syscall; \
+.Lend##sym: ; \
+.size sym,.Lend##sym-sym
 
 #define syscall(name,sym) \
 .text; \
@@ -239,5 +241,7 @@ sym: \
 .global sym; \
 sym: \
 	movb $__NR_##name,%al; \
-	jmp __unified_syscall
+	jmp __unified_syscall; \
+.Lend##sym: ; \
+.size sym,.Lend##sym-sym
 
