@@ -21,3 +21,5 @@ they can be free()d.
 res_mkquery should not assume op is QUERY
 
 logging.
+
+new stdio.

@@ -327,7 +327,7 @@
 #define EHOSTDOWN	64	/* Host is down */
 #define EHOSTUNREACH	65	/* No route to host */
 #define ENOTEMPTY	66	/* Directory not empty */
-#define EPROCLIM        67      /* SUNOS: Too many processes */
+#define EPROCLIM	67	/* SUNOS: Too many processes */
 #define EUSERS		68	/* Too many users */
 #define EDQUOT		69	/* Quota exceeded */
 #define ESTALE		70	/* Stale NFS file handle */
@@ -341,11 +341,11 @@
 #define EDEADLK		78	/* Resource deadlock would occur */
 #define ENOLCK		79	/* No record locks available */
 #define ENONET		80	/* Machine is not on the network */
-#define ERREMOTE        81      /* SunOS: Too many lvls of remote in path */
+#define ERREMOTE	81	/* SunOS: Too many lvls of remote in path */
 #define ENOLINK		82	/* Link has been severed */
 #define EADV		83	/* Advertise error */
 #define ESRMNT		84	/* Srmount error */
-#define ECOMM		85      /* Communication error on send */
+#define ECOMM		85	/* Communication error on send */
 #define EPROTO		86	/* Protocol error */
 #define EMULTIHOP	87	/* Multihop attempted */
 #define EDOTDOT		88	/* RFS specific error */
@@ -528,8 +528,10 @@ extern int *__errno_location(void);
 
 #define __set_errno(x) errno=(x)
 
+#ifdef _BSD_SOURCE
 extern const char *const sys_errlist[];
 extern int sys_nerr;
+#endif
 
 #endif
 

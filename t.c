@@ -36,24 +36,55 @@
 #include <stdarg.h>
 #include <sys/wait.h>
 
-void fnord(char*x,...) {
-  int i;
-  va_list v;
-  va_start(v,x);
-  for (i=0; i<10; ++i) {
-    char *tmp=va_arg(v,char*);
-    if (!tmp) break;
-    write(1,tmp,strlen(tmp));
+#include <errno.h>
+#include <syslog.h>
+#include <sys/un.h>
+#include <fcntl.h>
+
+#if 0
+static const char* Ident;
+static int Option;
+static int Facility;
+static struct sockaddr_un sock;
+static int fd=-1;
+
+static void syslogconnect(void) {
+  sock.sun_family=AF_UNIX;
+  strcpy(sock.sun_path,"/dev/log");
+  if ((fd=socket(AF_UNIX,SOCK_STREAM,0))==-1) return;
+  if (connect(fd,(struct sockaddr*)&sock,sizeof(sock))==-1) {
+    int save=errno;
+    close(fd);
+    fd=-1;
   }
+  fcntl(fd,F_SETFL,FD_CLOEXEC);		/* doesn't work?  too bad */
 }
 
-char *strlcpy2(char *dest, const char *src, size_t n)
-{
-  memccpy(dest,src,0,n-1);
-  return dest;
+void openlog(const char *ident, int option, int facility) {
+  Ident=ident;
+  Option=option;
+  Facility=facility;
+  syslogconnect();
 }
+
+void syslog(int priority, const char *format, ...) {
+  /* write(fd,"<13>Jun 29 19:21:32 leitner: fnord",...) */
+}
+
+void closelog(void) {
+}
+#endif
 
 int main(int argc,char *argv[]) {
+#if 0
+  struct addrinfo *ai;
+  getaddrinfo("ftp.fu-berlin.de","ftp",0,&ai);
+#endif
+  struct hostent host,*res;
+  char buf[4096];
+  int fnord;
+
+  gethostbyname2_r("knuth",AF_INET,&host,buf,4096,&res,&fnord);
 #if 0
   char buf[128];
   strcpy(buf,"/tmp/fnord/foo.XXXXXXX");
@@ -326,7 +357,7 @@ int main(int argc,char *argv[]) {
   if (foo)
     printf("found service %s on port %d\n",foo->s_name,foo->s_port);
 #endif
-#if 1
+#if 0
   char buf[128];
   strcpy(buf,"/tmp/blub/foo.XXXXXXX");
   printf("%d\n",mkstemp(buf));

@@ -7,6 +7,8 @@
 
 /* #include <stdio.h> */
 
+char* tzname[2];
+
 #ifdef WANT_TZFILE_PARSER
 static char *tzfile=0;
 static int tzlen=-1;
@@ -65,19 +67,27 @@ time_t __tzfile_map(time_t t, int *isdst) {
     printf("%s(%lu,%d,%d)",i?", ":"",ntohl(*(int*)tmp),tmp[4],tmp[5]); tmp+=6;
   }
   printf("\n");
+  for (i=0; i<tzh_charcnt; ++i) {
+    printf("%s\"%s\"",i?", ":"",tmp);
+    tmp+=strlen(tmp);
+  }
+  printf("\n");
 #endif
 
   tmp=tzfile+20+6*4;
   for (i=0; i<tzh_timecnt; ++i)
     if ((time_t)__myntohl(tmp+i*4) >= t) {
+      char* tz=tmp;
 /*      printf("match at %d\n",i); */
       tmp+=tzh_timecnt*4;
       i=tmp[i-1];
 /*      printf("using index %d\n",i); */
       tmp+=tzh_timecnt;
+      tz+=tzh_timecnt*5+tzh_leapcnt*4+tzh_typecnt*6;
       tmp+=i*6;
 /*      printf("(%lu,%d,%d)\n",ntohl(*(int*)tmp),tmp[4],tmp[5]); */
       *isdst=tmp[4];
+      tzname[0]=tz+tmp[5];
       return t+(timezone=__myntohl(tmp));
     }
   return t;
