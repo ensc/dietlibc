@@ -21,6 +21,8 @@
   add llseek and lseek64 with optional lseek fall-back.
   add res_init.
   add asprintf (ugh, what an ugly function).
+  expanded arpa/nameser.h to include backwards compatibility defines
+  added ut_name alias to ut_host in struct utmp.
 
 0.9:
   fixed initgroups (oops)

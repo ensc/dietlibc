@@ -38,6 +38,7 @@ struct utmp
   char ut_id[4];		/* Inittab ID.  */
   char ut_user[UT_NAMESIZE];	/* Username.  */
   char ut_host[UT_HOSTSIZE];	/* Hostname for remote login.  */
+#define ut_name ut_host
   struct exit_status ut_exit;	/* Exit status of a process marked
 				   as DEAD_PROCESS.  */
   long int ut_session;		/* Session ID, used for windowing.  */

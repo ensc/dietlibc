@@ -84,9 +84,9 @@ void __dns_readstartfiles() {
 int __dns_decodename(unsigned char *packet,int offset,unsigned char *dest,int maxlen) {
   unsigned char *tmp;
   unsigned char *max=dest+maxlen;
-  unsigned char *after=0;
+  unsigned char *after=packet+offset;
   int ok=0;
-  for (tmp=packet+offset; maxlen>0&&*tmp; ) {
+  for (tmp=after; maxlen>0&&*tmp; ) {
     if ((*tmp>>6)==3) {		/* goofy DNS decompression */
       unsigned int ofs=((unsigned int)(*tmp&0x3f)<<8)|*(tmp+1);
       if (ofs>=offset) return -1;	/* RFC1035: "pointer to a _prior_ occurrance" */

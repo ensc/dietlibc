@@ -9,4 +9,6 @@ of the (truncated) number of characters that were actually written.
 
 strtol and friends need overflow handling.
 
-XDR (rfc1014.txt)
+add search/domain handling for /etc/resolv.conf
+
+add ipv6 gethostbyname2
