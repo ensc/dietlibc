@@ -26,6 +26,7 @@
   added setpgrp and getpgrp, strsignal and execv (thanks, Olaf)
   add bcopy, index, rindex macros
   add isgraph and isxdigit
+  add strftime (ugh!!!)
 
 0.7.2:
   added several prototypes to already implemented functions and

@@ -14,6 +14,8 @@ time_t mktime(struct tm *timeptr) __THROW __pure__;
 char *asctime(const struct tm *timeptr) __THROW;
 char *asctime_r(const struct tm *timeptr, char *buf) __THROW;
 
-char *ctime(const time_t *timep);
+char *ctime(const time_t *timep) __THROW;
+
+size_t strftime(char *s, size_t max, const char *format, const struct tm *tm) __THROW;
 
 #endif

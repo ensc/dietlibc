@@ -40,6 +40,12 @@ static int rand() {
 extern double atof(const char *c);
 
 int main(int argc,char *argv[]) {
+  char buf[512];
+  time_t oink=time(0);
+  struct tm *duh=localtime(&oink);
+  strftime(buf,512,"%A %B %Y\n",duh);
+  puts(buf);
+#if 0
   struct in_addr bar;
   struct hostent *foo;
 /*  inet_aton("160.45.10.8",&bar); */
@@ -48,6 +54,7 @@ int main(int argc,char *argv[]) {
   if (foo)
     printf("%s -> %s\n",foo->h_name,inet_ntoa(*(struct in_addr*)foo->h_addr));
 /*  printf("%g %g\n",1e-10,1e10); */
+#endif
 #if 0
   double d=0.0;
   long long t=0x12345678ABCDEF01;
