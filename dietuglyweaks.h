@@ -4,6 +4,8 @@
 /* if you change something here ... KNOW what you're doing !
  * it'll effect ALL platforms ! */
 
+.weak __thread_doexit
+__thread_doexit:
 .weak __fflush_stdin
 __fflush_stdin:
 .weak __fflush_stdout
