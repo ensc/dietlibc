@@ -33,6 +33,7 @@
   allow short option grouping in getopt* (Ralf Wildenhues)
   make the DNS resolver IPv6 transport capable (WANT_IPV6_DNS)
   mention -v in diet.1 (Bryan Henderson)
+  auto-detect gcc 3 on i386 and remove compiler option warnings
 
 0.17:
   fix several bugs in getservent_r
