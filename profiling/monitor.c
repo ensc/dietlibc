@@ -12,11 +12,15 @@
 #include <sys/uio.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <stdlib.h>
 #include <sys/gmon.h>
 
 typedef unsigned short u_short;
 
 struct monparam mparam;
+
+void monitor (unsigned long, unsigned long) PROF_SECTION;
+void _stop_monitor (void) PROF_SECTION;
 
 /*
   monitor is called by _start, to start profiling
@@ -24,7 +28,7 @@ struct monparam mparam;
   highpc -> highest valid program counter (normally _etext)
 */
 void
-monitor (long lowpc, long highpc)
+monitor (unsigned long lowpc, unsigned long highpc)
 {
 	mparam.highpc     = highpc;
 	mparam.lowpc      = lowpc;
@@ -68,7 +72,7 @@ write_gmon (void)
 	{
 		char tag = GMON_TAG_CG_ARC;
 		struct iovec iov[mparam.arcnum*2];
-		long l;
+		unsigned long l;
 		for (l=0;l<mparam.arcnum;l++) {
 			iov[l*2].iov_base = &tag;
 			iov[l*2].iov_len  = sizeof (tag);

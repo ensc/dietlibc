@@ -3,13 +3,13 @@
 
 extern struct monparam mparam;
 
-void __mcount (long, long) PROF_SECTION;
+void __mcount (unsigned long, unsigned long) PROF_SECTION;
 
 void
-__mcount (long frompc, long selfpc)
+__mcount (unsigned long frompc, unsigned long selfpc)
 {
 	struct rawarc *arc = mparam.arcs, thisarc;
-	long num;
+	unsigned long num;
 	/* If arc already exists, increment count */
 	for (num = 0; num < mparam.arcnum; num++)
 		if (arc[num].raw_frompc == frompc && arc[num].raw_selfpc == selfpc) {

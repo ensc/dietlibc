@@ -36,20 +36,19 @@
 
 static unsigned short *buffer = NULL;
 static size_t maxhits  = 0;
-static long low_pc = 0;
-static long pscale = 0;
+static unsigned long low_pc = 0;
+static unsigned long pscale = 0;
 
 /* profiler - helper function for profil(3) */
 static void
 profiler (int signal, struct sigcontext ctx)
 {
 	size_t s = PC(ctx)-low_pc;
+	(void)signal;
 	if ((PC(ctx)) < low_pc) return;
 	s >>= 1;
-	if (s < maxhits) {
-		debug ("Found an entry @ %p\n", PC(ctx));
+	if (s < maxhits)
 		++buffer[s];
-	}
 }
 
 /* profil(3) - start or stop the profiling timer */
@@ -62,8 +61,8 @@ profil (u_short *buf, size_t bufsiz, size_t offset, u_int scale)
 		sigaction (SIGPROF, NULL, NULL);
 		setitimer (ITIMER_PROF, NULL, NULL);
 		return (0);
-	} 
-	sa.sa_handler = &profiler;
+	}
+	sa.sa_handler = (sighandler_t)&profiler;
 	sa.sa_flags   = SA_RESTART;
 	sigfillset (&sa.sa_mask);
 	sigaction (SIGPROF, &sa, NULL);
