@@ -121,6 +121,7 @@ int __libc_close(int fd);
 int __libc_creat(const char *pathname, mode_t mode);
 int __libc_fcntl(int fd, int cmd, void *arg);
 int __libc_fsync(int fd);
+int __libc_fdatasync(int fd);
 int __libc_nanosleep(const struct timespec *req, struct timespec *rem);
 int __libc_open(const char *pathname, int flags, mode_t mode);
 int __libc_pause(void);

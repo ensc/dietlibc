@@ -93,6 +93,8 @@ int fchown(int fd, uid_t owner, gid_t group) __THROW;
 int lchown(const char *path, uid_t owner, gid_t group) __THROW;
 
 int fsync(int fd) __THROW;
+#define _POSIX_SYNCHRONIZED_IO
+int fdatasync(int fd) __THROW;
 
 int pipe(int filedes[2]) __THROW;
 

@@ -122,6 +122,7 @@ __unified_syscall:
 #include "../syscalls.s/fstat64.S"
 #include "../syscalls.s/fstatfs.S"
 #include "../syscalls.s/fsync.S"
+#include "../syscalls.s/fdatasync.S"
 #include "../syscalls.s/ftruncate.S"
 #include "../syscalls.s/getcwd.S"
 #include "../syscalls.s/getdents.S"

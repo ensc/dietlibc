@@ -43,6 +43,12 @@
   fix MIPS start code (argv[0] was always corrupt)
   removed annoying -Wconversion gcc switch
   add -v to diet.c and fix MIPS CFLAGS in diet.  Thanks, Johannes Stezenbach
+  Kurt Garloff sent these diffs:
+    add fdatasync (and make it a pthread cancellation point)
+    numerous alpha issues, like using .quad instead of .long for
+    offsets, change strip to -strip in Makefile (so a failing strip does
+    not abort the make), try to be more friendly to the gcc 2.96 that
+    SuSE 7.1 AXP ships with.
 
 0.14:
   fix brk again (missing __brk, trivial oversight)

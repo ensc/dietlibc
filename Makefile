@@ -116,11 +116,11 @@ $(OBJDIR)/%.o: %.S
 
 $(OBJDIR)/pthread_%.o: libpthread/pthread_%.c
 	$(CROSS)$(CC) -I. -Iinclude $(CFLAGS) -c $< -o $@
-	$(COMMENT) $(CROSS)strip -x -R .comment -R .note $@
+	$(COMMENT) -$(CROSS)strip -x -R .comment -R .note $@
 
 $(OBJDIR)/%.o: %.c
 	$(CROSS)$(CC) -I. -Iinclude $(CFLAGS) -c $< -o $@
-	$(COMMENT) $(CROSS)strip -x -R .comment -R .note $@
+	$(COMMENT) -$(CROSS)strip -x -R .comment -R .note $@
 
 DIETLIBC_OBJ = $(OBJDIR)/unified.o \
 $(SYSCALLOBJ) $(LIBOBJ) $(LIBSTDIOOBJ) $(LIBUGLYOBJ) \

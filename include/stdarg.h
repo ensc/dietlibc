@@ -4,7 +4,8 @@
 #include <endian.h>
 
 #ifdef __GNUC__
-#if (__GNUC__ > 2) || (__GNUC__ == 2) && (__GNUC_MINOR__ > 96)
+#if (__GNUC__ > 2) || ((__GNUC__ == 2) && (__GNUC_MINOR__ > 96)) || ((__GNUC__ == 2) && (__GNUC_MINOR__ == 96) && defined(__alpha__))
+
 
 typedef __builtin_va_list va_list;
 #define va_start(v,l)	__builtin_stdarg_start((v),l)

@@ -10,7 +10,7 @@ void *memccpy(void *dest, const void *src, int c, size_t n) __THROW;
 void *memmove(void *dest, const void *src, size_t n) __THROW;
 
 int memccmp(const void *s1, const void *s2, int c, size_t n) __THROW __pure__;
-#if !defined(__GNUC__) && !defined(__mips__)
+#if !defined(__GNUC__) || defined(__mips__) || defined(__alpha__)
 /* gcc unfortunately has some internal prototypes that are not compliant
  * to the single unix specification and if we define the correct
  * prototypes here, gcc emits warnings. */
