@@ -10,6 +10,7 @@ __BEGIN_DECLS
 #endif
 
 #if defined(__x86_64__)
+#include <asm/x86_64-sigcontext.h>
 #endif
 
 #ifdef __sparc__
