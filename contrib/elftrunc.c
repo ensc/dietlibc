@@ -8,6 +8,7 @@
 
 #include <elf.h>
 
+void die (int v,const char *s);
 void die (int v,const char *s)
 {
   write(2,s,strlen(s)); write(2,"\n",1);
@@ -17,6 +18,7 @@ void die (int v,const char *s)
 char fn[1024];
 unsigned char buf[4096];
 
+void trunc32(int fd);
 void trunc32(int fd)
 {
   Elf32_Ehdr eh32;
@@ -72,6 +74,7 @@ void trunc32(int fd)
   close(out);
 }
 
+void trunc64(int fd);
 void trunc64(int fd)
 {
   Elf64_Ehdr eh64;

@@ -165,10 +165,10 @@ DYN_LIBC_OBJ = $(PICODIR)/dyn_syscalls.o \
 DYN_PTHREAD_OBJS = $(patsubst $(OBJDIR)/%.o,$(PICODIR)/%.o,$(LIBPTHREAD_OBJS))
 
 $(PICODIR)/libdietc.so: $(PICODIR) $(DYN_LIBC_OBJ)
-	$(CROSS)$(CC) -nostdlib -shared -o $@ $(DYN_LIBC_OBJ) -lgcc
+	$(CROSS)$(CC) -nostdlib -shared -o $@ $(CFLAGS) -fPIC $(DYN_LIBC_OBJ) -lgcc
 
 $(PICODIR)/libpthread.so: $(DYN_PTHREAD_OBJS) dietfeatures.h
-	$(CROSS)$(CC) -nostdlib -shared -o $@ $(DYN_PTHREAD_OBJS) -L$(PICODIR) -ldietc
+	$(CROSS)$(CC) -nostdlib -shared -o $@ $(CFLAGS) -fPIC $(DYN_PTHREAD_OBJS) -L$(PICODIR) -ldietc
 
 
 $(SYSCALLOBJ): syscalls.h
@@ -206,7 +206,7 @@ $(OBJDIR)/exports: $(OBJDIR)/dietlibc.a
 
 .PHONY: t t1
 t:
-	$(CROSS)$(CC) -g $(CFLAGS) -fno-builtin -nostdlib -Iinclude -o t t.c $(OBJDIR)/start.o $(OBJDIR)/dietlibc.a -lgcc -Wl,-Map,mapfile
+	$(CROSS)$(CC) -g $(CFLAGS) -fno-builtin -nostdlib -Iinclude -o t t.c $(OBJDIR)/start.o $(OBJDIR)/dyn_start.o $(OBJDIR)/dietlibc.a -lgcc $(OBJDIR)/dyn_stop.o -Wl,-Map,mapfile
 
 t1:
 	$(CROSS)$(CC) -g -o t1 t.c

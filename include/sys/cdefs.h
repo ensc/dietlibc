@@ -4,7 +4,7 @@
 #define __dietlibc__
 
 #ifndef __cplusplus
-#define throw ()
+//#define throw ()
 #define __THROW
 #define __BEGIN_DECLS
 #define __END_DECLS

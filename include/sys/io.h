@@ -10,7 +10,7 @@ extern int iopl(int level) __THROW;
 #ifdef __i386__
 static inline unsigned char inb (unsigned short int port) {
   unsigned char _v;
-  __asm__ __volatile__ ("inb %b1,%0":"=a" (_v):"Nd" (port));
+  __asm__ __volatile__ ("inb %w1,%0":"=a" (_v):"Nd" (port));
   return _v;
 }
 
@@ -22,7 +22,7 @@ static inline unsigned short inw (unsigned short int port) {
 
 static inline unsigned int inl (unsigned short int port) {
   unsigned int _v;
-  __asm__ __volatile__ ("inl %1,%0":"=a" (_v):"Nd" (port));
+  __asm__ __volatile__ ("inl %w1,%0":"=a" (_v):"Nd" (port));
   return _v;
 }
 
