@@ -48,7 +48,6 @@
 #include "../syscalls.s/pipe.S"
 #include "../syscalls.s/poll.S"
 #include "../syscalls.s/readv.S"
-#include "../syscalls.s/socketcall.S"
 #include "../syscalls.s/stat.S"
 #include "../syscalls.s/stat64.S"
 #include "../syscalls.s/truncate.S"
@@ -231,6 +230,26 @@ __unified_syscall:
 #include "../syscalls.s/ptrace.S"
 #include "../syscalls.s/truncate64.S"
 #include "../syscalls.s/ftruncate64.S"
+
+#include "../i386/send.S"
+#include "../i386/recv.S"
+#include "../i386/socket.S"
+#include "../i386/accept.S"
+#include "../i386/shutdown.S"
+#include "../i386/socketpair.S"
+#include "../i386/setsockopt.S"
+#include "../i386/sendto.S"
+#include "../i386/sendmsg.S"
+#include "../i386/recvmsg.S"
+#include "../i386/recvfrom.S"
+#include "../i386/listen.S"
+#include "../i386/getsockopt.S"
+#include "../i386/getsockname.S"
+#include "../i386/getpeername.S"
+#include "../i386/connect.S"
+#include "../i386/bind.S"
+#include "../i386/socketcall.S"
+
 
 /* so now this was the last u.s.c. */
 

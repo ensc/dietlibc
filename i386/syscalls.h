@@ -248,11 +248,11 @@ sym: \
 #define __socketcall(name,NAME) \
 .text; \
 .type name,@function; \
-.globl name; \
+.weak name; \
 name: ; \
-.weak __libc_##name; \
+.global __libc_##name; \
 __libc_##name: ; \
 	movb $SYS_##NAME,%al; \
 	jmp socketcall; \
-.Lende:; \
-.size name,.Lende-name
+.Lend##name:; \
+.size name,.Lend##name-name
