@@ -9,7 +9,7 @@ long int strtol(const char *nptr, char **endptr, int base)
 
   while(isspace(*nptr)) nptr++;
 
-  if (*nptr == '-' && isdigit(nptr[1])) { neg=-1; nptr++; }
+  if (*nptr == '-') { neg=-1; ++nptr; }
   v=strtoul(nptr,endptr,base);
   return (neg?-v:v);
 }

@@ -51,6 +51,8 @@
       behavior.
     system did not set SIGCHLD and thus contained a race.
     popen did not set close-on-exec and could leak an fd on malloc error.
+    daemon did not check whether open returns an fd below 3
+    perror did not save errno.
   Olaf: Peter Jones reported some problems with perror; strerror had the
     same problem.
     Peter also posted a patch to atexit/exit. With some modifications it is

@@ -7,17 +7,16 @@ unsigned long int strtoul(const char *nptr, char **endptr, int base)
   long int v=0;
 
   while(isspace(*nptr)) ++nptr;
-
   if (*nptr == '+') ++nptr;
+  if (base==16 && nptr[0]=='0' && nptr[1]=='x') nptr+=2; else
   if (!base) {
     if (*nptr=='0') {
       base=8;
-      if ((*(nptr+1)=='x')||(*(nptr+1)=='X')) {
+      if (nptr[1]=='x'||nptr[1]=='X') {
 	nptr+=2;
 	base=16;
       }
-    }
-    else
+    } else
       base=10;
   }
   while(*nptr) {
