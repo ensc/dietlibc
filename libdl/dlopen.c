@@ -17,7 +17,7 @@ void*_dlopen(const char *filename, int flags) {
     return _dl_open(filename,flags);
   }
   /* return 1 as an indicator for dlsym to search ALL global objects */
-  return (void*)1;
+  return RTLD_DEFAULT;
 }
 
 void*dlopen(const char *filename, int flags) {

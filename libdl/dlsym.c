@@ -69,7 +69,7 @@ void*_dl_sym_search_str(struct _dl_handle*dh,char*name) {
 
 void*dlsym(void*handle,char*symbol) {
   void*h;
-  if (handle==(void*)1)
+  if (handle==RTLD_DEFAULT || !handle /* RTLD_DEFAULT is NULL on glibc */ )
     h=_dl_sym_search_str(0,symbol);
   else h=_dlsym(handle,symbol);
   if (h==0) {
