@@ -5,7 +5,7 @@
 #include <errno.h>
 
 #ifdef __NR_mmap2
-void*mmap2(void*start,size_t length,int prot,int flags,int fd,off_t pgoffset);
+void*__mmap2(void*start,size_t length,int prot,int flags,int fd,off_t pgoffset);
 
 void*__libc_mmap64(void*addr,size_t len,int prot,int flags,int fd,off64_t offset);
 void*__libc_mmap64(void*addr,size_t len,int prot,int flags,int fd,off64_t offset) {
@@ -13,7 +13,7 @@ void*__libc_mmap64(void*addr,size_t len,int prot,int flags,int fd,off64_t offset
     errno=-EINVAL;
     return MAP_FAILED;
   }
-  return mmap2(addr,len,prot,flags,fd,offset>>PAGE_SHIFT);
+  return __mmap2(addr,len,prot,flags,fd,offset>>PAGE_SHIFT);
 }
 
 void*mmap64(void*addr,size_t len,int prot,int flags,int fd,off64_t offset)

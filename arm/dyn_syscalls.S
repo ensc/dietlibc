@@ -91,6 +91,7 @@ __unified_syscall:
 #include "../syscalls.s/mknod.S"
 #include "../syscalls.s/mlock.S"
 #include "../syscalls.s/mlockall.S"
+#include "../syscalls.s/mmap2.S"
 #include "../syscalls.s/mount.S"
 #include "../syscalls.s/mprotect.S"
 #include "../syscalls.s/mremap.S"

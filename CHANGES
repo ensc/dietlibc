@@ -22,6 +22,7 @@
     - libdl + gcc 3.4 resulted in a SIGSEGV because local names were
       dynamically resolved....
     - Also fixed a bug in the symbol resolver
+    - fixing the mmap64 stuff & arm/dyn_syscalls had no mmap2 (Gerrit Pape)
 
 0.27:
   change DNS routines to look for ip6.arpa instead of ip6.int
