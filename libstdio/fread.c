@@ -24,9 +24,7 @@ size_t fread( void *ptr, size_t size, size_t nmemb, FILE *stream) {
   }
   return nmemb;
 #else
-#ifdef WANT_UNGETC
   unsigned long j=size*nmemb;
-#endif
   fflush(stream);
 #ifdef WANT_UNGETC
   if (stream->ungotten) {
@@ -35,15 +33,19 @@ size_t fread( void *ptr, size_t size, size_t nmemb, FILE *stream) {
     --j;
   }
   if (!j) return 1;
-  res=read(stream->fd,ptr,j);
-#else
-  res=read(stream->fd,ptr,size*nmemb);
 #endif
-  if (res<0) {
-    stream->flags|=ERRORINDICATOR;
-    return 0;
-  } else if (res<size*nmemb)
-    stream->flags|=EOFINDICATOR;
+  while (j>0) {
+    res=read(stream->fd,ptr,j);
+    if (res<0) {
+      stream->flags|=ERRORINDICATOR;
+      return 0;
+    } else if (res==0) {
+      stream->flags|=EOFINDICATOR;
+      break;
+    }
+    j-=res;
+    ptr=((char*)ptr)+res;
+  }
   return res/size;
 #endif
 }

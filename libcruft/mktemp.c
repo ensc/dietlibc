@@ -5,7 +5,7 @@
 
 #include <dietwarning.h>
 
-link_warning("mktemp","\n\n[1;33;41m>>> mktemp stinks DON'T USE IT ! <<<[0m\n");
+link_warning("mktemp","\e[1;33;41m>>> mktemp stinks! DON'T USE IT ! <<<\e[0m");
 
 char* mktemp(char* template) {
   int fd;

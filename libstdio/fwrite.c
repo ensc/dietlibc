@@ -20,7 +20,14 @@ size_t fwrite( const void *ptr, size_t size, size_t nmemb, FILE *stream) {
     res=size*nmemb;
   }
 #else
-  res=write(stream->fd,ptr,size*nmemb);
+  long j;
+  if (!(j=size*nmemb)) res=0;
+  while (j) {
+    res=write(stream->fd,ptr,j);
+    if (res<=0) break;
+    j-=res;
+    ptr=((char*)ptr)+res;
+  }
 #endif
   if (res<0) {
     stream->flags|=ERRORINDICATOR;
