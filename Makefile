@@ -117,7 +117,7 @@ $(OBJDIR)/exports: $(OBJDIR)/dietlibc.a
 
 .PHONY: t t1
 t:
-	$(CROSS)$(CC) -g $(CFLAGS) -fno-builtin -nostdlib -Iinclude -o t t.c $(OBJDIR)/start.o $(OBJDIR)/libpthread.a $(OBJDIR)/dietlibc.a -lgcc -Wl,-Map,mapfile
+	$(CROSS)$(CC) -g $(CFLAGS) -fno-builtin -nostdlib -Iinclude -o t t.c $(OBJDIR)/start.o $(OBJDIR)/dietlibc.a -lgcc -Wl,-Map,mapfile
 
 t1:
 	$(CROSS)$(CC) -g -o t1 t.c

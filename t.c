@@ -26,34 +26,20 @@
 #include <sys/msg.h>
 #include <string.h>
 
-#if 0
-int compint(const void *a,const void *b) {
-/*  printf("comparing %d with %d\n",*(int*)a,*(int*)b); */
-  return (*(int*)a-*(int*)b);
-}
-
-#define SIZE 100000
-#define LOOKFOR ((SIZE/2)-2)
-
-int array[SIZE];
-
-#define rdtscl(low) \
-     __asm__ __volatile__ ("rdtsc" : "=a" (low) : : "edx")
-
-static unsigned int seed=1;
-
-static int rand() {
-  return ((seed = seed * 1103515245 + 12345) % ((unsigned int)RAND_MAX + 1));
-}
-#endif
-
-extern double atof(const char *c);
-
-int compar(const void*a,const void*b) {
-  return *(char*)a - *(char*)b;
-}
-
 int main(int argc,char *argv[]) {
+  struct dirent **namelist;
+  int n;
+
+  n = scandir(".", &namelist, 0, alphasort);
+  if (n < 0)
+    perror("scandir");
+  else {
+    while(n--) {
+      printf("%s\n", namelist[n]->d_name);
+      free(namelist[n]);
+    }
+    free(namelist);
+  }
 #if 0
   char foo[10]="none,zlib";
   char *tmp,*tmp2=foo;
@@ -97,7 +83,7 @@ int main(int argc,char *argv[]) {
   char buf[PATH_MAX];
   printf("%s\n",realpath("../../incoming/..///.zshrc",buf));
 #endif
-#if 1
+#if 0
   regex_t t;
   regcomp(&t,"^OpenSSH_2\\.5\\.[012]",5);
   printf("%d\n",regexec(&t,"OpenSSH_2.5.2p2",0,0,0));

@@ -51,6 +51,7 @@
   add flock to <sys/file.h>
   fixes to bsearch and the regular expressions.
   add fake herror.
+  add scandir and alphasort.
 
 0.9:
   fixed initgroups (oops)
