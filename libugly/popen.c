@@ -18,7 +18,7 @@ FILE *popen(const char *command, const char *type) {
     close(pfd[1]);
     return 0;
   }
-  if ((pid=vfork())<0) {
+  if ((pid=fork())<0) {
     close(pfd[0]);
     close(pfd[1]);
     return 0;

@@ -19,18 +19,23 @@ int main() {
   int i,j;
   long a,b,c;
   int *k;
-  for (i=0; i<SIZE; ++i) array[i]=rand();
-  memcpy(array2,array,sizeof(array));
-  qsort(array,SIZE,sizeof(int),compint);
-  for (i=0; i<SIZE-1; ++i)
-    if (array[i]<array[i+1])
-      die("not sorted after qsort!\n");
-  for (i=0; i<SIZE; ++i) {
-//    printf("element %d: ",i);
-    k=bsearch(array+i,array,SIZE,sizeof(int),compint);
-    if (!k) die("bsearch returned NULL\n");
-    if (k != array+i) die("bsearch found wrong element\n");
-//    printf("%d\n",k-array);
+  for (j=10; j<SIZE; ++j) {
+    for (i=0; i<j; ++i) array[i]=rand();
+    memcpy(array2,array,sizeof(array));
+    qsort(array,j,sizeof(int),compint);
+    for (i=0; i<j-1; ++i)
+      if (array[i]<array[i+1])
+	die("not sorted after qsort!\n");
+    for (i=0; i<j; ++i) {
+  //    printf("element %d: ",i);
+      k=bsearch(array+i,array,j,sizeof(int),compint);
+      if (!k) {
+	k=bsearch(array+i,array,j,sizeof(int),compint);
+	die("bsearch returned NULL\n");
+      }
+      if (k != array+i) die("bsearch found wrong element\n");
+  //    printf("%d\n",k-array);
+    }
   }
   return 0;
 }
