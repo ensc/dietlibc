@@ -1,8 +1,8 @@
 .text
 .align 2
-.global __testandsets
-.ent	__testandsets
-.type	__testandsets,@function
+.global __testandset
+.ent	__testandset
+.type	__testandset,@function
 __testandset:
 	.set	mips2
 	ll	$2, 0($4)
@@ -14,4 +14,4 @@ __testandset:
 	beqz	$8, __testandset
 1:	.set	mips0
 	jr	$31
-.end	__testandsets
+.end	__testandset
