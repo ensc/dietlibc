@@ -15,7 +15,7 @@ _start:
 	mtlr	0
 	stw	0,0(1)
 
- /* r9 enthält den initialen Stackpointer.
+ /* r9 contains the initial stack pointer
     argc = (r9)
     argv = (r9+4)
     envp = argv+(argc+1)*4 */
@@ -27,10 +27,15 @@ _start:
 	slwi	5,5,2	/* (argc+1)*4 */
 	add	5,5,4	/* argv+(argc+1)*4 */
 
-	lis	6,environ@ha
-	stw	5,environ@l(6)
+	lis	14,environ@ha
+	stw	5,environ@l(14)
 
+#ifdef WANT_DYNAMIC
+	mr	6,7
+	bl	_dyn_start
+#else
 	bl	main
+#endif
 	b	exit
 .size _start,.-_start
 
