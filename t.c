@@ -24,6 +24,7 @@
 #include <regex.h>
 #include <sys/types.h>
 #include <sys/msg.h>
+#include <string.h>
 
 #if 0
 int compint(const void *a,const void *b) {
@@ -51,7 +52,10 @@ extern double atof(const char *c);
 
 int main(int argc,char *argv[]) {
   char foo[10];
-  sscanf("abcdefghijklmn","%9s\n",foo);
+  strcpy(foo,"foo");
+  strncat(foo,"barbaz",3);
+  foo[6]=0;
+  puts(foo);
 #if 0
   struct hostent * host;
   struct in_addr i;
