@@ -1,6 +1,8 @@
-all: start.o dietlibc.a liblatin1.a elftrunc
-
 ARCH=$(shell uname -m | sed 's/i[4-9]86/i386/')
+
+OBJDIR=bin-$(ARCH)
+
+all: $(OBJDIR) $(OBJDIR)/start.o $(OBJDIR)/dietlibc.a $(OBJDIR)/liblatin1.a $(OBJDIR)/elftrunc $(OBJDIR)/diet
 
 CFLAGS=-pipe
 CROSS=
@@ -9,14 +11,14 @@ CC=gcc
 
 VPATH=lib:libstdio:libugly:libcruft:libcrypt:libshell:liblatin1:syscalls.c
 
-SYSCALLOBJ=$(patsubst syscalls.s/%.S,%.o,$(wildcard syscalls.s/*.S))
+SYSCALLOBJ=$(patsubst syscalls.s/%.S,$(OBJDIR)/%.o,$(wildcard syscalls.s/*.S))
 
-LIBOBJ=$(patsubst lib/%.c,%.o,$(wildcard lib/*.c))
-LIBUGLYOBJ=$(patsubst libugly/%.c,%.o,$(wildcard libugly/*.c))
-LIBSTDIOOBJ=$(patsubst libstdio/%.c,%.o,$(wildcard libstdio/*.c))
-LIBCRUFTOBJ=$(patsubst libcruft/%.c,%.o,$(wildcard libcruft/*.c))
-LIBCRYPTOBJ=$(patsubst libcrypt/%.c,%.o,$(wildcard libcrypt/*.c))
-LIBSHELLOBJ=$(patsubst libshell/%.c,%.o,$(wildcard libshell/*.c))
+LIBOBJ=$(patsubst lib/%.c,$(OBJDIR)/%.o,$(wildcard lib/*.c))
+LIBUGLYOBJ=$(patsubst libugly/%.c,$(OBJDIR)/%.o,$(wildcard libugly/*.c))
+LIBSTDIOOBJ=$(patsubst libstdio/%.c,$(OBJDIR)/%.o,$(wildcard libstdio/*.c))
+LIBCRUFTOBJ=$(patsubst libcruft/%.c,$(OBJDIR)/%.o,$(wildcard libcruft/*.c))
+LIBCRYPTOBJ=$(patsubst libcrypt/%.c,$(OBJDIR)/%.o,$(wildcard libcrypt/*.c))
+LIBSHELLOBJ=$(patsubst libshell/%.c,$(OBJDIR)/%.o,$(wildcard libshell/*.c))
 
 include $(ARCH)/Makefile.add
 
@@ -32,46 +34,55 @@ PWD=$(shell pwd)
 .SUFFIXES:
 .SUFFIXES: .S .c
 
+$(OBJDIR):
+	mkdir $@
+
 % :: %,v
 
-%.o: %.S
-	$(CROSS)$(CC) -I. -Iinclude $(CFLAGS) -c $<
+$(OBJDIR)/%.o: %.S
+	$(CROSS)$(CC) -I. -Iinclude $(CFLAGS) -c $< -o $@
 
-%.o: %.c
-	$(CROSS)$(CC) -I. -Iinclude $(CFLAGS) -c $<
-#	$(CROSS)strip -x -R .comment -R .note $@
+$(OBJDIR)/%.o: %.c
+	$(CROSS)$(CC) -I. -Iinclude $(CFLAGS) -c $< -o $@
+	$(CROSS)strip -x -R .comment -R .note $@
 
 DIETLIBC_OBJ = $(SYSCALLOBJ) $(LIBOBJ) $(LIBSTDIOOBJ) $(LIBUGLYOBJ) \
 $(LIBCRUFTOBJ) $(LIBCRYPTOBJ) $(LIBSHELLOBJ) \
-__longjmp.o setjmp.o unified.o mmap.o clone.o
+$(OBJDIR)/__longjmp.o $(OBJDIR)/setjmp.o $(OBJDIR)/unified.o \
+$(OBJDIR)/mmap.o $(OBJDIR)/clone.o
 
-dietlibc.a: $(DIETLIBC_OBJ) start.o
-	$(CROSS)ar cru dietlibc.a $(DIETLIBC_OBJ)
+$(OBJDIR)/dietlibc.a: $(DIETLIBC_OBJ) $(OBJDIR)/start.o
+	$(CROSS)ar cru $@ $(DIETLIBC_OBJ)
 
-LIBLATIN1_OBJS=$(patsubst liblatin1/%.c,%.o,$(wildcard liblatin1/*.c))
-liblatin1.a: $(LIBLATIN1_OBJS)
+LIBLATIN1_OBJS=$(patsubst liblatin1/%.c,$(OBJDIR)/%.o,$(wildcard liblatin1/*.c))
+$(OBJDIR)/liblatin1.a: $(LIBLATIN1_OBJS)
 	$(CROSS)ar cru $@ $^
 
-libdietc.so: dietlibc.a
+$(OBJDIR)/libdietc.so: $(OBJDIR)/dietlibc.a
 	$(CROSS)ld -whole-archive -shared -o $@ $^
 
 $(SYSCALLOBJ): syscalls.h
 
-elftrunc: contrib/elftrunc.c start.o dietlibc.a
+$(OBJDIR)/elftrunc: contrib/elftrunc.c $(OBJDIR)/start.o $(OBJDIR)/dietlibc.a
 	$(CROSS)$(CC) -Iinclude $(CFLAGS) -nostdlib -o $@ $^
 
-djb: compile load
+$(OBJDIR)/diet: diet.c $(OBJDIR)/start.o $(OBJDIR)/dietlibc.a
+	$(CROSS)$(CC) -Iinclude $(CFLAGS) -nostdlib -o $@ $^ -DDIETHOME=\"$(PWD)\"
+	$(CROSS)strip -x -R .comment -R .note $@
 
-compile:
-	echo 'exec gcc $(CFLAGS) -I$(PWD)/include -c $${1+"$$@"}' > $@
+$(OBJDIR)/djb: $(OBJDIR)/compile $(OBJDIR)/load
+
+$(OBJDIR)/compile:
+	echo 'exec gcc $(CFLAGS) -I$(PWD)/$(OBJDIR)/include -c $${1+"$$@"}' > $@
 	chmod 755 $@
 
-load:
-	echo 'main="$$1"; shift; exec gcc -nostdlib -o "$$main" $(PWD)/start.o "$$main".o $${1+"$$@"} $(PWD)/dietlibc.a -lgcc'  > $@
+$(OBJDIR)/load:
+	echo 'main="$$1"; shift; exec gcc -nostdlib -o "$$main" $(PWD)/$(OBJDIR)/start.o "$$main".o $${1+"$$@"} $(PWD)/$(OBJDIR)/dietlibc.a -lgcc'  > $@
 	chmod 755 $@
 
 clean:
 	rm -f *.o *.a t t1 compile load elftrunc exports mapfile libdietc.so
+	rm -rf bin-*
 	$(MAKE) -C examples clean
 
 tar: clean
@@ -79,12 +90,12 @@ tar: clean
 	ln -sf arm armv4l
 	cd ..; tar cvvf dietlibc.tar.bz2 dietlibc --use=bzip2 --exclude CVS
 
-exports: dietlibc.a
-	nm -g dietlibc.a | grep -w T | awk '{ print $$3 }' | sort -u > exports
+$(OBJDIR)/exports: $(OBJDIR)/dietlibc.a
+	nm -g $(OBJDIR)/dietlibc.a | grep -w T | awk '{ print $$3 }' | sort -u > $(OBJDIR)/exports
 
 .PHONY: t t1
 t:
-	$(CROSS)$(CC) -g $(CFLAGS) -fno-builtin -nostdlib -Iinclude -o t t.c start.o dietlibc.a -lgcc -Wl,-Map,mapfile
+	$(CROSS)$(CC) -g $(CFLAGS) -fno-builtin -nostdlib -Iinclude -o t t.c $(OBJDIR)/start.o $(OBJDIR)/dietlibc.a -lgcc -Wl,-Map,mapfile
 
 t1:
 	$(CROSS)$(CC) -g -o t1 t.c
@@ -96,11 +107,13 @@ install:
 .PHONY: sparc ppc mips arm alpha i386
 
 arm sparc ppc alpha i386:
-	$(MAKE) ARCH=$@ CROSS=$@-linux- all t libdietc.so
+	$(MAKE) ARCH=$@ CROSS=$@-linux- all t bin-$@/libdietc.so
 
 mips:
-	$(MAKE) ARCH=$@ CROSS=$@-linux-gnu- all t libdietc.so
+	$(MAKE) ARCH=$@ CROSS=$@-linux-gnu- all t bin-$@/libdietc.so
 
+cross:
+	$(MAKE) arm sparc ppc alpha i386 mips
 
 
 # these depend on dietfeatures.h for large file backward compatibility

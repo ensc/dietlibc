@@ -5,6 +5,9 @@
   add fnmatch
   change index, rindex and bcmp as weak ELF symbols (were #defined before)
   Olaf added character classes to *scanf.
+  Put object and library files into a separate directory (bin-$ARCH).
+  Add "cross" make target to make all architectures.
+  Add "diet" program and man page.
 
 0.8:
   vsnprintf(0,...) estimated the length of strings with a padding width

@@ -4,3 +4,9 @@ mapfile
 t1
 load
 compile
+bin-alpha
+bin-arm
+bin-i386
+bin-mips
+bin-ppc
+bin-sparc
