@@ -34,10 +34,10 @@ static void CopyWithEndianSwap (uint32_t *dst, const uint32_t *src, int length) 
     uint32_t value = *src++;
     *dst++ = ((((value)<<24)|((value)>>8))^((((value)^(((value)<<16)|((value)>>16)))&~0x00ff0000)>>8));
 #else
-    *dst=(((uint32_t)in[0])<<24) |
-	 (((uint32_t)in[1])<<16) |
-	 (((uint32_t)in[2])<<8) |
-	   (uint32_t)in[3];
+    *dst=(((uint32_t)in[3])<<24) |
+	 (((uint32_t)in[2])<<16) |
+	 (((uint32_t)in[1])<<8) |
+	   (uint32_t)in[0];
     in+=4; ++dst;
 #endif
   }
