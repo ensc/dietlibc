@@ -22,7 +22,6 @@ struct hostent* gethostbyaddr(const void *addr, socklen_t len, int type) {
   struct hostent *hostbuf;
   struct hostent *hp;
   int res;
-  int herr;
 
   __dns_buflen=512;
   do {
@@ -31,7 +30,7 @@ struct hostent* gethostbyaddr(const void *addr, socklen_t len, int type) {
   } while ((res = gethostbyaddr_r (addr, len, type, hostbuf,
 				   __dns_buf+hostentsize,
 				   __dns_buflen-hostentsize, &hp,
-				   &herr)) == ERANGE);
+				   &h_errno)) == ERANGE);
   if (res) hp=0;
   return hp;
 }

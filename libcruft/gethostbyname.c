@@ -10,8 +10,6 @@
 #include <errno.h>
 #include "dietwarning.h"
 
-extern int h_errno;
-
 static const int hostentsize=((sizeof(struct hostent)+15)&(-16));
 
 extern size_t __dns_buflen;
@@ -22,7 +20,6 @@ struct hostent* gethostbyname (const char *host) {
   struct hostent *hostbuf;
   struct hostent *hp;
   int res;
-  int herr;
 
   __dns_buflen=512;
   do {
@@ -30,7 +27,7 @@ struct hostent* gethostbyname (const char *host) {
     hostbuf=(struct hostent*)__dns_buf;
   } while ((res = gethostbyname_r (host, hostbuf, __dns_buf+hostentsize,
 				   __dns_buflen-hostentsize, &hp,
-				   &herr)) == ERANGE);
+				   &h_errno)) == ERANGE);
   if (res) hp=0;
   return hp;
 }

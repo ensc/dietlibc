@@ -95,12 +95,14 @@ extern char* strcpy2(char*a,char*b);
 #define rdtscl(low) \
      __asm__ __volatile__ ("rdtsc" : "=a" (low) : : "edx")
 
+#if 0
 int traverse(const char* file, const struct stat* sb, int flag) {
   __write1("found ");
   __write1(file);
   __write1("\n");
   return 0;
 }
+#endif
 
 int main(int argc,char *argv[]) {
 #if 0
@@ -323,7 +325,10 @@ int main(int argc,char *argv[]) {
 #if 1
   char buf[1024];
   struct hostent* r;
-  r=gethostbyname("borg");
+  r=gethostbyname("xorn.qontinuum");
+  if (!r) {
+    printf("dns error: %s\n",hstrerror(h_errno));
+  }
   {
 /*  while (r=gethostent_r(buf,1024)) { */
     if (r && r->h_name) {
@@ -332,7 +337,7 @@ int main(int argc,char *argv[]) {
       for (i=0; i<8; ++i)
 	if (r->h_aliases[i]) {
 	  printf("alias \"%s\"; ",r->h_aliases[i]);
-	}
+	} else break;
       if ((r->h_addr_list)[0]) {
 	struct in_addr address;
 	address = *((struct in_addr *) (r->h_addr_list)[0]);
