@@ -9,9 +9,9 @@
   Thomas also sent me profiling support (so far only on x86, but
     profiling/PORTING describes what needs to be done for other
     architectures)!
+  add contrib/dprof.c, also from Thomas.
   Andreas Krennmair sent a patch to add the BSD regex interface to
     libcompat
-  add contrib/dprof.c, also from Andreas.
   Andre noticed that __dtostr never sets first to false.  Oops!
 
 0.16:
