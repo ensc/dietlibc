@@ -3,7 +3,7 @@
 .global floorf,floor,floorl
 	.type floorf,@function
 	.type floor,@function
-	.type floorf,@function
+	.type floorl,@function
 
 floorf:
 	flds 4(%esp)

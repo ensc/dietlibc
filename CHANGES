@@ -4,6 +4,7 @@
   fix assert for 64-bit platforms (Gwenole Beauchesne)
   remove many warning from test suite (Gwenole Beauchesne)
   hopefully fix resolver (again, Gwenole)
+  fix floorl typo (Norbert Wolff)
 
 0.22:
   fix i386 libm
