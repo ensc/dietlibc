@@ -9,7 +9,7 @@
 #ifndef WANT_LARGEFILE_BACKCOMPAT
 struct dirent64* readdir64(DIR *d) {
   if (!d->num || (d->cur += ((struct dirent64*)(d->buf+d->cur))->d_reclen)>=d->num) {
-    int res=getdents64(d->fd,(struct dirent64*)d->buf,1023);
+    int res=getdents64(d->fd,(struct dirent64*)d->buf, sizeof (d->buf)-1);
     if (res<=0) return 0;
     d->num=res; d->cur=0;
   }
@@ -23,7 +23,7 @@ struct dirent64* readdir64(DIR *d) {
 again:
   if (!trygetdents64) {
     if (!d->num || (d->cur += ((struct dirent*)(d->buf+d->cur))->d_reclen)>=d->num) {
-      int res=getdents(d->fd,(struct dirent*)d->buf,1023);
+      int res=getdents(d->fd,(struct dirent*)d->buf, sizeof (d->buf)-1);
       if (res<=0) return 0;
       d->num=res; d->cur=0;
     }
@@ -36,7 +36,7 @@ again:
     return &d64;
   }
   if (!d->num || (d->cur += ((struct dirent64*)(d->buf+d->cur))->d_reclen)>=d->num) {
-    int res=getdents64(d->fd,(struct dirent64*)d->buf,1023);
+    int res=getdents64(d->fd,(struct dirent64*)d->buf,sizeof (d->buf));
     if (res<=0) {
       if (errno==ENOSYS) {
 	trygetdents64=0;

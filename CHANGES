@@ -34,6 +34,10 @@
   make the DNS resolver IPv6 transport capable (WANT_IPV6_DNS)
   mention -v in diet.1 (Bryan Henderson)
   auto-detect gcc 3 on i386 and remove compiler option warnings
+  putenv tweak (Thomas Ogrisegg)
+  add missing socket syscalls for PA-RISC and IA64 (Thomas Ogrisegg)
+  add cpio.h and tar.h (Thomas Ogrisegg)
+  change opendir/readdir/closedir from malloc to mmap (Thomas Ogrisegg)
 
 0.17:
   fix several bugs in getservent_r

@@ -1,4 +1,5 @@
 #include "dietdirent.h"
+#include <sys/mman.h>
 #include <unistd.h>
 #include <dirent.h>
 #include <stdlib.h>
@@ -9,12 +10,11 @@ DIR*  opendir ( const char* name ) {
   DIR*  t  = NULL;
 
   if ( fd >= 0 ) {
-    if (fcntl (fd, F_SETFD, FD_CLOEXEC) < 0) {
-      t=0;
+    if (fcntl (fd, F_SETFD, FD_CLOEXEC) < 0)
       goto lose;
-    }
-    t = (DIR*) calloc ((sizeof(DIR)+15)/16, 16);
-    if (t == NULL)
+    t = (DIR *) mmap (NULL, PAGE_SIZE, PROT_READ | PROT_WRITE, 
+		MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+    if (t == MAP_FAILED)
 lose:
       close (fd);
     else
