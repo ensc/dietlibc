@@ -290,8 +290,17 @@ void *realloc(void *ptr,size_t size)
       diff=tmp->size-need;
       if (diff<0)
       {
+	int in_free=0;
 	tf=END_OF_BLOCK(tmp);
-	if ((tf->magic==FREE_MAGIC)&&(need<USE_BIG_MALLOC))
+	{
+	  free_head* tmp;
+	  for (tmp=base; tmp->next ;tmp=tmp->next)
+	    if (tmp==tf) {
+	      in_free=1;
+	      break;
+	    }
+	}
+	if ((in_free)&&(tf->magic==FREE_MAGIC)&&(need<USE_BIG_MALLOC))
 	{
 	  if ((tf->size<(-diff))&&(tf->next==NULL))
 	  { /* next ist last block ? */
