@@ -1,3 +1,5 @@
+0.28:
+
 0.27:
   change DNS routines to look for ip6.arpa instead of ip6.int
   WANT_FREAD_OPTIMIZATION was broken on sockets (Johannes Stezenbach)
