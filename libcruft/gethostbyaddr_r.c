@@ -63,7 +63,7 @@ int gethostbyaddr_r(const char* addr, size_t length, int format,
       tmp[3]='.';
       tmp+=4;
     }
-    strcpy(tmp,".ip6.int");
+    strcpy(tmp,".ip6.arpa");
   } else return 1;
   if (buflen<sizeof(struct hostent)+16) {
     errno=ENOMEM;
