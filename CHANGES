@@ -1,6 +1,7 @@
 0.12:
   more contributions from Frank Klemm.
   iconv can now do UCS-2, too.
+  Imported several x86 assembly routines from Wouter van Kleunen.
   Lots of bug fixes, and several more i386 specific versions of common
     routines to make them smaller.
 
