@@ -208,6 +208,17 @@ A: The diet libc is also useful for servers because it can improve
    for an example and/or read http://www.fefe.de/talk.pdf for some
    benchmarks.
 
+
 Q: I just compiled hello world and the binary is larger than with glibc!
 A: You forgot to add the dynamic glibc to your size comparison.  Please
    use -static when linking with glibc to see the difference.
+
+
+Q: Should I compile my kernel with the diet libc?
+A: The kernel is not linked against any libc.  In fact, the libc is the
+   user space interface to the kernel.  So unless you are talking about
+   "user mode linux" (which is a special version of the kernel that
+   happens to be a user space program) you cannot link the kernel
+   against the diet libc.  Linking user space Linux with the diet libc
+   should be possible in theory but I don't think anyone has actually
+   tried it.
