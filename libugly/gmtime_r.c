@@ -24,8 +24,8 @@ struct tm *gmtime_r(const time_t *timep, struct tm *r) {
 
   r->tm_mday=1;
   if (__isleap(i) && (work>58)) {
-    work-=1;
     if (work==59) r->tm_mday=2; /* 29.2. */
+    work-=1;
   }
 
   for (i=11; i && __spm[i]>work; --i) ;
