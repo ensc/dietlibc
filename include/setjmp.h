@@ -116,7 +116,7 @@ extern void siglongjmp (sigjmp_buf __env, int __val)
      __THROW __attribute__ ((__noreturn__));
 
 #define setjmp(env) __sigsetjmp(env,0)
-#define sigsetjmp(env) __sigsetjmp(env,0)
+#define sigsetjmp(a,b) __sigsetjmp(a,b)
 
 #endif
 
