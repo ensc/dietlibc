@@ -1,3 +1,4 @@
+#ifndef ASM_PPC_SIGCONTEXT_H
 
 struct pt_regs {
 	unsigned long gpr[32];
@@ -74,3 +75,5 @@ struct sigcontext {
 	unsigned long	oldmask;
 	struct pt_regs 	*regs;
 };
+
+#endif

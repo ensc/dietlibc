@@ -6,6 +6,7 @@
     - fix the fd leak on error path (Denis Vlasenko)
     - the regparm attribute in typedefinition generats error with gcc-2.95
       on non-x86 arch... (reported: Johannes Stezenbach)
+  PowerPC build fix (Gerrit Pape)
 
 0.26:
   iconv UTF-8 fix (Kuba Winnicki)
