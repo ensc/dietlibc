@@ -2,12 +2,12 @@
 #include "_dl_int.h"
 
 #ifdef __DIET_LD_SO__
-static int _dl_error;
+static unsigned int _dl_error;
 static const char*_dl_error_location;
 static const char*_dl_error_data;
 #else
 #include <string.h>
-int _dl_error;
+unsigned int _dl_error;
 const char*_dl_error_location;
 const char*_dl_error_data;
 #endif

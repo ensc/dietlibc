@@ -476,6 +476,7 @@ static struct _dl_handle*_dl_map_lib(const char*fn,const char*pathname,int fd,in
   Elf_Phdr*ld[4]={0,0,0,0};
   Elf_Phdr*dyn=0;
 
+  if (0) { pathname=0; }	/* no unused parameter */
   if (fd==-1) return 0;
 
   if (_dl_sys_fstat(fd,&st)<0) {
@@ -688,7 +689,7 @@ static struct _dl_handle* _dl_dyn_scan(struct _dl_handle*dh,Elf_Dyn*_dynamic) {
       /* TEXT RELOCATIONS POSSIBLE -> NO SHARED OBJECT */
     case DT_TEXTREL:
 #ifdef DEBUG
-      pf(__func__": found possible textrelocation -> "); pf(dh->name); pf("is no compiled as a shared library\n");
+      pf(__func__": found possible textrelocation -> "); pf(dh->name); pf(" is not compiled as a shared library\n");
 #endif
       _dl_error_data=dh->name;
       _dl_error=3;
@@ -951,7 +952,7 @@ static unsigned long _dl_main(int argc,char*argv[],char*envp[],unsigned long _dy
   struct _dl_handle*prog,*mydh;
   struct _dl_handle my_dh;
   Elf_Dyn*prog_dynamic=0;
-  int i;
+  unsigned int i;
 
   if (0) _dl_main(argc,argv,envp,_dynamic); /* TRICK: no warning */
 

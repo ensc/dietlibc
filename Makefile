@@ -182,6 +182,8 @@ $(OBJDIR)/libdietc.so: $(OBJDIR)/dietlibc.a
 
 dyn: dynlinker/diet-linux.so dyn_lib
 
+#dyn: dynlinker/diet-linux.so dyn_lib
+
 # added dynamic linker
 $(OBJDIR)/libdl.a: $(LIBDLOBJ)
 	$(CROSS)ar cru $@ $(LIBDLOBJ)
@@ -189,7 +191,7 @@ $(OBJDIR)/libdl.a: $(LIBDLOBJ)
 dynlinker/diet-linux.so: $(OBJDIR)/libdl.a
 	make -C dynlinker
 
-dyn_lib: $(PICODIR) $(PICODIR)/libdietc.so $(PICODIR)/dstart.o \
+dyn_lib: $(PICODIR) $(PICODIR)/libc.so $(PICODIR)/dstart.o \
 	$(PICODIR)/dyn_so_start.o $(PICODIR)/dyn_start.o $(PICODIR)/dyn_stop.o \
 	$(PICODIR)/libpthread.so $(PICODIR)/libdl.so $(PICODIR)/libcompat.so \
 	$(PICODIR)/diet-dyn $(PICODIR)/diet-dyn-i
@@ -224,17 +226,20 @@ DYN_LIBDL_OBJS = $(patsubst $(OBJDIR)/%.o,$(PICODIR)/%.o,$(LIBDLOBJ))
 
 DYN_LIBCOMPAT_OBJS = $(patsubst $(OBJDIR)/%.o,$(PICODIR)/%.o,$(LIBCOMPATOBJ))
 
-$(PICODIR)/libdietc.so: $(PICODIR) $(DYN_LIBC_OBJ)
+$(PICODIR)/libc.so: $(PICODIR) $(DYN_LIBC_OBJ)
 	$(CROSS)$(CC) -nostdlib -shared -o $@ $(CFLAGS) -fPIC $(DYN_LIBC_OBJ) -Wl,-soname=libc.so
 
 $(PICODIR)/libpthread.so: $(DYN_PTHREAD_OBJS) dietfeatures.h
-	$(CROSS)$(CC) -nostdlib -shared -o $@ $(CFLAGS) -fPIC $(DYN_PTHREAD_OBJS) -L$(PICODIR) -ldietc -Wl,-soname=libpthread.so
+	$(CROSS)$(CC) -nostdlib -shared -o $@ $(CFLAGS) -fPIC $(DYN_PTHREAD_OBJS) -L$(PICODIR) -lc -Wl,-soname=libpthread.so
 
-$(PICODIR)/libdl.so: $(DYN_LIBDL_OBJS) dietfeatures.h
-	$(CROSS)$(CC) -nostdlib -shared -o $@ $(CFLAGS) -fPIC $(DYN_LIBDL_OBJS) -L$(PICODIR) -ldietc -Wl,-soname=libdl.so
+$(PICODIR)/libdl.so: libdl/_dl_main.c dietfeatures.h
+	$(CROSS)$(CC) -D__OD_CLEAN_ROOM -DNODIETREF -fPIC -nostdlib -shared -o $@ $(CFLAGS) -I. -Iinclude libdl/_dl_main.c -Wl,-soname=libdl.so
+
+#$(PICODIR)/libdl.so: $(DYN_LIBDL_OBJS) dietfeatures.h
+#	$(CROSS)$(CC) -nostdlib -shared -o $@ $(CFLAGS) -fPIC $(DYN_LIBDL_OBJS) -L$(PICODIR) -ldietc -Wl,-soname=libdl.so
 
 $(PICODIR)/libcompat.so: $(DYN_LIBCOMPAT_OBJS) dietfeatures.h
-	$(CROSS)$(CC) -nostdlib -shared -o $@ $(CFLAGS) -fPIC $(DYN_LIBCOMPAT_OBJS) -L$(PICODIR) -ldietc -Wl,-soname=libcompat.so
+	$(CROSS)$(CC) -nostdlib -shared -o $@ $(CFLAGS) -fPIC $(DYN_LIBCOMPAT_OBJS) -L$(PICODIR) -lc -Wl,-soname=libcompat.so
 
 
 
@@ -259,12 +264,20 @@ $(PICODIR)/diet-gen: $(OBJDIR)/start.o $(OBJDIR)/dyn_start.o diet.c $(OBJDIR)/di
 	$(CROSS)strip -R .command -R .note $@
 
 $(PICODIR)/diet-dyn: $(PICODIR)/start.o $(PICODIR)/dyn_start.o diet.c
-	$(CROSS)$(CC) -Iinclude $(CFLAGS) -nostdlib -o $@ $^ -DDIETHOME=\"$(HOME)\" -D__DYN_LIB -DVERSION=\"$(VERSION)\" -L$(PICODIR) -ldietc -lgcc $(PICODIR)/dyn_stop.o -Wl,-dynamic-linker=$(HOME)/dynlinker/diet-linux.so
+	$(CROSS)$(CC) -Iinclude $(CFLAGS) -nostdlib -o $@ $^ -DDIETHOME=\"$(HOME)\" -D__DYN_LIB -DVERSION=\"$(VERSION)\" -L$(PICODIR) -lc -lgcc $(PICODIR)/dyn_stop.o -Wl,-dynamic-linker=$(HOME)/$(PICODIR)/libdl.so
 	$(CROSS)strip -R .command -R .note $@
 
+#$(PICODIR)/diet-dyn: $(PICODIR)/start.o $(PICODIR)/dyn_start.o diet.c
+#	$(CROSS)$(CC) -Iinclude $(CFLAGS) -nostdlib -o $@ $^ -DDIETHOME=\"$(HOME)\" -D__DYN_LIB -DVERSION=\"$(VERSION)\" -L$(PICODIR) -ldietc -lgcc $(PICODIR)/dyn_stop.o -Wl,-dynamic-linker=$(HOME)/dynlinker/diet-linux.so
+#	$(CROSS)strip -R .command -R .note $@
+
 $(PICODIR)/diet-dyn-i: $(PICODIR)/start.o $(PICODIR)/dyn_start.o diet.c
-	$(CROSS)$(CC) -Iinclude $(CFLAGS) -nostdlib -o $@ $^ -DDIETHOME=\"$(prefix)\" -D__DYN_LIB -DVERSION=\"$(VERSION)\" -L$(PICODIR) -ldietc -lgcc $(PICODIR)/dyn_stop.o -Wl,-dynamic-linker=$(ILIBDIR)/diet-linux.so -DINSTALLVERSION
+	$(CROSS)$(CC) -Iinclude $(CFLAGS) -nostdlib -o $@ $^ -DDIETHOME=\"$(prefix)\" -D__DYN_LIB -DVERSION=\"$(VERSION)\" -L$(PICODIR) -lc -lgcc $(PICODIR)/dyn_stop.o -Wl,-dynamic-linker=$(ILIBDIR)/libdl.so -DINSTALLVERSION
 	$(CROSS)strip -R .command -R .note $@
+
+#$(PICODIR)/diet-dyn-i: $(PICODIR)/start.o $(PICODIR)/dyn_start.o diet.c
+#	$(CROSS)$(CC) -Iinclude $(CFLAGS) -nostdlib -o $@ $^ -DDIETHOME=\"$(prefix)\" -D__DYN_LIB -DVERSION=\"$(VERSION)\" -L$(PICODIR) -ldietc -lgcc $(PICODIR)/dyn_stop.o -Wl,-dynamic-linker=$(ILIBDIR)/diet-linux.so -DINSTALLVERSION
+#	$(CROSS)strip -R .command -R .note $@
 
 $(OBJDIR)/djb: $(OBJDIR)/compile $(OBJDIR)/load
 
@@ -308,7 +321,7 @@ $(OBJDIR)/liblatin1.a $(OBJDIR)/libcompat.a $(DESTDIR)$(ILIBDIR)
 	$(INSTALL) $(OBJDIR)/diet-i $(DESTDIR)$(BINDIR)/diet
 	-$(INSTALL) $(OBJDIR)/pstart.o $(OBJDIR)/libgmon.a $(OBJDIR)/dyn_start.o $(OBJDIR)/dyn_stop.o $(DESTDIR)$(ILIBDIR)
 	-$(INSTALL) $(PICODIR)/diet-dyn-i $(DESTDIR)$(BINDIR)/diet-dyn
-	-$(INSTALL) $(PICODIR)/libdietc.so $(DESTDIR)$(ILIBDIR)/libc.so
+	-$(INSTALL) $(PICODIR)/libc.so $(DESTDIR)$(ILIBDIR)/libc.so
 	-$(INSTALL) $(PICODIR)/libpthread.so $(DESTDIR)$(ILIBDIR)/libpthread.so
 	-$(INSTALL) $(PICODIR)/libdl.so $(DESTDIR)$(ILIBDIR)/libdl.so
 	-$(INSTALL) $(PICODIR)/libcompat.so $(DESTDIR)$(ILIBDIR)/libcompat.so
@@ -317,7 +330,7 @@ $(OBJDIR)/liblatin1.a $(OBJDIR)/libcompat.a $(DESTDIR)$(ILIBDIR)
 	-$(INSTALL) $(PICODIR)/dstart.o $(PICODIR)/dyn_so_start.o $(DESTDIR)$(ILIBDIR)
 	-$(INSTALL) dynlinker/diet-linux.so $(DESTDIR)$(ILIBDIR)/diet-linux.so
 	$(INSTALL) -m 644 diet.1 $(DESTDIR)$(MAN1DIR)/diet.1
-	if test -f $(PICODIR)/libdietc.so -a ! -f $(DESTDIR)/etc/diet.ld.conf; then echo "$(ILIBDIR)" > $(DESTDIR)/etc/diet.ld.conf; fi
+	if test -f $(PICODIR)/libc.so -a ! -f $(DESTDIR)/etc/diet.ld.conf; then echo "$(ILIBDIR)" > $(DESTDIR)/etc/diet.ld.conf; fi
 	for i in `find include -name \*.h`; do install -m 644 -D $$i $(DESTDIR)$(prefix)/$$i; done
 
 .PHONY: sparc ppc mips arm alpha i386 parisc mipsel powerpc s390 sparc64

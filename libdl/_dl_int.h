@@ -129,7 +129,7 @@ int _dl_open_dep();
 int _dl_relocate(struct _dl_handle* dh, _dl_rel_t *rel, int num);
 
 /* dlerror.c */
-extern int   _dl_error;
+extern unsigned int _dl_error;
 extern const char* _dl_error_location;
 extern const char* _dl_error_data;
 #endif

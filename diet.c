@@ -219,11 +219,7 @@ pp:
 #endif
 #else
       strcpy(b,platform); strcat(b,"/dstart.o");
-#ifdef INSTALLVERSION
       strcpy(c,"-lc");
-#else
-      strcpy(c,"-ldietc");
-#endif
 #endif
 
 #ifdef WANT_DYNAMIC
@@ -332,17 +328,14 @@ incorporated:
 #endif
 #ifdef __DYN_LIB
       if (shared){ *dest++=c; }
-#ifdef INSTALLVERSION
       f=alloca(strlen(platform)+100);
       if (_link) {
 	strcpy(f,"-Wl,-dynamic-linker=");
 	strcat(f,platform);
-	strcat(f,"/diet-linux.so");
+//	strcat(f,"/diet-linux.so");
+	strcat(f,"/libdl.so");
 	*dest++=f;
       }
-#else
-      if (_link) { *dest++="-Wl,-dynamic-linker=" DIETHOME "/dynlinker/diet-linux.so"; }
-#endif
 #endif
       *dest=0;
       if (verbose) {

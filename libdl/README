@@ -2,6 +2,11 @@ this is the experimental libdl
 
 written by Olaf Dreesen
 
+Fri Sep 13 16:28:42 CEST 2002
+
+this unified libdl/dynlinker is now the default.
+
+
 Mon Mar 11 19:44:20 CET 2002
 
 the unified libdl/dynlinker now seems to stand the NORMAL usage so I think
