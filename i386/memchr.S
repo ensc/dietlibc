@@ -8,7 +8,7 @@ memchr:
 	movl 12(%esp),%eax
 	movl 16(%esp),%ecx
 	cld
-	jcxz .Lnotfound
+	jecxz .Lnotfound
 
 	repne scasb
 
