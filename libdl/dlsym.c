@@ -16,18 +16,18 @@ void *_dlsym(void*handle,char*symbol) {
     char *name=dh->dyn_str_tab;
 
 #ifdef DEBUG
-//    pf(__func__:" bucket("); ph(bhash); pf(",\""); pf(symbol); pf("\")\n");
+//    pf(__FUNCTION__); pf(": bucket("); ph(bhash); pf(",\""); pf(symbol); pf("\")\n");
 #endif
 
     ind=HASH_BUCKET(dh->hash_tab)[bhash];
 #ifdef DEBUG
-//    pf(__func__:" chain ("); ph(ind); pf(",\""); pf(symbol); pf("\")\n");
+//    pf(__FUNCTION__); pf(": chain ("); ph(ind); pf(",\""); pf(symbol); pf("\")\n");
 #endif
 
     while(ind) {
       int ptr=dh->dyn_sym_tab[ind].st_name;
 #ifdef DEBUG
-//      pf(__func__:" symbol(\""); pf(name+ptr); pf("\",\"); pf(symbol); pf("\")\n");
+//      pf(__FUNCTION__); pf(": symbol(\""); pf(name+ptr); pf("\",\"); pf(symbol); pf("\")\n");
 #endif
       if (strcmp(name+ptr,symbol)==0) {
 	if (dh->dyn_sym_tab[ind].st_value!=0) {
@@ -38,7 +38,30 @@ void *_dlsym(void*handle,char*symbol) {
       ind=chain[ind];
     }
 #ifdef DEBUG
-    pf(__func__": symbol \""); pf(symbol); pf("\" @ "); ph((long)sym); pf("\n");
+    pf(__FUNCTION__); pf(": symbol \""); pf(symbol); pf("\" @ "); ph((long)sym); pf("\n");
+#endif
+  }
+  return sym;
+}
+
+#ifdef __DIET_LD_SO__
+static
+#endif
+void*_dl_sym_search_str(struct _dl_handle*dh,char*name) {
+  void *sym=0;
+  struct _dl_handle*tmp;
+#ifdef DEBUG
+  pf(__FUNCTION__); pf(": search for: "); pf(name); pf("\n");
+#endif
+  for (tmp=_dl_root_handle;tmp && (!sym);tmp=tmp->next) {
+    if (tmp==dh) continue;
+//    if (!(tmp->flags&RTLD_GLOBAL)) continue;
+#ifdef DEBUG
+    pf(__FUNCTION__); pf(": searching in "); pf(tmp->name); pf("\n");
+#endif
+    sym=_dlsym((void*)tmp,name);
+#ifdef DEBUG
+    if (sym) { pf(__FUNCTION__); pf(": found: "); pf(name); pf(" @ "); ph((long)sym); pf("\n"); }
 #endif
   }
   return sym;
@@ -46,7 +69,10 @@ void *_dlsym(void*handle,char*symbol) {
 
 void*dlsym(void*handle,char*symbol) {
   void*h;
-  if ((h=_dlsym(handle,symbol))==0) {
+  if (handle==(void*)1)
+    h=_dl_sym_search_str(0,symbol);
+  else h=_dlsym(handle,symbol);
+  if (h==0) {
     _dl_error_location="dlsym";
     _dl_error_data=symbol;
     _dl_error=5;

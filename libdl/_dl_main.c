@@ -44,106 +44,103 @@ extern char*strdup(const char*s);
 
 #ifdef __i386__
 
-asm(".text
-.type _start,@function
-_start:
-	movl	%esp, %ebp		# save stack
-	movl	(%ebp), %ecx		# argc
-	leal	4(%ebp), %esi		# argv
-	leal	4(%esi,%ecx,4), %eax	# envp
+asm(".text \n"
+".type _start,@function \n"
+"_start: \n"
+"	movl	%esp, %ebp		# save stack \n"
+"	movl	(%ebp), %ecx		# argc \n"
+"	leal	4(%ebp), %esi		# argv \n"
+"	leal	4(%esi,%ecx,4), %eax	# envp \n"
 
-# PIC code
-	call	getpic
-	addl	$_GLOBAL_OFFSET_TABLE_, %ebx
+"# PIC code \n"
+"	call	getpic \n"
+"	addl	$_GLOBAL_OFFSET_TABLE_, %ebx \n"
 
-# for calculation of load addr, get 'relocated' address of _DYNAMIC
-	leal	_DYNAMIC@GOTOFF(%ebx), %edx
+"# for calculation of load addr, get 'relocated' address of _DYNAMIC \n"
+"	leal	_DYNAMIC@GOTOFF(%ebx), %edx \n"
 
-# put parameter on stack and call _dl_main
-	pushl	%edx
-	pushl	%eax
-	pushl	%esi
-	pushl	%ecx
-	call	_dl_main
+"# put parameter on stack and call _dl_main \n"
+"	pushl	%edx \n"
+"	pushl	%eax \n"
+"	pushl	%esi \n"
+"	pushl	%ecx \n"
+"	call	_dl_main \n"
 
-# restore stack
-	movl	%ebp, %esp
+"# restore stack \n"
+"	movl	%ebp, %esp \n"
 
-# get fini pointer
-	movl	fini_entry@GOTOFF(%ebx), %edx
+"# get fini pointer \n"
+"	movl	fini_entry@GOTOFF(%ebx), %edx \n"
 
-# clear callee-save-register like kernel
-	xorl	%ebx, %ebx
-	xorl	%ebp, %ebp
-	xorl	%edi, %edi
-	xorl	%esi, %esi
+"# clear callee-save-register like kernel \n"
+"	xorl	%ebx, %ebx \n"
+"	xorl	%ebp, %ebp \n"
+"	xorl	%edi, %edi \n"
+"	xorl	%esi, %esi \n"
 
-# jump to program entry point
-	jmp	*%eax
+"# jump to program entry point \n"
+"	jmp	*%eax \n"
 
-_dl_sys_read:
-	movb	$3,%al
-	jmp	_dl_sys_call3
-_dl_sys_write:
-	movb	$4,%al
-	jmp	_dl_sys_call3
-_dl_sys_open:
-	movb	$5,%al
-	jmp	_dl_sys_call3
-_dl_sys_close:
-	movb	$6,%al
-	jmp	_dl_sys_call3
-_dl_sys_mmap:
-	movb	$90,%al
-	leal	4(%esp),%edx
-	pushl	%edx
-	call	_dl_sys_call3
-	popl	%ecx
-	ret
-_dl_sys_munmap:
-	movb	$91,%al
-	jmp	_dl_sys_call3
-_dl_sys_fstat:
-	movb	$108,%al
-	jmp	_dl_sys_call3
-_dl_sys_mprotect:
-	movb	$125,%al
-	jmp	_dl_sys_call3
-_dl_sys_exit:
-	movb	$1,%al
-_dl_sys_call3:
-	movzbl	%al,%eax
-	pushl	%ebx
-	movl	%esp,%ebx
-	movl	16(%ebx),%edx
-	movl	12(%ebx),%ecx
-	movl	8(%ebx),%ebx
-	int	$0x80
-	popl	%ebx
-	ret
+"_dl_sys_read: \n"
+"	movb	$3,%al \n"
+"	jmp	_dl_sys_call3 \n"
+"_dl_sys_write: \n"
+"	movb	$4,%al \n"
+"	jmp	_dl_sys_call3 \n"
+"_dl_sys_open: \n"
+"	movb	$5,%al \n"
+"	jmp	_dl_sys_call3 \n"
+"_dl_sys_close: \n"
+"	movb	$6,%al \n"
+"	jmp	_dl_sys_call3 \n"
+"_dl_sys_mmap: \n"
+"	movb	$90,%al \n"
+"	leal	4(%esp),%edx \n"
+"	pushl	%edx \n"
+"	call	_dl_sys_call3 \n"
+"	popl	%ecx \n"
+"	ret \n"
+"_dl_sys_munmap: \n"
+"	movb	$91,%al \n"
+"	jmp	_dl_sys_call3 \n"
+"_dl_sys_fstat: \n"
+"	movb	$108,%al \n"
+"	jmp	_dl_sys_call3 \n"
+"_dl_sys_mprotect: \n"
+"	movb	$125,%al \n"
+"	jmp	_dl_sys_call3 \n"
+"_dl_sys_exit: \n"
+"	movb	$1,%al \n"
+"_dl_sys_call3: \n"
+"	movzbl	%al,%eax \n"
+"	pushl	%ebx \n"
+"	movl	%esp,%ebx \n"
+"	movl	16(%ebx),%edx \n"
+"	movl	12(%ebx),%ecx \n"
+"	movl	8(%ebx),%ebx \n"
+"	int	$0x80 \n"
+"	popl	%ebx \n"
+"	ret \n"
 
-.type	_dl_jump,@function
-_dl_jump:
-	pushl	%eax		# save register args...
-	pushl	%ecx
-	pushl	%edx
+".type	_dl_jump,@function \n"
+"_dl_jump: \n"
+"	pushl	%eax		# save register args... \n"
+"	pushl	%ecx \n"
+"	pushl	%edx \n"
 
-	push	16(%esp)	# 2. arg from plt
-	push	16(%esp)	# 1. arg from plt
-	call	do_resolve
-	add	$8, %esp
+"	push	16(%esp)	# 2. arg from plt \n"
+"	push	16(%esp)	# 1. arg from plt \n"
+"	call	do_resolve \n"
+"	add	$8, %esp \n"
 
-	popl	%edx		# restore register args...
-	popl	%ecx
+"	popl	%edx		# restore register args... \n"
+"	popl	%ecx \n"
+"	xchgl	%eax, (%esp)	# restore eax and save function pointer (for return) \n"
+"	ret	$8		# remove arguments from plt and jump to REAL function \n"
 
-	xchgl	%eax, (%esp)	# restore eax and save function pointer (for return)
-
-	ret	$8		# remove arguments from plt and jump to REAL function
-
-# GET Position In Code :)
-getpic:	movl	(%esp), %ebx
-	ret
-");
+"# GET Position In Code :) \n"
+"getpic:	movl	(%esp), %ebx \n"
+"	ret");
 
 static inline unsigned long* get_got(void) {
   register unsigned long *got asm ("%ebx");
@@ -165,88 +162,87 @@ static inline int work_on_pltgot(struct _dl_handle*dh) {
 
 #elif __arm__
 
-asm(".text
-.type _start,function
-_start:
-	mov	r4, sp
-	mov	fp, #0			@ start new stack frame
+asm(".text \n"
+".type _start,function \n"
+"_start: \n"
+"	mov	r4, sp \n"
+"	mov	fp, #0			@ start new stack frame \n"
 
-	ldr	a1, [sp], #4		@ argc
-	mov	a2, sp			@ argv
+"	ldr	a1, [sp], #4		@ argc \n"
+"	mov	a2, sp			@ argv \n"
 
-	add	a3, a2, a1, lsl #2	@ envp
-	add	a3, a3, #4
+"	add	a3, a2, a1, lsl #2	@ envp \n"
+"	add	a3, a3, #4 \n"
 
-	ldr	sl, .L_got		@ PIC code
-1:	add	sl, pc, sl
+"	ldr	sl, .L_got		@ PIC code \n"
+"1:	add	sl, pc, sl \n"
 
-	ldr	a4, .L_la		@ get 'relocated' address of _DYNAMIC
-	add	a4, a4, sl
+"	ldr	a4, .L_la		@ get 'relocated' address of _DYNAMIC \n"
+"	add	a4, a4, sl \n"
 
-	bl	_dl_main		@ call _dl_main
+"	bl	_dl_main		@ call _dl_main \n"
 
-	mov	sp, r4
+"	mov	sp, r4 \n"
 
-	mov	lr, a1			@ save program entry point
+"	mov	lr, a1			@ save program entry point \n"
 
-	ldr	a1, [pc, #.L_fe-(.+8)]	@ agrument 1: global fini entry
-	ldr	a1, [sl, a1]
+"	ldr	a1, [pc, #.L_fe-(.+8)]	@ agrument 1: global fini entry \n"
+"	ldr	a1, [sl, a1] \n"
 
-	mov	pc, lr
+"	mov	pc, lr \n"
 
-.L_got:	.long	_GLOBAL_OFFSET_TABLE_-(1b+8)
-.L_la:	.long	_DYNAMIC(GOTOFF)
-.L_fe:	.long	fini_entry(GOTOFF)
+".L_got: .long	_GLOBAL_OFFSET_TABLE_-(1b+8) \n"
+".L_la:	.long	_DYNAMIC(GOTOFF) \n"
+".L_fe:	.long	fini_entry(GOTOFF) \n"
 
-_dl_sys_exit:
-	swi	#0x900001		@ exit
-	eor	lr, lr, lr		@ OR DIE !
-	mov	pc, lr
+"_dl_sys_exit: \n"
+"	swi	#0x900001		@ exit \n"
+"	eor	pc, lr, lr		@ OR DIE ! \n"
+"	mov	pc, lr \n"
 
-_dl_sys_read:
-	swi	#0x900003		@ read
-	mov	pc, lr
-_dl_sys_write:
-	swi	#0x900004		@ write
-	mov	pc, lr
-_dl_sys_open:
-	swi	#0x900005		@ open
-	mov	pc, lr
-_dl_sys_close:
-	swi	#0x900006		@ close
-	mov	pc, lr
-_dl_sys_mmap:
-	stmdb	sp!,{r0,r1,r2,r3}
-	mov	r0, sp
-	swi	#0x900090		@ mmap
-	add	sp, #16
-	mov	pc, lr
-_dl_sys_munmap:
-	swi	#0x900091		@ munmap
-	mov	pc, lr
-_dl_sys_fstat:
-	swi	#0x900108		@ fstat
-	mov	pc, lr
-_dl_sys_mprotect:
-	swi	#0x900125		@ mprotect
-	mov	pc, lr
+"_dl_sys_read: \n"
+"	swi	#0x900003		@ read \n"
+"	mov	pc, lr \n"
+"_dl_sys_write: \n"
+"	swi	#0x900004		@ write \n"
+"	mov	pc, lr \n"
+"_dl_sys_open: \n"
+"	swi	#0x900005		@ open \n"
+"	mov	pc, lr \n"
+"_dl_sys_close: \n"
+"	swi	#0x900006		@ close \n"
+"	mov	pc, lr \n"
+"_dl_sys_mmap: \n"
+"	stmdb	sp!,{r0,r1,r2,r3} \n"
+"	mov	r0, sp \n"
+"	swi	#0x900090		@ mmap \n"
+"	add	sp, sp, #16 \n"
+"	mov	pc, lr \n"
+"_dl_sys_munmap: \n"
+"	swi	#0x900091		@ munmap \n"
+"	mov	pc, lr \n"
+"_dl_sys_fstat: \n"
+"	swi	#0x900108		@ fstat \n"
+"	mov	pc, lr \n"
+"_dl_sys_mprotect: \n"
+"	swi	#0x900125		@ mprotect \n"
+"	mov	pc, lr \n"
 
-.type	_dl_jump,function
-_dl_jump:
-	stmdb	sp!, {r0, r1, r2, r3}	@ save arguments
+".type	_dl_jump,function \n"
+"_dl_jump: \n"
+"	stmdb	sp!, {r0, r1, r2, r3}	@ save arguments \n"
 
-	sub	r1, ip, lr		@ dyntab entry
-	sub	r1, r1, #4
-	add	r1, r1, r1
+"	sub	r1, ip, lr		@ dyntab entry \n"
+"	sub	r1, r1, #4 \n"
+"	add	r1, r1, r1 \n"
 
-	ldr	r0, [lr, #-4]		@ dynlib handle
+"	ldr	r0, [lr, #-4]		@ dynlib handle \n"
 
-	bl	do_resolve
+"	bl	do_resolve \n"
 
-	mov	r12, r0
-	ldmia	sp!, {r0, r1, r2, r3, lr} @ restore arguments
-	mov	pc, r12
-");
+"	mov	r12, r0 \n"
+"	ldmia	sp!, {r0, r1, r2, r3, lr} @ restore arguments \n"
+"	mov	pc, r12");
 
 static inline unsigned long* get_got(void) {
   register unsigned long *got asm ("sl");
@@ -389,6 +385,24 @@ static char*_dl_lib_strdup(const char*s) {
   memcpy(ret,s,l);
   return ret;
 }
+
+#ifdef __GDB_SUPPORT__
+volatile void _dl_debug_state(void);
+/* gdb debug break point */
+void _dl_debug_state() {}
+
+/* gdb debug init stuff */
+struct r_debug _r_debug;
+static struct r_debug* _dl_debug_init(Elf_Addr dl_base) {
+  if (_r_debug.r_brk==0) {
+    _r_debug.r_version	= 1;
+    _r_debug.r_ldbase	= dl_base;
+    _r_debug.r_map	= _dl_root_handle;	/* this my be wrong */
+    _r_debug.r_brk	= (Elf_Addr)&_dl_debug_state;
+  }
+  return &_r_debug;
+}
+#endif
 
 /* now reuse some unchanged sources */
 #include "dlerror.c"
@@ -591,7 +605,7 @@ static struct _dl_handle* _dl_dyn_scan(struct _dl_handle*dh,Elf_Dyn*_dynamic) {
   int i;
 
 #ifdef DEBUG
-  pf(__func__": pre dynamic scan "); ph((unsigned long)dh); pf("\n");
+  pf(__FUNCTION__); pf(": pre dynamic scan "); ph((unsigned long)dh); pf("\n");
 #endif
   for(i=0;_dynamic[i].d_tag;++i) {
     switch(_dynamic[i].d_tag) {
@@ -604,19 +618,19 @@ static struct _dl_handle* _dl_dyn_scan(struct _dl_handle*dh,Elf_Dyn*_dynamic) {
     case DT_HASH:
       dh->hash_tab = (unsigned long*)(dh->mem_base+_dynamic[i].d_un.d_ptr);
 #ifdef DEBUG
-      pf(__func__": have hash @ "); ph((long)dh->hash_tab); pf("\n");
+      pf(__FUNCTION__); pf(": have hash @ "); ph((long)dh->hash_tab); pf("\n");
 #endif
       break;
     case DT_SYMTAB:
       dh->dyn_sym_tab = (Elf_Sym*)(dh->mem_base+_dynamic[i].d_un.d_ptr);
 #ifdef DEBUG
-      pf(__func__": have dyn_sym_tab @ "); ph((long)dh->dyn_sym_tab); pf("\n");
+      pf(__FUNCTION__); pf(": have dyn_sym_tab @ "); ph((long)dh->dyn_sym_tab); pf("\n");
 #endif
       break;
     case DT_STRTAB:
       dh->dyn_str_tab = (char*)(dh->mem_base+_dynamic[i].d_un.d_ptr);
 #ifdef DEBUG
-      pf(__func__": have dyn_str_tab @ "); ph((long)dh->dyn_str_tab); pf("\n");
+      pf(__FUNCTION__); pf(": have dyn_str_tab @ "); ph((long)dh->dyn_str_tab); pf("\n");
 #endif
       break;
 
@@ -624,13 +638,13 @@ static struct _dl_handle* _dl_dyn_scan(struct _dl_handle*dh,Elf_Dyn*_dynamic) {
     case DT_FINI:
       dh->fini = (void(*)(void))(dh->mem_base+_dynamic[i].d_un.d_val);
 #ifdef DEBUG
-      pf(__func__": have fini @ "); ph((long)dh->fini); pf("\n");
+      pf(__FUNCTION__); pf(": have fini @ "); ph((long)dh->fini); pf("\n");
 #endif
       break;
     case DT_INIT:
       init = (void(*)(void))(dh->mem_base+_dynamic[i].d_un.d_val);
 #ifdef DEBUG
-      pf(__func__": have init @ "); ph((long)init); pf("\n");
+      pf(__FUNCTION__); pf(": have init @ "); ph((long)init); pf("\n");
 #endif
       break;
 
@@ -638,13 +652,13 @@ static struct _dl_handle* _dl_dyn_scan(struct _dl_handle*dh,Elf_Dyn*_dynamic) {
     case DT_PLTGOT:
       dh->pltgot = (unsigned long*)(dh->mem_base+_dynamic[i].d_un.d_val);
 #ifdef DEBUG
-      pf(__func__": have plt/got @ "); ph((long)dh->pltgot); pf("\n");
+      pf(__FUNCTION__); pf(": have plt/got @ "); ph((long)dh->pltgot); pf("\n");
 #endif
       break;
     case DT_PLTREL:
       if (_dynamic[i].d_un.d_val!=_DL_REL_T) {
 #ifdef DEBUG
-	pf(__func__": have incompatible relocation type\n");
+	pf(__FUNCTION__); pf(": have incompatible relocation type\n");
 #endif
 	_dl_error_data=dh->name;
 	_dl_error=6;
@@ -655,13 +669,13 @@ static struct _dl_handle* _dl_dyn_scan(struct _dl_handle*dh,Elf_Dyn*_dynamic) {
       plt_rel = (_dl_rel_t*)(dh->mem_base+_dynamic[i].d_un.d_val);
       dh->plt_rel = plt_rel;
 #ifdef DEBUG
-      pf(__func__": have jmprel @ "); ph((long)plt_rel); pf("\n");
+      pf(__FUNCTION__); pf(": have jmprel @ "); ph((long)plt_rel); pf("\n");
 #endif
       break;
     case DT_PLTRELSZ:
       plt_relsz = _dynamic[i].d_un.d_val;
 #ifdef DEBUG
-      pf(__func__": have pltrelsize @ "); ph((long)plt_relsz); pf("\n");
+      pf(__FUNCTION__); pf(": have pltrelsize @ "); ph((long)plt_relsz); pf("\n");
 #endif
       break;
 
@@ -669,19 +683,19 @@ static struct _dl_handle* _dl_dyn_scan(struct _dl_handle*dh,Elf_Dyn*_dynamic) {
     case DT_REL:
       rel = (_dl_rel_t*)(dh->mem_base+_dynamic[i].d_un.d_val);
 #ifdef DEBUG
-      pf(__func__": have rel @ "); ph((long)rel); pf("\n");
+      pf(__FUNCTION__); pf(": have rel @ "); ph((long)rel); pf("\n");
 #endif
       break;
     case DT_RELENT:
       relent=_dynamic[i].d_un.d_val;
 #ifdef DEBUG
-      pf(__func__": have relent  @ "); ph((long)relent); pf("\n");
+      pf(__FUNCTION__); pf(": have relent  @ "); ph((long)relent); pf("\n");
 #endif
       break;
     case DT_RELSZ:
       relsize=_dynamic[i].d_un.d_val;
 #ifdef DEBUG
-      pf(__func__": have relsize @ "); ph((long)relsize); pf("\n");
+      pf(__FUNCTION__); pf(": have relsize @ "); ph((long)relsize); pf("\n");
 #endif
       break;
 
@@ -689,7 +703,7 @@ static struct _dl_handle* _dl_dyn_scan(struct _dl_handle*dh,Elf_Dyn*_dynamic) {
       /* TEXT RELOCATIONS POSSIBLE -> NO SHARED OBJECT */
     case DT_TEXTREL:
 #ifdef DEBUG
-      pf(__func__": found possible textrelocation -> "); pf(dh->name); pf(" is not compiled as a shared library\n");
+      pf(__FUNCTION__); pf(": found possible textrelocation -> "); pf(dh->name); pf(" is not compiled as a shared library\n");
 #endif
       _dl_error_data=dh->name;
       _dl_error=3;
@@ -700,7 +714,7 @@ static struct _dl_handle* _dl_dyn_scan(struct _dl_handle*dh,Elf_Dyn*_dynamic) {
     default:
 #ifdef DEBUG
 #if 0
-      pf(__func__": unknown "); ph(_dynamic[i].d_tag); pf(", "); ph(_dynamic[i].d_un.d_val); pf("\n");
+      pf(__FUNCTION__); pf(": unknown "); ph(_dynamic[i].d_tag); pf(", "); ph(_dynamic[i].d_un.d_val); pf("\n");
 #endif
 #endif
       break;
@@ -711,13 +725,13 @@ static struct _dl_handle* _dl_dyn_scan(struct _dl_handle*dh,Elf_Dyn*_dynamic) {
     if (dh->name) {	/* librabry can have a SONAME */
       if (_dynamic[i].d_tag==DT_SONAME) {
 #ifdef DEBUG
-	pf(__func__": pre  soname: "); pf(dh->name); pf("\n");
+	pf(__FUNCTION__); pf(": pre  soname: "); pf(dh->name); pf("\n");
 #endif
 	if (dh->flags&RTLD_USER) free(dh->name);
 	dh->flags&=~RTLD_NOSONAME;
 	dh->name = dh->dyn_str_tab+_dynamic[i].d_un.d_val;
 #ifdef DEBUG
-	pf(__func__": have soname: "); pf(dh->name); pf("\n");
+	pf(__FUNCTION__); pf(": have soname: "); pf(dh->name); pf("\n");
 #endif
       }
     }
@@ -726,14 +740,14 @@ static struct _dl_handle* _dl_dyn_scan(struct _dl_handle*dh,Elf_Dyn*_dynamic) {
 	register char *rpath=dh->dyn_str_tab+_dynamic[i].d_un.d_val;
 	_dl_search_rpath=rpath;
 #ifdef DEBUG
-	pf(__func__": have runpath: "); pf(rpath); pf("\n");
+	pf(__FUNCTION__); pf(": have runpath: "); pf(rpath); pf("\n");
 #endif
       }
     }
   }
 
 #ifdef DEBUG
-  pf(__func__": post dynamic scan "); ph((unsigned long)dh); pf("\n");
+  pf(__FUNCTION__); pf(": post dynamic scan "); ph((unsigned long)dh); pf("\n");
 #endif
 
   if (work_on_pltgot(dh)) {
@@ -743,33 +757,33 @@ static struct _dl_handle* _dl_dyn_scan(struct _dl_handle*dh,Elf_Dyn*_dynamic) {
   }
 
 #ifdef DEBUG
-  pf(__func__": pre load depending libraries "); ph((unsigned long)dh); pf("\n");
+  pf(__FUNCTION__); pf(": pre load depending libraries "); ph((unsigned long)dh); pf("\n");
 #endif
   /* load depending libs */
   for(i=0;_dynamic[i].d_tag;++i) {
     if (_dynamic[i].d_tag==DT_NEEDED) {
       char *lib_name=dh->dyn_str_tab+_dynamic[i].d_un.d_val;
 #ifdef DEBUG
-      pf(__func__": needed for this lib: "); pf(lib_name); pf("\n");
+      pf(__FUNCTION__); pf(": needed for this lib: "); pf(lib_name); pf("\n");
 #endif
       _dl_queue_lib(lib_name,dh->flags);
     }
   }
 #ifdef DEBUG
-  pf(__func__": pre open depending libraries 2 "); ph((unsigned long)dh); pf("\n");
+  pf(__FUNCTION__); pf(": pre open depending libraries 2 "); ph((unsigned long)dh); pf("\n");
 #endif
   if (_dl_open_dep()) {
     return 0;
   }
 
 #ifdef DEBUG
-  pf(__func__": post load depending libraries, pre resolve "); ph((unsigned long)dh); pf("\n");
+  pf(__FUNCTION__); pf(": post load depending libraries, pre resolve "); ph((unsigned long)dh); pf("\n");
 #endif
 
   /* relocation */
   if (rel) {
 #ifdef DEBUG
-    pf(__func__": try to relocate some values\n");
+    pf(__FUNCTION__); pf(": try to relocate some values\n");
 #endif
     if (_dl_relocate(dh,rel,relsize/relent)) return 0;
   }
@@ -778,7 +792,7 @@ static struct _dl_handle* _dl_dyn_scan(struct _dl_handle*dh,Elf_Dyn*_dynamic) {
   if (plt_rel) {
     _dl_rel_t *tmp,*max=((void*)plt_rel)+plt_relsz;
 #ifdef DEBUG
-    pf(__func__": rel plt/got\n");
+    pf(__FUNCTION__); pf(": rel plt/got\n");
 #endif
     for(tmp=plt_rel;tmp<max;(char*)tmp=((char*)tmp)+sizeof(_dl_rel_t)) {
       if ((dh->flags&RTLD_NOW)) {
@@ -793,7 +807,7 @@ static struct _dl_handle* _dl_dyn_scan(struct _dl_handle*dh,Elf_Dyn*_dynamic) {
       else
 	_DL_REL_PLT(dh->mem_base,tmp);
 #ifdef DEBUG
-      pf(__func__": rel @ "); ph((long)dh->mem_base+tmp->r_offset); pf(" with type ");
+      pf(__FUNCTION__); pf(": rel @ "); ph((long)dh->mem_base+tmp->r_offset); pf(" with type ");
       ph(ELF_R_TYPE(tmp->r_info)); pf(" and sym "); ph(ELF_R_SYM(tmp->r_info));
       pf(" -> "); ph(*((unsigned long*)(dh->mem_base+tmp->r_offset))); pf("\n");
 #endif
@@ -801,11 +815,11 @@ static struct _dl_handle* _dl_dyn_scan(struct _dl_handle*dh,Elf_Dyn*_dynamic) {
   }
 
 #ifdef DEBUG
-  pf(__func__": post resolve, pre init "); ph((unsigned long)dh); pf("\n");
+  pf(__FUNCTION__); pf(": post resolve, pre init "); ph((unsigned long)dh); pf("\n");
 #endif
   if (init) init();
 #ifdef DEBUG
-  pf(__func__": post init "); ph((unsigned long)dh); pf("\n");
+  pf(__FUNCTION__); pf(": post init "); ph((unsigned long)dh); pf("\n");
 #endif
 
   return dh;
@@ -980,7 +994,7 @@ static unsigned long _dl_main(int argc,char*argv[],char*envp[],unsigned long _dy
   got[2]=(unsigned long)_DIE_;	/* NO lazy symbol resolver as long as we are not ready */
 
 #ifdef DEBUG
-  pf(__func__": pre scan\n");
+  pf(__FUNCTION__); pf(": pre scan\n");
 #endif
   /* bootstrap relocation */
   if (_dl_dyn_scan(&my_dh,(Elf_Dyn*)_dynamic)==0) {
@@ -988,7 +1002,7 @@ static unsigned long _dl_main(int argc,char*argv[],char*envp[],unsigned long _dy
     return (unsigned long)_DIE_;
   }
 #ifdef DEBUG
-  pf(__func__": post scan\n");
+  pf(__FUNCTION__); pf(": post scan\n");
 #endif
 
   /* now we are save to use anything :) (hopefully) */
@@ -998,7 +1012,7 @@ static unsigned long _dl_main(int argc,char*argv[],char*envp[],unsigned long _dy
   prog=_dl_get_handle();
 
 #ifdef DEBUG
-  pf(__func__": ugly, ugly, COPY pregenerated handle to real handle\n");
+  pf(__FUNCTION__); pf(": ugly, ugly, COPY pregenerated handle to real handle\n");
 #endif
   mydh=_dl_get_handle();
   {
@@ -1009,7 +1023,7 @@ static unsigned long _dl_main(int argc,char*argv[],char*envp[],unsigned long _dy
   got[1]=(unsigned long)mydh;
 
 #ifdef DEBUG
-  pf(__func__": MORE ugly: prepare program...\n");
+  pf(__FUNCTION__); pf(": MORE ugly: prepare program...\n");
 #endif
   for(i=0;(i<prog_ph_num);++i) {
     if (prog_ph[i].p_type==PT_DYNAMIC) {
@@ -1028,7 +1042,7 @@ static unsigned long _dl_main(int argc,char*argv[],char*envp[],unsigned long _dy
   prog->flags=LDSO_FLAGS;
 
 #ifdef DEBUG
-  pf(__func__": dyn_scan program...\n");
+  pf(__FUNCTION__); pf(": dyn_scan program...\n");
 #endif
   if (_dl_dyn_scan(prog,(Elf_Dyn*)prog_dynamic)==0) {
     _dl_error_location="error in dyn_scan the program";
@@ -1038,7 +1052,7 @@ static unsigned long _dl_main(int argc,char*argv[],char*envp[],unsigned long _dy
 
   /* now start the program */
 #ifdef DEBUG
-  pf(__func__": now jump to program entrypoint\n");
+  pf(__FUNCTION__); pf(": now jump to program entrypoint\n");
 #endif
   return prog_entry;
 }

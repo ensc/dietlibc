@@ -9,7 +9,7 @@ static void dec_referenced_libs(struct _dl_handle*dh) {
     if (dyn_tab[i].d_tag==DT_NEEDED) {
       char *lib_name=dh->dyn_str_tab+dyn_tab[i].d_un.d_val;
 #ifdef DEBUG
-      pf(__func__": lib: "); pf(lib_name); pf("\n");
+      pf(__FUNCTION__); pf(": lib: "); pf(lib_name); pf("\n");
 #endif
       dlclose(_dl_find_lib(lib_name));
     }
@@ -23,7 +23,7 @@ int dlclose(void*handle) {
     if (--(dh->lnk_count)) return 0;	/* not yet unreferenced */
 
 #ifdef DEBUG
-    pf(__func__": "); pf(dh->name); pf("\n");
+    pf(__FUNCTION__); pf(": "); pf(dh->name); pf("\n");
 #endif
     if (dh->fini) dh->fini();
     dec_referenced_libs(dh);

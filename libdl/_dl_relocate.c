@@ -29,7 +29,7 @@ static int _dl_apply_relocate(struct _dl_handle*dh,_dl_rel_t*rel) {
 
 #ifdef DEBUG
 #if 0
-  pf(__func__": "); ph(ELF_R_TYPE(rel->r_info)); pf(" @ "); ph((unsigned long)loc);
+  pf(__FUNCTION__); pf(": "); ph(ELF_R_TYPE(rel->r_info)); pf(" @ "); ph((unsigned long)loc);
   pf(" preval "); ph(*(unsigned long*)loc); pf("\n");
 #endif
 #endif
@@ -42,7 +42,7 @@ static int _dl_apply_relocate(struct _dl_handle*dh,_dl_rel_t*rel) {
   } else if (typ==R_386_COPY)  {	/* 5 */
     int len=dh->dyn_sym_tab[ELF_R_SYM(rel->r_info)].st_size;
 #ifdef DEBUG
-    pf(__func__": R_386_COPY !\n");
+    pf(__FUNCTION__); pf(": R_386_COPY !\n");
 #endif
     memcpy(loc,(void*)(unsigned long)_dl_sym_search(dh,ELF_R_SYM(rel->r_info)),len);
   } else if (typ==R_386_GLOB_DAT) {	/* 6 */
@@ -61,7 +61,7 @@ static int _dl_apply_relocate(struct _dl_handle*dh,_dl_rel_t*rel) {
   } else if (typ==R_ARM_COPY)  {	/* 20 */
     int len=dh->dyn_sym_tab[ELF_R_SYM(rel->r_info)].st_size;
 #ifdef DEBUG
-    pf(__func__": R_ARM_COPY !\n");
+    pf(__FUNCTION__); pf(": R_ARM_COPY !\n");
 #endif
     memcpy(loc,(void*)(unsigned long)_dl_sym_search(dh,ELF_R_SYM(rel->r_info)),len);
   } else if (typ==R_ARM_GLOB_DAT) {	/* 21 */
@@ -76,7 +76,7 @@ static int _dl_apply_relocate(struct _dl_handle*dh,_dl_rel_t*rel) {
 #endif
 
 #ifdef DEBUG
-  pf(__func__": @ "); ph((unsigned long)loc); pf(" val "); ph(*(unsigned long*)loc); pf("\n");
+  pf(__FUNCTION__); pf(": @ "); ph((unsigned long)loc); pf(" val "); ph(*(unsigned long*)loc); pf("\n");
 #endif
   return ret;
 }

@@ -1,7 +1,7 @@
 #ifndef ___DL_INT_H__
 #define ___DL_INT_H__
 
-#if defined(__alpha__)
+#if defined(__alpha__) || defined(__sparc64__) || defined(__x86_64__)
 #define ELF_CLASS ELFCLASS64
 #else
 #define ELF_CLASS ELFCLASS32
@@ -62,6 +62,10 @@
 #define LDSO_FLAGS	(RTLD_LAZY|RTLD_GLOBAL|RTLD_NOSONAME)
 
 struct _dl_handle {
+  char *	mem_base;	/* base address of maped *.so / or zero if program | Elf_Addr l_addr */
+  char *	l_name;		/* Abloslute filename of this object */
+  Elf_Dyn*	dynamic;	/* _DYNAMIC */
+
   struct _dl_handle *next;
   struct _dl_handle *prev;
 
@@ -70,7 +74,6 @@ struct _dl_handle {
   char *	name;		/* name of shared object */
 
   /* basic */
-  char *	mem_base;	/* base address of maped *.so / or zero if program */
   unsigned long mem_size;	/* len of mem block */
   unsigned long lnk_count;	/* reference count (other libraries) */
 
@@ -83,9 +86,21 @@ struct _dl_handle {
   Elf_Sym *	dyn_sym_tab;	/* dynamic symbol table */
   _dl_rel_t*	plt_rel;	/* PLT relocation table */
 
-  Elf_Dyn *	dynamic;	/* _DYNAMIC */
   /* INIT / FINI */
   void (*fini)(void);
+};
+
+/* debug communication (GDB) (dyn-linker only) */
+struct r_debug {
+  int r_version;
+  struct _dl_handle* r_map;
+  unsigned long r_brk;
+  enum {
+    RT_CONSISTENT,	/* mapping complete */
+    RT_ADD,		/* begin add object */
+    RT_DELETE,		/* begin del object */
+  } r_state;
+  unsigned long r_ldbase;
 };
 
 #define HASH_BUCKET_LEN(p)	(*((p)))
@@ -116,10 +131,11 @@ const char* _dl_get_rpath();
 int _dl_search(char *buf, int len, const char *filename);
 
 /* _dl_sym.c */
+void *_dl_sym_search(struct _dl_handle * h, int symbol);
 void *_dl_sym(struct _dl_handle * h, int symbol);
 /* dlsym.c */
-void *_dl_sym_search(struct _dl_handle * h, int symbol);
-void *_dlsym(void * h, char* symbol);
+void *_dl_sym_search_str(struct _dl_handle*h,char*name);
+void *_dlsym(void*dh,char*symbol);
 
 /* _dl_queue.c */
 int _dl_queue_lib(const char* name, int flags);

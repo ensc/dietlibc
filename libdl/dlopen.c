@@ -16,13 +16,11 @@ void*_dlopen(const char *filename, int flags) {
     }
     return _dl_open(filename,flags);
   }
-  /* dietld.so has allocated the top for the dynamic program. */
-  return _dl_root_handle;
+  /* return 1 as an indicator for dlsym to search ALL global objects */
+  return (void*)1;
 }
-
 
 void*dlopen(const char *filename, int flags) {
   _dl_error_location="dlopen";
   return _dlopen(filename,flags|RTLD_USER|RTLD_NOSONAME);
 }
-//__attribute__((alias("_dlopen")));
