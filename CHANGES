@@ -23,6 +23,7 @@
   utmp x86_64 biarch support (Gwenole Beauchesne)
   add fgetpwent (Alvaro Gomes Sobral Barcellos)
   add vsyscall support for linux 2.5 on recent CPUs
+  add a few new 2.5 syscalls, adapt to renamed epoll syscalls
 
 0.22:
   fix i386 libm

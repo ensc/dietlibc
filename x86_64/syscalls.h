@@ -258,8 +258,27 @@
 #define __NR_io_cancel	210
 #define __NR_get_thread_area	211
 #define __NR_lookup_dcookie	212
+#define __NR_epoll_create	213
+#define __NR_epoll_ctl	214
+#define __NR_epoll_wait	215
+#define __NR_remap_file_pages	216
+#define __NR_getdents64	217
+#define __NR_set_tid_address	218
+#define __NR_restart_syscall	219
+#define __NR_semtimedop		220
+#define __NR_fadvise64		221
+#define __NR_timer_create		222
+#define __NR_timer_settime		223
+#define __NR_timer_gettime		224
+#define __NR_timer_getoverrun		225
+#define __NR_timer_delete	226
+#define __NR_clock_settime	227
+#define __NR_clock_gettime	228
+#define __NR_clock_getres	229
+#define __NR_clock_nanosleep	230
+#define __NR_exit_group		231
 
-#define __NR_syscall_max __NR_futex
+#define __NR_syscall_max __NR_exit_group
 
 #define syscall_weak(name,wsym,sym) \
 .text; \
