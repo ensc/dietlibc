@@ -2,7 +2,7 @@
 
 int fputc_unlocked(int c, FILE *stream) {
   if (__fflush4(stream,0)) return EOF;
-  if (stream->bm>=BUFSIZE-1)
+  if (stream->bm>=stream->buflen-1)
     if (fflush(stream)) return EOF;
   stream->buf[stream->bm]=c;
   ++stream->bm;

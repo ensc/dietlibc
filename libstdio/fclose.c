@@ -15,6 +15,8 @@ int fclose(FILE *stream) {
 	__stdio_root=f->next;
       break;
     }
+  if ((!(stream->flags&STATICBUF))&&(stream->buf))
+    free(stream->buf);
   free(stream);
   return res;
 }

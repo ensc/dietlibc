@@ -10,7 +10,11 @@ extern void __stdio_flushall(void);
 
 FILE* __stdio_init_file_nothreads(int fd) {
   FILE *tmp=(FILE*)malloc(sizeof(FILE));
-  if (!tmp) {
+  if (!tmp) goto err_out;
+  tmp->buf=(FILE*)malloc(BUFSIZE);
+  if (!tmp->buf) {
+    free(tmp);
+err_out:
     close(fd);
     errno=ENOMEM;
     return 0;
@@ -18,6 +22,7 @@ FILE* __stdio_init_file_nothreads(int fd) {
   tmp->fd=fd;
   tmp->bm=0;
   tmp->bs=0;
+  tmp->buflen=BUFSIZE;
   tmp->flags=0;
   if (__stdio_atexit==0) {
     __stdio_atexit=1;

@@ -7,6 +7,10 @@
 __unified_syscall:
 	syscall
 	bne	$7, $0, .Lerror
+
+/* here we go an "reused" the return for weak-void functions */
+#include "dietuglyweaks.h"
+
 	jr	$31
 	.end	__unified_syscall
 

@@ -19,7 +19,8 @@ struct __stdio_file {
   int flags;
   unsigned int bs;	/* read: bytes in buffer */
   unsigned int bm;	/* position in buffer */
-  char buf[BUFSIZE];
+  unsigned int buflen;	/* length of buf */
+  char *buf;
   struct __stdio_file *next;	/* for fflush */
   pid_t popen_kludge;
   char ungetbuf;
@@ -34,6 +35,7 @@ struct __stdio_file {
 #define BUFINPUT 4
 #define BUFLINEWISE 8
 #define NOBUF 16
+#define STATICBUF 32
 
 #define _IONBF 0
 #define _IOLBF 1

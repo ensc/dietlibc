@@ -16,6 +16,10 @@ __unified_syscall:
 	str	r0, [r1]
 #endif
 	mvn	r0, #0
+
+/* here we go an "reused" the return for weak-void functions */
+#include "dietuglyweaks.h"
+
 	mov	pc, lr
 
 #ifndef WANT_THREAD_SAFE

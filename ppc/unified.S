@@ -24,5 +24,9 @@ error_unified_syscall:
 	stw	3,errno@l(9)
 #endif
 	li	3,-1
+
+/* here we go an "reused" the return for weak-void functions */
+#include "dietuglyweaks.h"
+
 	blr
 

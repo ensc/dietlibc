@@ -34,4 +34,8 @@ __unified_syscall:
 	pop	%ebx
 	pop	%esi
 	pop	%edi
+
+/* here we go an "reused" the return for weak-void functions */
+#include "dietuglyweaks.h"
+
 	ret
