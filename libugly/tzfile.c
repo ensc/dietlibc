@@ -5,7 +5,11 @@
 #include <netinet/in.h>
 #include <time.h>
 
-/* #include <stdio.h> */
+#include <stdio.h>
+
+/* This code appears to be subtly wrong depending on the date.
+ * However, the documentation I found about the tzfile layout are not
+ * sufficient to debug this. */
 
 char* tzname[2]={"GMT","GMT"};
 
@@ -23,7 +27,11 @@ void __maplocaltime(void) {
   len=lseek(fd,0,SEEK_END);
   if ((tzfile=mmap(0,len,PROT_READ,MAP_PRIVATE,fd,0))==MAP_FAILED) return;
   close(fd);
-  if (ntohl(*(int*)tzfile) != 0x545a6966) return;
+  if (len<44 || ntohl(*(int*)tzfile) != 0x545a6966) {
+    munmap(tzfile,len);
+    tzfile=0;
+    return;
+  }
   tzlen=len;
 }
 
@@ -34,8 +42,8 @@ static unsigned long __myntohl(const unsigned char* c) {
          ((unsigned long)c[3]);
 }
 
-time_t __tzfile_map(time_t t, int *isdst);
-time_t __tzfile_map(time_t t, int *isdst) {
+time_t __tzfile_map(time_t t, int *isdst, int forward);
+time_t __tzfile_map(time_t t, int *isdst, int forward) {
   /* "TZif" plus 16 reserved bytes. */
   char *tmp;
   int i;
@@ -76,21 +84,43 @@ time_t __tzfile_map(time_t t, int *isdst) {
 
   tmp=tzfile+20+6*4;
   daylight=(tzh_timecnt>0);
-  for (i=0; i<tzh_timecnt; ++i) {
-    if ((time_t)__myntohl(tmp+i*4) >= t) {
-      char* tz=tmp;
-/*      printf("match at %d\n",i); */
-      tmp+=tzh_timecnt*4;
-      i=tmp[i-1];
-/*      printf("using index %d\n",i); */
-      tmp+=tzh_timecnt;
+  if (forward) {
+    for (i=0; i<tzh_timecnt; ++i) {
+      if ((time_t)__myntohl(tmp+i*4) >= t) {
+	char* tz=tmp;
+  /*      printf("match at %d\n",i); */
+	tmp+=tzh_timecnt*4;
+	i=tmp[i-1];
+  /*      printf("using index %d\n",i); */
+	tmp+=tzh_timecnt;
+	tz+=tzh_timecnt*5+tzh_leapcnt*4+tzh_typecnt*6;
+	tmp+=i*6;
+  /*      printf("(%lu,%d,%d)\n",ntohl(*(int*)tmp),tmp[4],tmp[5]); */
+	*isdst=tmp[4];
+	tzname[0]=tz+tmp[5];
+	timezone=__myntohl(tmp);
+	return t+timezone;
+      }
+    }
+  } else {	/* reverse map, for mktime */
+    time_t prevtz,nexttz=0,lastval=0;
+//    printf("tzh_timecnt: %d\n",tzh_timecnt);
+    for (i=0; i<tzh_timecnt-1; ++i) {
+      char* x,* tz;
+      int j;
+      long k;
+//      printf("ab %ld: ",__myntohl(tmp+i*4));
+      prevtz=nexttz;
+      x=tmp+tzh_timecnt*4;
+      j=x[i-1];
       tz+=tzh_timecnt*5+tzh_leapcnt*4+tzh_typecnt*6;
-      tmp+=i*6;
-/*      printf("(%lu,%d,%d)\n",ntohl(*(int*)tmp),tmp[4],tmp[5]); */
-      *isdst=tmp[4];
-      tzname[0]=tz+tmp[5];
-      timezone=-(__myntohl(tmp));
-      return t-timezone;
+      nexttz=__myntohl(x+tzh_timecnt+j*6);
+//      printf("%ld - %ld (want %ld)\n",lastval,__myntohl(tmp+i*4)-nexttz,t);
+      if (lastval <= t && (k=(__myntohl(tmp+i*4)-nexttz)) > t) {
+//	printf("FOUND!1!!  Offset %d\n",prevtz);
+	return t-prevtz;
+      }
+      lastval=k;
     }
   }
   return t;
@@ -99,7 +129,7 @@ time_t __tzfile_map(time_t t, int *isdst) {
 void tzset(void) {
   int isdst;
   __maplocaltime();
-  __tzfile_map(time(0),&isdst);
+  __tzfile_map(time(0),&isdst,1);
 }
 
 #else

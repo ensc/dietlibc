@@ -7,11 +7,15 @@ int main() {
   t.tm_min=2;
   t.tm_hour=3;
   t.tm_mday=29;
-  t.tm_mon=1;
+  t.tm_mon=2;
   t.tm_year=100;
   printf("%d\n",mktime(&t));
   t.tm_mday=1;
   t.tm_mon=3;
+  t.tm_year=102;
+  printf("%d\n",mktime(&t));
+  t.tm_mday=1;
+  t.tm_mon=6;
   t.tm_year=102;
   printf("%d\n",mktime(&t));
   return 0;
