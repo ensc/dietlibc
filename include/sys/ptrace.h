@@ -11,6 +11,7 @@
 #define PTRACE_POKETEXT		   4
 #define PTRACE_POKEDATA		   5
 #define PTRACE_POKEUSR		   6
+#define PTRACE_POKEUSER		   PTRACE_POKEUSR
 #define PTRACE_CONT		   7
 #define PTRACE_KILL		   8
 #define PTRACE_SINGLESTEP	   9
