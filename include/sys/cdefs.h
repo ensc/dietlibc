@@ -1,6 +1,8 @@
 #ifndef _SYS_CDEFS_H
 #define _SYS_CDEFS_H
 
+#define __dietlibc__
+
 #ifndef __cplusplus
 #define throw ()
 #define __THROW
