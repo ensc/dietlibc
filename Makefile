@@ -175,14 +175,13 @@ $(OBJDIR)/dietlibc.a: $(DIETLIBC_OBJ) $(OBJDIR)/start.o
 $(OBJDIR)/librpc.a: $(LIBRPCOBJ)
 	$(CROSS)ar cru $@ $(LIBRPCOBJ)
 
-$(OBJDIR)/libcrypt.a: dummy.o
-	$(CROSS)ar cru $@ dummy.o
-	rm dummy.o
-
-dummy.o:
+$(OBJDIR)/libcrypt.a:
 	touch dummy.c
 	$(CROSS)gcc -c dummy.c
-	rm dummy.c
+	$(CROSS)ar cru $@ dummy.o
+	rm -f dummy.c dummy.o
+
+dummy.o:
 
 LIBLATIN1_OBJS=$(patsubst liblatin1/%.c,$(OBJDIR)/%.o,$(wildcard liblatin1/*.c))
 $(OBJDIR)/liblatin1.a: $(LIBLATIN1_OBJS)
