@@ -47,6 +47,8 @@ int fputc(int c, FILE *stream) __THROW;
 int fputc_unlocked(int c, FILE *stream) __THROW;
 int fputs(const char *s, FILE *stream) __THROW;
 
+int putchar(int c) __THROW;
+
 #define putc(c,stream) fputc(c,stream)
 #define putchar(c) fputc(c,stdout)
 
