@@ -95,4 +95,7 @@ struct netent *getnetent(void) __THROW;
 
 void herror(const char *s) __THROW;
 
+#define NI_MAXHOST 1025
+#define NI_MAXSERV 32
+
 #endif
