@@ -37,15 +37,18 @@ int main(int argc,char *argv[]) {
   int _link=0;
   int compile=0;
   char diethome[]=DIETHOME;
-#ifndef __DYN_LIB
 #ifdef INSTALLVERSION
   char platform[1000]=DIETHOME "/lib-";
-#else
-  char platform[1000]=DIETHOME "/bin-";
+#ifdef __DYN_LIB
+  int shared=0;
 #endif
+#else
+#ifndef __DYN_LIB
+  char platform[1000]=DIETHOME "/bin-";
 #else
   char platform[1000]=DIETHOME "/pic-";
   int shared=0;
+#endif
 #endif
   char* shortplatform=0;
 #ifdef WANT_SAFEGUARD
@@ -107,7 +110,7 @@ int main(int argc,char *argv[]) {
       char **dest;
       char *a,*b,*c;
 #ifdef WANT_DYNAMIC
-      char *d,*e;
+      char *d,*e,*f;
 #endif
 /* we need to add -I... if the command line contains -c, -S or -E */
       for (i=2; i<argc; ++i)
@@ -143,7 +146,11 @@ int main(int argc,char *argv[]) {
       strcpy(c,platform); strcat(c,"/dietlibc.a");
 #endif
 #else
+#ifdef INSTALLVERSION
+      strcpy(c,"-lc");
+#else
       strcpy(c,"-ldietc");
+#endif
 #endif
 
 #ifdef WANT_DYNAMIC
@@ -201,7 +208,17 @@ int main(int argc,char *argv[]) {
 #endif
 #ifdef __DYN_LIB
       if (shared){ *dest++=c; }
+#ifdef INSTALLVERSION
+      f=alloca(strlen(platform)+100);
+      if (_link) {
+	strcpy(f,"-Wl,-dynamic-linker=");
+	strcat(f,platform);
+	strcat(f,"/diet-linux.so");
+	*dest++=f;
+      }
+#else
       if (_link) { *dest++="-Wl,-dynamic-linker=/lib/diet-linux.so"; }
+#endif
 #endif
       *dest=0;
       execvp(newargv[0],newargv);
