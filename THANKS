@@ -29,3 +29,11 @@ Michal Ludvig did the porting to x86_64 and Gwenole Beauchesne helped
 finish the port.
 
 Johannes Stezenbach improved the MIPS port.
+
+Marian Jancar added s390x and ppc64 support.
+
+Gerrit Pape maintains the Debian port and helped immensely by relaying
+bug reports and doing testing on platforms I didn't have access to.
+
+Manuel Novoa III reported many bugs although it really works for the
+competition, uClibc ;-)
