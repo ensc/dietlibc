@@ -40,9 +40,14 @@ static int rand() {
 extern double atof(const char *c);
 
 int main(int argc,char *argv[]) {
+  char buf[128];
+  strcpy(buf,"/tmp/foo.XXXXXXX");
+  printf("%d\n",mkstemp(buf));
+#if 0
   char buf[512]="foo";
   strncat(buf,"barbaz",3);
   puts(buf);
+#endif
 #if 0
   time_t oink=time(0);
   struct tm *duh=localtime(&oink);

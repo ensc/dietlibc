@@ -2,4 +2,4 @@ provide __divq for Alpha.
 
 popen, pclose -> libdietugly
 
-resolver only asks first server from /etc/resolv.conf
+add optional large file compatibility layer for kernel 2.2 and 2.0

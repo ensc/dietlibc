@@ -86,6 +86,7 @@ int brk(void *end_data_segment) __THROW;
 void *sbrk(ptrdiff_t increment) __THROW;
 
 int gethostname(char *name, size_t len) __THROW;
+int sethostname(const char *name, size_t len) __THROW;
 
 void usleep(unsigned long usec) __THROW;
 unsigned int sleep(unsigned int seconds) __THROW;
@@ -114,5 +115,12 @@ uid_t geteuid(void) __THROW;
 gid_t getgid(void) __THROW;
 gid_t getegid(void) __THROW;
 int setreuid(uid_t ruid, uid_t euid) __THROW;
+
+int rename(const char *oldpath, const char *newpath) __THROW;
+int ftruncate(int fd, off_t length) __THROW;
+
+int mkstemp(char *Template) __THROW;
+
+extern char *__environ[];
 
 #endif

@@ -19,4 +19,6 @@ char *ctime(const time_t *timep) __THROW;
 size_t strftime(char *s, size_t max, const char *format, const struct tm *tm) __THROW;
 time_t time(time_t *t) __THROW;
 
+int stime(time_t *t) __THROW;
+
 #endif
