@@ -16,7 +16,7 @@ int pthread_setschedparam(pthread_t target_thread, int policy, const struct sche
   if (((policy == SCHED_OTHER) && (param->sched_priority==0)) ||
       (((policy == SCHED_RR) || (policy == SCHED_FIFO)) &&
        ((param->sched_priority > 0) && (param->sched_priority <100))))
-    return sched_setscheduler(td->pid, policy, param);
+    return sched_setscheduler(target_thread, policy, param);
 
   (*(__errno_location()))=EINVAL;
   return -1;

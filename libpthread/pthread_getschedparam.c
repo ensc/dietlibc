@@ -6,6 +6,7 @@
 
 int pthread_getschedparam(pthread_t target_thread, int *policy, const struct sched_param *param)
 {
+  int p;
   __THREAD_INIT();
 
   if (__find_thread_id(target_thread)<0) {
