@@ -116,6 +116,8 @@ int mlockall(int flags) __THROW;
 int mlock(const void *addr, size_t len) __THROW;
 int munlockall(void) __THROW;
 
+int madvise(void *start, size_t length, int advice) __THROW;
+
 #define _POSIX_MAPPED_FILES
 
 #endif
