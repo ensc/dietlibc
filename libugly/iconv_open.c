@@ -12,7 +12,7 @@ static enum charset parsecharset(const char* s) {
   return INVALID;
 }
 
-iconv_t __diet_iconv_open(const char* tocode, const char* fromcode) {
+iconv_t iconv_open(const char* tocode, const char* fromcode) {
   iconv_t foo=(iconv_t)malloc(sizeof(struct dieticonv));
   if (!foo) {
     errno=ENOMEM;
@@ -27,5 +27,3 @@ iconv_t __diet_iconv_open(const char* tocode, const char* fromcode) {
   }
   return foo;
 }
-
-iconv_t iconv_open(const char* tocode,const char* fromcode)  __attribute__((weak,alias("__diet_iconv_open")));
