@@ -68,6 +68,7 @@ inn_printf:
       /* FLAGS */
       case '#':
 	flag_hash=1;
+      case 'z':
 	goto inn_printf;
 
       case 'h':
