@@ -2,8 +2,6 @@
 #include <dietstdio.h>
 #include <unistd.h>
 
-#define SEEK_END 2
-
 extern int __stdio_atexit;
 extern void __stdio_flushall(void);
 
