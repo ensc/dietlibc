@@ -2,8 +2,12 @@
 
 main() {
   int i;
-  for (i=0; i<512/4-1; ++i) write(1,"foo ",4);
+  if (printf("foo")!=3) return 1;
+  return 0;
+#if 0
   i=printf("foo %d\n",23);
   fprintf(stderr,"got %d\n",i);
+  fprintf(stderr,"got %d\n",printf("foo"));
+#endif
 //  fprintf(stderr,"fflush returned %d\n",fflush(stdout));
 }

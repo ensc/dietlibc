@@ -6,20 +6,28 @@ A: Just type make.
 
 
 Q: How do I install it?  make install?
-A: You don't install it at all.  The diet libc comes with a wrapper
-   called "diet", which can be found in $(ARCH)-bin/diet, i.e.
-   i386-bin/diet for most of us.  Copy this wrapper somewhere in your
-   path (for example ~/bin) and then just compile stuff by prepending
-   diet to the command line, e.g. "diet gcc -pipe -g -o t t.c".
+A: Yep.  It will then install itself to /opt/diet, with the wrapper in
+   /opt/diet/bin/diet.  Or you don't install it at all.
+   The diet libc comes with a wrapper called "diet", which can be found
+   in $(ARCH)-bin/diet, i.e.  i386-bin/diet for most of us.  Copy this
+   wrapper somewhere in your path (for example ~/bin) and then just
+   compile stuff by prepending diet to the command line, e.g. "diet gcc
+   -pipe -g -o t t.c".
 
 
 Q: How do I compile programs using autoconf with the diet libc?
 A: Set CC in the environment properly.  For Bourne Shells:
 
-     $ CC="diet gcc -static" ./configure --disable-nls
+     $ CC="diet gcc -nostdinc" ./configure --disable-nls
 
    That should be enough, but you might also want to set
    --disable-shared and --enable-static for packages using libtool.
+
+
+Q: My program complains about missing asm/* or linux/* header files!
+A: It is quite linux specific.  You can try omitting the -nostdinc, but
+   except for some cases conflicts are likely.  You should not be using
+   the kernel headers in your software.
 
 
 Q: Do you have cross compiling support?
@@ -68,21 +76,18 @@ A: The getopt in the diet libc adheres to the Single Unix Specification.
 
 Q: I get linker errors about missing __ctype_b!
 A: This happens when you link in code that was compiled with the glibc
-   headers.  The most common culprit is a library like -lncurses or
-   -lcrypto.  All of the libraries you use have to be compiled with the
-   diet libc headers (CC="diet gcc")!
+   headers.  The most common culprit is a library like -lncurses,
+   -lcrypto or -lresolv.  All external libraries you use have to be
+   compiled with the diet libc headers (CC="diet gcc"), and there is no
+   libresolv with the diet libc, it's in the main libc!
 
 
 Q: My program links, but when I run it, I get no output at all and it
    appears to terminate immediately.
-A: This normally happens if you link in glibc.  The most common reason
-   for this is because you use -lz, for example, and gcc chooses to link
-   in /usr/lib/libz.so.  All shared libraries reference glibc as
-   dependency, which turns your program into a dynamically linked glibc
-   program, which has a different memory layout in glibc.  The result is
-   that output is written to the wrong file handle (use strace to see
-   for yourself), the program gets an error and terminates (or dumps
-   core).
+A: This normally happens if you link in glibc.  The major reason for
+   this was that shared libraries were linked in.  diet sets -static
+   since version 0.13, so if it still happens to you, you need to strace
+   and debug your software.
 
 
 Q: Why aren't you compatible to glibc?  I thought the interface was a
@@ -93,3 +98,8 @@ A: Yes, the interface is, but a lot of details are missing.  For
    links in translation code.  This is part of the reason why glibc is
    so big and ugly.  If we support all of this, we end up as bloated as
    glibc.
+
+
+Q: Where is the test suite?
+A: The humble beginnings are in the "test" directory, but it can't be
+   run automatically yet.

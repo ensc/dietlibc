@@ -18,11 +18,8 @@ fix %f and %g in printf.  They are more or less completely b0rken.
 
 gethost/netent -> parselib
 
-s390: shouldn't we zero the frame pointer for gdb?
+s390: shouldn't we zero the frame pointer for gdb? (Olaf says gdb works)
 
 Look at qsort (make test suite exhibits the worst case)
-
-utmp handling should work read-only, too, if it can't open utmp
-read-write
 
 Make __dtostr do scientific notation.
