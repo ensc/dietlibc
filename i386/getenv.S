@@ -1,7 +1,8 @@
 #include "PIC.h"
 
 .text
-.globl getenv
+.global getenv
+.type getenv,@function
 getenv:
 	pushl %esi
 	pushl %edi

@@ -12,6 +12,7 @@
 /* .section ".profile" */
 .text
 .globl mcount
+.type  mcount,@function
 mcount:
 /*
    save all generic registers which

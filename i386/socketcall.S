@@ -1,7 +1,8 @@
 #include <syscalls.h>
 
 .text
-.globl socketcall
+.global socketcall
+.type	socketcall,@function
 socketcall:
 	leal 4(%esp), %ecx
 	pushl %ecx

@@ -10,7 +10,8 @@
 */
 
 .text
-.globl memccpy
+.global memccpy
+.type   memccpy,@function
 memccpy:
 		pushl %esi
 		pushl %edi

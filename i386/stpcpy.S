@@ -1,5 +1,6 @@
 .text
-.globl stpcpy
+.global stpcpy
+.type	stpcpy,@function
 stpcpy:
 	pushl %edi
 	pushl %esi

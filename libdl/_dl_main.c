@@ -703,6 +703,7 @@ static struct _dl_handle* _dl_dyn_scan(struct _dl_handle*dh,Elf_Dyn*_dynamic) {
       pf(__func__": unknown "); ph(_dynamic[i].d_tag); pf(", "); ph(_dynamic[i].d_un.d_val); pf("\n");
 #endif
 #endif
+      break;
     }
   }
 
