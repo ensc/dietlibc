@@ -10,7 +10,7 @@ __libc_fork:
 	bcc,a	1f
 	nop
 	save	%sp, -96, %sp
-#ifdef WANT_THREAD_SAVE
+#ifdef WANT_THREAD_SAFE
 	call	__errno_location
 	nop
 #else

@@ -14,7 +14,7 @@ __unified_syscall:
 	cmp	%l2, 0xfe
 	bgu	2f
 	neg	%i0, %l3
-#ifdef WANT_THREAD_SAVE
+#ifdef WANT_THREAD_SAFE
 	call	__errno_location
 	nop
 #else

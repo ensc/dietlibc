@@ -45,5 +45,8 @@ FILE* __stdio_init_file(int fd) {
   tmp->next=__stdio_root;
   __stdio_root=tmp;
 #endif
+#ifdef WANT_THREAD_SAFE
+  pthread_mutex_init(&tmp->m,0);
+#endif
   return tmp;
 }

@@ -8,7 +8,7 @@ __unified_syscall:
 	andis.	9,0,4096
 	mr	0,3
 	beq	.L1
-#ifdef WANT_THREAD_SAVE
+#ifdef WANT_THREAD_SAFE
 	bl	__set_errno
 #else
 	lis	9,errno@ha

@@ -2,7 +2,7 @@
 
 #include "dietfeatures.h"
 #include <sys/types.h>
-#ifdef WANT_THREAD_SAVE
+#ifdef WANT_THREAD_SAFE
 #include <pthread.h>
 #endif
 
@@ -22,7 +22,7 @@ typedef struct __file {
   char ungetbuf;
   char ungotten;
 #endif
-#ifdef WANT_THREAD_SAVE
+#ifdef WANT_THREAD_SAFE
   pthread_mutex_t m;
 #endif
 } FILE;

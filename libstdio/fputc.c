@@ -3,17 +3,12 @@
 #include <unistd.h>
 #endif
 
+#ifdef WANT_THREAD_SAFE
 int fputc(int c, FILE *stream) {
-#ifdef WANT_BUFFERED_STDIO
-  if (__fflush4(stream,0)) return EOF;
-  if (stream->bm>=BUFSIZE-1)
-    if (fflush(stream)) return EOF;
-  stream->buf[stream->bm]=c;
-  ++stream->bm;
-  if ((stream->flags&BUFLINEWISE) && c=='\n')	/* puke */
-    if (fflush(stream)) return EOF;
-#else
-  write(stream->fd,&c,1);
-#endif
-  return 0;
+  int tmp;
+  pthread_mutex_lock(&stream->m);
+  tmp=fputc_unlocked(c,stream);
+  pthread_mutex_unlock(&stream->m);
+  return tmp;
 }
+#endif

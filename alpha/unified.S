@@ -9,7 +9,7 @@ __unified_syscall:
 .Lerror:
 .global error_unified_syscall
 error_unified_syscall:
-#ifdef WANT_THREAD_SAVE
+#ifdef WANT_THREAD_SAFE
 	lda	$sp, -16($sp)	/* alloc 2 qwords on stack */
 	stq	$26, 0($sp)	/* save ra to stack */
 	stq	$0,  8($sp)	/* save v0 to stack */

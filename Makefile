@@ -2,7 +2,7 @@ ARCH=$(shell uname -m | sed 's/i[4-9]86/i386/')
 
 OBJDIR=bin-$(ARCH)
 
-all: $(OBJDIR) $(OBJDIR)/start.o $(OBJDIR)/dietlibc.a $(OBJDIR)/liblatin1.a $(OBJDIR)/librpc.a $(OBJDIR)/elftrunc $(OBJDIR)/diet
+all: $(OBJDIR) $(OBJDIR)/start.o $(OBJDIR)/dietlibc.a $(OBJDIR)/liblatin1.a $(OBJDIR)/librpc.a $(OBJDIR)/libpthread.a $(OBJDIR)/elftrunc $(OBJDIR)/diet
 
 CFLAGS=-pipe
 CROSS=
@@ -22,6 +22,8 @@ LIBSHELLOBJ=$(patsubst libshell/%.c,$(OBJDIR)/%.o,$(wildcard libshell/*.c))
 
 LIBRPCOBJ=$(patsubst librpc/%.c,$(OBJDIR)/%.o,$(wildcard librpc/*.c))
 LIBREGEXOBJ=$(patsubst libregex/%.c,$(OBJDIR)/%.o,$(wildcard libregex/*.c))
+
+LIBPTHREAD_OBJS=$(patsubst libpthread/%.c,$(OBJDIR)/%.o,$(wildcard libpthread/pthread_*.c))
 
 include $(ARCH)/Makefile.add
 
@@ -48,6 +50,10 @@ $(OBJDIR):
 $(OBJDIR)/%.o: %.S
 	$(CROSS)$(CC) -I. -Iinclude $(CFLAGS) -c $< -o $@
 
+$(OBJDIR)/pthread_%.o: libpthread/pthread_%.c
+	$(CROSS)$(CC) -I. -Iinclude $(CFLAGS) -c $< -o $@
+	$(COMMENT) $(CROSS)strip -x -R .comment -R .note $@
+
 $(OBJDIR)/%.o: %.c
 	$(CROSS)$(CC) -I. -Iinclude $(CFLAGS) -c $< -o $@
 	$(COMMENT) $(CROSS)strip -x -R .comment -R .note $@
@@ -65,6 +71,9 @@ $(OBJDIR)/librpc.a: $(LIBRPCOBJ)
 
 LIBLATIN1_OBJS=$(patsubst liblatin1/%.c,$(OBJDIR)/%.o,$(wildcard liblatin1/*.c))
 $(OBJDIR)/liblatin1.a: $(LIBLATIN1_OBJS)
+	$(CROSS)ar cru $@ $^
+
+$(OBJDIR)/libpthread.a: $(LIBPTHREAD_OBJS)
 	$(CROSS)ar cru $@ $^
 
 $(OBJDIR)/libdietc.so: $(OBJDIR)/dietlibc.a

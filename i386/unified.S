@@ -16,7 +16,7 @@ __unified_syscall:
 	int	$0x80
 	cmp	$-124,%eax
 	jbe	.Lnoerror
-#ifdef WANT_THREAD_SAVE
+#ifdef WANT_THREAD_SAFE
 	movl	%eax,%ebx
 	call	__errno_location
 	neg	%ebx

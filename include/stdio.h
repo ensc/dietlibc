@@ -32,6 +32,7 @@ int vsscanf( const char *str, const char *format, va_list ap) __THROW;
 int vfscanf( FILE *stream, const char *format, va_list ap) __THROW;
 
 int fgetc(FILE *stream) __THROW;
+int fgetc_unlocked(FILE *stream) __THROW;
 char *fgets(char *s, int size, FILE *stream) __THROW;
 int getc(FILE *stream) __THROW;
 int getchar(void) __THROW;
@@ -39,6 +40,7 @@ char *gets(char *s) __THROW;
 int ungetc(int c, FILE *stream) __THROW;
 
 int fputc(int c, FILE *stream) __THROW;
+int fputc_unlocked(int c, FILE *stream) __THROW;
 int fputs(const char *s, FILE *stream) __THROW;
 
 #define putc(c,stream) fputc(c,stream)
@@ -89,8 +91,5 @@ int setvbuf(FILE *stream, char *buf, int mode , size_t size) __THROW;
 
 FILE *popen(const char *command, const char *type) __THROW;
 int pclose(FILE *stream) __THROW;
-
-#define getc_unlocked(stream) getc(stream)
-#define putc_unlocked(c,stream) putc(c,stream)
 
 #endif

@@ -10,7 +10,7 @@
 
 void die (int v,char *s)
 {
-  puts(s);
+  write(1,s,strlen(s)); write(1,"\n",1);
   exit(v);
 }
 

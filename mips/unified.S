@@ -14,7 +14,7 @@ __unified_syscall:
 	.ent	error_unified_syscall
 error_unified_syscall:
 .Lerror:
-#ifdef WANT_THREAD_SAVE
+#ifdef WANT_THREAD_SAFE
 	addiu	$sp, $sp, -24
 
 	sw	$31, 0($sp)
