@@ -55,7 +55,6 @@ __clone:
 #endif
 	popl	%ecx
 	movl	%ecx, (%eax)
-	xorl	%eax, %eax
-	decl	%eax
+	orl	$-1, %eax
 .Lreturn:
 	ret

@@ -18,10 +18,11 @@ int atexit(function t) {
 
 extern void _exit(int code) __attribute__((noreturn));
 
-void exit(int code) {
+void __libc_exit(int code) {
   register int i=atexit_counter;
   while(i) {
     __atexitlist[--i]();
   }
   _exit(code);
 }
+void exit(int code) __attribute__((weak,alias("__libc_exit")));

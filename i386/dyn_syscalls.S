@@ -89,9 +89,7 @@ __unified_syscall:
 	call	__errno_location@PLT
 	popl	%ebx
 	movl	%ebx,(%eax)
-
-	xor	%eax,%eax
-	dec	%eax
+	orl	$-1,%eax
 .Lnoerror:
 	pop	%ebx
 	pop	%esi

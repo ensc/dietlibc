@@ -13,20 +13,25 @@ _start:
 	movq	%rdx, environ
 
 #ifdef PROFILING
-	pushl	$_etext
-	pushl	$.text
+	pushq	$_etext
+	pushq	$.text
 	call	monitor
-	addl	$0x8, %esp
+	addq	$0x16, %rsp
 #endif
 
+#ifdef WANT_DYNAMIC
+	call	_dyn_start
+#else
 	call	main
+#endif
 
 #ifdef PROFILING
-	pushl	%eax
+	pushq	%rax
 	call	_stop_monitor
-	popl	%eax
-#endif
+	popq	%rdi
+#else
 	movq	%rax, %rdi	/* return value */
+#endif
 	call	exit
 	hlt
 .Lstart:

@@ -32,8 +32,7 @@ __unified_syscall:
 	movl	%eax,%ebx
 	call	__errno_location
 	movl	%ebx,(%eax)
-	xor	%eax,%eax
-	dec	%eax
+	orl	$-1,%eax
 #else
 	mov	%eax,errno
 	sbb	%eax,%eax               # eax = eax - eax - CY = -1
