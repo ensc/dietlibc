@@ -15,15 +15,13 @@ void (*dyn_start)();
 void ldso_start(void);
 extern void (*fini_entry)(void);
 
-static _fini_run(struct _dl_handle * tmp) {
+static void _fini_run(struct _dl_handle * tmp) {
   if (tmp->fini) tmp->fini();
   if (tmp->next) _fini_run(tmp->next);
 }
-static struct _dl_handle * dlh;
+static struct _dl_handle* dlh;
 static void tt_fini(void) {
-#ifdef DEBUG
-  puts("dyn fini");
-#endif
+  DEBUG(printf("dyn fini\n");)
   _fini_run(dlh);
 }
 
@@ -33,13 +31,10 @@ int main(int argc, char**argv, char**envp)
   unsigned int *ui=(unsigned int*)envp;
   struct elf_aux *ea;
 
-  Elf32_Phdr *ph32;
-  Elf32_Sym  *es32;
-
-  char *str;
+  Elf32_Phdr *ph32=0;
 
   /* --- */
-  unsigned int n=0, o=0, s=0;
+  unsigned int o=0, s=0;
   /* --- */
 
   dlh = _dl_get_handle();
@@ -55,30 +50,24 @@ int main(int argc, char**argv, char**envp)
     switch (ea->type) {
     case AT_EXECFD:
     case AT_NOTELF:
-      puts("N.F.Y. This you do without ME !");
+      //puts("N.F.Y. This you do without ME !");
       _exit(42);
       break;
 
     case AT_PHDR:
       ph32=(Elf32_Phdr*)ea->val;
-#ifdef DEBUG
-      printf("program header @ %08x\n",ph32);
-#endif
+      DEBUG(printf("program header @ %08x\n",ph32);)
       break;
     case AT_PHENT:
       ph_size=ea->val;
-#ifdef DEBUG
-      printf("program header size %08x\n",ph_size);
-#endif
+      DEBUG(printf("program header size %08x\n",ph_size);)
       break;
     case AT_PHNUM:
       ph_num=ea->val;
-#ifdef DEBUG
-      printf("program header # %d\n",ph_num);
-#endif
+      DEBUG(printf("program header # %d\n",ph_num);)
       break;
 
-#ifdef DEBUG
+#if DEBUG(1+)0
     case AT_BASE:
       printf("base: %08x\n",ea->val);
       break;
@@ -102,19 +91,15 @@ int main(int argc, char**argv, char**envp)
 
     case AT_PAGESZ:
       pg_size=ea->val;
-#ifdef DEBUG
-      printf("page size %d\n",pg_size);
-#endif
+      DEBUG(printf("page size %d\n",pg_size);)
       break;
 
     case AT_ENTRY:
       dyn_start=(void(*)())ea->val;
-#ifdef DEBUG
-      printf("start program  @ %08x\n",dyn_start);
-#endif
+      DEBUG(printf("start program  @ %08x\n",dyn_start);)
       break;
 
-#ifdef DEBUG
+#if DEBUG(1+)0
     case AT_PLATFORM:
       printf("CPU: %s\n",ea->val);
       break;
@@ -127,9 +112,7 @@ int main(int argc, char**argv, char**envp)
 #endif
 
     default:
-#ifdef DEBUG
-      printf("%08x: %08x %08x\n",ea,ea->type,ea->val);
-#endif
+      DEBUG(printf("%08x: %08x %08x\n",ea,ea->type,ea->val);)
       break;
     }
   }
@@ -146,12 +129,10 @@ int main(int argc, char**argv, char**envp)
 
   /* dynamic scan from _dl_load must be called here */
 
-  dlh = _dl_dyn_scan(dlh,o,0);
+  dlh = _dl_dyn_scan(dlh,(void*)o,0);
 
   if (!dlh) {
-#ifdef DEBUG
-    printf("error in dyn_scan");
-#endif
+    DEBUG(printf("error in dyn_scan");)
     _exit(23);
   }
 
@@ -159,9 +140,7 @@ int main(int argc, char**argv, char**envp)
   dlh->fini=0;
 
   if (dyn_start==ldso_start) {
-#ifdef DEBUG
-    printf("error in dyn_scan");
-#endif
+    DEBUG(printf("error in dyn_scan");)
     _exit(42);
   }
 

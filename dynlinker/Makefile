@@ -1,5 +1,5 @@
-#CFLAGS = -g
-CFLAGS = -Os # -fomit-frame-pointer
+#CFLAGS = -Wall -g
+CFLAGS = -Wall -Os # -fomit-frame-pointer
 
 DYNLINK = diet-linux.so
 
