@@ -12,4 +12,6 @@ int fnmatch(const char *pattern, const char *string, int flags) __THROW;
 #define FNM_LEADING_DIR 8
 #define FNM_CASEFOLD 16
 
+#define FNM_NOMATCH 1
+
 #endif
