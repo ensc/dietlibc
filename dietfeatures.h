@@ -19,7 +19,7 @@
 #define WANT_THREAD_SAFE
 
 /* make the startcode, etc. dynamic aware ({con,de}structors) */
-/* #undef WANT_DYNAMIC */
+#define WANT_DYNAMIC 1
 
 /* do you want smaller or faster string routines? */
 /* #define WANT_FASTER_STRING_ROUTINES */

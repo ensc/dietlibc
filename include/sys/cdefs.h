@@ -33,8 +33,10 @@
 #if (__GNUC__ < 3)
 #define __builtin_expect(foo,bar) (foo)
 #define expect(foo,bar) (foo)
+#define __malloc__
 #else
 #define expect(foo,bar) __builtin_expect(foo,bar)
+#define __malloc__ __attribute__((malloc))
 #endif
 #endif
 #endif

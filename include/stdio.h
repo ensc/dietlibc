@@ -15,7 +15,7 @@ int printf(const char *format, ...) __THROW __attribute__((format(printf,1,2)));
 int fprintf(FILE *stream, const char *format, ...) __THROW __attribute__((format(printf,2,3)));
 int sprintf(char *str, const char *format, ...) __THROW __attribute__((format(printf,2,3)));
 int snprintf(char *str, size_t size, const char *format, ...) __THROW __attribute__((format(printf,3,4)));
-int asprintf(char **ptr, const char* format, ...) __THROW __attribute__((format(printf,2,3)));
+int asprintf(char **ptr, const char* format, ...) __THROW __malloc__ __attribute__((format(printf,2,3)));
 
 int scanf(const char *format, ...) __THROW __attribute__((format(scanf,1,2)));
 int fscanf(FILE *stream, const char *format, ...) __THROW __attribute__((format(scanf,2,3)));
