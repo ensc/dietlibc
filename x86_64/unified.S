@@ -17,9 +17,9 @@ __unified_syscall:
 	cmpq	$0, %rax
 	jge	.Lnoerror
 	negq	%rax
-	movl	%eax, %ebx
+	movl	%eax, %ecx
 	call	__errno_location
-	movl	%ebx, (%rax)
+	movl	%ecx, (%rax)
 	mov	$-1, %rax
 .Lnoerror:
 
