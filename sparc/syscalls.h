@@ -138,10 +138,10 @@
 #define __NR_rmdir              137 /* Common                                      */
 #define __NR_utimes             138 /* SunOS Specific                              */
 #define __NR_stat64		139 /* Linux sparc32 Specific			   */
-/* #define __NR_adjtime         140    SunOS Specific                              */
+#define __NR_sendfile64         140 /* adjtime under SunOS                         */
 #define __NR_getpeername        141 /* Common                                      */
-/* #define __NR_gethostid       142    SunOS Specific                              */
-/* #define __NR_ni_syscall      143    ENOSYS under SunOS                          */
+#define __NR_futex              142 /* gethostid under SunOS                       */
+#define __NR_gettid             143 /* ENOSYS under SunOS                          */
 #define __NR_getrlimit          144 /* Common                                      */
 #define __NR_setrlimit          145 /* Common                                      */
 #define __NR_pivot_root		146 /* Linux Specific, killpg under SunOS          */
@@ -158,42 +158,42 @@
 #define __NR_statfs             157 /* Common                                      */
 #define __NR_fstatfs            158 /* Common                                      */
 #define __NR_umount             159 /* Common                                      */
-/* #define __NR_async_daemon    160    SunOS Specific                              */
-/* #define __NR_getfh           161    SunOS Specific                              */
+#define __NR_sched_set_affinity 160 /* Linux specific, async_daemon under SunOS    */
+#define __NR_sched_get_affinity 161 /* Linux specific, getfh under SunOS           */
 #define __NR_getdomainname      162 /* SunOS Specific                              */
 #define __NR_setdomainname      163 /* Common                                      */
 /* #define __NR_ni_syscall	164    ENOSYS under SunOS			   */
 #define __NR_quotactl           165 /* Common                                      */
-/* #define __NR_exportfs        166    SunOS Specific                              */
+#define __NR_set_tid_address    166 /* Linux specific, exportfs under SunOS        */
 #define __NR_mount              167 /* Common                                      */
 #define __NR_ustat              168 /* Common                                      */
-/* #define __NR_semsys          169    SunOS Specific                              */
-/* #define __NR_msgsys          170    SunOS Specific                              */
-/* #define __NR_shmsys          171    SunOS Specific                              */
-/* #define __NR_auditsys        172    SunOS Specific                              */
-/* #define __NR_rfssys          173    SunOS Specific                              */
+#define __NR_setxattr           169 /* SunOS: semsys                               */
+#define __NR_lsetxattr          170 /* SunOS: msgsys                               */
+#define __NR_fsetxattr          171 /* SunOS: shmsys                               */
+#define __NR_getxattr           172 /* SunOS: auditsys                             */
+#define __NR_lgetxattr          173 /* SunOS: rfssys                               */
 #define __NR_getdents           174 /* Common                                      */
 #define __NR_setsid             175 /* Common                                      */
 #define __NR_fchdir             176 /* Common                                      */
-/* #define __NR_fchroot         177    SunOS Specific                              */
-/* #define __NR_vpixsys         178    SunOS Specific                              */
-/* #define __NR_aioread         179    SunOS Specific                              */
-/* #define __NR_aiowrite        180    SunOS Specific                              */
-/* #define __NR_aiowait         181    SunOS Specific                              */
-/* #define __NR_aiocancel       182    SunOS Specific                              */
+#define __NR_fgetxattr          177 /* SunOS: fchroot                              */
+#define __NR_listxattr          178 /* SunOS: vpixsys                              */
+#define __NR_llistxattr         179 /* SunOS: aioread                              */
+#define __NR_flistxattr         180 /* SunOS: aiowrite                             */
+#define __NR_removexattr        181 /* SunOS: aiowait                              */
+#define __NR_lremovexattr       182 /* SunOS: aiocancel                            */
 #define __NR_sigpending         183 /* Common                                      */
 #define __NR_query_module	184 /* Linux Specific				   */
 #define __NR_setpgid            185 /* Common                                      */
-/* #define __NR_pathconf        186    SunOS Specific                              */
-/* #define __NR_fpathconf       187    SunOS Specific                              */
-/* #define __NR_sysconf         188    SunOS Specific                              */
+#define __NR_fremovexattr       186 /* SunOS: pathconf                             */
+#define __NR_tkill              187 /* SunOS: fpathconf                            */
+#define __NR_exit_group		188 /* Linux specific, sysconf undef SunOS         */
 #define __NR_uname              189 /* Linux Specific                              */
 #define __NR_init_module        190 /* Linux Specific                              */
 #define __NR_personality        191 /* Linux Specific                              */
-/* #define __NR_prof            192    Linux Specific                              */
-/* #define __NR_break           193    Linux Specific                              */
-/* #define __NR_lock            194    Linux Specific                              */
-/* #define __NR_mpx             195    Linux Specific                              */
+#define __NR_remap_file_pages   192 /* Linux Specific                              */
+#define __NR_epoll_create       193 /* Linux Specific                              */
+#define __NR_epoll_ctl          194 /* Linux Specific                              */
+#define __NR_epoll_wait         195 /* Linux Specific                              */
 /* #define __NR_ulimit          196    Linux Specific                              */
 #define __NR_getppid            197 /* Linux Specific                              */
 #define __NR_sigaction          198 /* Linux Specific                              */
@@ -206,10 +206,10 @@
 /* #define __NR_ioperm          205    Linux Specific - i386 specific, unused      */
 #define __NR_socketcall         206 /* Linux Specific                              */
 #define __NR_syslog             207 /* Linux Specific                              */
-/* #define __NR_olduname        208    Linux Specific                              */
-/* #define __NR_iopl            209    Linux Specific - i386 specific, unused      */
-/* #define __NR_idle            210    Linux Specific - was sys_idle, now unused   */
-/* #define __NR_vm86            211    Linux Specific - i386 specific, unused      */
+#define __NR_lookup_dcookie     208 /* Linux Specific                              */
+#define __NR_fadvise64          209 /* Linux Specific                              */
+#define __NR_fadvise64_64       210 /* Linux Specific                              */
+#define __NR_tgkill             211 /* Linux Specific                              */
 #define __NR_waitpid            212 /* Linux Specific                              */
 #define __NR_swapoff            213 /* Linux Specific                              */
 #define __NR_sysinfo            214 /* Linux Specific                              */
@@ -232,8 +232,8 @@
 #define __NR_time               231 /* Linux Specific                              */
 /* #define __NR_oldstat         232    Linux Specific                              */
 #define __NR_stime              233 /* Linux Specific                              */
-/* #define __NR_oldfstat        234    Linux Specific                              */
-/* #define __NR_phys            235    Linux Specific                              */
+#define __NR_statfs64           234 /* Linux Specific                              */
+#define __NR_fstatfs64          235 /* Linux Specific                              */
 #define __NR__llseek            236 /* Linux Specific                              */
 #define __NR_mlock              237
 #define __NR_munlock            238
