@@ -1,5 +1,3 @@
-LIBOBJ+=$(OBJDIR)/setjmp_aux.o
-
 # Now this needs explanation.
 # mips-linux is per default big endian.  Then they ported it to little
 # endian MIPS (Windoze CE handhelds mostly) and named the architecture

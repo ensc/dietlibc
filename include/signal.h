@@ -258,6 +258,30 @@ typedef struct {
 } sigset_t;
 
 struct sigaction {
+#if defined(__alpha__)
+  union {
+    sighandler_t _sa_handler;
+    void (*_sa_sigaction)(int, siginfo_t*, void*);
+  } _u;
+  sigset_t sa_mask;
+  unsigned long sa_flags;
+#elif defined(__ia64__) || defined(__hppa__)
+  union {
+    sighandler_t _sa_handler;
+    void (*_sa_sigaction)(int, siginfo_t*, void*);
+  } _u;
+  unsigned long sa_flags;
+  sigset_t sa_mask;
+#elif defined(__mips__)
+  unsigned long sa_flags;
+  union {
+    sighandler_t _sa_handler;
+    void (*_sa_sigaction)(int, siginfo_t*, void*);
+  } _u;
+  sigset_t sa_mask;
+  void (*sa_restorer)(void);
+  int sa_resv[1];
+#else	/* arm, i386, ppc, s390, sparc, saprc64, x86_64 */
   union {
     sighandler_t _sa_handler;
     void (*_sa_sigaction)(int, siginfo_t*, void*);
@@ -265,15 +289,22 @@ struct sigaction {
   unsigned long sa_flags;
   void (*sa_restorer)(void);
   sigset_t sa_mask;
+#endif
 };
 
 #define sa_handler	_u._sa_handler
 #define sa_sigaction	_u._sa_sigaction
 
 typedef struct sigaltstack {
+#if defined(__mips__)
+  void *ss_sp;
+  size_t ss_size;
+  int ss_flags;
+#else
   void *ss_sp;
   int ss_flags;
   size_t ss_size;
+#endif
 } stack_t;
 
 int sigaltstack(const struct sigaltstack *newstack, struct sigaltstack *oldstack) __THROW;

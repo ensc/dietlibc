@@ -1,5 +1,3 @@
-#ifdef __alpha__
-
 #include <setjmp.h>
 
 .text
@@ -34,6 +32,3 @@ __longjmp:
 	mov	 $1, $sp
 
 	ret	$31, ($26), 1
-
-
-#endif

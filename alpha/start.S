@@ -1,5 +1,3 @@
-#ifdef __alpha__
-
 .text
 .align 2
 	.set noreorder
@@ -33,5 +31,3 @@ _start:
 #endif
 	mov	 $0, $16
 	jsr	$26, exit	/* YES, CALL! for threads and atexit ! (+4 byte) */
-
-#endif

@@ -1,10 +1,17 @@
 #include <setjmp.h>
 
 .text
+.weak setjmp
+.type setjmp,@function
+setjmp:
+.weak __setjmp
+.type __setjmp,@function
+__setjmp:
+	ldgp	$gp,  0($gp)
+	mov	0, $17
 .global __sigsetjmp
 .type __sigsetjmp,@function
 __sigsetjmp:
-1:
 	ldgp	$gp,  0($gp)
 
 	mov	$sp, $1
@@ -39,12 +46,3 @@ __sigsetjmp:
 	lda	$sp, 16($sp)
 	ret	$31, ($26), 1	/* back to caller */
 
-.weak setjmp
-.type setjmp,@function
-setjmp:
-.weak __setjmp
-.type __setjmp,@function
-__setjmp:
-	ldgp	$gp,  0($gp)
-	mov	0, $17
-	br	1b
