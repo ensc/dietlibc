@@ -13,6 +13,7 @@
   remove C++ comments from header files
   add ftrylockfile
   C99 fixes and a new printf test from Enrico Scholz
+  epoll_event needs to be packed on x86_64 (pointed out by Indan Zupancic)
 
 0.24:
   work around incompatible Linux select() modifying the timeout in
