@@ -192,11 +192,7 @@ asm(".text \n"
 "	movq	(%rbp), %rdi		# argc \n"
 "	leaq	8(%rbp),%rsi		# argv \n"
 "	leaq	8(%rsi,%rdi,8),%rdx	# envp \n"
-/* needs to determine the load-address... */
-"	leaq	_DYNAMIC@GOTPCREL(%rip), %rcx \n"
-"	movq	(%rcx), %r8		# unrelocated address of _DYNAMIC \n"
-"	leaq	_DYNAMIC(%rip), %rcx	#   relocated address of _DYNAMIC \n"
-"	subq	%r8, %rcx		# -> load address \n"
+"	leaq	_DYNAMIC(%rip), %rcx	# relocated address of _DYNAMIC \n"
 /* call _dl_main */
 "	call	_dl_main \n"
 /* restore stack */
@@ -971,18 +967,21 @@ static struct _dl_handle* _dl_dyn_scan(struct _dl_handle*dh,Elf_Dyn*_dynamic) {
 
       /* BASIC RELOCATION */
     case DT_REL:
+    case DT_RELA:
       rel = (_dl_rel_t*)(dh->mem_base+_dynamic[i].d_un.d_val);
 #ifdef DEBUG
       pf(__FUNCTION__); pf(": have rel @ "); ph((long)rel); pf("\n");
 #endif
       break;
     case DT_RELENT:
+    case DT_RELAENT:
       relent=_dynamic[i].d_un.d_val;
 #ifdef DEBUG
       pf(__FUNCTION__); pf(": have relent  @ "); ph((long)relent); pf("\n");
 #endif
       break;
     case DT_RELSZ:
+    case DT_RELASZ:
       relsize=_dynamic[i].d_un.d_val;
 #ifdef DEBUG
       pf(__FUNCTION__); pf(": have relsize @ "); ph((long)relsize); pf("\n");
@@ -1358,7 +1357,7 @@ unsigned long _dl_main(int argc,char*argv[],char*envp[],unsigned long _dynamic) 
 #ifdef WANT_LD_SO_GDB_SUPPORT
   _r_debug.r_version=1;
   _r_debug.r_map=_dl_root_handle;
-  _r_debug.r_brk=&_dl_debug_state;
+  _r_debug.r_brk=(void*)&_dl_debug_state;
   _r_debug.r_state=RT_CONSISTENT;
   _r_debug.r_ldbase=loadaddr;
   if (prog_dynamic) {

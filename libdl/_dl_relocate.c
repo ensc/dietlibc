@@ -84,8 +84,8 @@ static int _dl_apply_relocate(struct _dl_handle*dh,_dl_rel_t*rel) {
   } else
     ret=1;
 #endif
-#ifdef __X86_64__
-  if (typ==R_X86_64) {			/* 1 */
+#ifdef __x86_64__
+  if (typ==R_X86_64_64) {			/* 1 */
     *loc=(unsigned long)(dh->mem_base+dh->dyn_sym_tab[ELF_R_SYM(rel->r_info)].st_value);
   } else if (typ==R_X86_64_COPY)  {	/* 5 */
     unsigned long len=dh->dyn_sym_tab[ELF_R_SYM(rel->r_info)].st_size;
@@ -96,7 +96,7 @@ static int _dl_apply_relocate(struct _dl_handle*dh,_dl_rel_t*rel) {
     memcpy(loc,from,len);
   } else if (typ==R_X86_64_GLOB_DAT) {	/* 6 */
     *loc=(unsigned long)_dl_sym(dh,ELF_R_SYM(rel->r_info));
-  } else if (typ==R_X86_64_JMP_SLOT) {	/* 7 */
+  } else if (typ==R_X86_64_JUMP_SLOT) {	/* 7 */
     *loc=((unsigned long)dh->mem_base)+rel->r_addend;
   } else if (typ==R_X86_64_RELATIVE) {	/* 8 */
     *loc=((unsigned long)dh->mem_base)+rel->r_addend;

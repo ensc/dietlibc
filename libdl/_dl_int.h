@@ -79,7 +79,7 @@ struct _dl_handle {
   unsigned long*pltgot;		/* PLT/GOT */
 
   /* symbol resolve helper */
-  unsigned long*hash_tab;	/* hash table */
+  unsigned int*hash_tab;	/* hash table */
   char *	dyn_str_tab;	/* dyn_name table */
   Elf_Sym *	dyn_sym_tab;	/* dynamic symbol table */
   _dl_rel_t*	plt_rel;	/* PLT relocation table */

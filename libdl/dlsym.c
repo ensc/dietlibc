@@ -9,10 +9,10 @@ void *_dlsym(void* handle,const char* symbol) {
   unsigned long*sym=0;
   if (handle) {
     struct _dl_handle*dh=(struct _dl_handle*)handle;
-    unsigned long hash =elf_hash(symbol);
-    unsigned long bhash=hash%HASH_BUCKET_LEN(dh->hash_tab);
-    unsigned long*chain=HASH_CHAIN(dh->hash_tab);
-    unsigned long ind;
+    unsigned int hash =elf_hash(symbol);
+    unsigned int bhash=hash%HASH_BUCKET_LEN(dh->hash_tab);
+    unsigned int*chain=HASH_CHAIN(dh->hash_tab);
+    unsigned int ind;
     char *name=dh->dyn_str_tab;
 
 #ifdef DEBUG
