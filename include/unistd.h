@@ -172,12 +172,15 @@ int llseek(int fildes, unsigned long hi, unsigned long lo, loff_t* result,int wh
 struct __sysctl_args;
 int _sysctl(struct __sysctl_args *args) __THROW;
 
-#define _SC_OPEN_MAX 4
 #define _SC_CLK_TCK 1
+#define _SC_ARG_MAX 2
+#define _SC_OPEN_MAX 4
 #define _SC_PAGESIZE 5
 #define _SC_NPROCESSORS_ONLN 6
 #define _SC_NPROCESSORS_CONF _SC_NPROCESSORS_ONLN
 long sysconf(int name) __THROW;
+#define _PC_PATH_MAX 1
+#define _PC_VDISABLE 2
 
 pid_t tcgetpgrp(int fd) __THROW;
 int tcsetpgrp(int fd, pid_t pgrpid) __THROW;

@@ -1,5 +1,6 @@
 #include <unistd.h>
 #include <errno.h>
+#include <limits.h>
 #include <sys/resource.h>
 
 extern int __sc_nr_cpus();
@@ -27,6 +28,9 @@ long sysconf(int name)
 #else
     return 4096;
 #endif
+
+  case _SC_ARG_MAX:
+    return ARG_MAX;
 
   case _SC_NPROCESSORS_ONLN:
     return __sc_nr_cpus();
