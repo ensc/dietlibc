@@ -37,7 +37,7 @@ _start:
 #else
 	call	main
 #endif
-	movr	%g1, %o3
+	mov	%g1, %o3
 
 	b	exit
 	mov %o0, %i0
