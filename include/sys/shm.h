@@ -58,8 +58,11 @@ struct shm_info {
   unsigned long swap_successes;
 };
 
-#ifndef PAGE_SIZE
-#define PAGE_SIZE getpagesize()
+#if defined(__i386__) || defined(__mips__) || defined(__arm__) || defined(__powerpc__)
+#define PAGE_SIZE 4096
+#elif defined(__alpha__) || defined(__sparc__)
+/* sun4* has 4k except sun4 architecture, sparc64 has 8k */
+#define PAGE_SIZE 8192
 #endif
 
 extern int shmget(key_t key, int size, int shmflg) __THROW;
