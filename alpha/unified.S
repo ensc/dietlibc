@@ -5,7 +5,7 @@ __unified_syscall:
 	callsys
 	bne	$19, .Lerror
 
-/* here we go an "reused" the return for weak-void functions */
+/* here we go and "reuse" the return for weak-void functions */
 #include "dietuglyweaks.h"
 
 	ret	$31, ($26), 0x01

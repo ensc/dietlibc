@@ -18,7 +18,7 @@ __unified_syscall:
 #endif
 	mvn	r0, #0
 
-/* here we go an "reused" the return for weak-void functions */
+/* here we go and "reuse" the return for weak-void functions */
 #include "dietuglyweaks.h"
 
 	mov	pc, lr

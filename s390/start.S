@@ -26,10 +26,14 @@ _start:
 	l	%r1,0(%r13)
 	basr	%r14,%r1
 
-/* jump to exit and leave %r14 */
+/* call exit */
 	l	%r1,4(%r13)
-	br	%r1
+	basr	%r14,%r1
 
+/* DIE! */
+	.word	0
+
+.align 4
 .Laddr:
 #ifdef WANT_DYNAMIC
 	.long	_dyn_start

@@ -42,7 +42,7 @@ _start:
 
 /* Die very horribly if exit returns.  */
 
-/* here we go an "reused" the return for weak-void functions */
+/* here we go and "reuse" the return for weak-void functions */
 #include "dietuglyweaks.h"
 	ret
 	nop
