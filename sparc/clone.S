@@ -30,8 +30,9 @@ __clone:
 
 .Lerror:
 	call	__errno_location
-	or	%g0, EINVAL, %i0
-	st	%i0, [%o0]
+	nop
+	mov	EINVAL, %l0
+	st	%l0, [%o0]
 	retl
 	restore	%g0, -1, %o0
 
