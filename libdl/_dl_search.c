@@ -26,7 +26,7 @@ static int _dl_search_path(char *buf, int len, const char*path, const int pathle
       i=strcspn(c,":;");
       if (i) {
 	if (i>ml) continue;	/* if len(path-entry)+len(filename)+2 is greater than the buffer ? SKIP */
-	strncpy(buf, c, i); buf[i]=0;
+	memcpy(buf, c, i); buf[i]=0;
 	l-=i;
 	strncat(buf, "/", l);
       }
