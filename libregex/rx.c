@@ -84,9 +84,9 @@ static const char* parsebracketed(struct bracketed*__restrict__ b,const char*__r
   if (*t=='^') { negflag=1; ++t; }
   do {
     if (*t==0) return s;
-    setcc(b->cc,rx->cflags&REG_ICASE?*t:tolower(*t));
+    setcc(b->cc,rx->cflags&REG_ICASE?tolower(*t):*t);
     if (t[1]=='-' && t[2]!=']') {
-      for (i=*t+1; i<=t[2]; ++i) setcc(b->cc,rx->cflags&REG_ICASE?i:tolower(i));
+      for (i=*t+1; i<=t[2]; ++i) setcc(b->cc,rx->cflags&REG_ICASE?tolower(i):i);
       t+=2;
     }
     ++t;
@@ -203,7 +203,7 @@ static const char* parseatom(struct atom*__restrict__ a,const char*__restrict__ 
     }
   default:
     a->type=CHAR;
-    a->u.c=rx->cflags&REG_ICASE?*s:tolower(*s);
+    a->u.c=rx->cflags&REG_ICASE?tolower(*s):*s;
     break;
   }
   return s+1;

@@ -54,11 +54,13 @@ int compar(const void*a,const void*b) {
 }
 
 int main(int argc,char *argv[]) {
+#if 0
   char foo[10]="none,zlib";
   char *tmp,*tmp2=foo;
   while (tmp=strsep(&tmp2,",")) {
     puts(tmp);
   }
+#endif
 #if 0
   char foo[10];
   printf("%d %d\n",abs(-3),abs(23));
@@ -95,9 +97,9 @@ int main(int argc,char *argv[]) {
   char buf[PATH_MAX];
   printf("%s\n",realpath("../../incoming/..///.zshrc",buf));
 #endif
-#if 0
+#if 1
   regex_t t;
-  regcomp(&t,"^OpenSSH[-_]2\\.[012]",5);
+  regcomp(&t,"^OpenSSH_2\\.5\\.[012]",5);
   printf("%d\n",regexec(&t,"OpenSSH_2.5.2p2",0,0,0));
 #endif
 #if 0
