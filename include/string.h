@@ -8,11 +8,17 @@ char *strcpy(char *dest, const char *src) __THROW;
 char *strncpy(char *dest, const char *src, size_t n) __THROW;
 
 void *memccpy(void *dest, const void *src, int c, size_t n) __THROW;
-void *memcpy(void *dest, const void *src, size_t n) __THROW;
 void *memmove(void *dest, const void *src, size_t n) __THROW;
 
 int memccmp(const void *s1, const void *s2, int c, size_t n) __THROW __pure__;
+#ifndef __GNUC__
+/* gcc unfortunately has some internal prototypes that are not compliant
+ * to the single unix specification and if we define the correct
+ * prototypes here, gcc emits warnings. */
 int memcmp(const void *s1, const void *s2, size_t n) __THROW __pure__;
+void* memset(void *s, int c, size_t n) __THROW;
+void* memcpy(void *dest, const void *src, size_t n) __THROW;
+#endif
 int strcmp(const char *s1, const char *s2) __THROW __pure__;
 int strncmp(const char *s1, const char *s2, size_t n) __THROW __pure__;
 
@@ -37,7 +43,6 @@ size_t strcspn(const char *s, const char *reject) __THROW;
 char *strpbrk(const char *s, const char *_accept) __THROW;
 char *strsep(char **stringp, const char *delim) __THROW;
 
-void* memset(void *s, int c, size_t n) __THROW;
 void* memchr(const void *s, int c, size_t n) __THROW;
 
 /* I would like to make this const, but Paul Jarc points out it has to
