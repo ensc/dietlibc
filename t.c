@@ -30,15 +30,20 @@
 #include <signal.h>
 #include <sys/io.h>
 #include <getopt.h>
-
-int foo;
+#include <arpa/nameser.h>
+#include <resolv.h>
 
 int main(int argc,char *argv[]) {
+  char buf[1024];
+  int len;
+  len=res_search("fu-berlin.de",ns_c_in,ns_t_ns,buf,sizeof(buf));
+#if 0
   regex_t t;
   regmatch_t rm;
   regcomp(&t,"abc",0);
   printf("%d\n",regexec(&t,"xabc",1,&rm,0));
   printf("ofs %d\n",rm.rm_so);
+#endif
 #if 0
   char buf[100];
   printf("%d\n",fread(buf,1,0,stdin));
