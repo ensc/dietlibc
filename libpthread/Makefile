@@ -12,7 +12,7 @@ VPATH=../$(ARCH)/
 PTHREAD_OBJS = \
 	__testandset.o \
  \
-	thread_internal.o thread_create.o \
+	thread_internal.o \
  \
 	pthread_once.o pthread_spinlock.o \
  \

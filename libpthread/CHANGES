@@ -1,6 +1,12 @@
 This is the pthread implementation of dietlibc.
 Written from scratch by Olaf Dreesen.
 
+Wed Mar 14 04:28:45 MET 2001
+
+I have implemented the "Manager Thread" so that nested thread creation
+works. really ugly stuff... don't look at it unless you're sitting on solid
+ground.
+
 Mon Mar 12 16:16:00 CET 2001
 
 first of all:

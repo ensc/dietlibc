@@ -3,44 +3,52 @@
 
 #include <pthread.h>
 
+/* cleanup */
+struct thread_cleanup_t {
+  struct thread_cleanup_t *n;
+  void (*routine)(void*);
+  void *arg;
+};
+
 /* the thread descriptor / internal */
 struct _pthread_descr_struct {
   /* runtime handling */
-  struct _pthread_descr_struct * joined;	/* a joined thread or NULL */
-  struct _pthread_descr_struct * lock;		/* next waiting thread */
+  struct _pthread_descr_struct *joined; /* a joined thread or NULL */
 
   /* thread/process data */
-  int  pid;					/* Process id */
+  int  pid;			/* Process id */
 
-  int  policy;					/* thread scheduling policy */
-  int  priority;				/* thread priority */
+  int  policy;			/* thread scheduling policy */
+  int  priority;		/* thread priority */
 
   /* errno handling */
   int   errno;
   int h_errno;
 
   /* stack handling */
-  unsigned int stack_size;			/* stack size for setrlimit */
-  void *stack_begin;				/* begin of stack / lowest address (free) */
-  int  userstack;				/* user has provided the stack */
-
-  /* signal handling */
+  unsigned int stack_size;	/* stack size for setrlimit */
+  void *stack_addr;		/* stack address for clone */
+  void *stack_begin;		/* begin of stack / lowest address (free) */
+  int  userstack;		/* user has provided the stack */
 
   /* thread exit handling */
-  void  *retval;				/* thread return value */
-  int  join;					/* thread waits for other to return */
+  void  *retval;		/* thread return value */
+  int  join;			/* thread waits for other to return */
 
   /* thread flags */
-  int  detached;				/* thread is detached */
-  int  canceled;				/* thread canceled */
+  int  detached;		/* thread is detached */
+  int  canceled;		/* thread canceled */
 
   /* cancel handling */
-  int  cancelstate;				/* cancel state */
-  int  canceltype;				/* type of cancellation */
+  int  cancelstate;		/* cancel state */
+  int  canceltype;		/* type of cancellation */
 
   /* thread basics */
-  void* (*func) (void* arg);			/* thread function */
-  void *arg;					/* thread argument */
+  void* (*func) (void* arg);	/* thread function */
+  void *arg;			/* thread argument */
+
+  /* create thread / manager thread lock */
+  struct _pthread_fastlock *manager_lock;
 
 } __attribute__ ((aligned(32)));
 
@@ -68,6 +76,9 @@ int __thread_create(void *(*__start_routine) (void *),
 		int inherit,
 		int spolicy,
 		int spriority);
+
+/* manager thread stuff */
+int signal_manager_thread(_pthread_descr td);
 
 /* init stuff */
 extern pthread_once_t __thread_inited;

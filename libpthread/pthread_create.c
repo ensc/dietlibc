@@ -1,3 +1,5 @@
+#include <unistd.h>
+#include <stdlib.h>
 #include <errno.h>
 
 #include <pthread.h>
@@ -7,32 +9,61 @@ int pthread_create (pthread_t *thread, const pthread_attr_t *attr,
 		void *(*start_routine) (void *), void *arg)
 {
   int ret=0;
-  unsigned int stacksize=PTHREAD_STACK_SIZE;
-  char *stack = 0;
-
-  int f_detach = 0;
-  int f_inherit = PTHREAD_EXPLICIT_SCHED;
-  int f_spolicy = SCHED_OTHER;
-  int f_spriority = 0;
+  _pthread_descr td;
+  pthread_attr_t default_attr;
 
   __THREAD_INIT();
 
-  if (attr) {
-    f_detach	= attr->__detachstate;
-    f_spolicy	= attr->__schedpolicy;
-    f_spriority	= attr->__schedparam.sched_priority;
-    f_inherit	= attr->__inheritsched;
-    stack	= attr->__stackaddr;
-    stacksize	= attr->__stacksize;
-    if ((f_spolicy!=SCHED_OTHER)&&(f_spriority==0)) {
+  td = __thread_get_free();
+
+  if (td) {
+    if (!(attr)) {
+      pthread_attr_init(&default_attr);
+      attr=&default_attr;
+    }
+
+    if ((td->policy!=SCHED_OTHER)&&(td->priority==0)) {
       (*(__errno_location()))=EINVAL;
       return -1;
     }
+
+    if (attr->__inheritsched==PTHREAD_INHERIT_SCHED) {
+      _pthread_descr this = __thread_self();
+      td->policy	= this->policy;
+      td->priority	= this->priority;
+    } else {
+      td->policy	= attr->__schedpolicy;
+      td->priority	= attr->__schedparam.sched_priority;
+    }
+
+    td->func		= start_routine;
+    td->arg		= arg;
+
+    td->detached	= attr->__detachstate;
+
+    td->stack_size	= attr->__stacksize;
+
+    if (!(td->stack_addr)) {
+      char *stack=(char*)malloc(td->stack_size);
+      if (!(stack)) {
+	(*(__errno_location()))=EINVAL;
+	return -1;
+      }
+      td->stack_begin = stack;
+      td->stack_addr = stack+td->stack_size;
+    }
+    else
+      td->stack_addr	= attr->__stackaddr;
+
+    td->stack_size	= attr->__stacksize;
+
+    ret = signal_manager_thread(td);
+    if (ret>1)
+      *thread=ret;
   }
+  else
+    (*(__errno_location()))=EAGAIN;
 
-  ret = __thread_create(start_routine, arg, stack, stacksize, f_detach,
-			f_inherit, f_spolicy, f_spriority);
-
-  if (ret!=-1) (*thread)=ret;
+  if (ret<2) return -1;
   return ret;
 }

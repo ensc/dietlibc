@@ -14,4 +14,4 @@ int __sigfillset (__sigset_t *set) {
   return 0;
 }
 
-int sigfillset(sigset_t *env, int signo) __attribute__((weak,alias("__sigfillset")));
+int sigfillset(sigset_t *env) __attribute__((weak,alias("__sigfillset")));

@@ -12,25 +12,23 @@
 
 #define PTHREAD_THREADS_MAX	128
 
-#define MAX_SPIN_COUNT		10
+#define MAX_SPIN_COUNT		50
 #define SPIN_SLEEP_DURATION	2000001
 
 typedef struct _pthread_descr_struct *_pthread_descr;
 typedef unsigned long int pthread_t;
 
-/* Fast locks (not abstract because mutexes and conditions aren't abstract). */
+/* Fast locks */
 struct _pthread_fastlock {
-  int __status;			/* "Free" or "taken" or head of waiting list */
-  int __spinlock;		/* For compare-and-swap emulation */
+  int __spinlock;
 };
 
-/* Mutexes (not abstract because of PTHREAD_MUTEX_INITIALIZER).  */
+/* Mutexes */
 typedef struct {
-  int reserved;			/* Reserved for future use */
-  unsigned int count;		/* Depth of recursive locking */
-  _pthread_descr owner;		/* Owner thread (if recursive or errcheck) */
-  int kind;			/* Mutex kind: fast, recursive or errcheck */
-  struct _pthread_fastlock lock;/* Underlying fast lock */
+  struct _pthread_fastlock lock;
+  _pthread_descr owner;
+  int kind;
+  unsigned int count;
 } pthread_mutex_t;
 
 enum {
@@ -48,13 +46,13 @@ enum
 };
 
 #define PTHREAD_MUTEX_INITIALIZER \
-{0, 0, 0, PTHREAD_MUTEX_FAST_NP, {0, 0}}
+{{0}, 0, PTHREAD_MUTEX_FAST_NP, 0}
 
 #define PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP \
-{0, 0, 0, PTHREAD_MUTEX_RECURSIVE_NP, {0, 0}}
+{{0}, 0, PTHREAD_MUTEX_RECURSIVE_NP, 0}
 
 #define PTHREAD_ERRORCHECK_MUTEX_INITIALIZER_NP \
-{0, 0, 0, PTHREAD_MUTEX_ERRORCHECK_NP, {0, 0}}
+{{0}, 0, PTHREAD_MUTEX_ERRORCHECK_NP, 0}
 
 typedef struct {
   int __mutexkind;
