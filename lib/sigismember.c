@@ -5,7 +5,7 @@
 #define __sigword(sig)		( ((sig)-1) / (8*sizeof(unsigned long)) )
 
 int sigismember(const sigset_t *set, int signo) {
-  if ((signo<0)||(signo>SIGRTMAX)) {
+  if ((signo<1)||(signo>SIGRTMAX)) {
     (*__errno_location())=EINVAL;
     return -1;
   } else {

@@ -15,6 +15,7 @@
   perror now checks if the message is NULL like glibc (Thomas Ogrisegg)
   ftell did not take ungetc into account (Kevin Ryde through Debian).
   Thomas Ogrisegg sent a port to IA64!
+  sigaddset, sigdelset and setismember segfaulted for signal 0 (Gunnar Ritter)
 
 0.17:
   fix several bugs in getservent_r
