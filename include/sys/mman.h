@@ -174,6 +174,7 @@ extern void *mmap64 (void *__addr, size_t __len, int __prot,
 
 int mlockall(int flags) __THROW;
 int mlock(const void *addr, size_t len) __THROW;
+int munlock(const void *addr, size_t len) __THROW;
 int munlockall(void) __THROW;
 
 int madvise(void *start, size_t length, int advice) __THROW;
