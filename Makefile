@@ -2,7 +2,7 @@ ARCH=$(shell uname -m | sed 's/i[4-9]86/i386/')
 
 OBJDIR=bin-$(ARCH)
 
-all: $(OBJDIR) $(OBJDIR)/start.o $(OBJDIR)/dietlibc.a $(OBJDIR)/liblatin1.a $(OBJDIR)/elftrunc $(OBJDIR)/diet r
+all: $(OBJDIR) $(OBJDIR)/start.o $(OBJDIR)/dietlibc.a $(OBJDIR)/liblatin1.a $(OBJDIR)/elftrunc $(OBJDIR)/diet
 
 CFLAGS=-pipe
 CROSS=
