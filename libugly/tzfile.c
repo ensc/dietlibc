@@ -3,8 +3,9 @@
 #include <fcntl.h>
 #include <sys/mman.h>
 #include <netinet/in.h>
+#include <time.h>
 
-#include <stdio.h>
+/* #include <stdio.h> */
 
 #ifdef WANT_TZFILE_PARSER
 static char *tzfile=0;
@@ -77,7 +78,7 @@ time_t __tzfile_map(time_t t, int *isdst) {
       tmp+=i*6;
 /*      printf("(%lu,%d,%d)\n",ntohl(*(int*)tmp),tmp[4],tmp[5]); */
       *isdst=tmp[4];
-      return t+__myntohl(tmp);
+      return t+(timezone=__myntohl(tmp));
     }
   return t;
 }
