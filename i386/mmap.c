@@ -1,8 +1,8 @@
 #include <linux/types.h>
 #include <linux/unistd.h>
 
-#define __NR__mmap __NR_mmap
-_syscall1(int,_mmap,unsigned long *,buffer)
+char* _mmap(unsigned long *buffer);
+asm("_mmap: movb $__NR_mmap, %al ; jmp __unified_syscall");
 
 char *mmap(char *addr, size_t len, int prot, int flags, int fd, unsigned long off) {
   unsigned long buffer[6];
