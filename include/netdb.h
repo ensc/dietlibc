@@ -60,6 +60,10 @@ extern int gethostbyaddr_r(const char* addr, size_t length, int format,
 		    struct hostent* result, char *buf, size_t buflen,
 		    struct hostent **RESULT, int *h_errnop) __THROW;
 
+int gethostbyname2_r(const char* name, int AF, struct hostent* result,
+		    char *buf, size_t buflen,
+		    struct hostent **RESULT, int *h_errnop) __THROW;
+
 struct protoent {
   char    *p_name;        /* official protocol name */
   char    **p_aliases;    /* alias list */

@@ -1,3 +1,8 @@
+  The system library is a challenge to all those using the computer to
+  write their own faster and better routines or to bow to the superior
+  strength and skill of a true master.
+ 	--http://www.inner.net/users/cmetz/program-like-a-klingon
+
 diet libc to statically link programs that don't need all the bloat
 from glibc.
 

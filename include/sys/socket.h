@@ -71,4 +71,20 @@ int getaddrinfo(const char *node, const char *service, const struct
 void freeaddrinfo(struct addrinfo *res) __THROW;
 char *gai_strerror(int errcode) __THROW;
 
+#define EAI_FAMILY -1
+#define EAI_SOCKTYPE -2
+#define EAI_BADFLAGS -3
+#define EAI_NONAME -4
+#define EAI_SERVICE -5
+#define EAI_ADDRFAMILY -6
+#define EAI_NODATA -7
+#define EAI_MEMORY -8
+#define EAI_FAIL -9
+#define EAI_AGAIN -10
+#define EAI_SYSTEM -11
+
+#define AI_NUMERICHOST 1
+#define AI_CANONNAME 2
+#define AI_PASSIVE 4
+
 #endif

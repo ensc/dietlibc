@@ -1,4 +1,5 @@
-ARCH=$(shell uname -m | sed 's/i[4-9]86/i386/')
+MYARCH=$(shell uname -m | sed 's/i[4-9]86/i386/')
+ARCH=$(MYARCH)
 
 OBJDIR=bin-$(ARCH)
 
@@ -86,7 +87,7 @@ $(OBJDIR)/libdietc.so: $(OBJDIR)/dietlibc.a
 $(SYSCALLOBJ): syscalls.h
 
 $(OBJDIR)/elftrunc: $(OBJDIR)/diet contrib/elftrunc.c
-	$(OBJDIR)/diet $(CROSS)$(CC) $(CFLAGS) -o $@ contrib/elftrunc.c
+	bin-$(MYARCH)/diet $(CROSS)$(CC) $(CFLAGS) -o $@ contrib/elftrunc.c
 
 $(OBJDIR)/diet: $(OBJDIR)/start.o $(OBJDIR)/dyn_start.o diet.c $(OBJDIR)/dietlibc.a $(OBJDIR)/dyn_stop.o
 	$(CROSS)$(CC) -Iinclude $(CFLAGS) -nostdlib -o $@ $^ -DDIETHOME=\"$(HOME)\"
