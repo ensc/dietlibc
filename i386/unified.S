@@ -6,6 +6,7 @@
 .weak exit
 _exit:
 exit:
+	movb	$1,%al
 #ifndef __DYN_LIB
 .global __unified_syscall
 #endif
