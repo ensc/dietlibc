@@ -20,7 +20,6 @@ static char rcsid[] = "$OpenBSD: md5crypt.c,v 1.9 1997/07/23 20:58:27 kstailey E
 #include <stdio.h>
 #include <string.h>
 #include <md5.h>
-#include <string.h>
 
 static unsigned char itoa64[] =		/* 0 ... 63 => ascii - 64 */
 	"./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";

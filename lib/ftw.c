@@ -7,14 +7,14 @@
 #include <stdlib.h>
 
 int ftw(const char*dir,int(*f)(const char*file,const struct stat*sb,int flag),int dpth){
-  char*cd;
+  char* cd;
   size_t cdl;
-  DIR*d;
-  struct dirent*de;
+  DIR* d;
+  struct dirent* de;
   struct stat sb;
   int r;
-  int oldlen=0;
-  char*filename;
+  unsigned int oldlen=0;
+  char* filename;	/* the warning gcc issues here is bogus */
   if(chdir(dir))return-1;
   cd=alloca(PATH_MAX+1);
   if(!getcwd(cd,PATH_MAX))return-1;

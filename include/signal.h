@@ -214,4 +214,8 @@ extern const char *const sys_siglist[];
 
 #define killpg(pgrp,sig) kill(-pgrp,sig)
 
+#ifdef _GNU_SOURCE
+const char* strsignal(int sig) __THROW;
+#endif
+
 #endif

@@ -1,9 +1,8 @@
 #include <string.h>
+#include <stdlib.h>
+#include <ctype.h>
 
-extern char  isspace (char c);
-
-double  strtod ( const char* s, const char** endptr )
-{
+double strtod(const char* s, char** endptr) {
     register const char*  p     = s;
     register long double  value = 0.L;
     int                   sign  = +1;

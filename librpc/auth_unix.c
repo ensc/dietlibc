@@ -64,13 +64,7 @@ static bool_t authunix_validate();
 static bool_t authunix_refresh();
 static void authunix_destroy();
 
-static struct auth_ops auth_unix_ops = {
-	authunix_nextverf,
-	authunix_marshal,
-	authunix_validate,
-	authunix_refresh,
-	authunix_destroy
-};
+static struct auth_ops auth_unix_ops;
 
 /*
  * This struct is pointed to by the ah_private field of an auth_handle.
@@ -311,3 +305,12 @@ register AUTH *auth;
 	}
 	XDR_DESTROY(xdrs);
 }
+
+static struct auth_ops auth_unix_ops = {
+	authunix_nextverf,
+	authunix_marshal,
+	authunix_validate,
+	authunix_refresh,
+	authunix_destroy
+};
+

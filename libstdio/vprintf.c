@@ -2,7 +2,8 @@
 #include <unistd.h>
 #include "dietstdio.h"
 
-__attribute__((weak)) int __stdio_outs(const char *s,size_t len) {
+int __stdio_outs(const char *s,size_t len) __attribute__((weak));
+int __stdio_outs(const char *s,size_t len) {
   return (write(1,s,len)==(int)len)?1:0;
 }
 

@@ -2,6 +2,7 @@
 #define _NETINET_IN_H
 
 #include <sys/types.h>
+#include <sys/socket.h>
 #include <endian.h>
 
 /* Standard well-defined IP protocols.  */
@@ -375,5 +376,8 @@ unsigned short int ntohs(unsigned short int netshort);
 	 && (((__const uint32_t *) (a))[1] == ((__const uint32_t *) (b))[1])  \
 	 && (((__const uint32_t *) (a))[2] == ((__const uint32_t *) (b))[2])  \
 	 && (((__const uint32_t *) (a))[3] == ((__const uint32_t *) (b))[3]))
+
+/* old legacy bullshit */
+int bindresvport(int sd, struct sockaddr_in* sin);
 
 #endif

@@ -6,6 +6,7 @@
 #define PAGE_SIZE 4096
 #endif
 
+size_t __libc_getpagesize(void);
 size_t __libc_getpagesize(void) {
   return PAGE_SIZE;
 }

@@ -53,6 +53,9 @@ int __fflush4(FILE *stream,int next) {
   return 0;
 }
 
+/* Internal function, has no prototype.
+ * This is defined here because of the weak symbol ELF semantics */
+int __stdio_outs(const char *s,size_t len);
 int __stdio_outs(const char *s,size_t len) {
   return fwrite(s,1,(size_t)len,stdout);
 }

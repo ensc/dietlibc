@@ -1,4 +1,5 @@
 #include <endian.h>
+#include <netinet/in.h>
 
 unsigned long int htonl(unsigned long int hostlong) {
 #if __BYTE_ORDER==__LITTLE_ENDIAN

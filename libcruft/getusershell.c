@@ -1,6 +1,7 @@
 #define _BSD_SOURCE
 #include <unistd.h>
 #include <paths.h>
+#include <string.h>
 #include "parselib.h"
 
 static struct state __ps;

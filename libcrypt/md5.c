@@ -20,6 +20,7 @@
 
 #include <endian.h>
 #include <md5.h>
+#include <string.h>
 
 #if (__BYTE_ORDER == __BIG_ENDIAN)
 /*
@@ -228,7 +229,7 @@ void MD5Final (uint8_t digest[16], MD5_CTX* context) {
 #if (__BYTE_ORDER == __BIG_ENDIAN)
    CopyWithEndianSwap (bits, context->count, 2);
 #else
-   memcpy (bits, context->count, 8);
+   memcpy(bits, context->count, 8);
 #endif
 
    MD5Update (context, finalBlock, finalBlockLength);
@@ -240,6 +241,6 @@ void MD5Final (uint8_t digest[16], MD5_CTX* context) {
    memcpy (digest, context->state, 16);
 #endif
 
-   memset (context, 0, sizeof(*context));
+   memset(context, 0, sizeof(*context));
 }
 

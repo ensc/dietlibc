@@ -9,8 +9,6 @@
 #include <errno.h>
 #include "dietwarning.h"
 
-extern int h_errno;
-
 static const int hostentsize=((sizeof(struct hostent)+15)&(-16));
 
 extern size_t __dns_buflen;

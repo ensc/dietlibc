@@ -12,6 +12,11 @@
 
 int __dns_fd=-1;
 
+/* the ad-hoc internal API from hell ;-) */
+void __dns_make_fd(void);
+void __dns_readstartfiles(void);
+int __dns_decodename(unsigned char *packet,unsigned int offset,unsigned char *dest,unsigned int maxlen);
+
 void __dns_make_fd(void) {
   int tmp;
   struct sockaddr_in si;

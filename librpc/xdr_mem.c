@@ -57,16 +57,7 @@ static bool_t xdrmem_setpos();
 static int32_t *xdrmem_inline();
 static void xdrmem_destroy();
 
-static struct xdr_ops xdrmem_ops = {
-	xdrmem_getlong,
-	xdrmem_putlong,
-	xdrmem_getbytes,
-	xdrmem_putbytes,
-	xdrmem_getpos,
-	xdrmem_setpos,
-	xdrmem_inline,
-	xdrmem_destroy
-};
+static struct xdr_ops xdrmem_ops;
 
 /*
  * The procedure xdrmem_create initializes a stream descriptor for a
@@ -178,3 +169,15 @@ int len;
 	}
 	return (buf);
 }
+
+static struct xdr_ops xdrmem_ops = {
+	xdrmem_getlong,
+	xdrmem_putlong,
+	xdrmem_getbytes,
+	xdrmem_putbytes,
+	xdrmem_getpos,
+	xdrmem_setpos,
+	xdrmem_inline,
+	xdrmem_destroy
+};
+

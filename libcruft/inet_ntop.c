@@ -1,5 +1,6 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
+#include <string.h>
 
 extern char *inet_ntoa_r(struct in_addr in,char* buf);
 
@@ -18,8 +19,7 @@ static int fmt_xlong(char* s,unsigned int i) {
   return s-bak+1;
 }
 
-unsigned int fmt_ip6(char *s,const char ip[16])
-{
+static unsigned int fmt_ip6(char *s,const char ip[16]) {
   unsigned int len;
   unsigned int i;
   unsigned int temp;

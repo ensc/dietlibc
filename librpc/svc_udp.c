@@ -56,14 +56,7 @@ static bool_t svcudp_getargs();
 static bool_t svcudp_freeargs();
 static void svcudp_destroy();
 
-static struct xp_ops svcudp_op = {
-	svcudp_recv,
-	svcudp_stat,
-	svcudp_getargs,
-	svcudp_reply,
-	svcudp_freeargs,
-	svcudp_destroy
-};
+static struct xp_ops svcudp_op;
 
 /*
  * kept in xprt->xp_p2
@@ -462,3 +455,13 @@ static int cache_get(SVCXPRT* xprt, struct rpc_msg* msg, char** replyp, unsigned
 	uc->uc_addr = xprt->xp_raddr;
 	return (0);
 }
+
+static struct xp_ops svcudp_op = {
+	svcudp_recv,
+	svcudp_stat,
+	svcudp_getargs,
+	svcudp_reply,
+	svcudp_freeargs,
+	svcudp_destroy
+};
+

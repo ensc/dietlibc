@@ -2,6 +2,7 @@
 #include <sys/types.h>
 #include <sys/mman.h>
 #include <paths.h>
+#include <string.h>
 #include "parselib.h"
 
 static struct state __ps;

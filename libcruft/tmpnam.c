@@ -6,6 +6,7 @@
 #include <sys/stat.h>
 #include <dietwarning.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 link_warning("tmpnam","\e[1;33;41m>>> tmpnam stinks! NEVER ! NEVER USE IT ! <<<\e[0m");
 

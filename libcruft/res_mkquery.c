@@ -11,8 +11,6 @@
 #include <arpa/nameser.h>
 #include "dietfeatures.h"
 
-extern int h_errno;
-
 static char dnspacket[]="\xfe\xfe\001\000\000\001\000\000\000\000\000\000";
 
 /*

@@ -4,6 +4,7 @@
 #include <dirent.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <string.h>
 
 #ifndef WANT_LARGEFILE_BACKCOMPAT
 struct dirent64* readdir64(DIR *d) {

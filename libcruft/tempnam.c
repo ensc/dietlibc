@@ -2,7 +2,8 @@
 #include <fcntl.h>
 #include <string.h>
 #include <errno.h>
-
+#include <stdio.h>
+#include <stdlib.h>
 #include <dietwarning.h>
 
 link_warning("tempnam","\e[1;33;41m>>> tempnam stinks! NEVER ! NEVER USE IT ! <<<\e[0m");

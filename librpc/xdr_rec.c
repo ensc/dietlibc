@@ -67,16 +67,7 @@ static bool_t xdrrec_setpos();
 static int32_t *xdrrec_inline();
 static void xdrrec_destroy();
 
-static struct xdr_ops xdrrec_ops = {
-	xdrrec_getlong,
-	xdrrec_putlong,
-	xdrrec_getbytes,
-	xdrrec_putbytes,
-	xdrrec_getpos,
-	xdrrec_setpos,
-	xdrrec_inline,
-	xdrrec_destroy
-};
+static struct xdr_ops xdrrec_ops;
 
 /*
  * A record is composed of one or more record fragments.
@@ -570,4 +561,14 @@ bool_t sendnow;
 	return (TRUE);
 }
 
+static struct xdr_ops xdrrec_ops = {
+	xdrrec_getlong,
+	xdrrec_putlong,
+	xdrrec_getbytes,
+	xdrrec_putbytes,
+	xdrrec_getpos,
+	xdrrec_setpos,
+	xdrrec_inline,
+	xdrrec_destroy
+};
 

@@ -1,3 +1,5 @@
+#include <time.h>
+
 int __isleap(int year) {
   /* every fourth year is a leap year except for century years that are
    * not divisible by 400. */

@@ -2,6 +2,7 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <errno.h>
+#include <string.h>
 #include "dietfeatures.h"
 
 static unsigned int scan_ip6(const char *s,char ip[16])

@@ -1,7 +1,6 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <string.h>
-
 #include <utmp.h>
 
 static const char *utmp_file_name = _PATH_UTMP;

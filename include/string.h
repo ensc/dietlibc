@@ -10,12 +10,13 @@ void *memccpy(void *dest, const void *src, int c, size_t n) __THROW;
 void *memmove(void *dest, const void *src, size_t n) __THROW;
 
 int memccmp(const void *s1, const void *s2, int c, size_t n) __THROW __pure__;
-#if !defined(__GNUC__) || defined(__mips__) || defined(__alpha__)
+
 /* gcc unfortunately has some internal prototypes that are not compliant
  * to the single unix specification and if we define the correct
  * prototypes here, gcc emits warnings. */
-int memcmp(const void *s1, const void *s2, size_t n) __THROW __pure__;
+#if !defined(__GNUC__) || defined(__mips__) || defined(__alpha__) || defined(__arm__)
 void* memset(void *s, int c, size_t n) __THROW;
+int memcmp(const void *s1, const void *s2, size_t n) __THROW __pure__;
 void* memcpy(void *dest, const void *src, size_t n) __THROW;
 #endif
 
@@ -80,6 +81,9 @@ int strcoll(const char *s1, const char *s2) __THROW;
 #define rindex(a,b) strrchr(a,b)
 #endif
 
+/* this macro causes gcc -Wall to warn about using strncpy and
+ * discarding the return value.  If that bothers you, use memccpy
+ * directly. */
 #define strncpy(dest,src,n) (memccpy(dest,src,0,n), dest)
 
 #endif

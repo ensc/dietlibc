@@ -1,5 +1,6 @@
 #include <endian.h>
 #include <ctype.h>
+#include <stdlib.h>
 
 long int atol(const char* s) {
   long int v=0;

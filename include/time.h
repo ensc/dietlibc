@@ -35,4 +35,6 @@ struct tm* gmtime(const time_t* t) __THROW;
 struct tm* localtime_r(const time_t* t, struct tm* r) __THROW;
 struct tm* gmtime_r(const time_t* t, struct tm* r) __THROW;
 
+clock_t clock(void);
+
 #endif

@@ -132,4 +132,7 @@ FILE* tmpfile(void) __THROW;
 #define L_cuserid 9
 #endif
 
+void flockfile(FILE* f) __THROW;
+void funlockfile(FILE* f) __THROW;
+
 #endif

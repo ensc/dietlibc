@@ -64,16 +64,7 @@ static bool_t clntraw_freeres();
 static bool_t clntraw_control();
 static void clntraw_destroy();
 
-static struct clnt_ops client_ops = {
-	clntraw_call,
-	clntraw_abort,
-	clntraw_geterr,
-	clntraw_freeres,
-	clntraw_destroy,
-	clntraw_control
-};
-
-void svc_getreq();
+static struct clnt_ops client_ops;
 
 /*
  * Create a client handle for memory based rpc.
@@ -228,3 +219,13 @@ static bool_t clntraw_control()
 static void clntraw_destroy()
 {
 }
+
+static struct clnt_ops client_ops = {
+	clntraw_call,
+	clntraw_abort,
+	clntraw_geterr,
+	clntraw_freeres,
+	clntraw_destroy,
+	clntraw_control
+};
+

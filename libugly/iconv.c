@@ -5,8 +5,8 @@
 
 size_t iconv(iconv_t cd, const char* * inbuf, size_t *
 		    inbytesleft, char* * outbuf, size_t * outbytesleft) {
-  size_t converted=0;
-  int i,j,k,bits;
+  size_t converted=0,i,j;
+  int k,bits;
   if (!inbuf || !*inbuf) return 0;
   while (*inbytesleft) {
     unsigned int v=0;

@@ -1,7 +1,5 @@
 #include <stdlib.h>
-#define scandir _duh
 #include <dirent.h>
-#undef scandir
 #include <string.h>
 
 int scandir(const char *dir, struct dirent ***namelist,

@@ -48,9 +48,6 @@ static char sccsid[] =
 static struct timeval timeout = { 5, 0 };
 static struct timeval tottimeout = { 60, 0 };
 
-void clnt_perror();
-
-
 /*
  * Set a mapping between program,version and port.
  * Calls the pmap service remotely to do the mapping.

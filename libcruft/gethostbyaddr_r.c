@@ -33,6 +33,7 @@ int gethostbyaddr_r(const char* addr, size_t length, int format,
   char tmpbuf[100];
   char* tmp;
   int res;
+  (void)length;	/* shut gcc up about unused length.  The length is implicit with format */
 #ifdef WANT_ETC_HOSTS
   {
     struct hostent* r;

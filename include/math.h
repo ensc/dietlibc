@@ -81,4 +81,17 @@ int isnan(double d) __attribute__((__const__));
 int isinf(double d) __attribute__((__const__));
 int finite(double d) __attribute__((__const__));
 
+double j0(double x);
+double j1(double x);
+double jn(int n, double x);
+double y0(double x);
+double y1(double x);
+double yn(int n, double x);
+double erf(double x);
+double erfc(double x);
+double lgamma(double x);
+double ipow(double mant, int expo);
+
+double rint(double x);
+
 #endif

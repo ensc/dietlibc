@@ -13,6 +13,7 @@ char* tzname[2];
 static char *tzfile=0;
 static int tzlen=-1;
 
+void __maplocaltime(void);
 void __maplocaltime(void) {
   int fd;
   unsigned int len;
@@ -33,6 +34,7 @@ static unsigned long __myntohl(const unsigned char* c) {
          ((unsigned long)c[3]);
 }
 
+time_t __tzfile_map(time_t t, int *isdst);
 time_t __tzfile_map(time_t t, int *isdst) {
   /* "TZif" plus 16 reserved bytes. */
   char *tmp;

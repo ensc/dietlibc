@@ -1,3 +1,4 @@
+#define _GNU_SOURCE
 #include <signal.h>
 
 const char* strsignal(int sig) {

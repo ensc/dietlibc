@@ -15,6 +15,7 @@
  */
 
 #ifdef SLASH_PROC_OK
+int __sc_nr_cpus();
 int __sc_nr_cpus() {
 #if defined(__arm__)
   return 1;

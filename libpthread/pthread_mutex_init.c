@@ -1,6 +1,6 @@
 #include <unistd.h>
 #include <errno.h>
-
+#include <string.h>
 #include <pthread.h>
 #include "thread_internal.h"
 

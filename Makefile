@@ -363,4 +363,8 @@ $(OBJDIR)/adjtimex.o: include/sys/timex.h
 
 $(OBJDIR)/fgetc_unlocked.o $(OBJDIR)/fread.o $(OBJDIR)/ungetc.o: dietstdio.h
 
+# these depend on dietfeatures.h for WANT_LINKER_WARNINGS
+$(OBJDIR)/setlinebuf.o $(OBJDIR)/bzero.o $(OBJDIR)/setegid.o \
+$(OBJDIR)/seteuid.o: dietfeatures.h
+
 # CFLAGS+=-W -Wshadow -Wid-clash-31 -Wpointer-arith -Wcast-align -Wstrict-prototypes -Wwrite-strings

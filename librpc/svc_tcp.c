@@ -60,14 +60,7 @@ static bool_t svctcp_reply();
 static bool_t svctcp_freeargs();
 static void svctcp_destroy();
 
-static struct xp_ops svctcp_op = {
-	svctcp_recv,
-	svctcp_stat,
-	svctcp_getargs,
-	svctcp_reply,
-	svctcp_freeargs,
-	svctcp_destroy
-};
+static struct xp_ops svctcp_op;
 
 /*
  * Ops vector for TCP/IP rendezvous handler
@@ -405,3 +398,13 @@ register struct rpc_msg *msg;
 	(void) xdrrec_endofrecord(xdrs, TRUE);
 	return (stat);
 }
+
+static struct xp_ops svctcp_op = {
+	svctcp_recv,
+	svctcp_stat,
+	svctcp_getargs,
+	svctcp_reply,
+	svctcp_freeargs,
+	svctcp_destroy
+};
+

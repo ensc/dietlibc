@@ -9,6 +9,7 @@ extern int __ltostr(char *s, int size, unsigned long i, int base, char UpCase);
 int getnameinfo(const struct sockaddr *sa, socklen_t salen, char *host,
 		size_t hostlen, char *serv, size_t servlen, int flags) {
   sa_family_t f=((struct sockaddr_storage *)sa)->ss_family;
+  (void)salen;	/* shut gcc up about unused salen */
   if (host && hostlen>0) {	/* user wants me to resolve the host name */
     register const char*addr=(f==AF_INET6)?(char*)&((struct sockaddr_in6*)sa)->sin6_addr:
 					   (char*)&((struct sockaddr_in*)sa)->sin_addr;

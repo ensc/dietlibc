@@ -71,14 +71,7 @@ static bool_t clnttcp_freeres();
 static bool_t clnttcp_control();
 static void clnttcp_destroy();
 
-static struct clnt_ops tcp_ops = {
-	clnttcp_call,
-	clnttcp_abort,
-	clnttcp_geterr,
-	clnttcp_freeres,
-	clnttcp_destroy,
-	clnttcp_control
-};
+static struct clnt_ops tcp_ops;
 
 struct ct_data {
 	int ct_sock;
@@ -460,3 +453,13 @@ int len;
 	}
 	return (len);
 }
+
+static struct clnt_ops tcp_ops = {
+	clnttcp_call,
+	clnttcp_abort,
+	clnttcp_geterr,
+	clnttcp_freeres,
+	clnttcp_destroy,
+	clnttcp_control
+};
+

@@ -4,6 +4,7 @@
 #include <termios.h>
 #include <sys/ioctl.h>
 #include <errno.h>
+#include <string.h>
 
 extern int __ltostr(char *s, int size, unsigned long i, int base, char UpCase);
 
