@@ -32,11 +32,16 @@
 #include <getopt.h>
 #include <arpa/nameser.h>
 #include <resolv.h>
+#include <fnmatch.h>
 
 int main(int argc,char *argv[]) {
+  printf("%d\n",fnmatch("*.o", "x.o", FNM_PATHNAME));
+  printf("%d\n",fnmatch("a/b/*", "a/b/c/d", FNM_PATHNAME));
+#if 0
   char buf[1024];
   int len;
   len=res_search("fu-berlin.de",ns_c_in,ns_t_ns,buf,sizeof(buf));
+#endif
 #if 0
   regex_t t;
   regmatch_t rm;

@@ -55,9 +55,11 @@ int fnmatch(const char *pattern, const char *string, int flags) {
     }
     break;
   case '*':
-    if (!pattern[1] || fnmatch(pattern+1,string,flags)==0)
+    if (!pattern[1] || fnmatch(pattern+1,string,flags)==0) {
+      if ((flags&FNM_PATHNAME) && strchr(string,'/'))
+	return FNM_NOMATCH;
       return 0;
-    else
+    } else
       if (*string!='/')
 	return fnmatch(pattern,string+1,flags);
     break;
