@@ -1,9 +1,10 @@
 #include <errno.h>
 #include <sys/time.h>
+#include <time.h>
 #include <syscalls.h>
 
 #ifndef __NR_stime
-int stime(const time_t *when)
+int stime(time_t *when)
 {
   struct timeval tv;
   tv.tv_sec = *when;

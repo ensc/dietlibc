@@ -37,7 +37,7 @@ int res_query(const char *dname, int class, int type, unsigned char *answer, int
       struct pollfd duh;
       struct timeval last,now;
 #ifdef WANT_IPV6_DNS
-      int tmpfd;
+      int tmpfd;	/* the warning gcc issues here is bogus */
 #else
       duh.fd=__dns_fd;
 #endif

@@ -23,6 +23,7 @@ Return value	__poly returns the value of the polynomial as evaluated for
 *---------------------------------------------------------------------------*/
 
 #include <stdio.h>
+#include "dietlibm.h"
 
 double  __poly ( double x, size_t n, const double* c) 
 {

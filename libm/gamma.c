@@ -1,3 +1,5 @@
+#include "dietlibm.h"
+
 /*--------------------------------------------------------------------------*
 
 Name            gamma, lgamma - gamma function
@@ -45,8 +47,6 @@ Return value    gamma returns a value in range (-0.1208, +oo). For a input
 #define B11     -    236364091.0l/2730/23/24
 #define B12     +      8553103.0l/   6/25/26
 
-double  __poly ( double x, size_t n, const double* c);
-
 static const double  coeff[] = { B0, B1, B2, B3, B4, B5, B6, B7, B8, B9, B10 };
 int                  signgam;
 
@@ -83,7 +83,7 @@ double  lgamma ( double x )
         case 4 : return 1.791759469228055000858148560l;
         case 5 : return 3.178053830347945619723759592l;
         case 6 : return 4.787491742782045994244981560l;
-        default: return 1./0.;
+        default: return 1./0.; /* ignore the gcc warning, this is intentional */
         }
        
     z = logfact (y = x - k + 7.0 - 1);

@@ -70,12 +70,12 @@ invalidpacket:
       char Name[257];
       unsigned short q=((unsigned short)inpkg[4]<<8)+inpkg[5];
       while (q>0) {
-	if (tmp>inpkg+size) goto invalidpacket;
-	while (*tmp) { tmp+=*tmp+1; if (tmp>inpkg+size) goto invalidpacket; }
+	if (tmp>(char*)inpkg+size) goto invalidpacket;
+	while (*tmp) { tmp+=*tmp+1; if (tmp>(char*)inpkg+size) goto invalidpacket; }
 	tmp+=5;
 	--q;
       }
-      if (tmp>inpkg+size) goto invalidpacket;
+      if (tmp>(char*)inpkg+size) goto invalidpacket;
       q=((unsigned short)inpkg[6]<<8)+inpkg[7];
       if (q<1) goto nodata;
       while (q>0) {

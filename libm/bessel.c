@@ -120,7 +120,7 @@ static long double  ___yn ( int n, double* x )
     unsigned int  My;
 
     if ( EXPD (x[0]) == 0 )
-        return -1./0.;
+        return -1./0.;	/* ignore the gcc warning, this is intentional */
 
     if ( (x[0] >= (n>=32 ? 25.8 : (n<8 ? 17.4+0.1*n : 16.2+0.3*n))) ) {
         Xi = x[0] - M_PI * (n*0.5+0.25);

@@ -1,5 +1,6 @@
 
 #include <math.h>
+#include "dietlibm.h"
 
 double  pow ( double mant, double expo )
 {

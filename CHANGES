@@ -21,6 +21,7 @@
   More fixes from Gwenole (printf %p only printed the last 32 bits, I
     botched the getdents64 #ifdefs, we violated the x86_64 ABI)
   change signal() to do as glibc does
+  remove a few more warnings
 
 0.21:
   use gcc's size_t, ptrdiff_t and wchar_t types (Olaf)

@@ -1,3 +1,5 @@
+#include "dietlibm.h"
+
 /*--------------------------------------------------------------------------*
                                      z
                               1      |  -x²/2
@@ -69,8 +71,6 @@ static const double  tab3 [8] = { +1, -1, +3, -15, +105, -945, +10395, -135135.0
 #include <math.h>
 
 #define M_1_SQRT2PI      0.398942280401432686
-
-double  __poly ( double x, size_t n, const double* c);
 
 static long double  gauss ( double x ) 
 { 
