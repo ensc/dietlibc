@@ -222,3 +222,18 @@ A: The kernel is not linked against any libc.  In fact, the libc is the
    against the diet libc.  Linking user space Linux with the diet libc
    should be possible in theory but I don't think anyone has actually
    tried it.
+
+
+Q: I get errors when cross compiling the diet libc with the Hard Hat
+   compiler chain.
+A: Their compiler and/or binutils is broken.  Compile your own.  At the
+   time of this writing, I am successfully using gcc 3.1.1 and binutils
+   2.12.1 to compile the diet libc 0.22.
+
+
+Q: I can't link this software; it uses functions like ftok and cuserid.
+A: Some obsolete and/or questionable functions have been put into
+   libcompat.a to quarantine them away.  If your software uses these
+   functions, it is broken.  Please go through the code and replace
+   these functions with their POSIX counterparts or get rid of it
+   altogether.
