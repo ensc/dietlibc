@@ -17,7 +17,7 @@ __clone:
 	ltr	%r2, %r2
 	jm	.Lerror
 	jz	thread_start
-	br	%14
+	br	%r14
 
 thread_start:
 	lr	%r2, %r5
