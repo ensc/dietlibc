@@ -1,4 +1,5 @@
 0.29
+  oops, fix LD_RUN_PATH unsetting (Enrico Scholz)
 
 0.28:
   add tcgetsid (Yuri Kozlov)
