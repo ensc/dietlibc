@@ -1,4 +1,4 @@
-diet glibc to statically link programs that don't need all the bloat
+diet libc to statically link programs that don't need all the bloat
 from glibc.
 
 malloc, printf and scanf contributed from Olaf Dreesen.

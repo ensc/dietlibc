@@ -14,7 +14,7 @@ int initgroups(const char *user, gid_t group) {
 	if (++n>=32)
 	  break;
       }
-      (*duh)++;
+      duh++;
     }
   }
   return setgroups(n,grouplist);

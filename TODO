@@ -3,3 +3,7 @@ time appears to be broken on Alpha.
 vfprintf appears to be broken on ppc.
 
 "locale"
+
+fnmatch (ugh)
+
+fscanf
