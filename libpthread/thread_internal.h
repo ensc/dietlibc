@@ -2,6 +2,7 @@
 #define __THREAD_INTERNAL_H__
 
 #include <pthread.h>
+#include <stdarg.h>
 
 /* cleanup */
 #define PTHREAD_MAX_CLEANUP 4
@@ -95,6 +96,10 @@ void __thread_init();
 
 void  __libc_free(void *ptr);
 void *__libc_malloc(size_t size);
+
+void __libc_closelog(void);
+void __libc_openlog(const char *ident, int option, int facility);
+void __libc_vsyslog(int priority, const char *format, va_list arg_ptr);
 
 pid_t __libc_fork(void);
 

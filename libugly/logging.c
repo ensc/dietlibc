@@ -12,9 +12,6 @@
 #include <time.h>
 #include <sys/socket.h>
 #include <signal.h>
-#ifdef WANT_THREAD_SAVE
-#include <pthread.h>
-#endif
 
 #define _PATH_CONSOLE	"/dev/console"
 #define BUF_SIZE 512	/* messagebuffer size (>= 200) */
@@ -32,10 +29,6 @@ static int		LogStat;	/* status bits, set by openlog() */
 extern char		*__progname;	/* Program name, from crt0. */
 static struct sockaddr	SyslogAddr;	/* AF_UNIX address of local logger */
 
-#ifdef WANT_THREAD_SAVE
-static pthread_mutex_t	syslog_mutex= PTHREAD_MUTEX_INITIALIZER;
-#endif
-
 static void closelog_intern(void)
 {
   if (!connected) return;
@@ -46,18 +39,10 @@ static void closelog_intern(void)
 
 void closelog(void)
 {
-#ifdef WANT_THREAD_SAVE
-  pthread_mutex_lock(&syslog_mutex);
-#endif
-
   closelog_intern();
 
   LogTag[0]=0;
   LogType = SOCK_DGRAM;
-
-#ifdef WANT_THREAD_SAVE
-  pthread_mutex_unlock(&syslog_mutex);
-#endif
 }
 
 static void openlog_intern(int option, int facility)
@@ -111,19 +96,11 @@ static void openlog_intern(int option, int facility)
 /* has to be secured against multiple, simultanious call's in threaded environment */
 void openlog(const char *ident, int option, int facility)
 {
-#ifdef WANT_THREAD_SAVE
-  pthread_mutex_lock(&syslog_mutex);
-#endif
-
   if (ident) {
     strncpy(LogTag,ident,MAX_LOGTAG);
     LogTag[MAX_LOGTAG-1]=0;
   }
   openlog_intern(option, facility);
-
-#ifdef WANT_THREAD_SAVE
-  pthread_mutex_unlock(&syslog_mutex);
-#endif
 }
 
 int setlogmask(int mask)
@@ -132,13 +109,6 @@ int setlogmask(int mask)
   if (mask) LogMask = mask;
   return old;
 }
-
-#ifdef WANT_THREAD_SAVE
-static void cancel_handler(void *ptr)
-{
-  pthread_mutex_unlock(&syslog_mutex);
-}
-#endif
 
 void vsyslog(int priority, const char *format, va_list arg_ptr)
 {
@@ -198,11 +168,6 @@ void vsyslog(int priority, const char *format, va_list arg_ptr)
     if (buffer[headerlen+buflen] != '\n') write(1,"\n", 1);
   }
 
-#ifdef WANT_THREAD_SAVE
-  pthread_cleanup_push(cancel_handler, &oldaction_ptr);
-  pthread_mutex_lock(&syslog_mutex);
-#endif
-
   /* prepare for broken connection */
   memset(&action, 0, sizeof(action));
   action.sa_handler = SIG_IGN;
@@ -235,11 +200,6 @@ void vsyslog(int priority, const char *format, va_list arg_ptr)
 
   if (sigpipe == 0)
     sigaction(SIGPIPE, &oldaction, (struct sigaction *) NULL);
-
-#ifdef WANT_THREAD_SAVE
-  pthread_cleanup_pop(0);
-  pthread_mutex_unlock(&syslog_mutex);
-#endif
 }
 
 void syslog(int priority, const char *format, ...)

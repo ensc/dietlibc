@@ -59,6 +59,7 @@ PTHREAD_OBJS = \
 	pthread_sys_fcntl.o \
 	pthread_sys_fsync.o \
 	pthread_sys_nanosleep.o \
+	pthread_sys_logging.o \
 	pthread_sys_open.o \
 	pthread_sys_pause.o \
 	pthread_sys_read.o \
