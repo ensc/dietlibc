@@ -48,37 +48,42 @@
 
 #endif
 
-#if 0
+//#define DEBUG
+#ifdef DEBUG
+#ifndef __DIET_LD_SO__
 #include <stdio.h>
-#define DEBUG(x, args...)	printf(x , ## args )
-#else
-#define DEBUG(x, args...)
+#define pf(s)	write(2,s,strlen(s))
+#define ph(l)	fdprintf(2,"%08lx",(l))
 #endif
+#endif
+
+#define RTLD_USER	0x10000000
+#define RTLD_NOSONAME	0x20000000
+#define LDSO_FLAGS	(RTLD_LAZY|RTLD_GLOBAL|RTLD_NOSONAME)
 
 struct _dl_handle {
   struct _dl_handle *next;
   struct _dl_handle *prev;
 
+  unsigned int flags;		/* FLAGS */
+
   char *	name;		/* name of shared object */
-  int		flag_global;	/* global depending names can resolve to this object */
-  int		flag_system;	/* if non 0 run fini in dyn_fini */
 
   /* basic */
-  char *	mem_base;	/* base address of maped *.so */
+  char *	mem_base;	/* base address of maped *.so / or zero if program */
   unsigned long mem_size;	/* len of mem block */
   unsigned long lnk_count;	/* reference count (other libraries) */
 
+  /* lazy evaluator data */
+  unsigned long*pltgot;		/* PLT/GOT */
+
   /* symbol resolve helper */
   unsigned long*hash_tab;	/* hash table */
-
-  unsigned long*pltgot;		/* PLT / GOT */
-  unsigned long*got;		/* global offset table */
-
   char *	dyn_str_tab;	/* dyn_name table */
-
   Elf_Sym *	dyn_sym_tab;	/* dynamic symbol table */
   _dl_rel_t*	plt_rel;	/* PLT relocation table */
 
+  Elf_Dyn *	dynamic;	/* _DYNAMIC */
   /* INIT / FINI */
   void (*fini)(void);
 };
@@ -93,7 +98,7 @@ struct _dl_handle {
 extern struct _dl_handle* _dl_root_handle;
 extern struct _dl_handle* _dl_top_handle;
 extern struct _dl_handle* _dl_free_list;
-#ifndef __OD_CLEAN_ROOM
+#ifndef __DIET_LD_SO__
 void _dl_free_handle(struct _dl_handle* dh);
 struct _dl_handle* _dl_get_handle();
 struct _dl_handle* _dl_find_lib(const char* name);

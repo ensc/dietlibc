@@ -18,7 +18,7 @@ const char* _dl_get_rpath() { return _dl_search_rpath; }
 
 /* search a colon (semicolon) seperated path for the libraray "filename" */
 static int _dl_search_path(char*buf,int len,const char*path,const int pathlen,const char*filename) {
-  int fd,i=1,ml=len-strlen(filename);
+  int fd,i=1,fl=strlen(filename),ml=len-fl;
   const char*c,*pe=path+pathlen;
 
   if (path) {
@@ -29,22 +29,14 @@ static int _dl_search_path(char*buf,int len,const char*path,const int pathlen,co
       if (i) {
 	if (i>ml) continue;	/* if len(path-entry)+len(filename)+2 is greater than the buffer ? SKIP */
 	memcpy(buf,c,i);
-#if 1
-	buf[i]=0;
-	l-=i;
-	strncat(buf,"/",l);
-      }
-      else
-	buf[0]=0;
-      strncat(buf,filename,--l);
-#else
 	buf[i]='/';
 	l-=++i;
       }
       memcpy(buf+i,filename,fl);
       buf[i+fl]=0;
+#ifdef DEBUG
+//      pf(__func__": "); pf(buf); pf("\n");
 #endif
-//      DEBUG(printf("_dl_search_path: %s\n",buf);)
 #ifdef __DIET_LD_SO__
       if ((fd=_dl_sys_open(buf,O_RDONLY,0))>-1) return fd;
 #else

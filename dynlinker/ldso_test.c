@@ -20,7 +20,9 @@ extern void (*fini_entry)(void);
 static struct _dl_handle* dlh;
 static void tt_fini(void) {
   struct _dl_handle*tmp;
-  DEBUG("dyn fini\n");
+#ifdef DEBUG
+  pf("dyn fini\n");
+#endif
   for(tmp=dlh;tmp;tmp=tmp->next) {
     if (tmp->fini) tmp->fini();
   }
@@ -51,69 +53,96 @@ int main(int argc, char**argv, char**envp)
     switch (ea->type) {
     case AT_EXECFD:
     case AT_NOTELF:
-      //write(2,"N.F.Y. This you do without ME !\n",32);
+      write(2,"Unsupported execution type\n",27);
       _exit(42);
       break;
 
     case AT_PHDR:
       ph32=(Elf32_Phdr*)ea->val;
-      DEBUG("program header @ %08lx\n",(long)ph32);
+#ifdef DEBUG
+      pf("program header @ "); ph(ea->val); pf("\n");
+#endif
       break;
     case AT_PHENT:
       ph_size=ea->val;
-      DEBUG("program header size %08lx\n",ph_size);
+#ifdef DEBUG
+      pf("program header size "); ph(ea->val); pf("\n");
+#endif
       break;
     case AT_PHNUM:
       ph_num=ea->val;
-      DEBUG("program header # %ld\n",ph_num);
+#ifdef DEBUG
+      pf("program header # "); ph(ea->val); pf("\n");
+#endif
       break;
 
 #if 0
     case AT_BASE:
-      DEBUG("base: %08x\n",ea->val);
+#ifdef DEBUG
+      pf("interpreter base: "); ph(ea->val); pf("\n");
+#endif
       break;
     case AT_FLAGS:
-      DEBUG("flags %08x\n",ea->val);
+#ifdef DEBUG
+      pf("flags "); ph(ea->val); pf("\n");
+#endif
       break;
 
     case AT_UID:
-      DEBUG(" UID: %d\n",ea->val);
+#ifdef DEBUG
+      pf(" UID: "); ph(ea->val); pf("\n");
+#endif
       break;
     case AT_EUID:
-      DEBUG("EUID: %d\n",ea->val);
+#ifdef DEBUG
+      pf("EUID: "); ph(ea->val); pf("\n");
+#endif
       break;
     case AT_GID:
-      DEBUG(" GID: %d\n",ea->val);
+#ifdef DEBUG
+      pf(" GID: "); ph(ea->val); pf("\n");
+#endif
       break;
     case AT_EGID:
-      DEBUG("EGID: %d\n",ea->val);
+#ifdef DEBUG
+      pf("EGID: "); ph(ea->val); pf("\n");
+#endif
       break;
 #endif
 
     case AT_PAGESZ:
       pg_size=ea->val;
-      DEBUG("page size %ld\n",pg_size);
+#ifdef DEBUG
+      pf("page size "); ph(ea->val); pf("\n");
+#endif
       break;
 
     case AT_ENTRY:
       dyn_start=(void(*)())ea->val;
-      DEBUG("start program  @ %08lx\n",(long)dyn_start);
+#ifdef DEBUG
+      pf("start program  @ "); ph(ea->val); pf("\n");
+#endif
       break;
 
 #if 0
     case AT_PLATFORM:
-      DEBUG("CPU: %s\n",ea->val);
+#ifdef DEBUG
+      pf("CPU: "); ph(ea->val); pf("\n");
+#endif
       break;
     case AT_HWCAP:
-      DEBUG("CPU capabilities: %08x\n",ea->val);
+#ifdef DEBUG
+      pf("CPU capabilities: "); ph(ea->val); pf("\n");
+#endif
       break;
     case AT_CLKTCK:
-      DEBUG("CLK per sec %d\n", ea->val);
+#ifdef DEBUG
+      pf("CLK per sec "); ph( ea->val); pf("\n");
+#endif
       break;
 #endif
 
     default:
-      DEBUG("%08lx: %08lx %08lx\n",(long)ea,(long)ea->type,(long)ea->val);
       break;
     }
   }
@@ -129,7 +158,7 @@ int main(int argc, char**argv, char**envp)
   }
 
   if (dyn_start==ldso_start) {
-    DEBUG("error diet-linux.so started\n");
+    write(2,"I'm not a normal program...\n",28);
     _exit(42);
   }
 
@@ -137,8 +166,10 @@ int main(int argc, char**argv, char**envp)
 
   dlh = _dl_dyn_scan(dlh,(void*)o,0);
 
+  _dl_error_location="diet-linker.so error";
   if (!dlh) {
-    DEBUG("error in dyn_scan\n");
+    const char*err=dlerror();
+    write(2,err,strlen(err)); write(2,"\n",1);
     _exit(23);
   }
 

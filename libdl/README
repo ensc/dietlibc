@@ -2,6 +2,14 @@ this is the experimental libdl
 
 written by Olaf Dreesen
 
+Mon Mar 11 19:44:20 CET 2002
+
+the unified libdl/dynlinker now seems to stand the NORMAL usage so I think
+it should be tested outside my CLEANROOM :)
+
+TODO: code for other archs than i386 and arm
+
+
 Thu Nov  1 18:41:36 MET 2001
 
 ufffff.... now the libdl code can be used in the libdl.so :)

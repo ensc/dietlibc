@@ -3,7 +3,9 @@
 #include "_dl_int.h"
 
 static void exit_now(void) {
-  DEBUG("exit_now: symbol not found\n");
+#ifdef DEBUG
+  pf(__func__": symbol not found\n");
+#endif
   _exit(213);
 }
 
@@ -15,18 +17,22 @@ unsigned long do_rel(struct _dl_handle * tmp_dl, unsigned long off)
 
   register unsigned long sym_val;
 
-  DEBUG("do_rel %08lx %08lx\n",(long)tmp_dl,off);
-  DEBUG("do_rel %08lx+%lx\n",(long)tmp_dl->plt_rel,off);
-  DEBUG("do_rel @ %08lx with type %d -> %d\n",(long)tmp->r_offset,ELF_R_TYPE(tmp->r_info),sym);
-  DEBUG("do_rel sym @ %08lx\n",(long)tmp_dl->dyn_sym_tab);
-  DEBUG("do_rel sym %08lx\n",(long)tmp_dl->dyn_sym_tab[sym].st_value);
+#ifdef DEBUG
+  pf(__func__": "); ph((unsigned long)tmp_dl); pf(" "); ph(off); pf(" on ");
+  ph((long)tmp_dl->plt_rel); pf("\n");
+  pf(__func__": @ "); ph((long)tmp->r_offset); pf(" with type ");
+  ph(ELF_R_TYPE(tmp->r_info)); pf(" and sym "); ph(sym);
+  pf(" symval "); ph(tmp_dl->dyn_sym_tab[sym].st_value); pf("\n");
+#endif
 
   /* modify GOT for REAL symbol */
   //sym_val=((unsigned long)(tmp_dl->mem_base+tmp_dl->dyn_sym_tab[sym].st_value));
   sym_val=(unsigned long)_dl_sym(tmp_dl,sym);
   *((unsigned long*)(tmp_dl->mem_base+tmp->r_offset))=sym_val;
 
-  DEBUG("do_rel sym %08lx\n",(long)sym_val);
+#ifdef DEBUG
+  pf(__func__": sym "); ph(sym_val); pf("\n");
+#endif
   /* JUMP (arg sysdep...) */
   if (sym_val) return sym_val;
   /* can't find symbol -> die now */

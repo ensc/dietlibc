@@ -15,14 +15,20 @@ void *_dlsym(void*handle,char*symbol) {
     unsigned long ind;
     char *name=dh->dyn_str_tab;
 
-//    DEBUG("dlsym: bucket(%08x,\"%s\")\n",bhash,symbol);
+#ifdef DEBUG
+//    pf(__func__:" bucket("); ph(bhash); pf(",\""); pf(symbol); pf("\")\n");
+#endif
 
     ind=HASH_BUCKET(dh->hash_tab)[bhash];
-//    DEBUG("dlsym: chain (%08x,\"%s\")\n",ind,symbol);
+#ifdef DEBUG
+//    pf(__func__:" chain ("); ph(ind); pf(",\""); pf(symbol); pf("\")\n");
+#endif
 
     while(ind) {
       int ptr=dh->dyn_sym_tab[ind].st_name;
-//      DEBUG("dlsym: symbol(\"%s\",\"%s\")\n",name+ptr,symbol);
+#ifdef DEBUG
+//      pf(__func__:" symbol(\""); pf(name+ptr); pf("\",\"); pf(symbol); pf("\")\n");
+#endif
       if (strcmp(name+ptr,symbol)==0) {
 	if (dh->dyn_sym_tab[ind].st_value!=0) {
 	  sym=(long*)(dh->mem_base+dh->dyn_sym_tab[ind].st_value);
@@ -31,14 +37,19 @@ void *_dlsym(void*handle,char*symbol) {
       }
       ind=chain[ind];
     }
-    DEBUG("dlsym: symbol \"%s\" @ %08lx\n",symbol,(long)sym);
+#ifdef DEBUG
+    pf(__func__": symbol \""); pf(symbol); pf("\" @ "); ph((long)sym); pf("\n");
+#endif
   }
   return sym;
 }
 
-void *dlsym(void*handle,char*symbol) {
-  _dl_error_location="dlsym";
-  _dl_error_data=symbol;
-  _dl_error=4;
-  return _dlsym(handle,symbol);
+void*dlsym(void*handle,char*symbol) {
+  void*h;
+  if ((h=_dlsym(handle,symbol))==0) {
+    _dl_error_location="dlsym";
+    _dl_error_data=symbol;
+    _dl_error=5;
+  }
+  return h;
 }

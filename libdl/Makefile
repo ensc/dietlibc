@@ -6,7 +6,7 @@ DCC = diet $(CC)
 SRC = $(wildcard *.c) # test/test.c
 OBJ = _dl_jump.o $(SRC:.c=.o)
 
-#CFLAGS = -Wall -O2
+#CFLAGS = -Wall -D__OD_CLEAN_ROOM -DNODIETREF -fPIC -g -O
 CFLAGS = -Wall -O2 -D__OD_CLEAN_ROOM -DNODIETREF -fPIC -frerun-loop-opt -fschedule-insns2 # -fomit-frame-pointer
 
 %.o : %.S
@@ -18,10 +18,10 @@ CFLAGS = -Wall -O2 -D__OD_CLEAN_ROOM -DNODIETREF -fPIC -frerun-loop-opt -fschedu
 it: t.out
 
 a.out: t.out
-	gcc -O2 a.c t.out -o $@ -Wl,-dynamic-linker=`pwd`/t.out -nostdlib
+	gcc -O -g test/a.c t.out -L/opt/diet/lib-i386 -lc -lgcc -o $@ -Wl,-dynamic-linker=`pwd`/t.out -nostdlib
 
 t.out: _dl_main.o
-	ld -shared -o $@ $? -soname=lindl.so
+	ld -shared -o $@ $? -soname=libdl.so
 
 all: test.out libdl.a
 

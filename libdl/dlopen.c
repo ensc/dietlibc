@@ -21,5 +21,8 @@ void*_dlopen(const char *filename, int flags) {
 }
 
 
-void *dlopen(const char *filename, int flags)
-__attribute__((alias("_dlopen")));
+void*dlopen(const char *filename, int flags) {
+  _dl_error_location="dlopen";
+  return _dlopen(filename,flags|RTLD_USER|RTLD_NOSONAME);
+}
+//__attribute__((alias("_dlopen")));

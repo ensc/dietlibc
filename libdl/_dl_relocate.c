@@ -27,7 +27,12 @@ static int _dl_apply_relocate(struct _dl_handle*dh,_dl_rel_t*rel) {
 
   loc=(Elf_Addr *)(dh->mem_base+rel->r_offset);
 
-  DEBUG("_dl_apply_relocate %d @ %08lx (%08lx)\n",ELF_R_TYPE(rel->r_info),(unsigned long)loc,*(unsigned long*)loc);
+#ifdef DEBUG
+#if 0
+  pf(__func__": "); ph(ELF_R_TYPE(rel->r_info)); pf(" @ "); ph((unsigned long)loc);
+  pf(" preval "); ph(*(unsigned long*)loc); pf("\n");
+#endif
+#endif
 
   typ=ELF_R_TYPE(rel->r_info);
 
@@ -36,7 +41,9 @@ static int _dl_apply_relocate(struct _dl_handle*dh,_dl_rel_t*rel) {
     *loc=(unsigned long)(dh->mem_base+dh->dyn_sym_tab[ELF_R_SYM(rel->r_info)].st_value);
   } else if (typ==R_386_COPY)  {	/* 5 */
     int len=dh->dyn_sym_tab[ELF_R_SYM(rel->r_info)].st_size;
-    DEBUG("_dl_apply_relocate: R_386_COPY !\n");
+#ifdef DEBUG
+    pf(__func__": R_386_COPY !\n");
+#endif
     memcpy(loc,(void*)(unsigned long)_dl_sym_search(dh,ELF_R_SYM(rel->r_info)),len);
   } else if (typ==R_386_GLOB_DAT) {	/* 6 */
     *loc=(unsigned long)_dl_sym(dh,ELF_R_SYM(rel->r_info));
@@ -53,7 +60,9 @@ static int _dl_apply_relocate(struct _dl_handle*dh,_dl_rel_t*rel) {
     *loc=(unsigned long)(dh->mem_base+dh->dyn_sym_tab[ELF_R_SYM(rel->r_info)].st_value);
   } else if (typ==R_ARM_COPY)  {	/* 20 */
     int len=dh->dyn_sym_tab[ELF_R_SYM(rel->r_info)].st_size;
-    DEBUG("_dl_apply_relocate: R_ARM_COPY !\n");
+#ifdef DEBUG
+    pf(__func__": R_ARM_COPY !\n");
+#endif
     memcpy(loc,(void*)(unsigned long)_dl_sym_search(dh,ELF_R_SYM(rel->r_info)),len);
   } else if (typ==R_ARM_GLOB_DAT) {	/* 21 */
     *loc=(unsigned long)_dl_sym(dh,ELF_R_SYM(rel->r_info));
@@ -66,7 +75,9 @@ static int _dl_apply_relocate(struct _dl_handle*dh,_dl_rel_t*rel) {
     ret=1;
 #endif
 
-  DEBUG("_dl_apply_relocate @ %08lx val %08lx\n",(unsigned long)loc,*(unsigned long*)loc);
+#ifdef DEBUG
+  pf(__func__": @ "); ph((unsigned long)loc); pf(" val "); ph(*(unsigned long*)loc); pf("\n");
+#endif
   return ret;
 }
 
@@ -77,7 +88,7 @@ int _dl_relocate(struct _dl_handle*dh,_dl_rel_t *rel,int num) {
   int i;
   for (i=0;i<num;i++) {
     if (_dl_apply_relocate(dh,rel+i)) {
-      _dl_error=3;
+      _dl_error=4;
       return 1;
     }
   }

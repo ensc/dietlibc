@@ -16,29 +16,40 @@ static struct _dl_err_msg {
   char*msg;
   int len;
 } _dl_error_msg[]={
-#define MSG(n) { (n), sizeof((n)) }
-  MSG("can't open: "),
-  MSG("can't stat: "),
-  MSG("shared object is not position independent: "),
-  MSG("can't resolve all symbols in: "),
-  MSG("can't find symbol: "),
-  MSG("invalid relocation type in: "),
+#define MSG(n) { (n), sizeof((n))-1 }
+  MSG("can't open: "),					/* 1 */
+  MSG("can't stat: "),					/* 2 */
+  MSG("shared object is not position independent: "),	/* 3 */
+  MSG("can't resolve all symbols in: "),		/* 4 */
+  MSG("can't find symbol: "),				/* 5 */
+  MSG("invalid relocation type in: "),			/* 6 */
+  MSG("internal error: layout not yet supported: "),	/* 7 */
 };
 
 const char *dlerror(void) {
-  static char buf[1024];
-  register int len=sizeof(buf)-1;
+  static char buf[1024],*p=buf;
+  register int l,len=sizeof(buf)-1;
+  if (_dl_error==0) return 0;
+
   buf[0]=0;
   buf[len]=0;
+  --_dl_error;
 
   if (_dl_error>=(sizeof(_dl_error_msg)/sizeof(struct _dl_err_msg)))
     return "HAE ?!?";
 
-  strncpy(buf,_dl_error_location,len); len-=sizeof(_dl_error_location);
-  strncat(buf,": ",len); len-=2;
-  strncat(buf,_dl_error_msg[_dl_error].msg,len); len-=_dl_error_msg[_dl_error].len;
-  strncat(buf,_dl_error_data,len);
+  if (_dl_error_location) {
+    l=strlen(_dl_error_location);
+    strncpy(p,_dl_error_location,len); len-=l; p+=l;
+    strncpy(p,": ",len); len-=2; p+=2;
+  }
+  l=_dl_error_msg[_dl_error].len;
+  strncpy(p,_dl_error_msg[_dl_error].msg,len); len-=l; p+=l;
+  strncpy(p,_dl_error_data,len);
 
+  _dl_error_location=0;
   _dl_error_data="";
+  _dl_error=0;
+
   return buf;
 }
