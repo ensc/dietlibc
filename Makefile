@@ -229,6 +229,7 @@ clean:
 	rm -rf bin-* pic-*
 	$(MAKE) -C examples clean
 	$(MAKE) -C dynlinker clean
+	$(MAKE) -C libdl clean
 
 tar: clean
 	rm -f armv4l
