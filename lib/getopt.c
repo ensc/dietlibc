@@ -54,6 +54,7 @@ found:
     return optopt;
   } else {	/* not found */
     getopterror(0);
+    ++optind;
     return '?';
   }
 }
