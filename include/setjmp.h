@@ -219,7 +219,11 @@ typedef jmp_buf sigjmp_buf;
 extern void siglongjmp(sigjmp_buf __env,int __val)
      __THROW __attribute__((__noreturn__));
 
+#ifdef _BSD_SOURCE
+#define setjmp(env) __sigsetjmp(env,1)
+#else
 #define setjmp(env) __sigsetjmp(env,0)
+#endif
 #define sigsetjmp(a,b) __sigsetjmp(a,b)
 
 #endif

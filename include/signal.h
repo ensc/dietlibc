@@ -204,9 +204,15 @@
 #define MINSIGSTKSZ	2048
 #define SIGSTKSZ	8192
 
+#if defined(__alpha__) || defined(__mips__)
+#define SIG_BLOCK	1	/* for blocking signals */
+#define SIG_UNBLOCK	2	/* for unblocking signals */
+#define SIG_SETMASK	3	/* for setting the signal mask */
+#else
 #define SIG_BLOCK	0	/* for blocking signals */
 #define SIG_UNBLOCK	1	/* for unblocking signals */
 #define SIG_SETMASK	2	/* for setting the signal mask */
+#endif
 
 typedef int sig_atomic_t;
 
