@@ -33,6 +33,7 @@
   hack rpc/xdr.h to work with gcc 4 (Andreas Jochens via Gerrit Pape)
   make dyn didn't work for !WANT_FULL_RESOLV_CONF (Sampo Kellomaki)
   #undef __i686 in i386/PIC.h (George Sawinski)
+  fix timegm bug (found by Nikola Vladov)
 
 0.27:
   change DNS routines to look for ip6.arpa instead of ip6.int
