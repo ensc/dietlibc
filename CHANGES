@@ -29,6 +29,8 @@
   make assert equal (void)0 under -DNDEBUG (Enrico Scholz)
   make __attribute_malloc__ #define safe (Matthias Andree)
   add BSD utimes to libcompat (Andreas Krennmair)
+  remove gcc 3 #ifdef kludgery from include/string.h; it works with gcc
+    3.2.2+, don't know if it's gcc or us (Gerrit Pape)
 
 0.22:
   fix i386 libm

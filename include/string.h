@@ -11,23 +11,13 @@ void *memmove(void *dest, const void *src, size_t n) __THROW;
 
 int memccmp(const void *s1, const void *s2, int c, size_t n) __THROW __pure;
 
-/* gcc unfortunately has some internal prototypes that are not compliant
- * to the single unix specification and if we define the correct
- * prototypes here, gcc emits warnings. */
-#if __GNUC__ > 2 || defined(__mips__) || defined(__alpha__) || defined(__arm__) || defined(__x86_64__)
 void* memset(void *s, int c, size_t n) __THROW;
 int memcmp(const void *s1, const void *s2, size_t n) __THROW __pure;
 void* memcpy(void *dest, const void *src, size_t n) __THROW;
-#endif
 
-#if __GNUC__ < 3 || defined(__x86_64__)
-/* gcc 3 unfortunately has internal prototypes for these functions that
- * differ from ours.  Unfortunately, gcc will complain whether we have
- * the correct prototypes or whether we don't have prototypes :-( */
 char *strncpy(char *dest, const char *src, size_t n) __THROW;
 int strncmp(const char *s1, const char *s2, size_t n) __THROW __pure;
 char *strncat(char *dest, const char *src, size_t n) __THROW;
-#endif
 
 int strcmp(const char *s1, const char *s2) __THROW __pure;
 
