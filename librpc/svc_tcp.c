@@ -302,8 +302,10 @@ register int len;
 	int readfds;
 #endif							/* def FD_SETSIZE */
 	do {
+		struct timeval tmp;
 		readfds = mask;
-		if (select(_rpc_dtablesize(), &readfds, 0, 0, &wait_per_try) <= 0) {
+		tmp=wait_per_try;
+		if (select(_rpc_dtablesize(), &readfds, 0, 0, &tmp) <= 0) {
 			if (errno == EINTR) {
 				continue;
 			}

@@ -315,6 +315,7 @@ resultproc_t eachresult;		/* call with each result obtained */
 	 * The response timeout grows larger per iteration.
 	 */
 	for (t.tv_sec = 4; t.tv_sec <= 14; t.tv_sec += 2) {
+		struct timeval tmp;
 		for (i = 0; i < nets; i++) {
 			baddr.sin_addr = addrs[i];
 			if (sendto(sock, outbuf, (size_t)outlen, 0,
@@ -334,7 +335,8 @@ resultproc_t eachresult;		/* call with each result obtained */
 		msg.acpted_rply.ar_results.where = (char*) & r;
 		msg.acpted_rply.ar_results.proc = (xdrproc_t)xdr_rmtcallres;
 		readfds = mask;
-		switch (select(_rpc_dtablesize(), &readfds, 0, 0, &t)) {
+		tmp=t;
+		switch (select(_rpc_dtablesize(), &readfds, 0, 0, &tmp)) {
 
 		case 0:				/* timed out */
 			stat = RPC_TIMEDOUT;

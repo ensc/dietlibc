@@ -412,10 +412,12 @@ register int len;
 
 #endif							/* def FD_SETSIZE */
 	while (TRUE) {
+		struct timeval tmp;
+		tmp=ct->ct_wait;
 		readfds = mask;
 		switch (select
 				(_rpc_dtablesize(), &readfds, 0, 0,
-				 &(ct->ct_wait))) {
+				 &tmp)) {
 		case 0:
 			ct->ct_error.re_status = RPC_TIMEDOUT;
 			return (-1);
