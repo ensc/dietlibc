@@ -18,6 +18,7 @@
   sigaddset, sigdelset and setismember segfaulted for signal 0 (Gunnar Ritter)
   Enrico Scholz reported several bugs in the header files.
   change __malloc__ to __attribute_malloc__
+  add pa-risc socketcall (but see TODO) (Felix J. Ogris)
 
 0.17:
   fix several bugs in getservent_r
