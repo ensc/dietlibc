@@ -33,6 +33,8 @@
 #if (__GNUC__ < 3)
 #define __builtin_expect(foo,bar) (foo)
 #define expect(foo,bar) (foo)
+#else
+#define expect(foo,bar) __builtin_expect(foo,bar)
 #endif
 
 #endif
