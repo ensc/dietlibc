@@ -222,28 +222,32 @@
 #define __NR_madvise			(__NR_SYSCALL_BASE+220)
 #define __NR_fcntl64			(__NR_SYSCALL_BASE+221)
 
-#define syscall_weak(name,wsym,sym) \
-.text; \
-.type wsym,function; \
-.weak wsym; \
-wsym: ; \
-.type sym,function; \
-.global sym; \
-sym: \
-	mov	ip, sp; \
-	stmfd	sp!,{r4, r5, r6}; \
-	ldmia	ip, {r4, r5, r6}; \
-	swi	__NR_##name; \
+#define syscall_weak(name,wsym,sym) __syscall_weak $__NR_##name, wsym, sym
+.macro __syscall_weak name wsym sym
+.text
+.type \wsym,function
+.weak \wsym
+\wsym:
+.type \sym,function
+.global \sym
+\sym:
+	mov	ip, sp
+	stmfd	sp!,{r4, r5, r6}
+	ldmia	ip, {r4, r5, r6}
+	swi	\name
 	b	__unified_syscall
+.endm
 
-#define syscall(name,sym) \
-.text; \
-.type sym,function; \
-.global sym; \
-sym: \
-	mov	ip, sp; \
-	stmfd	sp!,{r4, r5, r6}; \
-	ldmia	ip, {r4, r5, r6}; \
-	swi	__NR_##name; \
+#define syscall(name,sym) __syscall $__NR_##name, sym
+.macro __syscall name sym
+.text
+.type \sym,function
+.global \sym
+\sym:
+	mov	ip, sp
+	stmfd	sp!,{r4, r5, r6}
+	ldmia	ip, {r4, r5, r6}
+	swi	\name
 	b	__unified_syscall
+.endm
 
