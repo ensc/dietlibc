@@ -16,9 +16,9 @@ char *strncat(char *s, const char *t, size_t n) {
   register char *max;
   s+=strlen(s);
 #ifdef WANT_NON_COMPLIANT_STRNCAT
-  if (__unlikely(max=s+n-1)<=s) goto fini;
+  if (__unlikely((max=s+n-1)<=s)) goto fini;
 #else
-  if (__unlikely(max=s+n)==s) goto fini;
+  if (__unlikely((max=s+n)==s)) goto fini;
 #endif
   for (;;) {
     if (__unlikely(!(*s = *t))) break; if (__unlikely(++s==max)) break; ++t;

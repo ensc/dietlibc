@@ -372,7 +372,7 @@ xdrrec_getbytes (XDR *xdrs, char *addr, unsigned int len)
 				return (FALSE);
 			continue;
 		}
-		current = ((int)len < current) ? len : current;
+		current = (len < current) ? len : current;
 		if (!get_input_bytes(rstrm, addr, current))
 			return (FALSE);
 		addr += current;
