@@ -19,11 +19,13 @@ __start:
 	addu	$a1, $sp, 4	/* load argv.  huh?  should be 4, right? */
 	addu	$a2, $a0, 1	/* load envp */
 	sll	$a2, $a2, 2
+	la	$25, main
 	add	$a2, $a2, $a1
-	sw      $a2,environ
-	jal	main
+	sw	$a2, environ
+	jalr	$25
+	la	$25, exit
 	move	$4,$2
-	jal	exit
+	jalr	$25
 
 .global __main
 .type __main,@function
