@@ -4,7 +4,7 @@
 /* ugh.  This is normally provided by gcc. */
 
 typedef signed long ptrdiff_t;
-typedef unsigned int size_t;
+typedef unsigned long size_t;
 typedef int wchar_t;
 
 #ifndef NULL

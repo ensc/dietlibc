@@ -59,10 +59,10 @@ struct shm_info {
 };
 
 #if defined(__i386__) || defined(__mips__) || defined(__arm__) || defined(__powerpc__)
-#define PAGE_SIZE 4096
+#define PAGE_SIZE 4096UL
 #elif defined(__alpha__) || defined(__sparc__)
 /* sun4* has 4k except sun4 architecture, sparc64 has 8k */
-#define PAGE_SIZE 8192
+#define PAGE_SIZE 8192UL
 #endif
 
 extern int shmget(key_t key, int size, int shmflg) __THROW;

@@ -4,8 +4,8 @@
 #include <sys/cdefs.h>
 #include <sys/types.h>
 
-#define MREMAP_MAYMOVE	1
-#define MREMAP_FIXED	2
+#define MREMAP_MAYMOVE	1UL
+#define MREMAP_FIXED	2UL
 
 #define PROT_READ	0x1		/* page can be read */
 #define PROT_WRITE	0x2		/* page can be written */

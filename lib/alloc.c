@@ -50,8 +50,8 @@ static size_t get_index(size_t _size) __attribute__((regparm(1)));
 static void* __small_malloc(size_t _size) __attribute__((regparm(1)));
 #endif
 
-static void *do_mmap(unsigned long size) {
-  return mmap(0, size, PROT_READ|PROT_WRITE, MAP_ANONYMOUS|MAP_PRIVATE, -1, 0);
+static void *do_mmap(size_t size) {
+  return mmap(0, size, PROT_READ|PROT_WRITE, MAP_ANONYMOUS|MAP_PRIVATE, -1, (size_t)0);
 }
 
 /* -- SMALL MEM ----------------------------------------------------------- */
