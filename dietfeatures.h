@@ -37,6 +37,10 @@
 /* read the comment in lib/strncat.c for an explanation */
 /* #define WANT_NON_COMPLIANT_STRNCAT */
 
+/* on i386, Linux has an alternate syscall method since 2002/12/16 */
+/* on my Athlon XP, it is twice as fast, but it's only in kernel 2.5 */
+/* #define WANT_SYSENTER */
+
 #define WANT_LINKER_WARNINGS
 
 /* you need to define this if you want to run your programs with large

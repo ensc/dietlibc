@@ -22,6 +22,7 @@
   rename __pure__ to __pure (Laurent Bercot)
   utmp x86_64 biarch support (Gwenole Beauchesne)
   add fgetpwent (Alvaro Gomes Sobral Barcellos)
+  add vsyscall support for linux 2.5 on recent CPUs
 
 0.22:
   fix i386 libm

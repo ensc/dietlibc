@@ -33,7 +33,11 @@ __unified_syscall:
 	movl	0x18(%edi),%edx
 	movl	0x1c(%edi),%esi
 	movl	0x20(%edi),%edi
+#ifdef WANT_SYSENTER
+	call	0xffffe000
+#else
 	int	$0x80
+#endif
 	cmp	$-124,%eax
 	jbe	.Lnoerror
 	neg	%eax
