@@ -45,6 +45,10 @@ static int rand() {
 extern double atof(const char *c);
 
 int main(int argc,char *argv[]) {
+  printf("%d\n",setenv("foo","bar",0));
+  printf("%d\n",setenv("foo","bar",1));
+  execlp("printenv","printenv","foo",0);
+#if 0
   if (!fnmatch("s*", "sub", 0))
     printf("s* sub\n");
   if (!fnmatch("s*", "glob", 0))
@@ -53,6 +57,7 @@ int main(int argc,char *argv[]) {
     printf("s*b sub\n");
   if (!fnmatch("s*h", "sub", 0))
     printf("s*h sub\n");
+#endif
 #if 0
   char*tmp;
   int n=asprintf(&tmp,"foo %s %d\n","bar",23);

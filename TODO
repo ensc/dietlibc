@@ -11,8 +11,6 @@ strtol and friends need overflow handling.
 
 add search/domain handling for /etc/resolv.conf
 
-setenv
-
 glob, globfree
 
 realpath

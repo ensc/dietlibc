@@ -27,6 +27,7 @@
   add sysinfo, recvmsg, sendmsg.
   add endmntent, getmntent, setmntent.
   fix fnmatch (thanks, Guillaume Cottenceau!)
+  add setenv
 
 0.9:
   fixed initgroups (oops)
