@@ -9,6 +9,18 @@
 #define SCHAR_MAX 0x7f
 #define UCHAR_MAX 0xff
 
+#ifdef __CHAR_UNSIGNED__
+#undef CHAR_MIN
+#define CHAR_MIN 0
+#undef CHAR_MAX
+#define CHAR_MAX UCHAR_MAX
+#else
+#undef CHAR_MIN
+#define CHAR_MIN SCHAR_MIN
+#undef CHAR_MAX
+#define CHAR_MAX SCHAR_MAX
+#endif
+
 #define SHRT_MIN (-SHRT_MAX-1)
 #define SHRT_MAX 0x7fff
 #define USHRT_MAX 0xffff
