@@ -51,6 +51,7 @@ unsigned long elf_hash(const unsigned char *name);
 /* _dl_alloc.c */
 extern struct _dl_handle* _dl_root_handle;
 extern struct _dl_handle* _dl_top_handle;
+extern struct _dl_handle* _dl_free_list;
 void _dl_free_handle(struct _dl_handle* dh);
 struct _dl_handle* _dl_get_handle();
 struct _dl_handle* _dl_find_lib(const char* name);

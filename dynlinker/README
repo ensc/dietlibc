@@ -8,6 +8,10 @@ Replacement for standard ld.so
 It is still test-code only and depends on dietlibc/libdl code
 
 
+Mon Oct 22 14:55:51 MEST 2001
+
+added a little helper-code to "interact" with a loaded libdl.so ....
+
 
 Thu Jun 21 16:03:52 MEST 2001
 

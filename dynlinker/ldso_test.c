@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <unistd.h>
 #include "../libdl/_dl_int.h"
 
 struct elf_aux {
@@ -146,6 +147,17 @@ int main(int argc, char**argv, char**envp)
   dlh->fini=0;
 
   _dl_open_dep();
+
+#if 1
+  if ((dlh = _dl_find_lib("libdl.so"))) {
+    struct _dl_handle* tmp;
+    write(2,"libdl.so",8);
+    write(2," used.\n",7);
+    if ((tmp=_dlsym(dlh, "_dl_root_handle"))) tmp=_dl_root_handle;
+    if ((tmp=_dlsym(dlh, "_dl_top_handle" ))) tmp=_dl_top_handle;
+    if ((tmp=_dlsym(dlh, "_dl_free_list"  ))) tmp=_dl_free_list;
+  }
+#endif
 
   /* all depending libs have been loaded, now start the program or die */
   if (dyn_start) return (int)dyn_start; /* found an AT_ENTRY in table -> jump to it */

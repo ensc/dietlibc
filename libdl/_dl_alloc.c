@@ -6,7 +6,7 @@
 
 struct _dl_handle * _dl_root_handle=(struct _dl_handle*)0;
 struct _dl_handle * _dl_top_handle=(struct _dl_handle*)0;
-static struct _dl_handle * _dl_free_list=(struct _dl_handle*)0;
+struct _dl_handle * _dl_free_list=(struct _dl_handle*)0;
 
 void _dl_free_handle(struct _dl_handle* dh) {
   if (_dl_root_handle == dh) _dl_root_handle = dh->next;
