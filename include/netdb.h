@@ -75,6 +75,7 @@ struct protoent *getprotobyname(const char *name) __THROW;
 struct protoent *getprotobynumber(int proto) __THROW;
 void setprotoent(int stayopen) __THROW;
 void endprotoent(void) __THROW;
+void sethostent(int stayopen) __THROW;
 
 /* dummy */
 extern int h_errno;
