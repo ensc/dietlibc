@@ -16,8 +16,8 @@ int putenv(const char *string) {
   }
   len=tmp-string+1;
   for (envc=0, ep=(const char**)environ; *ep; ++ep) {
-    if (!memcmp(string,*ep,len) && ep[0][len]=='=') { /* found */
-      if (!tmp) {
+    if (!memcmp(string,*ep,len) && ep[0][len-1]=='=') { /* found */
+      if (!tmp[1]) {
 	for (; ep[1]; ++ep) ep[0]=ep[1];
 	ep[0]=0;
 	return 0;
@@ -27,7 +27,7 @@ int putenv(const char *string) {
     }
     ++envc;
   }
-  if (tmp) {
+  if (*tmp) {
     newenv=(char**)malloc((envc+2)*sizeof(char*));
     if (!newenv) return -1;
     newenv[0]=(char*)string;

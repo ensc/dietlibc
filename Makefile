@@ -270,12 +270,12 @@ install: $(OBJDIR)/start.o $(OBJDIR)/dietlibc.a $(OBJDIR)/liblatin1.a $(OBJDIR)/
 	if ! test -f $(DESTDIR)/etc/diet.so.conf; then echo "$(ILIBDIR)" > $(DESTDIR)/etc/diet.so.conf; fi
 	for i in `find include -name \*.h`; do install -m 644 -D $$i $(DESTDIR)$(prefix)/$$i; done
 
-.PHONY: sparc ppc mips arm alpha i386
+.PHONY: sparc ppc mips arm alpha i386 s390
 
-arm sparc ppc alpha i386:
+arm sparc ppc alpha i386 mips s390:
 	$(MAKE) ARCH=$@ CROSS=$@-linux- all t bin-$@/libdietc.so
 
-mips:
+mips-gnu:
 	$(MAKE) ARCH=$@ CROSS=$@-linux-gnu- all t bin-$@/libdietc.so
 
 cross:

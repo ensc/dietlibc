@@ -1,6 +1,8 @@
 0.13:
   add readdir64 and automatic mapping if _FILE_OFFSET_BITS == 64
   make diet not include the linker safeguard stuff when preprocessing.
+  Olaf: port to s/390!
+  me: fix vfork (it was put into dietlibc.a twice)
 
 0.12:
   more contributions from Frank Klemm.

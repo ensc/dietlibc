@@ -198,6 +198,7 @@ __unified_syscall:
 #include "../syscalls.s/setresgid32.S"
 #include "../syscalls.s/setreuid32.S"
 #include "../syscalls.s/setuid32.S"
+#include "../syscalls.s/vfork.S"
 
 /* other asm-files w.o. changes ... */
 #define _exit __exit
