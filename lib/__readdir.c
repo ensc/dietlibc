@@ -4,11 +4,10 @@
 #include <stdlib.h>
 
 struct dirent* __dietreaddir(DIR *d) {
-  if (d->cur>=d->num) {
+  if (!d->num || (d->cur += ((struct dirent*)(d->buf+d->cur))->d_reclen)>=d->num) {
     int res=getdents(d->fd,(struct dirent*)d->buf,1023);
     if (res<=0) return 0;
     d->num=res; d->cur=0;
-  } else
-    d->cur+=((struct dirent*)(d->buf+d->cur))->d_reclen;
+  }
   return (struct dirent*)(d->buf+d->cur);
 }
