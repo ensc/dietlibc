@@ -38,6 +38,7 @@ int main(int argc,char *argv[]) {
   int compile=0;
   char diethome[]=DIETHOME;
   char platform[1000]=DIETHOME "/bin-";
+  char* shortplatform=0;
 #ifdef WANT_SAFEGUARD
   char safeguard1[]="-include";
   char safeguard2[]=DIETHOME "/include/dietref.h";
@@ -66,10 +67,10 @@ int main(int argc,char *argv[]) {
       int len=strlen(platform);
       --tmp2;
       if (tmp2-cc>90) error("platform name too long!\n");
+      shortplatform=platform+len;
       memmove(platform+len,argv[1],(size_t)(tmp2-cc));
       platform[tmp2-cc+len]=0;
-      if (platform[0]=='i' && platform[2]=='8' && platform[3]=='6') platform[1]='3';
-/*      printf("found platform %s\n",platform); */
+      if (shortplatform[0]=='i' && shortplatform[2]=='8' && shortplatform[3]=='6') shortplatform[1]='3';
     } else {
 #ifdef __sparc__
       strcat(platform,"sparc");
@@ -89,6 +90,7 @@ int main(int argc,char *argv[]) {
 #ifdef __mips__
       strcat(platform,"mips");
 #endif
+      shortplatform=platform;
     }
     strcat(dashL,platform);
     if (!strcmp(tmp,"cc")) {
@@ -148,7 +150,7 @@ int main(int argc,char *argv[]) {
       if (mangleopts) {
 	const char **o=Os;
 	for (o=Os;*o;) {
-	  if (strcmp(*o,platform)) {
+	  if (!strcmp(*o,shortplatform)) {
 	    ++o;
 	    while (*o) {
 	      *dest++=(char*)*o;
