@@ -59,6 +59,7 @@
   remove more warnings (Yuri Kozlov)
   use expect() in a few strategic places
   try to add sigcontext and ucontext for x86_64
+  add ffs, ffsl, ffsll
 
 0.22:
   fix i386 libm
