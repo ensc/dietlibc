@@ -9,10 +9,7 @@
 #include <unistd.h>
 #include "dietfeatures.h"
 #include <errno.h>
-
-extern int __dns_gethostbyx_r(const char* name, struct hostent* result,
-			char *buf, size_t buflen,
-			struct hostent **RESULT, int *h_errnop, int lookfor);
+#include "dietdns.h"
 
 /* Oh boy, this interface sucks so badly, there are no words for it.
  * Not one, not two, but _three_ error signalling methods!  (*h_errnop

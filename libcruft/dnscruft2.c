@@ -11,6 +11,7 @@
 #include <arpa/nameser.h>
 #include <resolv.h>
 #include "dietfeatures.h"
+#include "dietdns.h"
 
 extern void __dns_make_fd(void);
 extern int __dns_fd;
@@ -24,7 +25,11 @@ extern int __dns_decodename(unsigned char *packet,unsigned int offset,unsigned c
  * nonzero?  return value nonzero?  *RESULT zero?)  The glibc goons
  * really outdid themselves with this one. */
 #ifdef WANT_FULL_RESOLV_CONF
-int __dns_gethostbyx_r_inner(const char* name, struct hostent* result,
+static int __dns_gethostbyx_r_inner(const char* name, struct hostent* result,
+			char *buf, size_t buflen,
+			struct hostent **RESULT, int *h_errnop, int lookfor);
+
+static int __dns_gethostbyx_r_inner(const char* name, struct hostent* result,
 			char *buf, size_t buflen,
 			struct hostent **RESULT, int *h_errnop, int lookfor) {
 #else
@@ -62,12 +67,18 @@ int __dns_gethostbyx_r(const char* name, struct hostent* result,
       int i;	/* current server */
       int j;	/* timeout count down */
       struct pollfd duh;
-      i=0; j=30;
+      struct timeval last,now;
+      i=0;
       __dns_readstartfiles();
       duh.fd=__dns_fd;
       duh.events=POLLIN;
-      for (j=30; j>0; --j) {
-	sendto(__dns_fd,packet,size,0,(struct sockaddr*)&(_res.nsaddr_list[i]),sizeof(struct sockaddr));
+      last.tv_usec=0;
+      for (j=10; j>0; --j) {
+	gettimeofday(&now,0);
+	if (now.tv_sec-last.tv_sec>10) {
+	  sendto(__dns_fd,packet,(size_t)size,0,(struct sockaddr*)&(_res.nsaddr_list[i]),sizeof(struct sockaddr));
+	  gettimeofday(&last,0);
+	}
 	if (++i > _res.nscount) i=0;
 	if (poll(&duh,1,15) == 1) {
 	  /* read and parse answer */
@@ -87,7 +98,6 @@ int __dns_gethostbyx_r(const char* name, struct hostent* result,
 	  if ((inpkg[3]&0x0f) != 0) {
 	    *h_errnop=HOST_NOT_FOUND;
 	    return 1;
-	    break;		/* error */
 	  }
 	  tmp=inpkg+12;
 	  {
@@ -101,7 +111,7 @@ int __dns_gethostbyx_r(const char* name, struct hostent* result,
 	    q=((unsigned short)inpkg[6]<<8)+inpkg[7];
 	    if (q<1) goto nodata;
 	    while (q>0) {
-	      int decofs=__dns_decodename(inpkg,tmp-(char*)inpkg,Name,256);
+	      int decofs=__dns_decodename(inpkg,(size_t)(tmp-(char*)inpkg),Name,256);
 	      if (decofs<0) break;
 	      tmp=inpkg+decofs;
 	      --q;
@@ -109,7 +119,7 @@ int __dns_gethostbyx_r(const char* name, struct hostent* result,
 	          tmp[2]!=0 || tmp[3]!=1) {		/* CLASS != IN */
 		if (tmp[1]==5) {	/* CNAME */
 		  tmp+=10;
-		  decofs=__dns_decodename(inpkg,tmp-(char*)inpkg,Name,256);
+		  decofs=__dns_decodename(inpkg,(size_t)(tmp-(char*)inpkg),Name,256);
 		  if (decofs<0) break;
 		  tmp=inpkg+decofs;
 		} else
@@ -123,7 +133,7 @@ int __dns_gethostbyx_r(const char* name, struct hostent* result,
 		  slen=strlen(Name);
 		  if (cur+slen+8+(lookfor==28?12:0)>=max) { *h_errnop=NO_RECOVERY; return 1; }
 		} else if (lookfor==12) /* PTR */ {
-		  decofs=__dns_decodename(inpkg,tmp-(char*)inpkg,Name,256);
+		  decofs=__dns_decodename(inpkg,(size_t)(tmp-(char*)inpkg),Name,256);
 		  if (decofs<0) break;
 		  tmp=inpkg+decofs;
 		  slen=strlen(Name);
@@ -183,7 +193,7 @@ int __dns_gethostbyx_r(const char* name, struct hostent* result,
   const char *tmp=name;
   char Buf[MAXDNAME+1];
   int res;
-  int len=strlen(name);
+  size_t len=strlen(name);
   int count=0;
   memmove(Buf,name,len);
   Buf[len]=Buf[MAXDNAME]=0;

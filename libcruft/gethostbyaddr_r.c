@@ -9,10 +9,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include "dietfeatures.h"
-
-extern int __dns_gethostbyx_r(const char* name, struct hostent* result,
-			char *buf, size_t buflen,
-			struct hostent **RESULT, int *h_errnop, int lookfor);
+#include "dietdns.h"
 
 static int i2a(char* dest,unsigned int x) {
   register unsigned int tmp=x;
