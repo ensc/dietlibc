@@ -4,6 +4,10 @@
     I need to get more sleep.
   Thanks Ogrisegg found that ptrace does not work as documented and
     provided a wrapper that emulates the glibc behaviour.
+  Dirk Engling saved 8 bytes and 4 cycles in the ARM clone()
+  fix ptrace.h for S/390 and ARM
+  provide a PORTING document so we don't lose track of which file need
+    to be touched to port the diet libc to a new platform.
 
 0.15:
   vfork sucks.  I reverted to the old behavior where vfork==fork.
