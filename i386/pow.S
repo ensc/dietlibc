@@ -1,3 +1,5 @@
+#include "PIC.h"
+
 .text
 .global pow
 .type   pow,@function
@@ -59,7 +61,13 @@ pow:
 1:	ret
 .Lfinpow:
 	fyl2x
+#ifdef __DYN_LIB
+	PIC_SAVE
+	PIC_INIT
+	jmp __finexp@PLT
+#else
 	jmp __finexp
+#endif
 
 .Lende:
 .size    pow,.Lende-pow

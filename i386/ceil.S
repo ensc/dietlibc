@@ -1,3 +1,5 @@
+#include "PIC.h"
+
 .text
 
 .global ceilf,ceil,ceill,__flcetr
@@ -9,12 +11,12 @@
 ceilf:
 	flds 4(%esp)
 	movb $0x08,%ah
-	jmp __flcetr
+	jmp .Lflcetr
 
 ceill:
 	fldt 4(%esp)
 	movb $0x08,%ah
-	jmp __flcetr
+	jmp .Lflcetr
 
 ceil:
 	fldl 4(%esp)
@@ -22,7 +24,10 @@ ceil:
 
 # Wspolny kod dla funkcji floor, ceil i trunc
 # W ah maska bitow 11 i 10 rejestru sterowania koprocesora
+#ifndef __DYN_LIB
 __flcetr:
+#endif
+.Lflcetr:
 	xorl %ecx,%ecx	# wyzerowanie rejestru
 	movb %ah,%ch	# i utworzenie maski w cx
 	pushl %eax	# krotsze niz subl $4,%esp
@@ -36,6 +41,12 @@ __flcetr:
 	fldcw (%esp)	# odtworzenie rejestru sterowania
 	popl %eax	# i polozenia stosu
 	ret
+
+#ifdef __DYN_LIB
+__flcetr:
+	PIC_RESTORE
+	jmp .Lflcetr
+#endif
 
 .Lende:
 .size    ceil,.Lende-ceil

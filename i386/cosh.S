@@ -1,3 +1,5 @@
+#include "PIC.h"
+
 .text
 
 .global coshf,cosh,coshl
@@ -12,7 +14,14 @@ cosh:
 	fldl2e
 	fmull 4(%esp)
 fincosh:
+#ifdef __DYN_LIB
+	PIC_SAVE
+	PIC_INIT
+	call __finexp@PLT
+	PIC_RESTORE
+#else
 	call __finexp
+#endif
 	fld1
 	fdiv %st(1),%st(0)	# st(0)=1/exp(x), st(1)=exp(x)
 	faddp %st,%st(1)
@@ -29,6 +38,6 @@ coshl:
 	jmp fincosh
 
 .Lende:
-.size    cosh,.ende-cosh
-.size    coshf,.ende-coshf
-.size    coshl,.ende-coshl
+.size    cosh,.Lende-cosh
+.size    coshf,.Lende-coshf
+.size    coshl,.Lende-coshl

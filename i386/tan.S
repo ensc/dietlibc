@@ -1,3 +1,5 @@
+#include "PIC.h"
+
 .text
 
 .global tanf,tan,tanl
@@ -10,7 +12,14 @@ tanf:
 tan:
         fldl    4(%esp)
 __tan:
+#ifdef __DYN_LIB
+	PIC_SAVE
+	PIC_INIT
+	call	__fmod2pi@PLT
+	PIC_RESTORE
+#else
 	call	__fmod2pi
+#endif
         fsincos
         fdivrp
         ret

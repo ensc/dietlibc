@@ -1,3 +1,4 @@
+#include "PIC.h"
 
 .text
 
@@ -13,7 +14,14 @@ sinh:
 	fldl2e
 	fmull 4(%esp)
 finsinh:
+#ifdef __DYN_LIB
+	PIC_SAVE
+	PIC_INIT
+	call __finexp@PLT
+	PIC_RESTORE
+#else
 	call __finexp
+#endif
 	fld1
 	fdiv %st(1),%st(0)	# st(0)=1/exp(x), st(1)=exp(x)
 	fsubrp %st(0),%st(1)
@@ -30,6 +38,6 @@ sinhl:
 	jmp finsinh
 
 .Lende:
-.size    sinh,.ende-sinh
-.size    sinhf,.ende-sinhf
-.size    sinhl,.ende-sinhl
+.size    sinh,.Lende-sinh
+.size    sinhf,.Lende-sinhf
+.size    sinhl,.Lende-sinhl

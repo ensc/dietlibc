@@ -1,3 +1,5 @@
+#include "PIC.h"
+
 .text
 #d.half:
 #	.long	0x3f000000	# 1/2
@@ -37,7 +39,13 @@ __cbrt:
 # x^y; st(0)=x, st(1)=y (x > 0)
 finpow:
 	fyl2x
+#ifdef __DYN_LIB
+	PIC_SAVE
+	PIC_INIT
+	jmp __finexp@PLT
+#else
 	jmp __finexp
+#endif
 
 .global exp2f,exp2,exp2l
 	.type	 exp2f,@function
@@ -45,13 +53,31 @@ finpow:
 	.type	 exp2l,@function
 exp2f:
 	flds 4(%esp)
+#ifdef __DYN_LIB
+	PIC_SAVE
+	PIC_INIT
+	jmp __finexp@PLT
+#else
 	jmp __finexp
+#endif
 exp2:
 	fldl 4(%esp)
+#ifdef __DYN_LIB
+	PIC_SAVE
+	PIC_INIT
+	jmp __finexp@PLT
+#else
 	jmp __finexp
+#endif
 exp2l:
 	fldt 4(%esp)
+#ifdef __DYN_LIB
+	PIC_SAVE
+	PIC_INIT
+	jmp __finexp@PLT
+#else
 	jmp __finexp
+#endif
 
 .global exp10f,exp10,exp10l	#,pow10f,pow10,pow10l
 	.type	 exp10f,@function
@@ -64,18 +90,36 @@ exp10f:
 #pow10f:
 	fldl2t
 	fmuls 4(%esp)
+#ifdef __DYN_LIB
+	PIC_SAVE
+	PIC_INIT
+	jmp __finexp@PLT
+#else
 	jmp __finexp
+#endif
 exp10:
 #pow10:
 	fldl2t
 	fmull 4(%esp)
+#ifdef __DYN_LIB
+	PIC_SAVE
+	PIC_INIT
+	jmp __finexp@PLT
+#else
 	jmp __finexp
+#endif
 exp10l:
 #pow10l:
 	fldl2t
 	fldt 4(%esp)
 	fmulp
+#ifdef __DYN_LIB
+	PIC_SAVE
+	PIC_INIT
+	jmp __finexp@PLT
+#else
 	jmp __finexp
+#endif
 
 # exp(x)-1
 .global expm1f,expm1,expm1l
@@ -106,7 +150,14 @@ finem1:
 	jc 1f
 	f2xm1
 	ret
+#ifdef __DYN_LIB
+1:	PIC_SAVE
+	PIC_INIT
+	call __finexp@PLT
+	PIC_RESTORE
+#else
 1:	call __finexp
+#endif
 	fld1
 	fsubrp
 	ret
@@ -307,17 +358,35 @@ fdiml:
 truncf:
 	flds 4(%esp)
 	movb $0x0c,%ah
+#ifdef __DYN_LIB
+	PIC_SAVE
+	PIC_INIT
+	jmp __flcetr@PLT
+#else
 	jmp __flcetr
+#endif
 
 trunc:
 	fldl 4(%esp)
 	movb $0x0c,%ah
+#ifdef __DYN_LIB
+	PIC_SAVE
+	PIC_INIT
+	jmp __flcetr@PLT
+#else
 	jmp __flcetr
+#endif
 
 truncl:
 	fldt 4(%esp)
 	movb $0x0c,%ah
+#ifdef __DYN_LIB
+	PIC_SAVE
+	PIC_INIT
+	jmp __flcetr@PLT
+#else
 	jmp __flcetr
+#endif
 
 .global frexpf,frexp,frexpl
 	.type frexpf,@function

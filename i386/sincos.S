@@ -1,3 +1,5 @@
+#include "PIC.h"
+
 .text
 
 .global sincosf,sincos,sincosl
@@ -8,7 +10,14 @@
 
 sincosf:
         flds     4(%esp)
+#ifdef __DYN_LIB
+	PIC_SAVE
+	PIC_INIT
+	call	__fmod2pi@PLT
+	PIC_RESTORE
+#else
 	call	__fmod2pi
+#endif
         movl    12(%esp),%eax
         movl    8(%esp),%ecx
         fsincos
@@ -17,7 +26,14 @@ sincosf:
         ret
 sincos:
         fldl     4(%esp)
+#ifdef __DYN_LIB
+	PIC_SAVE
+	PIC_INIT
+	call	__fmod2pi@PLT
+	PIC_RESTORE
+#else
 	call	__fmod2pi
+#endif
         movl    16(%esp),%eax
         movl    12(%esp),%ecx
         fsincos
@@ -26,7 +42,14 @@ sincos:
         ret
 sincosl:
         fldt     4(%esp)
+#ifdef __DYN_LIB
+	PIC_SAVE
+	PIC_INIT
+	call	__fmod2pi@PLT
+	PIC_RESTORE
+#else
 	call	__fmod2pi
+#endif
         movl    20(%esp),%eax
         movl    16(%esp),%ecx
         fsincos
