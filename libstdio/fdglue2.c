@@ -43,3 +43,5 @@ err_out:
   tmp->ungotten=0;
   return tmp;
 }
+
+FILE* __stdio_init_file_nothreads(int fd,int closeonerror,int mode) __attribute__((alias("__stdio_init_file")));
