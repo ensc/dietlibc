@@ -46,11 +46,31 @@ struct rlimit {
 #define RLIMIT_DATA	2		/* max data size */
 #define RLIMIT_STACK	3		/* max stack size */
 #define RLIMIT_CORE	4		/* max core file size */
+#if defined(__alpha__)
+#define RLIMIT_RSS	5		/* max resident set size */
+#define RLIMIT_NPROC	8		/* max number of processes */
+#define RLIMIT_NOFILE	6		/* max number of open files */
+#define RLIMIT_MEMLOCK	9		/* max locked-in-memory address space */
+#define RLIMIT_AS	7		/* address space limit */
+#elif defined(__mips__)
+#define RLIMIT_RSS	7		/* max resident set size */
+#define RLIMIT_NPROC	8		/* max number of processes */
+#define RLIMIT_NOFILE	5		/* max number of open files */
+#define RLIMIT_MEMLOCK	9		/* max locked-in-memory address space */
+#define RLIMIT_AS	6		/* address space limit */
+#elif defined(__sparc__)
+#define RLIMIT_RSS	5		/* max resident set size */
+#define RLIMIT_NPROC	7		/* max number of processes */
+#define RLIMIT_NOFILE	6		/* max number of open files */
+#define RLIMIT_MEMLOCK	8		/* max locked-in-memory address space */
+#define RLIMIT_AS	9		/* address space limit */
+#else
 #define RLIMIT_RSS	5		/* max resident set size */
 #define RLIMIT_NPROC	6		/* max number of processes */
 #define RLIMIT_NOFILE	7		/* max number of open files */
 #define RLIMIT_MEMLOCK	8		/* max locked-in-memory address space */
 #define RLIMIT_AS	9		/* address space limit */
+#endif
 #define RLIMIT_LOCKS	10		/* maximum file locks held */
 
 #define RLIM_NLIMITS	11
