@@ -24,7 +24,7 @@ int inet_aton(const char *cp, struct in_addr *inp) {
   char *tmp=(char*)cp;
   for (i=24; ;) {
     long j;
-    j=strtol(tmp,&tmp,0);
+    j=strtoul(tmp,&tmp,0);
     if (*tmp==0) {
       ip|=j;
       break;

@@ -446,7 +446,7 @@ extern int fstat64(int __fd, struct stat64 *__buf) __THROW;
 extern int lstat64(const char *__file, struct stat64 *__buf) __THROW;
 #endif
 
-#if _FILE_OFFSET_BITS == 64
+#if defined _FILE_OFFSET_BITS && _FILE_OFFSET_BITS == 64
 #define lstat(file,buf) lstat64(file,buf)
 #define fstat(file,buf) fstat64(file,buf)
 #define stat stat64

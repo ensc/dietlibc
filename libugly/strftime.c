@@ -43,15 +43,18 @@ size_t  strftime ( char* dst, size_t max, const char* format, const struct tm* t
 	        *p++ = '%';
 	    }
 	    else
+again:
     	    switch (*format) {
 //          case '%': *p++ = '%';  				 break;			// reduce size of jump table
             case 'n': *p++ = '\n'; 				 break;
             case 't': *p++ = '\t'; 				 break;
+	    case 'O': case 'E': ++format; goto again;
             case 'c': src = "%b %a %d %k:%M:%S %Z %Y";        	 goto _strf;
             case 'r': src = "%I:%M:%S %p";                    	 goto _strf;
             case 'R': src = "%H:%M";      			 goto _strf;
             case 'x': src = "%b %a %d";   			 goto _strf;
             case 'X': src = "%k:%M:%S";   			 goto _strf;
+            case 'D': src = "%m/%d/%y";   			 goto _strf;
             case 'T': src = "%H:%M:%S";
                _strf: p  += strftime (p, (size_t)(dst+max-p), src, tm); 	 break;
             case 'a': src = sweekdays [tm->tm_wday]; 		 goto _str;
@@ -74,7 +77,9 @@ size_t  strftime ( char* dst, size_t max, const char* format, const struct tm* t
             case 'S': no  = tm->tm_sec;           		 goto _no;
             case 'u': no  = tm->tm_wday ? tm->tm_wday : 7; 	 goto _no;
             case 'w': no  = tm->tm_wday;              		 goto _no;
-            case 'Z': tzset(); src = tzname; 			 goto _str;
+	    case 'U': no  = (tm->tm_yday - tm->tm_wday + 7) / 7; goto _no;
+	    case 'W': no  = (tm->tm_yday - (tm->tm_wday - 1 + 7) % 7 + 7) / 7; goto _no;
+            case 'Z': tzset(); src = tzname[0]; 			 goto _str;
             case 'Y': i2a ( buf+0, (unsigned int)(tm->tm_year / 100 + 19) );
 		      i2a ( buf+2, (unsigned int)(tm->tm_year % 100) );
 		      src = buf;
@@ -83,7 +88,7 @@ size_t  strftime ( char* dst, size_t max, const char* format, const struct tm* t
                  _no: i2a ( buf, no );				 /* append number 'no' */
                       src = buf;
             	      goto _str;
-                _nos: i2a ( buf, no );				 /* the same, but strip '0' */
+                _nos: i2a ( buf, no );				 /* the same, but '0'->' ' */
             	      if (buf[0] == '0')
 		          buf[0] = ' ';
 		      src = buf;

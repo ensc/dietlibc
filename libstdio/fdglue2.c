@@ -6,17 +6,16 @@
 #include <pthread.h>
 
 extern int __stdio_atexit;
-extern void __stdio_flushall(void);
 
-FILE* __stdio_init_file_nothreads(int fd);
-FILE* __stdio_init_file_nothreads(int fd) {
+FILE* __stdio_init_file_nothreads(int fd,int closeonerror);
+FILE* __stdio_init_file_nothreads(int fd,int closeonerror) {
   FILE *tmp=(FILE*)malloc(sizeof(FILE));
   if (!tmp) goto err_out;
   tmp->buf=(char*)malloc(BUFSIZE);
   if (!tmp->buf) {
     free(tmp);
 err_out:
-    close(fd);
+    if (closeonerror) close(fd);
     errno=ENOMEM;
     return 0;
   }
@@ -35,4 +34,4 @@ err_out:
   return tmp;
 }
 
-FILE* __stdio_init_file(int fd) __attribute__((weak,alias("__stdio_init_file_nothreads")));
+FILE* __stdio_init_file(int fd,int closeonerror) __attribute__((weak,alias("__stdio_init_file_nothreads")));

@@ -35,7 +35,7 @@ off_t lseek(int fildes, off_t offset, int whence) __THROW;
 #ifndef __NO_STAT64
 loff_t lseek64(int fildes, loff_t offset, int whence) __THROW;
 #endif
-#if _FILE_OFFSET_BITS == 64
+#if defined _FILE_OFFSET_BITS && _FILE_OFFSET_BITS == 64
 #define lseek(fildes,offset,whence) lseek64(fildes,offset,whence)
 #endif
 
@@ -118,7 +118,7 @@ extern int daemon (int nochdir,int noclose) __THROW;
 
 int pause(void) __THROW;
 
-#if _FILE_OFFSET_BITS == 64
+#if defined _FILE_OFFSET_BITS && _FILE_OFFSET_BITS == 64
 #define open open64
 #define creat creat64
 #endif

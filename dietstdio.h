@@ -71,3 +71,6 @@ int __fflush_stdin(void);
 int __fflush_stdout(void);
 int __fflush_stderr(void);
 
+FILE* __stdio_init_file(int fd,int closeonerror);
+int __stdio_parse_mode(const char *mode);
+void __stdio_flushall(void);

@@ -21,7 +21,7 @@ size_t fread( void *ptr, size_t size, size_t nmemb, FILE *stream) {
     size_t tmp=j-i;
     int res;
     fflush(stream);
-    while ((res=read(stream->fd,ptr+i,tmp))<tmp) {
+    while ((res=read(stream->fd,ptr+i,tmp))<(int)tmp) {
       if (res==-1) {
 	stream->flags|=ERRORINDICATOR;
 	goto exit;

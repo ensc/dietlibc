@@ -17,8 +17,15 @@
     Oops, this was reported 6 weeks ago but I overlooked the email.
     Thanks, Denis Rachal!
   vsnprintf's zero termination was broken.
-  Remove WANT_BUGGY_GLIBC_STRSEP.  The Linux man page is broken, glibc
-    does it correctly.
+  Uwe Ohse found a few more bugs:
+    Remove WANT_BUGGY_GLIBC_STRSEP.  The Linux man page is broken, glibc
+      does it correctly.
+    Make inet_aton use strtoul instead of strtol
+    fdopen would close the file descriptor if it could not malloc the
+      buffer.
+    strftime updates.
+    Make _FILE_OFFSET_BITS includes -Wundef clean
+  Andre found a typo in endian.h for big endian mips
 
 0.14:
   fix brk again (missing __brk, trivial oversight)

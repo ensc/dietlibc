@@ -7,11 +7,10 @@
 #include <errno.h>
 
 extern int __stdio_atexit;
-extern void __stdio_flushall();
-extern FILE* __stdio_init_file_nothreads(int fd);
+extern FILE* __stdio_init_file_nothreads(int fd,int closeonerror);
 
-FILE* __stdio_init_file(int fd) {
-  FILE *tmp=__stdio_init_file_nothreads(fd);
+FILE* __stdio_init_file(int fd,int closeonerror) {
+  FILE *tmp=__stdio_init_file_nothreads(fd,closeonerror);
   if (tmp) pthread_mutex_init(&tmp->m,0);
   return tmp;
 }

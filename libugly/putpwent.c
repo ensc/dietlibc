@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <sys/types.h>
 #include <errno.h>
+#include "dietwarning.h"
 
 int putpwent(const struct passwd *p, FILE *stream) {
   if (p && stream) {
@@ -14,3 +15,5 @@ int putpwent(const struct passwd *p, FILE *stream) {
   (*__errno_location())=EINVAL;
   return -1;
 }
+
+link_warning("putpwent","putpwent is garbage, don't use!")

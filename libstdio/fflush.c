@@ -7,7 +7,6 @@ FILE *__stdio_root;
 
 int __stdio_atexit=0;
 
-void __stdio_flushall(void);
 void __stdio_flushall(void) {
   fflush(0);
 }
@@ -54,7 +53,7 @@ int __fflush4(FILE *stream,int next) {
   return 0;
 }
 
-int __buffered_outs(const char *s,size_t len) {
+int __stdio_outs(const char *s,size_t len) {
   return fwrite(s,1,(size_t)len,stdout);
 }
 
