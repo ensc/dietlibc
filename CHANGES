@@ -1,4 +1,6 @@
 0.25:
+  fix sprintf
+  head -1  ->  head -n 1
 
 0.24:
   work around incompatible Linux select() modifying the timeout in
