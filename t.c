@@ -87,7 +87,7 @@ void foo(int tmp,...) {
 
 int main(int argc,char *argv[]) {
   char buf[20]="fnord";
-  printf("%s\n",strchr("gcc",'/'));
+/*  printf("%s\n",memmem("x86-linux-gcc",20,"gcc",3)); */
   printf("%d\n",strcmp(buf,"fnord"));
 #if 0
   regex_t r;

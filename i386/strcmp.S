@@ -8,14 +8,14 @@ strcmp:
 .Lloop:
 	movb (%ecx),%al
 	incl %edx
-	incl %ebx
+	incl %ecx
 	movb %al,%ah
 	subb -1(%edx),%al
 	jnz .Lnotequal
 	testb %ah,%ah
 	jnz .Lloop
 
-	xorb %eax,%eax
+	xorl %eax,%eax
 .Lnotequal:
 	movsx %al, %eax
 	ret
