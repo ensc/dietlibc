@@ -28,6 +28,7 @@ extern void *mmap64 (void *__addr, size_t __len, int __prot,
 #endif
 
 int mlockall(int flags) __THROW;
+int mlock(const void *addr, size_t len) __THROW;
 int munlockall(void) __THROW;
 
 #endif
