@@ -58,8 +58,8 @@ typedef struct t_alloc_head {
 /* freelist handler */
 static alloc_head base = {&base,0};
 static char *alloc_get_end = MEM_ALLOC_START;
-static pthread_mutex_t mutex_free;
-static pthread_mutex_t mutex_alloc;
+static pthread_mutex_t mutex_free = PTHREAD_MUTEX_INITIALIZER;
+static pthread_mutex_t mutex_alloc = PTHREAD_MUTEX_INITIALIZER;
 
 void free(void *ptr)
 {

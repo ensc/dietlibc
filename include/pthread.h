@@ -22,6 +22,8 @@ typedef struct {
   struct _pthread_fastlock lock;/* Underlying fast lock */
 } pthread_mutex_t;
 
+#define PTHREAD_MUTEX_INITIALIZER	{0, 0, 0, 0, {0, 0}}
+
 typedef struct {
   int __mutexkind;
 } pthread_mutexattr_t;
