@@ -13,4 +13,4 @@ socketcall:
 	popl %ecx
 	retl
 .Lende:
-.size accept,.Lende-accept
+.size socketcall,.Lende-socketcall
