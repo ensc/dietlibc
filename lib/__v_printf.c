@@ -73,6 +73,8 @@ inn_printf:
       case 'h':
 	--flag_long;
 	goto inn_printf;
+      case 'L':
+	++flag_long; /* fall through */
       case 'l':
 	++flag_long;
 	goto inn_printf;
