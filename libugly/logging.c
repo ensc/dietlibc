@@ -11,7 +11,9 @@
 #include <time.h>
 #include <sys/socket.h>
 #include <signal.h>
+#ifdef WANT_THREAD_SAVE
 #include <pthread.h>
+#endif
 
 #define _PATH_CONSOLE	"/dev/console"
 #define DEF_SIZE 128	/* default buffer size */

@@ -13,8 +13,8 @@ int mkstemp(char* template) {
   for (;;) {
     read(randfd,&random,sizeof(random));
     for (i=0; i<6; ++i) {
-      tmp[i]=((random>>(i*4))&0xf)+'0';
-      if (tmp[i]>'9') tmp[i]+='a'-'0';
+      int hexdigit=(random>>(i*4))&0xf;
+      tmp[i]=hexdigit>9?hexdigit+'a':hexdigit+'0';
     }
     puts(template);
     res=open(template,O_CREAT|O_RDWR|O_EXCL,0600);
