@@ -61,6 +61,7 @@ void *_dl_open(const char*pathname, int fd, int flag)
   struct _dl_handle *ret=0;
 
   unsigned long l;
+  struct stat st;
 
   Elf32_Ehdr *eh;
   Elf32_Phdr *ph;
@@ -72,6 +73,14 @@ void *_dl_open(const char*pathname, int fd, int flag)
   if (fd==-1) return 0;
 
   printf("_dl_open: %s\n",pathname);
+
+  if (fstat(fd,&st)<0) {
+    close(fd);
+    return 0;
+  }
+  else {
+    // use st_dev and st_ino for identification
+  }
 
   read(fd, buf, 1024);
   eh=(Elf32_Ehdr*)buf;
@@ -177,6 +186,7 @@ void *_dl_open(const char*pathname, int fd, int flag)
 	printf("_dl_open have dyn_str_tab @ %08lx\n",(long)ret->dyn_str_tab);
       }
 
+      /* INIT / FINI */
       if (dyn_tab[i].d_tag==DT_FINI) {
 	ret->fini = (void(*)(void))(m+dyn_tab[i].d_un.d_val);
 	printf("_dl_open have fini @ %08lx\n",(long)ret->fini);
@@ -186,6 +196,7 @@ void *_dl_open(const char*pathname, int fd, int flag)
 	printf("_dl_open have init @ %08lx\n",(long)init);
       }
 
+      /* PLT / Relocation entries for PLT in GOT */
       if (dyn_tab[i].d_tag==DT_PLTGOT) {
 	got=(unsigned long*)(m+dyn_tab[i].d_un.d_val);
 	ret->pltgot=got;
@@ -205,6 +216,7 @@ void *_dl_open(const char*pathname, int fd, int flag)
 	printf("_dl_open have jmprel @ %08lx\n",(long)jmprel);
       }
 
+      /* Relocation */
       if (dyn_tab[i].d_tag==DT_REL) {
 	rel=dyn_tab[i].d_un.d_val;
 	printf("_dl_open have rel @ %08lx\n",(long)rel);
@@ -219,7 +231,7 @@ void *_dl_open(const char*pathname, int fd, int flag)
       }
 
       if (dyn_tab[i].d_tag==DT_TEXTREL) {
-	printf("_dl_open have textrel ?!? -> SUE USER ! \n");
+	printf("_dl_open have textrel ?!? -> SUE LIB CREATOR ! \n");
 	_dl_free_handle(ret);
 	return 0;
       }
@@ -236,7 +248,7 @@ void *_dl_open(const char*pathname, int fd, int flag)
       /* */
     }
     else {
-      printf("_dl_open not PIC dynamic -> SUE USER ! \n");
+      printf("_dl_open non PIC dynamic -> SUE USER ! \n");
       if (ret) _dl_free_handle(ret);
       return 0;
     }
@@ -252,7 +264,7 @@ void *_dl_open(const char*pathname, int fd, int flag)
       printf("_dl_open: rel got\n");
       for (;(char*)tmp<(((char*)jmprel)+pltrelsize);(char*)tmp=((char*)tmp)+sizeof(Elf32_Rel)) {
 	*((unsigned long*)(m+tmp->r_offset))+=(unsigned long)m;
-	printf("_dl_open rel @ %08x with type %d -> %d\n",tmp->r_offset,ELF32_R_TYPE(tmp->r_info),ELF32_R_SYM(tmp->r_info));
+	printf("_dl_open rel @ %08lx with type %d -> %d\n",(long)m+tmp->r_offset,ELF32_R_TYPE(tmp->r_info),ELF32_R_SYM(tmp->r_info));
 	printf("_dl_open -> %08lx\n",*((unsigned long*)(m+tmp->r_offset)));
       }
     }
@@ -261,7 +273,8 @@ void *_dl_open(const char*pathname, int fd, int flag)
       printf("_dl_open: rela got\n");
       for (;(char*)tmp<(((char*)jmprel)+pltrelsize);(char*)tmp=((char*)tmp)+sizeof(Elf32_Rel)) {
 	*((unsigned long*)(m+tmp->r_offset))=(unsigned long)(m+tmp->r_addend);
-	printf("_dl_open rela @ %08x with type %d -> %d\n",tmp->r_offset,ELF32_R_TYPE(tmp->r_info),ELF32_R_SYM(tmp->r_info));
+	printf("_dl_open rela @ %08lx with type %d -> %d\n",(long)m+tmp->r_offset,ELF32_R_TYPE(tmp->r_info),ELF32_R_SYM(tmp->r_info));
+	printf("_dl_open -> %08lx\n",*((unsigned long*)(m+tmp->r_offset)));
       }
     }
 
