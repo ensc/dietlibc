@@ -39,7 +39,8 @@ __attribute__((section(".fini"))) void _fini(void)
   __do_global_dtors_aux();
 }
 
-int _dyn_start(structor dl_init, int argc, char **argv, char **envp)
+/* pre main, post _start */
+int _dyn_start(int argc, char **argv, char **envp, structor dl_init)
 {
   static __attribute__((section(".init"))) void _init(void);
   int main(int argc, char **argv, char **envp);

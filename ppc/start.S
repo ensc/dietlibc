@@ -7,13 +7,13 @@
 .type _start,@function
 _start:
  /* Save the stack pointer, in case we're statically linked under Linux.  */
-	mr      9,1
+	mr	9,1
  /* Set up an initial stack frame, and clear the LR.  */
-	clrrwi  1,1,4
-	li      0,0
-	stwu    1,-16(1)
-	mtlr    0
-	stw     0,0(1)
+	clrrwi	1,1,4
+	li	0,0
+	stwu	1,-16(1)
+	mtlr	0
+	stw	0,0(1)
 
  /* r9 enthält den initialen Stackpointer.
     argc = (r9)
@@ -36,7 +36,7 @@ _start:
 
 
 /* Define a symbol for the first piece of initialized data.  */
-        .section ".data"
+	.section ".data"
 __data_start:
 
 
