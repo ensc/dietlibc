@@ -50,6 +50,7 @@ void __dns_readstartfiles(void) {
       }
     }
   }
+  _res.options=RES_RECURSE;
   if ((fd=open("/etc/resolv.conf",O_RDONLY))<0) return;
   len=read(fd,buf,4096);
   close(fd);

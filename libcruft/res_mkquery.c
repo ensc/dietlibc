@@ -16,6 +16,24 @@ extern int h_errno;
 
 static char dnspacket[]="\xfe\xfe\001\000\000\001\000\000\000\000\000\000";
 
+/*
+                                    1  1  1  1  1  1
+      0  1  2  3  4  5  6  7  8  9  0  1  2  3  4  5
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+    |                      ID                       |
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+    |QR|   Opcode  |AA|TC|RD|RA|   Z    |   RCODE   |
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+    |                    QDCOUNT                    |
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+    |                    ANCOUNT                    |
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+    |                    NSCOUNT                    |
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+    |                    ARCOUNT                    |
+    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+*/
+
 extern void __dns_make_fd(void);
 extern int __dns_fd;
 
@@ -30,6 +48,7 @@ int res_mkquery(int op, const char *dname, int class, int type, char* data,
 		int datalen, const unsigned char* newrr, char* buf, int buflen) {
   unsigned char packet[512];
   memmove(packet,dnspacket,12);
+  if (_res.options&RES_RECURSE==0) packet[3]=0;
   *(unsigned short*)packet=rand();
   {
     unsigned char* x;

@@ -26,18 +26,23 @@ int res_query(const char *dname, int class, int type, unsigned char *answer, int
   int size;
   __dns_make_fd();
 
-  if ((size=res_mkquery(QUERY,dname,C_IN,type,0,0,0,packet,512))<0) return 1;
+  if ((size=res_mkquery(QUERY,dname,class,type,0,0,0,packet,512))<0) return 1;
   {
     {
       int i;	/* current server */
       int j;	/* timeout count down */
       struct pollfd duh;
+      struct timeval last,now;
       i=0; j=30;
       __dns_readstartfiles();
       duh.fd=__dns_fd;
       duh.events=POLLIN;
-      for (j=30; j>0; --j) {
-	sendto(__dns_fd,packet,size,0,(struct sockaddr*)&(_res.nsaddr_list[i]),sizeof(struct sockaddr));
+      for (j=10; j>0; --j) {
+	gettimeofday(&now,0);
+	if (now.tv_sec-last.tv_sec>10) {
+	  sendto(__dns_fd,packet,size,0,(struct sockaddr*)&(_res.nsaddr_list[i]),sizeof(struct sockaddr));
+	  gettimeofday(&last,0);
+	}
 	if (++i > _res.nscount) i=0;
 	if (poll(&duh,1,1) == 1) {
 	  /* read and parse answer */
