@@ -1,5 +1,3 @@
-getnameinfo, getaddrinfo, gai_strerror, freeaddrinfo (!!!)
-
 "locale"
 
 fscanf
@@ -9,12 +7,8 @@ of the (truncated) number of characters that were actually written.
 
 strtol and friends need overflow handling.
 
-add search/domain handling for /etc/resolv.conf
+real regerror
 
-glob, globfree
-
-realpath
-
-regerror
+real DNS errors.
 
 Try to improve code size and quality with __restrict__.
