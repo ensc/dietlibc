@@ -48,4 +48,6 @@
 #define PIPE_BUF	4096	/* # bytes in atomic write to a pipe */
 
 #define RTSIG_MAX	32
+
+#define LINE_MAX	2048
 #endif

@@ -21,6 +21,7 @@ static void getopterror(void) {
 int getopt(int argc,char*const argv[], const char* optstring) {
   static int lastidx=0,lastofs=0;
   char *tmp;
+  if (optind==0) optind=1;	/* whoever started setting optind to 0 should be shot */
 again:
   if (optind>argc || !argv[optind] || *argv[optind]!='-' || argv[optind][1]==0)
     return -1;

@@ -120,4 +120,12 @@ int pclose(FILE *stream) __THROW;
 #define P_tmpdir "/tmp"
 char *tmpnam(char *s) __THROW;	/* DO NOT USE!!! Use mkstemp instead! */
 
+#define FILENAME_MAX 4095
+#define FOPEN_MAX 16
+
+#ifdef _POSIX_SOURCE
+#define L_ctermid 9
+#define L_cuserid 9
+#endif
+
 #endif

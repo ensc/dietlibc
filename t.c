@@ -41,6 +41,7 @@
 #include <syslog.h>
 #include <sys/un.h>
 #include <fcntl.h>
+#include <iconv.h>
 
 #if 0
 static const char* Ident;
@@ -87,7 +88,20 @@ void foo(int tmp,...) {
 extern int __lltostr(char *s, int size, unsigned long long i, int base, char UpCase);
 
 int main(int argc,char *argv[]) {
+  char *inbuf="\xe2\x89\xa0";
+//  char *inbuf="\xc2\xa9";
+  char outbuf[100];
+  char *obptr=&outbuf;
+  size_t iblen=strlen(inbuf);
+  size_t oblen=100;
+  iconv_t i=iconv_open("utf-8","utf-8");
+  iconv(i,&inbuf,&iblen,&obptr,&oblen);
+  iconv_close(i);
+  outbuf[100-oblen]=0;
+  puts(outbuf);
+#if 0
   printf("%c %c\n",tolower('C'),toupper('c'));
+#endif
 #if 0
   printf("foo\n");
 #endif

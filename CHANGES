@@ -80,6 +80,9 @@
     also rewrote dtostr to have more precision)
   Olaf: checked in a new sig* function family (based on rt_sig*).
     legacy <2.2 signal-handling doesn't work at the moment.
+  Made rudimentary iconv that can convert back and forth between
+    iso-8859-1, utf-8 and ucs-4 (for debugging).
+    Thanks to Markus Kuhn for the excellent utf-8(7)!
 
 0.10:
   update getpagesize.

@@ -9,10 +9,10 @@ static void getopterror(void) {
   }
 }
 
-int getopt_long(int argc, char * const argv[], const char *optstring,
+int getopt_long_only(int argc, char * const argv[], const char *optstring,
 		const struct option *longopts, int *longindex) {
   static int lastidx=0,lastofs=0;
-  char *tmp;
+  char *tmp,*arg;
   if (optind==0) optind=1;	/* whoever started setting optind to 0 should be shot */
 again:
   if (optind>argc || !argv[optind] || *argv[optind]!='-' || argv[optind][1]==0)
@@ -21,8 +21,11 @@ again:
     ++optind;
     return -1;
   }
-  if (argv[optind][1]=='-') {	/* long option */
-    char* arg=argv[optind]+2;
+  if (argv[optind][1]=='-') /* long option */
+    arg=argv[optind]+2;
+  else
+    arg=argv[optind]+1;
+  {
     char* max=strchr(arg,'=');
     const struct option* o;
     if (!max) max=arg+strlen(arg);
@@ -50,6 +53,7 @@ again:
 	return 0;
       }
     }
+    if (argv[optind][1]!='-') goto shortopt;
     if (*optstring==':') return ':';
     write(2,"invalid option `",16);
     write(2,arg,max-arg);
@@ -57,6 +61,7 @@ again:
     ++optind;
     return '?';
   }
+shortopt:
   if (lastidx!=optind) {
     lastidx=optind; lastofs=0;
   }
