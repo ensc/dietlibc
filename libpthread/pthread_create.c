@@ -21,7 +21,7 @@ int pthread_create (pthread_t *thread, const pthread_attr_t *attr,
   td = __thread_get_free();
 
   if (td) {
-    td->go.__spinlock=1;
+    td->go.__spinlock=PTHREAD_SPIN_LOCKED;
     if (!(attr)) {
       pthread_attr_init(&default_attr);
       attr=&default_attr;
@@ -47,13 +47,17 @@ int pthread_create (pthread_t *thread, const pthread_attr_t *attr,
 
     td->stack_size	= attr->__stacksize;
 
-    if (!(td->stack_addr)) {
+    if (!(attr->__stackaddr)) {
       char *stack=(char*)malloc(td->stack_size);
       if (!(stack)) {
 	return EINVAL;
       }
       td->stack_begin	= stack;
+#ifdef __parisc__
+      td->stack_addr	= stack;
+#else
       td->stack_addr	= stack+td->stack_size;
+#endif
     } else {
       td->stack_begin	= 0;
       td->stack_addr	= attr->__stackaddr;

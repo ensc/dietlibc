@@ -142,6 +142,8 @@ void __libc_free(void *ptr) __attribute__((alias("_alloc_libc_free")));
 void free(void *ptr) __attribute__((weak,alias("_alloc_libc_free")));
 void if_freenameindex(void* ptr) __attribute__((alias("free")));
 
+static __alloc_t zeromem[2]= {{0},{0}};
+
 static void* _alloc_libc_malloc(size_t size) {
   __alloc_t* ptr;
   size_t need;
@@ -158,6 +160,7 @@ static void* _alloc_libc_malloc(size_t size) {
     ptr->size=need;
     return BLOCK_RET(ptr);
   }
+  return BLOCK_RET(zeromem);
 err_out:
   (*__errno_location())=ENOMEM;
   return 0;

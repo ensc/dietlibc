@@ -22,6 +22,9 @@
   Steven Rostedt pointed out that my setvbuf was broken with regard to
     size==0 and sent a patch to fix it.
   Thomas Ogrisegg made setenv smaller.
+  Olaf: implemented the parisc clone and an atomic testandset, modified the
+    libpthread to respect the parisc UPgrowing stack. still non functional,
+    because the unified syscall uses errno :(
 
 0.13:
   add readdir64 and automatic mapping if _FILE_OFFSET_BITS == 64

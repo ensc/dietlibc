@@ -11,14 +11,14 @@
 #include <stdio.h>
 #include "thread_internal.h"
 
-static struct _pthread_fastlock __thread_struct_lock = {0};
+static struct _pthread_fastlock __thread_struct_lock = {PTHREAD_SPIN_UNLOCKED};
 static struct _pthread_descr_struct threads[PTHREAD_THREADS_MAX];
 static int _max_used_thread_id=1;
 pthread_once_t __thread_inited;
 
-static struct _pthread_fastlock __manager_thread_signal_lock = {0};
-static struct _pthread_fastlock __manager_thread_data_lock = {1};
-static struct _pthread_fastlock __manager_thread_data_go_lock = {1};
+static struct _pthread_fastlock __manager_thread_signal_lock = {PTHREAD_SPIN_UNLOCKED};
+static struct _pthread_fastlock __manager_thread_data_lock = {PTHREAD_SPIN_LOCKED};
+static struct _pthread_fastlock __manager_thread_data_go_lock = {PTHREAD_SPIN_LOCKED};
 
 //#define DEBUG
 
@@ -340,7 +340,11 @@ void __thread_init()
 
   ++_max_used_thread_id;
   threads[1].stack_size=sizeof(__manager_thread_stack);
+#ifdef __parisc__
+  threads[1].stack_addr=__manager_thread_stack;
+#else
   threads[1].stack_addr=&__manager_thread_stack[sizeof(__manager_thread_stack)];
+#endif
   threads[1].stack_begin=0;
   threads[1].func=__manager_thread;
 

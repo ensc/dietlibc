@@ -19,6 +19,13 @@ typedef struct _pthread_descr_struct *_pthread_descr;
 typedef int pthread_t;
 
 /* Fast locks */
+#ifdef __parisc__
+#define PTHREAD_SPIN_LOCKED 0
+#define PTHREAD_SPIN_UNLOCKED 1
+#else
+#define PTHREAD_SPIN_LOCKED 1
+#define PTHREAD_SPIN_UNLOCKED 0
+#endif
 struct _pthread_fastlock {
   int __spinlock;
 };
@@ -46,13 +53,13 @@ enum
 };
 
 #define PTHREAD_MUTEX_INITIALIZER \
-{{0}, 0, PTHREAD_MUTEX_FAST_NP, 0}
+{{PTHREAD_SPIN_UNLOCKED}, 0, PTHREAD_MUTEX_FAST_NP, 0}
 
 #define PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP \
-{{0}, 0, PTHREAD_MUTEX_RECURSIVE_NP, 0}
+{{PTHREAD_SPIN_UNLOCKED}, 0, PTHREAD_MUTEX_RECURSIVE_NP, 0}
 
 #define PTHREAD_ERRORCHECK_MUTEX_INITIALIZER_NP \
-{{0}, 0, PTHREAD_MUTEX_ERRORCHECK_NP, 0}
+{{PTHREAD_SPIN_UNLOCKED}, 0, PTHREAD_MUTEX_ERRORCHECK_NP, 0}
 
 typedef struct {
   int __mutexkind;
@@ -80,7 +87,7 @@ typedef struct {
 } pthread_cond_t;
 
 #define PTHREAD_COND_INITIALIZER \
-{{0},0}
+{{PTHREAD_SPIN_UNLOCKED},0}
 
 int pthread_cond_init(pthread_cond_t *cond, pthread_condattr_t *cond_attr);
 int pthread_cond_destroy(pthread_cond_t *cond);

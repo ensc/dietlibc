@@ -27,7 +27,8 @@ int __pthread_trylock(struct _pthread_fastlock * lock)
 
 int __pthread_unlock(struct _pthread_fastlock * lock)
 {
-  return (lock->__spinlock = 0);
+  lock->__spinlock = PTHREAD_SPIN_UNLOCKED;
+  return 0;
 }
 
 
