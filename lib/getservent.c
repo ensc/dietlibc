@@ -99,8 +99,13 @@ error:
   return 0;
 }
 
+void setservent(int stayopen) {
+  cur=servicesmap;
+}
+
 struct servent *getservbyname(const char *name, const char *proto) {
   struct servent *s;
+  setservent(0);
   for (s=getservent(); s; s=getservent()) {
     char **tmp;
 #if 0
@@ -126,10 +131,6 @@ struct servent *getservbyport(int port, const char *proto) {
       return s;
   }
   return 0;
-}
-
-void setservent(int stayopen) {
-  cur=servicesmap;
 }
 
 void endservent(void) {
