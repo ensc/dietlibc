@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <unistd.h>
+#include <string.h>
 #include "../libdl/_dl_int.h"
 
 struct elf_aux {
