@@ -32,6 +32,9 @@ long sysconf(int name)
   case _SC_ARG_MAX:
     return ARG_MAX;
 
+  case _SC_NGROUPS_MAX:
+    return NGROUPS_MAX;
+
   case _SC_NPROCESSORS_ONLN:
     return __sc_nr_cpus();
 

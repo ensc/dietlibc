@@ -32,6 +32,7 @@
   #define _POSIX_VDISABLE in termios.h (Laurent Bercot)
   two *printf fixes (Gernot Tenchio)
   add nan and +-inf handling in __dtostr
+  add _SC_NGROUPS_MAX support to sysconf (Felix J. Ogris)
 
 0.21:
   use gcc's size_t, ptrdiff_t and wchar_t types (Olaf)

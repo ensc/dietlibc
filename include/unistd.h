@@ -182,6 +182,7 @@ int _sysctl(struct __sysctl_args *args) __THROW;
 
 #define _SC_CLK_TCK 1
 #define _SC_ARG_MAX 2
+#define _SC_NGROUPS_MAX 3
 #define _SC_OPEN_MAX 4
 #define _SC_PAGESIZE 5
 #define _SC_NPROCESSORS_ONLN 6
