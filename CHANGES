@@ -3,6 +3,8 @@
     Thomas Ogrisegg!
   Thomas also contributed a PA-RISC port including testandset, so
     libpthread will work once we implement clone!  Great work, Thomas.
+  made the fake locale more believable.
+  If you need gettext, use http://www.ca.postgresql.org/~petere/gettext.html
 
 0.13:
   add readdir64 and automatic mapping if _FILE_OFFSET_BITS == 64
