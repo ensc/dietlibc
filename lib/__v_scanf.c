@@ -240,8 +240,8 @@ exp_out:
 		pf=(float *)va_arg(arg_ptr,float*);
 		*pf=d;
 	      }
-	      ++n;
 	    }
+	    ++n;
 	  }
 	  break;
 #endif
