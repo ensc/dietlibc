@@ -4,6 +4,7 @@
 #include <sys/cdefs.h>
 #include <sys/time.h>
 #include <signal.h>
+#include <unistd.h>
 
 __BEGIN_DECLS
 
@@ -65,6 +66,8 @@ char *strptime(const char *s, const char *format, struct tm *tm);
 time_t timegm(struct tm *timeptr) __THROW __attribute_dontuse__ __pure ;
 time_t timelocal(struct tm *timeptr) __THROW __attribute_dontuse__ __pure;
 #endif
+
+#define CLK_TCK ((clock_t)sysconf(_SC_CLK_TCK))
 
 __END_DECLS
 
