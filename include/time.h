@@ -3,6 +3,7 @@
 
 #include <sys/cdefs.h>
 #include <sys/time.h>
+#include <signal.h>
 
 __BEGIN_DECLS
 
