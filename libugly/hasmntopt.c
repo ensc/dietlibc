@@ -1,28 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #include <string.h>
 #include <mntent.h>
 
@@ -34,7 +9,7 @@ char *hasmntopt(const struct mntent *mnt, const char *opt) {
   for (c=s;;) {
     if (!(c=strstr(c,opt))) break;
     if (c==s || c[-1]==',') {
-      if (c[len]==0 || c[len]==',')
+      if (c[len]==0 || c[len]==',' || c[len]=='=')
 	return c;
     }
     c+=len+1;

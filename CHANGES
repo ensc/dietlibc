@@ -13,6 +13,7 @@
     case a PATH element exceeded PATH_MAX, but it's not a security
     problem since setuid programs need to set their path to some known
     value anyway.
+    hasmntopt did not work with foo=bar style options
   Uwe also improved ftw's stack usage.
   Put movl instead of popl rationale in comment in i386/unified.S since
     three people have suggested saving a few bytes with popl now ;)
