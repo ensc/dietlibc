@@ -83,11 +83,12 @@ static unsigned int scan_ip6(const char *s,char ip[16])
 }
 
 int inet_pton(int AF, const char *CP, void *BUF) {
+  int len;
   if (AF==AF_INET) {
     if (!inet_aton(CP,(struct in_addr*)BUF))
       return 0;
   } else if (AF==AF_INET6) {
-    if (!CP[scan_ip6(CP,BUF)])
+    if (CP[len=scan_ip6(CP,BUF)])
       return 0;
   } else {
     errno=EAFNOSUPPORT;

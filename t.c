@@ -31,11 +31,13 @@
 int foo;
 
 int main(int argc,char *argv[]) {
+#if 0
   char buf[1024];
   FILE *f=popen("uname -srm","r");
   fgets(buf,1023,f);
   pclose(f);
   write(1,buf,strlen(buf));
+#endif
 #if 0
   char type[64];
   char filename[256];
@@ -51,15 +53,14 @@ int main(int argc,char *argv[]) {
   printf("%p %p\n",inet_ntop(AF_INET6,ip,buf,100),buf);
   puts(buf);
 #endif
-#if 0
+#if 1
   struct addrinfo *ai;
   struct addrinfo hints;
   char buf[16];
-  printf("%d\n",inet_pton(AF_INET6,"hellhound",buf));
   hints.ai_family = AF_UNSPEC;
   hints.ai_flags = AI_PASSIVE|AI_CANONNAME;
   hints.ai_socktype = SOCK_STREAM;
-  printf("%d\n",getaddrinfo(0,"80",&hints,&ai));
+  printf("%d\n",getaddrinfo("maddison.math.fu-berlin.de","ssh",&hints,&ai));
   while (ai) {
     printf("found host %s, port %d, family %s, socktype %s\n",ai->ai_canonname,
 	   ntohs(ai->ai_family==AF_INET6?((struct sockaddr_in6*)ai->ai_addr)->sin6_port:

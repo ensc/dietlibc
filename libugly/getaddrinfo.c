@@ -21,7 +21,7 @@ int getaddrinfo(const char *node, const char *service, const struct addrinfo *hi
       int lookupok=0;
       h.h_addr_list=(char**)buf+16;
       if (node) {
-	if (inet_pton(family,node,buf)>=0) {
+	if (inet_pton(family,node,buf)>0) {
 	  h.h_name=(char*)node;
 	  h.h_addr_list[0]=buf;
 	  lookupok=1;
