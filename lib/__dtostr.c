@@ -20,7 +20,7 @@ int __dtostr(double d,char *buf,int maxlen,int prec) {
     goto done;
   }
   if (s) { d=-d; *buf='-'; --maxlen; buf++; }
-  printf("e=%d e10=%d prec=%d\n",e,e10,prec);
+/*  printf("e=%d e10=%d prec=%d\n",e,e10,prec); */
   if (e10>=0) {
     i=e10;
     while (i>10) { tmp=tmp*1e10; i-=10; }
@@ -30,13 +30,9 @@ int __dtostr(double d,char *buf,int maxlen,int prec) {
     while (i>10) { tmp=tmp*1e-10; i-=10; }
     while (i>1) { tmp=tmp/10; --i; }
   }
-  if (d<1) {
-    tmp=1;
-  } else {
-    while (d/tmp<1) {
-      --e10;
-      tmp/=10.0;
-    }
+  while (d/tmp<1) {
+    --e10;
+    tmp/=10.0;
   }
   /* step 4: see if precision is sufficient to display all digits */
   if (e10>prec) {
@@ -63,6 +59,20 @@ int __dtostr(double d,char *buf,int maxlen,int prec) {
   }
   /* step 5: loop through the digits, inserting the decimal point when
    * appropriate */
+  if (d<1.0) {
+    double x=1.0;
+    int first=1;
+    do {
+      if (--maxlen<0) return buf-oldbuf;
+      *buf='0'; ++buf;
+      if (first) {
+	first=0;
+	*buf='.'; ++buf;
+	if (--maxlen<0) return buf-oldbuf;
+      }
+      x/=10.0;
+    } while (x>d);
+  }
   for (; prec>0; ) {
     double tmp2=d/tmp;
     char c;

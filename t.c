@@ -41,7 +41,7 @@ static int rand() {
 extern double atof(const char *c);
 
 int main(int argc,char *argv[]) {
-  char *t=mmap(0,1024,PROT_READ|PROT_WRITE,MAP_ANONYMOUS|MAP_PRIVATE|MAP_FIXED,-1,0);
+  printf("%g\n",30.0123);
 #if 0
   time_t t=time(0);
   puts(asctime(localtime(&t)));
