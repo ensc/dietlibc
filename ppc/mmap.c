@@ -1,3 +1,4 @@
+#include "dietfeatures.h"
 #include <sys/types.h>
 #include <errno.h>
 #include "syscalls.h"
