@@ -22,9 +22,10 @@ static unsigned int fmt_ip6(char *s,const char ip[16]) {
   unsigned int i;
   unsigned int temp;
   unsigned int compressing;
+  unsigned int compressed;
   int j;
 
-  len = 0; compressing = 0;
+  len = 0; compressing = 0; compressed = 0;
   for (j=0; j<16; j+=2) {
     if (j==12 && !memcmp(ip,V4mappedprefix,12)) {
       inet_ntoa_r(*(struct in_addr*)(ip+12),s);
@@ -33,7 +34,7 @@ static unsigned int fmt_ip6(char *s,const char ip[16]) {
     }
     temp = ((unsigned long) (unsigned char) ip[j] << 8) +
             (unsigned long) (unsigned char) ip[j+1];
-    if (temp == 0) {
+    if (temp == 0 && !compressed) {
       if (!compressing) {
 	compressing=1;
 	if (j==0) {
@@ -42,7 +43,7 @@ static unsigned int fmt_ip6(char *s,const char ip[16]) {
       }
     } else {
       if (compressing) {
-	compressing=0;
+	compressing=0; compressed=1;
 	*s++=':'; ++len;
       }
       i = fmt_xlong(s,temp); len += i; s += i;
