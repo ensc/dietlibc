@@ -26,6 +26,8 @@
 /* Nonzero if STATUS indicates the child is stopped.  */
 #define WIFSTOPPED(status)	(((status) & 0xff) == 0x7f)
 
+/* Nonzero if STATUS indicates the child dumped core. */
+#define WCOREDUMP(status) ((status) & 0x80)
 
 pid_t wait(int *status) __THROW;
 pid_t waitpid(pid_t pid, int *status, int options) __THROW;
