@@ -143,16 +143,17 @@ void __libc_free(void *ptr)
       tmp=base=block;
     }
     else
-    { /* in or after last freelistentry */
+    { /* in freelist or after last freelist-entry */
       for (tmp=base; tmp->next ;tmp=tmp->next)
       {
 	if (block<tmp->next) break;	/* FOUND */
       }
       block->next=tmp->next;
       block->prev=tmp;
+      tmp->next=block;
     }
 
-    next=tmp->next;
+    next=block->next;
     /* join code */
     if (END_OF_BLOCK(block)==next)
     { /* join right neighbor */
