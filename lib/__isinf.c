@@ -2,7 +2,7 @@
 
 int isinf(double d) {
   unsigned long long *x=(unsigned long long *)&d;
-  return (*x==0x7FF0000000000000ll?1:*x==0xFFF0000000000000?-1:0);
+  return (*x==0x7FF0000000000000ll?1:*x==0xFFF0000000000000ll?-1:0);
 }
 int __isinf(double d) __attribute__((alias("isinf")));
 

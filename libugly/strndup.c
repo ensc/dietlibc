@@ -1,3 +1,5 @@
+#define __GNU_SOURCE
+/* *puke* */
 #include <string.h>
 #include <stdlib.h>
 

@@ -103,29 +103,29 @@ typedef unsigned short sa_family_t;
 
 #ifdef _BSD_SOURCE
 /* die, BSD, die! */
-typedef char* caddr_t;
-typedef unsigned char u_char;
-typedef unsigned short u_short;
-typedef unsigned int u_int;
-typedef unsigned char uchar;
-typedef unsigned short ushort;
-typedef unsigned int uint;
-typedef uint32_t u_long;
-typedef uint32_t n_long;
-typedef uint32_t n_time;
-typedef uint16_t n_short;
-typedef uint32_t ulong;
-typedef uint32_t nlong;
-typedef uint32_t ntime;
-typedef uint16_t nshort;
+typedef char* caddr_t __attribute_dontuse__;
+typedef unsigned char u_char __attribute_dontuse__;
+typedef unsigned short u_short __attribute_dontuse__;
+typedef unsigned int u_int __attribute_dontuse__;
+typedef unsigned char uchar __attribute_dontuse__;
+typedef unsigned short ushort __attribute_dontuse__;
+typedef unsigned int uint __attribute_dontuse__;
+typedef uint32_t u_long __attribute_dontuse__;
+typedef uint32_t n_long __attribute_dontuse__;
+typedef uint32_t n_time __attribute_dontuse__;
+typedef uint16_t n_short __attribute_dontuse__;
+typedef uint32_t ulong __attribute_dontuse__;
+typedef uint32_t nlong __attribute_dontuse__;
+typedef uint32_t ntime __attribute_dontuse__;
+typedef uint16_t nshort __attribute_dontuse__;
 #endif
 
 #ifdef _GNU_SOURCE
-typedef uint8_t u_int8_t;
-typedef uint16_t u_int16_t;
-typedef uint32_t u_int32_t;
+typedef uint8_t u_int8_t __attribute_dontuse__;
+typedef uint16_t u_int16_t __attribute_dontuse__;
+typedef uint32_t u_int32_t __attribute_dontuse__;
 #ifndef __STRICT_ANSI__
-typedef uint64_t u_int64_t;
+typedef uint64_t u_int64_t __attribute_dontuse__;
 #endif
 #endif
 
