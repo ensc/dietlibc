@@ -1,41 +1,43 @@
 #include <dietfeatures.h>
-
 #include "syscalls.h"
 
 .text
-.global __unified_syscall4
-__unified_syscall4:
-	ldmfd	sp!, {r4, r5, r6}
-	b	__unified_syscall
+
+@
+@ The exit status is already in r0 and this function never returns.
+@ Therefore all we need to do here is call the syscall.
+@
+
 .weak exit
-.type exit,function
-exit:
 .global _exit
-.type _exit,function
+
+exit:
 _exit:
-	swi	$__NR_exit
+	swi	$__NR_exit		@ never returns.
+
+@
+@ Note that __unified_syscall has 2 entry points.
+@
+
 .global __unified_syscall
+.global __unified_syscall_1
+
 __unified_syscall:
+	ldmia	sp!, {r4, r5, r6}
+__unified_syscall_1:
 	cmn	r0, #4096
-	movcc	pc, lr
-	rsb	r0, r0, #0
+	movcc	pc, lr			@ return value comes direct from kernel.
+
+	rsb	r1, r0, #0
 #ifdef WANT_THREAD_SAFE
-	stmdb	sp!, {r0, lr}
+	stmdb	sp!, {r1, lr}
 	bl	__errno_location
 	ldmia	sp!, {r1, lr}
-	str	r1, [r0]
 #else
-	ldr	r1, .L0
-	str	r0, [r1]
+	ldr	r0, .L0
 #endif
-	mvn	r0, #0
+	str	r1, [r0]		@ store error code into 'errno'
+	mvn	r0, #0			@ return value = -1
 
 /* here we go and "reuse" the return for weak-void functions */
 #include "dietuglyweaks.h"
-
-	mov	pc, lr
-
-#ifndef WANT_THREAD_SAFE
-.L0:
-	.long errno
-#endif

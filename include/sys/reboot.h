@@ -16,4 +16,11 @@
 /* Reboot or halt the system.  */
 int reboot (int flag);
 
+/* the glibc people changed their macro names :-/ */
+#define RB_AUTOBOOT	0x01234567
+#define RB_HALT_SYSTEM	0xcdef0123
+#define RB_ENABLE_CAD	0x89abcdef
+#define RB_DISABLE_CAD	0
+#define RB_POWER_OFF	0x4321fedc
+
 #endif	/* _SYS_REBOOT_H */

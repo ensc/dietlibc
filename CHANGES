@@ -33,7 +33,9 @@
     add <asm/sigcontext.h> for profiling support.
     make strncpy a #define in string.h to save a few bytes.
   add a getenv test suite entry.
-  Andre contributed an ARM assembler md5 implementation.
+  Andre contributed an ARM assembler md5 implementation and he fixed mmap
+    on ARM.
+  add glibc macro names in sys/reboot.h.  Mentioned by Laurent G. Bercot
 
 0.14:
   fix brk again (missing __brk, trivial oversight)
