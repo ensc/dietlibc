@@ -30,6 +30,15 @@ int atoi(const char *nptr) __THROW;
 
 void abort(void) __THROW;
 
+/* warning: the rand() implementation of the diet libc really sucks. */
+#define RAND_MAX 32767
+
+extern int rand(void) __THROW;
+extern void srand(unsigned int seed) __THROW;
+
+void qsort(void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *)) __THROW;
+void *bsearch(const void *key, const void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *)) __THROW;
+
 extern char **environ;
 
 #define EXIT_SUCCESS 0

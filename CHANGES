@@ -8,6 +8,10 @@
   added setvbuf (only changes mode, not buffer)
   added dietwarning.h (woohoo, linker warnings!) and used it to warn of
     insecurity (system, sprintf) or bloat (printf and stdio).
+  added qsort() and bsearch().  Benchmark on 1000 random ints:
+    glibc: 679414 cycles qsort and 3352 cycles bsearch
+    diet libc: 300010 cycles qsort, 553 cycles bsearch
+    I have no idea why glibc is so slow.
 
 0.7.2:
   added several prototypes to already implemented functions and

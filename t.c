@@ -13,9 +13,48 @@
 #include <sys/sem.h>
 #include <sys/shm.h>
 
+int compint(const void *a,const void *b) {
+/*  printf("comparing %d with %d\n",*(int*)a,*(int*)b); */
+  return (*(int*)a-*(int*)b);
+}
+
+#define SIZE 100000
+#define LOOKFOR ((SIZE/2)-2)
+
+int array[SIZE];
+
+#define rdtscl(low) \
+     __asm__ __volatile__ ("rdtsc" : "=a" (low) : : "edx")
+
+static unsigned int seed=1;
+
+static int rand() {
+  return ((seed = seed * 1103515245 + 12345) % ((unsigned int)RAND_MAX + 1));
+}
+
 int main(int argc,char *argv[]) {
-  sprintf(0,"blubber");
-  printf("oink");
+  int i,j;
+  long a,b,c;
+  int *res;
+  printf("%p\n",malloc(0));
+  qsort(array,2,sizeof(int),compint);
+  for (i=0; i<SIZE; ++i)
+    array[i]=rand();
+  rdtscl(a);
+  qsort(array,SIZE,sizeof(int),compint);
+  rdtscl(b);
+  j=array[LOOKFOR];
+  res=bsearch(&j,array,SIZE,sizeof(int),compint);
+  rdtscl(c);
+  printf("%lu cycles sort, %lu cycles bsearch\n",b-a,c-b);
+  for (i=0; i<SIZE-1; ++i)
+    if (array[i]>array[i+1]) {
+      printf("qsort does not work, index %d: %d > %d\n",i,array[i],array[i+1]);
+      return 1;
+    }
+  if (*res!=j)
+    printf("besearch does not work, returned %p (%d) instead of %p (%d)\n",res,res?*res:-1,array+LOOKFOR,j);
+/*  printf("array={%d,%d,%d,%d,%d}\n",array[0],array[1],array[2],array[3],array[4]); */
 #if 0
   struct in_addr duh;
   printf("%d\n",inet_aton(argv[1]?argv[1]:"10.0.0.1",&duh));
