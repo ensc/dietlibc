@@ -35,4 +35,7 @@ char *asctime_r(const struct tm *timeptr, char *buf) __THROW;
 struct tm* gmtime(const time_t *t) __THROW;
 struct tm* gmtime_r(const time_t *t, struct tm *r) __THROW;
 
+struct tm* localtime(const time_t *t) __THROW;
+struct tm* localtime_r(const time_t *t, struct tm *r) __THROW;
+
 #endif
