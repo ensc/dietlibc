@@ -104,11 +104,7 @@ extern char* strcpy2(char*a,char*b);
      __asm__ __volatile__ ("rdtsc" : "=a" (low) : : "edx")
 
 int main(int argc,char *argv[]) {
-  char buf[100];
-  memset(buf,0,sizeof buf);
-  memcmp(buf,"foo",sizeof buf);
-  memcpy(buf,"foo",4);
-  memmove(buf,"foo",4);
+  printf("%+05d\n",500);
 #if 0
   char* c;
   printf("%d\n",asprintf(&c,"foo %d",23));

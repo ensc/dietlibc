@@ -1,3 +1,1 @@
-#include "syscalls.h"
-
-syscall(osf_signal,signal)
+/* on Alpha, we emulate signal with sigaction */

@@ -14,6 +14,8 @@
     Idea by Dirk Engling.
   fix an argument counting bug in *scanf (Thomas Ogrisegg)
   Forgot an #endif in asm/sigcontext.h (Mike Castle)
+  Kurt Garloff sent in patches to
+    fix struct termios on non-x86 architectures
 
 0.15:
   vfork sucks.  I reverted to the old behavior where vfork==fork.
