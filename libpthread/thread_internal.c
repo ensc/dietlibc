@@ -8,6 +8,8 @@
 #include "thread_internal.h"
 
 static struct _pthread_descr_struct threads[PTHREAD_THREADS_MAX];
+pthread_once_t __thread_inited;
+
 
 /* find thread */
 int __find_thread_id(int pid)
@@ -28,7 +30,8 @@ _pthread_descr __get_thread_struct(int id)
 /* thread errno location */
 int *__errno_location(void)
 {
-  int id=__find_thread_id(getpid());
+  int id=0;
+  if (__thread_inited) id=__find_thread_id(getpid());
   if (id<0)
     return 0;
   else
@@ -149,8 +152,6 @@ _pthread_descr __thread_get_free()
 }
 
 /* thread intern init */
-pthread_once_t __thread_inited;
-
 void __thread_init()
 {
   printf("INIT ! %d\n",getpid());
