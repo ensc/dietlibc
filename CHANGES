@@ -9,6 +9,7 @@
   added libstdio and moved all that stdio crap from lib/ there.  The
     idea is to start separating now what we will separate for shared
     libraries anyway.
+  test
 
 0.7.1:
   optimized away the static arrays from __ltostr and __lltostr.
