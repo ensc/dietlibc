@@ -41,7 +41,9 @@ void* memset(void *s, int c, size_t n) __THROW;
 void* memchr(const void *s, int c, size_t n) __THROW;
 
 const char *strerror(int errnum) __THROW;
+#ifdef _GNU_SOURCE
 const char *strsignal(int signum) __THROW;
+#endif
 
 char *strtok(char *s, const char *delim) __THROW;
 char *strtok_r(char *s, const char *delim, char **ptrptr) __THROW;
