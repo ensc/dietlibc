@@ -46,6 +46,7 @@
   fix glob strncpy (R.L. Horn)
   fix regfree (Uwe Ohse)
   fix puts in full stdio mode (would omit \n)
+  fix wrong types on powerpc, broke *stat (Gerrit Pape)
 
 0.21:
   use gcc's size_t, ptrdiff_t and wchar_t types (Olaf)
