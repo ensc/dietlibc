@@ -174,14 +174,8 @@ int glob(const char *pattern, int flags, int errfunc(const char * epath, int eer
 			ptr = strchr(ptr2, '/');
 			if (ptr != NULL)
 				*ptr = '\0';
-			setpwent();
-			while (((p = getpwent()) != NULL)) {
-				if (!strcmp(p->pw_name, ptr2)) {
-					home_dir = p->pw_dir;
-					break;
-				}
-			}
-			endpwent();
+			if (((p = getpwnam(ptr2)) != NULL))
+				home_dir = p->pw_dir;
 		}
 		if (home_dir != NULL) {
 			i = strlen(home_dir) + strlen(pattern_); /* pessimistic (the ~ case) */
