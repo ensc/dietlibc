@@ -1,5 +1,12 @@
 #ifdef __OD_CLEAN_ROOM
 
+/* work around...
+ * don't include <string.h> or <stdlib.h>
+ */
+#define _STRING_H
+#define _STDLIB_H
+
+/* we are the libdl.so so tell all included functiuons to be static. */
 #define __DIET_LD_SO__
 
 /*
@@ -41,6 +48,7 @@ int _dl_sys_mprotect(const void*addr,unsigned long len,int prot);
 int _dl_sys_fstat(int filedes, struct stat *buf);
 
 extern char*strdup(const char*s);
+extern void free(void*p);
 
 #if defined(__i386__)
 
