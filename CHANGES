@@ -1,7 +1,7 @@
 0.19:
   current gcc cvs makes __thread a keyword (Eric Troan)
   be more strict regarding hostile DNS packets.
-  fix ia64 syscalls compile snafu (forgot to include ia64/syscalls.h)
+  fix ia64 compile problems (Gerrit Pape)
   make killpg a function and not a macro (broke bash 2.05b)
 
 0.18:

@@ -36,6 +36,7 @@ static const char* Os[] = {
   "ppc","-Os","-fomit-frame-pointer","-mpowerpc-gpopt","-mpowerpc-gfxopt",0,
   "s390","-Os","-fomit-frame-pointer",0,
   "sh","-Os","-fomit-frame-pointer",0,
+  "ia64","-Os","-fno-omit-frame-pointer",0,
   0};
 
 int main(int argc,char *argv[]) {
