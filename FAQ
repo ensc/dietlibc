@@ -176,3 +176,26 @@ A: There is experimental support for profiling, but so far it only works
    on x86.  To use it, do "make profiling" before make install.  Then,
    diet will link in the support code if it finds a -pg on the gcc
    command line.
+
+
+Q: I get compiler errors in a line with caddr_t, u_long, n_short or
+   nlong or similar.
+A: Add -D_BSD_SOURCE to the compiler command line.  The diet libc tries
+   to encourage portable and standards compliant programming, so it
+   hides these legacy BSD types from the standard name space.  The
+   reason is that the Single Unix Specification contains a specification
+   of the socket API but does not mention those types.
+
+
+Q: I get compiler errors in a line with u_int8_t or similar.
+A: Add -D_GNU_SOURCE to the compiler command line.  See previous
+   question.  This is a very questionable GNU extension.  The C Standard
+   defines uint8_t, uint16_t and uint32_t.  Use those instead.
+
+
+Q: Can I compile or use the diet libc with a compiler that is not gcc?
+A: Compile: no.  Use: yes.
+
+
+Q: Can you please port the diet libc to FreeBSD/Solaris/Windows?
+A: No.
