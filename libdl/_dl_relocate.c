@@ -54,7 +54,7 @@ int _dl_apply_relocate(struct _dl_handle* dh, Elf32_Rel *rel) {
     ret=1;
   } else if (typ==R_ARM_GLOB_DAT) {	/* 21 */
     *loc = (unsigned long)_dl_sym(dh, ELF32_R_SYM(rel->r_info));
-  } else if (typ==R_ARM_JMP_SLOT) {	/* 22 */
+  } else if (typ==R_ARM_JUMP_SLOT) {	/* 22 */
     *loc += (unsigned long)dh->mem_base;
   } else if (typ==R_ARM_RELATIVE) {	/* 23 */
     *loc += (unsigned long)dh->mem_base;
