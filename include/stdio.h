@@ -54,13 +54,13 @@ int fputs(const char *s, FILE *stream) __THROW;
 
 int puts(const char *s) __THROW;
 
-long fseek(FILE *stream, long offset, int whence) __THROW;
+int fseek(FILE *stream, long offset, int whence) __THROW;
 long ftell(FILE *stream) __THROW;
-off_t fseeko(FILE *stream, off_t offset, int whence) __THROW;
+int fseeko(FILE *stream, off_t offset, int whence) __THROW;
 off_t ftello(FILE *stream) __THROW;
 
 #ifndef __NO_STAT64
-loff_t fseeko64(FILE *stream, loff_t offset, int whence) __THROW;
+int fseeko64(FILE *stream, loff_t offset, int whence) __THROW;
 loff_t ftello64(FILE *stream) __THROW;
 
 #if _FILE_OFFSET_BITS == 64

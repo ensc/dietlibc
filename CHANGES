@@ -67,7 +67,7 @@
     sources stink!)
   Added openpty.
   Squeeze a few bytes off the is* routines, courtesy of Peter Jones.
-  Olaf: I added a "stream" based scanf (all 6 scanf's are now available)
+  Fix fseek return value.
 
 0.10:
   update getpagesize.
