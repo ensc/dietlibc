@@ -19,6 +19,8 @@ typedef struct {
 #define REG_NOTBOL 1
 #define REG_NOTEOL 2
 
+#define RE_DUP_MAX 255
+
 typedef struct __regex_t {
   struct atom *list;
 } regex_t;
