@@ -138,12 +138,19 @@ int nice(int inc) __THROW;
 
 extern char *__environ[];
 
-char *crypt(const char *key, const char *salt);
-void encrypt(char block[64], int edflag);
-void setkey(const char *key);
+char *crypt(const char *key, const char *salt) __THROW;
+void encrypt(char block[64], int edflag) __THROW;
+void setkey(const char *key) __THROW;
 
-size_t getpagesize(void);
+size_t getpagesize(void) __attribute__((__const__)) __THROW;
 
-int _sysctl(struct __sysctl_args *args);
+int getdomainname(char *name, size_t len) __THROW;
+int setdomainname(const char *name, size_t len) __THROW;
+
+int getgroups(int size, gid_t list[]) __THROW;
+
+/* warning: linux specific: */
+int _sysctl(struct __sysctl_args *args) __THROW;
+int  sendfile(int out_fd, int in_fd, off_t *offset, size_t count) __THROW;
 
 #endif
