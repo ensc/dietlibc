@@ -1,10 +1,7 @@
-#define __KERNEL__
-#include <asm/signal.h>
+#include <signal.h>
 
 int __sigfillset (sigset_t *set) {
-  int i;
-  for (i=0; i<_NSIG_WORDS; i++)
-    set->sig[i]=~0;
+  memset(set,0xff,sizeof(*set));
   return 0;
 }
 

@@ -4,10 +4,10 @@
 #include <string.h>
 
 int sigemptyset(sigset_t *set) {
-  if (set==NULL) {
+/*  if (set==NULL) {
     __set_errno(EINVAL);
     return -1;
-  }
+  } */
   memset(set,0,sizeof(*set));
   return 0;
 }
