@@ -4,6 +4,9 @@
 #include <sys/cdefs.h>
 #include <linux/resource.h>
 
+#undef RLIM_INFINITY
+#define RLIM_INFINITY ((long)(~0UL>>1))
+
 int getpriority(int which, int who) __THROW;
 int setpriority(int which, int who, int prio) __THROW;
 

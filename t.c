@@ -28,12 +28,20 @@
 #include <sys/socket.h>
 #include <netdb.h>
 #include <signal.h>
+#include <sys/io.h>
 
 int foo;
 
 int main(int argc,char *argv[]) {
-  fd_set x;
-  FD_ZERO(&x);
+  fprintf(stdout,"foo\n");
+  sleep(1);
+  fprintf(stdout,"bar");
+  fprintf(stderr,"blonk");
+  sleep(1);
+  fprintf(stdout,"\rbz");
+  sleep(1);
+  fprintf(stdout,"\n");
+  sleep(1);
 #if 0
   sigset_t s;	/* sigsetops */
 
