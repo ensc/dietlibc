@@ -12,6 +12,10 @@ size_t iconv(iconv_t cd, const char* * inbuf, size_t *
     v=*(unsigned char*)*inbuf;
     i=j=1;
     switch (cd->from) {
+    case UCS_2:
+      v=*(unsigned short*)*inbuf;
+      i=2;
+      break;
     case UCS_4:
       v=*(unsigned int*)*inbuf;
       i=4;
@@ -32,6 +36,10 @@ size_t iconv(iconv_t cd, const char* * inbuf, size_t *
     switch (cd->to) {
     case ISO_8859_1:
       **outbuf=(unsigned char)v;
+      break;
+    case UCS_2:
+      *(unsigned short*)*outbuf=v;
+      j=2;
       break;
     case UCS_4:
       *(unsigned int*)*outbuf=v;

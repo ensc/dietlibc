@@ -2,6 +2,7 @@ enum charset {
   INVALID,
   ISO_8859_1,
   UTF_8,
+  UCS_2,
   UCS_4
 };
 

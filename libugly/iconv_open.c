@@ -6,6 +6,7 @@
 
 static enum charset parsecharset(const char* s) {
   if (!strcasecmp(s,"UTF-8")) return UTF_8; else
+  if (!strcasecmp(s,"UCS-2")) return UCS_2; else
   if (!strcasecmp(s,"UCS-4")) return UCS_4; else
   if (!strcasecmp(s,"ISO-8859-1")) return ISO_8859_1; else
   if (!strcasecmp(s,"US-ASCII")) return ISO_8859_1; else
