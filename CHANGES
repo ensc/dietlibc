@@ -7,6 +7,7 @@
   add memmem (a GNU extension that looks useful)
   several changes from Michael Ludvig: inttypes.h gets C99 macros,
     add pivot_root syscall, %n for *scanf.
+  add adjtimex (thanks, Laurent BERCOT)
 
 0.11:
   fix major oops in DNS routines (only with WANT_FULL_RESOLV_CONF enabled).

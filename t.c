@@ -85,9 +85,26 @@ void foo(int tmp,...) {
   if (l!=-1) write(2,"kaputt\n",7);
 }
 
+extern char* strcpy2(char*a,char*b);
+
+#define rdtscl(low) \
+     __asm__ __volatile__ ("rdtsc" : "=a" (low) : : "edx")
+
 int main(int argc,char *argv[]) {
+  printf("%d\n",strcmp("aaaa","aaad"));
+#if 0
+  long a,b,c;
   char buf[20]="fnord";
-  printf("%s\n",memmem("x86-linux-gcc",12,"gcc",3));
+  strcpy(buf,"Fnordhausen");
+  strcpy2(buf,"Fnordhausen");
+  rdtscl(a);
+  strcpy(buf,"Fnordhausen");
+  rdtscl(b);
+  strcpy2(buf,"Fnordhausen");
+  rdtscl(c);
+  printf("C: %d ticks, asm: %d ticks\n",b-a,c-b);
+#endif
+
 /*  printf("%d\n",strcmp(buf,"fnord")); */
 #if 0
   regex_t r;
