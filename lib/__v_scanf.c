@@ -35,7 +35,8 @@ int __v_scanf(struct arg_scanf* fn, const unsigned char *format, va_list arg_ptr
   /* get one char */
   int tpch= A_GETC(fn);
 
-  while ((tpch!=-1)&&(*format))
+  //while ((tpch!=-1)&&(*format))
+  while (*format)
   {
 //    const unsigned char *prev_fmt=format;
     ch=*format++;
@@ -67,6 +68,7 @@ int __v_scanf(struct arg_scanf* fn, const unsigned char *format, va_list arg_ptr
 
 in_scan:
 	ch=*format++;
+	if(ch!='n' && tpch==-1) goto err_out;
 	switch (ch) {
 	/* end of format string ?!? */
 	case 0: return 0;
@@ -136,16 +138,18 @@ in_scan:
 
 	    if (tpch=='+') tpch=A_GETC(fn);
 
-	    if ((_div==16) && (tpch=='0')) goto scan_hex;
-	    if (!_div) {
-	      _div=10;
-	      if (tpch=='0') {
-		_div=8;
+	    if (!flag_width) {
+	      if ((_div==16) && (tpch=='0')) goto scan_hex;
+	      if (!_div) {
+		_div=10;
+		if (tpch=='0') {
+		  _div=8;
 scan_hex:
-		tpch=A_GETC(fn);
-		if ((tpch|32)=='x') {
 		  tpch=A_GETC(fn);
-		  _div=16;
+		  if ((tpch|32)=='x') {
+		    tpch=A_GETC(fn);
+		    _div=16;
+		  }
 		}
 	      }
 	    }

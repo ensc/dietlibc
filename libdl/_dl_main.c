@@ -110,7 +110,7 @@ _dl_sys_mprotect:
 	movb	$125,%al
 	jmp	_dl_sys_call3
 _dl_sys_exit:
-	movl	$1,%eax
+	movb	$1,%al
 _dl_sys_call3:
 	movzbl	%al,%eax
 	pushl	%ebx
