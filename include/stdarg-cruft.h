@@ -82,6 +82,11 @@ typedef char * va_list;
 #define __va_rounded_size(__TYPE)  \
   (((sizeof (__TYPE) + sizeof (int) - 1) / sizeof (int)) * sizeof (int))
 #endif
+#ifdef __mips64
+#define __va_reg_size 8
+#else
+#define __va_reg_size 4
+#endif
 
 #if defined (__mips_eabi)
 #if ! defined (__mips_soft_float) && ! defined (__mips_single_float)
