@@ -33,5 +33,6 @@ const char *dlerror(void)
   strncat(buf,_dl_error_msg[_dl_error].msg,len); len -= _dl_error_msg[_dl_error].len;
   strncat(buf,_dl_error_data,len);
 
+  _dl_error_data="";
   return buf;
 }

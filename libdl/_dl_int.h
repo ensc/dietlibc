@@ -46,9 +46,11 @@ extern struct _dl_handle* _dl_root_handle;
 extern struct _dl_handle* _dl_top_handle;
 void _dl_free_handle(struct _dl_handle* dh);
 struct _dl_handle* _dl_get_handle();
+struct _dl_handle* _dl_find_lib(const char* name);
 
 /* _dl_open.c */
-void *_dl_open(const char* filename, const char*pathname, int fd, int flag);
+void *_dl_open(const char* filename, int flags);
+void *_dl_load(const char* filename, const char*pathname, int fd, int flags);
 
 /* _dl_search.c */
 void _dl_set_rpath(const char *path);
@@ -58,6 +60,10 @@ int _dl_search(char *buf, int len, const char *filename);
 void *_dl_sym(struct _dl_handle * h, int symbol);
 /* dlsym.c */
 void *_dlsym(void * h, char* symbol);
+
+/* _dl_queue.c */
+int _dl_queue_lib(const char* name, int flags);
+void _dl_open_dep();
 
 /* _dl_relocate.c */
 int _dl_relocate(struct _dl_handle* dh, Elf32_Rel *rel, int num);
