@@ -42,8 +42,10 @@ int __v_printf(struct arg_printf* fn, const unsigned char *format, va_list arg_p
     }
     if (*format=='%') {
       char buf[128];
+      union { char*s; } u_str;
+#define s u_str.s
 
-      unsigned char ch, *s, padwith=' ';
+      unsigned char ch, padwith=' ';
 
       char flag_in_sign=0;
       char flag_upcase=0;
