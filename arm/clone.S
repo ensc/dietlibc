@@ -1,36 +1,34 @@
+
 #include <errno.h>
 #include "syscalls.h"
 
-.text
-.weak clone
+	.text
+	.weak 	clone
+	.global __clone
+	
+@
+@ Some slightly tricky stuff here... edit with care :-)
+@
+
 clone:
-.type __clone,function
-.global __clone
 __clone:
-	cmp	r0, #0		/* check for function pointer */
-	cmpne	r1, #0		/* if function check for stack pointer */
-	moveq	r0, #-EINVAL	/* if one is not available set errno value */
-	beq	.Lerror		/* if error jump */
+	movs	r12, r0			@ check function pointer
+	cmpne	r1, #0			@ if function check for stack pointer
+	moveq	r0, #-EINVAL		@ if one is not available set errno value
+	beq	__unified_syscall	@ handle as if error was returned by the syscall
 
-#if 0
-	sub	r1, r1, #8	/* reserve 2 words on child-stack */
-	str	r3, [r1, #4]	/* function parameter */
-	str	r0, [r1]	/* save function pointer */
-#else
-	stmdb   r1!,{ r0, r3 }	/* Dirk Engling said this is equivalent */
-#endif
+	stmdb	r1!, { r3, r12 } 	@ store function param (r3) and function ptr (r12)
+					@ into what will become the childs stack.
 
-	mov	r0, r2		/* move flags to r0 */
-	swi	__NR_clone	/* syscall: clone */
-	movs	r0, r0		/* set condition codes */
-	blt	.Lerror		/* on error jump out */
-	movne	pc, lr		/* return if "parent" */
+	mov	r0, r2			@ move flags argument to r0
+	swi	__NR_clone		@ call the syscall
+	movs	r0, r0			@ set condition codes
+	blt	__unified_syscall	@ (return code  < 0): handle as an error
+	movne	pc, lr			@ (return code == 0): return to parent
 
-	mov	fp, #0		/* clear the frame pointer */
-	ldr	r0, [sp, #4]	/* load arg in argument register 0 */
-	mov	lr, pc		/* save local addr as return addr */
-	ldr	pc, [sp]	/* jmp to thread function */
-	b	_exit		/* thread returned */
+	mov	fp, #0			@ clear the frame pointer
+	adr	lr, 1f			@ setup return address
+	ldmia	sp!, { r0, pc } 	@ load function param and jump to thread function
 
-.Lerror:
-	b	__unified_syscall	/* make error handling */
+1:	b	_exit			@ branch to _exit (PIC safe)
+
