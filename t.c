@@ -102,12 +102,14 @@ extern char* strcpy2(char*a,char*b);
      __asm__ __volatile__ ("rdtsc" : "=a" (low) : : "edx")
 
 int main(int argc,char *argv[]) {
+#if 0
   char* buf[]={"FOO=FNORD","A=B","C=D","PATH=/usr/bin:/bin",0};
   environ=buf;
   putenv("FOO=BAR");
   putenv("FOO=BAZ");
   putenv("BLUB=DUH");
   system("printenv");
+#endif
 #if 0
   char buf[1024];
   time_t t1=time(0);
@@ -334,10 +336,10 @@ int main(int argc,char *argv[]) {
 #if 0
   puts(ttyname(0));
 #endif
-#if 0
+#if 1
   char buf[1024];
   struct hostent* r;
-  r=gethostbyname("www.convergence.de");
+  r=gethostbyname("cyberelk.net");
   if (!r) {
     printf("dns error: %s\n",hstrerror(h_errno));
   }

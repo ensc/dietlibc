@@ -267,7 +267,7 @@ install: $(OBJDIR)/start.o $(OBJDIR)/dietlibc.a $(OBJDIR)/liblatin1.a $(OBJDIR)/
 	-$(INSTALL) $(PICODIR)/dyn_start.o $(PICODIR)/dyn_stop.o $(DESTDIR)$(ILIBDIR)
 	-$(INSTALL) dynlinker/diet-linux.so $(DESTDIR)$(ILIBDIR)/diet-linux.so
 	$(INSTALL) -m 644 diet.1 $(DESTDIR)$(MAN1DIR)/diet.1
-	if ! test -f $(DESTDIR)/etc/diet.so.conf; then echo "$(ILIBDIR)" > $(DESTDIR)/etc/diet.so.conf; fi
+	if ! test -f $(DESTDIR)/etc/diet.ld.conf; then echo "$(ILIBDIR)" > $(DESTDIR)/etc/diet.ld.conf; fi
 	for i in `find include -name \*.h`; do install -m 644 -D $$i $(DESTDIR)$(prefix)/$$i; done
 
 .PHONY: sparc ppc mips arm alpha i386 s390
