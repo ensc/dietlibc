@@ -20,7 +20,7 @@ enum EPOLL_EVENTS {
 	EPOLLOUT = 0x004,
 #define EPOLLOUT EPOLLOUT
 
-#ifdef __USE_XOPEN
+#ifdef _XOPEN_SOURCE
 	EPOLLRDNORM = 0x040,
 #define EPOLLRDNORM EPOLLRDNORM
 	EPOLLRDBAND = 0x080,
@@ -31,7 +31,7 @@ enum EPOLL_EVENTS {
 #define EPOLLWRBAND EPOLLWRBAND
 #endif /* #ifdef __USE_XOPEN */
 
-#ifdef __USE_GNU
+#ifdef _GNU_SOURCE
 	EPOLLMSG = 0x400,
 #define EPOLLMSG EPOLLMSG
 #endif /* #ifdef __USE_GNU */
