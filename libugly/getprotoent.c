@@ -55,7 +55,7 @@ again:
   if (*cur=='\n') { *cur++=0; return &pe; }
   *cur=0; cur++;
   /* now the aliases */
-  for (aliasidx=0;aliasidx<10;++aliasidx) {
+  for (aliasidx=0;aliasidx<9;++aliasidx) {
     while (cur<last && isblank(*cur)) ++cur;
     aliases[aliasidx]=cur;
     while (cur<last && isalpha(*cur)) ++cur;

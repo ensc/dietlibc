@@ -67,7 +67,7 @@ again:
   }
   ++cur;
   /* now the aliases */
-  for (aliasidx=0;aliasidx<10;++aliasidx) {
+  for (aliasidx=0;aliasidx<9;++aliasidx) {
     while (cur<last && isblank(*cur)) ++cur;
     pe->h_aliases[aliasidx]=cur;
     while (cur<last && !isspace(*cur)) ++cur;
