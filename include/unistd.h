@@ -228,6 +228,9 @@ void setusershell(void);
 void endusershell(void);
 #endif
 
+#define   L_cuserid   17
+char * cuserid(char * string); /* ugh! */
+
 #define   _POSIX_VERSION  199506L
 
 #endif

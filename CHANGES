@@ -8,6 +8,7 @@
   add more BSD brokenness to time.h
   forward poll.h to sys/poll.h
   make DNS socket close-on-exec (Felix J. Ogris)
+  add cuserid to libcompat (Andreas Krennmair)
 
 0.22:
   fix i386 libm
