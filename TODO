@@ -42,8 +42,6 @@ getdents64 needs large file backwards compatibility as well (?)
 add PA-RISC socket calls that use the syscalls and not go through
 socketcall.
 
-ucontext.h (that looks nasty)
-
 printf %e
 
 move DNS stuff to libresolv.a?
