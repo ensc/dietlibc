@@ -31,6 +31,9 @@ int vsnprintf(char* str, size_t size, const char *format, va_list arg_ptr) {
   struct arg_printf ap = { &sd, (int(*)(void*,size_t,void*)) swrite };
   if (size) --sd.size;
   n=__v_printf(&ap,format,arg_ptr);
-  if (str) str[n]=0;
+  if (str) {
+    if (n>size) str[size]=0;
+    else str[n]=0;
+  }
   return n;
 }
