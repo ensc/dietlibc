@@ -54,6 +54,7 @@
   Olaf: checkin of the new libpthread implementation & added confstr
   Make gethostbyname2 case insensitive (Thomas Ogrisegg)
   RPC 64-bit cleanliness fixes (Gwenole Beauchesne)
+  sysctl fix (Thomas Ogrisegg)
 
 0.22:
   fix i386 libm
