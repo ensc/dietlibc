@@ -92,6 +92,18 @@ struct cmsghdr {
 #define UIO_FASTIOV	8
 #define UIO_MAXIOV	1024
 
+/* "Socket"-level control message types: */
+
+#define SCM_RIGHTS	0x01	/* rw: access rights (array of int) */
+#define SCM_CREDENTIALS	0x02	/* rw: struct ucred             */
+#define SCM_CONNECT	0x03	/* rw: struct scm_connect       */
+
+struct ucred {
+  unsigned int pid;
+  unsigned int uid;
+  unsigned int gid;
+};
+
 /* Supported address families. */
 #define AF_UNSPEC	0
 #define AF_UNIX		1	/* Unix domain sockets 		*/
