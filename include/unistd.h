@@ -169,4 +169,12 @@ int  sendfile(int out_fd, int in_fd, off_t *offset, size_t count) __THROW;
 int getdtablesize(void) __THROW;
 char *getpass(const char * prompt) __THROW;
 
+#ifdef __alpha__
+#define	__FD_SET(d, set)	((set)->fds_bits[__FDELT(d)] |= __FDMASK(d))
+#define	__FD_CLR(d, set)	((set)->fds_bits[__FDELT(d)] &= ~__FDMASK(d))
+#define	__FD_ISSET(d, set)	(((set)->fds_bits[__FDELT(d)] & __FDMASK(d)) != 0)
+#define	__FD_ZERO(set)	\
+  ((void) memset ((void*) (set), 0, sizeof (fd_set)))
+#endif
+
 #endif

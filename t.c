@@ -32,18 +32,16 @@
 int foo;
 
 int main(int argc,char *argv[]) {
+  fd_set x;
+  FD_ZERO(&x);
+#if 0
   sigset_t s;	/* sigsetops */
 
-#if 0
-  if (fork()==0) {
-    sleep(2);
-    exit(0);
-  }
-#endif
   sigemptyset(&s);
   sigaddset(&s,SIGCHLD);
   sigaddset(&s,SIGHUP);
   sigsuspend(&s);
+#endif
 #if 0
   char buf[1024];
   FILE *f=popen("uname -srm","r");
