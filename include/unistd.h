@@ -243,12 +243,14 @@ int vhangup(void) __THROW;
 
 extern char **__environ;
 
+#ifndef __NO_STAT64
 #if defined _FILE_OFFSET_BITS && _FILE_OFFSET_BITS == 64
 #define open open64
 #define creat creat64
 #define truncate truncate64
 #define ftruncate ftruncate64
 #define getdents getdents64
+#endif
 #endif
 
 #ifdef _LINUX_SOURCE
