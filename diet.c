@@ -149,13 +149,15 @@ int main(int argc,char *argv[]) {
       }
       if (mangleopts) {
 	const char **o=Os;
-	for (o=Os;*o;) {
+	for (o=Os;*o;++o) {
+	  puts(*o);
 	  if (!strcmp(*o,shortplatform)) {
 	    ++o;
 	    while (*o) {
 	      *dest++=(char*)*o;
 	      ++o;
 	    }
+	    break;
 	  } else
 	    while (*o) ++o;
 	}
