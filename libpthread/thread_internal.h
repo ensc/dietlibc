@@ -75,14 +75,8 @@ void __thread_cleanup(_pthread_descr th);
 
 void __thread_wait_some_time();
 
-int __thread_create(void *(*__start_routine) (void *),
-		void *__arg,
-		char* stack,
-		unsigned long stacksize,
-		int detach,
-		int inherit,
-		int spolicy,
-		int spriority);
+#define __NO_ASYNC_CANCEL_BEGIN { int oldtype; pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED, &oldtype);
+#define __NO_ASYNC_CANCEL_END pthread_setcanceltype(oldtype,0); pthread_testcancel(); }
 
 /* manager thread stuff */
 int signal_manager_thread(_pthread_descr td);

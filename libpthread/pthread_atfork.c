@@ -6,7 +6,7 @@
 
 #define PTHREAD_NUM_ATFORK 4
 
-struct {
+static struct {
   int used;
   void (*prepare)(void);
   void (*parent)(void);

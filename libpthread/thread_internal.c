@@ -11,16 +11,16 @@
 #include <stdio.h>
 #include "thread_internal.h"
 
+static struct _pthread_fastlock __thread_struct_lock = {0};
 static struct _pthread_descr_struct threads[PTHREAD_THREADS_MAX];
 static int _max_used_thread_id=1;
 pthread_once_t __thread_inited;
 
-static _pthread_descr __manager_thread_signal_lock_owner = 0;
 static struct _pthread_fastlock __manager_thread_signal_lock = {0};
 static struct _pthread_fastlock __manager_thread_data_lock = {1};
 static struct _pthread_fastlock __manager_thread_data_go_lock = {1};
 
-//#define DEBUG
+#define DEBUG
 
 /* find thread */
 int __find_thread_id(int pid)
@@ -62,16 +62,24 @@ _pthread_descr __thread_self()
 /* allocate a thread slot */
 _pthread_descr __thread_get_free()
 {
+  _pthread_descr ret=0;
   int i;
 
-  for (i=0; i<PTHREAD_THREADS_MAX; i++)
-    if (threads[i].pid==0)
-      if (!(__testandset(&threads[i].pid))) { /* atomic get slot :) */
-	if (i>=_max_used_thread_id) _max_used_thread_id=i+1;
-	return threads+i;
-      }
+  __NO_ASYNC_CANCEL_BEGIN;
+  __pthread_lock(&__thread_struct_lock);
 
-  return 0;
+  for (i=0; i<PTHREAD_THREADS_MAX; i++) {
+    if (threads[i].pid==0) {
+      threads[i].pid=1; /* mark as taken */
+      ret = threads+i;
+      if (i>=_max_used_thread_id) _max_used_thread_id=i+1;
+      break;
+    }
+  }
+
+  __pthread_unlock(&__thread_struct_lock);
+  __NO_ASYNC_CANCEL_END;
+  return ret;
 }
 
 /* sleep a little (reschedule for this time) */
@@ -89,23 +97,13 @@ void __thread_cleanup(_pthread_descr th)
   /* lib provided stack should be freed */
   if (th->stack_begin) free(th->stack_begin);
 
-  /* hopefully a deadlock prevention */
-  if (th->manager_lock) {
-    if (th->manager_lock->__spinlock)  {
-      if (__manager_thread_signal_lock_owner==th) {
-	/* Ups thread exited in signal_manager_thread and still has the lock */
-	__pthread_unlock(th->manager_lock);
-      }
-    }
-  }
-
   /* an other thread has joined this on */
   if (th->joined) {
     th->joined->retval=th->retval;
     th->joined->join=0;
     th->joined=0;
   }
-  th->pid=0;
+  th->pid=0;	/* mark struct as free */
 }
 
 /* SIGHUP handler (thread cnacel) PTHREAD_CANCEL_ASYNCHRONOUS */
@@ -175,17 +173,16 @@ static void *__mthread_starter(void *arg)
   printf("in starter %d, parameter %8p\n", td->pid, td->func);
 #endif
 
-  if (!(setjmp(td->jmp_exit))) {
-    if (!td->canceled) {
+  if (!td->canceled) {
+    if (!(setjmp(td->jmp_exit))) {
       td->retval=td->func(td->arg);
+#ifdef DEBUG
+    } else {
+      printf("pthread_exit called in %d\n", td->pid);
+#endif
     }
   }
-#ifdef DEBUG
-  else {
-    printf("pthread_exit called in %d\n", td->piddt);
-  }
-#endif
-
+  pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED,0);
 
 #ifdef DEBUG
   printf("end starter %d, retval %8p\n", td->pid, td->retval);
@@ -209,7 +206,7 @@ static void *__mthread_starter(void *arg)
 }
 
 
-/* manager thread */
+/* manager thread and signal handler */
 static char __manager_thread_stack[12*1024];
 static _pthread_descr __manager_thread_data;
 static void __manager_SIGCHLD(int sig)
@@ -257,26 +254,29 @@ static void* __manager_thread(void *arg)
 	      __manager_thread_data->stack_addr,
 	      CLONE_VM | CLONE_FS | CLONE_FILES | SIGCHLD,
 	      __manager_thread_data);
+#ifdef DEBUG
+    __thread_wait_some_time();
+    printf("manager new thread %d\n",__manager_thread_data->pid);
+#endif
     __pthread_unlock(&__manager_thread_data_go_lock);	/* release sender */
   }
   return 0;
 }
 
+/* pthread_create bottom half */
 int signal_manager_thread(_pthread_descr td)
 {
-  _pthread_descr this = __thread_self();
+  __NO_ASYNC_CANCEL_BEGIN;
 
-  this->manager_lock=&__manager_thread_signal_lock;	/* lock sender in use */
-  __pthread_lock(&__manager_thread_signal_lock);
-  __manager_thread_signal_lock_owner=this;
+  __pthread_lock(&__manager_thread_signal_lock);	/* lock */
 
-  __manager_thread_data=td;
+  __manager_thread_data = td;
   __pthread_unlock(&__manager_thread_data_lock);	/* signal manager to start */
-
   __pthread_lock(&__manager_thread_data_go_lock);	/* wait for manager */
 
   __pthread_unlock(&__manager_thread_signal_lock);	/* unlock */
-  this->manager_lock=0;
+
+  __NO_ASYNC_CANCEL_END;
 
   return td->pid;
 }
@@ -322,11 +322,8 @@ void __thread_init()
   threads[1].stack_begin=0;
   threads[1].func=__manager_thread;
 
-  threads[1].pid =
-        __clone(__mthread_starter,
-		threads[1].stack_addr,
-		CLONE_VM | CLONE_FS | CLONE_FILES,
-		threads+1);
+  threads[1].pid = __clone(__mthread_starter, threads[1].stack_addr,
+			   CLONE_VM | CLONE_FS | CLONE_FILES, threads+1);
 
 #ifdef DEBUG
   printf("manager thread @ : %d\n",threads[1].pid);
