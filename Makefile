@@ -239,10 +239,10 @@ VERSION=dietlibc-$(shell head -1 CHANGES|sed 's/://')
 CURNAME=$(notdir $(shell pwd))
 
 tar: clean rename
-       cd ..; tar cvvf $(VERSION).tar.bz2 $(VERSION) --use=bzip2 --exclude CVS
+	cd ..; tar cvvf $(VERSION).tar.bz2 $(VERSION) --use=bzip2 --exclude CVS
 
 rename:
-       if test $(CURNAME) != $(VERSION); then cd .. && mv $(CURNAME) $(VERSION); fi
+	if test $(CURNAME) != $(VERSION); then cd .. && mv $(CURNAME) $(VERSION); fi
 
 $(OBJDIR)/exports: $(OBJDIR)/dietlibc.a
 	nm -g $(OBJDIR)/dietlibc.a | grep -w T | awk '{ print $$3 }' | sort -u > $(OBJDIR)/exports
