@@ -41,7 +41,7 @@ again:
   /* first, the primary name */
   if (!isalpha(*cur)) goto parseerror;
   se.s_name=cur;
-  while (cur<last && isalnum(*cur)) cur++;
+  while (cur<last && !isblank(*cur)) cur++;
   if (cur>=last) return 0;
   if (*cur=='\n') goto parseerror;
   *cur=0; cur++;
