@@ -1,48 +1,95 @@
 #include <unistd.h>
 #include <errno.h>
+#include <string.h>
 
 #include <pthread.h>
 #include "thread_internal.h"
 
-struct _pthread_fastlock __thread_keys_lock;
-struct _thread_key __thread_keys[PTHREAD_KEYS_MAX];
+/* global key data */
+static struct _pthread_fastlock __thread_keys_lock;
+static struct _thread_key __thread_keys[PTHREAD_KEYS_MAX];
 
-void __thread_start__key(int id);
-void __thread_exit__key(int id);
+/* glue functions ... */
+void __thread_start__key(_pthread_descr th);
+void __thread_exit__key(_pthread_descr th);
 
-void __thread_start__key(int id)
-{
-  int i;
-
-  if (id<2) return;
-
-  __NO_ASYNC_CANCEL_BEGIN;
-  __pthread_lock(&__thread_keys_lock);
-
-  for (i=0; i<PTHREAD_KEYS_MAX; i++) {
-    __thread_keys[i].tkd[id]=0;
-  }
-
-  __pthread_unlock(&__thread_keys_lock);
-  __NO_ASYNC_CANCEL_END;
+void __thread_start__key(_pthread_descr th) {
+  memset(th->tkd,0,sizeof(th->tkd));
 }
 
-void __thread_exit__key(int id)
-{
+void __thread_exit__key(_pthread_descr th) {
   int i,try;
+  void (*dstr)(const void*);
 
-  if (id<2) return;
+  for (i=0;i<PTHREAD_KEYS_MAX;++i) {
+    if ((__thread_keys[i].used)&&(dstr=__thread_keys[i].destructor)) {
+      for (try=0;th->tkd[i]&&(try<PTHREAD_DESTRUCTOR_ITERATIONS);++try)
+	dstr(th->tkd[i]);
+    }
+  }
+}
 
-  __NO_ASYNC_CANCEL_BEGIN;
-//  __pthread_lock(&__thread_keys_lock);
+/* "create" a thread specific data key */
+int pthread_key_create(pthread_key_t*key,void(*destructor)(const void*)) {
+  _pthread_descr this=__thread_self();
+  int ret=EAGAIN,i;
 
-  for (i=0; i<PTHREAD_KEYS_MAX; i++) {
-    if ((__thread_keys[i].used) && (__thread_keys[i].destructor)) {
-      for (try=0;__thread_keys[i].tkd[id] && (try<PTHREAD_DESTRUCTOR_ITERATIONS);++try)
-	__thread_keys[i].destructor(__thread_keys[i].tkd[id]);
+  __NO_ASYNC_CANCEL_BEGIN_(this);
+  __pthread_lock(&__thread_keys_lock);
+
+  for (i=0;i<PTHREAD_KEYS_MAX;++i) {
+    if (__thread_keys[i].used==0) {
+      __thread_keys[i].used=1;
+      __thread_keys[i].destructor=destructor;
+      *key=i;
+      ret=0;
+      break;
     }
   }
 
-//  __pthread_unlock(&__thread_keys_lock);
-  __NO_ASYNC_CANCEL_STOP;
+  __pthread_unlock(&__thread_keys_lock);
+  __NO_ASYNC_CANCEL_END_(this);
+
+  return ret;
 }
+
+/* "destroy" a thread specific data key */
+int pthread_key_delete(pthread_key_t key) {
+  _pthread_descr this=__thread_self();
+
+  if (key>=PTHREAD_KEYS_MAX) return EINVAL;
+
+  __NO_ASYNC_CANCEL_BEGIN_(this);
+  __pthread_lock(&__thread_keys_lock);
+
+  __thread_keys[key].used=0;
+  __thread_keys[key].destructor=0;
+
+  __pthread_unlock(&__thread_keys_lock);
+  __NO_ASYNC_CANCEL_END_(this);
+  return 0;
+}
+
+
+/* get thread specific data */
+const void*pthread_getspecific(pthread_key_t key) {
+  _pthread_descr this=__thread_self();
+  const void*ret=0;
+
+  if ((key<PTHREAD_KEYS_MAX) && (__thread_keys[key].used)) {
+    ret=this->tkd[key];
+  }
+  return ret;
+}
+
+/* get thread specific data */
+int pthread_setspecific(pthread_key_t key, const void *value) {
+  _pthread_descr this=__thread_self();
+
+  if ((key<PTHREAD_KEYS_MAX)&&(__thread_keys[key].used)) {
+    this->tkd[key]=value;
+    return 0;
+  }
+  return EINVAL;
+}
+

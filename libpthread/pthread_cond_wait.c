@@ -4,55 +4,41 @@
 #include <pthread.h>
 #include "thread_internal.h"
 
-int pthread_cond_wait(pthread_cond_t *cond, pthread_mutex_t *mutex)
-{
-  _pthread_descr tmp;
-  _pthread_descr this;
+int pthread_cond_wait(pthread_cond_t*cond,pthread_mutex_t*mutex) {
+  _pthread_descr this=__thread_self();
+  _pthread_descr*tmp;
 
-  __THREAD_INIT();
+  if (mutex->owner!=this) return EINVAL;
 
-  this=__thread_self();
+  __NO_ASYNC_CANCEL_BEGIN_(this);
 
   /* put in wait-chain */
-  __NO_ASYNC_CANCEL_BEGIN;
-  __pthread_lock(&(cond->lock));
-  this->waiting=1;
-  if (cond->wait_chain) {
-    for(tmp=cond->wait_chain;tmp->waitnext;tmp=tmp->waitnext);
-    tmp->waitnext=this;
-  } else cond->wait_chain=this;
-  __pthread_unlock(&(cond->lock));
-  __NO_ASYNC_CANCEL_STOP;
+  LOCK(cond);
+  tmp=&(cond->wait_chain);
+  this->waitnext=0;
+  while (*tmp) tmp=&((*tmp)->waitnext);
+  this->waitprev=tmp;
+  *tmp=this;
+  UNLOCK(cond);
 
-  /* Aeh yeah / wait till signal */
+  /* Aeh yeah / wait till condition-signal (or cancel) */
   pthread_mutex_unlock(mutex);
-  while (this->waiting) {
-    __thread_wait_some_time();
-    if (this->canceled) break;	/* we got a cancel signal */
-  }
+
+  __thread_suspend(this,1);
+
   pthread_mutex_lock(mutex);
 
-  __NO_ASYNC_CANCEL_BEGIN;
-  __pthread_lock(&(cond->lock));
-  if (this->waiting) {	/* still waiting -> SIGNAL */
-    _pthread_descr prev;
-    /* remove from wait-chain */
-    prev=cond->wait_chain;
-    if ((prev=cond->wait_chain)==this) {
-      cond->wait_chain=this->waitnext;
-    } else {
-      for (tmp=prev->waitnext;tmp;prev=tmp,tmp=prev->waitnext) {
-	if (tmp==this) {
-	  prev->waitnext=this->waitnext;
-	  break;
-	}
-      }
-    }
-    this->waiting=0;
-    this->waitnext=0;
+  /* remove from wait-chain (if not signaled) */
+  LOCK(cond);
+  if (this->waitnext) {
+    this->waitnext->waitprev=this->waitprev;
+    *(this->waitprev)=this->waitnext;
   }
-  __pthread_unlock(&(cond->lock));
-  __NO_ASYNC_CANCEL_END;
+  else *(this->waitprev)=0;
+  UNLOCK(cond);
+
+  __NO_ASYNC_CANCEL_END_(this);
+
   return 0;
 }
 

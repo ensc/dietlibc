@@ -2,38 +2,31 @@
 #include <stdlib.h>
 #include <errno.h>
 
-#include "thread_internal.h"
 #include <pthread.h>
+#include "thread_internal.h"
 
-int pthread_join(pthread_t th, void **thread_return)
-{
-  pthread_t j;
-  _pthread_descr this, thread;
-
-  __THREAD_INIT();
-
-  this = __thread_self();
-  j=__find_thread_id(th);
-
-  if (j==-1) {
-    return ESRCH;
+int pthread_join(pthread_t th,void**thread_return) {
+  int ret=ESRCH;
+  _pthread_descr td,this=__thread_self();
+  if (th==getpid()) return EDEADLK;
+  __NO_ASYNC_CANCEL_BEGIN_(this);
+  if ((td=__thread_find(th))) {
+    /* test if detached or joined */
+    if (td->canceled || td->detached || __testandset(&(td->joined.__spinlock))) {
+      UNLOCK(td);
+      ret=EINVAL;
+    }
+    else {
+      td->jt=this;
+      UNLOCK(td);
+      /* wait for thread to exit */
+      __thread_suspend(this,0);
+      if (thread_return) *thread_return=td->retval;
+      /* clean up the mess */
+      ret=__thread_cleanup(td);
+    }
   }
-
-  thread = __get_thread_struct(j);
-
-  /* error handling */
-  if (thread==0) {
-    return ESRCH;
-  }
-
-  if (this==thread) {
-    return EDEADLK;
-  }
-
-  if (thread->detached || thread->joined) {
-    return EINVAL;
-  }
-
-  return __thread_join(thread,thread_return);
+  __NO_ASYNC_CANCEL_END_(this);
+  return ret;
 }
 

@@ -1,81 +1,90 @@
 #include <unistd.h>
-#include <stdlib.h>
+#include <sys/mman.h>
 #include <errno.h>
+#include <string.h>
 
 #include <pthread.h>
 #include "thread_internal.h"
 
-int pthread_create (pthread_t *thread, const pthread_attr_t *attr,
-		void *(*start_routine) (void *), void *arg)
-{
-  int ret=0;
-  _pthread_descr td;
-  pthread_attr_t default_attr;
+int pthread_attr_init(pthread_attr_t*attr) {
+  memset(attr,0,sizeof(pthread_attr_t));
+  attr->__stacksize=PTHREAD_STACK_SIZE;
+/* no need to do this initalisation (all are zero values)
+ * attr->__detachstate = PTHREAD_CREATE_JOINABLE;
+ * attr->__scope = PTHREAD_SCOPE_SYSTEM;
+ * attr->__inheritsched=PTHREAD_EXPLICIT_SCHED;
+ * attr->__schedpolicy=SCHED_OTHER;
+ * attr->__schedparam.sched_priority=0;
+ */
+  return 0;
+}
+int pthread_attr_destroy(pthread_attr_t *attr) __attribute__((alias("pthread_attr_init")));
 
-  __THREAD_INIT();
+int pthread_create(pthread_t*thread,const pthread_attr_t*d_attr,
+		void*(*start_routine)(void*),void*arg) {
+  struct __thread_descr request;
+  pthread_attr_t attr;
+  _pthread_descr td,this=__thread_self();
+  char*stack;
+  int ret;
 
-  if (start_routine==0) {
-    return EINVAL;
-  }
+  if (thread==0) kill(getpid(),SIGSEGV);
+  if (start_routine==0) return EINVAL;
 
-  td = __thread_get_free();
-
-  if (td) {
-    td->go.__spinlock=PTHREAD_SPIN_LOCKED;
-    if (!(attr)) {
-      pthread_attr_init(&default_attr);
-      attr=&default_attr;
-    }
-
-    if ((td->policy!=SCHED_OTHER)&&(td->priority==0)) {
-      return EINVAL;
-    }
-
-    if (attr->__inheritsched==PTHREAD_INHERIT_SCHED) {
-      _pthread_descr this = __thread_self();
-      td->policy	= this->policy;
-      td->priority	= this->priority;
-    } else {
-      td->policy	= attr->__schedpolicy;
-      td->priority	= attr->__schedparam.sched_priority;
-    }
-
-    td->func		= start_routine;
-    td->arg		= arg;
-
-    td->detached	= attr->__detachstate;
-
-    td->stack_size	= attr->__stacksize;
-
-    if (!(attr->__stackaddr)) {
-      char *stack=(char*)malloc(td->stack_size);
-      if (!(stack)) {
-	return EINVAL;
-      }
-      td->stack_begin	= stack;
-#ifdef __parisc__
-      td->stack_addr	= stack;
-#else
-      td->stack_addr	= stack+td->stack_size;
-#endif
-    } else {
-      td->stack_begin	= 0;
-      td->stack_addr	= attr->__stackaddr;
-    }
-
-    ret = signal_manager_thread(td);
-
-    if (ret>1)
-      *thread=ret;
-    else {
-      ++td->exited;	/* mark as exited */
-      __thread_cleanup(td);
-      if (ret<0) return (*(__errno_location()));
-      return EAGAIN;
-    }
-  }
+  __TEST_CANCEL_(this);
+  __NO_ASYNC_CANCEL_BEGIN_(this);
+  if (d_attr)
+    attr=*d_attr;
   else
-    return EAGAIN;
+    pthread_attr_init(&attr);
 
+  {
+    register char*stb,*st=0;
+    if ((stack=attr.__stackaddr)==0) {
+      /* YES we need PROT_EXEC for signal-handling :( */
+      if ((st=stack=(char*)mmap(0,attr.__stacksize,PROT_READ|PROT_WRITE|PROT_EXEC,MAP_PRIVATE|MAP_ANONYMOUS,-1,0))==MAP_FAILED)
+	return EINVAL;
+    }
+    stb=stack;
+#ifdef __parisc__
+    td=(_pthread_descr)stack;
+    stack+=sizeof(struct _pthread_descr_struct);
+#else
+    stack+=attr.__stacksize-sizeof(struct _pthread_descr_struct);
+    td=(_pthread_descr)stack;
+#endif
+    memset(td,0,sizeof(struct _pthread_descr_struct));
+    td->stack_begin	= stb;
+    td->stack_end	= stb+attr.__stacksize;
+    td->stack_free	= (st)?1:0;
+    attr.__stackaddr	= stack;
+  }
+
+  request.attr	= &attr;
+  request.td	= td;
+  request.tr	= this;
+  //request.stack	= stack;
+
+  if (attr.__inheritsched==PTHREAD_INHERIT_SCHED) {
+    if ((ret=__thread_getschedparam(request.tr->pid,&attr.__schedpolicy,&attr.__schedparam))!=0)
+      return ret;
+  }
+  td->lock.__spinlock	= PTHREAD_SPIN_UNLOCKED;
+  td->joined.__spinlock	= PTHREAD_SPIN_UNLOCKED;
+  td->detached		= attr.__detachstate;
+
+  td->stack_size	= attr.__stacksize;
+
+  td->func		= start_routine;
+  td->arg		= arg;
+
+  /* lett the "child thread" inherit the procmask (hope this works) */
+  sigprocmask(SIG_SETMASK,0,&(td->thread_sig_mask));
+  sigaddset(&(td->thread_sig_mask),PTHREAD_SIG_RESTART);
+  sigdelset(&(td->thread_sig_mask),PTHREAD_SIG_CANCEL);
+
+  if ((ret=__thread_start_new(&request))==-1) return EAGAIN;
+  *thread=ret;
+  __NO_ASYNC_CANCEL_END_(this);
   return 0;
 }

@@ -180,6 +180,9 @@ int llseek(int fildes, unsigned long hi, unsigned long lo, loff_t* result,int wh
 struct __sysctl_args;
 int _sysctl(struct __sysctl_args *args) __THROW;
 
+#define _CS_PATH 1
+size_t confstr(int name,char*buf,size_t len) __THROW;
+
 #define _SC_CLK_TCK 1
 #define _SC_ARG_MAX 2
 #define _SC_NGROUPS_MAX 3

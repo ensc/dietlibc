@@ -4,23 +4,15 @@
 #include <pthread.h>
 #include "thread_internal.h"
 
-int pthread_cond_signal(pthread_cond_t *cond)
-{
-  _pthread_descr tmp=0;
+int pthread_cond_signal(pthread_cond_t*cond) {
+  _pthread_descr this=__thread_self();
+  __NO_ASYNC_CANCEL_BEGIN_(this);
+  LOCK(cond);
 
-  __THREAD_INIT();
+  __thread_restart(cond->wait_chain);
 
-  __NO_ASYNC_CANCEL_BEGIN;
-  __pthread_lock(&(cond->lock));
-  if ((tmp=cond->wait_chain)) cond->wait_chain=tmp->waitnext;
-  __pthread_unlock(&(cond->lock));
-  __NO_ASYNC_CANCEL_STOP;
-
-  if (tmp) {
-    tmp->waitnext=0;
-    tmp->waiting=0;
-  }
-
+  UNLOCK(cond);
+  __NO_ASYNC_CANCEL_END_(this);
   return 0;
 }
 

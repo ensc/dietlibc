@@ -4,70 +4,42 @@
 #include <pthread.h>
 #include "thread_internal.h"
 
-int pthread_cond_timedwait(pthread_cond_t *cond, pthread_mutex_t *mutex,
-			   const struct timespec *abstime)
-{
-  _pthread_descr tmp;
-  _pthread_descr this;
-  int ret=0;
+int pthread_cond_timedwait(pthread_cond_t*cond,pthread_mutex_t*mutex,
+		      const struct timespec*abstime) {
+  _pthread_descr this=__thread_self();
+  _pthread_descr*tmp;
 
-  __THREAD_INIT();
+  if (mutex->owner!=this) return EINVAL;
 
-  this=__thread_self();
+  __NO_ASYNC_CANCEL_BEGIN_(this);
 
   /* put in wait-chain */
-  __NO_ASYNC_CANCEL_BEGIN;
-  __pthread_lock(&(cond->lock));
-  this->waiting=1;
-  if (cond->wait_chain) {
-    for(tmp=cond->wait_chain;tmp->waitnext;tmp=tmp->waitnext);
-    tmp->waitnext=this;
-  } else cond->wait_chain=this;
-  __pthread_unlock(&(cond->lock));
-  __NO_ASYNC_CANCEL_STOP;
+  LOCK(cond);
+  tmp=&(cond->wait_chain);
+  this->waitnext=0;
+  while (*tmp) tmp=&((*tmp)->waitnext);
+  this->waitprev=tmp;
+  *tmp=this;
+  UNLOCK(cond);
 
-  /* Aeh yeah / wait till cond-signal OR timeout */
+  /* Aeh yeah / wait till condition-signal or timout (or cancel) */
   pthread_mutex_unlock(mutex);
-  while (this->waiting) {
-    struct timeval tv;
-    gettimeofday(&tv,0);
-    if ((abstime->tv_sec <= tv.tv_sec) && (abstime->tv_nsec <= (tv.tv_usec*1000))) {
-      ret = 1;
-      break;
-    }
-    __thread_wait_some_time();
-    if (this->canceled) break;	/* a cancel */
-  }
+
+  __thread_suspend_till(this,1,abstime);
+
   pthread_mutex_lock(mutex);
 
-  __NO_ASYNC_CANCEL_BEGIN;
-  __pthread_lock(&(cond->lock));
-  if (this->waiting) {	/* still waiting -> TIMEOUT or SIGNAL */
-    _pthread_descr prev;
-    /* remove from wait-chain */
-    prev=cond->wait_chain;
-    if ((prev=cond->wait_chain)==this) {
-      cond->wait_chain=this->waitnext;
-    } else {
-      for (tmp=prev->waitnext;tmp;prev=tmp,tmp=prev->waitnext) {
-	if (tmp==this) {
-	  prev->waitnext=this->waitnext;
-	  break;
-	}
-      }
-    }
-    this->waiting=0;
-    this->waitnext=0;
+  /* remove from wait-chain (if not signaled) */
+  LOCK(cond);
+  if (this->waitnext) {
+    this->waitnext->waitprev=this->waitprev;
+    *(this->waitprev)=this->waitnext;
   }
-  __pthread_unlock(&(cond->lock));
-  __NO_ASYNC_CANCEL_END;
+  else *(this->waitprev)=0;
+  UNLOCK(cond);
 
-  if (ret) return ETIMEDOUT;
+  __NO_ASYNC_CANCEL_END_(this);
 
-  {
-    register int err = (*__errno_location());
-    if (err==EINTR) return err;
-  }
   return 0;
 }
 

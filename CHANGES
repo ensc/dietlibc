@@ -51,6 +51,7 @@
   remove =0 for static variables (Thomas Ogrisegg)
   fix strtoul (broke getaddrinfo and ssh)
   fix segfault in parser
+  Olaf: checkin of the new libpthread implementation & added confstr
 
 0.22:
   fix i386 libm

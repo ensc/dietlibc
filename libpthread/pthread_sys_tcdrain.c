@@ -5,8 +5,7 @@
 
 #include <termios.h>
 
-int tcdrain(int fd)
-{
+int tcdrain(int fd) {
   __TEST_CANCEL();
   return __libc_tcdrain(fd);
 }

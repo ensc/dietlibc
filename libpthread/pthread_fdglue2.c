@@ -10,7 +10,8 @@ extern int __stdio_atexit;
 extern FILE* __stdio_init_file_nothreads(int fd,int closeonerror);
 
 FILE* __stdio_init_file(int fd,int closeonerror) {
+  pthread_mutexattr_t attr={PTHREAD_MUTEX_RECURSIVE_NP};
   FILE *tmp=__stdio_init_file_nothreads(fd,closeonerror);
-  if (tmp) pthread_mutex_init(&tmp->m,0);
+  if (tmp) pthread_mutex_init(&tmp->m,&attr);
   return tmp;
 }

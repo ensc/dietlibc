@@ -4,14 +4,9 @@
 #include <pthread.h>
 #include "thread_internal.h"
 
-int pthread_attr_setscope(pthread_attr_t *attr, int scope)
-{
-  __THREAD_INIT();
-
+int pthread_attr_setscope(pthread_attr_t*attr,int scope) {
+  if (0) { attr=0; }
   if (scope==PTHREAD_SCOPE_SYSTEM) return 0;
-
-  if (scope==PTHREAD_SCOPE_PROCESS)
-    return ENOTSUP;
-  else
-    return EINVAL;
+  if (scope==PTHREAD_SCOPE_PROCESS) return ENOTSUP;
+  return EINVAL;
 }

@@ -4,8 +4,9 @@
 #include <pthread.h>
 #include "thread_internal.h"
 
-int pthread_attr_getscope(const pthread_attr_t*attr,int*scope) {
+int pthread_condattr_getpshared(const pthread_condattr_t*attr,int*pshared) {
   if (0) { attr=0; }
-  *scope=PTHREAD_SCOPE_SYSTEM;
+  *pshared=PTHREAD_PROCESS_PRIVATE;
   return 0;
 }
+

@@ -4,18 +4,19 @@
 #include <pthread.h>
 #include "thread_internal.h"
 
-int pthread_setschedparam(pthread_t target_thread, int policy, const struct sched_param *param)
-{
-  __THREAD_INIT();
-
-  if (__find_thread_id(target_thread)<0) {
-    return ESRCH;
+/* set thread schedul parameters */
+int pthread_setschedparam(pthread_t th,int policy,const struct sched_param*param) {
+  int ret=ESRCH;
+  _pthread_descr td,this=__thread_self();
+  __NO_ASYNC_CANCEL_BEGIN_(this);
+  if ((td=__thread_find(th))) {
+    UNLOCK(td);
+    ret=EINVAL;
+    if (((policy==SCHED_OTHER)&&(param->sched_priority==0)) ||
+	(((policy==SCHED_RR)||(policy==SCHED_FIFO))&&
+	 ((param->sched_priority>0)&&(param->sched_priority<100))))
+      ret=(sched_setscheduler(th,policy,param))?_errno_:0;
   }
-
-  if (((policy == SCHED_OTHER) && (param->sched_priority==0)) ||
-      (((policy == SCHED_RR) || (policy == SCHED_FIFO)) &&
-       ((param->sched_priority > 0) && (param->sched_priority <100))))
-    return sched_setscheduler(target_thread, policy, param);
-
-  return EINVAL;
+  __NO_ASYNC_CANCEL_END_(this);
+  return ret;
 }
