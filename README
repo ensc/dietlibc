@@ -41,3 +41,9 @@ The embedded utils are small replacements for common utilities like mv,
 chown, ls, and even a small tar that can extract tar files.  The binary
 repository contains a few utilities I linked against the diet libc, for
 example gzip, bzip2 and fdisk.
+
+
+The license for the diet libc is the GNU General Public License, version
+2 (as included in the file COPYING).  The glob() and entlib sources were
+contributed and are licensed under the GNU Lesser General Public
+License, as available on http://www.gnu.org/copyleft/lesser.html.
