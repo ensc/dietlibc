@@ -41,4 +41,4 @@ __flcetr:
 .size    ceil,.Lende-ceil
 .size    ceill,.Lende-ceill
 .size    ceilf,.Lende-ceilf
-.size    flcetr,.Lende-__flcetr
+.size    __flcetr,.Lende-__flcetr
