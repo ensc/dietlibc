@@ -5,13 +5,13 @@
 
 #if 1
 
-#define WANT_FLOATING_POINT_IN_PRINTF
-#define WANT_FLOATING_POINT_IN_SCANF
+/*#define WANT_FLOATING_POINT_IN_PRINTF
+#define WANT_FLOATING_POINT_IN_SCANF */
 #define WANT_NULL_PRINTF
 
 /* #define SLASH_PROC_OK */
 
-#define WANT_BUFFERED_STDIO
+/* #define WANT_BUFFERED_STDIO */
 
 /* use errno_location instead of errno */
 /* #define WANT_THREAD_SAVE */

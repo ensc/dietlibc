@@ -56,4 +56,8 @@ extern int gethostbyname_r(const char* NAME, struct hostent* RESULT_BUF,char* BU
 #define NO_RECOVERY 3
 #define NO_ADDRESS 4
 
+extern int gethostbyaddr_r(const char* addr, size_t length, int format,
+		    struct hostent* result, char *buf, size_t buflen,
+		    struct hostent **RESULT, int *h_errnop) __THROW;
+
 #endif

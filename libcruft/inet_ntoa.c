@@ -3,7 +3,7 @@
 #include <arpa/inet.h>
 
 static int i2a(char* dest,unsigned int x) {
-  register int tmp=x;
+  register unsigned int tmp=x;
   register int len=0;
   if (x>=100) { *dest++=tmp/100+'0'; tmp=tmp%100; ++len; }
   if (x>=10) { *dest++=tmp/10+'0'; tmp=tmp%10; ++len; }
