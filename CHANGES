@@ -12,6 +12,7 @@
   add killpg prototype (Luc Van Oostenryck)
   remove some compiler warnings (Luc Van Oostenryck)
   better rand() from Knuth's TAOCP (Luc Van Oostenryck)
+  fix unified x86_64 unified syscall 64-bit return value issue (Gwenole)
 
 0.21:
   use gcc's size_t, ptrdiff_t and wchar_t types (Olaf)

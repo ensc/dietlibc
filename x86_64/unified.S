@@ -15,7 +15,7 @@ _exit:
 __unified_syscall:
 	movzbl	%al, %eax
 	syscall
-	cmp	$0, %eax
+	cmpq	$0, %eax
 	jge	.Lnoerror
 	negl	%eax
 	pushq	%rax

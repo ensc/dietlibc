@@ -3,10 +3,10 @@
 #include <stdio.h>
 
 int main(int argc,char* argv[]) {
-  long a,b;
-  asm("rdtsc":"=A"(a));
+  uint64_t a,b;
+  asm volatile("rdtsc":"=A"(a));
   if (!fork()) { execve(argv[1],argv+1,environ); exit(1); }
   wait(0);
-  asm("rdtsc":"=A"(b));
-  printf("%lu cycles\n",b-a);
+  asm volatile("rdtsc":"=A"(b));
+  printf("%llu cycles\n",b-a);
 }

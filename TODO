@@ -20,7 +20,7 @@
  - try to make zebra compile.
  - printf %e
  - move DNS stuff to libresolv.a?
- - x86_64: readdir and regex fail their tests (Gwenole Beauchesne)
+ - x86_64: readdir fails their test (Gwenole Beauchesne)
  - regular expressions standards compliance; test suite from AT&T
  - fgetpwent (needed for cvm)
  - investigate putting some libgcc symbols in dietlibc.so for gcc<3
