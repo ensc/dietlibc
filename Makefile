@@ -165,7 +165,7 @@ DYN_LIBC_OBJ = $(PICODIR)/dyn_syscalls.o $(OBJDIR)/errlist.o \
 DYN_PTHREAD_OBJS = $(patsubst $(OBJDIR)/%.o,$(PICODIR)/%.o,$(LIBPTHREAD_OBJS))
 
 $(PICODIR)/libdietc.so: $(PICODIR) $(DYN_LIBC_OBJ)
-	$(CROSS)$(CC) -nostdlib -shared -o $@ $(CFLAGS) -fPIC $(DYN_LIBC_OBJ) -lgcc
+	$(CROSS)gcc -nostdlib -shared -o $@ $(CFLAGS) -fPIC $(DYN_LIBC_OBJ)
 
 $(PICODIR)/libpthread.so: $(DYN_PTHREAD_OBJS) dietfeatures.h
 	$(CROSS)$(CC) -nostdlib -shared -o $@ $(CFLAGS) -fPIC $(DYN_PTHREAD_OBJS) -L$(PICODIR) -ldietc
