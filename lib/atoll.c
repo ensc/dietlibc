@@ -2,7 +2,7 @@
 #include <ctype.h>
 
 #if __WORDSIZE != 64
-long long int atol(const char* s) {
+long long int atoll(const char* s) {
   long long int v=0;
   int sign=1;
   while (isspace(*s)) ++s;
