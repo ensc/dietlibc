@@ -37,6 +37,7 @@
   add i386 vfork (Thomas Ogrisegg)
   fix SA_NODEFER on sparc (Gerrit Pape, Thomas Bader)
   fix sin, cos and __dtostr (Gernot Tenchio)
+  add /dev/epoll ioctl constants to sys/ioctl.h
 
 0.21:
   use gcc's size_t, ptrdiff_t and wchar_t types (Olaf)

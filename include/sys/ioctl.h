@@ -21,6 +21,17 @@
 #include <sys/hppa-ioctl.h>
 #endif
 
+struct evpoll {
+  int ep_timeout;
+  unsigned long ep_resoff;
+};
+
+/* used for /dev/epoll */
+#define EP_ALLOC	_IOR('P', 1, int)
+#define EP_POLL		_IOWR('P', 2, struct evpoll)
+#define EP_FREE		_IO('P', 3)
+#define EP_ISPOLLED	_IOWR('P', 4, struct pollfd)
+
 int ioctl(int d, int request, ...) __THROW;
 
 #endif
