@@ -36,6 +36,8 @@
   Andre contributed an ARM assembler md5 implementation and he fixed mmap
     on ARM.
   add glibc macro names in sys/reboot.h.  Mentioned by Laurent G. Bercot
+  getservent_r did not parse lines without aliases.  Thanks, Jaroslav
+    Macodiseas!
 
 0.14:
   fix brk again (missing __brk, trivial oversight)

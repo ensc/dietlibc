@@ -1,5 +1,6 @@
 #include <sys/types.h>
 #include <sys/mman.h>
+#include <netinet/in.h>
 #include <netdb.h>
 #include <ctype.h>
 #include "parselib.h"
@@ -36,13 +37,15 @@ again:
     j=__parse_nws(&__ps);
     if (!isblank(found=__ps.buffirst[__ps.cur+j])) {
       if (i==2) break;	/* it's ok, no (more) aliases necessary */
+      if (i>1 || found!='\n') {
 parseerror:
-      while (__ps.cur+j<__ps.buflen) {
-	if (__ps.buffirst[__ps.cur+j]=='\n') {
-	  __ps.cur+=j+1;
-	  goto again;
+	while (__ps.cur+j<__ps.buflen) {
+	  if (__ps.buffirst[__ps.cur+j]=='\n') {
+	    __ps.cur+=j+1;
+	    goto again;
+	  }
+	  ++j;
 	}
-	++j;
       }
     }
     switch (i) {
