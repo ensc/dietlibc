@@ -19,7 +19,7 @@
 #define CLONE_PARENT    0x00008000      /* set if we want to have the same parent as the cloner */
 #define CLONE_THREAD    0x00010000      /* Same thread group? */
 
-#define CLONE_SIGNAL    (CLONE_SIGHAND | CLONE_THREA)
+#define CLONE_SIGNAL    (CLONE_SIGHAND | CLONE_THREAD)
 
 int clone(void*(*fn)(void*),void*stack,int flags,void*arg);
 
