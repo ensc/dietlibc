@@ -8,11 +8,11 @@ int strcasecmp(const char *s1, const char *s2) __THROW __pure;
 int strncasecmp(const char *s1, const char *s2, size_t n) __THROW __pure;
 int ffs(int i) __THROW __attribute__((__const__));
 
-int    bcmp(const void *, const void *, size_t) __THROW __pure;
-void   bcopy(const void *, void *, size_t) __THROW;
-void   bzero(void *, size_t) __THROW;
-char  *index(const char *, int) __THROW __pure;
-char  *rindex(const char *, int) __THROW __pure;
+int    bcmp(const void *, const void *, size_t) __THROW __pure __attribute_dontuse__;
+void   bcopy(const void *, void *, size_t) __THROW __attribute_dontuse__;
+void   bzero(void *, size_t) __THROW __attribute_dontuse__;
+char  *index(const char *, int) __THROW __pure __attribute_dontuse__;
+char  *rindex(const char *, int) __THROW __pure __attribute_dontuse__;
 
 #define bzero(s,n) memset(s,0,n)
 #define bcopy(src,dest,n) memmove(dest,src,n)

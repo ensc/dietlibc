@@ -46,8 +46,8 @@ extern int rand(void) __THROW;
 extern int rand_r(unsigned int *seed) __THROW;
 extern void srand(unsigned int seed) __THROW;
 #ifdef _BSD_SOURCE
-extern int random(void) __THROW;
-extern void srandom(unsigned int seed) __THROW;
+extern int random(void) __THROW __attribute_dontuse__;
+extern void srandom(unsigned int seed) __THROW __attribute_dontuse__;
 #endif
 
 typedef unsigned short randbuf[3];

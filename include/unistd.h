@@ -223,9 +223,9 @@ int setresuid32(uid32_t ruid, uid32_t euid, uid32_t suid) __THROW;
 int setresgid32(gid32_t rgid, gid32_t egid, gid32_t sgid) __THROW;
 
 #ifdef _BSD_SOURCE
-char *getusershell(void);
-void setusershell(void);
-void endusershell(void);
+char *getusershell(void) __attribute_dontuse__;
+void setusershell(void) __attribute_dontuse__;
+void endusershell(void) __attribute_dontuse__;
 #endif
 
 /* this is so bad, we moved it to -lcompat */
