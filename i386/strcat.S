@@ -11,6 +11,7 @@ strcat:
 
 	pushl %edi
 
+	cld
 	xorl %eax, %eax
 	xorl %ecx, %ecx
 	decl %ecx

@@ -22,6 +22,7 @@ atol:
 	xorl %eax, %eax
 	xorl %edx, %edx
 	xorb %cl, %cl
+	cld
 .LSpace:
 	lodsb
 	or %al, %al

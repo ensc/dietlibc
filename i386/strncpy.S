@@ -16,27 +16,27 @@
 .type strncpy,@function
 
 strncpy:
-		pushl %esi
-		pushl %edi
-		movl %esp, %ecx
-		movl  0x0c(%ecx), %edi
-		movl  0x10(%ecx), %esi
-		movl  0x14(%ecx), %ecx
+	pushl %esi
+	pushl %edi
+	movl %esp, %ecx
+	movl  0x0c(%ecx), %edi
+	movl  0x10(%ecx), %esi
+	movl  0x14(%ecx), %ecx
 
-		movl %edi, %edx
-
+	movl %edi, %edx
+	cld
 .Lloop:
-		dec %ecx
-		js .Lout
-		lodsb
-		stosb
-		or %al, %al
-		jnz .Lloop
+	dec %ecx
+	js .Lout
+	lodsb
+	stosb
+	or %al, %al
+	jnz .Lloop
 #ifdef WANT_FULL_POSIX_COMPAT
-		repnz stosb
+	repnz stosb
 #endif
 .Lout:
-		movl %edx, %eax
-		popl %edi
-		popl %esi
-		ret
+	movl %edx, %eax
+	popl %edi
+	popl %esi
+	ret

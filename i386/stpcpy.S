@@ -6,7 +6,7 @@ stpcpy:
 	pushl %esi
 	movl 0xc(%esp),  %edi
 	movl 0x10(%esp), %esi
-
+	cld
 .Lcopy:
 	lodsb
 	stosb
