@@ -185,9 +185,6 @@ static inline int work_on_pltgot(struct _dl_handle*dh) {
 
 #warning "x86_64 is not tested yet..."
 
-static unsigned long*x86_64__got=0;
-static unsigned long __start=(unsigned long)&_start;
-
 asm(".text \n"
 ".type _start,@function \n"
 "_start: \n"
@@ -195,16 +192,11 @@ asm(".text \n"
 "	movq	(%rbp), %rdi		# argc \n"
 "	leaq	4(%rbp),%rsi		# argv \n"
 "	leaq	8(%rsi,%rdi,8),%rdx	# envp \n"
-/* get 'relocated' address of _DYNAMIC */
+/* needs to determine the load-address... */
 "	leaq	_DYNAMIC@GOTPCREL(%rip), %rcx \n"
-"	subq	_DYNAMIC@GOT, %rcx \n"
-"	movq	%rcx, x86_64__got(%rip) # save got address \n"
-"	movq	(%rcx), %rcx \n"
-/* %rcx still needs the load-address added... */
-"	leaq	_start(%rip), %r8	#   relocated _start address \n"
-"	subq	__start(%rip), %r8	# unrelocated _start address \n"
-//"	movq	%r8, __loadaddr(%rip)	# save base address \n"
-"	addq	%r8, %rcx \n"
+"	movq	(%rcx), %r8		# unrelocated address of _DYNAMIC \n"
+"	leaq	_DYNAMIC(%rip), %rcx	#   relocated address of _DYNAMIC \n"
+"	subq	%r8, %rcx		# -> load address \n"
 /* call _dl_main */
 "	call	_dl_main \n"
 /* restore stack */
@@ -294,8 +286,10 @@ asm(".text \n"
 
    );
 
-static inline unsigned long* get_got(void) {
-  return x86_64__got;
+static unsigned long* get_got(void) {
+  unsigned long*ret;
+  asm("lea _GLOBAL_OFFSET_TABLE_(%%rip),%0" : "=r"(ret) );
+  return ret;
 }
 
 static inline int work_on_pltgot(struct _dl_handle*dh) {
