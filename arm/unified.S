@@ -1,6 +1,11 @@
 #include <dietfeatures.h>
 
 #include "syscalls.h"
+
+.global __unified_syscall4
+__unified_syscall4:
+	ldmfd	sp!, {r4, r5, r6}
+	b	__unified_syscall
 .text
 .weak exit
 .type exit,function
@@ -8,13 +13,9 @@ exit:
 .global _exit
 .type _exit,function
 _exit:
-	mov	ip, sp
-	stmfd	sp!, {r4, r5, r6}
-	ldmia	ip,  {r4, r5, r6}
 	swi	$__NR_exit
 .global __unified_syscall
 __unified_syscall:
-	ldmfd	sp!, {r4, r5, r6}
 	cmn	r0, #4096
 	movcc	pc, lr
 	rsb	r0, r0, #0

@@ -10,16 +10,17 @@
 #include "syscalls.h"
 
 .text
+__unified_syscall4:
+	ldmfd	sp!, {r4, r5, r6}
+	b	__unified_syscall
 .weak exit
 exit:
 .type _exit,function
 .global _exit
 _exit:
 __exit:
-	stmfd	sp!, {r4, r5, r6}
 	swi	__NR_exit
 __unified_syscall:
-	ldmfd   sp!, {r4, r5, r6}
 	cmn	r0, #4096
 	movcc	pc, lr
 	rsb	r0, r0, #0
