@@ -25,7 +25,7 @@ size_t fread( void *ptr, size_t size, size_t nmemb, FILE *stream) {
   return nmemb;
 #else
 #ifdef WANT_UNGETC
-  j=size*nmemb;
+  unsigned long j=size*nmemb;
 #endif
   fflush(stream);
 #ifdef WANT_UNGETC
