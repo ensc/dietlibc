@@ -95,7 +95,15 @@ extern char* strcpy2(char*a,char*b);
 #define rdtscl(low) \
      __asm__ __volatile__ ("rdtsc" : "=a" (low) : : "edx")
 
+int traverse(const char* file, const struct stat* sb, int flag) {
+  __write1("found ");
+  __write1(file);
+  __write1("\n");
+  return 0;
+}
+
 int main(int argc,char *argv[]) {
+  ftw("/tmp",traverse,10);
 #if 0
   printf("%u\n",getuid32());
 #endif

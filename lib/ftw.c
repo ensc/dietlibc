@@ -6,47 +6,39 @@
 #include <string.h>
 #include <stdlib.h>
 
-int ftw(const char *dir,int (*fn)(const char *file, const struct stat *sb, int flag), int depth) {
-  char *cwd;
-  size_t cwdlen;
-  DIR *d;
-  struct dirent *de;
+int ftw(const char*dir,int(*f)(const char*file,const struct stat*sb,int flag),int dpth){
+  char*cd;
+  size_t cdl;
+  DIR*d;
+  struct dirent*de;
   struct stat sb;
-  if (chdir(dir)) return -1;
-  cwd=alloca(PATH_MAX+1);
-  if (!getcwd(cwd,PATH_MAX)) return -1;
-  cwd[PATH_MAX]=0;
-  cwdlen=strlen(cwd);
-/*  write(1,"ftw in ",7); puts(cwd); */
-  if (!(d=opendir("."))) return -1;
-  while ((de=readdir(d))) {
-    int res;
-    int flag;
-    size_t nlen;
-    char *filename;
-    if (de->d_name[0]=='.' &&
-	(de->d_name[1]==0 ||
-	(de->d_name[1]=='.' && de->d_name[2]==0))) continue;
-    nlen=strlen(de->d_name);
-    filename=alloca(nlen+cwdlen+3);
-    memmove(filename,cwd,cwdlen);
-    filename[cwdlen]='/';
-    memmove(filename+cwdlen+1,de->d_name,nlen+1);
-    if (!lstat(de->d_name,&sb)) {
-      if (S_ISLNK(sb.st_mode)) flag=FTW_SL; else
-      if (S_ISDIR(sb.st_mode)) flag=FTW_D; else
-      flag=FTW_F;
-    } else
-      flag=FTW_NS;
-    res=fn(filename,&sb,flag);
-    if (res) return res;
-    if (flag==FTW_D && depth>0) {
-      res=ftw(filename,fn,depth-1);
+  int r;
+  if(chdir(dir))return-1;
+  cd=alloca(PATH_MAX+1);
+  if(!getcwd(cd,PATH_MAX))return-1;
+  cd[PATH_MAX]='\0';
+  cdl=strlen(cd);
+  if(!(d=opendir(".")))return-1;
+  while((de=readdir(d))){
+    int flg;
+    size_t nl;
+    char*filename;
+    if(de->d_name[0]=='.'){if(!de->d_name[1])continue;if(de->d_name[1]=='.'&&!de->d_name[2])continue;}
+    nl=strlen(de->d_name);
+    filename=alloca(nl+cdl+2);
+    memmove(filename,cd,cdl);
+    filename[cdl]='/';
+    memmove(filename+cdl+1,de->d_name,nl+1);
+    if(!lstat(de->d_name,&sb)){
+      if(S_ISLNK(sb.st_mode))flg=FTW_SL;else if(S_ISDIR(sb.st_mode))flg=FTW_D;else flg=FTW_F;
+    }else flg=FTW_NS;
+    r=f(filename,&sb,flg);
+    if(r){closedir(d);return r;}
+    if(flg==FTW_D&&dpth){
+      r=ftw(filename,f,dpth-1);
       chdir(dir);
-      if (res) return res;
+      if (r){closedir(d);return r;}
     }
-/*    puts(de->d_name); */
   }
-  closedir(d);
-  return 0;
+  return closedir(d);
 }

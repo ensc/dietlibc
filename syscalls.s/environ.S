@@ -1,2 +1,6 @@
 .global environ
-.comm   environ,4,4
+#ifdef __alpha__
+.comm   environ,8
+#else
+.comm   environ,4
+#endif
