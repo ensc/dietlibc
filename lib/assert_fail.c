@@ -2,6 +2,7 @@
 #include <string.h>
 #include <unistd.h>
 #include "dietwarning.h"
+#include <write12.h>
 
 void __assert_fail (const char *assertion, const char *file, unsigned int line, const char *function);
 
@@ -22,7 +23,7 @@ void __assert_fail (const char *assertion, const char *file, unsigned int line, 
     strcat(buf,"Assertion `");
     strcat(buf,assertion);
     strcat(buf,"' failed.\n");
-    write(2,buf,strlen(buf));
+    __write2(buf);
   }
   abort();
 }
