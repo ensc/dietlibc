@@ -29,19 +29,56 @@
 #include <netdb.h>
 #include <signal.h>
 #include <sys/io.h>
+#include <getopt.h>
 
 int foo;
 
-char* fump(char*dest,const char*src) {
-  fprintf(stderr,"dest %p (%s), src %p (%s)\n",dest,dest,src,src);
-  return dest;
-}
-
 int main(int argc,char *argv[]) {
+  int aflag = 0;
+  int bflag = 0;
+  char *cvalue = NULL;
+  int index;
+  int c;
+
+  opterr = 1;
+
+  while ((c = getopt (argc, argv, "abc:")) != -1)
+    switch (c)
+      {
+      case 'a':
+	aflag = 1;
+	break;
+      case 'b':
+	bflag = 1;
+	break;
+      case 'c':
+	cvalue = optarg;
+	break;
+      case '?':
+	if (isprint (optopt))
+	  fprintf (stderr, "Unknown option `-%c'.\n", optopt);
+	else
+	  fprintf (stderr,
+		  "Unknown option character `\\x%x'.\n",
+		  optopt);
+	return 1;
+      default:
+	abort ();
+      }
+
+  printf ("aflag = %d, bflag = %d, cvalue = %s\n",
+	  aflag, bflag, cvalue);
+
+  for (index = optind; index < argc; index++)
+    printf ("Non-option argument %s\n", argv[index]);
+  return 0;
+
+#if 0
   char *t="foobar";
   char *c;
   char buf[1000];
   puts(strcat(strcpy(buf,"HOME="),t));
+#endif
 #if 0
   struct netent* n=getnetbyname("loopback");
   printf("%s %s\n",n->n_name,inet_ntoa(*(struct in_addr*)&n->n_net));
