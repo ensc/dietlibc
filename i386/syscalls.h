@@ -307,6 +307,7 @@ sym: \
 .type name,@function; \
 .weak name; \
 name: ; \
+.type __libc_##name,@function; \
 .global __libc_##name; \
 __libc_##name: ; \
 	movb $SYS_##NAME,%al; \

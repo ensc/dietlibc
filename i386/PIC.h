@@ -4,6 +4,21 @@
 
 #if 1
 /* don't trash the athlon return stack */
+#if (__GNUC__ >= 3)	// FIXME: how do I check for the binutils version ?
+.section .gnu.linkonce.t.__i686.get_pc_thunk.bx,"ax",@progbits
+.global __i686.get_pc_thunk.bx
+.hidden __i686.get_pc_thunk.bx
+.type   __i686.get_pc_thunk.bx,@function
+__i686.get_pc_thunk.bx:
+	movl	(%esp), %ebx
+	ret
+.previous
+
+.macro PIC_INIT
+	call	__i686.get_pc_thunk.bx
+	addl	$_GLOBAL_OFFSET_TABLE_, %ebx
+.endm
+#else
 .text
 .Lgetpic:
 	mov	(%esp),%ebx
@@ -13,6 +28,7 @@
 	call	.Lgetpic
 	addl	$_GLOBAL_OFFSET_TABLE_, %ebx
 .endm
+#endif
 #else
 /* standard code for PIC init */
 .macro PIC_INIT

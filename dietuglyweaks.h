@@ -4,23 +4,26 @@
 /* if you change something here ... KNOW what you're doing !
  * it'll effect ALL platforms ! */
 
-.weak __thread_doexit
-__thread_doexit:
-.weak __fflush_stdin
-__fflush_stdin:
-.weak __fflush_stdout
-__fflush_stdout:
-.weak __fflush_stderr
-__fflush_stderr:
-.weak flockfile
-flockfile:
-.weak ftrylockfile
-ftrylockfile:
-.weak funlockfile
-funlockfile:
-.weak __nop
-__nop:
-.global __you_tried_to_link_a_dietlibc_object_against_glibc
-__you_tried_to_link_a_dietlibc_object_against_glibc:
+.macro DEF_G name
+.global \name
+.type \name,function
+\name:
+.endm
+.macro DEF_W name
+.weak \name
+.type \name,function
+\name:
+.endm
+
+DEF_W __fflush_stderr
+DEF_W __fflush_stdin
+DEF_W __fflush_stdout
+DEF_W __nop
+DEF_W __thread_doexit
+DEF_W flockfile
+DEF_W ftrylockfile
+DEF_W funlockfile
+
+DEF_G __you_tried_to_link_a_dietlibc_object_against_glibc
 
 #endif

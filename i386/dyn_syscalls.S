@@ -83,10 +83,12 @@ __unified_syscall_256:
 .weak exit
 exit:
 .type _exit,@function
+.type __exit,@function
 .global _exit
 _exit:
 __exit:
 	mov $__NR_exit, %al
+.type __unified_syscall,@function
 __unified_syscall:
 	movzbl	%al, %eax
 1:
@@ -275,6 +277,16 @@ __unified_syscall:
 #include "../syscalls.s/sysfs.S"
 #include "../syscalls.s/capget.S"
 #include "../syscalls.s/capset.S"
+
+#include "../syscalls.s/timer_create.S"
+#include "../syscalls.s/timer_settime.S"
+#include "../syscalls.s/timer_gettime.S"
+#include "../syscalls.s/timer_getoverrun.S"
+#include "../syscalls.s/timer_delete.S"
+
+#include "../syscalls.s/clock_settime.S"
+#include "../syscalls.s/clock_gettime.S"
+#include "../syscalls.s/clock_getres.S"
 
 #undef __PIC__
 #undef __socketcall

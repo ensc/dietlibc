@@ -1,5 +1,6 @@
 .text
-.globl vfork
+.global vfork
+.type	vfork,@function
 vfork:
 	popl %edx
 	xorl %eax,%eax
