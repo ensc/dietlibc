@@ -209,7 +209,7 @@ int __dns_gethostbyx_r(const char* name, struct hostent* result,
     if (count==__dns_search) break;
     Buf[len]='.';
 //    printf("appending %d: %p (%s)\n",count,__dns_domains[count],__dns_domains[count]);
-    strncat(Buf+len+1,__dns_domains[count],MAXDNAME-len-1);
+    strncpy(Buf+len+1,__dns_domains[count],MAXDNAME-len-1);
     tmp=Buf;
     ++count;
   }
