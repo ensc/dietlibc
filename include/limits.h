@@ -51,6 +51,8 @@
 
 #define LINE_MAX	2048
 
+/* mutt demanded these */
 #define _POSIX_PATH_MAX PATH_MAX
+#define MB_LEN_MAX 16
 
 #endif

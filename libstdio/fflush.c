@@ -31,7 +31,10 @@ int fflush(FILE *stream) {
 //  if (stream->flags&NOBUF) return 0;
   if (stream->flags&BUFINPUT) {
     register int tmp;
-    if ((tmp=stream->bm-stream->bs)) lseek(stream->fd,tmp,SEEK_CUR);
+    if ((tmp=stream->bm-stream->bs)) {
+      lseek(stream->fd,tmp,SEEK_CUR);
+      stream->bs=0;
+    }
   } else
     if (stream->bm && write(stream->fd,stream->buf,stream->bm)!=(int)stream->bm) {
       stream->flags|=ERRORINDICATOR;

@@ -86,7 +86,15 @@ void foo(int tmp,...) {
 }
 
 int main(int argc,char *argv[]) {
-  putc('x',stdout);
+  FILE *f=fopen("/home/leitner/Mail/outbox","r");
+  char buf[1024];
+  int i=0;
+  if (f) {
+    while (fgets(buf,1023,f)) {
+      ++i;
+      printf("%d %lu %s",i,ftell(f),buf);
+    }
+  }
 #if 0
   char template[]="/tmp/duh/fnord-XXXXXX";
   printf("%d\n",mkdtemp(template));
