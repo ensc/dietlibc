@@ -73,10 +73,13 @@ int main(int argc,char *argv[]) {
       for (i=2; i<argc; ++i)
 	if (!strcmp(argv[i],"-c") || !strcmp(argv[i],"-S") || !strcmp(argv[i],"-E"))
 	  compile=1;
-/* we need to add -nostdlib if the command line contains -o and we are not compiling*/
+/* we need to add -nostdlib if we are not compiling*/
+      link=!compile;
+#if 0
       for (i=2; i<argc; ++i)
 	if (!strcmp(argv[i],"-o"))
 	  if (!compile) link=1;
+#endif
       newargv=alloca(sizeof(char*)*(argc+5));
       a=alloca(strlen(diethome)+20);
       b=alloca(strlen(platform)+20);
