@@ -21,7 +21,7 @@ void setutent() {
 
 void endutent() {
   if (fd<0) return;
-  close(fd);
+  close(fd); fd=-1;
 }
 
 struct utmp *getutent(void) {
