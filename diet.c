@@ -125,9 +125,12 @@ int main(int argc,char *argv[]) {
 #endif
 /* we need to add -I... if the command line contains -c, -S or -E */
       for (i=2; i<argc; ++i) {
+	if (argv[i][0]=='-' && argv[i][1]=='M')
+	  goto pp;
 	if (!strcmp(argv[i],"-c") || !strcmp(argv[i],"-S"))
 	  compile=1;
 	if (!strcmp(argv[i],"-E"))
+pp:
 	  preprocess=compile=1;
       }
 /* we need to add -nostdlib if we are not compiling*/
