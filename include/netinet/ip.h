@@ -4,6 +4,9 @@
 #include <inttypes.h>
 #include <endian.h>
 
+#define	IPVERSION	4               /* IP version number */
+#define	IP_MAXPACKET	65535		/* maximum packet size */
+
 #define IPTOS_TOS_MASK		0x1E
 #define IPTOS_TOS(tos)		((tos)&IPTOS_TOS_MASK)
 #define IPTOS_LOWDELAY		0x10
