@@ -23,4 +23,6 @@
 
 #endif
 
+#define __P(x) x
+
 #endif

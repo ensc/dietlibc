@@ -41,6 +41,7 @@
     overwrite the default is* functions.
   added liblatin1.a
   added tzfile implementation (does it work for anyone else?)
+  added syslog(3) (thanks to Rene Müller!)
 
 0.7.2:
   added several prototypes to already implemented functions and

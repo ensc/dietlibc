@@ -92,10 +92,10 @@ install:
 
 .PHONY: sparc ppc mips arm alpha i386
 
-sparc ppc alpha i386:
+arm sparc ppc alpha i386:
 	$(MAKE) ARCH=$@ CROSS=$@-linux- all t libdietc.so
 
-mips arm:
+mips:
 	$(MAKE) ARCH=$@ CROSS=$@-linux-gnu- all t libdietc.so
 
 

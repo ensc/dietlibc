@@ -19,4 +19,16 @@ int raise (int sig) __THROW;
 int sigaction(int signum, const struct sigaction *act, struct sigaction *oldact) __THROW;
 int sigaltstack(const struct sigaltstack *newstack, struct sigaltstack *oldstack) __THROW;
 
+#ifndef SIGCLD
+#define SIGCLD SIGCHLD
+#endif
+
+extern const char *const sys_siglist[];
+
+typedef __sighandler_t sig_t;
+
+#ifndef NSIG
+#define NSIG _NSIG
+#endif
+
 #endif
