@@ -2,7 +2,10 @@
 #define _LINUX_EVENTPOLL_H
 
 #include <sys/ioctl.h>
+#include <sys/poll.h>
+#include <sys/shm.h>
 
+#define POLLFD_X_PAGE	(PAGE_SIZE / sizeof(struct pollfd))
 #define EP_FDS_PAGES(n)	(((n) + POLLFD_X_PAGE - 1) / POLLFD_X_PAGE)
 #define EP_MAP_SIZE(n)	(EP_FDS_PAGES(n) * PAGE_SIZE * 2)
 
