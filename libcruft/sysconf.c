@@ -21,6 +21,13 @@ long sysconf(int name)
     return 100;
 #endif
 
+  case _SC_PAGESIZE:
+#if ( defined(__alpha__) || defined(__sparc__) )
+    return 8192;
+#else
+    return 4096;
+#endif
+
   case _SC_NPROCESSORS_ONLN:
     return __sc_nr_cpus();
 
