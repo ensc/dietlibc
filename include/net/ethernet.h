@@ -3,7 +3,7 @@
 
 #include <sys/cdefs.h>
 #include <sys/types.h>
-#include <linux/if_ether.h>     /* IEEE 802.3 Ethernet constants */
+#include <net/if_ether.h>     /* IEEE 802.3 Ethernet constants */
 
 __BEGIN_DECLS
 
