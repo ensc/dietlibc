@@ -15,6 +15,7 @@ LIBOBJ=$(patsubst lib/%.c,%.o,$(wildcard lib/*.c))
 LIBUGLYOBJ=$(patsubst libugly/%.c,%.o,$(wildcard libugly/*.c))
 LIBSTDIOOBJ=$(patsubst libstdio/%.c,%.o,$(wildcard libstdio/*.c))
 LIBCRUFTOBJ=$(patsubst libcruft/%.c,%.o,$(wildcard libcruft/*.c))
+LIBCRYPTOBJ=$(patsubst libcrypt/%.c,%.o,$(wildcard libcrypt/*.c))
 
 include $(ARCH)/Makefile.add
 
@@ -40,7 +41,7 @@ PWD=$(shell pwd)
 #	$(CROSS)strip -x -R .comment -R .note $@
 
 DIETLIBC_OBJ = $(SYSCALLOBJ) $(LIBOBJ) $(LIBSTDIOOBJ) $(LIBUGLYOBJ) \
-$(LIBCRUFTOBJ) __longjmp.o setjmp.o unified.o mmap.o clone.o
+$(LIBCRUFTOBJ) $(LIBCRYPTOBJ) __longjmp.o setjmp.o unified.o mmap.o clone.o
 
 dietlibc.a: $(DIETLIBC_OBJ) start.o
 	$(CROSS)ar cru dietlibc.a $(DIETLIBC_OBJ)
