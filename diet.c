@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <write12.h>
 
 #include "dietfeatures.h"
 
@@ -31,6 +32,8 @@ static const char* Os[] = {
   "arm","-Os","-fomit-frame-pointer",0,
   "mips","-Os","-fomit-frame-pointer","-fno-pic",0,
   "ppc","-Os","-fomit-frame-pointer","-mpowerpc-gpopt","-mpowerpc-gfxopt",0,
+  "s390","-Os","-fomit-frame-pointer",0,
+  "sh","-Os","-fomit-frame-pointer",0,
   0};
 
 int main(int argc,char *argv[]) {
@@ -86,24 +89,30 @@ int main(int argc,char *argv[]) {
       if (shortplatform[0]=='i' && shortplatform[2]=='8' && shortplatform[3]=='6') shortplatform[1]='3';
     } else {
 #ifdef __sparc__
-      strcat(platform,"sparc");
+      shortplatform="sparc";
 #endif
 #ifdef __powerpc__
-      strcat(platform,"ppc");
+      shortplatform="ppc";
 #endif
 #ifdef __i386__
-      strcat(platform,"i386");
+      shortplatform="i386";
 #endif
 #ifdef __alpha__
-      strcat(platform,"alpha");
+      shortplatform="alpha";
 #endif
 #ifdef __arm__
-      strcat(platform,"arm");
+      shortplatform="arm";
 #endif
 #ifdef __mips__
-      strcat(platform,"mips");
+      shortplatform="mips";
 #endif
-      shortplatform=platform;
+#ifdef __s390__
+      shortplatform="s390";
+#endif
+#ifdef __sh__
+      shortplatform="sh";
+#endif
+      strcat(platform,shortplatform);
     }
     strcat(dashL,platform);
     if (!strcmp(tmp,"cc")) {
