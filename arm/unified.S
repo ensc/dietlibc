@@ -2,11 +2,11 @@
 
 #include "syscalls.h"
 
+.text
 .global __unified_syscall4
 __unified_syscall4:
 	ldmfd	sp!, {r4, r5, r6}
 	b	__unified_syscall
-.text
 .weak exit
 .type exit,function
 exit:
