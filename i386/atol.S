@@ -41,7 +41,7 @@ atol:
 	cmpb $47, %al
 	jng .Lout
 	subb $('0'), %al
-	cmpb $0xa, %al
+	cmpb $9, %al
 	jng .Lfe2
 .Lout:
 	movl %edx, %eax

@@ -82,7 +82,7 @@
 #endif
 
 #ifdef __DYN_LIB
-/* with sahred libraries you MUST have a dynamic aware startcode */
+/* with shared libraries you MUST have a dynamic aware startcode */
 #ifndef WANT_DYNAMIC
 #define WANT_DYNAMIC
 #endif
