@@ -341,6 +341,9 @@ $(OBJDIR)/netent.o $(OBJDIR)/system.o: dietfeatures.h
 # these depend on dietfeatures.h for WANT_CRYPT_MD5
 $(OBJDIR)/crypt.o: dietfeatures.h
 
+# these depend on dietfeatures.h for WANT_DYNAMIC
+$(OBJDIR)/start.o $(OBJDIR)/dyn_start.o $(OBJDIR)/dyn_stop.o: dietfeatures.h
+
 $(OBJDIR)/unified.o: dietuglyweaks.h
 
 $(OBJDIR)/adjtimex.o: include/sys/timex.h
