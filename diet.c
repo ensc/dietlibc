@@ -44,6 +44,7 @@ int main(int argc,char *argv[]) {
     if (tmp<cc) goto donttouch;
     if ((tmp2=strstr(cc,"linux-"))) {	/* cross compiling? */
       int len=strlen(platform);
+      --tmp2;
       if (tmp2-cc>90) error("platform name too long!\n");
       memmove(platform+len,argv[1],tmp2-cc);
       platform[tmp2-cc+len]=0;
