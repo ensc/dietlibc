@@ -9,10 +9,13 @@
   duh, there is an alarm system call, too, so we use it and not setitimer
   fix comparison in gmtime_r that caused Jan 1 to be converted to Dec 32.
   rewrote __dtostr (it also has one more argument now)
-  make putenv behave like glibc (putenv("HOME") == unsetenv("HOME"))
-  fix strncat for the case where n == 0 (security implications?)
-  fix bsearch (it didn't find the very last element in the array, same
-    bug in both the C and the i386 assembly version).
+  Thanks to Erik Troan for these:
+    make putenv behave like glibc (putenv("HOME") == unsetenv("HOME"))
+    fix strncat for the case where n == 0 (security implications?)
+    fix bsearch (it didn't find the very last element in the array, same
+      bug in both the C and the i386 assembly version).
+  fix brk (the syscall was documented incorrectly in the Linux man page)
+    Thanks, Thomas Ogrisegg!
 
 0.12:
   more contributions from Frank Klemm.
