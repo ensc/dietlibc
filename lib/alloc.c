@@ -147,22 +147,21 @@ static __alloc_t zeromem[2]= {{0},{0}};
 static void* _alloc_libc_malloc(size_t size) {
   __alloc_t* ptr;
   size_t need;
-  if (size) {
-    size+=sizeof(__alloc_t);
-    if (size<=__MAX_SMALL_SIZE) {
-      need=GET_SIZE(size);
-      if ((ptr=__small_malloc(need))==MAP_FAILED) goto err_out;
-    }
-    else {
-      need=PAGE_ALIGN(size);
-      if ((ptr=do_mmap(need))==MAP_FAILED) goto err_out;
-    }
-    ptr->size=need;
-    return BLOCK_RET(ptr);
+  if (!size) goto retzero;
+  size+=sizeof(__alloc_t);
+  if (size<=__MAX_SMALL_SIZE) {
+    need=GET_SIZE(size);
+    if ((ptr=__small_malloc(need))==MAP_FAILED) goto err_out;
   }
-  return BLOCK_RET(zeromem);
+  else {
+    need=PAGE_ALIGN(size);
+    if ((ptr=do_mmap(need))==MAP_FAILED) goto err_out;
+  }
+  ptr->size=need;
+  return BLOCK_RET(ptr);
 err_out:
   (*__errno_location())=ENOMEM;
+retzero:
   return 0;
 }
 void* __libc_malloc(size_t size) __attribute__((alias("_alloc_libc_malloc")));

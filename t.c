@@ -43,6 +43,7 @@
 #include <fcntl.h>
 #include <iconv.h>
 #include <features.h>
+#include <sys/ioctl.h>
 #ifdef __dietlibc__
 #include <md5.h>
 #include <write12.h>
@@ -102,6 +103,19 @@ extern char* strcpy2(char*a,char*b);
      __asm__ __volatile__ ("rdtsc" : "=a" (low) : : "edx")
 
 int main(int argc,char *argv[]) {
+  struct winsize ws;
+  if (!ioctl(0, TIOCGWINSZ, &ws)) {
+    printf("%dx%d\n",ws.ws_col,ws.ws_row);
+  }
+#if 0
+  struct termios t;
+  if (tcgetattr(1,&t)) { puts("tcgetattr failed!"); return 1; }
+  printf("%d\n",cfgetospeed(&t));
+#endif
+#if 0
+  printf("%p\n",malloc(0));
+#endif
+#if 0
   char* argv[]={"sh","-i",0};
   char buf[PATH_MAX+100];
   int i;
@@ -111,6 +125,7 @@ int main(int argc,char *argv[]) {
   putenv(buf);
   execvp("sh",argv);
   printf("%d\n",islower('ü'));
+#endif
 #if 0
   char buf[101];
   __dtostr(-123456789.456,buf,100,6,2);

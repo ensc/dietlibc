@@ -5,7 +5,7 @@
 .weak exit
 .type exit,function
 exit:
-.gloabl _exit
+.global _exit
 .type _exit,function
 _exit:
 	mov	ip, sp

@@ -25,6 +25,7 @@
   Olaf: implemented the parisc clone and an atomic testandset, modified the
     libpthread to respect the parisc UPgrowing stack. still non functional,
     because the unified syscall uses errno :(
+  tcgetospeed read from the wrong termios field.  Thanks, Gunnar Ritter!
 
 0.13:
   add readdir64 and automatic mapping if _FILE_OFFSET_BITS == 64
