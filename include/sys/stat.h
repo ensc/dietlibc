@@ -45,4 +45,8 @@ extern int mknod (const char *__path, mode_t __mode, dev_t __dev) __THROW;
 
 extern int mkfifo (const char *__path, mode_t __mode) __THROW;
 
+#define S_IREAD S_IRUSR
+#define S_IWRITE S_IWUSR
+#define S_IEXEC S_IXUSR
+
 #endif
