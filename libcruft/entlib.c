@@ -150,5 +150,4 @@ void __ent_end(struct __ent_state *st)
 		return;
 	close(st->fd);
 	free(st);
-	st = NULL;
 }

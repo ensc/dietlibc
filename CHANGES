@@ -36,6 +36,7 @@
   add a gruesome hack to printf floating point to accept %f and kludge
     together support for %.2f.  Don't look at the code, please!
   fixed tcsetpgrp (oops, this is embarassing!  Thanks, Chris Siebenmann)
+  imported fix for entlib by Jeff Garzik.
 
 0.9:
   fixed initgroups (oops)

@@ -42,4 +42,4 @@ err_out:
 }
 
 void setspent(void) { __ent_set(st); }
-void endspent(void) { __ent_end(st); }
+void endspent(void) { __ent_end(st); st=NULL; }

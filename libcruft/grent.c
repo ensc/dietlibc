@@ -51,4 +51,4 @@ err_out:
 }
 
 void setgrent(void) { __ent_set(st); }
-void endgrent(void) { __ent_end(st); }
+void endgrent(void) { __ent_end(st); st=NULL; }

@@ -40,4 +40,4 @@ err_out:
 }
 
 void setpwent(void) { __ent_set(st); }
-void endpwent(void) { __ent_end(st); }
+void endpwent(void) { __ent_end(st); st=NULL; }
