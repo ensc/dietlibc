@@ -1,4 +1,3 @@
-#include "start.h"
 #include "dietfeatures.h"
 
 #ifdef __arm__

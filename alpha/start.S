@@ -1,5 +1,3 @@
-#include "start.h"
-
 #ifdef __alpha__
 
 .text

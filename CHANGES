@@ -28,6 +28,9 @@
     warning.
   started getting rid of kernel headers.  Big task! :-(
   add res_mkquery.  The diet libc can now compile and link mtr.
+  Olaf: added a lot of code in libdl (not yet complete), changed the
+    startup code to make it work with his libdl and ld.so (needs still work
+    too)
 
 0.10:
   update getpagesize.

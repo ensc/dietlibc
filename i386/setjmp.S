@@ -50,12 +50,18 @@ __sigsetjmp:
            we can't save and restore our caller's value.  Instead, we do an
            indirect jump through the GOT, using for the temporary register
            %ecx, which is call-clobbered.  */
-	call L(here)
-L(here):
-	popl %ecx
-	addl $_GLOBAL_OFFSET_TABLE_+[.-L(here)], %ecx
-	movl C_SYMBOL_NAME(__sigjmp_save@GOT)(%ecx), %ecx
+	call 1f
+1:	popl %ecx
+	addl $_GLOBAL_OFFSET_TABLE_+[.-1b], %ecx
+
+#if 1
+	/* O.D. simulate PLT */
+	jmp *__sigjmp_save@GOT(%ecx)
+#else
+	movl __sigjmp_save@GOT(%ecx), %ecx
 	jmp *%ecx
+#endif
+
 #else
 	jmp __sigjmp_save
 #endif

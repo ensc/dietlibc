@@ -3,7 +3,7 @@
 #include <unistd.h>
 #include <sys/mman.h>
 #include <dlfcn.h>
-#include <linux/elf.h>
+#include <elf.h>
 
 #include "_dl_int.h"
 
@@ -153,7 +153,7 @@ struct _dl_handle* _dl_dyn_scan(struct _dl_handle* dh, void* dyn_addr, int flags
   int i;
 
 #ifdef DEBUG
-  printf("_dl_load pre resolv %08x\n",dyn_tab);
+  printf("_dl_load pre resolv %08lx\n",(long)dyn_tab);
 #endif
   dh->dyn_str_tab = 0;
   dh->flag_global = flags&RTLD_GLOBAL;
@@ -253,8 +253,19 @@ struct _dl_handle* _dl_dyn_scan(struct _dl_handle* dh, void* dyn_addr, int flags
       return 0;
     }
   }
+  /* extra scan for rpath (if program) ... */
+  for(i=0;dyn_tab[i].d_tag;i++) {
+    if (dyn_tab[i].d_tag==DT_RPATH) {
+      char *rpath=dh->dyn_str_tab+dyn_tab[i].d_un.d_val;
+      _dl_set_rpath(rpath);
 #ifdef DEBUG
-  printf("_dl_load post dynamic scan %08x\n",dh);
+      printf("_dl_load have runpath: %s\n",rpath);
+#endif
+    }
+  }
+
+#ifdef DEBUG
+  printf("_dl_load post dynamic scan %08lx\n",(long)dh);
 #endif
 
   if ((got=_dlsym(dh,"_GLOBAL_OFFSET_TABLE_"))) {

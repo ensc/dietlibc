@@ -1,5 +1,3 @@
-#include "start.h"
-
 #ifdef __sparc__
 	.section ".text"
 	.align 4

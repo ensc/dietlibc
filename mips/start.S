@@ -1,5 +1,3 @@
-#include "start.h"
-
 #define zero 0
 #define ra 31
 #define sp 29

@@ -1,7 +1,9 @@
 #include <dietfeatures.h>
 
 .text
+#ifndef __DYN_LIB
 .global __unified_syscall
+#endif
 __unified_syscall:
 	movzbl	%al, %eax
 	push	%edi
@@ -16,13 +18,12 @@ __unified_syscall:
 	int	$0x80
 	cmp	$-124,%eax
 	jbe	.Lnoerror
+	neg	%eax
 #ifdef WANT_THREAD_SAFE
 	movl	%eax,%ebx
 	call	__errno_location
-	neg	%ebx
 	movl	%ebx,(%eax)
 #else
-	neg	%eax
 	mov	%eax,errno
 #endif
 	xor	%eax,%eax

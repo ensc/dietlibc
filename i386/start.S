@@ -1,4 +1,3 @@
-#include "start.h"
 #include "dietfeatures.h"
 
 #ifdef __i386__
@@ -17,7 +16,14 @@ _start:
 	pushl	%eax
 	pushl	%esi
 	pushl	%ecx
+#ifdef __DYN_LIB
+	call	1f
+1:	popl	%ebx
+	addl	$_GLOBAL_OFFSET_TABLE_+[.-1b],%ebx
+	movl	%eax,environ@GOT(%ebx)
+#else
 	movl	%eax,environ
+#endif
 
 #ifdef WANT_DYNAMIC
 	call	_dyn_start
