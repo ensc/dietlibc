@@ -4,6 +4,6 @@
 #include <linux/reboot.h>
 
 /* Reboot or halt the system.  */
-extern int reboot (int flag);
+int reboot (int flag, void *arg);
 
 #endif	/* _SYS_REBOOT_H */
