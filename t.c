@@ -111,6 +111,9 @@ int traverse(const char* file, const struct stat* sb, int flag) {
 #endif
 
 int main(int argc,char *argv[]) {
+  struct timeval a,b;
+  a.tv_sec=0; a.tv_usec=0;
+  printf("%d\n",adjtime(&a,&b));
 #if 0
   fd_set f;
   struct timeval tv;
@@ -343,7 +346,7 @@ int main(int argc,char *argv[]) {
 #if 0
   puts(ttyname(0));
 #endif
-#if 1
+#if 0
   char buf[1024];
   struct hostent* r;
   r=gethostbyname("www.convergence.de");

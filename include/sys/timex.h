@@ -2,18 +2,31 @@
 #define _SYS_TIMEX_H
 
 struct timex {
-  int modes;           /* mode selector */
-  long offset;         /* time offset (usec) */
-  long freq;           /* frequency offset (scaled ppm) */
-  long maxerror;       /* maximum error (usec) */
-  long esterror;       /* estimated error (usec) */
-  int status;          /* clock command/status */
-  long constant;       /* pll time constant */
-  long precision;      /* clock precision (usec) (read only) */
-  long tolerance;      /* clock frequency tolerance (ppm)
-			  (read only) */
-  struct timeval time; /* current time (read only) */
-  long tick;           /* usecs between clock ticks */
+  unsigned int modes;	/* mode selector */
+  long int offset;	/* time offset (usec) */
+  long int freq;	/* frequency offset (scaled ppm) */
+  long int maxerror;	/* maximum error (usec) */
+  long int esterror;	/* estimated error (usec) */
+  int status;		/* clock command/status */
+  long int constant;	/* pll time constant */
+  long int precision;	/* clock precision (usec) (read only) */
+  long int tolerance;	/* clock frequency tolerance (ppm) (read only) */
+  struct timeval time;	/* (read only) */
+  long int tick;	/* (modified) usecs between clock ticks */
+
+  long int ppsfreq;	/* pps frequency (scaled ppm) (ro) */
+  long int jitter;	/* pps jitter (us) (ro) */
+  int shift;		/* interval duration (s) (shift) (ro) */
+  long int stabil;	/* pps stability (scaled ppm) (ro) */
+  long int jitcnt;	/* jitter limit exceeded (ro) */
+  long int calcnt;	/* calibration intervals (ro) */
+  long int errcnt;	/* calibration errors (ro) */
+  long int stbcnt;	/* stability limit exceeded (ro) */
+
+  /* ??? */
+  int  :32; int  :32; int  :32; int  :32;
+  int  :32; int  :32; int  :32; int  :32;
+  int  :32; int  :32; int  :32; int  :32;
 };
 
 #define ADJ_OFFSET            0x0001 /* time offset */

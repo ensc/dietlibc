@@ -8,7 +8,7 @@ int adjtime (const struct timeval *itv, struct timeval *otv) {
     tmp.modes = ADJ_OFFSET_SINGLESHOT;
   } else
     tmp.modes = 0;
-  if (adjtimex(&tmp))
+  if (adjtimex(&tmp)==-1)
     return -1;
   if (otv) {
     otv->tv_usec = tmp.offset % 1000000;

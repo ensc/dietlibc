@@ -292,4 +292,6 @@ $(OBJDIR)/crypt.o: dietfeatures.h
 
 $(OBJDIR)/unified.o: dietuglyweaks.h
 
+$(OBJDIR)/adjtimex.o: include/sys/timex.h
+
 # CFLAGS+=-W -Wshadow -Wid-clash-31 -Wpointer-arith -Wcast-align -Wstrict-prototypes -Wwrite-strings
