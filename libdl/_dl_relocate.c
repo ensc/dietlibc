@@ -27,9 +27,11 @@ int _dl_apply_relocate(struct _dl_handle* dh, Elf32_Rel *rel) {
   typ = ELF32_R_TYPE(rel->r_info);
 
   if (typ==R_386_32) {		/* 1 */
-    *loc = (unsigned long)dh->dyn_sym_tab[ELF32_R_SYM(rel->r_info)].st_value;
-  } else if ((typ==R_386_GLOB_DAT)||(typ==R_386_JMP_SLOT)) {	/* 6 / 7 */
+    *loc = (unsigned long)(dh->mem_base+dh->dyn_sym_tab[ELF32_R_SYM(rel->r_info)].st_value);
+  } else if (typ==R_386_GLOB_DAT) {	/* 6 */
     *loc = (unsigned long)_dl_sym(dh, ELF32_R_SYM(rel->r_info));
+  } else if (typ==R_386_JMP_SLOT) {	/* 7 */
+    *loc += (unsigned long)dh->mem_base;
   } else if (typ==R_386_RELATIVE) {	/* 8 */
     *loc += (unsigned long)dh->mem_base;
   } else if (typ==R_386_NONE) {		/* 0 */
