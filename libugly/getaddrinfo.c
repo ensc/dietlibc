@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <netdb.h>
+#include <arpa/inet.h>
 
 /* XXX TODO FIXME */
 
@@ -17,7 +18,30 @@ int getaddrinfo(const char *node, const char *service, const struct addrinfo *hi
       struct hostent *H;
       int herrno;
       char buf[4096];
-      if (!gethostbyname2_r(node,family,&h,buf,4096,&H,&herrno)) {
+      int lookupok=0;
+      h.h_addr_list=buf+16;
+      if (node) {
+	if (inet_pton(family,node,buf)>=0) {
+	  h.h_name=(char*)node;
+	  h.h_addr_list[0]=buf;
+	  lookupok=1;
+	} else if ((!hints || !(hints->ai_flags&AI_NUMERICHOST)) &&
+		   !gethostbyname2_r(node,family,&h,buf,4096,&H,&herrno)) {
+	  lookupok=1;
+	}
+      } else {
+	h.h_name="";
+	h.h_addr_list[0]=buf;
+	memset(buf,0,16);
+	if (hints && hints->ai_flags&AI_PASSIVE) {
+	  if (family==AF_INET) {
+	    buf[0]=127; buf[3]=1;
+	  } else
+	    buf[15]=1;
+	}
+	lookupok=1;
+      }
+      if (lookupok) {
 	struct ai_v6 {
 	  struct addrinfo ai;
 	  union {
@@ -45,7 +69,7 @@ int getaddrinfo(const char *node, const char *service, const struct addrinfo *hi
 	memmove(foo->name,h.h_name,strlen(h.h_name)+1);
 	if (!hints || hints->ai_socktype!=SOCK_DGRAM) {	/* TCP is OK */
 	  char *x;
-	  port=strtol(service,&x,0);
+	  port=htons(strtol(service,&x,0));
 	  if (*x) {	/* service is not numeric :-( */
 	    struct servent* se;
 	    if ((se=getservbyname(service,"tcp"))) {	/* found a service. */
@@ -68,7 +92,7 @@ int getaddrinfo(const char *node, const char *service, const struct addrinfo *hi
 	foo->ai.ai_protocol=IPPROTO_UDP;
 	if (!hints || hints->ai_socktype!=SOCK_STREAM) {	/* UDP is OK */
 	  char *x;
-	  port=strtol(service,&x,0);
+	  port=htons(strtol(service,&x,0));
 	  if (*x) {	/* service is not numeric :-( */
 	    struct servent* se;
 	    if ((se=getservbyname(service,"udp"))) {	/* found a service. */
