@@ -19,6 +19,8 @@
     format some day :-(
   added unlink prototype to unistd.h.
   added gmtime and gmtime_r.
+  fixed sparc unified syscall error handling.
+  removed readdir glibc compatibility cruft.
 
 0.7.1:
   optimized away the static arrays from __ltostr and __lltostr.

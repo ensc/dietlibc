@@ -1,28 +1,10 @@
-#include <stdlib.h>
+#include "dietdirent.h"
 #include <unistd.h>
-#include <errno.h>
-#undef _POSIX_PTHREADS
-#include "dirstream.h"
+#include <dirent.h>
+#include <stdlib.h>
 
-#undef closedir
-int closedir(DIR * dir)
-{
-  int fd;
-
-  if (!dir) {
-    errno = EBADF;
-    return -1;
-  }
-
-  /* We need to check dd_fd. */
-  if (dir->dd_fd == -1)
-  {
-    errno = EBADF;
-    return -1;
-  }
-  fd = dir->dd_fd;
-  dir->dd_fd = -1;
-  free(dir->dd_buf);
-  free(dir);
-  return close(fd);
+int __dietclosedir (DIR* d) {
+  int res=close(d->fd);
+  free(d);
+  return res;
 }

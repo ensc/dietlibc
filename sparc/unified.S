@@ -22,7 +22,7 @@ __unified_syscall:
 	or	%o0, %lo(errno), %o0
 #endif
 	st	%l3, [ %o0 ]
-	mov	-1, %o0
+	mov	-1, %i0
 2:
 	ret
 	restore

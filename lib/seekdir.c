@@ -1,15 +1,8 @@
+#include "dietdirent.h"
 #include <unistd.h>
-#include <errno.h>
+#include <dirent.h>
 
-#include "dirstream.h"
-
-#undef seekdir
-void seekdir(DIR * dir, off_t offset)
-{
-  if (!dir) {
-    errno = EBADF;
-    return;
-  }
-  dir->dd_nextoff = lseek(dir->dd_fd, offset, SEEK_SET);
-  dir->dd_size = dir->dd_nextloc = 0;
+void __dietseekdir(DIR *d,off_t offset) {
+  if (lseek(d->fd,offset,SEEK_SET) != (off_t)-1)
+    d->num=d->cur=0;
 }

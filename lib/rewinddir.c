@@ -1,17 +1,8 @@
+#include "dietdirent.h"
 #include <unistd.h>
-#include <errno.h>
+#include <dirent.h>
 
-#include "dirstream.h"
-
-/*
- * rewinddir() just does an lseek(fd,0,0) - see close for comments
- */
-void rewinddir(DIR * dir)
-{
-  if (!dir) {
-    errno = EBADF;
-    return;
-  }
-  lseek(dir->dd_fd,0,SEEK_SET);
-  dir->dd_nextoff = dir->dd_nextloc = dir->dd_size = 0;
+void __dietrewinddir(DIR *d) {
+  if (lseek(d->fd,0,SEEK_SET) != (off_t)-1)
+    d->num=d->cur=0;
 }
