@@ -1,6 +1,6 @@
 #include <ctype.h>
 
-int isblank(int ch)
+int isblank ( int ch )
 {
-  return ((ch==' ')||(ch=='\t'));
+    return ch == ' '  ||  ch == '\t';
 }

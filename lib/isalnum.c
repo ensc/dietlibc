@@ -1,8 +1,9 @@
 #include <ctype.h>
 
-int __isalnum_ascii(int c) {
-  int d = c|0x20;
-  return ((d >= 'a') & (d <= 'z')) | ((c >= '0') & (c <= '9'));
+int __isalnum_ascii ( int ch ) 
+{
+    return (unsigned int)((ch | 0x20) - 'a') < 26u  ||
+           (unsigned int)( ch         - '0') < 10u;
 }
 
-int isalnum(int c) __attribute__((weak,alias("__isalnum_ascii")));
+int isalnum ( int ch ) __attribute__((weak,alias("__isalnum_ascii")));

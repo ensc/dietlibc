@@ -1,7 +1,8 @@
 #include <ctype.h>
 
-int __islower_ascii(int c) {
-  return (c>='a' && c<='z');
+int __islower_ascii ( int ch ) 
+{
+    return (unsigned int) (ch - 'a') < 26u;
 }
 
-int islower(int c) __attribute__((weak,alias("__islower_ascii")));
+int islower ( int ch ) __attribute__((weak,alias("__islower_ascii")));

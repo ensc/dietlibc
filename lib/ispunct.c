@@ -1,7 +1,8 @@
 #include <ctype.h>
 
-int __ispunct_ascii(int c) {
-  return isprint(c) && !( isalnum(c) || isspace(c) );
+int __ispunct_ascii ( int ch ) 
+{
+    return isprint (ch)  &&  !isalnum (ch)  &&  !isspace (ch);
 }
 
-int ispunct(int c) __attribute__((weak,alias("__ispunct_ascii")));
+int ispunct ( int ch ) __attribute__((weak,alias("__ispunct_ascii")));

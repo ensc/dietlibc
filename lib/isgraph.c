@@ -1,5 +1,6 @@
-int __isgraph_ascii(int c) {
-  return (c>=33 && c<=126);
+int __isgraph_ascii ( int ch ) 
+{
+  return (unsigned int)(ch - '!') < 127u - '!';
 }
 
-int isgraph(int c) __attribute__((weak,alias("__isgraph_ascii")));
+int isgraph ( int ch ) __attribute__((weak,alias("__isgraph_ascii")));

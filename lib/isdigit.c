@@ -1,7 +1,8 @@
 #include <ctype.h>
 
-int __isdigit_ascii(int c) {
-  return (c>='0' && c<='9');
+int __isdigit_ascii ( int ch ) 
+{
+    return (unsigned int)(ch - '0') < 10u;
 }
 
-int isdigit(int c) __attribute__((weak,alias("__isdigit_ascii")));
+int isdigit ( int ch ) __attribute__((weak,alias("__isdigit_ascii")));

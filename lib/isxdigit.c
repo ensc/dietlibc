@@ -1,6 +1,7 @@
-int __isxdigit_ascii(int c) {
-  int d=c|0x20;
-  return (((c>='0')&(c<='9')) | ((d>='a')&(d<='f')));
+int __isxdigit_ascii ( int ch )
+{
+    return (unsigned int)( ch         - '0') < 10u  || 
+           (unsigned int)((ch | 0x20) - 'a') <  6u;
 }
 
-int isxdigit(int c) __attribute__((weak,alias("__isxdigit_ascii")));
+int isxdigit ( int ch ) __attribute__((weak,alias("__isxdigit_ascii")));

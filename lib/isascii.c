@@ -1,6 +1,6 @@
 #include <ctype.h>
 
-int isascii(int c) {
-  return (c & 0x80) == 0;
+int isascii ( int ch ) 
+{
+    return (unsigned int)ch < 128u;
 }
-
