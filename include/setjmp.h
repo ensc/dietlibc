@@ -109,7 +109,7 @@ typedef struct __sparc64_jmp_buf {
   unsigned long uc_flags;
   sigset_t uc_sigmask;
   struct {
-    unsigned long	mc_gregs[MC_NREG];
+    unsigned long	mc_gregs[MC_NGREG];
     unsigned long	mc_fp;
     unsigned long	mc_i7;
     struct {
