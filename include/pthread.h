@@ -225,7 +225,7 @@ pid_t pthread_atfork(void (*prepare)(void), void (*parent)(void),
 		     void (*child)(void));
 
 /* THREADS */
-int pthread_create (pthread_t *__thread,
+int pthread_create (pthread_t *__threadarg,
 		const pthread_attr_t *__attr,
 		void *(*__start_routine) (void *),
 		void *__arg);

@@ -1,3 +1,6 @@
+0.19:
+  current gcc cvs makes __thread a keyword (Eric Troan)
+
 0.18:
   add stpcpy (from Thomas Ogrisegg)
   check in mktime fix (from Luc Van Oostenryck)
