@@ -2,13 +2,12 @@
 #include <string.h>
 #include <stdlib.h>
 
-struct passwd *getpwnam(const char * name) {
+extern struct passwd __passwd_pw;
+extern char __passwd_buf[1000];
+
+struct passwd *getpwnam(const char* name) {
   struct passwd *tmp;
-  setpwent();
-  for (;;) {
-    tmp=getpwent();
-    if (!tmp) return 0;
-    if (!strcmp(tmp->pw_name,name))
-      return tmp;
-  }
+  if (getpwnam_r(name,&__passwd_pw,__passwd_buf,sizeof(__passwd_buf),&tmp)==0)
+    return tmp;
+  return 0;
 }
