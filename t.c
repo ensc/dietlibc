@@ -32,9 +32,12 @@ int foo;
 
 int main(int argc,char *argv[]) {
   char type[64];
+  char filename[256];
+  int major,minor;
   int len;
-  printf("%d\n",sscanf("\n","%63s%n",type,&len));
-  printf("%s %d\n",type,len);
+  printf("%d\n",sscanf("GET / HTTP/1.0\r\n","%4[A-Z] %255[^ \t\r\n] HTTP/%d.%d",type,filename,&major,&minor));
+  printf("%s %s %d %d\n",type,filename,major,minor);
+
 #if 0
   char buf[100];
   char ip[16];

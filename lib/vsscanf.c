@@ -36,8 +36,14 @@ int vsscanf(const char *str, const char *format, va_list arg_ptr)
 
   while ((*str)&&(*format))
   {
-    const char *prevfmt=format;
-    format=skip_ws(format);
+    const char *prevfmt;
+    {
+      char *duh=skip_ws(format);
+      if (duh!=format)
+	str=skip_ws(str);
+      format=duh;
+    }
+    prevfmt=format;
     ch=*format++;
     if (!ch) continue;
 
@@ -256,7 +262,7 @@ inn_vsscanf:
 	      register unsigned char tmp=*format;
 	      for (;ch<=tmp;++ch) cset[ch]=1;
 	      flag_dash=0;
-	      ch=*(++format);
+	      ch=*format;
 	    }
 	    else if (*format=='-') flag_dash=1;
 	    else
@@ -276,7 +282,7 @@ inn_vsscanf:
 	    s=(char *)va_arg(arg_ptr,char*);
 	    ++n;
 	  }
-	  while (width && (cset[(unsigned char)(*str)]-flag_not))
+	  while (width && (cset[(unsigned char)(*str)]^flag_not))
 	  {
 	    if (!flag_discard) *(s++)=*(str);
 	    if (!*str) break;
@@ -284,6 +290,7 @@ inn_vsscanf:
 	    --width;
 	  }
 	}
+	++format;
 	break;
 #endif
       }
