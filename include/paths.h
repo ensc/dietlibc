@@ -7,7 +7,6 @@
 #define _PATH_DEVNULL "/dev/null"
 
 #define _PATH_CONSOLE "/dev/console"
-#define _PATH_MOUNTED "/etc/mtab"
 
 #define _PATH_PASSWD "/etc/passwd"
 #define _PATH_GROUP "/etc/group"
