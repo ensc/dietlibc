@@ -54,7 +54,7 @@ int __fflush4(FILE *stream,int next) {
   return 0;
 }
 
-int __buffered_outs(const char *s,int len) {
+int __buffered_outs(const char *s,size_t len) {
   return fwrite(s,1,(size_t)len,stdout);
 }
 
