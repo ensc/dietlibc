@@ -66,7 +66,8 @@ struct pt_regs {
 #define PT_FPR31 (PT_FPR0 + 2*31)
 #define PT_FPSCR (PT_FPR0 + 2*32 + 1)
 
-struct sigcontext_struct {
+#define sigcontext_struct sigcontext
+struct sigcontext {
 	unsigned long	_unused[4];
 	int		signal;
 	unsigned long	handler;
