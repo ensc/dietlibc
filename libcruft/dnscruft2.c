@@ -99,7 +99,7 @@ int __dns_gethostbyx_r(const char* name, struct hostent* result,
 	      --q;
 	    }
 	    q=((unsigned short)inpkg[6]<<8)+inpkg[7];
-	    if (q<1) break;
+	    if (q<1) goto nodata;
 	    while (q>0) {
 	      int decofs=__dns_decodename(inpkg,tmp-(char*)inpkg,Name,256);
 	      if (decofs<0) break;
@@ -156,7 +156,7 @@ int __dns_gethostbyx_r(const char* name, struct hostent* result,
 	    }
 	  }
 	  if (!names) {
-	    *h_errnop=NO_DATA;
+nodata:     *h_errnop=NO_DATA;
 	    return 1;
 	  }
 /*	  printf("%d answers\n",((unsigned short)inpkg[6]<<8)+inpkg[7]);
