@@ -21,6 +21,7 @@
   add modf, libm fixes (Andreas Krennmair)
   rename __pure__ to __pure (Laurent Bercot)
   utmp x86_64 biarch support (Gwenole Beauchesne)
+  add fgetpwent (Alvaro Gomes Sobral Barcellos)
 
 0.22:
   fix i386 libm

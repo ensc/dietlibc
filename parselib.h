@@ -9,6 +9,8 @@ struct state {
 
 /* open and mmap file, fill in struct state */
 void __prepare_parse(const char* filename,struct state* s);
+/* mmap a file already open, fill in struct state */
+void __fprepare_parse(int fd, struct state* s);
 /* unmap file */
 void __end_parse(struct state* s);
 
