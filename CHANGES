@@ -7,6 +7,7 @@
   fix floorl typo (Norbert Wolff)
   add more BSD brokenness to time.h
   forward poll.h to sys/poll.h
+  make DNS socket close-on-exec (Felix J. Ogris)
 
 0.22:
   fix i386 libm
