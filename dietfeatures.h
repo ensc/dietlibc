@@ -81,8 +81,10 @@
 #endif
 
 #ifdef WANT_THREAD_SAFE
+#ifndef __ASSEMBLER__
 #define errno (*__errno_location())
 #define _REENTRANT
+#endif
 #endif
 
 #ifdef __DYN_LIB
