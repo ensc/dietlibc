@@ -10,6 +10,8 @@
     to be touched to port the diet libc to a new platform.
   remove a few warnings
   provide a prototype for usleep.
+  make __dtostr work on ARM by using long instead of long long.
+    Idea by Dirk Engling.
 
 0.15:
   vfork sucks.  I reverted to the old behavior where vfork==fork.

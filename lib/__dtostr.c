@@ -1,11 +1,22 @@
 #include <stdlib.h>
+#include <endian.h>
 /* convert double to string.  Helper for sprintf. */
 
 int __dtostr(double d,char *buf,unsigned int maxlen,unsigned int prec,unsigned int prec2) {
+#if 0
   unsigned long long *x=(unsigned long long *)&d;
   /* step 1: extract sign, mantissa and exponent */
   signed int s=*x>>63;
   signed long e=((*x>>52)&((1<<11)-1))-1023;
+#else
+#if __BYTE_ORDER == __LITTLE_ENDIAN
+  signed int  s=(((unsigned long*)&d)[1])>>31;
+  signed long e=(((((unsigned long*)&d)[1])>>20)&((1<<11)-1))-1023;
+#else
+  signed int  s=(*((unsigned long*)&d))>>31;
+  signed long e=(((*((unsigned long*)&d))>>20)&((1<<11)-1))-1023;
+#endif
+#endif
 /*  unsigned long long m=*x & ((1ull<<52)-1); */
   /* step 2: exponent is base 2, compute exponent for base 10 */
   signed long e10=1+(long)(e*0.30102999566398119802); /* log10(2) */
