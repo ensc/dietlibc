@@ -7,6 +7,7 @@
 #include <limits.h>
 
 #include "dietstdio.h"
+#include "dietwarning.h"
 
 #define A_GETC(fn)	((fn)->getch((fn)->data))
 #define A_PUTC(c,fn)	((fn)->putch((c),(fn)->data))
@@ -333,3 +334,5 @@ err_out:
   A_PUTC(tpch,fn);
   return n;
 }
+
+link_warning("__v_scanf","warning: the scnaf functions add several kilobytes of bloat.");
