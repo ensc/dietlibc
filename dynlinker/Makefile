@@ -17,4 +17,4 @@ install: $(DYNLINK)
 	cp $(DYNLINK) /lib
 
 clean:
-	$(RM) *.o *.a *.so *.out *~ /tmp/test.so
+	$(RM) *.o *.a *.so *.out *~
