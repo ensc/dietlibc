@@ -23,6 +23,7 @@
   removed readdir glibc compatibility cruft.
   removed stat glibc compatibility cruft.
   oops, my fread was broken for pipes.
+  Olaf found a bug in pipe() for sparc, too.
 
 0.7.1:
   optimized away the static arrays from __ltostr and __lltostr.

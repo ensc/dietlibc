@@ -3,6 +3,7 @@
 .text
 .global pipe
 pipe:
+	mov	%o0, %o2
 	mov	__NR_pipe, %g1
 	ta 0x10
 	bcc,a	1f
