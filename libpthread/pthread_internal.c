@@ -49,10 +49,7 @@ static _pthread_descr _thread_hash_tid[NR_BUCKETS];
 static inline unsigned long hash_tid(int tid) { return (tid&(NR_BUCKETS-1)); }
 
 /* O(1) */
-#if defined(__i386__)
-static void __thread_add_tid_(_pthread_descr*root,_pthread_descr thread) __attribute__((regparm(2)));
-#endif
-static void __thread_add_tid_(_pthread_descr*root,_pthread_descr thread) {
+static void __attribute__((regparm(2))) __thread_add_tid_(_pthread_descr*root,_pthread_descr thread) {
   _pthread_descr tmp=*root;
   thread->prev=root;
   thread->next=tmp;
@@ -78,10 +75,12 @@ static void __thread_del_list(_pthread_descr td) {
 #if defined(__i386__)
 static _pthread_descr __thread_find_(int pid) __attribute__((regparm(1)));
 _pthread_descr __thread_find(int pid) { return __thread_find_(pid); }
+static _pthread_descr __attribute__((regparm(1))) __thread_find_(int pid)
 #else
 _pthread_descr __thread_find(int pid) __attribute__((alias("__thread_find_")));
+static _pthread_descr __thread_find_(int pid)
 #endif
-static _pthread_descr __thread_find_(int pid) {
+{
   _pthread_descr cur;
   if (__thread_started==PTHREAD_ONCE_INIT) { /* uninitialised */
     LOCK(&_main_thread);
