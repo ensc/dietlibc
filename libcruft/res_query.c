@@ -12,8 +12,6 @@
 #include <arpa/nameser.h>
 #include "dietfeatures.h"
 
-extern int h_errno;
-
 extern void __dns_make_fd(void);
 extern int __dns_fd;
 
@@ -26,14 +24,14 @@ int res_query(const char *dname, int class, int type, unsigned char *answer, int
   int size;
   __dns_make_fd();
 
-  if ((size=res_mkquery(QUERY,dname,class,type,0,0,0,packet,512))<0) return 1;
+  if ((size=res_mkquery(QUERY,dname,class,type,0,0,0,packet,512))<0) { h_errno=NO_RECOVERY; return -1; }
   {
     {
       int i;	/* current server */
       int j;	/* timeout count down */
       struct pollfd duh;
       struct timeval last,now;
-      i=0; j=30;
+      i=0;
       __dns_readstartfiles();
       duh.fd=__dns_fd;
       duh.events=POLLIN;
@@ -44,16 +42,18 @@ int res_query(const char *dname, int class, int type, unsigned char *answer, int
 	  gettimeofday(&last,0);
 	}
 	if (++i > _res.nscount) i=0;
-	if (poll(&duh,1,1) == 1) {
+	if (poll(&duh,1,1000) == 1) {
 	  /* read and parse answer */
 	  unsigned char inpkg[1500];
 	  int len=read(__dns_fd,inpkg,1500);
 	  /* header, question, answer, authority, additional */
 	  if (inpkg[0]!=packet[0] || inpkg[1]!=packet[1]) continue;	/* wrong ID */
 	  if ((inpkg[2]&0xf9) != (_res.options&RES_RECURSE?0x81:0x80)) continue;	/* not answer */
-	  if ((inpkg[3]&0x0f) != 0) break;		/* error */
-	  if (len>anslen)
+	  if ((inpkg[3]&0x0f) != 0) { h_errno=HOST_NOT_FOUND; return -1; }		/* error */
+	  if (len>anslen) {
+	    h_errno=NO_RECOVERY;
 	    return -1;
+	  }
 	  memmove(answer,inpkg,len);
 	  return len;
 	}
@@ -61,6 +61,7 @@ int res_query(const char *dname, int class, int type, unsigned char *answer, int
       }
     }
   }
-  return 1;
+  h_errno=NO_DATA;
+  return -1;
 }
 

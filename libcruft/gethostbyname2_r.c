@@ -5,7 +5,6 @@
 #include <netdb.h>
 #include <stdlib.h>
 #include <arpa/inet.h>
-#include <sys/poll.h>
 #include <unistd.h>
 #include "dietfeatures.h"
 #include <errno.h>

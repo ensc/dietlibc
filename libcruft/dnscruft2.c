@@ -80,7 +80,7 @@ int __dns_gethostbyx_r(const char* name, struct hostent* result,
 	  gettimeofday(&last,0);
 	}
 	if (++i > _res.nscount) i=0;
-	if (poll(&duh,1,15) == 1) {
+	if (poll(&duh,1,15000) == 1) {
 	  /* read and parse answer */
 	  unsigned char inpkg[1500];
 	  char *tmp;
