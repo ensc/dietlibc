@@ -224,6 +224,7 @@ inn_vsscanf:
 	    ++str;
 	    --width;
 	  }
+	  *s=0;
 	}
 	break;
 
