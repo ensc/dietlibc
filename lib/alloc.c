@@ -70,10 +70,10 @@ static inline int __ind_shift() { return (MEM_BLOCK_SIZE==4096)?4:5; }
 
 static size_t REGPARM(1) get_index(size_t _size) {
   register size_t idx=0;
-  if (_size) {
+//  if (_size) {	/* we already check this in the callers */
     register size_t size=((_size-1)&(MEM_BLOCK_SIZE-1))>>__ind_shift();
     while(size) { size>>=1; ++idx; }
-  }
+//  }
   return idx;
 }
 

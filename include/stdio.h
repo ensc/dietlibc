@@ -83,7 +83,7 @@ int fseeko64_unlocked(FILE *stream, loff_t offset, int whence) __THROW;
 loff_t ftello64(FILE *stream) __THROW;
 loff_t ftello64_unlocked(FILE *stream) __THROW;
 
-#if _FILE_OFFSET_BITS == 64
+#if defined _FILE_OFFSET_BITS && _FILE_OFFSET_BITS == 64
 #define off_t loff_t
 #define fseeko(foo,bar,baz) fseeko64(foo,bar,baz)
 #define ftello(foo) ftello64(foo)
