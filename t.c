@@ -157,14 +157,14 @@ int main(int argc,char *argv[]) {
   printf("%p %p\n",inet_ntop(AF_INET6,ip,buf,100),buf);
   puts(buf);
 #endif
-#if 0
+#if 1
   struct addrinfo *ai;
   struct addrinfo hints;
   char buf[16];
   hints.ai_family = AF_UNSPEC;
   hints.ai_flags = AI_PASSIVE|AI_CANONNAME;
   hints.ai_socktype = SOCK_STREAM;
-  printf("%d\n",getaddrinfo("borg","ssh",&hints,&ai));
+  printf("%d\n",getaddrinfo("ftp.fu-berlin.de","ftp",0,&ai));
   while (ai) {
     printf("found host %s, port %d, family %s, socktype %s\n",ai->ai_canonname,
 	   ntohs(ai->ai_family==AF_INET6?((struct sockaddr_in6*)ai->ai_addr)->sin6_port:
@@ -260,7 +260,7 @@ int main(int argc,char *argv[]) {
   printf("%d\n",setenv("foo","bar",1));
   execlp("printenv","printenv","foo",0);
 #endif
-#if 1
+#if 0
   printf("%d\n",fnmatch("*c*","bin",0));
   if (!fnmatch("s*", "sub", 0))
     printf("s* sub\n");

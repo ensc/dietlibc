@@ -9,4 +9,6 @@
 #define IPPORT_RESERVED 1024
 #define INET6_ADDRSTRLEN 46
 
+#define ipv6mr_interface ipv6mr_ifindex
+
 #endif

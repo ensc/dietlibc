@@ -96,11 +96,11 @@ $(OBJDIR)/diet: $(OBJDIR)/start.o $(OBJDIR)/dyn_start.o diet.c $(OBJDIR)/dietlib
 $(OBJDIR)/djb: $(OBJDIR)/compile $(OBJDIR)/load
 
 $(OBJDIR)/compile:
-	echo 'exec gcc $(CFLAGS) -I$(PWD)/$(OBJDIR)/include -c $${1+"$$@"}' > $@
+	echo 'exec' $(CC) '$(CFLAGS) -I$(PWD)/$(OBJDIR)/include -c $${1+"$$@"}' > $@
 	chmod 755 $@
 
 $(OBJDIR)/load:
-	echo 'main="$$1"; shift; exec gcc -nostdlib -o "$$main" $(PWD)/$(OBJDIR)/start.o "$$main".o $${1+"$$@"} $(PWD)/$(OBJDIR)/dietlibc.a -lgcc'  > $@
+	echo 'main="$$1"; shift; exec' $(CC) '-nostdlib -o "$$main" $(PWD)/$(OBJDIR)/start.o "$$main".o $${1+"$$@"} $(PWD)/$(OBJDIR)/dietlibc.a -lgcc'  > $@
 	chmod 755 $@
 
 clean:
