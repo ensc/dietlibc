@@ -33,7 +33,7 @@
   getopt* fix from Thomas Walpuski
   add syscall() to libcompat (Thomas Ogrisegg)
   fix strncpy and strrchr i386 assembly versions for dynamic linking
-    (John K. Holm)
+    (John K. Hohm)
   allow short option grouping in getopt* (Ralf Wildenhues)
   make the DNS resolver IPv6 transport capable (WANT_IPV6_DNS)
   mention -v in diet.1 (Bryan Henderson)
