@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include <unistd.h>
 #include <sys/mman.h>
 #include <dlfcn.h>
@@ -26,6 +27,11 @@ static void *do_map_in(void *base, unsigned long length, int flags, int fd, unsi
   return mmap(base, length, perm, MAP_PRIVATE|((base)?MAP_FIXED:0), fd, offset);
 }
 
+void exit_now(void) {
+  printf("exit_now: symbol not found\n");
+  _exit(213);
+}
+
 unsigned long do_rel(struct _dl_handle * tmp_dl, unsigned long off)
 {
   Elf32_Rel *tmp = ((void*)tmp_dl->plt_rel)+off;
@@ -48,10 +54,11 @@ unsigned long do_rel(struct _dl_handle * tmp_dl, unsigned long off)
 
   printf("do_rel sym %08lx\n",(long)sym_val);
   /* JUMP (arg sysdep...) */
-  return sym_val;
+  if (sym_val) return sym_val;
+  return (unsigned long)exit_now;
 }
 
-void *_dl_open(const char*pathname, int fd, int flag)
+void *_dl_open(const char*fn, const char*pathname, int fd, int flag)
 {
   struct _dl_handle* dl_test=0;
   int ps=getpagesize();
@@ -157,6 +164,7 @@ void *_dl_open(const char*pathname, int fd, int flag)
 
     ret = dl_test;
   }
+  close(fd);
 
   printf("_dl_open pre resolv\n");
   if (ret) {
@@ -310,6 +318,7 @@ void *_dl_open(const char*pathname, int fd, int flag)
       }
     }
 
+    ret->name=strdup(fn);
 
     // _dl_open depending libs ...
     printf("_dl_open post resolv, pre init\n");
@@ -317,6 +326,5 @@ void *_dl_open(const char*pathname, int fd, int flag)
   }
   printf("_dl_open post resolv, post init\n");
 
-  close(fd);
   return ret;
 }

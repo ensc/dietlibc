@@ -8,7 +8,7 @@ struct _dl_handle {
   struct _dl_handle *next;
   struct _dl_handle *prev;
 
-  char *	so_name;
+  char *	name;
   int		flag_global;
 
   /* basic */
@@ -48,7 +48,7 @@ void _dl_free_handle(struct _dl_handle* dh);
 struct _dl_handle* _dl_get_handle();
 
 /* _dl_open.c */
-void *_dl_open(const char*pathname, int fd, int flag);
+void *_dl_open(const char* filename, const char*pathname, int fd, int flag);
 
 /* _dl_search.c */
 void _dl_set_rpath(const char *path);

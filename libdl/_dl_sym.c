@@ -1,9 +1,11 @@
 #include "_dl_int.h"
 #include <stdio.h>
 
+#if 0
 static void dummy(unsigned long t) {
   printf("shit happens (called from %08lx)\n",*((&t)-1));
 }
+#endif
 
 static void *_dl_sym_search(struct _dl_handle * h, int symbol)
 {
@@ -15,7 +17,7 @@ static void *_dl_sym_search(struct _dl_handle * h, int symbol)
     printf("_dl_sym_search: searching: %08lx %08lx\n",(long)tmp, (long)h);
 //    if (tmp==h) continue;
 //    if (!tmp->flag_global) continue;
-    printf("_dl_sym_search: searching in %s\n",tmp->so_name);
+    printf("_dl_sym_search: searching in %s\n",tmp->name);
     sym=_dlsym((void*)tmp,name);
     if (sym) printf("_dl_sym_search: found: %s @ %08lx\n",name,(long)sym);
   }

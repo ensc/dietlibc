@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include <sys/mman.h>
 
@@ -15,6 +16,7 @@ void _dl_free_handle(struct _dl_handle* dh) {
   if (dh->next) dh->next->prev=dh->prev;
   if (dh->prev) dh->prev->next=dh->next;
 
+  if (dh->name) free(dh->name);
   memset(dh,0,sizeof(struct _dl_handle));
   dh->next=_dl_free_list;
   _dl_free_list=dh;

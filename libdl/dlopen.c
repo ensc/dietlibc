@@ -21,7 +21,7 @@ void *dlopen (const char *filename, int flag)
       p=buf;
       fd=_dl_search(buf,sizeof(buf),filename);
     }
-    return _dl_open(p,fd,flag);
+    return _dl_open(filename,p,fd,flag);
   }
   /* dietld.so has allocated the top for the dynamic program.
    * (if there is a dietld.so :) not yet functional
