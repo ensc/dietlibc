@@ -17,10 +17,9 @@ static int swrite(void*ptr, size_t nmemb, struct str_data* sd) {
     if (len>tmp) len=tmp;
     if (sd->str) {
       memcpy(sd->str+sd->len,ptr,len);
-      sd->len+=len;
       sd->str[sd->len+len]=0;
-    } else
-      sd->len+=len;
+    }
+    sd->len+=len;
   }
   return nmemb;
 }
