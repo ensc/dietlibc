@@ -136,21 +136,55 @@
 #define SIGRTMAX	(_NSIG-1)
 
 /* SA_FLAGS values: */
-#ifdef __hppa__
-#define SA_ONSTACK      0x00000001
-#define SA_RESETHAND    0x00000004
-#define SA_NOCLDSTOP    0x00000008
-#define SA_SIGINFO      0x00000010
-#define SA_NODEFER      0x00000020
-#define SA_RESTART      0x00000040
-#define SA_NOCLDWAIT    0x00000080 /* not supported yet */
-#define _SA_SIGGFAULT   0x00000100 /* HPUX */
-#define SA_INTERRUPT    0x20000000 /* dummy -- ignored */
-#define SA_RESTORER     0x04000000 /* obsolete -- ignored */
+#if defined(__alpha__)
+#define SA_ONSTACK	0x00000001
+#define SA_RESTART	0x00000002
+#define SA_NOCLDSTOP	0x00000004
+#define SA_NODEFER	0x00000008
+#define SA_RESETHAND	0x00000010
+#define SA_NOCLDWAIT	0x00000020 /* not supported yet */
+#define SA_SIGINFO	0x00000040
+#define SA_INTERRUPT	0x20000000 /* dummy -- ignored */
+#elif defined(__hppa__)
+#define SA_ONSTACK	0x00000001
+#define SA_RESETHAND	0x00000004
+#define SA_NOCLDSTOP	0x00000008
+#define SA_SIGINFO	0x00000010
+#define SA_NODEFER	0x00000020
+#define SA_RESTART	0x00000040
+#define SA_NOCLDWAIT	0x00000080 /* not supported yet */
+#define _SA_SIGGFAULT	0x00000100 /* HPUX */
+#define SA_INTERRUPT	0x20000000 /* dummy -- ignored */
+#define SA_RESTORER	0x04000000 /* obsolete -- ignored */
+#elif defined (__sparc__)
+#define SV_SSTACK	1	/* This signal handler should use sig-stack */
+#define SV_INTR		2	/* Sig return should not restart system call */
+#define SV_RESET	4	/* Set handler to SIG_DFL upon taken signal */
+#define SV_IGNCHILD	8	/* Do not send SIGCHLD */
+
+#define SA_NOCLDSTOP	SV_IGNCHILD
+#define SA_STACK	SV_SSTACK
+#define SA_ONSTACK	SV_SSTACK
+#define SA_RESTART	SV_INTR
+#define SA_ONESHOT	SV_RESET
+#define SA_INTERRUPT	0x10
+#define SA_NOMASK	0x20
+#define SA_SHIRQ	0x40
+#define SA_NOCLDWAIT	0x100»··/* not supported yet */
+#define SA_SIGINFO	0x200
+#else
+#if defined (__mips__)
+#define SA_NOCLDSTOP	0x00000001
+#define SA_SIGINFO	0x00000008
+#define SA_NOCLDWAIT	0x00010000 /* Not supported yet */
 #else
 #define SA_NOCLDSTOP	0x00000001
 #define SA_NOCLDWAIT	0x00000002 /* not supported yet */
 #define SA_SIGINFO	0x00000004
+#endif
+#if defined(__arm__)
+#define SA_THIRTYTWO	0x02000000
+#endif
 #define SA_RESTORER	0x04000000
 #define SA_ONSTACK	0x08000000
 #define SA_RESTART	0x10000000

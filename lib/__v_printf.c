@@ -7,14 +7,14 @@
 #include "dietwarning.h"
 
 static inline unsigned int skip_to(const unsigned char *format) {
-  int unsigned nr;
+  unsigned int nr;
   for (nr=0; format[nr] && (format[nr]!='%'); ++nr);
   return nr;
 }
 
 #define A_WRITE(fn,buf,sz)	((fn)->put((void*)(buf),(sz),(fn)->data))
 
-static char* pad_line[16]= { "                ", "0000000000000000", };
+static const char pad_line[2][16]= { "                ", "0000000000000000", };
 static inline int write_pad(struct arg_printf* fn, int len, int padwith) {
   int nr=0;
   for (;len>15;len-=16,nr+=16) {
@@ -141,6 +141,7 @@ inn_printf:
 #endif
 	sz = strlen(s);
 	if (flag_dot && sz>preci) sz=preci;
+	flag_dot^=flag_dot;
 
 print_out:
 	if (width && (!flag_left)) {
