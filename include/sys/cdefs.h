@@ -33,13 +33,13 @@
 #define expect(foo,bar) (foo)
 #else
 #define expect(foo,bar) __builtin_expect(foo,bar)
-#define __malloc__ __attribute__((malloc))
+#define __attribute_malloc__ __attribute__((malloc))
 #endif
 #endif
 #endif
 
-#ifndef __malloc__
-#define __malloc__
+#ifndef __attribute_malloc__
+#define __attribute_malloc__
 #endif
 
 #define __P(x) x

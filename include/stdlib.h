@@ -6,10 +6,10 @@
 #include <sys/cdefs.h>
 #include <sys/types.h>
 
-void *calloc(size_t nmemb, size_t size) __malloc__ __THROW;
-void *malloc(size_t size) __malloc__ __THROW;
+void *calloc(size_t nmemb, size_t size) __attribute_malloc__ __THROW;
+void *malloc(size_t size) __attribute_malloc__ __THROW;
 void free(void *ptr) __THROW;
-void *realloc(void *ptr, size_t size) __malloc__ __THROW;
+void *realloc(void *ptr, size_t size) __attribute_malloc__ __THROW;
 
 char *getenv(const char *name) __THROW __pure__;
 int putenv(const char *string) __THROW;

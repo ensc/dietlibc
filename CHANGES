@@ -16,6 +16,8 @@
   ftell did not take ungetc into account (Kevin Ryde through Debian).
   Thomas Ogrisegg sent a port to IA64!
   sigaddset, sigdelset and setismember segfaulted for signal 0 (Gunnar Ritter)
+  Enrico Scholz reported several bugs in the header files.
+  change __malloc__ to __attribute_malloc__
 
 0.17:
   fix several bugs in getservent_r

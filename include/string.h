@@ -38,7 +38,7 @@ size_t strlen(const char *s) __THROW __pure__;
 
 char *strstr(const char *haystack, const char *needle) __THROW __pure__;
 
-char *strdup(const char *s) __malloc__ __THROW;
+char *strdup(const char *s) __attribute_malloc__ __THROW;
 
 char *strchr(const char *s, int c) __THROW __pure__;
 char *strrchr(const char *s, int c) __THROW __pure__;
