@@ -2,7 +2,7 @@
 
 #ifdef __i386__
 .text
-.globl _start
+.global _start
 _start:
 #if 1
 	popl	%ecx			/* %ecx = argc */
@@ -26,7 +26,8 @@ _start:
 	call	1f
 1:	popl	%ebx
 	addl	$_GLOBAL_OFFSET_TABLE_+[.-1b],%ebx
-	movl	%eax,environ@GOT(%ebx)
+	movl	environ@GOT(%ebx),%ecx
+	movl	%eax,(%ecx)
 #else
 	movl	%eax,environ
 #endif

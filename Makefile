@@ -141,7 +141,9 @@ PICODIR = pic-$(ARCH)
 $(PICODIR):
 	mkdir $@
 
-dyn_lib: $(PICODIR) $(PICODIR)/libdietc.so $(PICODIR)/start.o $(PICODIR)/libpthread.so $(PICODIR)/libdl.so
+dyn_lib: $(PICODIR) $(PICODIR)/libdietc.so $(PICODIR)/start.o $(PICODIR)/dyn_start.o $(PICODIR)/dyn_stop.o \
+	$(PICODIR)/libpthread.so $(PICODIR)/libdl.so \
+	$(PICODIR)/diet-dyn
 
 $(PICODIR)/%.o: %.S
 	$(CROSS)$(CC) -I. -Iinclude $(CFLAGS) -fPIC -D__DYN_LIB -c $< -o $@
@@ -184,6 +186,14 @@ $(OBJDIR)/elftrunc: $(OBJDIR)/diet contrib/elftrunc.c
 $(OBJDIR)/diet: $(OBJDIR)/start.o $(OBJDIR)/dyn_start.o diet.c $(OBJDIR)/dietlibc.a $(OBJDIR)/dyn_stop.o
 	$(CROSS)$(CC) -Iinclude $(CFLAGS) -nostdlib -o $@ $^ -DDIETHOME=\"$(HOME)\"
 	$(CROSS)strip -R .comment -R .note $@
+
+$(PICODIR)/diet-gen: $(OBJDIR)/start.o $(OBJDIR)/dyn_start.o diet.c $(OBJDIR)/dietlibc.a $(OBJDIR)/dyn_stop.o
+	$(CROSS)$(CC) -Iinclude $(CFLAGS) -nostdlib -o $@ $^ -DDIETHOME=\"$(HOME)\" -D__DYN_LIB
+	$(CROSS)strip -R .command -R .note $@
+
+$(PICODIR)/diet-dyn: $(PICODIR)/start.o $(PICODIR)/dyn_start.o diet.c
+	$(CROSS)$(CC) -Iinclude $(CFLAGS) -nostdlib -o $@ $^ -DDIETHOME=\"$(HOME)\" -D__DYN_LIB -L$(PICODIR) -ldietc -lgcc $(PICODIR)/dyn_stop.o -Wl,-dynamic-linker=/lib/diet-linux.so
+	$(CROSS)strip -R .command -R .note $@
 
 $(OBJDIR)/djb: $(OBJDIR)/compile $(OBJDIR)/load
 

@@ -9,7 +9,8 @@
 
 #define WANT_LD_SO_CONF_SEARCH
 
-static const char *_dl_search_rpath=0;
+const char *_dl_search_rpath=0;
+
 void _dl_set_rpath(const char *path) { _dl_search_rpath=path; }
 
 /* search a colon (semicolon) seperated path for the libraray "filename" */

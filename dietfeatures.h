@@ -74,4 +74,10 @@
 #define _REENTRANT
 #endif
 
+#ifdef __DYN_LIB
+#ifndef WANT_DYNAMIC
+#define WANT_DYNAMIC
+#endif
+#endif
+
 #endif

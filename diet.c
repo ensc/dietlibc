@@ -37,7 +37,12 @@ int main(int argc,char *argv[]) {
   int _link=0;
   int compile=0;
   char diethome[]=DIETHOME;
+#ifndef __DYN_LIB
   char platform[1000]=DIETHOME "/bin-";
+#else
+  char platform[1000]=DIETHOME "/pic-";
+  int shared=0;
+#endif
   char* shortplatform=0;
 #ifdef WANT_SAFEGUARD
   char safeguard1[]="-include";
@@ -106,6 +111,15 @@ int main(int argc,char *argv[]) {
 	  compile=1;
 /* we need to add -nostdlib if we are not compiling*/
       _link=!compile;
+#ifdef __DYN_LIB
+      if (_link) {
+	for (i=2; i<argc; ++i)
+	  if (!strcmp(argv[i],"-shared")) {
+	    shared=1;
+	    _link=0;
+	  }
+      }
+#endif
 #if 0
       for (i=2; i<argc; ++i)
 	if (!strcmp(argv[i],"-o"))
@@ -118,7 +132,11 @@ int main(int argc,char *argv[]) {
 
       strcpy(a,"-I"); strcat(a,diethome); strcat(a,"/include");
       strcpy(b,platform); strcat(b,"/start.o");
+#ifndef __DYN_LIB
       strcpy(c,platform); strcat(c,"/dietlibc.a");
+#else
+      strcpy(c,"-ldietc");
+#endif
 
 #ifdef WANT_DYNAMIC
       d=alloca(strlen(platform)+20);
@@ -129,8 +147,13 @@ int main(int argc,char *argv[]) {
 
       dest=newargv;
       *dest++=argv[1];
+#ifndef __DYN_LIB
       if (_link) { *dest++=(char*)nostdlib; *dest++=dashL; }
       if (compile || _link) *dest++=a;
+#else
+      if (_link || shared) { *dest++=(char*)nostdlib; *dest++=dashL; }
+      if (compile || _link || shared) *dest++=a;
+#endif
 #ifdef WANT_SAFEGUARD
       if (compile) {
 	*dest++=safeguard1;
@@ -164,6 +187,10 @@ int main(int argc,char *argv[]) {
       if (_link) { *dest++=c; *dest++=(char*)libgcc; }
 #ifdef WANT_DYNAMIC
       if (_link) { *dest++=e; }
+#endif
+#ifdef __DYN_LIB
+      if (shared){ *dest++=c; }
+      if (_link) { *dest++="-Wl,-dynamic-linker=/lib/diet-linux.so"; }
 #endif
       *dest=0;
       execvp(newargv[0],newargv);
