@@ -14,8 +14,8 @@ void pthread_cleanup_push(void (*func)(void*), void *arg)
   this = __thread_self();
 
   for (i=0; i<PTHREAD_MAX_CLEANUP; ++i)
-    if (this->cleanup_stack[i].func)
-      if (__testandset((int*)&this->cleanup_stack[i].func)) {
+    if (!this->cleanup_stack[i].func)
+      if (!__testandset((int*)&this->cleanup_stack[i].func)) {
 	this->cleanup_stack[i].func=func;
 	this->cleanup_stack[i].arg=arg;
       }
