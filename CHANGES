@@ -2,6 +2,7 @@
   fix sprintf
   head -1  ->  head -n 1
   handle negative precision and -0 (Jens Låås)
+  susv3 renamed IFNAMSIZ to IF_NAMESIZE
 
 0.24:
   work around incompatible Linux select() modifying the timeout in

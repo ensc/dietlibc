@@ -41,10 +41,11 @@ struct ifmap {
 
 struct ifreq {
 #define IFHWADDRLEN	6
-#define IFNAMSIZ	16
+#define IF_NAMESIZE	16
+#define IFNAMSIZ	IF_NAMESIZE
   union
   {
-    char	ifrn_name[IFNAMSIZ];		/* if name, e.g. "en0" */
+    char	ifrn_name[IF_NAMESIZE];		/* if name, e.g. "en0" */
   } ifr_ifrn;
   union {
     struct sockaddr ifru_addr;
@@ -56,8 +57,8 @@ struct ifreq {
     int ifru_ivalue;
     int ifru_mtu;
     struct ifmap ifru_map;
-    char ifru_slave[IFNAMSIZ];	/* Just fits the size */
-    char ifru_newname[IFNAMSIZ];
+    char ifru_slave[IF_NAMESIZE];	/* Just fits the size */
+    char ifru_newname[IF_NAMESIZE];
     char* ifru_data;
   } ifr_ifru;
 };
