@@ -5,10 +5,35 @@ Q: How do I compile this beast?  I don't see a configure?
 A: Just type make.
 
 
+Q: How do I install it?  make install?
+A: You don't install it at all.  The diet libc comes with a wrapper
+   called "diet", which can be found in $(ARCH)-bin/diet, i.e.
+   i386-bin/diet for most of us.  Copy this wrapper somewhere in your
+   path (for example ~/bin) and then just compile stuff by prepending
+   diet to the command line, e.g. "diet gcc -pipe -g -o t t.c".
+
+
+Q: How do I compile programs using autoconf with the diet libc?
+A: Set CC in the environment properly.  For Bourne Shells:
+
+     $ CC="diet gcc -static" ./configure --disable-nls
+
+   That should be enough, but you might also want to set
+   --disable-shared and --enable-static for packages using libtool.
+
+
 Q: Do you have cross compiling support?
 A: Yes.  Just type something like "make ARCH=arm CROSS=arm-linux- all".
    For arm, alpha, mips, ppc, sparc and i386, shortcuts exist.  You can
-   also use "make arm", for example.
+   also use "make arm", for example.  You still use the same "diet"
+   program as for normal compilation, but you can then say
+
+     $ diet sparc-linux-gcc -pipe -g -o t t.c
+
+   Programs using autoconf can be configured like this:
+
+     $ CC="diet sparc-linux-gcc -static" ./configure --disable-nls
+
 
 Q: I keep getting warnings about asm/posix_types.h when compiling the diet libc.
 A: The diet libc works with Linux 2.2 and Linux 2.4 headers and assumes
@@ -20,6 +45,7 @@ A: The diet libc works with Linux 2.2 and Linux 2.4 headers and assumes
    know) or delete the offending asm/posix_types.h from the gcc dir (NOT
    from the kernel source tree!).
 
+
 Q: There are a few warnings about possibly uninitialized variables when
    compiling the diet libc.  Can't you remove them?
 A: This type of warning can only be removed by a) compiling without
@@ -28,6 +54,7 @@ A: This type of warning can only be removed by a) compiling without
    explicit initializer will add a few bytes of code.  As you know, the
    goal of the diet libc is to not waste a single byte of code, so we
    don't add initializers ;-)
+
 
 Q: Cross-Compiling on sparc fails because it tries to include a missing
    file, asm/asm_offsets.h.  What gives?
