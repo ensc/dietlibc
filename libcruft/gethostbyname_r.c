@@ -33,6 +33,7 @@ int gethostbyname_r(const char* name, struct hostent* result,
 	memmove(result,r,sizeof(struct hostent));
 	*RESULT=result;
 	*h_errnop=0;
+	endhostent();
 	return 0;
       }
     }
