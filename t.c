@@ -86,6 +86,14 @@ void foo(int tmp,...) {
 }
 
 int main(int argc,char *argv[]) {
+  printf("%s\n",memchr("fnordhausen",'h',5));
+#if 0
+  regex_t r;
+//  printf("regcomp %d\n",regcomp(&r,"^(re([\\[0-9\\]+])*|aw):[ \t]*",REG_EXTENDED));
+  printf("regcomp %d\n",regcomp(&r,"^([A-Za-z ]+>|[]>:|}-][]>:|}-]*)",REG_EXTENDED));
+  printf("regexec %d\n",regexec(&r,"Marketing-Laufbahn hinterdir.",1,0,REG_NOSUB));
+#endif
+#if 0
   FILE *f=fopen("/home/leitner/Mail/outbox","r");
   char buf[1024];
   int i=0;
@@ -95,6 +103,7 @@ int main(int argc,char *argv[]) {
       printf("%d %lu %s",i,ftell(f),buf);
     }
   }
+#endif
 #if 0
   char template[]="/tmp/duh/fnord-XXXXXX";
   printf("%d\n",mkdtemp(template));
@@ -130,10 +139,20 @@ int main(int argc,char *argv[]) {
   struct addrinfo hints;
   char buf[16];
   memset(&hints,0,sizeof(hints));
+#if 0
   hints.ai_family = AF_UNSPEC;
   hints.ai_flags = AI_PASSIVE;
   hints.ai_socktype = SOCK_STREAM;
-  printf("%d\n",getaddrinfo(0,"80",&hints,&ai));
+#endif
+  hints.ai_family=0;
+  hints.ai_flags=0;
+  hints.ai_socktype=1;
+  hints.ai_protocol=0;
+  hints.ai_addrlen=0;
+  hints.ai_addr=0;
+  hints.ai_canonname=0;
+  hints.ai_next=0;
+  printf("%d\n",getaddrinfo("news.fu-berlin.de","119",&hints,&ai));
   while (ai) {
     printf("found host %s, port %d, family %s, socktype %s\n",ai->ai_canonname,
 	   ntohs(ai->ai_family==AF_INET6?((struct sockaddr_in6*)ai->ai_addr)->sin6_port:

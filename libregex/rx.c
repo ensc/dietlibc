@@ -4,6 +4,8 @@
 #include <sys/types.h>
 #include <string.h>
 
+#undef DEBUG
+
 /* this is ugly.
  * the idea is to build a parse tree, then do some poor man's OOP with a
  * generic matcher function call that is always that the start of each
@@ -97,55 +99,75 @@ static const char* parsebracketed(struct bracketed*__restrict__ b,const char*__r
 
 static const char* parseregex(struct regex* r,const char* s,regex_t* rx);
 
-static int matchatom(void*__restrict__ x,const char*__restrict__ s,int ofs,struct __regex_t*__restrict__ preg,int plus,int eflags) {
+static int matchatom(void*__restrict__ x,const unsigned char*__restrict__ s,int ofs,struct __regex_t*__restrict__ preg,int plus,int eflags) {
   register struct atom* a=(struct atom*)x;
   int matchlen=0;
   switch (a->type) {
   case EMPTY:
-//    printf("matching EMPTY against \"%s\"\n",s);
+#ifdef DEBUG
+    printf("matching atom EMPTY against \"%s\"\n",s);
+#endif
     preg->l[a->bnum].rm_so=preg->l[a->bnum].rm_eo=ofs;
     goto match;
   case REGEX:
-//    printf("matching REGEX against \"%s\"\n",s);
-    if ((matchlen=a->u.r.m(a,s,ofs,preg,0,eflags))>=0) {
+#ifdef DEBUG
+    printf("matching atom REGEX against \"%s\"\n",s);
+#endif
+    if ((matchlen=a->u.r.m(&a->u.r,s,ofs,preg,0,eflags))>=0) {
       preg->l[a->bnum].rm_so=ofs;
       preg->l[a->bnum].rm_eo=ofs+matchlen;
       goto match;
     }
     break;
   case BRACKET:
-//    printf("matching BRACKET against \"%s\"\n",s);
+#ifdef DEBUG
+    printf("matching atom BRACKET against \"%s\"\n",s);
+#endif
     matchlen=1;
     if (*s=='\n' && (preg->cflags&REG_NEWLINE)) break;
     if (*s && issetcc(a->u.b.cc,(preg->cflags&REG_ICASE?tolower(*s):*s)))
       goto match;
     break;
   case ANY:
-//    printf("matching ANY against \"%s\"\n",s);
+#ifdef DEBUG
+    printf("matching atom ANY against \"%s\"\n",s);
+#endif
     if (*s=='\n' && (preg->cflags&REG_NEWLINE)) break;
     matchlen=1;
     if (*s) goto match;
     break;
   case LINESTART:
-//    printf("matching LINESTART against \"%s\"\n",s);
+#ifdef DEBUG
+    printf("matching atom LINESTART against \"%s\"\n",s);
+#endif
     if (ofs==0 && (eflags&REG_NOTBOL)==0) {
       goto match;
     }
     break;
   case LINEEND:
-//    printf("matching LINEEND against \"%s\"\n",s);
+#ifdef DEBUG
+    printf("matching atom LINEEND against \"%s\"\n",s);
+#endif
     if ((*s && *s!='\n') || (eflags&REG_NOTEOL)==0) break;
     goto match;
   case WORDSTART:
+#ifdef DEBUG
+    printf("matching atom WORDSTART against \"%s\"\n",s);
+#endif
     if ((ofs==0 || !isalnum(s[-1])) && isalnum(*s))
       goto match;
     break;
   case WORDEND:
+#ifdef DEBUG
+    printf("matching atom WORDEND against \"%s\"\n",s);
+#endif
     if (ofs>0 && isalnum(s[-1]) && !isalnum(*s))
       goto match;
     break;
   case CHAR:
-//    printf("matching CHAR %c against \"%s\"\n",a->u.c,s);
+#ifdef DEBUG
+    printf("matching atom CHAR %c against \"%s\"\n",a->u.c,s);
+#endif
     matchlen=1;
     if (((preg->cflags&REG_ICASE)?tolower(*s):*s)==a->u.c) goto match;
     break;
@@ -282,6 +304,9 @@ static const char* parsepiece(struct piece*__restrict__ p,const char*__restrict_
 static int matchbranch(void*__restrict__ x,const char*__restrict__ s,int ofs,struct __regex_t*__restrict__ preg,int plus,int eflags) {
   register struct branch* a=(struct branch*)x;
   int tmp;
+#ifdef DEBUG
+  printf("%08p matching branch against \"%s\"\n",a,s);
+#endif
   tmp=a->p->m(a->p,s,ofs,preg,plus,eflags);
   if (tmp>=0) {
     if (a->next)
@@ -321,6 +346,9 @@ static const char* parsebranch(struct branch*__restrict__ b,const char*__restric
 static int matchregex(void*__restrict__ x,const char*__restrict__ s,int ofs,struct __regex_t*__restrict__ preg,int plus,int eflags) {
   register struct regex* a=(struct regex*)x;
   int i,tmp;
+#ifdef DEBUG
+  printf("%08p matching regex against \"%s\"\n",a,s);
+#endif
   for (i=0; i<a->num; ++i) {
     tmp=a->b[i].m(&a->b[i],s,ofs,preg,plus,eflags);
     if (tmp>=0) {

@@ -30,7 +30,6 @@ int gethostbyname2_r(const char* name, int AF, struct hostent* result,
   }
   result->h_name=buf;
   if (buflen<L) { *h_errnop=ERANGE; return 1; }
-  strcpy(buf,name);
 #ifdef WANT_ETC_HOSTS
   {
     struct hostent* r;
@@ -55,5 +54,6 @@ found:
     endhostent();
   }
 #endif
+  strcpy(buf,name);
   return __dns_gethostbyx_r(name,result,buf+L,buflen-L,RESULT,h_errnop,lookfor);
 }

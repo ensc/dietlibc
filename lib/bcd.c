@@ -49,8 +49,11 @@ int  __decompose_floatp ( long double number,
 
 	// Runden (ohne Geradezahlregel => Bug)
         tmp = 5.;
-        for ( i = 0; i < precision; i++ )
-            tmp *= 0.1;
+	{
+	  unsigned int j;
+	  for ( j = 0; j < precision; j++ )
+	      tmp *= 0.1;
+	}
         
         number += tmp;
                 
@@ -104,8 +107,11 @@ char*  __decompose_fixp ( long double number,
     
     // Runden (ohne Geradezahlregel => Bug)
     tmp = 0.5;
-    for ( i = 0; i < precision_frac; i++ )
-        tmp *= 0.1;
+    {
+      unsigned int j;
+      for ( j = 0; j < precision_frac; j++ )
+	  tmp *= 0.1;
+    }
     
     number += tmp;
     
