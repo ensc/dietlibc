@@ -2,7 +2,7 @@
 #include <unistd.h>
 #include <string.h>
 
-int opterr;
+int opterr=1;
 int optopt;
 
 int optind=1;

@@ -1,18 +1,21 @@
-#include <getopt.h>
-#include <unistd.h>
 #include <string.h>
+#include <getopt.h>
 
-/* fsck, no GNU style permutation of argv this time. */
-
-static void getopterror(void) {
-  static char error[]="Unknown option `-x'.\n";
+static void getopterror(int which) {
+  static char error1[]="Unknown option `-x'.\n";
+  static char error2[]="Missing argument for `-x'.\n";
   if (opterr) {
-    error[17]=optopt;
-    write(2,error,22);
+    if (which) {
+      error2[23]=optopt;
+      write(2,error2,28);
+    } else {
+      error1[17]=optopt;
+      write(2,error1,22);
+    }
   }
 }
 
-int getopt(int argc,char*const argv[], const char* optstring) {
+int getopt(int argc, char * const argv[], const char *optstring) {
   static int lastidx=0,lastofs=0;
   char *tmp;
   if (optind==0) optind=1;	/* whoever started setting optind to 0 should be shot */
@@ -33,23 +36,24 @@ again:
       goto again;
     }
     if (tmp[1]==':') {	/* argument expected */
-      if (argv[optind][lastofs+2]) {	/* "-foo", return "oo" as optarg */
-	optarg=argv[optind]+lastofs+2;
-	++optind;
-	return optopt;
+      if (tmp[2]==':' || argv[optind][lastofs+2]) {	/* "-foo", return "oo" as optarg */
+	if (!*(optarg=argv[optind]+lastofs+2)) optarg=0;
+	goto found;
       }
       optarg=argv[optind+1];
       if (!optarg) {	/* missing argument */
+	++optind;
 	if (*optstring==':') return ':';
-	getopterror();
-	return '?';
+	getopterror(1);
+	return ':';
       }
-      optind+=2;
+      ++optind;
     } else ++lastofs;
+found:
+    ++optind;
     return optopt;
   } else {	/* not found */
-    getopterror();
+    getopterror(0);
     return '?';
   }
 }
-

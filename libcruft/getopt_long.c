@@ -33,7 +33,7 @@ again:
     const struct option* o;
     if (!max) max=arg+strlen(arg);
     for (o=longopts; o->name; ++o) {
-      if (!strncmp(o->name,arg,max-arg)) {	/* match */
+      if (!strncmp(o->name,arg,(size_t)(max-arg))) {	/* match */
 	if (longindex) *longindex=o-longopts;
 	if (o->has_arg>0) {
 	  if (*max=='=')
@@ -43,7 +43,7 @@ again:
 	    if (!optarg && o->has_arg==1) {	/* no argument there */
 	      if (*optstring==':') return ':';
 	      write(2,"argument required: `",20);
-	      write(2,arg,max-arg);
+	      write(2,arg,(size_t)(max-arg));
 	      write(2,"'.\n",3);
 	      ++optind;
 	      return '?';
@@ -61,7 +61,7 @@ again:
     }
     if (*optstring==':') return ':';
     write(2,"invalid option `",16);
-    write(2,arg,max-arg);
+    write(2,arg,(size_t)(max-arg));
     write(2,"'.\n",3);
     ++optind;
     return '?';
