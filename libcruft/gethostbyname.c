@@ -32,8 +32,10 @@ struct hostent* gethostbyname (const char *host)
       tmphstbuf = realloc (tmphstbuf, hstbuflen);
     }
   /*  Check for errors.  */
-  if (res || hp == NULL)
+  if (res || hp == NULL) {
+    free(tmphstbuf);
     return NULL;
+  }
   return hp;
 }
 
