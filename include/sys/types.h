@@ -117,6 +117,43 @@ typedef long int fpos_t;
 typedef unsigned int socklen_t;
 typedef unsigned short sa_family_t;
 
+/* this should be in 'signal.h' but is used in time.h ... */
+
+#define SIGEV_SIGNAL    0       /* notify via signal */
+#define SIGEV_NONE      1       /* other notification: meaningless */
+#define SIGEV_THREAD    2       /* deliver via thread creation */
+#define SIGEV_THREAD_ID 4       /* deliver to thread */
+
+#define SIGEV_MAX_SIZE  64
+#ifndef SIGEV_PAD_SIZE
+#define SIGEV_PAD_SIZE  ((SIGEV_MAX_SIZE/sizeof(int)) - 3)
+#endif
+
+typedef union sigval {
+  int  sival_int;
+  void*sival_ptr;
+} sigval_t;
+
+typedef struct sigevent {
+  sigval_t sigev_value;
+  int sigev_signo;
+  int sigev_notify;
+  union {
+    int _pad[SIGEV_PAD_SIZE];
+    int _tid;
+
+    struct {
+      void(*_function)(sigval_t);
+      void*_attribute; /* really pthread_attr_t */
+    } _sigev_thread;
+  } _sigev_un;
+} sigevent_t;
+
+#define sigev_notify_function   _sigev_un._sigev_thread._function
+#define sigev_notify_attributes _sigev_un._sigev_thread._attribute
+#define sigev_notify_thread_id  _sigev_un._tid
+
+
 #ifdef _BSD_SOURCE
 /* die, BSD, die! */
 typedef char* caddr_t __attribute_dontuse__;
