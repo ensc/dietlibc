@@ -2,10 +2,4 @@ time appears to be broken on Alpha.
 
 vfprintf appears to be broken on ppc.
 
-getpwent
-
-setgrent, endgrent, getgrent, putgrent, getgrgid, getgrnam, initgroups
-
-setspent, endspent, getspent, getspnam, sgetspent, putspent, lckpwdf, ulckpwdf
-
 "locale"

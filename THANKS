@@ -1,9 +1,15 @@
-I initially took some syscalls from Redhat minilibc.
+I initially took some syscalls from Redhat minilibc, but the code has
+been completely replaced now.
 
-The directory routines are taken from uC-libc.
-As was the localtime implementation.
+I initially took localtime and the directory reading routines from
+uClibc, but the code has been completely replaced now.
 
 The malloc code was done by Olaf Dreesen, who also helped with the SPARC
-start code and fork().
+start code and fork().  Olaf also did the printf and scanf routines and
+he is currently implementing pthreads (wow!).
+
+syslog and crypt were contributed by René Müller.
+
+Jeff Garzik contributed {get,set}{pw,gr,sp}ent.
 
 I also grabbed code from glibc (mostly assembly routines).

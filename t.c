@@ -47,7 +47,7 @@ int main(int argc,char *argv[]) {
   struct spwd *s=getspnam("leitner");
   printf("%g\n",30.0123);
 #endif
-  initgroups("leitner",100);
+  initgroups("root",100);
 #if 0
   time_t t=time(0);
   puts(asctime(localtime(&t)));

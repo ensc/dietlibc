@@ -1,4 +1,4 @@
-0.7.3:
+0.8:
   vsnprintf(0,...) estimated the length of strings with a padding width
     incorrectly.
   new reboot() from Olaf.
