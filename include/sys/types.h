@@ -80,10 +80,17 @@ typedef char* caddr_t;
 typedef unsigned char u_char;
 typedef unsigned short u_short;
 typedef unsigned int u_int;
+typedef unsigned char uchar;
+typedef unsigned short ushort;
+typedef unsigned int uint;
 typedef uint32_t u_long;
 typedef uint32_t n_long;
 typedef uint32_t n_time;
 typedef uint16_t n_short;
+typedef uint32_t ulong;
+typedef uint32_t nlong;
+typedef uint32_t ntime;
+typedef uint16_t nshort;
 #endif
 
 #ifdef _GNU_SOURCE
