@@ -12,6 +12,11 @@
 #ifndef _PATH_UTMP
 #define _PATH_UTMP	"/var/run/utmp"
 #define _PATH_WTMP	"/var/log/wtmp"
+#ifdef _BSD_SOURCE
+/* die, BSD, die!!! */
+#define PATH_UTMP _PATH_UTMP
+#define PATH_WTMP _PATH_WTMP
+#endif
 #endif
 
 /* The structure describing an entry in the database of
