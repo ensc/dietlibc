@@ -22,6 +22,7 @@
   fix *rand48 initialization (Kevin Ryde)
   fnmatch infinite loop fix (Piotr Esden-Tempski)
   make signal() into a sigaction wrapper function
+  add memrchr (Emil)
 
 0.17:
   fix several bugs in getservent_r

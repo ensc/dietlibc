@@ -51,7 +51,10 @@ size_t strcspn(const char *s, const char *reject) __THROW;
 char *strpbrk(const char *s, const char *_accept) __THROW;
 char *strsep(char **stringp, const char *delim) __THROW;
 
-void* memchr(const void *s, int c, size_t n) __THROW;
+void* memchr(const void *s, int c, size_t n) __THROW __pure__;
+#ifdef _GNU_SOURCE
+void* memrchr(const void *s, int c, size_t n) __THROW __pure__;
+#endif
 
 /* I would like to make this const, but Paul Jarc points out it has to
  * be char* :-( */
