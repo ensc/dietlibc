@@ -1,9 +1,62 @@
 #ifndef _SYS_SHM_H
 #define _SYS_SHM_H
 
-#include <linux/shm.h>
 #include <sys/ipc.h>
-#include <asm/page.h>
+
+#define SHMMAX 0x2000000		 /* max shared seg size (bytes) */
+#define SHMMIN 1			 /* min shared seg size (bytes) */
+#define SHMMNI 4096			 /* max num of segs system wide */
+#define SHMALL (SHMMAX/PAGE_SIZE*(SHMMNI/16)) /* max shm system wide (pages) */
+#define SHMSEG SHMMNI			 /* max shared segs per process */
+
+struct shmid_ds {
+  struct ipc_perm	shm_perm;	/* operation perms */
+  int			shm_segsz;	/* size of segment (bytes) */
+  time_t		shm_atime;	/* last attach time */
+  time_t		shm_dtime;	/* last detach time */
+  time_t		shm_ctime;	/* last change time */
+  pid_t			shm_cpid;	/* pid of creator */
+  pid_t			shm_lpid;	/* pid of last operator */
+  unsigned short	shm_nattch;	/* no. of current attaches */
+  unsigned short 	shm_unused;	/* compatibility */
+  void 			*shm_unused2;	/* ditto - used by DIPC */
+  void			*shm_unused3;	/* unused */
+};
+
+/* permission flag for shmget */
+#define SHM_R		0400	/* or S_IRUGO from <linux/stat.h> */
+#define SHM_W		0200	/* or S_IWUGO from <linux/stat.h> */
+
+/* mode for attach */
+#define	SHM_RDONLY	010000	/* read-only access */
+#define	SHM_RND		020000	/* round attach address to SHMLBA boundary */
+#define	SHM_REMAP	040000	/* take-over region on attach */
+
+/* super user shmctl commands */
+#define SHM_LOCK 	11
+#define SHM_UNLOCK 	12
+
+/* ipcs ctl commands */
+#define SHM_STAT 	13
+#define SHM_INFO 	14
+
+/* Obsolete, used only for backwards compatibility */
+struct	shminfo {
+  int shmmax;
+  int shmmin;
+  int shmmni;
+  int shmseg;
+  int shmall;
+};
+
+struct shm_info {
+  int used_ids;
+  unsigned long shm_tot;	/* total allocated shm */
+  unsigned long shm_rss;	/* total resident shm */
+  unsigned long shm_swp;	/* total swapped shm */
+  unsigned long swap_attempts;
+  unsigned long swap_successes;
+};
 
 #ifndef PAGE_SIZE
 #define PAGE_SIZE getpagesize()

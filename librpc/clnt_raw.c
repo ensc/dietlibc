@@ -54,7 +54,7 @@ static struct clntraw_private {
 	XDR xdr_stream;
 	char _raw_buf[UDPMSGSIZE];
 	char mashl_callmsg[MCALL_MSG_SIZE];
-	u_int mcnt;
+	unsigned int mcnt;
 } *clntraw_private;
 
 static enum clnt_stat clntraw_call();
@@ -79,8 +79,8 @@ void svc_getreq();
  * Create a client handle for memory based rpc.
  */
 CLIENT *clntraw_create(prog, vers)
-u_long prog;
-u_long vers;
+unsigned long prog;
+unsigned long vers;
 {
 	register struct clntraw_private *clp = clntraw_private;
 	struct rpc_msg call_msg;
@@ -123,11 +123,11 @@ u_long vers;
 static enum clnt_stat
 clntraw_call(h, proc, xargs, argsp, xresults, resultsp, timeout)
 CLIENT *h;
-u_long proc;
+unsigned long proc;
 xdrproc_t xargs;
-caddr_t argsp;
+char* argsp;
 xdrproc_t xresults;
-caddr_t resultsp;
+char* resultsp;
 struct timeval timeout;
 {
 	register struct clntraw_private *clp = clntraw_private;
@@ -202,7 +202,7 @@ static void clntraw_geterr()
 static bool_t clntraw_freeres(cl, xdr_res, res_ptr)
 CLIENT *cl;
 xdrproc_t xdr_res;
-caddr_t res_ptr;
+char* res_ptr;
 {
 	register struct clntraw_private *clp = clntraw_private;
 	register XDR *xdrs = &clp->xdr_stream;

@@ -1,4 +1,3 @@
-#include <linux/time.h>
 #include <time.h>
 
 unsigned int sleep(unsigned int secs) {

@@ -32,19 +32,19 @@ enum
 # define FTW_SLN FTW_SLN
 };
 
-typedef int (*__ftw_func_t) (__const char *__filename,
-			     __const struct stat *__status, int __flag) __THROW;
+typedef int (*__ftw_func_t) (const char *__filename,
+			     const struct stat *__status, int __flag) __THROW;
 
-typedef int (*__nftw_func_t) (__const char *__filename,
-			      __const struct stat *__status, int __flag,
+typedef int (*__nftw_func_t) (const char *__filename,
+			      const struct stat *__status, int __flag,
 			      struct FTW *__info) __THROW;
 
 #ifndef __NO_STAT64
-typedef int (*__ftw64_func_t) (__const char *__filename,
-			       __const struct stat64 *__status, int __flag) __THROW;
+typedef int (*__ftw64_func_t) (const char *__filename,
+			       const struct stat64 *__status, int __flag) __THROW;
 
-typedef int (*__nftw64_func_t) (__const char *__filename,
-				__const struct stat64 *__status,
+typedef int (*__nftw64_func_t) (const char *__filename,
+				const struct stat64 *__status,
 				int __flag, struct FTW *__info) __THROW;
 #endif
 

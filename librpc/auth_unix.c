@@ -78,9 +78,9 @@ static struct auth_ops auth_unix_ops = {
 struct audata {
 	struct opaque_auth au_origcred;	/* original credentials */
 	struct opaque_auth au_shcred;	/* short hand cred */
-	u_long au_shfaults;			/* short hand cache faults */
+	unsigned long au_shfaults;			/* short hand cache faults */
 	char au_marshed[MAX_AUTH_BYTES];
-	u_int au_mpos;				/* xdr pos at end of marshed */
+	unsigned int au_mpos;				/* xdr pos at end of marshed */
 };
 
 #define	AUTH_PRIVATE(auth)	((struct audata *)auth->ah_private)
@@ -121,7 +121,7 @@ AUTH *authunix_create __P ((char *machname, uid_t uid,
 	}
 #endif
 	auth->ah_ops = &auth_unix_ops;
-	auth->ah_private = (caddr_t) au;
+	auth->ah_private = (char*) au;
 	auth->ah_verf = au->au_shcred = _null_auth;
 	au->au_shfaults = 0;
 
@@ -133,7 +133,7 @@ AUTH *authunix_create __P ((char *machname, uid_t uid,
 	aup.aup_machname = machname;
 	aup.aup_uid = uid;
 	aup.aup_gid = gid;
-	aup.aup_len = (u_int) len;
+	aup.aup_len = (unsigned int) len;
 	aup.aup_gids = aup_gids;
 
 	/*
@@ -145,14 +145,14 @@ AUTH *authunix_create __P ((char *machname, uid_t uid,
 	au->au_origcred.oa_length = len = XDR_GETPOS(&xdrs);
 	au->au_origcred.oa_flavor = AUTH_UNIX;
 #ifdef KERNEL
-	au->au_origcred.oa_base = mem_alloc((u_int) len);
+	au->au_origcred.oa_base = mem_alloc((unsigned int) len);
 #else
-	if ((au->au_origcred.oa_base = mem_alloc((u_int) len)) == NULL) {
+	if ((au->au_origcred.oa_base = mem_alloc((unsigned int) len)) == NULL) {
 		(void) fprintf(stderr, "authunix_create: out of memory\n");
 		return (NULL);
 	}
 #endif
-	bcopy(mymem, au->au_origcred.oa_base, (u_int) len);
+	bcopy(mymem, au->au_origcred.oa_base, (unsigned int) len);
 
 	/*
 	 * set auth handle to reflect new cred.
@@ -288,7 +288,7 @@ register AUTH *auth;
 	if (auth->ah_verf.oa_base != NULL)
 		mem_free(auth->ah_verf.oa_base, auth->ah_verf.oa_length);
 
-	mem_free((caddr_t) auth, sizeof(*auth));
+	mem_free((char*) auth, sizeof(*auth));
 }
 
 /*

@@ -5,7 +5,20 @@
 #include <sys/types.h>
 #include <limits.h>
 
-#include <linux/dirent.h>
+struct dirent {
+  long		d_ino;
+  off_t		d_off;
+  unsigned short	d_reclen;
+  char		d_name[256]; /* We must not include limits.h! */
+};
+
+struct dirent64 {
+  uint64_t	d_ino;
+  int64_t	d_off;
+  unsigned short	d_reclen;
+  unsigned char	d_type;
+  char		d_name[256];
+};
 
 #define d_fileno	d_ino	/* Backwards compatibility.  */
 

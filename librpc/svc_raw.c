@@ -130,7 +130,7 @@ struct rpc_msg *msg;
 static bool_t svcraw_getargs(xprt, xdr_args, args_ptr)
 SVCXPRT *xprt;
 xdrproc_t xdr_args;
-caddr_t args_ptr;
+char* args_ptr;
 {
 	register struct svcraw_private *srp = svcraw_private;
 
@@ -142,7 +142,7 @@ caddr_t args_ptr;
 static bool_t svcraw_freeargs(xprt, xdr_args, args_ptr)
 SVCXPRT *xprt;
 xdrproc_t xdr_args;
-caddr_t args_ptr;
+char* args_ptr;
 {
 	register struct svcraw_private *srp = svcraw_private;
 	register XDR *xdrs;

@@ -26,6 +26,7 @@
   remove printf references and nested functions from glob.
   added an errno in libpthread that will display a prominent linker
     warning.
+  started getting rid of kernel headers.  Big task! :-(
   add res_mkquery.  The diet libc can now compile and link mtr.
 
 0.10:

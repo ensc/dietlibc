@@ -88,7 +88,7 @@ struct ct_data {
 	struct sockaddr_in ct_addr;
 	struct rpc_err ct_error;
 	char ct_mcall[MCALL_MSG_SIZE];	/* marshalled callmsg */
-	u_int ct_mpos;				/* pos after marshal */
+	unsigned int ct_mpos;				/* pos after marshal */
 	XDR ct_xdrs;
 };
 
@@ -108,11 +108,11 @@ struct ct_data {
  */
 CLIENT *clnttcp_create(raddr, prog, vers, sockp, sendsz, recvsz)
 struct sockaddr_in *raddr;
-u_long prog;
-u_long vers;
+unsigned long prog;
+unsigned long vers;
 register int *sockp;
-u_int sendsz;
-u_int recvsz;
+unsigned int sendsz;
+unsigned int recvsz;
 {
 	CLIENT *h;
 	register struct ct_data *ct;
@@ -138,12 +138,12 @@ u_int recvsz;
 	 * If no port number given ask the pmap for one
 	 */
 	if (raddr->sin_port == 0) {
-		u_short port;
+		unsigned short port;
 
 		if ((port = pmap_getport(raddr, prog, vers, IPPROTO_TCP)) == 0) {
-			mem_free((caddr_t) ct, sizeof(struct ct_data));
+			mem_free((char*) ct, sizeof(struct ct_data));
 
-			mem_free((caddr_t) h, sizeof(CLIENT));
+			mem_free((char*) h, sizeof(CLIENT));
 			return ((CLIENT *) NULL);
 		}
 		raddr->sin_port = htons(port);
@@ -205,9 +205,9 @@ u_int recvsz;
 	 * and authnone for authentication.
 	 */
 	xdrrec_create(&(ct->ct_xdrs), sendsz, recvsz,
-				  (caddr_t) ct, readtcp, writetcp);
+				  (char*) ct, readtcp, writetcp);
 	h->cl_ops = &tcp_ops;
-	h->cl_private = (caddr_t) ct;
+	h->cl_private = (char*) ct;
 	h->cl_auth = authnone_create();
 	return (h);
 
@@ -215,9 +215,9 @@ u_int recvsz;
 	/*
 	 * Something goofed, free stuff and barf
 	 */
-	mem_free((caddr_t) ct, sizeof(struct ct_data));
+	mem_free((char*) ct, sizeof(struct ct_data));
 
-	mem_free((caddr_t) h, sizeof(CLIENT));
+	mem_free((char*) h, sizeof(CLIENT));
 	return ((CLIENT *) NULL);
 }
 
@@ -225,18 +225,18 @@ static enum clnt_stat
 clnttcp_call(h, proc, xdr_args, args_ptr, xdr_results, results_ptr,
 			 timeout)
 register CLIENT *h;
-u_long proc;
+unsigned long proc;
 xdrproc_t xdr_args;
-caddr_t args_ptr;
+char* args_ptr;
 xdrproc_t xdr_results;
-caddr_t results_ptr;
+char* results_ptr;
 struct timeval timeout;
 {
 	register struct ct_data *ct = (struct ct_data *) h->cl_private;
 	register XDR *xdrs = &(ct->ct_xdrs);
 	struct rpc_msg reply_msg;
-	u_long x_id;
-	u_long *msg_x_id = (u_long *) (ct->ct_mcall);	/* yuk */
+	unsigned long x_id;
+	unsigned long *msg_x_id = (unsigned long *) (ct->ct_mcall);	/* yuk */
 	register bool_t shipnow;
 	int refreshes = 2;
 
@@ -331,7 +331,7 @@ struct rpc_err *errp;
 static bool_t clnttcp_freeres(cl, xdr_res, res_ptr)
 CLIENT *cl;
 xdrproc_t xdr_res;
-caddr_t res_ptr;
+char* res_ptr;
 {
 	register struct ct_data *ct = (struct ct_data *) cl->cl_private;
 	register XDR *xdrs = &(ct->ct_xdrs);
@@ -378,9 +378,9 @@ CLIENT *h;
 		(void) close(ct->ct_sock);
 	}
 	XDR_DESTROY(&(ct->ct_xdrs));
-	mem_free((caddr_t) ct, sizeof(struct ct_data));
+	mem_free((char*) ct, sizeof(struct ct_data));
 
-	mem_free((caddr_t) h, sizeof(CLIENT));
+	mem_free((char*) h, sizeof(CLIENT));
 }
 
 /*
@@ -390,7 +390,7 @@ CLIENT *h;
  */
 static int readtcp(ct, buf, len)
 register struct ct_data *ct;
-caddr_t buf;
+char* buf;
 register int len;
 {
 #ifdef FD_SETSIZE
@@ -446,7 +446,7 @@ register int len;
 
 static int writetcp(ct, buf, len)
 struct ct_data *ct;
-caddr_t buf;
+char* buf;
 int len;
 {
 	register int i, cnt;

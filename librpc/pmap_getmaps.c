@@ -74,7 +74,7 @@ struct sockaddr_in *address;
 	client = clnttcp_create(address, PMAPPROG, PMAPVERS, &socket, 50, 500);
 	if (client != (CLIENT *) NULL) {
 		if (CLNT_CALL(client, PMAPPROC_DUMP, (xdrproc_t)xdr_void, NULL, (xdrproc_t)xdr_pmaplist,
-					  (caddr_t)&head, minutetimeout) != RPC_SUCCESS) {
+					  (char*)&head, minutetimeout) != RPC_SUCCESS) {
 			clnt_perror(client, "pmap_getmaps rpc problem");
 		}
 		CLNT_DESTROY(client);

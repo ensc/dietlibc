@@ -1,5 +1,4 @@
-#include <linux/types.h>
-#include <linux/signal.h>
+#include <sys/types.h>
 #include <signal.h>
 #include <stdlib.h>
 

@@ -1,5 +1,5 @@
 #include <stdarg.h>
-#include <linux/types.h>
+#include <sys/types.h>
 #include <stdlib.h>
 #include "dietwarning.h"
 

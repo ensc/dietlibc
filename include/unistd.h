@@ -2,10 +2,8 @@
 #define _UNISTD_H
 
 #include <sys/cdefs.h>
-#include <dirent.h>
 #include <sys/types.h>
 #include <sys/time.h>
-#include <linux/sysctl.h>
 #include <sys/stat.h>
 #include <sys/fsuid.h>
 
@@ -21,7 +19,7 @@ int getopt(int argc, char *const argv[], const char *options);
 #define F_OK 0 /* Test for existence.  */
 
 /* Test for access to NAME using the real UID and real GID.  */
-extern int access (__const char *__name, int __type) __THROW;
+extern int access (const char *__name, int __type) __THROW;
 
 #define SEEK_SET 0
 #define SEEK_CUR 1
@@ -32,7 +30,6 @@ extern int access (__const char *__name, int __type) __THROW;
 #define STDERR_FILENO  2
 
 off_t lseek(int fildes, off_t offset, int whence) __THROW;
-int llseek(int fildes, unsigned long hi, unsigned long lo, loff_t* result,int whence) __THROW;
 #ifndef __NO_STAT64
 loff_t lseek64(int fildes, loff_t offset, int whence) __THROW;
 #endif
@@ -78,6 +75,8 @@ int dup2 (int oldfd,int newfd) __THROW;
 
 int mknod(const char *pathname, mode_t mode, dev_t dev) __THROW;
 
+struct dirent;
+struct dirent64;
 int getdents(unsigned int fd, struct dirent *dirp, unsigned int count) __THROW;
 int getdents64(unsigned int fd, struct dirent64 *dirp, unsigned int count) __THROW;
 
@@ -163,20 +162,15 @@ int getdomainname(char *name, size_t len) __THROW;
 int setdomainname(const char *name, size_t len) __THROW;
 
 int getgroups(int size, gid_t list[]) __THROW;
-
-/* warning: linux specific: */
-int _sysctl(struct __sysctl_args *args) __THROW;
-int  sendfile(int out_fd, int in_fd, off_t *offset, size_t count) __THROW;
-
 int getdtablesize(void) __THROW;
 char *getpass(const char * prompt) __THROW;
 
-#ifdef __alpha__
-#define	__FD_SET(d, set)	((set)->fds_bits[__FDELT(d)] |= __FDMASK(d))
-#define	__FD_CLR(d, set)	((set)->fds_bits[__FDELT(d)] &= ~__FDMASK(d))
-#define	__FD_ISSET(d, set)	(((set)->fds_bits[__FDELT(d)] & __FDMASK(d)) != 0)
-#define	__FD_ZERO(set)	\
-  ((void) memset ((void*) (set), 0, sizeof (fd_set)))
-#endif
+/* warning: linux specific: */
+int sendfile(int out_fd, int in_fd, off_t *offset, size_t count) __THROW;
+int llseek(int fildes, unsigned long hi, unsigned long lo, loff_t* result,int whence) __THROW;
+
+/* include <linux/sysctl.h> to get all the definitions! */
+struct __sysctl_args;
+int _sysctl(struct __sysctl_args *args) __THROW;
 
 #endif

@@ -59,7 +59,7 @@ register struct authunix_parms *p;
 		&& xdr_string(xdrs, &(p->aup_machname), MAX_MACHINE_NAME)
 		&& xdr_int(xdrs, &a)
 		&& xdr_int(xdrs, &b)
-		&& xdr_array(xdrs, (caddr_t *) & (p->aup_gids),
+		&& xdr_array(xdrs, (char* *) & (p->aup_gids),
 					 &(p->aup_len), NGRPS, sizeof(int), (xdrproc_t)xdr_int)) {
 		p->aup_uid=(uid_t)a;
 		p->aup_gid=(gid_t)b;

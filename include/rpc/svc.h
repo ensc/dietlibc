@@ -75,18 +75,18 @@ enum xprt_stat {
 typedef struct SVCXPRT SVCXPRT;
 struct SVCXPRT {
   int xp_sock;
-  u_short xp_port;		/* associated port number */
+  unsigned short xp_port;		/* associated port number */
   const struct xp_ops {
     bool_t	(*xp_recv) (SVCXPRT *__xprt, struct rpc_msg *__msg);
 				/* receive incoming requests */
     enum xprt_stat (*xp_stat) (SVCXPRT *__xprt);
 				/* get transport status */
     bool_t	(*xp_getargs) (SVCXPRT *__xprt, xdrproc_t __xdr_args,
-			       caddr_t args_ptr); /* get arguments */
+			       char* args_ptr); /* get arguments */
     bool_t	(*xp_reply) (SVCXPRT *__xprt, struct rpc_msg *__msg);
 				/* send reply */
     bool_t	(*xp_freeargs) (SVCXPRT *__xprt, xdrproc_t __xdr_args,
-				caddr_t args_ptr);
+				char* args_ptr);
 				/* free mem allocated for args */
     void	(*xp_destroy) (SVCXPRT *__xprt);
 				/* destroy this struct */
@@ -94,8 +94,8 @@ struct SVCXPRT {
   int		xp_addrlen;	 /* length of remote address */
   struct sockaddr_in xp_raddr;	 /* remote address */
   struct opaque_auth xp_verf;	 /* raw response verifier */
-  caddr_t		xp_p1;		 /* private */
-  caddr_t		xp_p2;		 /* private */
+  char*		xp_p1;		 /* private */
+  char*		xp_p2;		 /* private */
   char		xp_pad [256];	/* padding, internal use */
 };
 
@@ -110,7 +110,7 @@ struct SVCXPRT {
  * SVCXPRT		*xprt;
  * struct rpc_msg	*msg;
  * xdrproc_t		 xargs;
- * caddr_t		 argsp;
+ * char*		 argsp;
  */
 #define SVC_RECV(xprt, msg)				\
 	(*(xprt)->xp_ops->xp_recv)((xprt), (msg))
@@ -151,7 +151,7 @@ struct svc_req {
   rpcvers_t rq_vers;            /* service protocol version */
   rpcproc_t rq_proc;            /* the desired procedure */
   struct opaque_auth rq_cred;   /* raw creds from the wire */
-  caddr_t rq_clntcred;          /* read only cooked cred */
+  char* rq_clntcred;          /* read only cooked cred */
   SVCXPRT *rq_xprt;             /* associated transport */
 };
 
@@ -227,7 +227,7 @@ extern void xprt_unregister (SVCXPRT *__xprt) __THROW;
  */
 
 extern bool_t	svc_sendreply (SVCXPRT *xprt, xdrproc_t __xdr_results,
-			       caddr_t __xdr_location) __THROW;
+			       char* __xdr_location) __THROW;
 
 extern void	svcerr_decode (SVCXPRT *__xprt) __THROW;
 
@@ -294,20 +294,20 @@ extern SVCXPRT *svcraw_create (void) __THROW;
  * Udp based rpc.
  */
 extern SVCXPRT *svcudp_create (int __sock) __THROW;
-extern SVCXPRT *svcudp_bufcreate (int __sock, u_int __sendsz, u_int __recvsz)
+extern SVCXPRT *svcudp_bufcreate (int __sock, unsigned int __sendsz, unsigned int __recvsz)
      __THROW;
 
 /*
  * Tcp based rpc.
  */
-extern SVCXPRT *svctcp_create (int __sock, u_int __sendsize, u_int __recvsize)
+extern SVCXPRT *svctcp_create (int __sock, unsigned int __sendsize, unsigned int __recvsize)
      __THROW;
 
 
 /*
  * Unix based rpc.
  */
-extern SVCXPRT *svcunix_create (int __sock, u_int __sendsize, u_int __recvsize,
+extern SVCXPRT *svcunix_create (int __sock, unsigned int __sendsize, unsigned int __recvsize,
 				char *__path) __THROW;
 
 

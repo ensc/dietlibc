@@ -1,7 +1,6 @@
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>
-#include <asm/ipc.h>
 
 extern int __ipc(int,int,int,int,void*);
 

@@ -52,7 +52,7 @@ static char sccsid[] = "@(#)xdr.c 1.35 87/08/12";
  */
 #define XDR_FALSE	((long) 0)
 #define XDR_TRUE	((long) 1)
-#define LASTUNSIGNED	((u_int) 0-1)
+#define LASTUNSIGNED	((unsigned int) 0-1)
 
 /*
  * for unit alignment
@@ -76,7 +76,7 @@ void xdr_free(xdrproc_t proc, char* objp)
  */
 bool_t xdr_void( /* xdrs, addr */ )
 	/* XDR *xdrs; */
-	/* caddr_t addr; */
+	/* char* addr; */
 {
 
 	return (TRUE);
@@ -108,10 +108,10 @@ bool_t xdr_u_int(XDR* xdrs, unsigned int* up)
 
 #ifdef lint
 	(void) (xdr_short(xdrs, (short *) up));
-	return (xdr_u_long(xdrs, (u_long *) up));
+	return (xdr_u_long(xdrs, (unsigned long *) up));
 #else
-	if (sizeof(u_int) == sizeof(u_long)) {
-		return (xdr_u_long(xdrs, (u_long *) up));
+	if (sizeof(unsigned int) == sizeof(unsigned long)) {
+		return (xdr_u_long(xdrs, (unsigned long *) up));
 	} else {
 		return (xdr_short(xdrs, (short *) up));
 	}
@@ -184,19 +184,19 @@ bool_t xdr_short(XDR* xdrs, short* sp)
  */
 bool_t xdr_u_short(XDR* xdrs, unsigned short* usp)
 {
-	u_long l;
+	unsigned long l;
 
 	switch (xdrs->x_op) {
 
 	case XDR_ENCODE:
-		l = (u_long) * usp;
+		l = (unsigned long) * usp;
 		return (XDR_PUTLONG(xdrs, &l));
 
 	case XDR_DECODE:
 		if (!XDR_GETLONG(xdrs, &l)) {
 			return (FALSE);
 		}
-		*usp = (u_short) l;
+		*usp = (unsigned short) l;
 		return (TRUE);
 
 	case XDR_FREE:
@@ -226,7 +226,7 @@ bool_t xdr_char(XDR* xdrs, char* cp)
  */
 bool_t xdr_u_char(XDR* xdrs, unsigned char* cp)
 {
-	u_int u;
+	unsigned int u;
 
 	u = (*cp);
 	if (!xdr_u_int(xdrs, &u)) {
@@ -297,10 +297,10 @@ enum_t *ep;
  */
 bool_t xdr_opaque(xdrs, cp, cnt)
 register XDR *xdrs;
-caddr_t cp;
-register u_int cnt;
+char* cp;
+register unsigned int cnt;
 {
-	register u_int rndup;
+	register unsigned int rndup;
 	static char crud[BYTES_PER_XDR_UNIT];
 
 	/*
@@ -349,11 +349,11 @@ register u_int cnt;
 bool_t xdr_bytes(xdrs, cpp, sizep, maxsize)
 register XDR *xdrs;
 char **cpp;
-register u_int *sizep;
-u_int maxsize;
+register unsigned int *sizep;
+unsigned int maxsize;
 {
 	register char *sp = *cpp;	/* sp is the actual string pointer */
-	register u_int nodesize;
+	register unsigned int nodesize;
 
 	/*
 	 * first deal with the length since xdr bytes are counted
@@ -465,11 +465,11 @@ bool_t xdr_union(XDR* xdrs, enum_t* dscmp, char* unp, const struct xdr_discrim* 
 bool_t xdr_string(xdrs, cpp, maxsize)
 register XDR *xdrs;
 char **cpp;
-u_int maxsize;
+unsigned int maxsize;
 {
 	register char *sp = *cpp;	/* sp is the actual string pointer */
-	u_int size;
-	u_int nodesize;
+	unsigned int size;
+	unsigned int nodesize;
 
 	/*
 	 * first deal with the length since xdr strings are counted-strings

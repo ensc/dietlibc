@@ -64,7 +64,7 @@ register struct rpc_msg *msg;
 		char area_machname[MAX_MACHINE_NAME + 1];
 		gid_t area_gids[NGRPS];
 	} *area;
-	u_int auth_len;
+	unsigned int auth_len;
 	int str_len, gid_len;
 	register int i;
 
@@ -72,7 +72,7 @@ register struct rpc_msg *msg;
 	aup = &area->area_aup;
 	aup->aup_machname = area->area_machname;
 	aup->aup_gids = area->area_gids;
-	auth_len = (u_int) msg->rm_call.cb_cred.oa_length;
+	auth_len = (unsigned int) msg->rm_call.cb_cred.oa_length;
 	xdrmem_create(&xdrs, msg->rm_call.cb_cred.oa_base, auth_len,
 				  XDR_DECODE);
 	buf = XDR_INLINE(&xdrs, auth_len);
@@ -83,7 +83,7 @@ register struct rpc_msg *msg;
 			stat = AUTH_BADCRED;
 			goto done;
 		}
-		bcopy((caddr_t) buf, aup->aup_machname, (u_int) str_len);
+		bcopy((char*) buf, aup->aup_machname, (unsigned int) str_len);
 		aup->aup_machname[str_len] = 0;
 		str_len = RNDUP(str_len);
 		buf += str_len / sizeof(long);

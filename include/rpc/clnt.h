@@ -109,8 +109,8 @@ struct rpc_err {
     int RE_errno;		/* related system error */
     enum auth_stat RE_why;	/* why the auth error occurred */
     struct {
-      u_long low;		/* lowest verion supported */
-      u_long high;		/* highest verion supported */
+      unsigned long low;		/* lowest verion supported */
+      unsigned long high;		/* highest verion supported */
     } RE_vers;
     struct {			/* maybe meaningful if RPC_FAILED */
       long s1;
@@ -133,19 +133,19 @@ typedef struct CLIENT CLIENT;
 struct CLIENT {
   AUTH	*cl_auth;		 /* authenticator */
   struct clnt_ops {
-    enum clnt_stat (*cl_call) (CLIENT *, u_long, xdrproc_t, caddr_t, xdrproc_t,
-			       caddr_t, struct timeval);
+    enum clnt_stat (*cl_call) (CLIENT *, unsigned long, xdrproc_t, char*, xdrproc_t,
+			       char*, struct timeval);
 			       	/* call remote procedure */
     void (*cl_abort) (void);	/* abort a call */
     void (*cl_geterr) (CLIENT *, struct rpc_err *);
 				/* get specific error code */
-    bool_t (*cl_freeres) (CLIENT *, xdrproc_t, caddr_t);
+    bool_t (*cl_freeres) (CLIENT *, xdrproc_t, char*);
 				/* frees results */
     void (*cl_destroy) (CLIENT *); /* destroy this structure */
     bool_t (*cl_control) (CLIENT *, int, char *);
 				/* the ioctl() of rpc */
   } *cl_ops;
-  caddr_t cl_private;		/* private stuff */
+  char* cl_private;		/* private stuff */
 };
 
 
@@ -160,11 +160,11 @@ struct CLIENT {
  * enum clnt_stat
  * CLNT_CALL(rh, proc, xargs, argsp, xres, resp, timeout)
  * 	CLIENT *rh;
- *	u_long proc;
+ *	unsigned long proc;
  *	xdrproc_t xargs;
- *	caddr_t argsp;
+ *	char* argsp;
  *	xdrproc_t xres;
- *	caddr_t resp;
+ *	char* resp;
  *	struct timeval timeout;
  */
 #define	CLNT_CALL(rh, proc, xargs, argsp, xres, resp, secs)	\
@@ -194,7 +194,7 @@ struct CLIENT {
  * CLNT_FREERES(rh, xres, resp);
  * 	CLIENT *rh;
  *	xdrproc_t xres;
- *	caddr_t resp;
+ *	char* resp;
  */
 #define	CLNT_FREERES(rh,xres,resp) ((*(rh)->cl_ops->cl_freeres)(rh,xres,resp))
 #define	clnt_freeres(rh,xres,resp) ((*(rh)->cl_ops->cl_freeres)(rh,xres,resp))
@@ -203,7 +203,7 @@ struct CLIENT {
  * bool_t
  * CLNT_CONTROL(cl, request, info)
  *      CLIENT *cl;
- *      u_int request;
+ *      unsigned int request;
  *      char *info;
  */
 #define	CLNT_CONTROL(cl,rq,in) ((*(cl)->cl_ops->cl_control)(cl,rq,in))
@@ -253,16 +253,16 @@ struct CLIENT {
  * and network administration.
  */
 
-#define RPCTEST_PROGRAM		((u_long)1)
-#define RPCTEST_VERSION		((u_long)1)
-#define RPCTEST_NULL_PROC	((u_long)2)
-#define RPCTEST_NULL_BATCH_PROC	((u_long)3)
+#define RPCTEST_PROGRAM		((unsigned long)1)
+#define RPCTEST_VERSION		((unsigned long)1)
+#define RPCTEST_NULL_PROC	((unsigned long)2)
+#define RPCTEST_NULL_BATCH_PROC	((unsigned long)3)
 
 /*
  * By convention, procedure 0 takes null arguments and returns them
  */
 
-#define NULLPROC ((u_long)0)
+#define NULLPROC ((unsigned long)0)
 
 /*
  * Below are the client handle creation routines for the various
@@ -274,10 +274,10 @@ struct CLIENT {
  * Memory based rpc (for speed check and testing)
  * CLIENT *
  * clntraw_create(prog, vers)
- *	u_long prog;
- *	u_long vers;
+ *	unsigned long prog;
+ *	unsigned long vers;
  */
-extern CLIENT *clntraw_create (__const u_long __prog, __const u_long __vers)
+extern CLIENT *clntraw_create (const unsigned long __prog, const unsigned long __vers)
      __THROW;
 
 
@@ -287,12 +287,12 @@ extern CLIENT *clntraw_create (__const u_long __prog, __const u_long __vers)
  * CLIENT *
  * clnt_create(host, prog, vers, prot)
  *	char *host; 	-- hostname
- *	u_long prog;	-- program number
+ *	unsigned long prog;	-- program number
  *	u_ong vers;	-- version number
  *	char *prot;	-- protocol
  */
-extern CLIENT *clnt_create (__const char *__host, __const u_long __prog,
-			    __const u_long __vers, __const char *__prot)
+extern CLIENT *clnt_create (const char *__host, const unsigned long __prog,
+			    const unsigned long __vers, const char *__prot)
      __THROW;
 
 
@@ -301,23 +301,23 @@ extern CLIENT *clnt_create (__const char *__host, __const u_long __prog,
  * CLIENT *
  * clnttcp_create(raddr, prog, vers, sockp, sendsz, recvsz)
  *	struct sockaddr_in *raddr;
- *	u_long prog;
- *	u_long version;
+ *	unsigned long prog;
+ *	unsigned long version;
  *	register int *sockp;
- *	u_int sendsz;
- *	u_int recvsz;
+ *	unsigned int sendsz;
+ *	unsigned int recvsz;
  */
-extern CLIENT *clnttcp_create (struct sockaddr_in *__raddr, u_long __prog,
-			       u_long __version, int *__sockp, u_int __sendsz,
-			       u_int __recvsz) __THROW;
+extern CLIENT *clnttcp_create (struct sockaddr_in *__raddr, unsigned long __prog,
+			       unsigned long __version, int *__sockp, unsigned int __sendsz,
+			       unsigned int __recvsz) __THROW;
 
 /*
  * UDP based rpc.
  * CLIENT *
  * clntudp_create(raddr, program, version, wait, sockp)
  *	struct sockaddr_in *raddr;
- *	u_long program;
- *	u_long version;
+ *	unsigned long program;
+ *	unsigned long version;
  *	struct timeval wait_resend;
  *	int *sockp;
  *
@@ -325,20 +325,20 @@ extern CLIENT *clnttcp_create (struct sockaddr_in *__raddr, u_long __prog,
  * CLIENT *
  * clntudp_bufcreate(raddr, program, version, wait, sockp, sendsz, recvsz)
  *	struct sockaddr_in *raddr;
- *	u_long program;
- *	u_long version;
+ *	unsigned long program;
+ *	unsigned long version;
  *	struct timeval wait_resend;
  *	int *sockp;
- *	u_int sendsz;
- *	u_int recvsz;
+ *	unsigned int sendsz;
+ *	unsigned int recvsz;
  */
-extern CLIENT *clntudp_create (struct sockaddr_in *__raddr, u_long __program,
-			       u_long __version, struct timeval __wait_resend,
+extern CLIENT *clntudp_create (struct sockaddr_in *__raddr, unsigned long __program,
+			       unsigned long __version, struct timeval __wait_resend,
 			       int *__sockp) __THROW;
 extern CLIENT *clntudp_bufcreate (struct sockaddr_in *__raddr,
-				  u_long __program, u_long __version,
+				  unsigned long __program, unsigned long __version,
 				  struct timeval __wait_resend, int *__sockp,
-				  u_int __sendsz, u_int __recvsz) __THROW;
+				  unsigned int __sendsz, unsigned int __recvsz) __THROW;
 
 
 
@@ -348,28 +348,28 @@ extern CLIENT *clntudp_bufcreate (struct sockaddr_in *__raddr,
  * CLIENT *
  * clntunix_create(raddr, prog, vers, sockp, sendsz, recvsz)
  *      struct sockaddr_un *raddr;
- *      u_long prog;
- *      u_long version;
+ *      unsigned long prog;
+ *      unsigned long version;
  *      register int *sockp;
- *      u_int sendsz;
- *      u_int recvsz;
+ *      unsigned int sendsz;
+ *      unsigned int recvsz;
  */
-extern CLIENT *clntunix_create  (struct sockaddr_un *__raddr, u_long __program,
-				 u_long __version, int *__sockp,
-				 u_int __sendsz, u_int __recvsz) __THROW;
+extern CLIENT *clntunix_create  (struct sockaddr_un *__raddr, unsigned long __program,
+				 unsigned long __version, int *__sockp,
+				 unsigned int __sendsz, unsigned int __recvsz) __THROW;
 
 
-extern int callrpc (__const char *__host, __const u_long __prognum,
-		    __const u_long __versnum, __const u_long __procnum,
-		    __const xdrproc_t __inproc, __const char *__in,
-		    __const xdrproc_t __outproc, char *__out) __THROW;
+extern int callrpc (const char *__host, const unsigned long __prognum,
+		    const unsigned long __versnum, const unsigned long __procnum,
+		    const xdrproc_t __inproc, const char *__in,
+		    const xdrproc_t __outproc, char *__out) __THROW;
 extern int _rpc_dtablesize (void) __THROW;
 
 /*
  * Print why creation failed
  */
-extern void clnt_pcreateerror (__const char *__msg) __THROW;	/* stderr */
-extern char *clnt_spcreateerror(__const char *__msg) __THROW;	/* string */
+extern void clnt_pcreateerror (const char *__msg) __THROW;	/* stderr */
+extern char *clnt_spcreateerror(const char *__msg) __THROW;	/* string */
 
 /*
  * Like clnt_perror(), but is more verbose in its output
@@ -379,9 +379,9 @@ extern void clnt_perrno (enum clnt_stat __num) __THROW;		/* stderr */
 /*
  * Print an English error message, given the client error code
  */
-extern void clnt_perror (CLIENT *__clnt, __const char *__msg) __THROW;
+extern void clnt_perror (CLIENT *__clnt, const char *__msg) __THROW;
 							/* stderr */
-extern char *clnt_sperror (CLIENT *__clnt, __const char *__msg) __THROW;
+extern char *clnt_sperror (CLIENT *__clnt, const char *__msg) __THROW;
 							/* string */
 
 /*
@@ -404,8 +404,8 @@ extern char *clnt_sperrno (enum clnt_stat __num) __THROW;	/* string */
 /*
  * get the port number on the host for the rpc program,version and proto
  */
-extern int getrpcport (__const char * __host, u_long __prognum,
-		       u_long __versnum, u_int proto) __THROW;
+extern int getrpcport (const char * __host, unsigned long __prognum,
+		       unsigned long __versnum, unsigned int proto) __THROW;
 
 /*
  * get the local host's IP address without consulting

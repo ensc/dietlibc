@@ -69,7 +69,7 @@ typedef unsigned long rpcport_t;
 #include <netinet/in.h>
 
 #ifndef INADDR_LOOPBACK
-#define       INADDR_LOOPBACK         (u_long)0x7F000001
+#define       INADDR_LOOPBACK         0x7F000001UL
 #endif
 #ifndef MAXHOSTNAMELEN
 #define        MAXHOSTNAMELEN  64

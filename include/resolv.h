@@ -23,25 +23,25 @@
 #define	RES_MAXNDOTS		15	/* should reflect bit field size */
 
 struct res_state {
-	int	retrans;	 	/* retransmission time interval */
-	int	retry;			/* number of times to retransmit */
-	u_long	options;		/* option flags - see below. */
-	int	nscount;		/* number of name servers */
-	struct sockaddr_in
-		nsaddr_list[MAXNS];	/* address of name server */
+  int	retrans;	 	/* retransmission time interval */
+  int	retry;			/* number of times to retransmit */
+  unsigned long	options;		/* option flags - see below. */
+  int	nscount;		/* number of name servers */
+  struct sockaddr_in
+	  nsaddr_list[MAXNS];	/* address of name server */
 #define	nsaddr	nsaddr_list[0]		/* for backward compatibility */
-	u_short	id;			/* current message id */
-	char	*dnsrch[MAXDNSRCH+1];	/* components of domain to search */
-	char	defdname[256];		/* default domain (deprecated) */
-	u_long	pfcode;			/* RES_PRF_ flags - see below. */
-	unsigned ndots:4;		/* threshold for initial abs. query */
-	unsigned nsort:4;		/* number of elements in sort_list[] */
-	char	unused[3];
-	struct {
-		struct in_addr	addr;
-		u_int32_t	mask;
-	} sort_list[MAXRESOLVSORT];
-	char	pad[72];		/* on an i386 this means 512b total */
+  unsigned short	id;			/* current message id */
+  char	*dnsrch[MAXDNSRCH+1];	/* components of domain to search */
+  char	defdname[256];		/* default domain (deprecated) */
+  unsigned long	pfcode;			/* RES_PRF_ flags - see below. */
+  unsigned ndots:4;		/* threshold for initial abs. query */
+  unsigned nsort:4;		/* number of elements in sort_list[] */
+  char	unused[3];
+  struct {
+    struct in_addr	addr;
+    uint32_t	mask;
+  } sort_list[MAXRESOLVSORT];
+  char	pad[72];		/* on an i386 this means 512b total */
 };
 
 /*

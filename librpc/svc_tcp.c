@@ -88,13 +88,13 @@ static int readtcp(), writetcp();
 static SVCXPRT *makefd_xprt();
 
 struct tcp_rendezvous {			/* kept in xprt->xp_p1 */
-	u_int sendsize;
-	u_int recvsize;
+	unsigned int sendsize;
+	unsigned int recvsize;
 };
 
 struct tcp_conn {				/* kept in xprt->xp_p1 */
 	enum xprt_stat strm_stat;
-	u_long x_id;
+	unsigned long x_id;
 	XDR xdrs;
 	char verf_body[MAX_AUTH_BYTES];
 };
@@ -121,8 +121,8 @@ struct tcp_conn {				/* kept in xprt->xp_p1 */
  */
 SVCXPRT *svctcp_create(sock, sendsize, recvsize)
 register int sock;
-u_int sendsize;
-u_int recvsize;
+unsigned int sendsize;
+unsigned int recvsize;
 {
 	bool_t madesock = FALSE;
 	register SVCXPRT *xprt;
@@ -163,7 +163,7 @@ u_int recvsize;
 		return (NULL);
 	}
 	xprt->xp_p2 = NULL;
-	xprt->xp_p1 = (caddr_t) r;
+	xprt->xp_p1 = (char*) r;
 	xprt->xp_verf = _null_auth;
 	xprt->xp_ops = &svctcp_rendezvous_op;
 	xprt->xp_port = ntohs(addr.sin_port);
@@ -178,8 +178,8 @@ u_int recvsize;
  */
 SVCXPRT *svcfd_create(fd, sendsize, recvsize)
 int fd;
-u_int sendsize;
-u_int recvsize;
+unsigned int sendsize;
+unsigned int recvsize;
 {
 
 	return (makefd_xprt(fd, sendsize, recvsize));
@@ -187,8 +187,8 @@ u_int recvsize;
 
 static SVCXPRT *makefd_xprt(fd, sendsize, recvsize)
 int fd;
-u_int sendsize;
-u_int recvsize;
+unsigned int sendsize;
+unsigned int recvsize;
 {
 	register SVCXPRT *xprt;
 	register struct tcp_conn *cd;
@@ -208,9 +208,9 @@ u_int recvsize;
 	}
 	cd->strm_stat = XPRT_IDLE;
 	xdrrec_create(&(cd->xdrs), sendsize, recvsize,
-				  (caddr_t) xprt, readtcp, writetcp);
+				  (char*) xprt, readtcp, writetcp);
 	xprt->xp_p2 = NULL;
-	xprt->xp_p1 = (caddr_t) cd;
+	xprt->xp_p1 = (char*) cd;
 	xprt->xp_verf.oa_base = cd->verf_body;
 	xprt->xp_addrlen = 0;
 	xprt->xp_ops = &svctcp_op;	/* truely deals with calls */
@@ -268,9 +268,9 @@ register SVCXPRT *xprt;
 		/* an actual connection socket */
 		XDR_DESTROY(&(cd->xdrs));
 	}
-	mem_free((caddr_t) cd, sizeof(struct tcp_conn));
+	mem_free((char*) cd, sizeof(struct tcp_conn));
 
-	mem_free((caddr_t) xprt, sizeof(SVCXPRT));
+	mem_free((char*) xprt, sizeof(SVCXPRT));
 }
 
 /*
@@ -286,7 +286,7 @@ static struct timeval wait_per_try = { 35, 0 };
  */
 static int readtcp(xprt, buf, len)
 register SVCXPRT *xprt;
-caddr_t buf;
+char* buf;
 register int len;
 {
 	register int sock = xprt->xp_sock;
@@ -328,7 +328,7 @@ register int len;
  */
 static int writetcp(xprt, buf, len)
 register SVCXPRT *xprt;
-caddr_t buf;
+char* buf;
 int len;
 {
 	register int i, cnt;
@@ -373,7 +373,7 @@ register struct rpc_msg *msg;
 static bool_t svctcp_getargs(xprt, xdr_args, args_ptr)
 SVCXPRT *xprt;
 xdrproc_t xdr_args;
-caddr_t args_ptr;
+char* args_ptr;
 {
 
 	return ((*xdr_args)
@@ -383,7 +383,7 @@ caddr_t args_ptr;
 static bool_t svctcp_freeargs(xprt, xdr_args, args_ptr)
 SVCXPRT *xprt;
 xdrproc_t xdr_args;
-caddr_t args_ptr;
+char* args_ptr;
 {
 	register XDR *xdrs = &(((struct tcp_conn *) (xprt->xp_p1))->xdrs);
 

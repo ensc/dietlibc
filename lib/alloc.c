@@ -13,7 +13,7 @@
 #include <errno.h>
 #endif
 
-#include <linux/types.h>
+#include <sys/types.h>
 
 #if defined(MAP_ANONYMOUS) && !defined(MAP_ANON)
 #define MAP_ANON MAP_ANONYMOUS

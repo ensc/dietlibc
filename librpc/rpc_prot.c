@@ -74,7 +74,7 @@ bool_t xdr_des_block(xdrs, blkp)
 register XDR *xdrs;
 register des_block *blkp;
 {
-	return (xdr_opaque(xdrs, (caddr_t) blkp, sizeof(des_block)));
+	return (xdr_opaque(xdrs, (char*) blkp, sizeof(des_block)));
 }
 
 /* * * * * * * * * * * * * * XDR RPC MESSAGE * * * * * * * * * * * * * * * */
@@ -146,7 +146,7 @@ register struct rpc_msg *rmsg;
 		xdr_enum(xdrs, (enum_t *) & (rmsg->rm_direction)) &&
 		(rmsg->rm_direction == REPLY))
 		return (xdr_union(xdrs, (enum_t *) & (rmsg->rm_reply.rp_stat),
-						  (caddr_t) & (rmsg->rm_reply.ru), reply_dscrm,
+						  (char*) & (rmsg->rm_reply.ru), reply_dscrm,
 						  NULL_xdrproc_t));
 	return (FALSE);
 }

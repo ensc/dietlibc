@@ -55,13 +55,13 @@ static struct timeval tottimeout = { 60, 0 };
  * Calls the pmap service remotely to do the lookup.
  * Returns 0 if no map exists.
  */
-u_short pmap_getport(address, program, version, protocol)
+unsigned short pmap_getport(address, program, version, protocol)
 struct sockaddr_in *address;
-u_long program;
-u_long version;
-u_int protocol;
+unsigned long program;
+unsigned long version;
+unsigned int protocol;
 {
-	u_short port = 0;
+	unsigned short port = 0;
 	int socket = -1;
 	register CLIENT *client;
 	struct pmap parms;
@@ -75,8 +75,8 @@ u_int protocol;
 		parms.pm_vers = version;
 		parms.pm_prot = protocol;
 		parms.pm_port = 0;		/* not needed or used */
-		if (CLNT_CALL(client, PMAPPROC_GETPORT, (xdrproc_t)xdr_pmap, (caddr_t)&parms,
-					  (xdrproc_t)xdr_u_short, (caddr_t)&port, tottimeout) != RPC_SUCCESS) {
+		if (CLNT_CALL(client, PMAPPROC_GETPORT, (xdrproc_t)xdr_pmap, (char*)&parms,
+					  (xdrproc_t)xdr_u_short, (char*)&port, tottimeout) != RPC_SUCCESS) {
 			rpc_createerr.cf_stat = RPC_PMAPFAILURE;
 			clnt_geterr(client, &rpc_createerr.cf_error);
 		} else if (port == 0) {

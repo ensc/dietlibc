@@ -1,4 +1,4 @@
-#include <linux/types.h>
+#include <sys/types.h>
 #include <unistd.h>
 #include <signal.h>
 #include "syscalls.h"

@@ -45,7 +45,7 @@ static char sccsid[] = "@(#)xdr_reference.c 1.11 87/08/11 SMI";
 #include <rpc/xdr.h>
 #include <string.h>
 
-#define LASTUNSIGNED	((u_int)0-1)
+#define LASTUNSIGNED	((unsigned int)0-1)
 
 /*
  * XDR an indirect pointer
@@ -58,11 +58,11 @@ static char sccsid[] = "@(#)xdr_reference.c 1.11 87/08/11 SMI";
  */
 bool_t xdr_reference(xdrs, pp, size, proc)
 register XDR *xdrs;
-caddr_t *pp;					/* the pointer to work on */
-u_int size;						/* size of the object pointed to */
+char* *pp;					/* the pointer to work on */
+unsigned int size;						/* size of the object pointed to */
 xdrproc_t proc;					/* xdr routine to handle the object */
 {
-	register caddr_t loc = *pp;
+	register char* loc = *pp;
 	register bool_t stat;
 
 	if (loc == NULL)
@@ -71,7 +71,7 @@ xdrproc_t proc;					/* xdr routine to handle the object */
 			return (TRUE);
 
 		case XDR_DECODE:
-			*pp = loc = (caddr_t) mem_alloc(size);
+			*pp = loc = (char*) mem_alloc(size);
 			if (loc == NULL) {
 				(void) fprintf(stderr, "xdr_reference: out of memory\n");
 				return (FALSE);
@@ -112,7 +112,7 @@ xdrproc_t proc;					/* xdr routine to handle the object */
 bool_t xdr_pointer(xdrs, objpp, obj_size, xdr_obj)
 register XDR *xdrs;
 char **objpp;
-u_int obj_size;
+unsigned int obj_size;
 xdrproc_t xdr_obj;
 {
 

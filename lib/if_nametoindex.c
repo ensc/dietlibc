@@ -1,5 +1,4 @@
-#include <linux/if.h>
-#include <linux/net.h>
+#include <net/if.h>
 #include <sys/ioctl.h>
 #include <unistd.h>
 #include <sys/socket.h>
@@ -8,7 +7,7 @@
 #define SOCK_DGRAM 2
 #endif
 
-int if_nametoindex(char* blub) {
+unsigned int if_nametoindex(const char* blub) {
   struct ifreq ifr;
   int fd;
   char *tmp;

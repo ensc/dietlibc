@@ -1,9 +1,66 @@
 #ifndef _SYS_TYPES_H
 #define _SYS_TYPES_H
 
-#include <linux/types.h>
-#include <linux/posix_types.h>
-#include <linux/socket.h>
+#include <inttypes.h>
+#include <stddef.h>
+
+typedef unsigned long int blkcnt_t;	/* Used for file block counts */
+typedef unsigned long int blksize_t;	/* Used for block sizes */
+typedef unsigned long int clock_t;	/* Used for system times in
+					   clock ticks or CLOCKS_PER_SEC
+					   (see <time.h>). */
+
+/* TODO:
+     clockid_t
+             Used for clock ID type in the clock and timer functions.
+     fsblkcnt_t
+             Used for file system block counts
+     fsfilcnt_t
+             Used for file system file counts
+     pthread_attr_t
+             Used to identify a thread attribute object.
+     pthread_cond_t
+             Used for condition variables.
+     pthread_condattr_t
+             Used to identify a condition attribute object.
+     pthread_key_t
+             Used for thread-specific data keys.
+     pthread_mutex_t
+             Used for mutexes.
+     pthread_mutexattr_t
+             Used to identify a mutex attribute object.
+     pthread_once_t
+             Used for dynamic package initialisation.
+     pthread_rwlock_t
+             Used for read-write locks.
+     pthread_rwlockattr_t
+             Used for read-write lock attributes.
+     pthread_t
+             Used to identify a thread.
+     timer_t
+             Used for timer ID returned by timer_create().
+*/
+
+typedef unsigned short dev_t;		/* Used for device IDs. */
+typedef unsigned short gid_t;		/* Used for group IDs. */
+typedef signed int id_t;		/* Used as a general identifier; can be
+					   used to contain at least a pid_t,
+					   uid_t or a gid_t. */
+typedef unsigned long ino_t;		/* Used for file serial numbers. */
+typedef signed int key_t;		/* Used for interprocess communication. */
+typedef unsigned short mode_t;		/* Used for some file attributes. */
+typedef unsigned short nlink_t;		/* Used for link counts. */
+typedef signed long off_t;		/* Used for file sizes. */
+typedef signed int pid_t;		/* Used for process IDs and process group IDs. */
+typedef unsigned int size_t;		/* Used for sizes of objects. */
+typedef signed int ssize_t;		/* Used for a count of bytes or an error indication. */
+typedef signed long suseconds_t;	/* Used for time in microseconds. */
+typedef signed long time_t;		/* Used for time in seconds. */
+typedef unsigned short uid_t;		/* Used for user IDs. */
+typedef signed long useconds_t;		/* Used for time in microseconds. */
+
+/* non-susv2 types: */
+typedef signed long long loff_t;	/* 64-bit offset */
 
 #ifdef __GNUC__
 #define __quad_t __quad_t
@@ -24,10 +81,6 @@ typedef __quad_t blkcnt64_t;
 
 typedef long int fpos_t;
 
-#define socklen_t socklen_t
-typedef unsigned int socklen_t;
-
-typedef long int blksize_t;
-typedef long int blkcnt_t;
+#include <sys/socket.h>
 
 #endif

@@ -1,5 +1,5 @@
 #include <stdarg.h>
-#include <linux/types.h>
+#include <sys/types.h>
 #include <stdlib.h>
 
 int vsnprintf (char *str,size_t size,const char *format, va_list arg_ptr);

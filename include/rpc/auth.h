@@ -71,8 +71,8 @@ enum auth_stat {
 
 union des_block {
 	struct {
-		u_int32_t high;
-		u_int32_t low;
+		uint32_t high;
+		uint32_t low;
 	} key;
 	char c[8];
 };
@@ -84,8 +84,8 @@ extern bool_t xdr_des_block (XDR *__xdrs, des_block *__blkp) __THROW;
  */
 struct opaque_auth {
 	enum_t	oa_flavor;		/* flavor of auth */
-	caddr_t	oa_base;		/* address of more auth stuff */
-	u_int	oa_length;		/* not to exceed MAX_AUTH_BYTES */
+	char*	oa_base;		/* address of more auth stuff */
+	unsigned int	oa_length;		/* not to exceed MAX_AUTH_BYTES */
 };
 
 /*
@@ -104,7 +104,7 @@ struct AUTH {
     int  (*ah_refresh) (AUTH *);		/* refresh credentials */
     void (*ah_destroy) (AUTH *); 	    	/* destroy this structure */
   } *ah_ops;
-  caddr_t ah_private;
+  char* ah_private;
 };
 
 
@@ -162,10 +162,10 @@ extern AUTH *authunix_create (char *__machname,uid_t __uid, gid_t __gid,
 			      int __len, gid_t *__aup_gids) __THROW;
 extern AUTH *authunix_create_default (void) __THROW;
 extern AUTH *authnone_create (void) __THROW;
-extern AUTH *authdes_create (const char *__servername, u_int __window,
+extern AUTH *authdes_create (const char *__servername, unsigned int __window,
 			     struct sockaddr *__syncaddr, des_block *__ckey)
      __THROW;
-extern AUTH *authdes_pk_create (const char *, netobj *, u_int,
+extern AUTH *authdes_pk_create (const char *, netobj *, unsigned int,
 				struct sockaddr *, des_block *) __THROW;
 
 
@@ -183,11 +183,11 @@ extern AUTH *authdes_pk_create (const char *, netobj *, u_int,
  *
  */
 extern int getnetname (char *) __THROW;
-extern int host2netname (char *, __const char *, __const char *) __THROW;
-extern int user2netname (char *, __const uid_t, __const char *) __THROW;
-extern int netname2user (__const char *, uid_t *, gid_t *, int *, gid_t *)
+extern int host2netname (char *, const char *, const char *) __THROW;
+extern int user2netname (char *, const uid_t, const char *) __THROW;
+extern int netname2user (const char *, uid_t *, gid_t *, int *, gid_t *)
      __THROW;
-extern int netname2host (__const char *, char *, __const int) __THROW;
+extern int netname2host (const char *, char *, const int) __THROW;
 
 /*
  *

@@ -42,8 +42,8 @@ static char sccsid[] = "@(#)getrpcport.c 1.3 87/08/11 SMI";
 #include <string.h>
 #include <rpc/pmap_clnt.h>
 
-extern int getrpcport (const char * host, u_long prognum,
-			   u_long versnum, u_int proto)
+extern int getrpcport (const char * host, unsigned long prognum,
+			   unsigned long versnum, unsigned int proto)
 {
 	struct sockaddr_in addr;
 	struct hostent *hp;

@@ -64,42 +64,40 @@ static struct timeval timeout = { 3, 0 };
  * remotely call that routine with the given parameters.  This allows
  * programs to do a lookup and call in one step.
 */
-enum clnt_stat
-pmap_rmtcall(addr, prog, vers, proc, xdrargs, argsp, xdrres, resp, tout,
-			 port_ptr)
-struct sockaddr_in *addr;
-u_long prog, vers, proc;
-xdrproc_t xdrargs, xdrres;
-caddr_t argsp, resp;
-struct timeval tout;
-u_long *port_ptr;
-{
-	int socket = -1;
-	register CLIENT *client;
-	struct rmtcallargs a;
-	struct rmtcallres r;
-	enum clnt_stat stat;
+enum clnt_stat pmap_rmtcall (struct sockaddr_in *addr,
+				    const unsigned long prog,
+				    const unsigned long vers,
+				    const unsigned long proc,
+				    xdrproc_t xdrargs,
+				    char* argsp, xdrproc_t xdrres,
+				    char* resp, struct timeval tout,
+				    unsigned long *port_ptr) {
+  int socket = -1;
+  register CLIENT *client;
+  struct rmtcallargs a;
+  struct rmtcallres r;
+  enum clnt_stat stat;
 
-	addr->sin_port = htons(PMAPPORT);
-	client = clntudp_create(addr, PMAPPROG, PMAPVERS, timeout, &socket);
-	if (client != (CLIENT *) NULL) {
-		a.prog = prog;
-		a.vers = vers;
-		a.proc = proc;
-		a.args_ptr = argsp;
-		a.xdr_args = xdrargs;
-		r.port_ptr = port_ptr;
-		r.results_ptr = resp;
-		r.xdr_results = xdrres;
-		stat = CLNT_CALL(client, PMAPPROC_CALLIT, (xdrproc_t)xdr_rmtcall_args, (caddr_t)&a,
-						 (xdrproc_t)xdr_rmtcallres, (caddr_t)&r, tout);
-		CLNT_DESTROY(client);
-	} else {
-		stat = RPC_FAILED;
-	}
-	(void) close(socket);
-	addr->sin_port = 0;
-	return (stat);
+  addr->sin_port = htons(PMAPPORT);
+  client = clntudp_create(addr, PMAPPROG, PMAPVERS, timeout, &socket);
+  if (client != (CLIENT *) NULL) {
+    a.prog = prog;
+    a.vers = vers;
+    a.proc = proc;
+    a.args_ptr = argsp;
+    a.xdr_args = xdrargs;
+    r.port_ptr = port_ptr;
+    r.results_ptr = resp;
+    r.xdr_results = xdrres;
+    stat = CLNT_CALL(client, PMAPPROC_CALLIT, (xdrproc_t)xdr_rmtcall_args, (char*)&a,
+		      (xdrproc_t)xdr_rmtcallres, (char*)&r, tout);
+    CLNT_DESTROY(client);
+  } else {
+    stat = RPC_FAILED;
+  }
+  (void) close(socket);
+  addr->sin_port = 0;
+  return (stat);
 }
 
 
@@ -109,7 +107,7 @@ u_long *port_ptr;
  */
 bool_t xdr_rmtcall_args(XDR* xdrs, struct rmtcallargs* cap)
 {
-	u_int lenposition, argposition, position;
+	unsigned int lenposition, argposition, position;
 
 	if (xdr_u_long(xdrs, &(cap->prog)) &&
 		xdr_u_long(xdrs, &(cap->vers)) && xdr_u_long(xdrs, &(cap->proc))) {
@@ -120,7 +118,7 @@ bool_t xdr_rmtcall_args(XDR* xdrs, struct rmtcallargs* cap)
 		if (!(*(cap->xdr_args)) (xdrs, cap->args_ptr))
 			return (FALSE);
 		position = XDR_GETPOS(xdrs);
-		cap->arglen = (u_long) position - (u_long) argposition;
+		cap->arglen = (unsigned long) position - (unsigned long) argposition;
 		XDR_SETPOS(xdrs, lenposition);
 		if (!xdr_u_long(xdrs, &(cap->arglen)))
 			return (FALSE);
@@ -136,12 +134,12 @@ bool_t xdr_rmtcall_args(XDR* xdrs, struct rmtcallargs* cap)
  */
 bool_t xdr_rmtcallres(XDR* xdrs, struct rmtcallres* crp)
 {
-	caddr_t port_ptr;
+	char* port_ptr;
 
-	port_ptr = (caddr_t) crp->port_ptr;
-	if (xdr_reference(xdrs, &port_ptr, sizeof(u_long),
+	port_ptr = (char*) crp->port_ptr;
+	if (xdr_reference(xdrs, &port_ptr, sizeof(unsigned long),
 					  (xdrproc_t)xdr_u_long) && xdr_u_long(xdrs, &crp->resultslen)) {
-		crp->port_ptr = (u_long *) port_ptr;
+		crp->port_ptr = (unsigned long *) port_ptr;
 		return ((*(crp->xdr_results)) (xdrs, crp->results_ptr));
 	}
 	return (FALSE);
@@ -222,13 +220,13 @@ char *buf;						/* why allocxate more when we can use existing... */
 enum clnt_stat
 clnt_broadcast(prog, vers, proc, xargs, argsp, xresults, resultsp,
 			   eachresult)
-u_long prog;					/* program number */
-u_long vers;					/* version number */
-u_long proc;					/* procedure number */
+unsigned long prog;					/* program number */
+unsigned long vers;					/* version number */
+unsigned long proc;					/* procedure number */
 xdrproc_t xargs;				/* xdr routine for args */
-caddr_t argsp;					/* pointer to args */
+char* argsp;					/* pointer to args */
 xdrproc_t xresults;				/* xdr routine for results */
-caddr_t resultsp;				/* pointer to results */
+char* resultsp;				/* pointer to results */
 resultproc_t eachresult;		/* call with each result obtained */
 {
 	enum clnt_stat stat;
@@ -248,8 +246,8 @@ resultproc_t eachresult;		/* call with each result obtained */
 #endif							/* def FD_SETSIZE */
 	register int i;
 	bool_t done = FALSE;
-	register u_long xid;
-	u_long port;
+	register unsigned long xid;
+	unsigned long port;
 	struct in_addr addrs[20];
 	struct sockaddr_in baddr, raddr;	/* broadcast and response addresses */
 	struct rmtcallargs a;
@@ -332,7 +330,7 @@ resultproc_t eachresult;		/* call with each result obtained */
 		}
 	  recv_again:
 		msg.acpted_rply.ar_verf = _null_auth;
-		msg.acpted_rply.ar_results.where = (caddr_t) & r;
+		msg.acpted_rply.ar_results.where = (char*) & r;
 		msg.acpted_rply.ar_results.proc = (xdrproc_t)xdr_rmtcallres;
 		readfds = mask;
 		switch (select(_rpc_dtablesize(), &readfds, 0, 0, &t)) {
@@ -361,18 +359,18 @@ resultproc_t eachresult;		/* call with each result obtained */
 			stat = RPC_CANTRECV;
 			goto done_broad;
 		}
-		if (inlen < sizeof(u_long))
+		if (inlen < sizeof(unsigned long))
 			goto recv_again;
 		/*
 		 * see if reply transaction id matches sent id.
 		 * If so, decode the results.
 		 */
-		xdrmem_create(xdrs, inbuf, (u_int) inlen, XDR_DECODE);
+		xdrmem_create(xdrs, inbuf, (unsigned int) inlen, XDR_DECODE);
 		if (xdr_replymsg(xdrs, &msg)) {
 			if ((msg.rm_xid == xid) &&
 				(msg.rm_reply.rp_stat == MSG_ACCEPTED) &&
 				(msg.acpted_rply.ar_stat == SUCCESS)) {
-				raddr.sin_port = htons((u_short) port);
+				raddr.sin_port = htons((unsigned short) port);
 				done = (*eachresult) (resultsp, &raddr);
 			}
 			/* otherwise, we just ignore the errors ... */

@@ -19,6 +19,6 @@ struct spwd {
 extern struct spwd *getspent(void) __THROW;
 extern void setspent(void) __THROW;
 extern void endspent(void) __THROW;
-extern struct spwd *getspnam (__const char *__name) __THROW;
+extern struct spwd *getspnam (const char *__name) __THROW;
 
 #endif /* _SHADOW_H */

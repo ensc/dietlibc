@@ -4,8 +4,8 @@
 #include <sys/cdefs.h>
 
 /* This prints an "Assertion failed" message and aborts.  */
-extern void __assert_fail (__const char *__assertion, __const char *__file,
-			   unsigned int __line, __const char *__function)
+extern void __assert_fail (const char *__assertion, const char *__file,
+			   unsigned int __line, const char *__function)
      __THROW __attribute__ ((__noreturn__));
 
 #ifdef __PRETTY_FUNCTION__

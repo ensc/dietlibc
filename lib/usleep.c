@@ -1,4 +1,3 @@
-#include <linux/time.h>
 #include <time.h>
 
 /* nano * 1000 == usecs

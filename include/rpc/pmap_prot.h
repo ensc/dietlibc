@@ -75,17 +75,17 @@ __BEGIN_DECLS
  * The service supports remote procedure calls on udp/ip or tcp/ip socket 111.
  */
 
-#define PMAPPORT		((u_short)111)
-#define PMAPPROG		((u_long)100000)
-#define PMAPVERS		((u_long)2)
-#define PMAPVERS_PROTO		((u_long)2)
-#define PMAPVERS_ORIG		((u_long)1)
-#define PMAPPROC_NULL		((u_long)0)
-#define PMAPPROC_SET		((u_long)1)
-#define PMAPPROC_UNSET		((u_long)2)
-#define PMAPPROC_GETPORT	((u_long)3)
-#define PMAPPROC_DUMP		((u_long)4)
-#define PMAPPROC_CALLIT		((u_long)5)
+#define PMAPPORT		((unsigned short)111)
+#define PMAPPROG		((unsigned long)100000)
+#define PMAPVERS		((unsigned long)2)
+#define PMAPVERS_PROTO		((unsigned long)2)
+#define PMAPVERS_ORIG		((unsigned long)1)
+#define PMAPPROC_NULL		((unsigned long)0)
+#define PMAPPROC_SET		((unsigned long)1)
+#define PMAPPROC_UNSET		((unsigned long)2)
+#define PMAPPROC_GETPORT	((unsigned long)3)
+#define PMAPPROC_DUMP		((unsigned long)4)
+#define PMAPPROC_CALLIT		((unsigned long)5)
 
 struct pmap {
 	long unsigned pm_prog;

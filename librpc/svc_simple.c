@@ -73,8 +73,8 @@ int registerrpc(int prognum, int versnum, int procnum, char *(*progname)(), xdrp
 			return (-1);
 		}
 	}
-	(void) pmap_unset((u_long) prognum, (u_long) versnum);
-	if (!svc_register(transp, (u_long) prognum, (u_long) versnum,
+	(void) pmap_unset((unsigned long) prognum, (unsigned long) versnum);
+	if (!svc_register(transp, (unsigned long) prognum, (unsigned long) versnum,
 					  universal, IPPROTO_UDP)) {
 		(void) fprintf(stderr, "couldn't register prog %d vers %d\n",
 					   prognum, versnum);

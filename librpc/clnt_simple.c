@@ -54,8 +54,8 @@ static struct callrpc_private {
 	char *oldhost;
 } *callrpc_private;
 
-int callrpc (const char *host, const u_long prognum,
-			 const u_long versnum, const u_long procnum,
+int callrpc (const char *host, const unsigned long prognum,
+			 const unsigned long versnum, const unsigned long procnum,
 			 const xdrproc_t inproc, const char *in,
 			 const xdrproc_t outproc, char *out)
 {
@@ -94,8 +94,8 @@ int callrpc (const char *host, const u_long prognum,
 		bcopy(hp->h_addr, (char *) &server_addr.sin_addr, hp->h_length);
 		server_addr.sin_family = AF_INET;
 		server_addr.sin_port = 0;
-		if ((crp->client = clntudp_create(&server_addr, (u_long) prognum,
-										  (u_long) versnum, timeout,
+		if ((crp->client = clntudp_create(&server_addr, (unsigned long) prognum,
+										  (unsigned long) versnum, timeout,
 										  &crp->socket)) == NULL)
 			return ((int) rpc_createerr.cf_stat);
 		crp->valid = 1;
