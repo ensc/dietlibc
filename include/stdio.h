@@ -11,29 +11,29 @@ FILE *fopen (const char *path, const char *mode) __THROW;
 FILE *fdopen (int fildes, const char *mode) __THROW;
 FILE *freopen (const char *path, const char *mode, FILE *stream) __THROW;
 
-int printf(const char *format, ...) __THROW;
-int fprintf(FILE *stream, const char *format, ...) __THROW;
-int sprintf(char *str, const char *format, ...) __THROW;
-int snprintf(char *str, size_t size, const char *format, ...) __THROW;
-int asprintf(char **ptr, const char* format, ...) __THROW;
+int printf(const char *format, ...) __THROW __attribute__((format(printf,1,2)));
+int fprintf(FILE *stream, const char *format, ...) __THROW __attribute__((format(printf,2,3)));
+int sprintf(char *str, const char *format, ...) __THROW __attribute__((format(printf,2,3)));
+int snprintf(char *str, size_t size, const char *format, ...) __THROW __attribute__((format(printf,3,4)));
+int asprintf(char **ptr, const char* format, ...) __THROW __attribute__((format(printf,2,3)));
 
-int scanf(const char *format, ...) __THROW;
-int fscanf(FILE *stream, const char *format, ...) __THROW;
-int sscanf(const char *str, const char *format, ...) __THROW;
+int scanf(const char *format, ...) __THROW __attribute__((format(scanf,1,2)));
+int fscanf(FILE *stream, const char *format, ...) __THROW __attribute__((format(scanf,2,3)));
+int sscanf(const char *str, const char *format, ...) __THROW __attribute__((format(scanf,2,3)));
 
 #include <stdarg.h>
 
-int vprintf(const char *format, va_list ap) __THROW;
-int vfprintf(FILE *stream, const char *format, va_list ap) __THROW;
-int vsprintf(char *str, const char *format, va_list ap) __THROW;
-int vsnprintf(char *str, size_t size, const char *format, va_list ap) __THROW;
+int vprintf(const char *format, va_list ap) __THROW __attribute__((format(printf,1,0)));
+int vfprintf(FILE *stream, const char *format, va_list ap) __THROW __attribute__((format(printf,2,0)));
+int vsprintf(char *str, const char *format, va_list ap) __THROW __attribute__((format(printf,2,0)));
+int vsnprintf(char *str, size_t size, const char *format, va_list ap) __THROW __attribute__((format(printf,3,0)));
 
-int fdprintf(int fd, const char *format, ...) __THROW;
-int vfdprintf(int fd, const char *format, va_list ap) __THROW;
+int fdprintf(int fd, const char *format, ...) __THROW __attribute__((format(printf,2,3)));
+int vfdprintf(int fd, const char *format, va_list ap) __THROW __attribute__((format(printf,2,0)));
 
-int vscanf(const char *format, va_list ap) __THROW;
-int vsscanf(const char *str, const char *format, va_list ap) __THROW;
-int vfscanf(FILE *stream, const char *format, va_list ap) __THROW;
+int vscanf(const char *format, va_list ap) __THROW __attribute__((format(scanf,1,0)));
+int vsscanf(const char *str, const char *format, va_list ap) __THROW __attribute__((format(scanf,2,0)));
+int vfscanf(FILE *stream, const char *format, va_list ap) __THROW __attribute__((format(scanf,2,0)));
 
 int fgetc(FILE *stream) __THROW;
 int fgetc_unlocked(FILE *stream) __THROW;
