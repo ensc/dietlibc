@@ -15,13 +15,15 @@ _exit:
 __unified_syscall:
 	movzbq	%al, %rax
 	syscall
-	cmpq	$0, %rax
+	cmp	$0, %eax
 	jge	.Lnoerror
 	negq	%rax
-	movl	%eax, %ecx
+	pushq	%rax
 	call	__errno_location
-	movl	%ecx, (%rax)
-	mov	$-1, %rax
+	popq	%rcx
+	movl	%ecx,(%rax)
+	xorq	%rax,%rax
+	decq	%rax
 .Lnoerror:
 
 /* here we go and "reuse" the return for weak-void functions */
