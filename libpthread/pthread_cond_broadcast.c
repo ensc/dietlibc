@@ -10,14 +10,17 @@ int pthread_cond_broadcast(pthread_cond_t *cond)
 
   __THREAD_INIT();
 
+  __NO_ASYNC_CANCEL_BEGIN;
   __pthread_lock(&(cond->lock));
-  while ((tmp=cond->wait_chain)) {
-    cond->wait_chain=tmp->waitnext;
+
+  for (tmp=cond->wait_chain;tmp;tmp=tmp->waitnext) {
     tmp->waitnext=0;
     tmp->waiting=0;
   }
-  __pthread_unlock(&(cond->lock));
+  cond->wait_chain=0;
 
+  __pthread_unlock(&(cond->lock));
+  __NO_ASYNC_CANCEL_STOP;
   return 0;
 }
 

@@ -25,7 +25,7 @@ void *malloc(size_t size) {
   return ret;
 }
 
-void* realloc(void* ptr, size_t size) { /* the code is not thread-save */
+void* realloc(void* ptr, size_t size) {
   register void *ret;
   __NO_ASYNC_CANCEL_BEGIN;
   pthread_mutex_lock(&mutex_alloc);
