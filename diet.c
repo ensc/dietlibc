@@ -104,12 +104,14 @@ usage:
   if (!argv[1]) goto usage;
   {
     char *tmp=strchr(argv[1],0)-2;
-    char *tmp2;
+    char *tmp2,*tmp3;
     char *cc=argv[1];
     if (tmp<cc) goto donttouch;
     if ((tmp2=strstr(cc,"linux-"))) {	/* cross compiling? */
       int len=strlen(platform);
       --tmp2;
+      tmp3=strchr(cc,'-');
+      if (tmp3<tmp2) tmp2=tmp3;
       if (tmp2-cc>90) error("platform name too long!\n");
       shortplatform=platform+len;
       memmove(shortplatform,argv[1],(size_t)(tmp2-cc));
