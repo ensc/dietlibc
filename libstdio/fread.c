@@ -8,7 +8,7 @@ size_t fread( void *ptr, size_t size, size_t nmemb, FILE *stream) {
   j=size*nmemb;
   i=0;
 
-  if (!j) return 0;
+  if (!j || j/nmemb!=size) return 0;
   if (stream->ungotten) {
     stream->ungotten=0;
     *(char*)ptr=stream->ungetbuf;

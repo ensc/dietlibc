@@ -10,6 +10,7 @@
   add integer overflow fix in xdr_array after bugtraq advisory (me)
   fix x86_64 socket calls and mmap (and some more) (Gwenole Beauchesne)
   add calloc integer overflow fix after RUS-CERT advisory (me)
+  add fread and fwrite integer overflow fix (me)
 
 0.18:
   add stpcpy (from Thomas Ogrisegg)
