@@ -6,8 +6,8 @@
   added experimental sem* and shm*
   define EXIT_SUCCESS and EXIT_FAILURE
   added setvbuf (only changes mode, not buffer)
-  added dietwarning.h (woohoo, linker warnings!) and used it to warn
-    on setvbuf, sprintf and vsnprintf.
+  added dietwarning.h (woohoo, linker warnings!) and used it to warn of
+    insecurity (system, sprintf) or bloat (printf and stdio).
 
 0.7.2:
   added several prototypes to already implemented functions and
