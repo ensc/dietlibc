@@ -231,7 +231,7 @@ int main(int argc,char *argv[]) {
   foo[6]=0;
   puts(foo);
 #endif
-#if 1
+#if 0
   struct hostent * host;
   struct in_addr i;
 
@@ -328,7 +328,7 @@ int main(int argc,char *argv[]) {
   strftime(buf,512,"%A %B %Y\n",duh);
   puts(buf);
 #endif
-#if 0
+#if 1
   struct in_addr bar;
   struct hostent *foo;
 /*  inet_aton("160.45.10.8",&bar); */
@@ -422,8 +422,7 @@ int main(int argc,char *argv[]) {
 #endif
 #if 0
   char **tmp;
-  putenv("FOO");
-  assert(1==2);
+  putenv("A=foo");
   for (tmp=environ; *tmp; tmp++)
     puts(*tmp);
 #endif

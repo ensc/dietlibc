@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 
 int putenv(const char *string) {
   int len;
@@ -9,12 +10,13 @@ int putenv(const char *string) {
   char **newenv;
   static char **origenv=0;
   if (!origenv) origenv=environ;
-  if (!(tmp=strchr(string,'=')))
-    len=strlen(string);
-  else
-    len=tmp-string+1;
+  if (!(tmp=strchr(string,'='))) {
+    errno=EINVAL;
+    return 0;
+  }
+  len=tmp-string+1;
   for (envc=0, ep=(const char**)environ; *ep; ++ep) {
-    if (!memcmp(string,*ep,len)) { /* found */
+    if (!memcmp(string,*ep,len) && ep[0][len]=='=') { /* found */
       if (!tmp) {
 	for (; ep[1]; ++ep) ep[0]=ep[1];
 	ep[0]=0;

@@ -4,13 +4,6 @@
 #include <time.h>
 
 #include <sys/types.h>
-#ifndef u16
-#define u16 __u16
-#endif
-
-/* till those F**KIN' kernel headers are sane: A COPY !
- * #include <linux/sched.h>
- * A COPY OF THE STUFF WE NEED.... *GRUMBLE* */
 
 /*
  * cloning flags:
@@ -42,7 +35,7 @@
 #define SCHED_YIELD		0x10
 
 struct sched_param {
-	int sched_priority;
+  int sched_priority;
 };
 
 /* END OF COPY form kernel-header */

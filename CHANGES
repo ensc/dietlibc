@@ -41,6 +41,9 @@
     not work as delimiter)
   errno.h now declares sys_errlist and sys_nerr.
   ttyname should return 0 if !isatty.  Thanks, Uwe Ohse.
+  realpath returns NULL if "." cannot be opened (thanks, Uwe Ohse)
+  putenv erroneously accepted (and mishandled) entries without "=".
+    Thanks, Uwe.
 
 0.10:
   update getpagesize.
