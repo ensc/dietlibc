@@ -16,6 +16,7 @@
   make res_query return TRY_AGAIN instead of NO_DATA if no answer was
     received (Nikola Vladov)
   fix PT_READ_U in sys/trace.h (John K. Hohm)
+  Olaf: added mmap64 wrapper (arm,mips,sparc,...)
 
 0.27:
   change DNS routines to look for ip6.arpa instead of ip6.int
