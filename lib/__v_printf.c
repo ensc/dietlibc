@@ -67,7 +67,7 @@ inn_printf:
 
       /* FLAGS */
       case '#':
-	flag_hash=1;
+	flag_hash=-1;
       case 'z':
 	goto inn_printf;
 
@@ -150,6 +150,11 @@ print_out:
 	    ++s; --sz;
 	    --width;
 	  }
+	  if (flag_hash>0) {
+	    A_WRITE(fn,s,flag_hash); len+=flag_hash;
+	    s+=flag_hash; sz-=flag_hash;
+	    width-=flag_hash;
+	  }
 //	  len+=write_pad(fn,(signed int)width-(signed int)sz,padwith);
 	  if (flag_dot) {
 	    len+=write_pad(fn,(signed int)width-(signed int)preci,padwith);
@@ -169,7 +174,7 @@ print_out:
 	sz=0;
 	goto num_printf;
       case 'p':
-	flag_hash=1;
+	flag_hash=2;
 	ch='x';
       case 'X':
 	flag_upcase=(ch=='X');
@@ -179,6 +184,7 @@ print_out:
 	if (flag_hash) {
 	  buf[1]='0';
 	  buf[2]=ch;
+	  flag_hash=2;
 	  sz=2;
 	}
 	goto num_printf;
@@ -194,6 +200,7 @@ print_out:
 	sz=0;
 	if (flag_hash) {
 	  buf[1]='0';
+	  flag_hash=1;
 	  ++sz;
 	}
 
