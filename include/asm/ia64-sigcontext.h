@@ -1,3 +1,4 @@
+#include <sys/ptrace.h>
 
 #define PC(ctx) (ctx.sc_ip)
 

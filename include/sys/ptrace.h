@@ -715,6 +715,12 @@ struct pt_regs {
 
 #elif defined(__ia64__)
 
+struct ia64_fpreg {
+  union {
+    unsigned long bits[2];
+  } u;
+} __attribute__ ((aligned (16)));
+
 struct pt_regs {
 	unsigned long cr_ipsr;		/* interrupted task's psr */
 	unsigned long cr_iip;		/* interrupted task's instruction pointer */
