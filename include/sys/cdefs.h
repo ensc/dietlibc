@@ -56,6 +56,7 @@
 #define __attribute_dontuse__ __attribute__((__deprecated__))
 #else
 #define __attribute_dontuse__
+#define __deprecated__
 #endif
 
 #endif
