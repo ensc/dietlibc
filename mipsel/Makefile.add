@@ -1,2 +1,3 @@
-include mips/Makefile.add
 ENDIAN=-EL
+CFLAGS+=$(ENDIAN) -Os -G 0 -fstrict-aliasing -fno-pic -mno-abicalls
+VPATH:=mips:syscalls.s:$(VPATH)
