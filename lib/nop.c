@@ -49,7 +49,7 @@ int pthread_rwlock_wrlock()	__attribute__((weak,alias("__return0")));
 int pthread_rwlockattr_destroy()	__attribute__((weak,alias("__return0")));
 int pthread_rwlockattr_getpshared()	__attribute__((weak,alias("__return0")));
 int pthread_rwlockattr_init()	__attribute__((weak,alias("__return0")));
-int pthread_rwlockattr_setpshared()r	 __attribute__((weak,alias("__return0")));
+int pthread_rwlockattr_setpshared()	__attribute__((weak,alias("__return0")));
 int pthread_self()		__attribute__((weak,alias("__return0")));
 int pthread_setcancelstate()	__attribute__((weak,alias("__return0")));
 int pthread_setcanceltype()	__attribute__((weak,alias("__return0")));
