@@ -1,4 +1,5 @@
 #include <dietstdio.h>
+#include <unistd.h>
 
 int fputc_unlocked(int c, FILE *stream) {
   if (__fflush4(stream,0)) return EOF;
