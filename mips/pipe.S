@@ -1,4 +1,4 @@
-#include <asm/unistd.h>
+#include "syscalls.h"
 
 #define v0      2      /* return value */
 #define v1      3      /* return value */

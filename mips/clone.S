@@ -1,6 +1,6 @@
 #include "start.h"
-#include <asm/errno.h>
-#include <asm/unistd.h>
+#include <errno.h>
+#include "syscalls.h"
 
 .text
 .align 2
