@@ -162,6 +162,7 @@ __unified_syscall:
 #include "../syscalls.s/sysctl.S"
 #include "../syscalls.s/sysinfo.S"
 #include "../syscalls.s/syslog.S"
+#include "../syscalls.s/sysfs.S"
 #include "../syscalls.s/time.S"
 #include "../syscalls.s/times.S"
 #include "../syscalls.s/truncate.S"
