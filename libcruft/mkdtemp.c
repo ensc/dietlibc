@@ -17,11 +17,10 @@ char* mkdtemp(char* template) {
       int hexdigit=(random>>(i*5))&0x1f;
       tmp[i]=hexdigit>9?hexdigit+'a'-10:hexdigit+'0';
     }
-    if (mkdir(template,0700)==-1) {
-      if (errno==EEXIST) continue;
-      close(randfd);
-      return 0;
-    }
+    if (mkdir(template,0700)==0) break;
+    if (errno==EEXIST) continue;
+    close(randfd);
+    return 0;
   }
   close(randfd);
   return template;

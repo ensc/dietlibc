@@ -88,6 +88,9 @@ void foo(int tmp,...) {
 extern int __lltostr(char *s, int size, unsigned long long i, int base, char UpCase);
 
 int main(int argc,char *argv[]) {
+  char template[]="/tmp/duh/fnord-XXXXXX";
+  printf("%d\n",mkdtemp(template));
+#if 0
   char *inbuf="\xe2\x89\xa0";
 //  char *inbuf="\xc2\xa9";
   char outbuf[100];
@@ -99,6 +102,7 @@ int main(int argc,char *argv[]) {
   iconv_close(i);
   outbuf[100-oblen]=0;
   puts(outbuf);
+#endif
 #if 0
   printf("%c %c\n",tolower('C'),toupper('c'));
 #endif
