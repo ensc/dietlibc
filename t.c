@@ -30,6 +30,7 @@ int foo;
 
 int main(int argc,char *argv[]) {
   int i=foo;
+  printf("load average is %3.2f\n",0.0);
 #if 0
   struct dirent **namelist;
   int n;
@@ -88,7 +89,7 @@ int main(int argc,char *argv[]) {
   char buf[PATH_MAX];
   printf("%s\n",realpath("../../incoming/..///.zshrc",buf));
 #endif
-#if 1
+#if 0
   regex_t t;
   regcomp(&t,"^OpenSSH_2\\.5\\.[012]",5);
   printf("%d\n",regexec(&t,"OpenSSH_2.5.2p2",0,0,0));

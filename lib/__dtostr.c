@@ -16,8 +16,9 @@ int __dtostr(double d,char *buf,int maxlen,int prec) {
   int initial=1;
 
   if (d==0.0) {
-    *buf='0'; ++buf;
-    goto done;
+    for (i=0; i<prec; ++i) buf[i]='0';
+    buf[1]='.'; buf[i]=0;
+    return i;
   }
   if (s) { d=-d; *buf='-'; --maxlen; buf++; }
 /*  printf("e=%d e10=%d prec=%d\n",e,e10,prec); */
