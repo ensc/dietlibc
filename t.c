@@ -44,7 +44,10 @@ static int rand() {
 extern double atof(const char *c);
 
 int main(int argc,char *argv[]) {
-  printf("%ld\n",lseek(0,1234,SEEK_SET));
+  char*tmp;
+  int n=asprintf(&tmp,"foo %s %d\n","bar",23);
+  write(1,tmp,n);
+  free(tmp);
 #if 0
   struct passwd *p=getpwnam("leitner");
   struct spwd *s=getspnam("leitner");

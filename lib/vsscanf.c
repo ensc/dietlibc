@@ -3,6 +3,7 @@
 #include <sys/types.h>
 #include <ctype.h>
 #include <stdlib.h>
+#include <string.h>
 
 const char *skip_ws(const char *str)
 {

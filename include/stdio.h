@@ -14,6 +14,7 @@ int printf(const char *format, ...) __THROW;
 int fprintf(FILE *stream, const char *format, ...) __THROW;
 int sprintf(char *str, const char *format, ...) __THROW;
 int snprintf(char *str, size_t size, const char *format, ...) __THROW;
+int asprintf(char **ptr, const char* format, ...) __THROW;
 
 int scanf( const char *format, ...) __THROW;
 int fscanf( FILE *stream, const char *format, ...) __THROW;

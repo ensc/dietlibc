@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <sys/types.h>
+#include <string.h>
 
 /* this is ugly.
  * the idea is to build a parse tree, then do some poor man's OOP with a

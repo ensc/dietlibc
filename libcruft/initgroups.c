@@ -1,5 +1,6 @@
 #include <grp.h>
 #include <sys/types.h>
+#include <string.h>
 
 int initgroups(const char *user, gid_t group) {
   int n=0;

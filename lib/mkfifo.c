@@ -1,6 +1,6 @@
 #include <linux/stat.h>
 #include <unistd.h>
 
-int mkfifo(char *fn,int mode) {
+int mkfifo(const char *fn,mode_t mode) {
   return mknod(fn,S_IFIFO|mode,0);
 }
