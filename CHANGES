@@ -1,4 +1,5 @@
 0.20:
+  umount and stime for x86_64 (Gwenole Beauchesne)
 
 0.19:
   current gcc cvs makes __thread a keyword (Eric Troan)
