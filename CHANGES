@@ -43,6 +43,7 @@
   Olaf: fix x86_64 start-code (we have reg-args)
     fixing some broken macros in sparc32-code (.udiv,.urem)
     adding strndup (GNU Extension)
+  fix glob strncpy (R.L. Horn)
 
 0.21:
   use gcc's size_t, ptrdiff_t and wchar_t types (Olaf)

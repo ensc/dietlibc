@@ -70,7 +70,7 @@ static int add_entry(const char* name,glob_t *pglob,int* nfound) {
 
 static void build_fullname(char * fullname, int fullnamesize, const char * directory, const char * filename) {
   char *dest=fullname;
-  char *max=fullname+fullnamesize-1;
+  char *max=fullname+fullnamesize;
   if (directory[0]=='/' && !directory[1]) {
     *dest='/'; ++dest;
   } else if (directory[0]!='.' || directory[1]) {
