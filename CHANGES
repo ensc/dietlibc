@@ -8,6 +8,8 @@
     upcoming AMD Hammer chips!).  You can't even buy the chips yet and
     the diet libc already supports it!  Amazing ;-)
   Michal's patch also fixed several of the outstanding warnings.  Thanks!
+  Andre sent a patch to add ARM profiling.  He says it does not work
+    yet, but it's a start.
 
 0.17:
   fix several bugs in getservent_r

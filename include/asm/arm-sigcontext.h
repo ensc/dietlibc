@@ -1,3 +1,6 @@
+
+#define PC(ctx) (ctx.arm_pc)
+
 /*
  * Signal context structure - contains all info to do with the state
  * before the signal handler was invoked.  Note: only add new entries

@@ -28,6 +28,14 @@ _start:
 	str	a3, [ip, #0]		@ environ = envp
 #endif
 
+#ifdef PROFILING
+	stmdb	sp!, { r0 - r3 }
+	ldr	r0, .L5
+	ldr	r1, .L6
+	bl	monitor
+	ldmia	sp!, { r0 - r3 }
+#endif
+
 #ifdef WANT_DYNAMIC
 	bl	_dyn_start
 #else
@@ -36,14 +44,20 @@ _start:
 
 @
 @ The exit status from main() is already in r0.
-@ All we need to do now is drop through to the exit library (if atexit is
-@ used) or syscall.
+@ We need to branch to 'exit' in case we have linked with 'atexit'.
 @
 	bl	exit
 
 exit:
 _exit:
+
+#ifdef PROFILING
+	mov	r4, r0			@ save a copy of exit status
+	bl	_stop_monitor
+	mov	r0, r4
+#endif
 	swi	$__NR_exit		@ never returns.
+
 
 #ifdef __DYN_LIB
 .L3:	.word 	environ(GOT)
@@ -51,3 +65,11 @@ _exit:
 #else
 .L3:	.word 	environ
 #endif
+
+#ifdef PROFILING
+.L5:	.word	.text
+.L6:	.word	_etext
+#endif
+
+
+
