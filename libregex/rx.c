@@ -353,9 +353,15 @@ static const char* parsebranch(struct branch*__restrict__ b,const char*__restric
       if (tmp==s) return s;
     }
 //    printf("b->p from %p to ",b->p);
-    if (!(b->p=realloc(b->p,++b->num*sizeof(p)))) return s;
+    {
+      struct piece* tmp;
+      if (!(tmp=realloc(b->p,++b->num*sizeof(p)))) return s;
+//      printf("piece realloc: %p -> %p (%d*%d)\n",b->p,tmp,b->num,sizeof(p));
+      b->p=tmp;
+    }
 //    printf("%p (size %d)\n",b->p,b->num*sizeof(p));
     b->p[b->num-1]=p;
+//    printf("assigned piece %d in branch %p\n",b->num-1,b->p);
     if (*tmp=='|') { break; }
     s=tmp;
   }
@@ -393,9 +399,15 @@ static const char* parseregex(struct regex*__restrict__ r,const char*__restrict_
     tmp=parsebranch(&b,s,p,&r->pieces);
     if (tmp==s) return s;
 //    printf("r->b from %p to ",r->b);
-    if (!(r->b=realloc(r->b,++r->num*sizeof(b)))) return s;
+    {
+      struct branch* tmp;
+      if (!(tmp=realloc(r->b,++r->num*sizeof(b)))) return s;
+//      printf("branch realloc: %p -> %p (%d*%d)\n",r->b,tmp,r->num,sizeof(b));
+      r->b=tmp;
+    }
 //    printf("%p (size %d)\n",r->b,r->num*sizeof(b));
     r->b[r->num-1]=b;
+//    printf("assigned branch %d at %p\n",r->num-1,r->b);
     s=tmp; if (*s=='|') ++s;
   }
   return tmp;
@@ -472,13 +484,22 @@ int regexec(const regex_t*__restrict__ preg, const char*__restrict__ string, siz
   return REG_NOMATCH;
 }
 
-
+static void __regfree(struct regex* r) {
+  int i;
+  for (i=0; i<r->num; ++i) {
+    int j,k;
+    k=r->b[i].num;
+    for (j=0; j<k; ++j)
+    if (r->b[i].p[j].a.type==REGEX)
+      __regfree(&r->b[i].p[j].a.u.r);
+    free(r->b[i].p);
+  }
+  free(r->b);
+}
 
 void regfree(regex_t* preg) {
-  int i;
-  for (i=0; i<preg->r.num; ++i)
-    free(preg->r.b[i].p);
-  free(preg->r.b);
+  __regfree(&preg->r);
+  memset(preg,0,sizeof(regex_t));
 }
 
 size_t regerror(int errcode, const regex_t*__restrict__ preg, char*__restrict__ errbuf, size_t errbuf_size) {

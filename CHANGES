@@ -6,6 +6,7 @@
     complains.
   setlocale now accepts setting the locale to "C".
   several fixes from Gwenole Beauchesne, AMD64 and otherwise.
+  fix memory leak in regfree (thanks, Valgrind!).
 
 0.27:
   change DNS routines to look for ip6.arpa instead of ip6.int
