@@ -1,6 +1,8 @@
 #ifndef _PTHREAD_H
 #define _PTHREAD_H 1
 
+/* Most of this is taken from Linuxthreads */
+
 //#include <linux/sched.h>
 
 typedef struct _pthread_descr_struct *_pthread_descr;
@@ -41,19 +43,19 @@ typedef struct
 
 typedef unsigned long int pthread_t;
 
-extern int pthread_create (pthread_t *__thread,
-			const pthread_attr_t *__attr,
-			void *(*__start_routine) (void *),
-			void *__arg);
+int pthread_create (pthread_t *__thread,
+		const pthread_attr_t *__attr,
+		void *(*__start_routine) (void *),
+		void *__arg);
 
-extern void pthread_exit (void *__retval) __attribute__ ((__noreturn__));
+void pthread_exit (void *__retval) __attribute__ ((__noreturn__));
 
-extern int pthread_join (pthread_t __th, void **__thread_return);
+int pthread_join (pthread_t __th, void **__thread_return);
 
-extern int pthread_detach (pthread_t __th);
+int pthread_detach (pthread_t __th);
 
-extern pthread_t pthread_self (void);
-extern int pthread_equal (pthread_t __thread1, pthread_t __thread2);
+pthread_t pthread_self (void);
+int pthread_equal (pthread_t __thread1, pthread_t __thread2);
 
 int pthread_mutex_init(pthread_mutex_t *mutex,
 		const pthread_mutexattr_t *mutexattr);
