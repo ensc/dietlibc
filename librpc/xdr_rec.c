@@ -459,9 +459,7 @@ unsigned int pos;
 	return (FALSE);
 }
 
-static int32_t *xdrrec_inline(xdrs, len)
-register XDR *xdrs;
-int len;
+static int32_t *xdrrec_inline(XDR* xdrs, unsigned int len)
 {
 	register RECSTREAM *rstrm = (RECSTREAM *) xdrs->x_private;
 	int32_t *buf = NULL;

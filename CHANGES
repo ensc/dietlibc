@@ -10,6 +10,10 @@
   make DNS socket close-on-exec (Felix J. Ogris)
   add cuserid to libcompat (Andreas Krennmair)
   add ctermid and ftok to libcompat (those are _really_ ugly)
+  copy some RPC bugfix cruft from glibc
+    warning: I don't use rpc or xdr, I don't actually understand or have
+    a way to test this.  Maybe I should remove this cruft from the
+    diet libc...?
 
 0.22:
   fix i386 libm

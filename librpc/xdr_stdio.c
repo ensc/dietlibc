@@ -170,9 +170,7 @@ unsigned int pos;
 			FALSE : TRUE);
 }
 
-static int32_t *xdrstdio_inline(xdrs, len)
-XDR *xdrs;
-unsigned int len;
+static int32_t *xdrstdio_inline(XDR* xdrs, unsigned int len)
 {
 
 	/*
