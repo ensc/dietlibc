@@ -34,6 +34,12 @@ __clone:
 	je	.Lstart_thread
 	ret
 
+.Lstart_thread:
+	xorl	%ebp,%ebp
+	call	*%ebx
+	pushl	%eax
+	call	_exit
+
 .Lclone_error:
 	negl	%eax
 	pushl	%eax
@@ -43,9 +49,3 @@ __clone:
 	xorl	%eax, %eax
 	decl	%eax
 	ret
-
-.Lstart_thread:
-	xorl	%ebp,%ebp
-	call	*%ecx
-	pushl	%eax
-	call	_exit
