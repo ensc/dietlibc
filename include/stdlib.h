@@ -19,7 +19,9 @@ void unsetenv(const char *name) __THROW;
 int system (const char * string) __THROW;
 int atexit(void (*function)(void)) __THROW;
 
+float strtof(const char *nptr, char **endptr) __THROW;
 double strtod(const char *nptr, char **endptr) __THROW;
+long double strtold(const char *nptr, char **endptr) __THROW;
 long int strtol(const char *nptr, char **endptr, int base) __THROW;
 unsigned long int strtoul(const char *nptr, char **endptr, int base) __THROW;
 
