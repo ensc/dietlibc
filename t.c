@@ -63,7 +63,7 @@ int main(int argc,char *argv[]) {
   int len;
   len=res_search("fu-berlin.de",ns_c_in,ns_t_ns,buf,sizeof(buf));
 #endif
-#if 1
+#if 0
   regex_t t;
   regmatch_t rm;
 //  regcomp(&t,"^ *read",0);
@@ -231,7 +231,7 @@ int main(int argc,char *argv[]) {
   foo[6]=0;
   puts(foo);
 #endif
-#if 0
+#if 1
   struct hostent * host;
   struct in_addr i;
 

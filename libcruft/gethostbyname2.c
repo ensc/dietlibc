@@ -12,9 +12,10 @@
 
 extern int h_errno;
 
-struct hostent* gethostbyname2(const char *host,int AF)
-{
-  static struct hostent hostbuf;
+static const hostentsize=((sizeof(struct hostent)+15)&(-16));
+
+struct hostent* gethostbyname2(const char *host,int AF) {
+  struct hostent *hostbuf;
   struct hostent *hp;
   size_t hstbuflen;
   char *tmphstbuf;
@@ -22,10 +23,10 @@ struct hostent* gethostbyname2(const char *host,int AF)
   int herr;
 
   hstbuflen = 1024;
-  /* Allocate buffer, remember to free it to avoid a memory leakage.  */
-  tmphstbuf = malloc (hstbuflen);
+  if (!(tmphstbuf = malloc (hstbuflen))) return NULL;
+  hostbuf=(struct hostent*)tmphstbuf;
 
-  while ((res = gethostbyname2_r (host, AF,&hostbuf, tmphstbuf, hstbuflen,
+  while ((res = gethostbyname2_r (host, AF, &hostbuf, tmphstbuf+hostentsize, hstbuflen-hostentsize,
 				  &hp, &herr)) == ERANGE)
     {
       /* Enlarge the buffer.  */

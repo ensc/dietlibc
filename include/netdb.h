@@ -13,8 +13,7 @@
 #define	_PATH_SERVICES		"/etc/services"
 
 /* Description of data base entry for a single service.  */
-struct servent
-{
+struct servent {
   char *s_name;			/* Official service name.  */
   char **s_aliases;		/* Alias list.  */
   int s_port;			/* Port number.  */
@@ -28,8 +27,7 @@ extern struct servent *getservbyname (const char *__name,
 extern struct servent *getservbyport (int __port, const char *__proto)
      __THROW;
 
-struct hostent
-{
+struct hostent {
   char *h_name;			/* Official name of host.  */
   char **h_aliases;		/* Alias list.  */
   int h_addrtype;		/* Host address type.  */
