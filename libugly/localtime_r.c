@@ -19,7 +19,7 @@ struct tm* localtime_r(const time_t* t, struct tm* r) {
   struct timezone tz;
   gettimeofday(0, &tz);
   timezone=tz.tz_minuteswest*60L;
-  tmp=*t-timezone;
+  tmp=*t+timezone;
 #endif
   return gmtime_r(&tmp,r);
 }

@@ -89,7 +89,8 @@ time_t __tzfile_map(time_t t, int *isdst) {
 /*      printf("(%lu,%d,%d)\n",ntohl(*(int*)tmp),tmp[4],tmp[5]); */
       *isdst=tmp[4];
       tzname[0]=tz+tmp[5];
-      return t+(timezone=__myntohl(tmp));
+      timezone=-(__myntohl(tmp));
+      return t-timezone;
     }
   }
   return t;
