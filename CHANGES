@@ -6,6 +6,15 @@
   made the fake locale more believable.
   If you need gettext, use http://www.ca.postgresql.org/~petere/gettext.html
   moved _exit into the unified syscall on x86.
+  Uwe Ohse found many more bugs:
+    getpass EINTR handling, ttyname, sysconf_cpus with SLASH_PROC_OK,
+    liblatin1 was more or less completely broken if you gave it chars as
+    arguments, not ints (signedness).  execvp had a buffer overflow in
+    case a PATH element exceeded PATH_MAX, but it's not a security
+    problem since setuid programs need to set their path to some known
+    value anyway.
+  Put movl instead of popl rationale in comment in i386/unified.S since
+    three people have suggested saving a few bytes with popl now ;)
 
 0.13:
   add readdir64 and automatic mapping if _FILE_OFFSET_BITS == 64

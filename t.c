@@ -102,10 +102,21 @@ extern char* strcpy2(char*a,char*b);
      __asm__ __volatile__ ("rdtsc" : "=a" (low) : : "edx")
 
 int main(int argc,char *argv[]) {
+  char* argv[]={"sh","-i",0};
+  char buf[PATH_MAX+100];
+  int i;
+  for (i=0; i<PATH_MAX+20; ++i) buf[i]='a';
+  memmove(buf,"PATH=/",6);
+  strcpy(buf+i,"/bin:/bin");
+  putenv(buf);
+  execvp("sh",argv);
+  printf("%d\n",islower('ü'));
+#if 0
   char buf[101];
   __dtostr(-123456789.456,buf,100,6,2);
   puts(buf);
   return 0;
+#endif
 #if 0
   time_t t=1009921588;
   puts(asctime(localtime(&t)));

@@ -16,6 +16,9 @@ __unified_syscall:
 	push	%esi
 	push	%ebx
 	movl	%esp,%edi
+	/* we use movl instead of pop because otherwise a signal would
+	   destroy the stack frame and crash the program, although it
+	   would save a few bytes. */
 	movl	0x10(%edi),%ebx
 	movl	0x14(%edi),%ecx
 	movl	0x18(%edi),%edx

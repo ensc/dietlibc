@@ -12,7 +12,7 @@
 /* 128 or 2048 bytes buffer size? */
 /* #define WANT_SMALL_STDIO_BUFS */
 
-/* this is only for meaningful for ttyname so far */
+/* this is only for meaningful for ttyname and sysconf_cpus so far */
 #define SLASH_PROC_OK 1
 
 /* use errno_location instead of errno */

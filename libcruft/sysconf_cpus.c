@@ -1,6 +1,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <errno.h>
+#include "dietfeatures.h"
 
 /*
  * by Olaf Dreesen
@@ -13,6 +14,7 @@
  * default	->	processor\t: <cpunr>\n	(one per cpu)
  */
 
+#ifdef SLASH_PROC_OK
 int __sc_nr_cpus() {
 #if defined(__arm__)
   return 1;
@@ -53,3 +55,8 @@ int __sc_nr_cpus() {
   }
 #endif
 }
+#else
+int __sc_nr_cpus() {
+  return 1;	/* kludge kludge ;-) */
+}
+#endif

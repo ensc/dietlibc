@@ -3,6 +3,17 @@
 #include <limits.h>
 #include <fcntl.h>
 #include <string.h>
+#include <errno.h>
+
+static inline int _tcsetattr(int fd,int optional,struct termios *termios_p) {
+  int tmp;
+  for (;;) {
+    if ((tmp=tcsetattr(fd,optional,termios_p)))
+      if (errno==EINTR) continue;
+    break;
+  }
+  return tmp;
+}
 
 char *getpass(const char* prompt) {
   struct termios old,tmp;
@@ -13,20 +24,21 @@ char *getpass(const char* prompt) {
   if (!tcgetattr(in,&old)) {
     tmp=old;
     tmp.c_lflag &= ~(ECHO|ISIG);
-    tcsetattr(in,TCSAFLUSH,&tmp);
+    _tcsetattr(in,TCSAFLUSH,&tmp);
   }
   write(out,prompt,strlen(prompt));
   {
     int nread,ofs=0;
     for (;;) {
-      nread=read(in,buf+ofs,PASS_MAX-ofs);
-      if (nread<0) {
+      nread=read(in,buf+ofs,1);
+      if (nread<=0) {
+	if (errno==EINTR) continue;
 	buf[ofs]=0;
 	break;
       } else if (ofs+nread>=PASS_MAX) {
 	buf[PASS_MAX-1]=0;
 	break;
-      } else if (buf[ofs+nread-1]=='\n') {
+      } else if (buf[ofs]=='\n') {
 	buf[ofs+nread-1]=0;
 	break;
       }
@@ -34,7 +46,7 @@ char *getpass(const char* prompt) {
     }
     write(out,"\n",1);
   }
-  tcsetattr(in,TCSAFLUSH,&old);
+  _tcsetattr(in,TCSAFLUSH,&old);
   if (doclose) close(in);
   return buf;
 }

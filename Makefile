@@ -302,7 +302,7 @@ fclose.o $(OBJDIR)/fdglue.o $(OBJDIR)/fflush.o $(OBJDIR)/fgetc.o $(OBJDIR)/fputc
 strcasecmp.o $(OBJDIR)/strcat.o $(OBJDIR)/strchr.o $(OBJDIR)/strcmp.o $(OBJDIR)/strcpy.o $(OBJDIR)/strlen.o $(OBJDIR)/strncasecmp.o $(OBJDIR)/strncat.o $(OBJDIR)/strrchr.o: dietfeatures.h
 
 # these depend on dietfeatures.h for /proc
-$(OBJDIR)/ttyname.o: dietfeatures.h
+$(OBJDIR)/ttyname.o $(OBJDIR)/sysconf_cpus.o: dietfeatures.h
 
 # these depend on dietfeatures.h for WANT_TZFILE_PARSER
 $(OBJDIR)/localtime_r.o: dietfeatures.h

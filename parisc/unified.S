@@ -19,6 +19,11 @@
 .global __unified_syscall
 .type __unified_syscall,@function
 
+.globl _exit
+.weak exit
+_exit:
+exit:
+        ldi 1, %r20
 __unified_syscall:
 	be,l 0x100(%sr2, %r0), %sr0, %r31
 	nop

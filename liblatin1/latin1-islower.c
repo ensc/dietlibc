@@ -1,5 +1,6 @@
 #include <ctype.h>
 
 int islower(int c) {
-  return (c>='a' && c<='z') || (c>=223 && c<=255 && c!=247);
+  unsigned char x=c&0xff;
+  return (x>='a' && x<='z') || (x>=223 && x<=255 && x!=247);
 }
