@@ -3,14 +3,24 @@
 #include <sys/wait.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <errno.h>
+
+#include <sched.h>
+#include <sys/resource.h>
 
 #include <stdio.h>
 #include "thread_internal.h"
 
 static struct _pthread_descr_struct threads[PTHREAD_THREADS_MAX];
-static int _max_used_thread_id=2;
+static int _max_used_thread_id=1;
 pthread_once_t __thread_inited;
 
+static struct _pthread_fastlock __manager_thread_signal_lock = {0};
+static _pthread_descr __manager_thread_signal_lock_owner = 0;
+static struct _pthread_fastlock __manager_thread_data_lock = {1};
+static struct _pthread_fastlock __manager_thread_data_go_lock = {1};
+
+//#define DEBUG
 
 /* find thread */
 int __find_thread_id(int pid)
@@ -49,6 +59,21 @@ _pthread_descr __thread_self()
     return threads+i;
 }
 
+/* allocate a thread slot */
+_pthread_descr __thread_get_free()
+{
+  int i;
+
+  for (i=0; i<PTHREAD_THREADS_MAX; i++)
+    if (threads[i].pid==0)
+      if (!(__testandset(&threads[i].pid))) { /* atomic get slot :) */
+	if (i>=_max_used_thread_id) _max_used_thread_id=i+1;
+	return threads+i;
+      }
+
+  return 0;
+}
+
 /* sleep a little (reschedule for this time) */
 void __thread_wait_some_time()
 {
@@ -58,10 +83,23 @@ void __thread_wait_some_time()
   nanosleep(&reg,0);
 }
 
-/* clean a thread struct */
-static void __thread_cleanup(_pthread_descr th)
+/* cleanup a thread struct */
+void __thread_cleanup(_pthread_descr th)
 {
+  /* lib provided stack should be freed */
   if (!(th->userstack)) free(th->stack_begin);
+
+  /* hopefully a deadlock prevention */
+  if (th->manager_lock) {
+    if (th->manager_lock->__spinlock)  {
+      if (__manager_thread_signal_lock_owner==th) {
+	/* Ups thread exited in signal_manager_thread and still has the lock */
+	__pthread_unlock(th->manager_lock);
+      }
+    }
+  }
+
+  /* an other thread has joined this on */
   if (th->joined) {
     th->joined->retval=th->retval;
     th->joined->join=0;
@@ -81,46 +119,32 @@ static void __thread_cancel_handler(int sig)
   signal( SIGHUP, __thread_cancel_handler );
 }
 
-/* kill ALL threads */
+/* kill ALL threads / other then prime task and manager thread */
 static void __kill_all_threads()
 {
   int i;
 
-  for (i=1; i<_max_used_thread_id; i++) {
+  for (i=2; i<_max_used_thread_id; i++) {
     if (threads[i].pid>1) {
-/*      printf("CANCEL ! %d\n",threads[i].pid); */
+#ifdef DEBUG
+      printf("CANCEL ! %d\n",threads[i].pid);
+#endif
       threads[i].canceled=1;
-      sched_yield();
+      kill(threads[i].pid, SIGHUP);	/* cancel thread */
     }
   }
 
   __thread_wait_some_time();
 
-  for (i=1; i<_max_used_thread_id; i++) {
+  for (i=2; i<_max_used_thread_id; i++) {
     if (threads[i].pid>1) {
 #ifdef DEBUG
       printf("KILL ! %d\n",threads[i].pid);
 #endif
-      kill(threads[i].pid, SIGTERM);
-      sched_yield();
+      kill(threads[i].pid, SIGTERM);	/* KILL thread */
     }
   }
 
-}
-
-/* allocate a thread slot */
-_pthread_descr __thread_get_free()
-{
-  int i;
-
-  for (i=0; i<PTHREAD_THREADS_MAX; i++)
-    if (threads[i].pid==0)
-      if (!(__testandset(&threads[i].pid))) { // atomic get slot :)
-	if (i>=_max_used_thread_id) _max_used_thread_id=i+1;
-	return threads+i;
-      }
-
-  return 0;
 }
 
 /* support for manager */
@@ -128,13 +152,16 @@ static void *__mthread_starter(void *arg)
 {
   _pthread_descr td = (_pthread_descr)arg;
   int limit = td->stack_size-4096;
+
+  /* just to be sure */
   td->pid=getpid();
 
-  signal(SIGTERM, SIG_DFL);
+  /* signal handling for a thread */
+  signal(SIGTERM, _exit);
   signal(SIGCHLD, SIG_DFL);
   signal(SIGHUP, __thread_cancel_handler );
 
-  /* limit stack so that we NEVER have worry */
+  /* limit stack so that we NEVER have to worry */
   setrlimit(RLIMIT_STACK, (struct rlimit *)(&limit));
 
   /* set scheduler */
@@ -156,12 +183,14 @@ static void *__mthread_starter(void *arg)
   printf("end starter %d, retval %8p\n", td->pid, td->retval);
 #endif
 
+#if 0
   /* wake joined thread and put retval */
   if (td->joined) {
     td->joined->retval=td->retval;
     td->joined->join=0;
     td->joined=0;
   }
+#endif
 
   return 0;
 }
@@ -169,12 +198,7 @@ static void *__mthread_starter(void *arg)
 
 /* manager thread */
 static char __manager_thread_stack[12*1024];
-static struct _pthread_fastlock __manager_thread_signal_lock = {0};
-static struct _pthread_fastlock __manager_thread_data_lock = {1};
-static struct _pthread_fastlock __manager_thread_data_go_lock = {1};
-
 static _pthread_descr __manager_thread_data;
-
 static void __manager_SIGCHLD(int sig)
 {
   int pid, status, i;
@@ -183,7 +207,7 @@ static void __manager_SIGCHLD(int sig)
     pid = waitpid (-1, &status, WNOHANG);
     if (pid <= 0) break;
 
-    for (i=0; i<PTHREAD_THREADS_MAX; i++) {
+    for (i=0; i<_max_used_thread_id; i++) {
       if (threads[i].pid==pid) {
 	__thread_cleanup(threads+i);
 	break;
@@ -207,10 +231,12 @@ static void* __manager_thread(void *arg)
 
   sigaction(SIGCHLD, &sig_action_chld, 0);
   signal(SIGTERM, __manager_SIGTERM);
+  signal(SIGHUP, SIG_IGN);
 
   while(1) {
     do {
       __thread_wait_some_time();
+      if (getppid()<0) __manager_SIGTERM(0);
     } while (__pthread_trylock(&__manager_thread_data_lock));
 
     __manager_thread_data->pid =
@@ -227,18 +253,18 @@ int signal_manager_thread(_pthread_descr td)
 {
   _pthread_descr this = __thread_self();
 
-  this->manager_lock=&__manager_thread_signal_lock;
+  this->manager_lock=&__manager_thread_signal_lock;	/* lock sender in use */
   __pthread_lock(&__manager_thread_signal_lock);
+  __manager_thread_signal_lock_owner=this;
 
   __manager_thread_data=td;
-  __pthread_unlock(&__manager_thread_data_lock);
+  __pthread_unlock(&__manager_thread_data_lock);	/* signal manager to start */
 
-  __pthread_lock(&__manager_thread_data_go_lock);
+  __pthread_lock(&__manager_thread_data_go_lock);	/* wait for manager */
 
-  __pthread_unlock(&__manager_thread_signal_lock);
-
+  __pthread_unlock(&__manager_thread_signal_lock);	/* unlock */
   this->manager_lock=0;
-  sched_yield();
+
   return td->pid;
 }
 
@@ -258,7 +284,9 @@ static void __thread_main_exit()
     printf("EXIT ! %d\n",getpid());
 #endif
 
+  /* stop ALL threads */
   kill(threads[1].pid, SIGTERM);
+  __thread_wait_some_time();
   __kill_all_threads();
 }
 
@@ -275,6 +303,7 @@ void __thread_init()
 
   threads[0].pid = getpid();
 
+  ++_max_used_thread_id;
   threads[1].stack_size=sizeof(__manager_thread_stack);
   threads[1].stack_addr=&__manager_thread_stack[sizeof(__manager_thread_stack)];
   threads[1].userstack=1;

@@ -66,6 +66,8 @@ _pthread_descr __get_thread_struct(int id);
 _pthread_descr __thread_get_free();
 _pthread_descr __thread_self();
 
+void __thread_cleanup(_pthread_descr th);
+
 void __thread_wait_some_time();
 
 int __thread_create(void *(*__start_routine) (void *),

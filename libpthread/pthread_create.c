@@ -58,8 +58,11 @@ int pthread_create (pthread_t *thread, const pthread_attr_t *attr,
     td->stack_size	= attr->__stacksize;
 
     ret = signal_manager_thread(td);
+
     if (ret>1)
       *thread=ret;
+    else
+      __thread_cleanup(td);
   }
   else
     (*(__errno_location()))=EAGAIN;
