@@ -131,9 +131,9 @@ int setlogmask(int mask)
   return old;
 }
 
-static void sigpipe_handler(int signo)
+static void cancel_handler(void *ptr)
 {
-  closelog_intern();
+  pthread_mutex_unlock(&syslog_mutex);
 }
 
 void vsyslog(int priority, const char *format, void *arg_ptr)

@@ -134,6 +134,13 @@ int pthread_setcanceltype(int type, int *oldtype);
 
 void pthread_testcancel(void);
 
+/* CLEANUP */
+
+void pthread_cleanup_push(void (*routine)(void*), void *arg);
+void pthread_cleanup_pop (int execute);
+
+void pthread_cleanup_push_defer_np(void (*routine)(void *), void *arg);
+void pthread_cleanup_pop_restore_np(int execute);
 
 /* THREADS */
 int pthread_create (pthread_t *__thread,
