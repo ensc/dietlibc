@@ -1,4 +1,5 @@
 
 LIBOBJ+=
+LIBMATH=cos.o exp.o log.o sin.o sqrt.o tan.o
 CFLAGS+=-march=i386 -mcpu=i386 -Os -fomit-frame-pointer
 VPATH:=i386:syscalls.s:$(VPATH)

@@ -41,7 +41,7 @@ HOME=$(shell pwd)
 
 all: $(OBJDIR) $(OBJDIR)/start.o $(OBJDIR)/dyn_start.o $(OBJDIR)/dyn_stop.o \
 	$(OBJDIR)/dietlibc.a $(OBJDIR)/liblatin1.a $(OBJDIR)/librpc.a $(OBJDIR)/libpthread.a \
-	$(OBJDIR)/diet $(OBJDIR)/elftrunc
+	$(OBJDIR)/libm.a $(OBJDIR)/diet $(OBJDIR)/elftrunc
 
 CFLAGS=-pipe -nostdinc
 CROSS=
@@ -58,6 +58,7 @@ LIBSTDIOOBJ=$(patsubst libstdio/%.c,$(OBJDIR)/%.o,$(wildcard libstdio/*.c))
 LIBCRUFTOBJ=$(patsubst libcruft/%.c,$(OBJDIR)/%.o,$(wildcard libcruft/*.c))
 LIBCRYPTOBJ=$(patsubst libcrypt/%.c,$(OBJDIR)/%.o,$(wildcard libcrypt/*.c))
 LIBSHELLOBJ=$(patsubst libshell/%.c,$(OBJDIR)/%.o,$(wildcard libshell/*.c))
+LIBMATHOBJ=$(patsubst %,$(OBJDIR)/%,$(LIBMATH))
 
 LIBRPCOBJ=$(patsubst librpc/%.c,$(OBJDIR)/%.o,$(wildcard librpc/*.c))
 LIBREGEXOBJ=$(patsubst libregex/%.c,$(OBJDIR)/%.o,$(wildcard libregex/*.c))
@@ -116,6 +117,9 @@ $(OBJDIR)/liblatin1.a: $(LIBLATIN1_OBJS)
 
 $(OBJDIR)/libpthread.a: $(LIBPTHREAD_OBJS) dietfeatures.h
 	$(CROSS)ar cru $@ $(LIBPTHREAD_OBJS)
+
+$(OBJDIR)/libm.a: $(LIBMATHOBJ)
+	$(CROSS)ar cru $@ $(LIBMATHOBJ)
 
 $(OBJDIR)/libdietc.so: $(OBJDIR)/dietlibc.a
 	$(CROSS)ld -whole-archive -shared -o $@ $^

@@ -92,4 +92,6 @@ void setnetent(int stayopen) __THROW;
 struct netent *getnetbyname(const char *name) __THROW;
 struct netent *getnetent(void) __THROW;
 
+void herror(const char *s) __THROW;
+
 #endif

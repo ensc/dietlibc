@@ -69,6 +69,7 @@
   Squeeze a few bytes off the is* routines, courtesy of Peter Jones.
   Fix fseek return value.
   Add dirname and basename.
+  Add a few i386 math routines contributed by Frank Klemm.
 
 0.10:
   update getpagesize.
