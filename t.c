@@ -95,6 +95,7 @@ extern char* strcpy2(char*a,char*b);
      __asm__ __volatile__ ("rdtsc" : "=a" (low) : : "edx")
 
 int main(int argc,char *argv[]) {
+#if 0
   FILE *f;
   int i;
   char addr6p[8][5];
@@ -108,8 +109,8 @@ int main(int argc,char *argv[]) {
       printf("i=%d\n",i);
     }
   }
-
-#if 0
+#endif
+#if 1
   printf("%s\n",crypt("test","$1$"));
 #endif
 #if 0

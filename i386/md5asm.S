@@ -256,7 +256,7 @@ MD5Update:
 	leal	BUFFER, %ecx
 	pushl	%ecx
 	push	%ebx
-	call	MD5Transform
+	call	__MD5Transform
 
 //      len = (inputBytes - partLen) / 64;
 
@@ -269,7 +269,7 @@ MD5Update:
 	pushl	%ecx
 	pushl	%esi
 	pushl	%ebx
-	call	MD5Transform
+	call	__MD5Transform
 	addl	$24,%esp
 	
 //	i = partLen + 64 * len;
