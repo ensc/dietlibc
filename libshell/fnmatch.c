@@ -12,6 +12,7 @@ static int match(char c,char d,int flags) {
 
 int fnmatch(const char *pattern, const char *string, int flags) {
   if (*string==0) {
+    while (*pattern=='*') ++pattern;
     return (!!*pattern);
   }
   if (*string=='.' && *pattern!='.' && (flags&FNM_PERIOD)) {

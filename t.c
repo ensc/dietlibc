@@ -50,6 +50,7 @@ extern double atof(const char *c);
 
 
 int main(int argc,char *argv[]) {
+#if 0
   struct hostent * host;
   struct in_addr i;
 
@@ -66,6 +67,7 @@ int main(int argc,char *argv[]) {
     address = *((struct in_addr *) (host->h_addr_list)[0]);
     printf("addr %s\n", inet_ntoa(address));
   }
+#endif
 #if 0
   struct msgbuf bla;
   bla.mtype=0;
@@ -93,7 +95,8 @@ int main(int argc,char *argv[]) {
   printf("%d\n",setenv("foo","bar",1));
   execlp("printenv","printenv","foo",0);
 #endif
-#if 0
+#if 1
+  printf("%d\n",fnmatch("*c*","bin",0));
   if (!fnmatch("s*", "sub", 0))
     printf("s* sub\n");
   if (!fnmatch("s*", "glob", 0))
