@@ -234,4 +234,12 @@ char * cuserid(char * string); /* ugh! */
 
 #define   _POSIX_VERSION  199506L
 
+#define F_ULOCK 0	/* Unlock a previously locked region.  */
+#define F_LOCK  1	/* Lock a region for exclusive use.  */
+#define F_TLOCK 2	/* Test and lock a region for exclusive use.  */
+#define F_TEST  3	/* Test a region for other processes locks.  */
+
+extern int lockf (int __fd, int __cmd, off_t __len) __THROW;
+extern int lockf64 (int __fd, int __cmd, off64_t __len) __THROW;
+
 #endif
