@@ -72,4 +72,7 @@ double copysign(double value, double sign) __attribute__((__const__));
    ((union { unsigned __l __attribute__((__mode__(__DI__))); double __d; })   \
     { __l: 0x000000007ff00000ULL }).__d)
 
+#ifdef _GNU_SOURCE
+void sincos(double x, double* sinx, double* cosx);
+#endif
 #endif
