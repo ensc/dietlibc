@@ -20,6 +20,9 @@ void _dl_free_handle(struct _dl_handle* dh) {
   memset(dh,0,sizeof(struct _dl_handle));
   dh->next=_dl_free_list;
   _dl_free_list=dh;
+#ifdef DEBUG
+//  printf("_dl_free_handle: %08x\n",dh);
+#endif
 }
 
 struct _dl_handle* _dl_get_handle() {
@@ -51,11 +54,13 @@ struct _dl_handle* _dl_get_handle() {
 }
 
 struct _dl_handle* _dl_find_lib(const char* name) {
-  if (_dl_root_handle) {
-    struct _dl_handle* tmp;
-    for (tmp=_dl_root_handle;tmp;tmp=tmp->next) {
-      if (!strcmp(tmp->name,name))
-	return tmp;
+  if (name) {
+    if (_dl_root_handle) {
+      struct _dl_handle* tmp;
+      for (tmp=_dl_root_handle;tmp;tmp=tmp->next) {
+	if (!tmp->name) continue;
+	if (!strcmp(tmp->name,name)) return tmp;
+      }
     }
   }
   return 0;

@@ -14,7 +14,7 @@ struct _dl_handle {
   int		flag_global;
 
   /* basic */
-  void *	mem_base;	/* base address of maped *.so */
+  char *	mem_base;	/* base address of maped *.so */
   unsigned long mem_size;	/* len of mem block */
   unsigned long lnk_count;	/* reference count (other libraries) */
   unsigned long img_off;	/* */

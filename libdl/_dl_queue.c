@@ -3,8 +3,8 @@
 
 #define MAX_QUEUE 64
 
-static int _dl_start;
-static int _dl_stop;
+static int _dl_start=0;
+static int _dl_stop=0;
 
 static struct {
   const char* name;
