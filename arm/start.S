@@ -36,8 +36,10 @@ _start:
 
 @
 @ The exit status from main() is already in r0.
-@ All we need to do now is drop through to the exit syscall.
+@ All we need to do now is drop through to the exit library (if atexit is
+@ used) or syscall.
 @
+	bl	exit
 
 exit:
 _exit:
