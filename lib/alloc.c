@@ -178,7 +178,7 @@ void* malloc(size_t size) __attribute__((weak,alias("_alloc_libc_malloc")));
 
 void *calloc(size_t nmemb, size_t _size) {
   register size_t size=_size*nmemb;
-  if (size/nmemb!=_size) {
+  if (nmemb && size/nmemb!=_size) {
     (*__errno_location())=ENOMEM;
     return 0;
   }
