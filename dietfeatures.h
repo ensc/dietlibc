@@ -12,8 +12,13 @@
 /* 128 or 2048 bytes buffer size? */
 /* #define WANT_SMALL_STDIO_BUFS */
 
+/* want fread to read() directly if size of data is larger than buffer?
+ * This costs a few bytes but is worth it if the application is already
+ * buffering. */
+#define WANT_FREAD_OPTIMIZATION
+
 /* this is only for meaningful for ttyname and sysconf_cpus so far */
-#define SLASH_PROC_OK 1
+#define SLASH_PROC_OK
 
 /* use errno_location instead of errno */
 #define WANT_THREAD_SAFE

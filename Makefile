@@ -351,6 +351,9 @@ $(OBJDIR)/netent.o $(OBJDIR)/system.o: dietfeatures.h
 # these depend on dietfeatures.h for WANT_CRYPT_MD5
 $(OBJDIR)/crypt.o: dietfeatures.h
 
+# these depend on dietfeatures.h for WANT_FREAD_OPTIMIZATION
+$(OBJDIR)/fread.o $(OBJDIR)/fwrite.o: dietfeatures.h
+
 # these depend on dietfeatures.h for WANT_DYNAMIC
 $(OBJDIR)/start.o $(OBJDIR)/dyn_start.o $(OBJDIR)/dyn_stop.o: dietfeatures.h
 

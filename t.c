@@ -367,7 +367,7 @@ int main(int argc,char *argv[]) {
     if (a!=b) printf("%d: %d %d\n",i,a,b);
   }
 #endif
-#if 1
+#if 0
   char* name;
   int ptyfd,ttyfd;
   int i=openpty(&ptyfd,&ttyfd,0,0,0);
