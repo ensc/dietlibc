@@ -109,7 +109,7 @@ void *_dl_open(const char*pathname, int fd, int flag)
     ret = dl_test;
   }
   else if (ld_nr==2) { /* aem... yes Quick & Really Dirty / for the avarage 99% */
-    //unsigned long text_addr = _ELF_DWN_ROUND(ps,ld[0]->p_vaddr);
+    unsigned long text_addr = _ELF_DWN_ROUND(ps,ld[0]->p_vaddr);
     unsigned long text_offset = _ELF_DWN_ROUND(ps,ld[0]->p_offset);
     unsigned long text_off = _ELF_RST_ROUND(ps,ld[0]->p_offset);
     unsigned long text_size = _ELF_UP_ROUND(ps,ld[0]->p_memsz+text_off);
@@ -145,6 +145,9 @@ void *_dl_open(const char*pathname, int fd, int flag)
 
     dl_test->mem_base=m;
     dl_test->lnk_count=0;
+
+    dl_test->img_off = text_addr;
+
     ret = dl_test;
   }
 
@@ -156,6 +159,9 @@ void *_dl_open(const char*pathname, int fd, int flag)
     void* jmprel=0;
     int pltreltype=0;
     int pltrelsize=0;
+    int rel=0;
+    int relent=0;
+    int relsize=0;
 
     ret->flag_global = flag&RTLD_GLOBAL;
 
@@ -173,6 +179,7 @@ void *_dl_open(const char*pathname, int fd, int flag)
 	ret->dyn_str_tab = (char*)(m+dyn_tab[i].d_un.d_ptr);
 	printf("_dl_open have dyn_str_tab @ %08lx\n",(long)ret->dyn_str_tab);
       }
+
       if (dyn_tab[i].d_tag==DT_FINI) {
 	ret->fini = (void(*)(void))(m+dyn_tab[i].d_un.d_val);
 	printf("_dl_open have fini @ %08lx\n",(long)ret->fini);
@@ -181,6 +188,7 @@ void *_dl_open(const char*pathname, int fd, int flag)
 	init = (void(*)(void))(m+dyn_tab[i].d_un.d_val);
 	printf("_dl_open have init @ %08lx\n",(long)init);
       }
+
       if (dyn_tab[i].d_tag==DT_PLTGOT) {
 	got=(unsigned long*)(m+dyn_tab[i].d_un.d_val);
 	ret->got=got;
@@ -199,19 +207,51 @@ void *_dl_open(const char*pathname, int fd, int flag)
 	ret->plt_rel=jmprel;
 	printf("_dl_open have plt @ %08lx\n",(long)jmprel);
       }
+
+      if (dyn_tab[i].d_tag==DT_REL) {
+	rel=dyn_tab[i].d_un.d_val;
+	printf("_dl_open have rel ?!? @ %08lx\n",(long)rel);
+      }
+      if (dyn_tab[i].d_tag==DT_RELENT) {
+	relent=dyn_tab[i].d_un.d_val;
+	printf("_dl_open have relent ?!? @ %08lx\n",(long)relent);
+      }
+      if (dyn_tab[i].d_tag==DT_RELSZ) {
+	relsize=dyn_tab[i].d_un.d_val;
+	printf("_dl_open have relsize ?!? @ %08lx\n",(long)relsize);
+      }
+
+      if (dyn_tab[i].d_tag==DT_RELSZ) {
+	printf("_dl_open have textrel ?!?\n");
+      }
     }
     printf("_dl_open post dynamic scan\n");
 
     if (!got) {
+      got=dlsym(ret,"_GLOBAL_OFFSET_TABLE_");
+      ret->got=got;
+      printf("found a GOT ? @ %08lx\n",got);
+    }
+
+    if (got) {
+      /* GOT */
+      got[0]+=(unsigned long)m;	/* reloc dynamic pointer */
+      got[1]=(unsigned long)dl_test;
+      got[2]=(unsigned long)(_dl_jump);	/* sysdep jump to _dl_rel */
+      /* */
+    }
+    else {
       printf("_dl_open not PIC dynamic -> SUE USER ! \n");
-      if (ret) _dl_get_handle(ret);
+      if (ret) _dl_free_handle(ret);
       return 0;
     }
-    /* GOT */
-    got[0]+=(unsigned long)m;	/* reloc dynamic pointer */
-    got[1]=(unsigned long)dl_test;
-    got[2]=(unsigned long)(_dl_jump);	/* sysdep jump to _dl_rel */
-    /* */
+
+    if (rel) {
+      printf("_dl_open try to relocate a non PIC dynamic ! \n");
+      _dl_relocate(ret,rel,relsize/relent);
+
+    }
+
 
     if (pltreltype == DT_REL) {
       Elf32_Rel *tmp = jmprel;
@@ -219,7 +259,7 @@ void *_dl_open(const char*pathname, int fd, int flag)
       for (;(char*)tmp<(((char*)jmprel)+pltrelsize);(char*)tmp=((char*)tmp)+sizeof(Elf32_Rel)) {
 	*((unsigned long*)(m+tmp->r_offset))+=(unsigned long)m;
 	printf("_dl_open rel @ %08x with type %d -> %d\n",tmp->r_offset,ELF32_R_TYPE(tmp->r_info),ELF32_R_SYM(tmp->r_info));
-	printf("_dl_open -> %08x\n",*((unsigned long*)(m+tmp->r_offset)));
+	printf("_dl_open -> %08lx\n",*((unsigned long*)(m+tmp->r_offset)));
       }
     }
     if (pltreltype == DT_RELA) {

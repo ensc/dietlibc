@@ -2,11 +2,15 @@
 
 #include "_dl_int.h"
 
-int _dl_apply_relocate(struct _dl_handle* dh, Elf32_Rel *rel, Elf32_Addr v) {
+int _dl_apply_relocate(struct _dl_handle* dh, Elf32_Rel *rel) {
   int ret=0;
-  Elf32_Addr *loc = (Elf32_Addr *)(dh->mem_base+rel->r_offset );
+  Elf32_Addr v = (Elf32_Addr) dh->mem_base;
+  Elf32_Addr *loc;
 
-  printf("_dl_apply_relocate %d\n",ELF32_R_TYPE(rel->r_info));
+  rel = (void*)rel+(long)v;
+  loc = (Elf32_Addr *)(v+rel->r_offset);
+
+  printf("_dl_apply_relocate %d @ %08lx\n",ELF32_R_TYPE(rel->r_info),(unsigned long)loc);
 
   switch (ELF32_R_TYPE(rel->r_info)) {
   case R_386_NONE:
@@ -23,7 +27,7 @@ int _dl_apply_relocate(struct _dl_handle* dh, Elf32_Rel *rel, Elf32_Addr v) {
 
   case R_386_GLOB_DAT:
   case R_386_JMP_SLOT:
-    *loc = v;
+    *loc = (unsigned long)_dl_sym(dh, ELF32_R_SYM(rel->r_info));
     break;
 
   case R_386_RELATIVE:
@@ -63,7 +67,7 @@ int _dl_apply_relocate(struct _dl_handle* dh, Elf32_Rel *rel, Elf32_Addr v) {
 int _dl_relocate(struct _dl_handle* dh, Elf32_Rel *rel, int num) {
   int i;
   for (i=0;i<num;i++) {
-//    _dl_apply_relocate(dh,rel,0);
+    _dl_apply_relocate(dh,rel+i);
   }
   return 0;
 }
