@@ -229,6 +229,7 @@ __unified_syscall:
 #include "../syscalls.s/setresgid32.S"
 #include "../syscalls.s/setreuid32.S"
 #include "../syscalls.s/setuid32.S"
+#include "../syscalls.s/vfork.S"
 
 /* so now this was the last u.s.c. */
 
