@@ -1,4 +1,5 @@
 #include "PIC.h"
+#include <stdlib.h>
 
 .data
 .align 4
@@ -28,7 +29,7 @@ random:
 #else
 .Lstore:movl	%eax,seed
 #endif
-	andl	$0x7FFF,%eax
+	andl	$RAND_MAX,%eax
 #ifdef __DYN_LIB
 	popl	%ebx
 #endif

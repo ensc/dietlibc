@@ -1,6 +1,8 @@
 #ifndef _STDLIB_H
 #define _STDLIB_H
 
+#ifndef __ASSEMBLER__
+
 #include <sys/cdefs.h>
 #include <sys/types.h>
 
@@ -34,14 +36,8 @@ int atoi(const char *nptr) __THROW;
 long int atol(const char *nptr) __THROW;
 double atof(const char *nptr) __THROW;
 
-#define EXIT_FAILURE 1
-#define EXIT_SUCCESS 0
-
 void exit(int status) __THROW __attribute__((noreturn));
 void abort(void) __THROW;
-
-/* warning: the rand() implementation of the diet libc really sucks. */
-#define RAND_MAX 32767
 
 extern int rand(void) __THROW;
 extern void srand(unsigned int seed) __THROW;
@@ -93,5 +89,13 @@ int grantpt (int fd) __THROW;
 int unlockpt (int fd) __THROW;
 char *ptsname (int fd) __THROW;
 #endif
+
+#endif
+
+#define EXIT_FAILURE 1
+#define EXIT_SUCCESS 0
+
+/* warning: the rand() implementation of the diet libc really sucks. */
+#define RAND_MAX 32767
 
 #endif
