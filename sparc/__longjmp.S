@@ -10,6 +10,7 @@
 
 .text
 .global __longjmp
+.type __longjmp,function
 __longjmp:
 	/* Store our arguments in global registers so we can still
 	   use them while unwinding frames and their register windows.  */

@@ -2,6 +2,7 @@
 
 .text
 .global __longjmp
+.type __longjmp,@function
 __longjmp:
 	movl 4(%esp), %ecx	/* User's jmp_buf in %ecx.  */
 	movl 8(%esp), %eax	/* Second argument is return value.  */

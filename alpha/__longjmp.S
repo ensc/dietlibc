@@ -6,6 +6,7 @@
 .align 2
 
 .global __longjmp
+.type __longjmp,@function
 __longjmp:
 	mov	$17, $0 	/* a1 -> v0 */
 
