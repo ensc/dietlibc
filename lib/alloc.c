@@ -5,6 +5,7 @@
 #include <linux/unistd.h>
 #include <asm/mman.h>
 #include <linux/errno.h>
+#include <pthread.h>
 
 #if 0
 #include <sys/mman.h>
@@ -49,14 +50,16 @@ typedef struct t_alloc_head {
 #define PAGE_ALIGN(s)	(((s)+MEM_BLOCK_SIZE-1)&(~(MEM_BLOCK_SIZE-1)))
 #define PAGE_ALIGNP(p)	((char*)PAGE_ALIGN((size_t)(p)))
 
-#define END_OF_BLOCK(p) ((alloc_head*)(((char*)(p))+((p)->size)))
-#define START_BLOCK(p)  ((alloc_head*)(((char*)(p))-sizeof(alloc_head)))
-#define START_DATA(p)   (((char*)(p))+sizeof(alloc_head))
-#define MIN_ALLOC(s)    (((((s)+sizeof(alloc_head)-1)/MEM_ALLOC_MIN)+1)*MEM_ALLOC_MIN)
+#define END_OF_BLOCK(p)	((alloc_head*)(((char*)(p))+((p)->size)))
+#define START_BLOCK(p)	((alloc_head*)(((char*)(p))-sizeof(alloc_head)))
+#define START_DATA(p)	(((char*)(p))+sizeof(alloc_head))
+#define MIN_ALLOC(s)	(((((s)+sizeof(alloc_head)-1)/MEM_ALLOC_MIN)+1)*MEM_ALLOC_MIN)
 
 /* freelist handler */
 static alloc_head base = {&base,0};
 static char *alloc_get_end = MEM_ALLOC_START;
+static pthread_mutex_t mutex_free;
+static pthread_mutex_t mutex_alloc;
 
 void free(void *ptr)
 {
@@ -65,6 +68,8 @@ void free(void *ptr)
   if (ptr==NULL) return;
 
   block=START_BLOCK(ptr);
+
+  pthread_mutex_lock(&mutex_free);
   prev=&base;
   for (p=prev->ptr ; ; prev=p, p=p->ptr)
   {
@@ -90,6 +95,7 @@ void free(void *ptr)
     prev->size += block->size;
     prev->ptr   = block->ptr;
   }
+  pthread_mutex_unlock(&mutex_free);
 }
 
 static void *alloc_get_mem(unsigned long size)
@@ -136,6 +142,7 @@ void *malloc(size_t size)
   /* needed MEM_ALLOC_MIN */
   need=MIN_ALLOC(size);
 
+  pthread_mutex_lock(&mutex_alloc);
   prev=&base;
   for (p=prev->ptr;;prev=p,p=p->ptr)
   {
@@ -165,13 +172,16 @@ void *malloc(size_t size)
       }
       p->ptr=p;		/* self-link */
 
+      pthread_mutex_unlock(&mutex_alloc);
       return (void*)START_DATA(p);
     }
     else if (p==&base)
     {
-      if ((p=alloc_get_mem(need))==NULL) return NULL;
+      if ((p=alloc_get_mem(need))==NULL) goto err_out;
     }
   }
+err_out:
+  pthread_mutex_unlock(&mutex_alloc);
   return NULL;
 }
 
@@ -206,7 +216,7 @@ void *realloc(void *ptr,size_t size)
 	}
 	return NULL;
       }
-      if (diff>0)
+      if (diff>=sizeof(alloc_head))
       {
 	tmp->size=need;
 	tf=END_OF_BLOCK(tmp);
