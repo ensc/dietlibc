@@ -1,5 +1,5 @@
 #ifndef _RESOLV_H
-#define	_RESOLV_H 1
+#define _RESOLV_H
 
 #include <sys/param.h>
 #include <sys/types.h>
@@ -107,13 +107,13 @@ int res_querydomain(const char *name, const char *domain,
       int anslen) __THROW;
 
 int res_mkquery(int op, const char *dname, int class,
-      int type, char *data, int datalen, struct rrec *newrr,
+      int type, char *data, int datalen, const unsigned char* newrr,
       char *buf, int buflen) __THROW;
 
 int res_send(const char *msg, int msglen, char *answer,
       int anslen) __THROW;
 
-int dn_comp(unsigned char *exp_dn, unsigned char *comp_dn,
+int dn_comp(unsigned char *msg, unsigned char *comp_dn,
       int length, unsigned char **dnptrs, unsigned char *exp_dn,
       unsigned char **lastdnptr) __THROW;
 
