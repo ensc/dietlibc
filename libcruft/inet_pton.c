@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <arpa/inet.h>
 #include <errno.h>
+#include "dietfeatures.h"
 
 static unsigned int scan_ip6(const char *s,char ip[16])
 {
@@ -91,7 +92,11 @@ int inet_pton(int AF, const char *CP, void *BUF) {
     if (CP[len=scan_ip6(CP,BUF)])
       return 0;
   } else {
+#ifdef WANT_THREAD_SAFE
+    *(__errno_location())=EAFNOSUPPORT;
+#else
     errno=EAFNOSUPPORT;
+#endif
     return -1;
   }
   return 1;

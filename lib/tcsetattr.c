@@ -3,7 +3,8 @@
 #include <sys/ioctl.h>
 #undef tcsetattr
 
-#include <asm/errno.h>
+#include "dietfeatures.h"
+#include <errno.h>
 
 extern int errno;
 
@@ -17,7 +18,11 @@ int tcsetattr(int fildes, int optional_actions, struct termios *termios_p)
   case TCSAFLUSH:
     return ioctl(fildes, TCSETSF, termios_p);
   default:
+#ifdef WANT_THREAD_SAFE
+    *(__errno_location()) = EINVAL;
+#else
     errno = EINVAL;
+#endif
     return -1;
   }
 }

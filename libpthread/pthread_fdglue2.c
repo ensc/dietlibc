@@ -14,7 +14,11 @@ FILE* __stdio_init_file(int fd) {
   FILE *tmp=(FILE*)malloc(sizeof(FILE));
   if (!tmp) {
     close(fd);
+#ifdef WANT_THREAD_SAFE
+    *(__errno_location())=ENOMEM;
+#else
     errno=ENOMEM;
+#endif
     return 0;
   }
   tmp->fd=fd;

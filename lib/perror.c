@@ -11,10 +11,14 @@ void perror(const char *s) {
   register char *message="[unknown error]";
   write(2,s,strlen(s));
   write(2,": ",2);
-  if (errno>=0 && errno<sys_nerr)
 #ifdef WANT_THREAD_SAFE
-    message=sys_errlist[*__errno_location()];
+  {
+    int *err = __errno_location();
+  if (*err>=0 && *err<sys_nerr)
+    message=sys_errlist[*err];
+  }
 #else
+  if (errno>=0 && errno<sys_nerr)
     message=sys_errlist[errno];
 #endif
   write(2,message,strlen(message));

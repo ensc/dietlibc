@@ -29,7 +29,11 @@ int __ent_start(const char *pathname, struct __ent_state **st_ref)
 
 	st = calloc(1, sizeof(*st));
 	if (!st) {
+#ifdef WANT_THREAD_SAFE
+		*(__errno_location()) = ENOMEM;
+#else
 		errno = ENOMEM;
+#endif
 		return -1;
 	}
 
