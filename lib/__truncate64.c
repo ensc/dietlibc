@@ -13,7 +13,7 @@ int truncate64(int fd, loff_t o) {
   if ((tmp=__dietlibc_truncate64(fd,o))==-1) {
     if (errno!=ENOSYS) return -1;
     if (o>0x7fffffff) { errno=EOVERFLOW; return -1; }
-    return ftruncate(fd,o);
+    return truncate(fd,o);
   }
   return tmp;
 }
