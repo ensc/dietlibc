@@ -37,6 +37,9 @@
 * 2002/02/25:  Andre McCurdy <armccurdy@yahoo.co.uk>
 *   - MD5Update re-written in assembler (saves 12 bytes + lots of cycles :-)
 *
+* 2002/03/07:  Andre McCurdy <armccurdy@yahoo.co.uk>
+*   - _Finally_ fixed hashing from an unaligned buffer in all cases :-)
+*
 ******************************************************************************
 *
 * Notes:
@@ -57,82 +60,44 @@
    .align  2
 
     @ --
-    @ void MD5Init (MD5_CTX* ctx);
+    @ void MD5Init (MD5_CTX* context);
     @ --
 
 MD5Init:
 
     adr     r1, 1f                          @ r1 = base address of MD5InitData array
     ldmia   r1, { r1 - r3, r12 }            @ load 4 elements from MD5InitData array
-    stmia   r0, { r1 - r3, r12 }            @ store into MD5 Context->state[0..3]
+    stmia   r0, { r1 - r3, r12 }            @ store into MD5 context->state[0..3]
     mov     r1, #0
     str     r1, [r0, #0x10]                 @ initial count[0] = 0
     str     r1, [r0, #0x14]                 @ initial count[1] = 0
     mov     pc, lr                          @ return
 
-1: .word    0x67452301                      @ initial MD5 Context->state[0]
-   .word    0xefcdab89                      @ initial MD5 Context->state[1]
-   .word    0x98badcfe                      @ initial MD5 Context->state[2]
-   .word    0x10325476                      @ initial MD5 Context->state[3]
+1: .word    0x67452301                      @ initial MD5 context->state[0]
+   .word    0xefcdab89                      @ initial MD5 context->state[1]
+   .word    0x98badcfe                      @ initial MD5 context->state[2]
+   .word    0x10325476                      @ initial MD5 context->state[3]
 
 
     @ --
-    @ void MD5Update (MD5_CTX* ctx, const uint8_t* buf, signed int len);
-    @
-    @ Performs alignment checking and correction before passing input data
-    @ on to __MD5Update which does the real work.
-    @ If 'buf' is known to always be correctly aligned, this wrapper
-    @ function may be skipped.
+    @ void MD5Update (MD5_CTX* context, const uint8_t* buf, signed int len);
     @ --
-
-1:  stmdb   sp!, { r4 - r7, lr }
-    mov     r4, r0                          @ r4 = ctx
-    mov     r5, r1                          @ r5 = buf
-    mov     r6, r2                          @ r6 = len
-    sub     sp, sp, #256                    @ create 256 byte temp buffer
-    cmp     r6, #0
-2:  addle   sp, sp, #256                    @ return temp buffer to stack
-    ldmleia sp!, { r4 - r7, pc }            @ return
-    cmp     r6, #256
-    movcc   r7, r6
-    movcs   r7, #256                        @ r7 = min(len, 256) == datalength
-    mov     r0, sp
-    mov     r1, r5
-    mov     r2, r7
-    bl      memcpy                          @ memcpy (temp, buf, datalength);
-    mov     r0, r4
-    mov     r1, sp
-    mov     r2, r7
-    bl      __MD5Update                     @ __MD5Update (ctx, temp, datalength);
-    add     r5, r5, #256                    @ buf += 256
-    subs    r6, r6, #256                    @ len -= 256
-    b       2b
 
 MD5Update:
 
-    tst     r1, #3
-    bne     1b                              @ 'buf' not aligned (fixup is required)
-                                            @ else drop through to __MD5Update with minimal overhead.
-
-
-    @ --
-    @ void __MD5Update (MD5_CTX* ctx, const uint32_t* buf, size_t len);
-    @ --
-
-__MD5Update:
     stmdb   sp!, { r4 - r8, lr }
     add     r4, r0, #(6 * 4)                @ r4 = &context->buffer[0]
     ldmdb   r4, { r0, r3 }                  @ r0 = count[0], r3 = count[1]
     mov     r5, r1                          @ r5 = input
     mov     r6, r0, lsr #3                  @ r6 = (context->count[0] >> 3)
-    and     r6, r6, #0x3f                   @ r6 = (context->count[0] >> 3) & 0x3f == byteIndex
+    and     r6, r6, #0x3f                   @ r6 = byteIndex = ((context->count[0] >> 3) & 0x3f)
     adds    r0, r0, r2, lsl #3
     adc     r3, r3, r2, lsr #29
     stmdb   r4, { r0, r3 }                  @ context->count += (inputBytes * 8)
     rsb     r7, r6, #64                     @ r7 = (64 - byteIndex) == partLen
     subs    r8, r2, r7                      @ r8 = (inputBytes - partLen)
     add     r0, r4, r6
-    bcc     1f
+    bcc     2f
     mov     r2, r7
     bl      memcpy                          @ memcpy (&context->buffer[byteIndex], input, partLen);
     sub     r0, r4, #(6 * 4)
@@ -141,19 +106,22 @@ __MD5Update:
     bl      __MD5Transform                  @ __MD5Transform (context->state, context->buffer, 1);
     sub     r0, r4, #(6 * 4)
     add     r1, r5, r7
-    mov     r2, r8, lsr #6                  @ r2 = ((inputBytes - partLen) / 64) == len
-    bl      __MD5Transform                  @ __MD5Transform (context->state, &input[partLen], len);
-    mov     r0, r4
+    mov     r2, r8, lsr #6                  @ r2 = len = ((inputBytes - partLen) / 64)
+    tst     r1, #3                          @ if (input & 0x03)
+    adr     lr, 1f
+    beq     __MD5Transform                  @ __MD5Transform (context->state, &input[partLen], len);
+    bne     __UnalignedMD5Transform         @ else __UnalignedMD5Transform (context->state, &input[partLen], len);
+1:  mov     r0, r4
     bic     r2, r8, #0x3f
     add     r1, r2, r7
     add     r1, r1, r5
     sub     r2, r8, r2
-1:  ldmia   sp!, { r4 - r8, lr }
+2:  ldmia   sp!, { r4 - r8, lr }
     b       memcpy                          @ classic tail-call optimisation...
 
 
     @ --
-    @ void __MD5Transform (uint32_t *buf, const uint32_t *in, int repeat);
+    @ static void __MD5Transform (uint32_t *buf, const uint32_t *in, int repeat);
     @ --
 
 MD5MagicData:
@@ -391,6 +359,36 @@ __MD5Transform:
     stmia   r0, { r2 - r5 }
     bne     2b
     ldmia   sp!, { r0, r2, r4 - r11, pc }   @ restore all callee saved registers and return
+
+
+    @ --
+    @ static void __UnalignedMD5Transform (uint32_t *buf, const uint8_t *in, int repeat);
+    @ --
+
+__UnalignedMD5Transform:
+
+    stmdb   sp!, { r4 - r7, lr }
+    movs    r4, r2, lsl #6                  @ r4 = (repeat * 64)
+    ldmeqia sp!, { r4 - r7, pc }            @ if  ((repeat * 64) == 0) return;
+    mov     r5, r0                          @ r5 = state
+    mov     r6, r1                          @ r6 = in
+    sub     sp, sp, #256                    @ create 256 byte temp buffer
+1:  cmp     r4, #256
+    mov     r0, sp
+    movcc   r7, r4
+    movcs   r7, #256                        @ r7 = (blockCount * 64) = min((repeat * 64), (4 * 64))
+    mov     r1, r6
+    mov     r2, r7
+    bl      memcpy                          @ memcpy (blockBuffer, in, (blockCount * 64));
+    mov     r0, r5
+    mov     r1, sp
+    mov     r2, r7, lsr #6
+    bl      __MD5Transform                  @ __MD5Transform (state, blockBuffer, blockCount);
+    subs    r4, r4, #256                    @ (repeat * 64) -= (4 * 64);
+    add     r6, r6, #256                    @ in += (4 * 64);
+    bgt     1b                              @ loop while (repeat > 0)
+    add     sp, sp, #256                    @ return temp buffer to stack
+    ldmia   sp!, { r4 - r7, pc }            @ return
 
 
 #endif   /* __BYTE_ORDER == __LITTLE_ENDIAN */
