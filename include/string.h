@@ -54,4 +54,7 @@ char *strtok_r(char *s, const char *delim, char **ptrptr) __THROW;
 
 int ffs(int i) __THROW __attribute__((__const__));
 
+size_t strlcpy(char *dst, const char *src, size_t size) __THROW;
+size_t strlcat(char *dst, const char *src, size_t size) __THROW;
+
 #endif

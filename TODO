@@ -1,8 +1,8 @@
+getnameinfo, getaddrinfo, gai_strerror, freeaddrinfo (!!!)
+
 "locale"
 
 fscanf
-
-getnameinfo
 
 vsnprintf return value should be the number of needed characters instead
 of the (truncated) number of characters that were actually written.

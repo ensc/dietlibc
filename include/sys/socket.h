@@ -5,6 +5,12 @@
 #include <sys/types.h>
 #include <linux/socket.h>
 
+struct sockaddr_storage {
+  sa_family_t  ss_family;
+  uint32_t  __ss_align;
+  char __ss_padding[(128  - (2 * sizeof (uint32_t ))) ];
+};
+
 #ifndef SOCK_DGRAM
 /* the Linux kernel headers suck really badly on non-x86 */
 #define SOCK_STREAM	1		/* stream (connection) socket	*/
@@ -14,10 +20,6 @@
 #define SOCK_SEQPACKET	5		/* sequential packet socket	*/
 #define SOCK_PACKET	10		/* linux specific way of	*/
 #endif
-
-struct sockaddr_storage {
-  char __tmp[sizeof(struct sockaddr)];
-};
 
 int socket(int domain, int type, int protocol) __THROW;
 int accept(int s, struct sockaddr *addr, socklen_t *addrlen) __THROW;
