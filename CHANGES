@@ -44,6 +44,7 @@
   added syslog(3) (thanks to Rene Müller!)
   Jeff Garzik contributed getgr*, getpw* and getsp* in one tiny package.
     Thanks!
+  merged duplicate code in execv and execvp into exec_lib.o
 
 0.7.2:
   added several prototypes to already implemented functions and

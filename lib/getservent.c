@@ -5,6 +5,7 @@
 #include <errno.h>
 #include <netinet/in.h>
 #include <string.h>
+#include <ctype.h>
 
 static int servicesfd=-1;
 static char* servicesmap;
@@ -13,22 +14,6 @@ static unsigned int serviceslen;
 static char* aliases[10];
 
 static char *cur;
-
-static inline int isalpha(char c) {
-  return (c>='a' && c<='z') || (c>='A' && c<='Z');
-}
-
-static inline int isdigit(char c) {
-  return (c>='0' && c<='9');
-}
-
-static inline int isalnum(char c) {
-  return isalpha(c) || isdigit(c);
-}
-
-static inline int isblank(char c) {
-  return (c==' ' || c=='\t');
-}
 
 /* nameserver	42/tcp		name		# IEN 116 */
 struct servent *getservent(void) {

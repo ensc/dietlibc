@@ -1,8 +1,7 @@
 #include <linux/types.h>
 #include <linux/signal.h>
 #include <signal.h>
-
-extern int exit(int code) __attribute__ ((noreturn));
+#include <stdlib.h>
 
 void abort() {
   sigset_t t;
