@@ -2,7 +2,7 @@
 
 int isnan(double d) {
   unsigned long long *x=(unsigned long long *)&d;
-  return (*x==0x7FF8000000000000ll || *x==0x7FF0000000000000);
+  return (*x==0x7FF8000000000000ll || *x==0x7FF0000000000000 || *x==0xfff8000000000000);
 }
 int __isnan(double d) __attribute__((alias("isnan")));
 
