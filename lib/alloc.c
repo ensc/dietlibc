@@ -156,14 +156,16 @@ static void* _alloc_libc_malloc(size_t size) {
   if (!size) goto retzero;
 #endif
   size+=sizeof(__alloc_t);
+  if (size<sizeof(__alloc_t)) goto retzero;
   if (size<=__MAX_SMALL_SIZE) {
     need=GET_SIZE(size);
-    if ((ptr=__small_malloc(need))==MAP_FAILED) goto err_out;
+    ptr=__small_malloc(need);
   }
   else {
     need=PAGE_ALIGN(size);
-    if ((ptr=do_mmap(need))==MAP_FAILED) goto err_out;
+    if (!need) ptr=MAP_FAILED; else ptr=do_mmap(need);
   }
+  if (ptr==MAP_FAILED) goto err_out;
   ptr->size=need;
   return BLOCK_RET(ptr);
 err_out:
@@ -190,6 +192,7 @@ void* __libc_realloc(void* ptr, size_t _size) {
     if (size) {
       __alloc_t* tmp=BLOCK_START(ptr);
       size+=sizeof(__alloc_t);
+      if (size<sizeof(__alloc_t)) goto retzero;
       size=(size<=__MAX_SMALL_SIZE)?GET_SIZE(size):PAGE_ALIGN(size);
       if (tmp->size!=size) {
 	if ((tmp->size<=__MAX_SMALL_SIZE)) {
@@ -208,6 +211,7 @@ void* __libc_realloc(void* ptr, size_t _size) {
 	  size=PAGE_ALIGN(size);
 	  foo=mremap(tmp,tmp->size,size,MREMAP_MAYMOVE);
 	  if (foo==MAP_FAILED) {
+retzero:
 	    (*__errno_location())=ENOMEM;
 	    ptr=0;
 	  }
