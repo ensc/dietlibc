@@ -271,7 +271,7 @@ num_printf:
 	      if (tmp1) strcpy(tmp,tmp1);
 	    }
 	  }
-	  sz=strlen(buf);
+	  preci=strlen(buf);
 	  s=buf;
 
 	  goto print_out;
