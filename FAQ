@@ -155,7 +155,7 @@ A: Add -lrpc.  The code is from Sun and frankly it is so ugly and so
    rarely used that I don't want to include it in libc.
 
 
-Q: I am missing som BSD/GNU extension!
+Q: I am missing some BSD/GNU extension!
 A: I started adding a few of them to libcompat.  You have to link it in
    manually, though, as using them is bad for portability and I want
    people to make a conscious effort to write non-portable applications
