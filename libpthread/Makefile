@@ -19,7 +19,7 @@ PTHREAD_OBJS = \
  \
 	pthread_create.o pthread_detach.o \
 	pthread_join.o pthread_self.o \
-	pthread_exit.o \
+	pthread_exit.o pthread_equal.o \
  \
 	pthread_cleanup_push.o \
 	pthread_cleanup_pop.o \
