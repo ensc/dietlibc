@@ -30,8 +30,8 @@ int vsnprintf(char* str, size_t size, const char *format, va_list arg_ptr) {
   struct str_data sd = { str, 0, size?size-1:0 };
   struct arg_printf ap = { &sd, (int(*)(void*,size_t,void*)) swrite };
   n=__v_printf(&ap,format,arg_ptr);
-  if (str && size) {
-    if (size!=(size_t)-1 && ((long)n>=(long)size) && size>0) str[size-1]=0;
+  if (str && size && n>=0) {
+    if (size!=(size_t)-1 && ((size_t)n>=size)) str[size-1]=0;
     else str[n]=0;
   }
   return n;
