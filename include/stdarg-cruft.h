@@ -58,22 +58,7 @@ __extension__							\
 
 #elif defined(__mips__)
 
-#if defined (__mips_eabi) && ! defined (__mips_soft_float) && ! defined (__mips_single_float)
-
-typedef struct {
-  /* Pointer to FP regs.  */
-  char *__fp_regs;
-  /* Number of FP regs remaining.  */
-  int __fp_left;
-  /* Pointer to GP regs followed by stack parameters.  */
-  char *__gp_regs;
-} va_list;
-
-#else /* ! (defined (__mips_eabi) && ! defined (__mips_soft_float) && ! defined (__mips_single_float)) */
-
 typedef char * va_list;
-
-#endif /* ! (defined (__mips_eabi) && ! defined (__mips_soft_float) && ! defined (__mips_single_float)) */
 
 #ifdef __mips64
 #define __va_rounded_size(__TYPE)  \
@@ -88,101 +73,41 @@ typedef char * va_list;
 #define __va_reg_size 4
 #endif
 
-#if defined (__mips_eabi)
-#if ! defined (__mips_soft_float) && ! defined (__mips_single_float)
-#ifdef __mips64
-#define va_start(__AP, __LASTARG)                                       \
-  (__AP.__gp_regs = ((char *) __builtin_next_arg (__LASTARG)            \
-                     - (__builtin_args_info (2) < 8                     \
-                        ? (8 - __builtin_args_info (2)) * __va_reg_size \
-                        : 0)),                                          \
-   __AP.__fp_left = 8 - __builtin_args_info (3),                        \
-   __AP.__fp_regs = __AP.__gp_regs - __AP.__fp_left * __va_reg_size)
-#else /* ! defined (__mips64) */
-#define va_start(__AP, __LASTARG)                                       \
-  (__AP.__gp_regs = ((char *) __builtin_next_arg (__LASTARG)            \
-                     - (__builtin_args_info (2) < 8                     \
-                        ? (8 - __builtin_args_info (2)) * __va_reg_size \
-                        : 0)),                                          \
-   __AP.__fp_left = (8 - __builtin_args_info (3)) / 2,                  \
-   __AP.__fp_regs = __AP.__gp_regs - __AP.__fp_left * 8,                \
-   __AP.__fp_regs = (char *) ((int) __AP.__fp_regs & -8))
-#endif /* ! defined (__mips64) */
-#else /* ! (! defined (__mips_soft_float) && ! defined (__mips_single_float) ) */
-#define va_start(__AP, __LASTARG)                                       \
-  (__AP = ((va_list) __builtin_next_arg (__LASTARG)              \
-           - (__builtin_args_info (2) >= 8 ? 0                          \
-              : (8 - __builtin_args_info (2)) * __va_reg_size)))
-#endif /* ! (! defined (__mips_soft_float) && ! defined (__mips_single_float) ) */
-#else /* ! defined (__mips_eabi) */
 #define va_start(__AP, __LASTARG) \
   (__AP = (va_list) __builtin_next_arg (__LASTARG))
-#endif /* ! (defined (__mips_eabi) && ! defined (__mips_soft_float) && ! defined (__mips_single_float)) */
 
-#ifndef va_end
-void va_end (va_list);           /* Defined in libgcc.a */
+#ifdef __mips64
+#ifdef __MIPSEB__
+#define va_arg(__AP, __type)                                    \
+  ((__type *) (void *) (__AP = (char *)                         \
+                       ((((__PTRDIFF_TYPE__)__AP + 8 - 1) & -8) \
+                           + __va_rounded_size (__type))))[-1]
+#else
+#define va_arg(__AP, __type)                                    \
+  ((__AP = (char *) ((((__PTRDIFF_TYPE__)__AP + 8 - 1) & -8)    \
+                     + __va_rounded_size (__type))),            \
+   *(__type *) (void *) (__AP - __va_rounded_size (__type)))
 #endif
 
-#if ! defined (__mips_soft_float) && ! defined (__mips_single_float)
-#ifdef __mips64
-#define __va_next_addr(__AP, __type)                                    \
-  ((__builtin_classify_type (*(__type *) 0) == __real_type_class        \
-    && __AP.__fp_left > 0)                                              \
-   ? (--__AP.__fp_left, (__AP.__fp_regs += 8) - 8)                      \
-   : (__AP.__gp_regs += __va_reg_size) - __va_reg_size)
-#else
-#define __va_next_addr(__AP, __type)                                    \
-  ((__builtin_classify_type (*(__type *) 0) == __real_type_class        \
-    && __AP.__fp_left > 0)                                              \
-   ? (--__AP.__fp_left, (__AP.__fp_regs += 8) - 8)                      \
-   : (((__builtin_classify_type (* (__type *) 0) < __record_type_class  \
-        && __alignof__ (__type) > 4)                                    \
-       ? __AP.__gp_regs = (char *) (((int) __AP.__gp_regs + 8 - 1) & -8) \
-       : (char *) 0),                                                   \
-      (__builtin_classify_type (* (__type *) 0) >= __record_type_class  \
-       ? (__AP.__gp_regs += __va_reg_size) - __va_reg_size              \
-       : ((__AP.__gp_regs += __va_rounded_size (__type))                \
-          - __va_rounded_size (__type)))))
-#endif
-#else /* ! (! defined (__mips_soft_float) && ! defined (__mips_single_float)) */
-#ifdef __mips64
-#define __va_next_addr(__AP, __type)                                    \
-  ((__AP += __va_reg_size) - __va_reg_size)
-#else
-#define __va_next_addr(__AP, __type)                                    \
-  (((__builtin_classify_type (* (__type *) 0) < __record_type_class     \
-     && __alignof__ (__type) > 4)                                       \
-    ? __AP = (char *) (((__PTRDIFF_TYPE__) __AP + 8 - 1) & -8)          \
-    : (char *) 0),                                                      \
-   (__builtin_classify_type (* (__type *) 0) >= __record_type_class     \
-    ? (__AP += __va_reg_size) - __va_reg_size                           \
-    : ((__AP += __va_rounded_size (__type))                             \
-       - __va_rounded_size (__type))))
-#endif
-#endif /* ! (! defined (__mips_soft_float) && ! defined (__mips_single_float)) */
+#else /* not __mips64 */
 
 #ifdef __MIPSEB__
-#define va_arg(__AP, __type)                                            \
-  ((__va_rounded_size (__type) <= __va_reg_size)                        \
-   ? *(__type *) (void *) (__va_next_addr (__AP, __type)                \
-                           + __va_reg_size                              \
-                           - sizeof (__type))                           \
-   : (__builtin_classify_type (*(__type *) 0) >= __record_type_class    \
-      ? **(__type **) (void *) (__va_next_addr (__AP, __type)           \
-                                + __va_reg_size                         \
-                                - sizeof (char *))                      \
-      : *(__type *) (void *) __va_next_addr (__AP, __type)))
+/* For big-endian machines.  */
+#define va_arg(__AP, __type)                                    \
+  ((__AP = (char *) ((__alignof__ (__type) > 4                  \
+                      ? ((__PTRDIFF_TYPE__)__AP + 8 - 1) & -8   \
+                      : ((__PTRDIFF_TYPE__)__AP + 4 - 1) & -4)  \
+                     + __va_rounded_size (__type))),            \
+   *(__type *) (void *) (__AP - __va_rounded_size (__type)))
 #else
-#define va_arg(__AP, __type)                                            \
-  ((__va_rounded_size (__type) <= __va_reg_size)                        \
-   ? *(__type *) (void *) __va_next_addr (__AP, __type)         \
-   : (__builtin_classify_type (* (__type *) 0) >= __record_type_class   \
-      ? **(__type **) (void *) __va_next_addr (__AP, __type)            \
-      : *(__type *) (void *) __va_next_addr (__AP, __type)))
+/* For little-endian machines.  */
+#define va_arg(__AP, __type)                                                \
+  ((__type *) (void *) (__AP = (char *) ((__alignof__(__type) > 4           \
+                                ? ((__PTRDIFF_TYPE__)__AP + 8 - 1) & -8     \
+                                : ((__PTRDIFF_TYPE__)__AP + 4 - 1) & -4)    \
+                                         + __va_rounded_size(__type))))[-1]
 #endif
-
-/* Copy va_list into another variable of this type.  */
-#define __va_copy(dest, src) (dest) = (src)
+#endif
 
 #elif defined(__powerpc__)
 
