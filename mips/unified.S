@@ -20,7 +20,7 @@ error_unified_syscall:
 	sw	$31, 0($sp)
 	sw	$2,  4($sp)
 
-	la	$25, errno_location
+	la	$25, __errno_location
 	jalr	$25
 
 	lw	$8,  4($sp)
