@@ -15,9 +15,9 @@
 #include <signal.h>
 
 #define _PATH_CONSOLE	"/dev/console"
-#define BUF_SIZE 512	/* messagebuffer size (>= 200) */
+#define BUF_SIZE 2048	/* messagebuffer size (>= 200) */
 
-#define MAX_LOGTAG 80
+#define MAX_LOGTAG 1000
 
 /* those have to be global *sigh* */
 static volatile int	connected = 0;  /* have done connect */

@@ -58,12 +58,6 @@
 					/* other similar things on the	*/
 					/* user level.			*/
 
-#define socklen_t socklen_t
-typedef unsigned int socklen_t;
-typedef unsigned short sa_family_t;
-
-typedef char* caddr_t;
-
 struct sockaddr {
   sa_family_t sa_family;
   char sa_data[14];

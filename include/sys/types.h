@@ -81,6 +81,10 @@ typedef __quad_t blkcnt64_t;
 
 typedef long int fpos_t;
 
-#include <sys/socket.h>
+#define socklen_t socklen_t
+typedef unsigned int socklen_t;
+typedef unsigned short sa_family_t;
+
+typedef char* caddr_t;
 
 #endif
