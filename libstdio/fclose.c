@@ -5,8 +5,8 @@
 int fclose_unlocked(FILE *stream) {
   int res;
   FILE *f,*fl;
-  fflush_unlocked(stream);
-  res=close(stream->fd);
+  res=fflush_unlocked(stream);
+  res|=close(stream->fd);
   for (fl=0,f=__stdio_root; f; fl=f,f=f->next)
     if (f==stream) {
       if (fl)
