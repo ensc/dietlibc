@@ -35,3 +35,5 @@ memccpy:
 		popl %edi
 		popl %esi
 		ret
+.Lende:
+.size    memccpy,.Lende-memccpy
