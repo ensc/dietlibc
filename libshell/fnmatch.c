@@ -1,5 +1,6 @@
 #include <ctype.h>
 #include <fnmatch.h>
+#include <string.h>
 
 #define NOTFIRST 128
 
