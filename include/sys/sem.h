@@ -74,7 +74,7 @@ extern int semget( key_t key, int nsems, int semflg) __THROW;
 /* The prototype really is:
  * extern int semctl(int semid, int semnum, int cmd, union semun arg) __THROW;
  * glibc bug compatibility forces us to write it like this: */
-extern int semctl(int semid, int semnum, int cmd, union semun arg) __THROW;
+extern int semctl(int semid, int semnum, int cmd, ...) __THROW;
 
 extern int semop(int semid, struct sembuf *sops, unsigned nsops) __THROW;
 
