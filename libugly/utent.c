@@ -62,7 +62,7 @@ struct utmp *getutent(void) {
 struct utmp *getutid(struct utmp *ut) {
   struct utmp *tmp;
 
-  while (tmp = getutent()) {
+  while ((tmp = getutent())) {
     if (ut->ut_type && (ut->ut_type <= OLD_TIME)) {
       if (ut->ut_type == tmp->ut_type) break;
     }
@@ -76,7 +76,7 @@ struct utmp *getutid(struct utmp *ut) {
 struct utmp *getutline(struct utmp *ut) {
   struct utmp *tmp;
 
-  while (tmp = getutent()) {
+  while ((tmp = getutent())) {
     if ((tmp->ut_type == USER_PROCESS) || (tmp->ut_type == LOGIN_PROCESS)) {
       if (!strncmp(ut->ut_line,tmp->ut_line,UT_LINESIZE)) break;
     }

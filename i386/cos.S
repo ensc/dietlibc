@@ -3,9 +3,9 @@
 .type   cos,@function
 .global cos
 cos:
-	fldl    4(%esp)
-	fcos
-	ret
+        fldl    4(%esp)
+        fcos
+        ret
 
 .ende:
-.size	 cos,.ende-cos
+.size    cos,.ende-cos

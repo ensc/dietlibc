@@ -20,7 +20,7 @@ struct __stdio_file {
   unsigned int bs;	/* read: bytes in buffer */
   unsigned int bm;	/* position in buffer */
   char buf[BUFSIZE];
-  struct __file *next;	/* for fflush */
+  struct __stdio_file *next;	/* for fflush */
   pid_t popen_kludge;
   char ungetbuf;
   char ungotten;

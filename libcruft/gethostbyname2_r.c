@@ -34,7 +34,7 @@ int gethostbyname2_r(const char* name, int AF, struct hostent* result,
 #ifdef WANT_ETC_HOSTS
   {
     struct hostent* r;
-    while (r=gethostent_r(buf,buflen)) {
+    while ((r=gethostent_r(buf,buflen))) {
       if (r->h_addrtype==AF && !strcmp(r->h_name,name)) {	/* found it! */
 	memmove(result,r,sizeof(struct hostent));
 	*RESULT=result;

@@ -48,6 +48,7 @@ double acosh(double d) __THROW __attribute__((__const__));
 double atanh(double d) __THROW __attribute__((__const__));
 
 double exp(double d) __THROW __attribute__((__const__));
+double exp10(double d) __THROW __attribute__((__const__));
 double log(double d) __THROW __attribute__((__const__));
 double log10(double d) __THROW __attribute__((__const__));
 
@@ -59,6 +60,10 @@ double fmod(double x, double y) __THROW __attribute__((__const__));
 
 double floor(double x) __attribute__((__const__));
 double ceil(double x) __attribute__((__const__));
+
+double expm1(double x) __THROW __attribute__((__const__));
+double hypot(double x, double y) __THROW __attribute__((__const__));
+double atan2(double x, double y) __THROW __attribute__((__const__));
 
 #  define HUGE_VAL \
   (__extension__                                                              \
