@@ -1,6 +1,8 @@
 0.11:
   fix major oops in DNS routines (only with WANT_FULL_RESOLV_CONF enabled).
   fix vsscanf bug (Thanks, David Chappell).
+  add floor, ceil and memchr prototypes.
+  add __builtin_expect and expect #defines for gcc versions below 3.0
 
 0.10:
   update getpagesize.

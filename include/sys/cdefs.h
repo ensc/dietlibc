@@ -29,6 +29,11 @@
 #define __restrict__
 #endif
 
+#if (__GNUC__ < 3)
+#define __builtin_expect(foo,bar) (foo)
+#define expect(foo,bar) (foo)
+#endif
+
 #endif
 
 #define __P(x) x
