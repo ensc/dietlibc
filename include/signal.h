@@ -124,13 +124,13 @@
 #endif
 
 #define SIGCLD		SIGCHLD
-#define SIGLOST		SIGPWR
 #define SIGPOLL		SIGIO
 
 /* These should not be considered constants from userland.  */
 #ifdef __hppa__
 #define SIGRTMIN	37
 #else
+#define SIGLOST		SIGPWR
 #define SIGRTMIN	32
 #endif
 #define SIGRTMAX	(_NSIG-1)
