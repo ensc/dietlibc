@@ -12,6 +12,7 @@ To port the diet libc to a new architecture, you need to:
   - edit include/sys/ioctl.h
   - edit include/sys/ptrace.h
   - edit include/asm/sigcontext.h
+  - edit include/sys/ucontext.h
   - edit include/endian.h
   - edit include/fcntl.h
   - edit include/sys/mman.h

@@ -37,6 +37,7 @@ static const char* Os[] = {
   "s390","-Os","-fomit-frame-pointer",0,
   "sh","-Os","-fomit-frame-pointer",0,
   "ia64","-Os","-fno-omit-frame-pointer",0,
+  "x86_64","-Os","-fstrict-aliasing","-momit-leaf-frame-pointer","-mfance-math-387",0,
   0};
 
 int main(int argc,char *argv[]) {

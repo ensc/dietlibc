@@ -321,8 +321,9 @@ $(OBJDIR)/liblatin1.a $(OBJDIR)/libcompat.a $(DESTDIR)$(ILIBDIR)
 	for i in `find include -name \*.h`; do install -m 644 -D $$i $(DESTDIR)$(prefix)/$$i; done
 
 .PHONY: sparc ppc mips arm alpha i386 parisc mipsel powerpc s390 sparc64
+.PHONY: x86_64 ia64
 
-arm sparc ppc alpha i386 mips parisc s390 sparc64:
+arm sparc ppc alpha i386 mips parisc s390 sparc64 x86_64 ia64:
 	$(MAKE) ARCH=$@ CROSS=$@-linux- all
 
 # Cross compile for little endian MIPS
