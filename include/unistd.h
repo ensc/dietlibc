@@ -70,6 +70,7 @@ int setpgid (pid_t pid,pid_t pgid) __THROW;
 pid_t getpgid (pid_t pid) __THROW;
 int setpgrp (void) __THROW;
 pid_t getpgrp (void) __THROW;
+pid_t getsid(pid_t pid) __THROW;
 pid_t setsid (void) __THROW;
 int dup (int oldfd) __THROW;
 int dup2 (int oldfd,int newfd) __THROW;
