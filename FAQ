@@ -121,3 +121,9 @@ A: You have to explicitly build them with "make dyn".  Since they are
    glibc in them, so the program will crash.  And you have to explicitly
    compile the code with -fPIC or -fpic.  You can then use them by
    substituting "diet-dyn" for "diet" on the command line.
+
+
+Q: My target platform does not have a MMU.  Should I be using uClibc?
+A: I am not aware of any issues with MMU-less systems.  You should be
+   able to use the diet libc just fine.  Having a MMU or not is mostly
+   an issue for the kernel, not libc.
