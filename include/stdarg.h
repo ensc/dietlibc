@@ -7,7 +7,7 @@ typedef char* va_list;
 
 #define va_end(ap) ap=0
 
-#ifdef __sparc__
+#if defined(__sparc__)
 
 enum __va_type_classes {
   __no_type_class = -1,
@@ -61,6 +61,10 @@ __extension__							\
 
 
 #else	/* !__sparc__ */
+
+#ifndef __i386__
+#warning "stdarg for this platform is untested!"
+#endif
 
 /* this only works when everything is passed on the stack (i.e. x86) */
 #if __WORDSIZE == 64

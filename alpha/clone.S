@@ -1,5 +1,5 @@
 #include "syscalls.h"
-#include <asm/errno.h>
+#include <errno.h>
 
 .text
 .align 2

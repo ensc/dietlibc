@@ -56,7 +56,11 @@ extern char **environ;
 typedef struct { int quot,rem; } div_t;
 div_t div(int numer, int denom) __THROW __attribute__((const));
 
+#ifdef __GNUC__
+#define alloca(x) __builtin_alloca(x)
+#else
 void *alloca(size_t size) __THROW; /* gcc built-in */
+#endif
 
 char *realpath(const char *path, char *resolved_path) __THROW;
 
