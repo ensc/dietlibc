@@ -8,7 +8,8 @@ void __stat64_cvt(const struct stat *src,struct stat64 *dest) {
   dest->st_ino=src->st_ino;
   dest->st_mode=src->st_mode;
   dest->st_nlink=src->st_nlink;
-  dest->st_uid=src->st_gid;
+  dest->st_uid=src->st_uid;
+  dest->st_gid=src->st_gid;
   dest->st_rdev=src->st_rdev;
   dest->st_size=src->st_size;
   dest->st_blksize=src->st_blksize;
