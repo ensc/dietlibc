@@ -16,6 +16,8 @@
   Forgot an #endif in asm/sigcontext.h (Mike Castle)
   Kurt Garloff sent in patches to
     fix struct termios on non-x86 architectures
+  printf("%+05d\n",500) was broken (Raimar Falke told me, Olaf fixed it)
+  create libcompat.a (and move daemon to it)
 
 0.15:
   vfork sucks.  I reverted to the old behavior where vfork==fork.

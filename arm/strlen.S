@@ -1,10 +1,15 @@
+
 	.text
 	.align	2
+
 	.global	strlen
-	.type	strlen, function
+
 strlen:
-	teq	a1, #0
-	moveq	pc, lr
+
+#if 0
+	teq	a1, #0			@ is string pointer NULL ??
+	moveq	pc, lr			@ if so, return 0
+#endif
 
 	ands	a3, a1, #3
 	ldr	ip, .Lmagic

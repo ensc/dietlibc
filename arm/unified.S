@@ -1,26 +1,11 @@
+
 #include <dietfeatures.h>
-#include "syscalls.h"
 
-.text
-
-@
-@ The exit status is already in r0 and this function never returns.
-@ Therefore all we need to do here is call the syscall.
-@
-
-.weak exit
-.global _exit
-
-exit:
-_exit:
-	swi	$__NR_exit		@ never returns.
-
-@
-@ Note that __unified_syscall has 2 entry points.
-@
-
-.global __unified_syscall
-.global __unified_syscall4
+	.text
+	.align 2
+	
+	.global __unified_syscall
+	.global __unified_syscall4
 
 __unified_syscall4:
 	ldmia	sp!, {r4, r5, r6}
@@ -44,3 +29,6 @@ __unified_syscall:
 
 	mov	pc, lr			@ return
 
+#ifndef WANT_THREAD_SAFE
+.L0:	.long 	errno
+#endif
