@@ -52,7 +52,7 @@ __sigsetjmp:
 	stw %sp,  0x4c(%sr0, %r26)
 	stw %rp,  0x50(%sr0, %r26)
 	/* Floating point stack in %r19 */
-	ldo 58(%r26), %r19
+	ldo 0x58(%r26), %r19
 	/* Save Floating point registers */
 	fstd,ma %fr12, 8(%sr0, %r19)
 	fstd,ma %fr13, 8(%sr0, %r19)
