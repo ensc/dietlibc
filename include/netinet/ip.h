@@ -3,6 +3,7 @@
 
 #include <inttypes.h>
 #include <endian.h>
+#include <netinet/in.h>
 
 #define	IPVERSION	4               /* IP version number */
 #define	IP_MAXPACKET	65535		/* maximum packet size */
@@ -92,6 +93,29 @@ struct iphdr {				/* size 20/0x14 */
   unsigned int saddr;			/* offset 12/0xc */
   unsigned int daddr;			/* offset 16/0x10 */
   /*The options start here. */
+};
+
+struct ip {
+#if __BYTE_ORDER == __LITTLE_ENDIAN
+  unsigned int ip_hl:4;		/* header length */
+  unsigned int ip_v:4;		/* version */
+#endif
+#if __BYTE_ORDER == __BIG_ENDIAN
+  unsigned int ip_v:4;		/* version */
+  unsigned int ip_hl:4;		/* header length */
+#endif
+  unsigned char ip_tos;		/* type of service */
+  unsigned short ip_len;		/* total length */
+  unsigned short ip_id;		/* identification */
+  unsigned short ip_off;		/* fragment offset field */
+#define	IP_RF 0x8000			/* reserved fragment flag */
+#define	IP_DF 0x4000			/* dont fragment flag */
+#define	IP_MF 0x2000			/* more fragments flag */
+#define	IP_OFFMASK 0x1fff		/* mask for fragmenting bits */
+  unsigned char ip_ttl;		/* time to live */
+  unsigned char ip_p;			/* protocol */
+  unsigned short ip_sum;		/* checksum */
+  struct in_addr ip_src, ip_dst;	/* source and dest address */
 };
 
 #endif

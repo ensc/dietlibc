@@ -3,6 +3,7 @@
 
 #include <sys/cdefs.h>
 #include <inttypes.h>
+#include <netinet/ip.h>
 
 struct icmphdr {
   uint8_t type;		/* message type */
