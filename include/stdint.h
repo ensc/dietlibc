@@ -24,7 +24,4 @@ typedef unsigned long long int uint_fast64_t;
 
 #include <endian.h>
 
-typedef long int intptr_t;
-typedef long int uintptr_t;
-
 #endif

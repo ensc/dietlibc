@@ -70,6 +70,9 @@
   Fix fseek return value.
   Add dirname and basename.
   Add a few i386 math routines contributed by Frank Klemm.
+  Fixed getservent (did not allow _ and - in the aliases).
+    Thanks, Oden Eriksson
+  Added a float.h (ugh!)
 
 0.10:
   update getpagesize.
