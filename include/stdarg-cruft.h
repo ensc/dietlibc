@@ -67,11 +67,11 @@ typedef struct {
   int __fp_left;
   /* Pointer to GP regs followed by stack parameters.  */
   char *__gp_regs;
-} __gnuc_va_list;
+} va_list;
 
 #else /* ! (defined (__mips_eabi) && ! defined (__mips_soft_float) && ! defined (__mips_single_float)) */
 
-typedef char * __gnuc_va_list;
+typedef char * va_list;
 
 #endif /* ! (defined (__mips_eabi) && ! defined (__mips_soft_float) && ! defined (__mips_single_float)) */
 
@@ -105,17 +105,17 @@ typedef char * __gnuc_va_list;
 #endif /* ! defined (__mips64) */
 #else /* ! (! defined (__mips_soft_float) && ! defined (__mips_single_float) ) */
 #define va_start(__AP, __LASTARG)                                       \
-  (__AP = ((__gnuc_va_list) __builtin_next_arg (__LASTARG)              \
+  (__AP = ((va_list) __builtin_next_arg (__LASTARG)              \
            - (__builtin_args_info (2) >= 8 ? 0                          \
               : (8 - __builtin_args_info (2)) * __va_reg_size)))
 #endif /* ! (! defined (__mips_soft_float) && ! defined (__mips_single_float) ) */
 #else /* ! defined (__mips_eabi) */
 #define va_start(__AP, __LASTARG) \
-  (__AP = (__gnuc_va_list) __builtin_next_arg (__LASTARG))
+  (__AP = (va_list) __builtin_next_arg (__LASTARG))
 #endif /* ! (defined (__mips_eabi) && ! defined (__mips_soft_float) && ! defined (__mips_single_float)) */
 
 #ifndef va_end
-void va_end (__gnuc_va_list);           /* Defined in libgcc.a */
+void va_end (va_list);           /* Defined in libgcc.a */
 #endif
 
 #if ! defined (__mips_soft_float) && ! defined (__mips_single_float)
@@ -176,7 +176,7 @@ void va_end (__gnuc_va_list);           /* Defined in libgcc.a */
       : *(__type *) (void *) __va_next_addr (__AP, __type)))
 #endif
 
-/* Copy __gnuc_va_list into another variable of this type.  */
+/* Copy va_list into another variable of this type.  */
 #define __va_copy(dest, src) (dest) = (src)
 
 #elif defined(__powerpc__)
@@ -320,7 +320,7 @@ __extension__ (*({							   \
 #define va_end(AP)	((void)0)
 
 /* Copy va_list into another variable of this type.  */
-#define va_copy(dest, src) *(dest) = *(src)
+#define __va_copy(dest, src) *(dest) = *(src)
 
 #elif defined(__alpha__)
 
