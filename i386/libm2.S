@@ -598,29 +598,6 @@ frexpl:
 	movl 16(%esp),%eax
 	jmp __frexp
 
-.global ldexpf,ldexp,ldexpl
-	.type ldexpf,@function
-	.type ldexp,@function
-	.type ldexpl,@function
-
-ldexpf:
-	fildl 8(%esp)
-	flds 4(%esp)
-	fscale
-	ret
-
-ldexp:
-	fildl 12(%esp)
-	fldl 4(%esp)
-	fscale
-	ret
-
-ldexpl:
-	fildl 16(%esp)
-	fldt 4(%esp)
-	fscale
-	ret
-
 .global logbf,logb,logbl
 	.type logbf,@function
 	.type logb,@function

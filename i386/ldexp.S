@@ -1,15 +1,28 @@
 .text
-.type   ldexp,@function
-.global ldexp
+.global ldexpf,ldexp,ldexpl
+	.type ldexpf,@function
+	.type ldexp,@function
+	.type ldexpl,@function
 
-# double  ldexp ( double value, int expo );
+ldexpf:
+	fildl 8(%esp)
+	flds 4(%esp)
+	fscale
+	ret
 
 ldexp:
-        fildl 12(%esp)
-        fldl   4(%esp)
-        fscale
-        fstp  %st(1)
-        ret
+	fildl 12(%esp)
+	fldl 4(%esp)
+	fscale
+	ret
+
+ldexpl:
+	fildl 16(%esp)
+	fldt 4(%esp)
+	fscale
+	ret
 
 .ende:
-.size    ldexp,.ende-ldexp
+.size    ldexpl,.ende-ldexpl
+.size    ldexp,ldexpl-ldexp
+.size    ldexpf,ldexp-ldexpf
