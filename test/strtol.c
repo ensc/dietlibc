@@ -54,7 +54,10 @@ int main() {
   assert(strtol(s="9223372036854775808",&c,0)==9223372036854775807 && c==s+19 && errno==ERANGE);
   assert(strtol(s="922337203685477580777",&c,0)==9223372036854775807 && c==s+21 && errno==ERANGE);
   assert(strtol(s="9223372036854775810",&c,0)==9223372036854775807 && c==s+19 && errno==ERANGE);
-  assert(strtol(s="-2147483648",&c,0)==-2147483648 && c==s+11 && errno==0);
+  /* dietlibc would also fail this because we don't set errno to 0
+   * when returning 0x8000000 in non-failure cases on 64-bit platforms.
+   * POSIX says: The strtol() function shall not change the setting of errno if successful. */
+  errno=0; assert(strtol(s="-2147483648",&c,0)==-2147483648 && c==s+11 && errno==0);
   assert(strtol(s="-9223372036854775808",&c,0)==0x8000000000000000 && c==s+20 && errno==0);
   assert(strtol(s="-9223372036854775809",&c,0)==0x8000000000000000 && c==s+20 && errno==ERANGE);
   assert(strtol(s="0x112233445566778899z",&c,0)==9223372036854775807 && c==s+20 && errno==ERANGE);

@@ -7,18 +7,31 @@ __BEGIN_DECLS
 
 enum {
   LC_CTYPE = 0,
+#define LC_CTYPE		LC_CTYPE
   LC_NUMERIC = 1,
+#define LC_NUMERIC		LC_NUMERIC
   LC_TIME = 2,
+#define LC_TIME			LC_TIME
   LC_COLLATE = 3,
+#define LC_COLLATE		LC_COLLATE
   LC_MONETARY = 4,
+#define LC_MONETARY		LC_MONETARY
   LC_MESSAGES = 5,
+#define LC_MESSAGES		LC_MESSAGES
   LC_ALL = 6,
+#define LC_ALL			LC_ALL
   LC_PAPER = 7,
+#define LC_PAPER		LC_PAPER
   LC_NAME = 8,
+#define LC_NAME			LC_NAME
   LC_ADDRESS = 9,
+#define LC_ADDRESS		LC_ADDRESS
   LC_TELEPHONE = 10,
+#define LC_TELEPHONE		LC_TELEPHONE
   LC_MEASUREMENT = 11,
+#define LC_MEASUREMENT		LC_MEASUREMENT
   LC_IDENTIFICATION = 12
+#define LC_IDENTIFICATION	LC_IDENTIFICATION
 };
 
 /* Structure giving information about numeric and monetary notation.  */

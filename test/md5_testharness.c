@@ -9,7 +9,7 @@ int main(void) { return 0; }
 #include <md5.h>
 
 
-#if defined (__i386__)
+#if defined (__i386__) || defined (__x86_64__)
  #define RDTSC(dst) { asm volatile ("rdtsc" : "=a" (dst) : : "edx"); }
  #define ITERATIONS 10
 #else

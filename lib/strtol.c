@@ -4,7 +4,11 @@
 #include <limits.h>
 #include <stdlib.h>
 
+#if __WORDSIZE == 64
+#define ABS_LONG_MIN 9223372036854775808UL
+#else
 #define ABS_LONG_MIN 2147483648UL
+#endif
 long int strtol(const char *nptr, char **endptr, int base)
 {
   int neg=0;
