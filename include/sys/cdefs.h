@@ -29,15 +29,14 @@
 #define __restrict__
 #endif
 
+#ifndef __STRICT_ANSI__
 #if (__GNUC__ < 3)
 #define __builtin_expect(foo,bar) (foo)
 #define expect(foo,bar) (foo)
 #else
 #define expect(foo,bar) __builtin_expect(foo,bar)
 #endif
-
-#else
-
+#endif
 #endif
 
 #define __P(x) x
