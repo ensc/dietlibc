@@ -15,7 +15,7 @@ fork:
 	sethi	%hi(errno), %o0
 	or	%o0, %lo(errno), %o0
 #endif
-	st	i0, [ %o0 ]
+	st	%i0, [ %o0 ]
 	retl
 	restore	%g0, -1, %o0
 1:	dec	%o1
