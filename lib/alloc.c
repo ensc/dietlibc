@@ -32,8 +32,10 @@ extern void *memset(void *s, int c, size_t n);
 extern void *memcpy(void *dest, const void *src, size_t n);
 
 typedef struct t_alloc_head {
+  unsigned int magic1;
   struct t_alloc_head *ptr;
   unsigned long size;
+  unsigned int magic2;
 } alloc_head;
 
 /* guess what ? the virtual block size */
@@ -55,8 +57,11 @@ typedef struct t_alloc_head {
 #define START_DATA(p)	(((char*)(p))+sizeof(alloc_head))
 #define MIN_ALLOC(s)	(((((s)+sizeof(alloc_head)-1)/MEM_ALLOC_MIN)+1)*MEM_ALLOC_MIN)
 
+#define ALLOC_MAGIC1	0xbad2f7ee
+#define ALLOC_MAGIC2	0xf7ee2bad
+
 /* freelist handler */
-static alloc_head base = {&base,0};
+static alloc_head base = {ALLOC_MAGIC1,&base,0,ALLOC_MAGIC2};
 static char *alloc_get_end = MEM_ALLOC_START;
 
 void __libc_free(void *ptr)
@@ -66,6 +71,8 @@ void __libc_free(void *ptr)
   if (ptr==NULL) return;
 
   block=START_BLOCK(ptr);
+  if (block->magic1 != ALLOC_MAGIC1) return;
+  if (block->magic2 != ALLOC_MAGIC2) return;
 
   prev=&base;
   for (p=prev->ptr ; ; prev=p, p=p->ptr)
@@ -122,6 +129,8 @@ static void *alloc_get_mem(unsigned long size)
 
   /* make a header */
   ah=(alloc_head*)tmp;
+  ah->magic1=ALLOC_MAGIC1;
+  ah->magic2=ALLOC_MAGIC2;
   ah->ptr=ah;
   ah->size=size;
 
@@ -160,6 +169,8 @@ void *__libc_malloc(size_t size)
 	else
 	{
 	  prev->ptr=tmp;
+	  tmp->magic1=ALLOC_MAGIC1;
+	  tmp->magic2=ALLOC_MAGIC2;
 	  tmp->ptr=p->ptr;
 	  tmp->size=p->size-need;	/* remaining size */
 	}
@@ -215,6 +226,8 @@ void *realloc(void *ptr,size_t size)
       {
 	tmp->size=need;
 	tf=END_OF_BLOCK(tmp);
+	tf->magic1=ALLOC_MAGIC1;
+	tf->magic2=ALLOC_MAGIC2;
 	tf->ptr=tf;
 	tf->size=diff;
 	free(START_DATA(tf));

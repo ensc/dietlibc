@@ -3,15 +3,28 @@ LIBPTHREAD
   This is the pthread implementation of dietlibc.
   Written from scratch by Olaf Dreesen.
 
-STATUS: incomplete but should work (or not... I had a lot of heisen-bugs...)
+1. STATUS: incomplete but should work (or not... I had a lot of heisen-bugs...)
 	On non i386 archs the kernel header have major differences...
 	NO workaround yet for this problems...
 
 It's like linuxthreads a clone base thread implementation.
 
-UPDATE: I have to implement a "Manager Thread" with all the pain it
-	involves... nested thread creation is now working fine...
+I have implemented a "Manager Thread" with all the pain it involves...
+Nested thread creation is now working fine...
 
+
+2. HOW-TO make this lib:
+
+	1. generate the dietlibc in the parent directory.
+	   and make sure you have WANT_THREAD_SAVE active in the file:
+	   dietfeatures.h
+
+	2. change back here and type make
+
+	and then you should have a libpthread.a
+
+
+3. NOTES
 
 NON STANDARD SIGNAL HANDLING for the threads:
 

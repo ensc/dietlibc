@@ -145,7 +145,7 @@ static void __kill_all_threads()
 }
 
 __attribute__((weak)) volatile void __thread_start__key(int id) { return; }
-__attribute__((weak)) volatile void __thread_exit__key(int id) { return; }
+__attribute__((weak,alias("__thread_start__key"))) volatile void __thread_exit__key(int id);
 
 /* support for manager */
 static void *__mthread_starter(void *arg)
