@@ -20,6 +20,7 @@
   create libcompat.a (and move daemon to it)
   add getdelim and getline
   *printf now recognize 'z' integer flag (and ignore it)
+  Dirk Engling provided a strcpy.S for ARM.
 
 0.15:
   vfork sucks.  I reverted to the old behavior where vfork==fork.
