@@ -525,6 +525,8 @@ int kill(pid_t pid, int sig) __THROW;
 
 int sigaction(int signum, const struct sigaction *act, struct sigaction *oldact) __THROW;
 
+#include <sys/time.h>
+
 int sigtimedwait(const sigset_t *mask, siginfo_t *info, const struct timespec *ts) __THROW;
 int sigqueueinfo(int pid, int sig, siginfo_t *info) __THROW;
 int siginterrupt(int sig, int flag) __THROW;
@@ -538,7 +540,6 @@ int sigwait(const sigset_t* set,int* sig) __THROW;
 
 extern const char *const* sys_siglist;
 
-#include <sys/time.h>
 #include <sys/ucontext.h>
 
 __END_DECLS
