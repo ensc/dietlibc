@@ -27,6 +27,7 @@
   Olaf: fixing the vsyscall support so that the binaries still work on 2.4
   remove getline macro, caused problems with GNU sed
   make assert equal (void)0 under -DNDEBUG (Enrico Scholz)
+  make __attribute_malloc__ #define safe (Matthias Andree)
 
 0.22:
   fix i386 libm
