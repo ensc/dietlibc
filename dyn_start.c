@@ -1,3 +1,6 @@
+#include "dietfeatures.h"
+
+#ifdef WANT_DYNAMIC
 #include <stdlib.h>
 
 typedef void(*structor)(void);
@@ -46,3 +49,4 @@ int _dyn_start(structor dl_init, int argc, char **argv, char **envp)
   atexit(_fini);
   return main(argc, argv, envp);
 }
+#endif

@@ -28,6 +28,10 @@ extern const char *const sys_siglist[];
 
 typedef __sighandler_t sig_t;
 
+#ifndef _NSIG
+#define _NSIG 64
+#endif
+
 #ifndef NSIG
 #define NSIG _NSIG
 #endif

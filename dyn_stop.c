@@ -1,3 +1,6 @@
+#include "dietfeatures.h"
+
+#ifdef WANT_DYNAMIC
 typedef void(*structor)(void);
 
 #if 0
@@ -28,4 +31,4 @@ __attribute__((section(".init"))) void _init()
 {
   __do_global_ctors_aux();
 }
-
+#endif
