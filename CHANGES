@@ -1,5 +1,9 @@
 0.26:
   iconv UTF-8 fix (Kuba Winnicki)
+  Olaf:
+    - adding 'getgrouplist'
+    - fixing type of 'unsetenv'
+    - adding missing realtime syscalls 'clock_*' 'timer_*' and types
 
 0.25:
   fix sprintf

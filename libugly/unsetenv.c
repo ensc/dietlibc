@@ -1,6 +1,6 @@
 #include <stdlib.h>
 
-void unsetenv(const char *name) {
-  putenv(name);
+int unsetenv(const char *name) {
+  return putenv(name);
 }
 

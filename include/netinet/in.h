@@ -320,7 +320,7 @@ struct ipv6_opt_hdr {
 
 /* routing header type 0 (used in cmsghdr struct) */
 
-#ifndef __STRICT_ANSI__
+#if !defined(__STRICT_ANSI__) || (__STDC_VERSION__ + 0 >= 199900L)
 struct rt0_hdr {
   struct ipv6_rt_hdr	rt_hdr;
   uint32_t		bitmap;		/* strict/loose bit map */

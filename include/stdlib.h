@@ -17,7 +17,7 @@ void *realloc(void *ptr, size_t size) __THROW __attribute_malloc__;
 char *getenv(const char *name) __THROW __pure;
 int putenv(const char *string) __THROW;
 int setenv(const char *name, const char *value, int overwrite) __THROW;
-void unsetenv(const char *name) __THROW;
+int unsetenv(const char *name) __THROW;
 
 int system (const char * string) __THROW;
 int atexit(void (*function)(void)) __THROW;

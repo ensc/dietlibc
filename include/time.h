@@ -6,7 +6,26 @@
 
 __BEGIN_DECLS
 
-extern int __isleap(int year);
+int __isleap(int year);
+
+#define CLOCK_REALTIME           0
+#define CLOCK_MONOTONIC          1
+#define CLOCK_PROCESS_CPUTIME_ID 2
+#define CLOCK_THREAD_CPUTIME_ID  3
+#define CLOCK_REALTIME_HR        4
+#define CLOCK_MONOTONIC_HR       5
+
+int clock_settime(clockid_t clock_id,const struct timespec*tp);
+int clock_gettime(clockid_t clock_id,struct timespec*tp);
+int clock_getres (clockid_t clock_id,struct timespec*res);
+
+#define TIMER_ABSTIME            1
+
+int timer_create(clockid_t clock_id,struct sigevent*evp,timer_t*timerid) __THROW;
+int timer_delete(timer_t timerid) __THROW;
+int timer_settime(timer_t timerid,int flags,const struct itimerspec*ival,struct itimerspec*oval) __THROW;
+int timer_gettime(timer_t timerid,const struct itimerspec*val) __THROW;
+int timer_getoverrun(timer_t timerid) __THROW;
 
 int nanosleep(const struct timespec *req, struct timespec *rem) __THROW;
 

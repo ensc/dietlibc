@@ -15,7 +15,7 @@ size_t fwrite_unlocked(const void *ptr, size_t size, size_t nmemb, FILE *stream)
   if (len>stream->buflen || (stream->flags&NOBUF)) {
     if (fflush_unlocked(stream)) return 0;
     do {
-      res=__libc_write(stream->fd,ptr,size*nmemb);
+      res=__libc_write(stream->fd,ptr,len);
     } while (res==-1 && errno==EINTR);
   } else {
     register const unsigned char *c=ptr;

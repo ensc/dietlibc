@@ -108,6 +108,9 @@ __extension__ typedef signed long long blkcnt64_t;
 typedef uint32_t uid32_t;
 typedef uint32_t gid32_t;
 
+typedef int clockid_t;
+typedef int timer_t;
+
 typedef long int fpos_t;
 
 #define __socklen_t_defined
@@ -133,8 +136,10 @@ typedef uint32_t ntime __attribute_dontuse__;
 typedef uint16_t nshort __attribute_dontuse__;
 
 /* never heard of these two, but dump uses them */
+#if !defined(__STRICT_ANSI__) || __STDC_VERSION__ + 0 >= 199900L
 typedef int64_t quad_t __attribute_dontuse__;
 typedef uint64_t u_quad_t __attribute_dontuse__;
+#endif
 typedef long daddr_t __attribute_dontuse__;
 
 typedef daddr_t __daddr_t __attribute_dontuse__;
