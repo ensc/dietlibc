@@ -102,9 +102,10 @@ extern char* strcpy2(char*a,char*b);
      __asm__ __volatile__ ("rdtsc" : "=a" (low) : : "edx")
 
 int main(int argc,char *argv[]) {
-  char* c;
-  while (c=getusershell())
-    puts(c);
+  char buf[1024];
+  time_t t1=time(0);
+  struct tm* t=localtime(&t1);
+  printf("%d %s\n",strftime(buf,sizeof buf,"%b %d %H:%M",t),buf);
 #if 0
   tzset();
   printf("%d\n",daylight);

@@ -43,7 +43,7 @@ size_t  strftime ( char* dst, size_t max, const char* format, const struct tm* t
 	        *p++ = '%';
 	    }
 	    else
-    	    switch (*++format) {
+    	    switch (*format) {
 //          case '%': *p++ = '%';  				 break;			// reduce size of jump table
             case 'n': *p++ = '\n'; 				 break;
             case 't': *p++ = '\t'; 				 break;
@@ -91,7 +91,6 @@ size_t  strftime ( char* dst, size_t max, const char* format, const struct tm* t
       	                  *p++ = *src++;
       	              break;
       	    };
-            break;
         } else {
             *p++ = *format;
         }
