@@ -13,6 +13,9 @@
 #define POLLRDBAND	0x0080
 #define POLLWRBAND	0x0200
 #define POLLMSG		0x0400
+/* POLLREMOVE is for /dev/epoll (/dev/misc/eventpoll),
+ * a new event notification mechanism for 2.6 */
+#define POLLREMOVE	0x1000
 
 #if defined(__sparc__) || defined (__mips__)
 #define POLLWRNORM	POLLOUT
