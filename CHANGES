@@ -14,6 +14,7 @@
     warning: I don't use rpc or xdr, I don't actually understand or have
     a way to test this.  Maybe I should remove this cruft from the
     diet libc...?
+  make declaration of writev and readv match susv3
 
 0.22:
   fix i386 libm
