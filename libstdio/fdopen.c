@@ -2,8 +2,6 @@
 #include <dietstdio.h>
 #include <unistd.h>
 
-#define SEEK_END 2
-
 int __stdio_parse_mode(const char *mode);
 FILE* __stdio_init_file(int fd);
 

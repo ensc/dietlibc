@@ -173,4 +173,7 @@ int llseek(int fildes, unsigned long hi, unsigned long lo, loff_t* result,int wh
 struct __sysctl_args;
 int _sysctl(struct __sysctl_args *args) __THROW;
 
+#define _SC_OPEN_MAX 4
+long sysconf(int name) __THROW;
+
 #endif

@@ -57,6 +57,7 @@
     now implemented.
   Unbuffered stdio and ungetc can no longer be disabled.  I will try to
     implement part of it using ELF weak symbols.
+  Added minimal sysconf (tehe) from David Chappell.
 
 0.10:
   update getpagesize.
