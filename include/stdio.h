@@ -116,6 +116,8 @@ int pclose(FILE *stream) __THROW;
 #define SEEK_END 2
 #endif
 
+#define L_tmpnam 128
+#define P_tmpdir "/tmp"
 char *tmpnam(char *s) __THROW;	/* DO NOT USE!!! Use mkstemp instead! */
 
 #endif
