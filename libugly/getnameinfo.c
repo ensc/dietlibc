@@ -40,6 +40,8 @@ int getnameinfo(const struct sockaddr *sa, socklen_t salen, char *host,
       struct servent *s;
       if (!(s=getservbyport(port,flags&NI_DGRAM?"udp":"tcp")))
 	return EAI_SERVICE;
+      strncpy(serv,s.s_name,servlen-1);
+      serv[servlen-1]=0;
     }
   }
   return 0;

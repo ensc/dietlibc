@@ -30,6 +30,7 @@
    - fixing the *scanf return behavior (reported by Enrico Scholz)
   add printf test
   change sys_siglist to char** (removes linker warning)
+  fix getnameinfo (Arnaldo Carvalho de Melo)
 
 0.23:
   update sys/soundcard.h
