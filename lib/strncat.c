@@ -14,9 +14,9 @@ char *strncat(char *s, const char *t, size_t n) {
   register char *max;
   s+=strlen(s);
 #ifdef WANT_NON_COMPLIANT_STRNCAT
-  max=s+n-1;
+  if ((max=s+n-1)<=s) goto fini;
 #else
-  max=s+n;
+  if ((max=s+n)==s) goto fini;
 #endif
   for (;;) {
     if (!(*s = *t)) break; if (++s==max) break; ++t;
@@ -27,5 +27,6 @@ char *strncat(char *s, const char *t, size_t n) {
 #endif
   }
   *s=0;
+fini:
   return dest;
 }

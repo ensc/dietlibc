@@ -12,7 +12,8 @@ bsearch:
 		
 	jecxz .LreturnNULL
 
-	leal -2(%ecx), %eax
+	decl %ecx
+	leal -1(%ecx), %eax
 	imull %edx, %eax
 	leal (%esi, %eax), %edi
 

@@ -6,7 +6,8 @@ void *bsearch(const void *key, const void *base, size_t nmemb, size_t size, int 
   int res;
   if (!nmemb) return 0;
   if (--nmemb)
-    r=((const char*)base)+(nmemb-1)*size;
+//    r=((const char*)base)+(nmemb-1)*size;
+    r=((const char*)base)+nmemb*size;
   else
     r=((const char*)base)-size;
   do {
