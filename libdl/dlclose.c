@@ -4,7 +4,7 @@
 
 static void dec_referenced_libs(struct _dl_handle* dh)
 {
-  Elf32_Dyn* dyn_tab = (void*)(dh->got[0]);	/* for i386/arm this is the dynamic section ptr */
+  Elf_Dyn* dyn_tab = (void*)(dh->got[0]);	/* for i386/arm this is the dynamic section ptr */
   int i;
   for(i=0;dyn_tab[i].d_tag;i++) {
     if (dyn_tab[i].d_tag==DT_NEEDED) {

@@ -1,8 +1,50 @@
 #ifndef ___DL_INT_H__
 #define ___DL_INT_H__
 
+#if defined(__alpha__)
+#define ELF_CLASS ELFCLASS64
+#else
+#define ELF_CLASS ELFCLASS32
+#endif
+
 #include <elf.h>
 #include <dlfcn.h>
+
+#if ELF_CLASS == ELFCLASS32
+
+#define Elf_Addr	Elf32_Addr
+
+#define Elf_Dyn 	Elf32_Dyn
+#define Elf_Ehdr	Elf32_Ehdr
+#define Elf_Phdr	Elf32_Phdr
+#define Elf_Rel 	Elf32_Rel
+#define Elf_Rela	Elf32_Rela
+#define Elf_Sym 	Elf32_Sym
+
+#define ELF_R_SYM(x)	ELF32_R_SYM((x))
+#define ELF_R_TYPE(x)	ELF32_R_TYPE((x))
+
+#define ELF_ST_BIND(x)	ELF32_ST_BIND((x))
+#define ELF_ST_TYPE(x)	ELF32_ST_TYPE((x))
+
+#else
+
+#define Elf_Addr	Elf64_Addr
+
+#define Elf_Dyn 	Elf64_Dyn
+#define Elf_Ehdr	Elf64_Ehdr
+#define Elf_Phdr	Elf64_Phdr
+#define Elf_Rel 	Elf64_Rel
+#define Elf_Rela	Elf64_Rela
+#define Elf_Sym 	Elf64_Sym
+
+#define ELF_R_SYM(x)	ELF64_R_SYM((x))
+#define ELF_R_TYPE(x)	ELF64_R_TYPE((x))
+
+#define ELF_ST_BIND(x)	ELF64_ST_BIND((x))
+#define ELF_ST_TYPE(x)	ELF64_ST_TYPE((x))
+
+#endif
 
 #if 0
 #include <stdio.h>
@@ -32,8 +74,8 @@ struct _dl_handle {
 
   char *	dyn_str_tab;	/* dyn_name table */
 
-  Elf32_Sym *	dyn_sym_tab;	/* dynamic symbol table */
-  Elf32_Rel *	plt_rel;	/* PLT relocation table */
+  Elf_Sym *	dyn_sym_tab;	/* dynamic symbol table */
+  Elf_Rel *	plt_rel;	/* PLT relocation table */
 
   /* INIT / FINI */
   void (*fini)(void);
@@ -79,7 +121,7 @@ int _dl_queue_lib(const char* name, int flags);
 int _dl_open_dep();
 
 /* _dl_relocate.c */
-int _dl_relocate(struct _dl_handle* dh, Elf32_Rel *rel, int num);
+int _dl_relocate(struct _dl_handle* dh, Elf_Rel *rel, int num);
 
 /* dlerror.c */
 extern int   _dl_error;

@@ -28,7 +28,7 @@ void *_dl_sym_search(struct _dl_handle * h, int symbol)
 void *_dl_sym(struct _dl_handle * h, int symbol)
 {
   void * ret=0;
-  if (ELF32_ST_TYPE(h->dyn_sym_tab[symbol].st_shndx)!=0) {
+  if (ELF_ST_TYPE(h->dyn_sym_tab[symbol].st_shndx)!=0) {
     ret = h->mem_base+h->dyn_sym_tab[symbol].st_value;
   }
   else {

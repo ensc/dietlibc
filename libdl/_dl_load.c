@@ -45,12 +45,12 @@ static struct _dl_handle *_dl_map_lib(const char*fn, const char*pathname, int fd
   unsigned long l;
   struct stat st;
 
-  Elf32_Ehdr *eh;
-  Elf32_Phdr *ph;
+  Elf_Ehdr *eh;
+  Elf_Phdr *ph;
 
   int ld_nr=0;
-  Elf32_Phdr *ld[4]={0,0,0,0};
-  Elf32_Phdr *dyn=0;
+  Elf_Phdr *ld[4]={0,0,0,0};
+  Elf_Phdr *dyn=0;
 
   if (fd==-1) return 0;
 
@@ -71,8 +71,8 @@ static struct _dl_handle *_dl_map_lib(const char*fn, const char*pathname, int fd
     return 0;
   }
 
-  eh=(Elf32_Ehdr*)buf;
-  ph=(Elf32_Phdr*)&buf[eh->e_phoff];
+  eh=(Elf_Ehdr*)buf;
+  ph=(Elf_Phdr*)&buf[eh->e_phoff];
 
   for (i=0; i<eh->e_phnum; i++) {
     if (ph[i].p_type==PT_LOAD) {
@@ -152,7 +152,7 @@ __attribute__ ((alias("_dl_dyn_scan")));
 
 struct _dl_handle* _dl_dyn_scan(struct _dl_handle* dh, void* dyn_addr, int flags)
 {
-  Elf32_Dyn* dyn_tab = dyn_addr;
+  Elf_Dyn* dyn_tab = dyn_addr;
 
   void (*init)()=0;
   unsigned long* got=0;
@@ -177,7 +177,7 @@ struct _dl_handle* _dl_dyn_scan(struct _dl_handle* dh, void* dyn_addr, int flags
       DEBUG("_dl_load have hash @ %08lx\n",(long)dh->hash_tab);
     }
     else if (dyn_tab[i].d_tag==DT_SYMTAB) {
-      dh->dyn_sym_tab = (Elf32_Sym*)(dh->mem_base+dyn_tab[i].d_un.d_ptr);
+      dh->dyn_sym_tab = (Elf_Sym*)(dh->mem_base+dyn_tab[i].d_un.d_ptr);
       DEBUG("_dl_load have dyn_sym_tab @ %08lx\n",(long)dh->dyn_sym_tab);
     }
     else if (dyn_tab[i].d_tag==DT_STRTAB) {
@@ -283,7 +283,7 @@ struct _dl_handle* _dl_dyn_scan(struct _dl_handle* dh, void* dyn_addr, int flags
   /* relocate */
   if (rel) {
     DEBUG("_dl_load try to relocate some values\n");
-    if (_dl_relocate(dh,(Elf32_Rel*)rel,relsize/relent)) {
+    if (_dl_relocate(dh,(Elf_Rel*)rel,relsize/relent)) {
       munmap(dh->mem_base,dh->mem_size);
       _dl_free_handle(dh);
       return 0;
@@ -292,11 +292,11 @@ struct _dl_handle* _dl_dyn_scan(struct _dl_handle* dh, void* dyn_addr, int flags
 
   /* do PTL / GOT relocation */
   if (pltreltype == DT_REL) {
-    Elf32_Rel *tmp = jmprel;
+    Elf_Rel *tmp = jmprel;
     DEBUG("_dl_load: rel got\n");
-    for (;(char*)tmp<(((char*)jmprel)+pltrelsize);(char*)tmp=((char*)tmp)+sizeof(Elf32_Rel)) {
+    for (;(char*)tmp<(((char*)jmprel)+pltrelsize);(char*)tmp=((char*)tmp)+sizeof(Elf_Rel)) {
       if ((flags&RTLD_NOW)) {
-	unsigned long sym=(unsigned long)_dl_sym(dh,ELF32_R_SYM(tmp->r_info));
+	unsigned long sym=(unsigned long)_dl_sym(dh,ELF_R_SYM(tmp->r_info));
 	if (sym) *((unsigned long*)(dh->mem_base+tmp->r_offset))=sym;
 	else {
 	  _dl_free_handle(dh);
@@ -306,16 +306,16 @@ struct _dl_handle* _dl_dyn_scan(struct _dl_handle* dh, void* dyn_addr, int flags
       }
       else
 	*((unsigned long*)(dh->mem_base+tmp->r_offset))+=(unsigned long)dh->mem_base;
-      DEBUG("_dl_load rel @ %08lx with type %d -> %d\n",(long)dh->mem_base+tmp->r_offset,ELF32_R_TYPE(tmp->r_info),ELF32_R_SYM(tmp->r_info));
+      DEBUG("_dl_load rel @ %08lx with type %d -> %d\n",(long)dh->mem_base+tmp->r_offset,ELF_R_TYPE(tmp->r_info),ELF_R_SYM(tmp->r_info));
       DEBUG("_dl_load -> %08lx\n",*((unsigned long*)(dh->mem_base+tmp->r_offset)));
     }
   }
   if (pltreltype == DT_RELA) {
-    Elf32_Rela *tmp = jmprel;
+    Elf_Rela *tmp = jmprel;
     DEBUG("_dl_load: rela got\n");
-    for (;(char*)tmp<(((char*)jmprel)+pltrelsize);(char*)tmp=((char*)tmp)+sizeof(Elf32_Rel)) {
+    for (;(char*)tmp<(((char*)jmprel)+pltrelsize);(char*)tmp=((char*)tmp)+sizeof(Elf_Rela)) {
       if ((flags&RTLD_NOW)) {
-	unsigned long sym=(unsigned long)_dl_sym(dh,ELF32_R_SYM(tmp->r_info));
+	unsigned long sym=(unsigned long)_dl_sym(dh,ELF_R_SYM(tmp->r_info));
 	if (sym) *((unsigned long*)(dh->mem_base+tmp->r_offset))=sym;
 	else {
 	  _dl_free_handle(dh);
@@ -325,7 +325,7 @@ struct _dl_handle* _dl_dyn_scan(struct _dl_handle* dh, void* dyn_addr, int flags
       }
       else
 	*((unsigned long*)(dh->mem_base+tmp->r_offset))=(unsigned long)(dh->mem_base+tmp->r_addend);
-      DEBUG("_dl_load rela @ %08lx with type %d -> %d\n",(long)dh->mem_base+tmp->r_offset,ELF32_R_TYPE(tmp->r_info),ELF32_R_SYM(tmp->r_info));
+      DEBUG("_dl_load rela @ %08lx with type %d -> %d\n",(long)dh->mem_base+tmp->r_offset,ELF_R_TYPE(tmp->r_info),ELF_R_SYM(tmp->r_info));
       DEBUG("_dl_load -> %08lx\n",*((unsigned long*)(dh->mem_base+tmp->r_offset)));
     }
   }

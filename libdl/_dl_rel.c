@@ -9,15 +9,15 @@ static void exit_now(void) {
 
 unsigned long do_rel(struct _dl_handle * tmp_dl, unsigned long off)
 {
-  Elf32_Rel *tmp = ((void*)tmp_dl->plt_rel)+off;
+  Elf_Rel *tmp = ((void*)tmp_dl->plt_rel)+off;
 
-  int sym=ELF32_R_SYM(tmp->r_info);
+  int sym=ELF_R_SYM(tmp->r_info);
 
   register unsigned long sym_val;
 
   DEBUG("do_rel %08lx %08lx\n",(long)tmp_dl,off);
   DEBUG("do_rel %08lx+%lx\n",(long)tmp_dl->plt_rel,off);
-  DEBUG("do_rel @ %08lx with type %d -> %d\n",(long)tmp->r_offset,ELF32_R_TYPE(tmp->r_info),sym);
+  DEBUG("do_rel @ %08lx with type %d -> %d\n",(long)tmp->r_offset,ELF_R_TYPE(tmp->r_info),sym);
   DEBUG("do_rel sym @ %08lx\n",(long)tmp_dl->dyn_sym_tab);
   DEBUG("do_rel sym %08lx\n",(long)tmp_dl->dyn_sym_tab[sym].st_value);
 

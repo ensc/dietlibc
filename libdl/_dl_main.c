@@ -1,3 +1,5 @@
+#ifdef __OD_CLEAN_ROOM
+
 /*
  * the is the dietlibc libdl dynamic-linker
  */
@@ -6,6 +8,8 @@
 static void (*fini_entry)(void);
 
 void _start(void);
+void _dl_jump(void);
+void _exit(int);
 
 #ifdef __i386__
 
@@ -19,14 +23,13 @@ _start:
 	leal	4(%esi,%ecx,4), %eax	# envp
 
 # PIC code
-	call	.L_pic
+	call	getpic
 	addl	$_GLOBAL_OFFSET_TABLE_, %ebx
 
-# get load addr ( this generates TEXTREL :( )
-	leal	0f@GOTOFF(%ebx), %edx
-0:	subl	$., %edx
+# for calculation of load addr, get 'relocated' address of _DYNAMIC
+	leal	_DYNAMIC@GOTOFF(%ebx), %edx
 
-# put parameter on stack and call main
+# put parameter on stack and call _dl_main
 	pushl	%edx
 	pushl	%eax
 	pushl	%esi
@@ -54,14 +57,41 @@ _start:
 #	ret
 
 # test / debug code :)
+.global _exit
 _exit:
 	movl	$1,%eax
 	popl	%ebx
 	int	$0x80
 	hlt
 
-# get Position In Code :)
-.L_pic:	movl	(%esp), %ebx
+.global _dl_jump
+.type	_dl_jump,@function
+_dl_jump:
+	pushl	%eax		# save register args...
+	pushl	%ecx
+	pushl	%edx
+
+	pushl	%ebx		# callee save
+
+	call	getpic
+	addl	$_GLOBAL_OFFSET_TABLE_,%ebx
+
+	push	20(%esp)	# 2. arg from plt
+	push	20(%esp)	# 1. arg from plt
+	call	do_rel@PLT
+	add	$8, %esp
+
+	popl	%ebx		# callee save
+
+	popl	%edx		# restore register args...
+	popl	%ecx
+
+	xchgl	%eax, (%esp)	# restore eax and save function pointer (for return)
+
+	ret	$8		# remove arguments from plt and jump to REAL function
+
+# GET Position In Code :)
+getpic:	movl	(%esp), %ebx
 	ret
 ");
 
@@ -76,29 +106,55 @@ asm(".text
 .global _start
 _start:
 	mov	r4, sp
-	mov	fp, #0
+	mov	fp, #0			@ start new stack frame
 
-	ldr	a1, [sp], #4
-	mov	a2, sp
+	ldr	a1, [sp], #4		@ argc
+	mov	a2, sp			@ argv
 	add	a3, a2, a1, lsl #2
-	add	a3, a3, #4
+	add	a3, a3, #4		@ envp
 
-	ldr	sl, .L_got
+	ldr	sl, .L_got		@ PIC code
 1:	add	sl, pc, sl
 
-	ldr	a4, .L_la
-	mov	a4, pc
+	ldr	a4, .L_la		@ get 'relocated' address of _DYNAMIC
+	add	a4, a4, sl
 
-	bl	_dl_main
+	bl	_dl_main		@ call _dl_main
 
 	mov	sp, r4
-	mov	lr, a1
-	ldr	a1, [pc, #.L_fe-(.+8)]
+
+	mov	lr, a1			@ save program entry point
+
+	ldr	a1, [pc, #.L_fe-(.+8)]	@ agrument 1: global fini entry
+	ldr	a1, [sl, a1]
+
 	mov	pc, lr
 
 .L_got:	.long	_GLOBAL_OFFSET_TABLE_-(1b+8)
-.L_la:	.long	.L_la(GOTOFF)
+.L_la:	.long	_DYNAMIC(GOTOFF)
 .L_fe:	.long	fini_entry(GOTOFF)
+
+_exit:
+	swi	#1			@ exit
+	eor	lr, lr, lr		@ OR DIE !
+	mov	pc, lr
+
+.global _dl_jump
+.type	_dl_jump,function
+_dl_jump:
+	stmdb	sp!, {r0, r1, r2, r3}	@ save arguments
+
+	sub	r1, ip, lr
+	sub	r1, r1, #4
+	add	r1, r1, r1		@ dyntab entry
+
+	ldr	r0, [lr, #-4]		@ dynlib handle
+
+	bl	do_rel(PLT)
+
+	mov	r12, r0
+	ldmia	sp!, {r0, r1, r2, r3, lr} @ restore arguments
+	mov	pc, r12
 ");
 
 static inline unsigned long* get_got(void) {
@@ -110,14 +166,37 @@ static inline unsigned long* get_got(void) {
 #error "arch not supported"
 #endif
 
-static unsigned long _dl_main(int argc,char*argv[],char*envp[],unsigned long load_addr) {
+#define DT_NUM 23
+
+static void bootstrap(Elf_Dyn*_dynamic) {
+
+}
+
+static void _DIE_() { _exit(113); }
+
+static unsigned long _dl_main(int argc,char*argv[],char*envp[],unsigned long _dynamic) {
+  unsigned long*got;
+  unsigned long load_addr;
+
   if (0) _dl_main(argc,argv,envp,load_addr); /* TRICK: no warning */
+
+  /* prepare to bootstarp the relocations */
+  got=get_got();
+
+  /* first element of GOT points to _DYNAMIC (ELF convention)
+   * _dynamic - (UNRELOCATED offset) == load address */
+  load_addr=_dynamic-got[0];
+
+  got[0]=_dynamic;		/* write relocated address of _DYNAMIC */
+  got[1]=0;			/* NOT YET */
+  got[2]=(unsigned long)(_DIE_);/* NO dynamic symbol relocation as long as we are not ready */
+
   /* bootstrap relocation */
-  {
-    unsigned long*got=get_got();
-    fini_entry=got;
-  }
+  bootstrap((Elf_Dyn*)_dynamic);
 
   /* now we are save to use anything :) */
+
   return load_addr;
 }
+
+#endif

@@ -108,6 +108,7 @@ typedef int64_t		Elf64_Sxword;
 #define DT_DEBUG		21
 #define DT_TEXTREL		22
 #define DT_JMPREL		23
+#define DT_NUM			24
 #define DT_LOPROC		0x70000000
 #define DT_HIPROC		0x7fffffff
 #define DT_MIPS_RLD_VERSION	0x70000001
@@ -143,6 +144,9 @@ typedef int64_t		Elf64_Sxword;
 
 #define ELF32_ST_BIND(x) ((x) >> 4)
 #define ELF32_ST_TYPE(x) (((unsigned int) x) & 0xf)
+
+#define ELF64_ST_BIND(val)		ELF32_ST_BIND (val)
+#define ELF64_ST_TYPE(val)		ELF32_ST_TYPE (val)
 
 /* Symbolic values for the entries in the auxiliary table
    put on the initial stack */
@@ -182,8 +186,11 @@ typedef struct {
 } Elf64_Dyn;
 
 /* The following are used with relocations */
-#define ELF32_R_SYM(x) ((x) >> 8)
+#define ELF32_R_SYM(x)  ((x) >> 8)
 #define ELF32_R_TYPE(x) ((x) & 0xff)
+
+#define ELF64_R_SYM(x)  ((x) >> 32)
+#define ELF64_R_TYPE(x) ((x) & 0xffffffff)
 
 #define R_386_NONE		0
 #define R_386_32		1
