@@ -1,12 +1,17 @@
 #include <dietstdio.h>
 #include <unistd.h>
+#include <endian.h>
 
 int fputc_unlocked(int c, FILE *stream) {
   if (__fflush4(stream,0)) return EOF;
   if (stream->bm>=stream->buflen-1)
     if (fflush(stream)) return EOF;
   if (stream->flags&NOBUF) {
+#if __BYTE_ORDER == __LITTLE_ENDIAN
     if (write(stream->fd,&c,1) != 1) return EOF;
+#else
+    if (write(stream->fd,&c+sizeof(c)-1,1) != 1) return EOF;
+#endif
     return 0;
   }
   stream->buf[stream->bm]=c;
