@@ -246,6 +246,9 @@ __extension__ typedef signed long long int intmax_t;
 __extension__ typedef unsigned long long int uintmax_t;
 #endif
 
+intmax_t strtoimax (const char *nptr, char **endptr, int base);
+uintmax_t strtoumax (const char *nptr, char **endptr, int base);
+
 __END_DECLS
 
 #endif

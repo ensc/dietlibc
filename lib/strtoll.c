@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <limits.h>
 #include <errno.h>
+#include <inttypes.h>
 
 long long int strtoll(const char *nptr, char **endptr, int base)
 {
@@ -24,3 +25,6 @@ long long int strtoll(const char *nptr, char **endptr, int base)
   }
   return (neg?-v:v);
 }
+
+intmax_t strtoimax(const char *nptr, char **endptr, int base)
+	__attribute__((alias("strtoll")));

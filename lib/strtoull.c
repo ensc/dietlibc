@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <limits.h>
+#include <inttypes.h>
 
 unsigned long long int strtoull(const char *ptr, char **endptr, int base)
 {
@@ -57,4 +58,7 @@ skip0x:
 
 /* die, BSD, die!!! */
 unsigned long long int strtouq(const char *nptr, char **endptr, int base)
-	__attribute__((weak,alias("strtoull")));
+	__attribute__((alias("strtoull")));
+
+uintmax_t strtoumax(const char *nptr, char **endptr, int base)
+	__attribute__((alias("strtoull")));
