@@ -1,3 +1,3 @@
 #include "syscalls.h"
 
-syscall(sigsuspend,sigsuspend)
+syscall_weak(sigsuspend,sigsuspend,__libc_sigsuspend)
