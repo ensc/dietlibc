@@ -3,7 +3,6 @@
 #include <errno.h>
 #include <stdlib.h>
 #include "dietfeatures.h"
-#include "dietstdarg.h"
 
 int execlp(const char* file, const char *arg,...) {
   va_list ap,bak;

@@ -1,7 +1,6 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "dietstdarg.h"
 
 int vfprintf(FILE *fstream, const char *format, va_list ap)
 {
