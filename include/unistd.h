@@ -154,4 +154,6 @@ int getgroups(int size, gid_t list[]) __THROW;
 int _sysctl(struct __sysctl_args *args) __THROW;
 int  sendfile(int out_fd, int in_fd, off_t *offset, size_t count) __THROW;
 
+int getdtablesize(void) __THROW;
+
 #endif

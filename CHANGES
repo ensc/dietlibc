@@ -10,6 +10,10 @@
   add getopt_long stuff to getopt.h (may compile but won't link).
   add RPC headers (no code yet).
   add mlockall, munlockall
+  make "diet gcc foo.c" work.
+  added Sun RPC code and removed as many warnings as possible in a
+    heroic act of self-mutilation.
+  added getproto* and getdtablesize for the RPC cruft :-(
 
 0.9:
   fixed initgroups (oops)

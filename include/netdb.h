@@ -23,9 +23,9 @@ struct servent
 
 extern void endservent (void) __THROW;
 extern struct servent *getservent (void) __THROW;
-extern struct servent *getservbyname (__const char *__name,
-				      __const char *__proto) __THROW;
-extern struct servent *getservbyport (int __port, __const char *__proto)
+extern struct servent *getservbyname (const char *__name,
+				      const char *__proto) __THROW;
+extern struct servent *getservbyport (int __port, const char *__proto)
      __THROW;
 
 struct hostent
@@ -59,5 +59,17 @@ extern int gethostbyname_r(const char* NAME, struct hostent* RESULT_BUF,char* BU
 extern int gethostbyaddr_r(const char* addr, size_t length, int format,
 		    struct hostent* result, char *buf, size_t buflen,
 		    struct hostent **RESULT, int *h_errnop) __THROW;
+
+struct protoent {
+  char    *p_name;        /* official protocol name */
+  char    **p_aliases;    /* alias list */
+  int     p_proto;        /* protocol number */
+};
+
+struct protoent *getprotoent(void) __THROW;
+struct protoent *getprotobyname(const char *name) __THROW;
+struct protoent *getprotobynumber(int proto) __THROW;
+void setprotoent(int stayopen) __THROW;
+void endprotoent(void) __THROW;
 
 #endif

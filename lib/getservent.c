@@ -21,7 +21,7 @@ struct servent *getservent(void) {
   char *last;
   int aliasidx;
   if (servicesfd<0) {
-    servicesfd=open("/etc/services",O_RDONLY);
+    servicesfd=open(_PATH_SERVICES,O_RDONLY);
     if (servicesfd<0) return 0;
     serviceslen=lseek(servicesfd,0,SEEK_END);
     servicesmap=mmap(0,serviceslen,PROT_READ|PROT_WRITE,MAP_PRIVATE,servicesfd,0);

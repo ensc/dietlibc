@@ -2,14 +2,14 @@ ARCH=$(shell uname -m | sed 's/i[4-9]86/i386/')
 
 OBJDIR=bin-$(ARCH)
 
-all: $(OBJDIR) $(OBJDIR)/start.o $(OBJDIR)/dietlibc.a $(OBJDIR)/liblatin1.a $(OBJDIR)/elftrunc $(OBJDIR)/diet
+all: $(OBJDIR) $(OBJDIR)/start.o $(OBJDIR)/dietlibc.a $(OBJDIR)/liblatin1.a $(OBJDIR)/librpc.a $(OBJDIR)/elftrunc $(OBJDIR)/diet
 
 CFLAGS=-pipe
 CROSS=
 
 CC=gcc
 
-VPATH=lib:libstdio:libugly:libcruft:libcrypt:libshell:liblatin1:syscalls.c
+VPATH=lib:libstdio:libugly:libcruft:libcrypt:libshell:liblatin1:librpc:syscalls.c
 
 SYSCALLOBJ=$(patsubst syscalls.s/%.S,$(OBJDIR)/%.o,$(wildcard syscalls.s/*.S))
 
@@ -19,6 +19,8 @@ LIBSTDIOOBJ=$(patsubst libstdio/%.c,$(OBJDIR)/%.o,$(wildcard libstdio/*.c))
 LIBCRUFTOBJ=$(patsubst libcruft/%.c,$(OBJDIR)/%.o,$(wildcard libcruft/*.c))
 LIBCRYPTOBJ=$(patsubst libcrypt/%.c,$(OBJDIR)/%.o,$(wildcard libcrypt/*.c))
 LIBSHELLOBJ=$(patsubst libshell/%.c,$(OBJDIR)/%.o,$(wildcard libshell/*.c))
+
+LIBRPCOBJ=$(patsubst librpc/%.c,$(OBJDIR)/%.o,$(wildcard librpc/*.c))
 
 include $(ARCH)/Makefile.add
 
@@ -30,7 +32,7 @@ ifneq ($(DEBUG),)
 CFLAGS = -g
 COMMENT = :
 endif
-CFLAGS += -Wall
+CFLAGS += -Wall -Wno-switch
 
 PWD=$(shell pwd)
 
@@ -56,6 +58,9 @@ $(OBJDIR)/mmap.o $(OBJDIR)/clone.o
 
 $(OBJDIR)/dietlibc.a: $(DIETLIBC_OBJ) $(OBJDIR)/start.o
 	$(CROSS)ar cru $@ $(DIETLIBC_OBJ)
+
+$(OBJDIR)/librpc.a: $(OBJDIR) $(LIBRPCOBJ)
+	$(CROSS)ar cru $@ $(LIBRPCOBJ)
 
 LIBLATIN1_OBJS=$(patsubst liblatin1/%.c,$(OBJDIR)/%.o,$(wildcard liblatin1/*.c))
 $(OBJDIR)/liblatin1.a: $(LIBLATIN1_OBJS)
