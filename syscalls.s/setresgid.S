@@ -1,6 +1,6 @@
 #include "syscalls.h"
 
-#ifdef __setresgid
+#ifdef __NR_setresgid
 
 syscall(setresgid)
 

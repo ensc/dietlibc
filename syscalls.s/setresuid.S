@@ -1,6 +1,6 @@
 #include "syscalls.h"
 
-#ifdef __setresuid
+#ifdef __NR_setresuid
 
 syscall(setresuid)
 
