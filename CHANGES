@@ -24,6 +24,7 @@
   expanded arpa/nameser.h to include backwards compatibility defines
   add ut_name alias to ut_host in struct utmp.
   add inet_ntop, inet_pton, gethostbyname2.
+  add sysinfo.
 
 0.9:
   fixed initgroups (oops)
