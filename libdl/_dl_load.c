@@ -31,7 +31,7 @@ static inline void *do_map_in(void *base, unsigned long length, int flags, int f
 {
   register int op = MAP_PRIVATE;
   if (base) op|=MAP_FIXED;
-  return mmap(base, length, map_flags(flags), op, fd, offset);
+  return mmap(base, length, flags, op, fd, offset);
 }
 
 static struct _dl_handle *_dl_map_lib(const char*fn, const char*pathname, int fd, int flags)
@@ -89,7 +89,8 @@ static struct _dl_handle *_dl_map_lib(const char*fn, const char*pathname, int fd
     unsigned long length = _ELF_UP_ROUND(ps,ld[0]->p_memsz+off);
     ret = _dl_get_handle();
 
-    m = (char*)do_map_in(0, length, ld[0]->p_flags, fd, offset);
+    ret->lnk_count = map_flags(ld[0]->p_flags); /* missuse of field */
+    m = (char*)do_map_in(0, length, ret->lnk_count, fd, offset);
     if (m==MAP_FAILED) { _dl_free_handle(ret); close(fd); return 0; }
 
     /* zero pad bss */
@@ -98,9 +99,10 @@ static struct _dl_handle *_dl_map_lib(const char*fn, const char*pathname, int fd
 
     ret->mem_base=m;
     ret->mem_size=length;
+    ret->text_size=length;
   }
   else if (ld_nr==2) { /* aem... yes Quick & Really Dirty / for the avarage 99% */
-    unsigned long text_addr = _ELF_DWN_ROUND(ps,ld[0]->p_vaddr);
+//    unsigned long text_addr = _ELF_DWN_ROUND(ps,ld[0]->p_vaddr);	/* do we need this ? */
     unsigned long text_offset = _ELF_DWN_ROUND(ps,ld[0]->p_offset);
     unsigned long text_off = _ELF_RST_ROUND(ps,ld[0]->p_offset);
     unsigned long text_size = _ELF_UP_ROUND(ps,ld[0]->p_memsz+text_off);
@@ -113,14 +115,15 @@ static struct _dl_handle *_dl_map_lib(const char*fn, const char*pathname, int fd
 
     ret = _dl_get_handle();
     /* mmap all mem_blocks for *.so */
-    m = (char*) do_map_in(0,text_size+data_size,ld[0]->p_flags,fd,text_offset);
+    ret->lnk_count = map_flags(ld[0]->p_flags); /* missuse of field */
+    m = (char*) do_map_in(0,text_size+data_size,ret->lnk_count,fd,text_offset);
     if (m==MAP_FAILED) { _dl_free_handle(ret); close(fd); return 0; }
 
     /* release data,bss part */
     mprotect(m+data_addr, data_size, PROT_NONE);
 
     /* mmap data,bss part */
-    d = (char*) do_map_in(m+data_addr,data_fsize,ld[1]->p_flags,fd,data_offset);
+    d = (char*) do_map_in(m+data_addr,data_fsize,map_flags(ld[1]->p_flags),fd,data_offset);
 
     /* zero pad bss */
     l = data_off+ld[1]->p_filesz;
@@ -132,15 +135,14 @@ static struct _dl_handle *_dl_map_lib(const char*fn, const char*pathname, int fd
       mmap(d+data_fsize, l, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0);
     }
 
-    ret->mem_size=text_size+data_size;
     ret->mem_base=m;
-    ret->img_off = text_addr;
+    ret->mem_size=text_size+data_size;
+    ret->text_size=text_size;
   }
 
   if (ret) {
-    ret->lnk_count=1;
     ret->name=strdup(fn);
-    ret->dyn_str_tab=(char*)m+dyn->p_vaddr;
+    ret->dyn_str_tab=(char*)m+dyn->p_vaddr;	/* missuse of field */
   }
 
   close(fd);
@@ -154,6 +156,7 @@ __attribute__ ((alias("_dl_dyn_scan")));
 struct _dl_handle* _dl_dyn_scan(struct _dl_handle* dh, void* dyn_addr, int flags)
 {
   Elf32_Dyn* dyn_tab = dyn_addr;
+
   void (*init)()=0;
   unsigned long* got=0;
   void* jmprel=0;
@@ -163,9 +166,13 @@ struct _dl_handle* _dl_dyn_scan(struct _dl_handle* dh, void* dyn_addr, int flags
   int relent=0;
   int relsize=0;
 
+  unsigned long text_flags = dh->lnk_count;
+  int textrel=0;
+
   int i;
 
   DEBUG("_dl_load pre resolv %08lx\n",(long)dyn_tab);
+  dh->lnk_count   = 1;
   dh->dyn_str_tab = 0;
   dh->flag_global = flags&RTLD_GLOBAL;
 
@@ -230,9 +237,13 @@ struct _dl_handle* _dl_dyn_scan(struct _dl_handle* dh, void* dyn_addr, int flags
     }
 
     if (dyn_tab[i].d_tag==DT_TEXTREL) {
+#if 1
+      textrel=1;
+#else
       _dl_free_handle(dh);
       _dl_error = 2;
       return 0;
+#endif
     }
   }
   /* extra scan for rpath (if program) ... */
@@ -266,16 +277,21 @@ struct _dl_handle* _dl_dyn_scan(struct _dl_handle* dh, void* dyn_addr, int flags
     return 0;
   }
 
-  /* here unprotect the text as writable IF TEXTREL is given */
   if (rel) {
+    if (textrel) { /* here unprotect the text as writable IF TEXTREL is given */
+      if (mprotect(dh->mem_base,dh->text_size,PROT_READ|PROT_WRITE)) goto rel_err;
+    }
     DEBUG("_dl_load try to relocate some values\n");
     if (_dl_relocate(dh,(Elf32_Rel*)rel,relsize/relent)) {
+rel_err:
       munmap(dh->mem_base,dh->mem_size);
       _dl_free_handle(dh);
       return 0;
     }
+    if (textrel) { /* here reprotect the text as readonly IF TEXTREL is given */
+      mprotect(dh->mem_base,dh->text_size,text_flags);
+    }
   }
-  /* here reprotect the text as readonly IF TEXTREL is given */
 
   // load other libs
   for(i=0;dyn_tab[i].d_tag;i++) {
