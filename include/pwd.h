@@ -17,4 +17,8 @@ struct passwd {
 extern struct passwd *getpwuid (uid_t __uid) __THROW;
 extern struct passwd *getpwnam (const char *__name) __THROW;
 
+extern struct passwd *getpwent(void) __THROW;
+extern void setpwent(void) __THROW;
+extern void endpwent(void) __THROW;
+
 #endif

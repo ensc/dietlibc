@@ -42,6 +42,8 @@
   added liblatin1.a
   added tzfile implementation (does it work for anyone else?)
   added syslog(3) (thanks to Rene Müller!)
+  Jeff Garzik contributed getgr*, getpw* and getsp* in one tiny package.
+    Thanks!
 
 0.7.2:
   added several prototypes to already implemented functions and

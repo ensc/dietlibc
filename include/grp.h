@@ -12,7 +12,11 @@ struct group
     char **gr_mem;		/* Member list.	*/
   };
 
-extern struct passwd *getgrgid (uid_t __uid) __THROW;
-extern struct passwd *getgrnam (const char *__name) __THROW;
+extern struct group *getgrgid (uid_t __uid) __THROW;
+extern struct group *getgrnam (const char *__name) __THROW;
+
+extern struct group *getgrent(void) __THROW;
+extern void setgrent(void) __THROW;
+extern void endgrent(void) __THROW;
 
 #endif
