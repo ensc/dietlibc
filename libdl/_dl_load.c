@@ -1,6 +1,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/mman.h>
+#include <sys/stat.h>
 #include <dlfcn.h>
 #include <elf.h>
 

@@ -16,13 +16,18 @@ _dl_jump:
 #endif
 
 #ifdef __arm__
-	stmdb	sp!, {r0, r1, r2, r3, lr, pc}
+	stmdb	sp!, {r0, r1, r2, r3}
+	sub	r1, ip, lr
+	sub	r1, r1, #4
+	add	r1, r1, r1		/* dyntab entry */
+	ldr	r0, [lr, #-4]		/* dynlib handle */
 #ifdef __DYN_LIB
 	bl	do_rel(PLT)
 #else
 	bl	do_rel
 #endif
-	str	r0, [sp, #20]		/* overwrite pc on stack */
-	ldmia	sp!, {r0, r1, r2, r3, lr, pc}
+	mov	r12, r0
+	ldmia	sp!, {r0, r1, r2, r3, lr}
+	mov	pc, r12
 
 #endif
