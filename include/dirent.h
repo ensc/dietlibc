@@ -12,6 +12,7 @@ struct dirent {
   char		d_name[256]; /* We must not include limits.h! */
 };
 
+#ifndef __STRICT_ANSI__
 struct dirent64 {
   uint64_t	d_ino;
   int64_t	d_off;
@@ -19,6 +20,7 @@ struct dirent64 {
   unsigned char	d_type;
   char		d_name[256];
 };
+#endif
 
 #define d_fileno	d_ino	/* Backwards compatibility.  */
 

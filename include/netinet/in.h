@@ -296,12 +296,14 @@ struct ipv6_opt_hdr {
 
 /* routing header type 0 (used in cmsghdr struct) */
 
+#ifndef __STRICT_ANSI__
 struct rt0_hdr {
   struct ipv6_rt_hdr	rt_hdr;
   uint32_t		bitmap;		/* strict/loose bit map */
   struct in6_addr	addr[0];
 #define rt0_type		rt_hdr.type;
 };
+#endif
 
 struct ipv6hdr {
 #if __BYTE_ORDER == __LITTLE_ENDIAN
