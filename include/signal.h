@@ -212,6 +212,4 @@ int siginterrupt(int sig, int flag) __THROW;
 
 extern const char *const sys_siglist[];
 
-#define killpg(pgrp,sig) kill(-pgrp,sig)
-
 #endif
