@@ -237,3 +237,15 @@ A: Some obsolete and/or questionable functions have been put into
    functions, it is broken.  Please go through the code and replace
    these functions with their POSIX counterparts or get rid of it
    altogether.
+
+
+Q: Compiling software with "diet -Os gcc..." gives error messages about
+   -malign-loops, -malign-jumps and -malign-functions being obsolete.
+A: diet -Os uses some platform dependant gcc options to create tighter
+   code.  Unfortunately, these options have been renamed on gcc 3.  You
+   can fix this by creating a file ~/.diet/gcc containing this line:
+
+     -Os -fomit-frame-pointer -falign-functions=0 -falign-jumps=0 -falign-loops=0 -mpreferred-stack-boundary=2
+
+   If you get this options not for diet -Os gcc but for diet -Os
+   i386-linux-gcc, put this in ~/.diet/i386-linux-gcc instead.
