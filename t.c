@@ -140,7 +140,7 @@ int main(int argc,char *argv[]) {
   struct hostent * host;
   struct in_addr i;
 
-  host = gethostbyname("pegasus");
+  host = gethostbyname2("borg",AF_INET6);
 
   if (!host)
     printf("host null\n");

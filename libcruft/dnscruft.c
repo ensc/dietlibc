@@ -36,13 +36,13 @@ void __dns_readstartfiles() {
   int fd;
   char *buf=alloca(4096);
   int len;
-#ifdef WANT_FULL_RESOLV_CONF
-  __dns_search=0;
-#endif
   if (__dns_servers>0) return;
   {
     struct sockaddr_in to;
     char *cacheip=getenv("DNSCACHEIP");
+#ifdef WANT_FULL_RESOLV_CONF
+    __dns_search=0;
+#endif
     if (cacheip) {
       to.sin_port=htons(53);
       to.sin_family=AF_INET;
