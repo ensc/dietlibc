@@ -259,8 +259,8 @@
 #define __NR_get_thread_area	211
 #define __NR_lookup_dcookie	212
 #define __NR_epoll_create	213
-#define __NR_epoll_ctl	214
-#define __NR_epoll_wait	215
+#define __NR_epoll_ctl	233
+#define __NR_epoll_wait	232
 #define __NR_remap_file_pages	216
 #define __NR_getdents64	217
 #define __NR_set_tid_address	218
