@@ -24,3 +24,5 @@ Look at qsort (make test suite exhibits the worst case)
 
 utmp handling should work read-only, too, if it can't open utmp
 read-write
+
+Make __dtostr do scientific notation.
