@@ -45,6 +45,7 @@ int __v_printf(struct arg_printf* fn, const unsigned char *format, va_list arg_p
       union { char*s; } u_str;
 #define s u_str.s
 
+      int retval;
       unsigned char ch, padwith=' ';
 
       char flag_in_sign=0;
@@ -154,6 +155,7 @@ inn_printf:
 #endif
 	sz = strlen(s);
 	if (flag_dot && sz>preci) sz=preci;
+	preci=0;
 	flag_dot^=flag_dot;
 	padwith=' ';
 
@@ -161,10 +163,13 @@ print_out:
       {
 	char *sign=s;
 	int todo=0;
+	int vs;
+	
 	if (! (width||preci) ) {
-	  A_WRITE(fn,s,sz);
+	  A_WRITE(fn,s,sz); len+=sz;
 	  break;
 	}
+	
 	if (flag_in_sign) todo=1;
 	if (flag_hash>0)  todo=flag_hash;
 	if (todo) {
@@ -172,9 +177,11 @@ print_out:
 	  sz-=todo;
 	  width-=todo;
 	}
+	
 	if (!flag_left) {
 	  if (flag_dot) {
-	    len+=write_pad(fn,(signed int)width-(signed int)preci,' ');
+	    vs=preci>sz?preci:sz;
+	    len+=write_pad(fn,(signed int)width-(signed int)vs,' ');
 	    if (todo) {
 	      A_WRITE(fn,sign,todo);
 	      len+=todo;
@@ -191,19 +198,18 @@ print_out:
 	      len+=todo;
 	    }
 	  }
-	  A_WRITE(fn,s,sz);
+	  A_WRITE(fn,s,sz); len+=sz;
 	} else if (flag_left) {
-	  int remain;
 	  if (todo) {
 	    A_WRITE(fn,sign,todo);
 	    len+=todo;
 	  }
 	  len+=write_pad(fn,(signed int)preci-(signed int)sz, '0');
-	  A_WRITE(fn,s,sz);
-	  remain=preci>sz?preci:sz;
-	  len+=write_pad(fn,(signed int)width-(signed int)remain, ' ');
+	  A_WRITE(fn,s,sz); len+=sz;
+	  vs=preci>sz?preci:sz;
+	  len+=write_pad(fn,(signed int)width-(signed int)vs, ' ');
 	} else {
-	  A_WRITE(fn,s,sz);
+	  A_WRITE(fn,s,sz); len+=sz;
 	}
 	break;
       }
@@ -276,10 +282,18 @@ num_printf:
 	if (flag_long<-1) number&=0xff;
 #ifdef WANT_LONGLONG_PRINTF
 	if (flag_long>1)
-	  sz += __lltostr(s+sz,sizeof(buf)-5,(unsigned long long) llnumber,base,flag_upcase);
+	  retval = __lltostr(s+sz,sizeof(buf)-5,(unsigned long long) llnumber,base,flag_upcase);
 	else
 #endif
-	  sz += __ltostr(s+sz,sizeof(buf)-5,(unsigned long) number,base,flag_upcase);
+	  retval = __ltostr(s+sz,sizeof(buf)-5,(unsigned long) number,base,flag_upcase);
+
+	/* When 0 is printed with an explicit precision 0, the output is empty. */
+	if (flag_dot && retval == 1 && s[sz] == '0') {
+	  if (preci == 0||flag_hash > 0) {
+	    sz = 0;
+	  }
+	  flag_hash = 0;
+	} else sz += retval;
 
 	if (flag_in_sign==2) {
 	  *(--s)='-';
@@ -301,15 +315,22 @@ num_printf:
 	  s=buf+1;
 	  if (width==0) width=1;
 	  if (!flag_dot) preci=6;
+	  if (flag_sign || d < +0.0) flag_in_sign=1;
+	  
 	  sz=__dtostr(d,s,sizeof(buf)-1,width,preci);
+	  
 	  if (flag_dot) {
 	    char *tmp;
 	    if ((tmp=strchr(s,'.'))) {
-	      ++tmp;
+	      if (preci || flag_hash) ++tmp;
 	      while (preci>0 && *++tmp) --preci;
 	      *tmp=0;
+	    } else if (flag_hash) {
+	      s[sz]='.';
+	      s[++sz]='\0';
 	    }
 	  }
+
 	  if (g) {
 	    char *tmp,*tmp1;	/* boy, is _this_ ugly! */
 	    if ((tmp=strchr(s,'.'))) {
@@ -322,12 +343,15 @@ num_printf:
 	      if (tmp1) strcpy(tmp,tmp1);
 	    }
 	  }
+	  
 	  if ((flag_sign || flag_space) && d>=0) {
 	    *(--s)=(flag_sign)?'+':' ';
 	    ++sz;
 	  }
+	  
 	  sz=strlen(s);
 	  flag_dot=0;
+	  flag_hash=0;
 	  goto print_out;
 	}
 #endif
