@@ -558,17 +558,17 @@ fdiml:
 truncf:
 	flds 4(%esp)
 	movb $0x0c,%ah
-	jmp flcetr
+	jmp __flcetr
 
 trunc:
 	fldl 4(%esp)
 	movb $0x0c,%ah
-	jmp flcetr
+	jmp __flcetr
 
 truncl:
 	fldt 4(%esp)
 	movb $0x0c,%ah
-	jmp flcetr
+	jmp __flcetr
 
 .global frexpf,frexp,frexpl
 	.type frexpf,@function

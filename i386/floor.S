@@ -8,17 +8,17 @@
 floorf:
 	flds 4(%esp)
 	movb $0x04,%ah
-	jmp flcetr
+	jmp __flcetr
 
 floor:
 	fldl 4(%esp)
 	movb $0x04,%ah
-	jmp flcetr
+	jmp __flcetr
 
 floorl:
 	fldt 4(%esp)
 	movb $0x04,%ah
-	jmp flcetr
+	jmp __flcetr
 
 .Lende:
 .size    floor,.Lende-floor

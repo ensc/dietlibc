@@ -1,19 +1,20 @@
 .text
 
-.global ceilf,ceil,ceill
+.global ceilf,ceil,ceill,__flcetr
 	.type ceilf,@function
 	.type ceil,@function
 	.type ceill,@function
+	.type __flcetr,@function
 
 ceilf:
 	flds 4(%esp)
 	movb $0x08,%ah
-	jmp .Lflcetr
+	jmp __flcetr
 
 ceill:
 	fldt 4(%esp)
 	movb $0x08,%ah
-	jmp .Lflcetr
+	jmp __flcetr
 
 ceil:
 	fldl 4(%esp)
@@ -21,7 +22,7 @@ ceil:
 
 # Wspolny kod dla funkcji floor, ceil i trunc
 # W ah maska bitow 11 i 10 rejestru sterowania koprocesora
-.Lflcetr:
+__flcetr:
 	xorl %ecx,%ecx	# wyzerowanie rejestru
 	movb %ah,%ch	# i utworzenie maski w cx
 	pushl %eax	# krotsze niz subl $4,%esp
@@ -40,3 +41,4 @@ ceil:
 .size    ceil,.Lende-ceil
 .size    ceill,.Lende-ceill
 .size    ceilf,.Lende-ceilf
+.size    flcetr,.Lende-__flcetr
