@@ -22,6 +22,22 @@ struct termio {
 };
 
 /* modem lines */
+#ifdef __mips__
+#define TIOCM_LE	0x001
+#define TIOCM_DTR	0x002
+#define TIOCM_RTS	0x004
+#define TIOCM_ST	0x010
+#define TIOCM_SR	0x020
+#define TIOCM_CTS	0x040
+#define TIOCM_CAR	0x100
+#define TIOCM_RNG	0x200
+#define TIOCM_DSR	0x400
+#define TIOCM_CD	TIOCM_CAR
+#define TIOCM_RI	TIOCM_RNG
+#define TIOCM_OUT1	0x2000
+#define TIOCM_OUT2	0x4000
+#define TIOCM_LOOP	0x8000
+#else
 #define TIOCM_LE	0x001
 #define TIOCM_DTR	0x002
 #define TIOCM_RTS	0x004
@@ -36,6 +52,7 @@ struct termio {
 #define TIOCM_OUT1	0x2000
 #define TIOCM_OUT2	0x4000
 #define TIOCM_LOOP	0x8000
+#endif
 
 /* line disciplines */
 #define N_TTY		0
@@ -53,6 +70,7 @@ struct termio {
 #define N_SMSBLOCK	12	/* SMS block mode - for talking to GSM data cards about SMS messages */
 #define N_HDLC		13	/* synchronous HDLC */
 #define N_SYNC_PPP	14	/* synchronous PPP */
+#define N_HCI		15	/* Bluetooth HCI UART */
 
 typedef unsigned char	cc_t;
 typedef unsigned int	speed_t;
@@ -108,23 +126,99 @@ struct termios {
 #endif
 
 /* c_cc characters */
-#define VINTR 0
-#define VQUIT 1
-#define VERASE 2
-#define VKILL 3
-#define VEOF 4
-#define VTIME 5
-#define VMIN 6
-#define VSWTC 7
-#define VSTART 8
-#define VSTOP 9
-#define VSUSP 10
-#define VEOL 11
+#if defined(__alpha__)
+#define VEOF	0
+#define VEOL	1
+#define VEOL2	2
+#define VERASE	3
+#define VWERASE 4
+#define VKILL	5
+#define VREPRINT 6
+#define VSWTC	7
+#define VINTR	8
+#define VQUIT	9
+#define VSUSP	10
+#define VSTART	12
+#define VSTOP	13
+#define VLNEXT	14
+#define VDISCARD 15
+#define VMIN	16
+#define VTIME	17
+#elif defined(__mips__)
+#define VINTR	0
+#define VQUIT	1
+#define VERASE	2
+#define VKILL	3
+#define VMIN	4
+#define VTIME	5
+#define VEOL2	6
+#define VSWTC	7
+#define VSWTCH	VSWTC
+#define VSTART	8
+#define VSTOP	9
+#define VSUSP	10
 #define VREPRINT 12
 #define VDISCARD 13
 #define VWERASE 14
-#define VLNEXT 15
-#define VEOL2 16
+#define VLNEXT	15
+#define VEOF	16
+#define VEOL	17
+#elif defined(__powerpc__)
+#define VINTR	0
+#define VQUIT	1
+#define VERASE	2
+#define VKILL	3
+#define VEOF	4
+#define VMIN	5
+#define VEOL	6
+#define VTIME	7
+#define VEOL2	8
+#define VSWTC	9
+#define VWERASE 10
+#define VREPRINT 11
+#define VSUSP	12
+#define VSTART	13
+#define VSTOP	14
+#define VLNEXT	15
+#define VDISCARD 16
+#elif defined(__sparc__)
+#define VINTR	0
+#define VQUIT	1
+#define VERASE	2
+#define VKILL	3
+#define VEOF	4
+#define VEOL	5
+#define VEOL2	6
+#define VSWTC	7
+#define VSTART	8
+#define VSTOP	9
+#define VSUSP	10
+#define VDSUSP	11
+#define VREPRINT 12
+#define VDISCARD 13
+#define VWERASE 14
+#define VLNEXT	15
+#define VMIN	16
+#define VTIME	17
+#else			/* arm, i386, parisc, s390, x86_64 */
+#define VINTR	0
+#define VQUIT	1
+#define VERASE	2
+#define VKILL	3
+#define VEOF	4
+#define VTIME	5
+#define VMIN	6
+#define VSWTC	7
+#define VSTART	8
+#define VSTOP	9
+#define VSUSP	10
+#define VEOL	11
+#define VREPRINT 12
+#define VDISCARD 13
+#define VWERASE 14
+#define VLNEXT	15
+#define VEOL2	16
+#endif
 
 /* c_iflag bits */
 #define IGNBRK	0000001
@@ -239,7 +333,11 @@ struct termios {
 #define ECHOCTL	0001000
 #define ECHOPRT	0002000
 #define ECHOKE	0004000
+#ifdef __mips__
+#define FLUSHO	0020000
+#else
 #define FLUSHO	0010000
+#endif
 #define PENDIN	0040000
 #define IEXTEN	0100000
 
