@@ -65,6 +65,7 @@
   unbuffered fputc was broken on big endian (big oops, thanks Gerrit Pape)
   fix parisc struct stat (Gerrit Pape)
   add vasprintf (for elinks)
+  fnmatch used [^e] instead of [!e] for negation (Heiko Berges)
 
 0.22:
   fix i386 libm

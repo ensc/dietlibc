@@ -32,7 +32,7 @@ int fnmatch(const char *pattern, const char *string, int flags) {
       int neg=0;
       ++pattern;
       if (*string=='/' && flags&FNM_PATHNAME) return FNM_NOMATCH;
-      if (*pattern=='^') { neg=1; ++pattern; }
+      if (*pattern=='!') { neg=1; ++pattern; }
       while (*pattern && *pattern!=']') {
 	int res=0;
 	if (pattern[1]=='-') {
