@@ -4,16 +4,25 @@
 #define a0 4
 #define a1 5
 #define a2 6
+#define gp 28
 
 .text
 .global __start
 .type __start,@function
 __start:
+#ifdef __pic__
+/* initialize gp pointer */
 	.set noreorder
 	bltzal $0,0f
 	nop
 0:	.cpload	$31
 	.set reorder
+#else
+	/* _gp is provided by the linker and points into the middle of the
+	 * "small data" section (.sdata and .sbss) allocated by the
+	 * -G 8 compiler option */
+	la      $gp, _gp
+#endif
 	move	$ra, $zero	/* prime stack frame */
 	lw	$a0, 0($sp)	/* load argc */
 	addu	$a1, $sp, 4	/* load argv.  huh?  should be 4, right? */

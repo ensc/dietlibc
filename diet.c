@@ -32,7 +32,7 @@ static const char* Os[] = {
   "sparc64","-Os","-m64",0,
   "alpha","-Os","-fomit-frame-pointer",0,
   "arm","-Os","-fomit-frame-pointer",0,
-  "mips","-Os","-fomit-frame-pointer","-mno-abicalls","-G","0","-fno-pic",0,
+  "mips","-Os","-fomit-frame-pointer","-mno-abicalls","-G","8","-fno-pic",0,
   "ppc","-Os","-fomit-frame-pointer","-mpowerpc-gpopt","-mpowerpc-gfxopt",0,
   "s390","-Os","-fomit-frame-pointer",0,
   "sh","-Os","-fomit-frame-pointer",0,

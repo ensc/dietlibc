@@ -1,4 +1,6 @@
 0.21:
+  use gcc's size_t, ptrdiff_t and wchar_t types (Olaf)
+  use -G 8 on MIPS to reduce code size (Johannes Stezenbach)
 
 0.20:
   calloc was botched
