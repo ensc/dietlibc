@@ -49,6 +49,7 @@ FILE *fdopen (int fildes, const char *mode);
 FILE *freopen (const char *path, const char *mode, FILE *stream);
 
 int fgetc(FILE *stream);
+int fgetc_unlocked(FILE *stream) __THROW;
 char *fgets(char *s, int size, FILE *stream);
 int getc(FILE *stream);
 int getchar(void);
@@ -56,6 +57,7 @@ char *gets(char *s);
 int ungetc(int c, FILE *stream);
 
 int fputc(int c, FILE *stream);
+int fputc_unlocked(int c, FILE *stream) __THROW;
 int fputs(const char *s, FILE *stream);
 int putc(int c, FILE *stream);
 int putchar(int c);
