@@ -7,8 +7,8 @@ struct state {
   size_t cur;			/* already parsed bytes */
 };
 
-/* open and mmap file, fill in struct state, return fd or return -1 */
-int __prepare_parse(const char* filename,struct state* s);
+/* open and mmap file, fill in struct state */
+void __prepare_parse(const char* filename,struct state* s);
 /* unmap file */
 void __end_parse(struct state* s);
 

@@ -19,7 +19,7 @@ void* memset(void *s, int c, size_t n) __THROW;
 void* memcpy(void *dest, const void *src, size_t n) __THROW;
 #endif
 
-#if !defined(__GNUC__) && __GNUC__ < 3
+#if !defined(__GNUC__) || __GNUC__ < 3
 /* gcc 3 unfortunately has internal prototypes for these functions that
  * differ from ours. */
 char *strncpy(char *dest, const char *src, size_t n) __THROW;

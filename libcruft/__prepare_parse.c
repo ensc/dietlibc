@@ -4,12 +4,10 @@
 #include <sys/mman.h>
 #include "parselib.h"
 
-/* open and mmap file, fill in struct state, return 0.
- * return -1 on failure */
-int __prepare_parse(const char* filename,struct state* s) {
+void __prepare_parse(const char* filename,struct state* s) {
   int fd;
   s->cur=0;
-  if (s->buffirst) return 0;
+  if (s->buffirst) return;	/* already mapped */
   fd=open(filename,O_RDONLY);
   if (fd>=0) {
     s->buflen=lseek(fd,0,SEEK_END);
@@ -17,7 +15,5 @@ int __prepare_parse(const char* filename,struct state* s) {
     if (s->buffirst==(const unsigned char*)-1)
       s->buffirst=0;
     close(fd);
-    return 0;
   }
-  return -1;
 }

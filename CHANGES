@@ -26,6 +26,9 @@
     libpthread to respect the parisc UPgrowing stack. still non functional,
     because the unified syscall uses errno :(
   tcgetospeed read from the wrong termios field.  Thanks, Gunnar Ritter!
+  Fixed asprintf (relied on vsnprintf(NULL,...) to return length but
+    don't write anything which was no longer the case.  It also
+    allocated one byte unnecessarily, which Uwe Ohse found.
 
 0.13:
   add readdir64 and automatic mapping if _FILE_OFFSET_BITS == 64

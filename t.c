@@ -103,10 +103,15 @@ extern char* strcpy2(char*a,char*b);
      __asm__ __volatile__ ("rdtsc" : "=a" (low) : : "edx")
 
 int main(int argc,char *argv[]) {
+  char* c;
+  printf("%d\n",asprintf(&c,"foo %d",23));
+  puts(c);
+#if 0
   struct winsize ws;
   if (!ioctl(0, TIOCGWINSZ, &ws)) {
     printf("%dx%d\n",ws.ws_col,ws.ws_row);
   }
+#endif
 #if 0
   struct termios t;
   if (tcgetattr(1,&t)) { puts("tcgetattr failed!"); return 1; }
