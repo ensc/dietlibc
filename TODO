@@ -1,9 +1,5 @@
-time appears to be broken on Alpha.
-
-vfprintf appears to be broken on ppc.
-
 "locale"
 
 fscanf
 
-sscanf support for character classes ("%[^ ]").
+getnameinfo
