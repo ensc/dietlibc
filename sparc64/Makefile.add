@@ -1,0 +1,3 @@
+LDFLAGS+=-Wl,-melf64_sparc
+CFLAGS+=-Wa,-64,-Av9 -mcpu=v9 -Os
+VPATH:=sparc64:syscalls.s:$(VPATH)
