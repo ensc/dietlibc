@@ -35,7 +35,7 @@ __clone:
 	call	*%rax
 	/* exit a thread */
 	movq	%rax,%rdi
-#ifdef PIC
+#ifdef __PIC__
 	jmp	_exit@PLT
 #else
 	jmp	_exit
@@ -45,7 +45,7 @@ __clone:
 	/* set errno */
 	negl	%eax
 	pushq	%rax
-#ifdef PIC
+#ifdef __PIC__
 	call	__errno_location@PLT
 #else
 	call	__errno_location

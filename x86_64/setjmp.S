@@ -23,7 +23,7 @@ __sigsetjmp:
 	movq	%rdx,(JB_RSP*8)(%rdi)
 	movq	(%rsp),%rdx
 	movq	%rdx,(JB_PC*8)(%rdi)
-#ifdef	PIC
+#ifdef	__PIC__
 	jmp	__sigjmp_save@PLT
 #else
 	jmp	__sigjmp_save

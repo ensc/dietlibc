@@ -280,6 +280,28 @@
 
 #define __NR_syscall_max __NR_exit_group
 
+#ifdef __PIC__
+#define syscall_weak(name,wsym,sym) \
+.text; \
+.type wsym,@function; \
+.weak wsym; \
+wsym: ; \
+.type sym,@function; \
+.global sym; \
+sym: \
+	mov	$__NR_##name,%al; \
+	jmp	__unified_syscall@PLT
+
+#define syscall(name,sym) \
+.text; \
+.type sym,@function; \
+.global sym; \
+sym: \
+	mov	$__NR_##name,%al; \
+	jmp	__unified_syscall@PLT
+
+#else
+
 #define syscall_weak(name,wsym,sym) \
 .text; \
 .type wsym,@function; \
@@ -298,4 +320,4 @@ sym: \
 sym: \
 	mov	$__NR_##name,%al; \
 	jmp	__unified_syscall
-
+#endif

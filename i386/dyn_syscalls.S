@@ -293,26 +293,26 @@ __unified_syscall:
 #undef __socketcall
 /* oh what a kludge! */
 #define socketcall .Lsocketcall
-#include "../i386/send.S"
-#include "../i386/recv.S"
-#include "../i386/socket.S"
-#include "../i386/accept.S"
-#include "../i386/shutdown.S"
-#include "../i386/socketpair.S"
-#include "../i386/setsockopt.S"
-#include "../i386/sendto.S"
-#include "../i386/sendmsg.S"
-#include "../i386/recvmsg.S"
-#include "../i386/recvfrom.S"
-#include "../i386/listen.S"
-#include "../i386/getsockopt.S"
-#include "../i386/getsockname.S"
-#include "../i386/getpeername.S"
-#include "../i386/connect.S"
-#include "../i386/bind.S"
+#include "send.S"
+#include "recv.S"
+#include "socket.S"
+#include "accept.S"
+#include "shutdown.S"
+#include "socketpair.S"
+#include "setsockopt.S"
+#include "sendto.S"
+#include "sendmsg.S"
+#include "recvmsg.S"
+#include "recvfrom.S"
+#include "listen.S"
+#include "getsockopt.S"
+#include "getsockname.S"
+#include "getpeername.S"
+#include "connect.S"
+#include "bind.S"
 #undef socketcall
 .Lsocketcall:
-#include "../i386/socketcall.S"
+#include "socketcall.S"
 #define __PIC__
 #undef __socketcall
 
