@@ -10,8 +10,7 @@ char* realpath(const char *path, char *resolved_path) {
   char* tmp=(char*)"";
   if (fd<0) return 0;
   if (chdir(path)) {
-    if (errno==ENOTDIR)
-    {
+    if (errno==ENOTDIR) {
       char* match;
       if ((match=strrchr(path,'/'))) {
 	tmp=match;
@@ -19,6 +18,8 @@ char* realpath(const char *path, char *resolved_path) {
 	resolved_path[tmp-path]=0;
 	if (chdir(resolved_path)) { resolved_path=0; goto abort; }
       }
+    } else {
+      resolved_path=0; goto abort;
     }
   }
   if (!getcwd(resolved_path,PATH_MAX)) { resolved_path=0; goto abort; }
