@@ -26,8 +26,11 @@ static int swrite(void*ptr, size_t nmemb, struct str_data* sd) {
 }
 
 int vsnprintf(char* str, size_t size, const char *format, va_list arg_ptr) {
+  int n;
   struct str_data sd = { str, 0, size };
   struct arg_printf ap = { &sd, (int(*)(void*,size_t,void*)) swrite };
-  if (size) { --sd.size; str[sd.size]=0; }
-  return __v_printf(&ap,format,arg_ptr);
+  if (size) --sd.size;
+  n=__v_printf(&ap,format,arg_ptr);
+  str[n]=0;
+  return n;
 }
