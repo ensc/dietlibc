@@ -247,6 +247,8 @@ char * cuserid(char * string); /* ugh! */
 extern int lockf (int __fd, int __cmd, off_t __len) __THROW;
 extern int lockf64 (int __fd, int __cmd, off64_t __len) __THROW;
 
+extern void swab(const void *src, void *dest, ssize_t nbytes) __THROW;
+
 __END_DECLS
 
 #endif
