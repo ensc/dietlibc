@@ -8,7 +8,9 @@
 #include <sys/mount.h>
 
 int main() {
-  printf("%d\n",strncasecmp("foo","FOO2",3));
+  int a,b,c;
+  printf("sscanf returned %d\n",sscanf("Mem: 123 456 789\n","Mem: %d %d %d",&a,&b,&c));
+  printf("got %d %d %d\n",a,b,c);
 #if 0
   int i;
   for (i=0; i<5; i++) {

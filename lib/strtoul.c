@@ -21,7 +21,7 @@ unsigned long int strtoul(const char *nptr, char **endptr, int base)
       base=10;
   }
   while(*nptr) {
-    register char c=*nptr;
+    register unsigned char c=*nptr;
     c=(c>='a'?c-'a'+10:c>='A'?c-'A'+10:c-'0');
     if (c>=base) break;
     v=v*base+c;

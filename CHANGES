@@ -13,6 +13,7 @@
   added strcasecmp and strncasecmp (thanks to Abraham vd Merwe for
     insightful discussions and patches I partially used for the last three)
   added getpriority and setpriority (also by Abraham)
+  oops, I broke strtoul in a recent optimization attempt.
 
 0.7:
   clone support for i386,alpha,arm and sparc by Olaf.
