@@ -8,12 +8,10 @@ clone:
 .global __clone
 __clone:
 	movl	4(%esp), %ecx	/* have non null thread_funcion */
-	testl	%ecx, %ecx
-	je	.Lclone_error
+	jecxz	.Lclone_error
 
 	movl	8(%esp), %ecx	/* have non null child_stack pointer */
-	testl	%ecx, %ecx
-	je	.Lclone_error
+	jecxz	.Lclone_error
 
 	/* put the parameter on thread stack */
 	subl	$8, %ecx
@@ -33,9 +31,7 @@ __clone:
 
 	testl	%eax, %eax
 	jl	.Lclone_error
-	je	.Lstart_thread
-	ret
-
+	jne	.Lreturn
 .Lstart_thread:
 	xorl	%ebp,%ebp
 	call	*%ebx
@@ -57,4 +53,5 @@ __clone:
 	movl	%ecx, (%eax)
 	xorl	%eax, %eax
 	decl	%eax
+.Lreturn:	
 	ret
