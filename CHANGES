@@ -76,6 +76,8 @@
   Fix a lot more stdio bugs that Uwe Ohse pointed out.
   Olaf: has added a new scanf and printf core that is sutable for all
     scanf and printf function implementations
+  Imported a few more functions and optimizations from Frank Klemm (he
+    also rewrote dtostr to have more precision)
 
 0.10:
   update getpagesize.

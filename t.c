@@ -77,8 +77,11 @@ void closelog(void) {
 #endif
 
 int main(int argc,char *argv[]) {
+  printf("%d\n",atol("-1234"));
+#if 0
   long int clk_tck=sysconf(_SC_CLK_TCK);
   printf("%lu\n",clk_tck);
+#endif
 #if 0
   fwrite("foobar",6,1,stdout);
 #endif

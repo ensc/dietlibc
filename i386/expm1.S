@@ -16,7 +16,7 @@ expm1:                          # note: exp(x) = 2^(x*log2(e))
         fstp     %st(1)         # 2^int(x*log2(e))                2^(x*log2(e))-2^int(x*log2(e))
         fld1                    # 1                               2^int(x*log2(e))                2^(x*log2(e))-2^int(x*log2(e))
         fsubrp   %st(1)         # 2^int(x*log2(e))-1              2^(x*log2(e))-2^int(x*log2(e))
-        faddp
+        faddp    %st(1)
         ret
 
 .ende:

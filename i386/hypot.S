@@ -7,7 +7,7 @@ hypot:
         fmul    %st(0),%st(0)
         fldl    12(%esp)
         fmul    %st(0),%st(0)
-        fadd
+        faddp
         fsqrt
         ret
 

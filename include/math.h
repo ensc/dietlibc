@@ -65,6 +65,8 @@ double expm1(double x) __THROW __attribute__((__const__));
 double hypot(double x, double y) __THROW __attribute__((__const__));
 double atan2(double x, double y) __THROW __attribute__((__const__));
 
+double copysign(double value, double sign) __attribute__((__const__));
+
 #  define HUGE_VAL \
   (__extension__                                                              \
    ((union { unsigned __l __attribute__((__mode__(__DI__))); double __d; })   \

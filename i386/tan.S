@@ -5,7 +5,7 @@
 tan:
         fldl    4(%esp)
         fsincos
-        fdivr
+        fdivrp
         ret
 
 .ende:
