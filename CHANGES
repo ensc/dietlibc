@@ -1,6 +1,7 @@
 0.25:
   fix sprintf
   head -1  ->  head -n 1
+  handle negative precision and -0 (Jens Låås)
 
 0.24:
   work around incompatible Linux select() modifying the timeout in

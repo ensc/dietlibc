@@ -123,7 +123,8 @@ inn_printf:
       case '.':
 	flag_dot=1;
 	if (*format=='*') {
-	  preci=va_arg(arg_ptr,int);
+	  int tmp=va_arg(arg_ptr,int);
+	  preci=tmp<0?0:tmp;
 	  ++format;
 	} else {
 	  long int tmp=strtol(format,(char**)&s,10);
