@@ -6,6 +6,8 @@
 #include <fcntl.h>
 #include <stdio.h>
 
+#include "_dl_int.h"
+
 #define WANT_LD_SO_CONF_SEARCH
 
 static const char *_dl_search_rpath=0;
@@ -14,14 +16,16 @@ void _dl_set_rpath(const char *path) { _dl_search_rpath=path; }
 /* search a colon (semicolon) seperated path for the libraray "filename" */
 static int _dl_search_path(char *buf, int len, const char*path, const int pathlen, const char *filename)
 {
-  int fd,l=len,i=1;
+  int fd,i=1,ml=len-strlen(filename);
   const char *c,*pe=path+pathlen;
 
   if (path) {
     for (c=path; c<pe; c+=i) {
+      int l=len-1;
       if ((*c==':')||(*c==';')) ++c;
       i=strcspn(c,":;");
       if (i) {
+	if (i>ml) continue;	/* if len(path-entry)+len(filename)+2 is greater than the buffer ? SKIP */
 	strncpy(buf, c, i); buf[i]=0;
 	l-=i;
 	strncat(buf, "/", l);
@@ -29,7 +33,7 @@ static int _dl_search_path(char *buf, int len, const char*path, const int pathle
       else
 	buf[0]=0;
       strncat(buf, filename, --l);
-//      DEBUG(printf("_dl_search: %s\n",buf);)
+//      DEBUG(printf("_dl_search_path: %s\n",buf);)
       if ((fd=open(buf,O_RDONLY))!=-1) return fd;
     }
   }

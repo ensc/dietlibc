@@ -2,6 +2,13 @@ this is the experimental libdl
 
 written by Olaf Dreesen
 
+Wed Jul  4 11:55:00 MEST 2001
+
+Uwe Ohse pointed to some flaws in my code, I have started to fix them....
+
+TODO: rebuild the code in a more readable and consistent way.
+TODO: code for other archs than i386
+
 
 Thu Jun 21 15:32:45 MEST 2001
 

@@ -19,7 +19,7 @@ void *_dl_open(const char *filename, int flags)
     fd=open(p=filename,O_RDONLY);
   else {
     p=buf;
-    fd=_dl_search(buf,sizeof(buf),filename);
+    fd=_dl_search(buf,sizeof(buf)-1,filename);
   }
   if (fd==-1) return 0;
   return _dl_load(filename,p,fd,flags);
