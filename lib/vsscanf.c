@@ -38,7 +38,7 @@ int vsscanf(const char *str, const char *format, va_list arg_ptr)
   {
     const char *prevfmt;
     {
-      char *duh=skip_ws(format);
+      const char *duh=skip_ws(format);
       if (duh!=format)
 	str=skip_ws(str);
       format=duh;
@@ -230,7 +230,7 @@ inn_vsscanf:
 	    ++str;
 	    --width;
 	  }
-	  *s=0;
+	  if (!flag_discard) *s=0;
 	}
 	break;
 

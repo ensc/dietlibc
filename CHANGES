@@ -1,5 +1,6 @@
 0.11:
   fix major oops in DNS routines (only with WANT_FULL_RESOLV_CONF enabled).
+  fix vsscanf bug (Thanks, David Chappell).
 
 0.10:
   update getpagesize.
