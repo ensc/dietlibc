@@ -3,6 +3,7 @@
 
 #include <sys/cdefs.h>
 #include <sys/resource.h>
+#include <linux/wait.h>
 
 pid_t wait(int *status) __THROW;
 pid_t waitpid(pid_t pid, int *status, int options) __THROW;
