@@ -9,8 +9,6 @@ void *malloc(size_t size) __THROW;
 void free(void *ptr) __THROW;
 void *realloc(void *ptr, size_t size) __THROW;
 
-void *alloca(size_t size);
-
 char *getenv(const char *name) __THROW __pure__;
 int putenv(const char *string) __THROW;
 
