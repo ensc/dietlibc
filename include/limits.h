@@ -1,14 +1,8 @@
 #ifndef _LIMITS_H
 #define _LIMITS_H
 
+#include <endian.h>
 #include <linux/limits.h>
-
-#define __WORDSIZE 32
-
-#ifdef __alpha__
-#undef __WORDSIZE
-#define __WORDSIZE 64
-#endif
 
 #ifndef PATH_MAX
 #define PATH_MAX 4096
