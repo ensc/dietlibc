@@ -6,17 +6,28 @@
 .type   cosl,@function
 
 cosf:
-        flds    4(%esp)
-        jmp .Lcos
+	flds	4(%esp)
+	jmp 1f
 cos:
-        fldl    4(%esp)
-.Lcos:	
-	call	__fmod2pi
+	fldl	4(%esp)
+1:
+	fcos
+	fnstsw	%ax
+	testb	$0x04, %ah
+	je 3f
+	fldpi
+	fadd	%st
+	fxch	%st(1)
+2:	fprem1
+	fnstsw	%ax
+	testb	$0x04, %ah
+	jne	2b
+	fstp	%st(1)
         fcos
-        ret
+3:	ret
 cosl:
         fldt    4(%esp)
-        jmp .Lcos
+        jmp 1b
 
 .Lende:
 .size    cos,.Lende-cos

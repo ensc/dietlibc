@@ -33,7 +33,7 @@ int __dtostr(double d,char *buf,unsigned int maxlen,unsigned int prec,unsigned i
   char *oldbuf=buf;
 
   if (isnan(d)) return copystring(buf,maxlen,"nan");
-  if (i=isinf(d)) return copystring(buf,maxlen,i>0?"inf":"-inf");
+  if ((i=isinf(d))) return copystring(buf,maxlen,i>0?"inf":"-inf");
   e10=1+(long)(e*0.30102999566398119802); /* log10(2) */
   /* Wir iterieren von Links bis wir bei 0 sind oder maxlen erreicht
    * ist.  Wenn maxlen erreicht ist, machen wir das nochmal in
@@ -50,17 +50,17 @@ int __dtostr(double d,char *buf,unsigned int maxlen,unsigned int prec,unsigned i
   }
 
   if (d < 0.0) { d=-d; *buf='-'; --maxlen; ++buf; }
-  if (d < 1.0) { *buf='0'; --maxlen; ++buf; }
 
    /*
       Perform rounding. It needs to be done before we generate any
       digits as the carry could propagate through the whole number.
    */
-   
-   tmp = 0.5;
-   for (i = 0; i < prec2; i++) { tmp *= 0.1; }
-   d += tmp;
-  
+
+  tmp = 0.5;
+  for (i = 0; i < prec2; i++) { tmp *= 0.1; }
+  d += tmp;
+
+  if (d < 1.0) { *buf='0'; --maxlen; ++buf; }
 /*  printf("e=%d e10=%d prec=%d\n",e,e10,prec); */
   if (e10>0) {
     int first=1;	/* are we about to write the first digit? */
