@@ -9,6 +9,8 @@
   fix memory leak in regfree (thanks, Valgrind!).
   add support for gcc ProPolice and stack gap (see README.security).
   add ftw64 (yuck!)
+  #include <endian.h> in syscalls.s/environ.S to make sure environ is
+    actually large enough (Enrico Scholz)
 
 0.27:
   change DNS routines to look for ip6.arpa instead of ip6.int

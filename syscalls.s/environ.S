@@ -1,5 +1,6 @@
 .section ".bss"
 .align 8
+#include <endian.h>
 
 .type environ,object
 .weak environ
