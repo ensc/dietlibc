@@ -120,6 +120,7 @@ int getaddrinfo(const char *node, const char *service, const struct addrinfo *hi
     }
     if (family==PF_INET) break;
   }
+  if (*res==0) return EAI_NONAME; /* kludge kludge... */
   return 0;
 error:
   freeaddrinfo(*res);
