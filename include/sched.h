@@ -8,6 +8,10 @@ struct list_head {
   struct list_head *next, *prev;
 };
 
+#include <sys/types.h>
+#ifndef u16
+#define u16 __u16
+#endif
 #include <linux/sched.h>
 
 int __sched_setparam(pid_t pid, const struct sched_param *p);

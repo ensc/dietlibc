@@ -55,7 +55,7 @@ endif
 #CFLAGS = -g
 CFLAGS += -Wall
 
-CFLAGS += -nostdinc -I.. -I../include -I/usr/lib/gcc-lib/i386-linux/2.95.2/include -Wall
+CFLAGS += -I.. -I../include -Wall
 
 PWD=$(shell pwd)
 
