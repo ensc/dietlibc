@@ -11,14 +11,8 @@
 
 static unsigned int consumed;
 
-#define A_GETC_2(fn)	((fn)->getch((fn)->data))
+#define A_GETC(fn)	(++consumed,(fn)->getch((fn)->data))
 #define A_PUTC(c,fn)	((fn)->putch((c),(fn)->data))
-
-static inline int A_GETC(struct arg_scanf* fn)
-{
-	consumed++;
-	return A_GETC_2(fn);
-}
 
 int __v_scanf(struct arg_scanf* fn, const unsigned char *format, va_list arg_ptr)
 {
@@ -35,12 +29,10 @@ int __v_scanf(struct arg_scanf* fn, const unsigned char *format, va_list arg_ptr
   int    *pi;
   char    *s;
 
-  /* get one char */
-  int tpch;
+  unsigned int consumed=0;
 
-  consumed=0;
-  
-  tpch= A_GETC(fn);
+  /* get one char */
+  int tpch= A_GETC(fn);
 
   while ((tpch!=-1)&&(*format))
   {
