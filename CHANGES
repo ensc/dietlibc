@@ -1,5 +1,5 @@
 0.6.15:
-  clone support for i386,alpha and arm by Olaf.
+  clone support for i386,alpha,arm and sparc by Olaf.
   Initial dynamic loading glue for i386, also by Olaf.
   We don't have a dynamic loader yet, so this is not yet usable.
   added readv, sigdelset, sigaltstack, sigfillset, sigismember, usleep,
