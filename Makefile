@@ -100,9 +100,11 @@ t:
 t1:
 	$(CROSS)$(CC) -g -o t1 t.c
 
-install:
-	cp start.o $(INSTALLPREFIX)$(prefix)/lib/dietstart.o
-	cp dietlibc.a $(INSTALLPREFIX)$(prefix)/lib/libdietc.a
+install: $(OBJDIR)/start.o $(OBJDIR)/dietlibc.a $(OBJDIR)/liblatin1.a $(OBJDIR)/elftrunc $(OBJDIR)/diet
+	cp $(OBJDIR)/start.o $(INSTALLPREFIX)$(prefix)/lib/dietstart.o
+	cp $(OBJDIR)/dietlibc.a $(INSTALLPREFIX)$(prefix)/lib/libdietc.a
+	cp $(OBJDIR)/liblatin1.a $(INSTALLPREFIX)$(prefix)/lib/libdietlatin1.a
+	cp $(OBJDIR)/diet $(INSTALLPREFIX)$(prefix)/bin/diet
 
 .PHONY: sparc ppc mips arm alpha i386
 
