@@ -128,6 +128,11 @@ int main(int argc, char**argv, char**envp)
     }
   }
 
+  if (dyn_start==ldso_start) {
+    DEBUG("error diet-linux.so started\n");
+    _exit(42);
+  }
+
   /* dynamic scan from _dl_load must be called here */
 
   dlh = _dl_dyn_scan(dlh,(void*)o,0);
@@ -140,14 +145,9 @@ int main(int argc, char**argv, char**envp)
   dlh->name=0;
   dlh->fini=0;
 
-  if (dyn_start==ldso_start) {
-    DEBUG("error in dyn_scan\n");
-    _exit(42);
-  }
-
   _dl_open_dep();
 
   /* all depending libs have been loaded, now start the program or die */
   if (dyn_start) return (int)dyn_start; /* found an AT_ENTRY in table -> jump to it */
-  _exit(23);
+  _exit(17);
 }
