@@ -61,22 +61,9 @@ typedef signed long useconds_t;		/* Used for time in microseconds. */
 /* non-susv2 types: */
 typedef signed long long loff_t;	/* 64-bit offset */
 
-#ifdef __GNUC__
-#define __quad_t __quad_t
-typedef long long int __quad_t;
-typedef unsigned long long int __u_quad_t;
-#else
-#warning no long long support - no 64 bit file I/O support
-typedef long int __quad_t;
-typedef unsigned long int __u_quad_t;
-#endif
-
-
-#ifdef __quad_t
-typedef __quad_t off64_t;
-typedef __u_quad_t ino64_t;
-typedef __quad_t blkcnt64_t;
-#endif
+typedef signed long long off64_t;
+typedef unsigned long long ino64_t;
+typedef signed long long blkcnt64_t;
 
 typedef long int fpos_t;
 
