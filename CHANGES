@@ -37,6 +37,8 @@
     also dynlinker is now available (i386 only at this time)
   crufted together a stdarg.h implementation from the various gcc headers.
   implement getopt_long (ugh, the GNU people need professional help)
+  fixed word delimiters in regex (they looked for space, i.e. "," did
+    not work as delimiter)
 
 0.10:
   update getpagesize.
