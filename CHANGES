@@ -66,6 +66,7 @@
   fix parisc struct stat (Gerrit Pape)
   add vasprintf (for elinks)
   fnmatch used [^e] instead of [!e] for negation (Heiko Berges)
+  add sparc and parisc assembly routines (Thomas Ogrisegg)
 
 0.22:
   fix i386 libm
