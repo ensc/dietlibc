@@ -1,10 +1,10 @@
 #include <libintl.h>
 #include <string.h>
 
-static char* dom;
+static char* dir;
 
-char* textdomain(const char* domainname) {
-  if (dom) free(dom);
-  if (!(dom=strdup(domainname))) return 0;
-  return dom;
+char* bindtextdomain(const char* domainname,const char* dirname) {
+  if (dir) free(dir);
+  if (!(dir=strdup(dirname))) return 0;
+  return dir;
 }
