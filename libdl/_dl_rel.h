@@ -16,7 +16,8 @@
 #define _dl_rel_t	Elf_Rela
 #define _DL_REL_T	DT_RELA
 
-#define _DL_REL_PLT(b,r)	(*(unsigned long*)((b)+(r)->r_offset)=(unsigned long)((b)+(r)->r_addend))
+#define _DL_REL_PLT(b,r)	(*(unsigned long*)((b)+(r)->r_offset)+=(unsigned long)(b))
+//#define _DL_REL_PLT(b,r)	(*(unsigned long*)((b)+(r)->r_offset)=(unsigned long)((b)+(r)->r_addend))
 
 #else
 /* there are no known linux supported arch with mixed relocation types ... */
