@@ -3,6 +3,10 @@
 
 #include <sys/cdefs.h>
 #include <stdio.h>
+#include <paths.h>
+
+#define MNTTAB          _PATH_MNTTAB    /* Deprecated alias.  */
+#define MOUNTED         _PATH_MOUNTED   /* Deprecated alias.  */
 
 /* General filesystem types.  */
 #define MNTTYPE_IGNORE	"ignore"	/* Ignore this entry.  */

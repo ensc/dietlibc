@@ -6,7 +6,8 @@
     with putchar('\n') behind your back...?!
   import include/scsi/ from glibc.
   add iopl.
-  add execl prototype.
+  add execl and sigdelset prototypes.
+  add getopt_long stuff to getopt.h (may compile but won't link).
 
 0.9:
   fixed initgroups (oops)
