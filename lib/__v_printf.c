@@ -198,13 +198,15 @@ num_printf:
 
 	if (flag_in_sign) {
 #ifdef WANT_LONGLONG_PRINTF
-	  if ((flag_long>1)&&(llnumber<0))
+	  if ((flag_long>1)&&(llnumber<0)) {
 	    llnumber=-llnumber;
-	  else
+	    flag_in_sign=2;
+	  } else
 #endif
-	    if (number<0)
+	    if (number<0) {
 	      number=-number;
-	  flag_in_sign=2;
+	      flag_in_sign=2;
+	    }
 	}
 	if (flag_long<0) number&=0xffff;
 	if (flag_long<-1) number&=0xff;

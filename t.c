@@ -87,8 +87,15 @@ void foo(int tmp,...) {
 extern int __lltostr(char *s, int size, unsigned long long i, int base, char UpCase);
 
 int main(int argc,char *argv[]) {
+  printf(", ");
+  printf("%d",23);
+  printf(", ");
+  printf("%d",25);
+  printf("\n");
+#if 0
   double d=strtod(argv[1],0);
   printf("%g|\n",d);
+#endif
 #if 0
   char buf[100];
   printf("%d\n",__lltostr(buf,30,-1ll,10,0));

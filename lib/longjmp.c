@@ -20,7 +20,6 @@
 #include <setjmp.h>
 #include <signal.h>
 
-extern int __sigprocmask(int how,void* set,void* oldset);
 extern void __longjmp(void* env, int val);
 
 /*
@@ -38,7 +37,7 @@ void __siglongjmp (sigjmp_buf env, int val)
 
   if (env[0].__mask_was_saved)
     /* Restore the saved signal mask.  */
-    (void) __sigprocmask (SIG_SETMASK, &env[0].__saved_mask, 0);
+    (void) sigprocmask (SIG_SETMASK, (sigset_t*)&env[0].__saved_mask, 0);
 
   /* Call the machine-dependent function to restore machine state.  */
   __longjmp (env[0].__jmpbuf, val ?: 1);
