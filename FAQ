@@ -103,3 +103,10 @@ A: Yes, the interface is, but a lot of details are missing.  For
 Q: Where is the test suite?
 A: The humble beginnings are in the "test" directory, but it can't be
    run automatically yet.
+
+
+Q: GPL sucks!  Now I can't compile my BSD programs with the diet libc!
+A: Wrong.  You can compile them, and you can use them.  You just can't
+   redistribute the binaries.  If you are a distribution vendor and want
+   to use the diet libc to make BSD licensed binaries for the install
+   or rescue floppy which you sell commercially, please talk to me.
