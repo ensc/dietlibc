@@ -9,7 +9,7 @@
 #include <dietfeatures.h>
 #include "syscalls.h"
 
-/* ok now include all syscalls.s/*.S and sysdep *.S */
+/* ok now include all syscalls.s (*.S) and sysdep *.S */
 
 #include "mmap.S"
 
@@ -58,8 +58,10 @@
 
 /* OK this is basicaly unified.S */
 .text
+.type exit,@function
 .weak exit
 exit:
+.type _exit,@function
 .global _exit
 _exit:
 __exit:

@@ -12,6 +12,7 @@
 .text
 .weak exit
 exit:
+.type _exit,function
 .global _exit
 _exit:
 __exit:
@@ -30,7 +31,7 @@ __unified_syscall:
 	mvn	r0, #0
 	mov	pc, lr
 
-/* ok now include all syscalls.s/*.S and sysdep *.S */
+/* ok now include all syscalls.s (*.S) and sysdep *.S */
 #include "mmap.S"
 
 #include "../syscalls.s/__getpagesize.S"
