@@ -104,12 +104,21 @@ int gethostbyname_r(const char* name, struct hostent* result,
 	    if (q<1) break;
 	    while (q>0) {
 	      int decofs=__dns_decodename(inpkg,tmp-(char*)inpkg,name,256);
-	      if (decofs<0) goto kaputt;
+	      if (decofs<0) break;
 	      tmp=inpkg+decofs;
 	      --q;
-	      if (tmp[0]!=0 || tmp[1]!=1) break;	/* TYPE != A */
-	      if (tmp[2]!=0 || tmp[3]!=1) break;	/* CLASS != IN */
-	      if (tmp[8]!=0 || tmp[9]!=4) break;	/* length != 4 */
+	      if (tmp[0]!=0 || tmp[1]!=1 ||		/* TYPE != A */
+	          tmp[2]!=0 || tmp[3]!=1 ||		/* CLASS != IN */
+	          tmp[8]!=0 || tmp[9]!=4) {		/* length != 4 */
+		if (tmp[1]==5) {	/* CNAME */
+		  tmp+=10;
+		  decofs=__dns_decodename(inpkg,tmp-(char*)inpkg,name,256);
+		  if (decofs<0) break;
+		  tmp=inpkg+decofs;
+		} else
+		  break;
+		continue;
+	      }
 	      tmp+=10;	/* skip type, class, TTL and length */
 	      {
 		int slen=strlen(name);
@@ -128,7 +137,7 @@ int gethostbyname_r(const char* name, struct hostent* result,
 		cur+=4;
 		result->h_addr_list[ips]=0;
 	      }
-	      puts(name);
+/*	      puts(name); */
 	    }
 	  }
 /*	  printf("%d answers\n",((unsigned short)inpkg[6]<<8)+inpkg[7]);
