@@ -1,4 +1,4 @@
-// #define NDEBUG
+#define NDEBUG
 #include <regex.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -102,20 +102,19 @@ static const char* parseregex(struct regex* r,const char* s,regex_t* rx);
 static int matchatom(void*__restrict__ x,const unsigned char*__restrict__ s,int ofs,struct __regex_t*__restrict__ preg,int plus,int eflags) {
   register struct atom* a=(struct atom*)x;
   int matchlen=0;
-#ifdef DEBUG
-  printf("a->bnum is %d\n",a->bnum);
-#endif
   assert(a->type!=ILLEGAL);
   switch (a->type) {
   case EMPTY:
 #ifdef DEBUG
     printf("matching atom EMPTY against \"%s\"\n",s);
+    printf("a->bnum is %d\n",a->bnum);
 #endif
     if (a->bnum>=0) preg->l[a->bnum].rm_so=preg->l[a->bnum].rm_eo=ofs;
     goto match;
   case REGEX:
 #ifdef DEBUG
     printf("matching atom REGEX against \"%s\"\n",s);
+    printf("a->bnum is %d\n",a->bnum);
 #endif
     if ((matchlen=a->u.r.m(&a->u.r,s,ofs,preg,0,eflags))>=0) {
       assert(a->bnum>=0);
@@ -446,15 +445,16 @@ int regexec(const regex_t*__restrict__ preg, const char*__restrict__ string, siz
   const char *orig=string;
   assert(preg->brackets+1>0 && preg->brackets<1000);
 #ifdef DEBUG
-  printf("alloca(%d)\n",sizeof(regmatch_t)*(preg->brackets+1));
+  printf("alloca(%d)\n",sizeof(regmatch_t)*(preg->brackets+3));
 #endif
-  ((regex_t*)preg)->l=alloca(sizeof(regmatch_t)*(preg->brackets+1));
+  ((regex_t*)preg)->l=alloca(sizeof(regmatch_t)*(preg->brackets+3));
   while (*string) {
     matched=preg->r.m((void*)&preg->r,string,string-orig,(regex_t*)preg,0,eflags);
+//    printf("ebp on stack = %x\n",stack[1]);
     if (matched>=0) {
-      ((regex_t*)preg)->l[0].rm_so=string-orig;
-      ((regex_t*)preg)->l[0].rm_eo=string-orig+matched;
-      if ((preg->cflags&REG_NOSUB)==0) memmove(pmatch,preg->l,nmatch*sizeof(regmatch_t));
+      preg->l[0].rm_so=string-orig;
+      preg->l[0].rm_eo=string-orig+matched;
+      if ((preg->cflags&REG_NOSUB)==0) memcpy(pmatch,preg->l,nmatch*sizeof(regmatch_t));
       return 0;
     }
     ++string; eflags|=REG_NOTBOL;
