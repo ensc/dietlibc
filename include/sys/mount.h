@@ -69,8 +69,10 @@ enum
 /* Possible value for FLAGS parameter of `umount2'.  */
 enum
 {
-  MNT_FORCE = 1			/* Force unmounting.  */
+  MNT_FORCE = 1,		/* Force unmounting.  */
 #define MNT_FORCE MNT_FORCE
+  MNT_DETACH = 2		/* Just detach, unmount when last reference dies.  */
+#define MNT_DETACH MNT_DETACH
 };
 
 int  mount(const char* specialfile, const char* dir, const char* filesystemtype,
