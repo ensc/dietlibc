@@ -11,13 +11,12 @@
 	.globl	pipe
 	.ent	pipe
 pipe:
-	move	$a0,$v0
 	li	$v0,__NR_pipe
 	syscall
 	bnez	$a3,.Lerror
-	nop
 	sw	$v0,0($a0)
 	sw	$v1,4($a0)
+	move	$v0,$0
 	jr      $ra
 .Lerror:
 	la	$25, error_unified_syscall
