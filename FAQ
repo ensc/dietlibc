@@ -261,3 +261,10 @@ A: "static" global variables are initialized to 0.  ANSI C guarantees that.
    the way.  On all platforms supported by the diet libc, numeric zero
    is also the pointer value for NULL.  So not initializing a static
    pointer yields NULL.
+
+
+Q: My diet libc programs all segfault in User Mode Linux 2.6!
+A: This is a shortcoming of User Mode Linux.
+   Edit dietfeatures.h, remove the WANT_SYSENTER #define, and then
+   recompile the diet libc and your program.  Oh, and bug the user mode
+   linux people about this, it's their fault! ;)
