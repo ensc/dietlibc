@@ -1,6 +1,6 @@
 
-int __isprint_ascii ( int ch ) 
-{
+int __isprint_ascii ( int ch );
+int __isprint_ascii ( int ch ) {
     return (unsigned int)(ch - ' ') < 127u - ' ';
 }
 

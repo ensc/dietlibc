@@ -4,7 +4,7 @@
 
 #ifdef __linux__
 
-extern int __ltostr(char *s, int size, unsigned long i, int base, char UpCase);
+#include <stdlib.h>
 
 char *ttyname(int fd) {
 #ifdef SLASH_PROC_OK
@@ -12,7 +12,7 @@ char *ttyname(int fd) {
   static char obuf[20];
   if (!isatty(fd)) return 0;
   strcpy(ibuf,"/proc/self/fd/");
-  ibuf[__ltostr(ibuf+14,6,fd,10,0)+14]=0;
+  ibuf[__ltostr(ibuf+14,6,(unsigned long)fd,10,0)+14]=0;
   if (readlink(ibuf,obuf,sizeof(obuf)-1)<0) return 0;
   return obuf;
 #else

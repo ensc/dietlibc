@@ -1,6 +1,6 @@
 #include <time.h>
 
-extern const time_t  __spm [];
+extern const short  __spm [];
 int __isleap ( int year );
 
 time_t  mktime ( register struct tm* const t )

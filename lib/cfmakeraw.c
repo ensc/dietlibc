@@ -1,8 +1,7 @@
 #include <termios.h>
 #include <sys/ioctl.h>
 
-void cfmakeraw(struct termios *t)
-{
+void cfmakeraw(struct termios *t) {
      t->c_iflag &= ~(IGNBRK|BRKINT|PARMRK|ISTRIP|INLCR|IGNCR|ICRNL|IXON);
      t->c_oflag &= ~OPOST;
      t->c_lflag &= ~(ECHO|ECHONL|ICANON|ISIG|IEXTEN);

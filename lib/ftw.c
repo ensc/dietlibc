@@ -8,7 +8,7 @@
 
 int ftw(const char *dir,int (*fn)(const char *file, const struct stat *sb, int flag), int depth) {
   char *cwd;
-  int cwdlen;
+  size_t cwdlen;
   DIR *d;
   struct dirent *de;
   struct stat sb;
@@ -22,7 +22,7 @@ int ftw(const char *dir,int (*fn)(const char *file, const struct stat *sb, int f
   while ((de=readdir(d))) {
     int res;
     int flag;
-    int nlen;
+    size_t nlen;
     char *filename;
     if (de->d_name[0]=='.' &&
 	(de->d_name[1]==0 ||

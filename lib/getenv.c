@@ -1,6 +1,5 @@
+#include <stdlib.h>
 #include <string.h>
-
-extern char **environ;
 
 extern char *getenv(const char *s)
 {

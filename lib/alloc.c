@@ -302,11 +302,11 @@ void *realloc(void *ptr,size_t size)
 	}
 	if ((in_free)&&(tf->magic==FREE_MAGIC)&&(need<USE_BIG_MALLOC))
 	{
-	  if ((tf->size<(-diff))&&(tf->next==NULL))
+	  if ((tf->size<(unsigned long)(-diff))&&(tf->next==NULL))
 	  { /* next ist last block ? */
-	    alloc_get_mem(need);
+	    alloc_get_mem((unsigned long)need);
 	  }
-	  if (tf->size>(-diff))
+	  if (tf->size>(unsigned long)(-diff))
 	  {
 	    free_head *f=(free_head*)(((char*)tmp)+need);
 #ifdef DEBUG

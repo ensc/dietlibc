@@ -1,6 +1,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include "dietfeatures.h"
+#include <stdio.h>
 
 int remove(const char* filename) {
   if (unlink(filename)) {

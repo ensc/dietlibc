@@ -7,6 +7,7 @@ FILE *__stdio_root;
 
 int __stdio_atexit=0;
 
+void __stdio_flushall(void);
 void __stdio_flushall(void) {
   fflush(0);
 }
@@ -54,7 +55,7 @@ int __fflush4(FILE *stream,int next) {
 }
 
 int __buffered_outs(const char *s,int len) {
-  return fwrite(s,1,len,stdout);
+  return fwrite(s,1,(size_t)len,stdout);
 }
 
 link_warning("fflush","warning: your code uses stdio (7+k bloat).")

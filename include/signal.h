@@ -202,6 +202,11 @@ int sigemptyset(sigset_t *set) __THROW;
 int sigfillset(sigset_t *set) __THROW;
 int sigaddset(sigset_t *set, int signum) __THROW;
 int sigdelset(sigset_t *set, int signum) __THROW;
+int sigismember(const sigset_t *set, int signo) __THROW;
+int sigsuspend(const sigset_t *mask) __THROW;
+int sigpending(sigset_t *set) __THROW;
+int sigprocmask(int how, const sigset_t *set, sigset_t *oldset) __THROW;
+
 
 sighandler_t signal(int signum, sighandler_t action);
 
@@ -210,12 +215,9 @@ int kill(pid_t pid, int sig) __THROW;
 
 int sigaction(int signum, const struct sigaction *act, struct sigaction *oldact) __THROW;
 
-int sigsuspend(const sigset_t *mask) __THROW;
-int sigpending(sigset_t *set) __THROW;
-int sigprocmask(int how, const sigset_t *set, sigset_t *oldset) __THROW;
-
 int sigtimedwait(const sigset_t *mask, siginfo_t *info, const struct timespec *ts) __THROW;
-int sigqueueinfo(int pid, int sig, siginfo_t *info);
+int sigqueueinfo(int pid, int sig, siginfo_t *info) __THROW;
+int siginterrupt(int sig, int flag) __THROW;
 
 /* 0 is OK ! kernel puts in MAX_THREAD_TIMEOUT :) */
 #define sigwaitinfo(m, i) sigtimedwait((m),(i),0)

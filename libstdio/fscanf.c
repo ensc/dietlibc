@@ -4,8 +4,6 @@
 #include "dietstdio.h"
 #include <unistd.h>
 
-int vfscanf(FILE *stream, const char *format, va_list arg_ptr);
-
 int fscanf(FILE *stream, const char *format, ...) {
   int n;
   va_list arg_ptr;

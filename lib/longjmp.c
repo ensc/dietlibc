@@ -28,6 +28,7 @@ extern void _longjmp_unwind (jmp_buf env, int val);
 /* Set the signal mask to the one specified in ENV, and jump
    to the position specified in ENV, causing the setjmp
    call there to return VAL, or 1 if VAL is 0.  */
+void __siglongjmp (sigjmp_buf env, int val);
 void __siglongjmp (sigjmp_buf env, int val)
 {
   /* Perform any cleanups needed by the frames being unwound.  */

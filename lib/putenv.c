@@ -3,7 +3,7 @@
 #include <errno.h>
 
 int putenv(const char *string) {
-  int len;
+  size_t len;
   int envc;
   char *tmp;
   const char **ep;

@@ -2,6 +2,7 @@
 
 #include <sys/types.h>
 #include <sys/utsname.h>
+#include <unistd.h>
 
 int gethostname(char *name,size_t len) {
   struct utsname u;

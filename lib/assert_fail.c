@@ -3,13 +3,13 @@
 #include <unistd.h>
 #include "dietwarning.h"
 
-extern int __ltostr(char *s, int size, unsigned long i, int base, char UpCase);
+void __assert_fail (const char *assertion, const char *file, unsigned int line, const char *function);
 
 void __assert_fail (const char *assertion, const char *file, unsigned int line, const char *function)
 {
-  int alen=strlen(assertion);
-  int flen=strlen(file);
-  int fulen=strlen(function);
+  unsigned int alen=strlen(assertion);
+  unsigned int flen=strlen(file);
+  unsigned int fulen=strlen(function);
   char *buf=(char*)alloca(alen+flen+fulen+50);
   if (buf) {
     char *tmp;

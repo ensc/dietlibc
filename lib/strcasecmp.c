@@ -1,3 +1,4 @@
+#include <string.h>
 
 int  strcasecmp ( const char* s1, const char* s2 )
 {
@@ -9,7 +10,7 @@ int  strcasecmp ( const char* s1, const char* s2 )
         x1 = *s1++ - 'A'; if (x1 < 26u) x1 += 32;
         if ( x2 != x1 )
             break;
-        if ( x1 == -'A' )
+        if ( x1 == (unsigned int)-'A' )
             break;
     }
 

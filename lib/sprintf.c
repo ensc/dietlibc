@@ -1,8 +1,7 @@
 #include <stdarg.h>
 #include <sys/types.h>
 #include <stdlib.h>
-
-int vsprintf (char *str,const char *format, va_list arg_ptr);
+#include <stdio.h>
 
 int sprintf(char *dest,const char *format,...)
 {

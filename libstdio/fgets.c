@@ -1,7 +1,5 @@
 #include "dietstdio.h"
 
-extern int ferror(FILE *stream);
-
 char *fgets(char *s, int size, FILE *stream) {
   char *orig=s;
   int l;

@@ -2,5 +2,5 @@
 #include <unistd.h>
 
 int mkfifo(const char *fn,mode_t mode) {
-  return mknod(fn,S_IFIFO|mode,0);
+  return mknod(fn,(mode_t)(mode|S_IFIFO),0);
 }

@@ -5,6 +5,7 @@
 #define O_LARGEFILE 0
 #endif
 
+int __libc_open64(const char* file,int oflag,int mode);
 int __libc_open64(const char* file,int oflag,int mode) {
   return open(file,oflag|O_LARGEFILE,mode);
 }

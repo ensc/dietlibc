@@ -1,9 +1,10 @@
 #include <string.h>
+#include <stdlib.h>
 
-int __ltostr(char *s, int size, unsigned long i, int base, char UpCase)
+int __ltostr(char *s, unsigned int size, unsigned long i, unsigned int base, int UpCase)
 {
   char *tmp;
-  int j=0;
+  unsigned int j=0;
 
   s[--size]=0;
 

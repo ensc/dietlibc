@@ -7,7 +7,6 @@
 extern int __isleap(int year);
 
 int nanosleep(const struct timespec *req, struct timespec *rem) __THROW;
-unsigned int sleep(unsigned int secs) __THROW;
 
 time_t mktime(struct tm *timeptr) __THROW __pure__;
 
@@ -27,5 +26,10 @@ double difftime(time_t time1, time_t time0) __THROW __attribute__((const));
 
 extern long int timezone;
 extern char* tzname[2];
+
+struct tm* localtime(const time_t* t) __THROW;
+struct tm* gmtime(const time_t* t) __THROW;
+struct tm* localtime_r(const time_t* t, struct tm* r) __THROW;
+struct tm* gmtime_r(const time_t* t, struct tm* r) __THROW;
 
 #endif

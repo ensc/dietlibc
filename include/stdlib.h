@@ -21,11 +21,13 @@ double strtod(const char *nptr, char **endptr) __THROW;
 long int strtol(const char *nptr, char **endptr, int base) __THROW;
 unsigned long int strtoul(const char *nptr, char **endptr, int base) __THROW;
 
-int __ltostr(char *s, int size, unsigned long i, int base, char UpCase) __THROW;
+extern int __ltostr(char *s, unsigned int size, unsigned long i, unsigned int base, int UpCase) __THROW;
+extern int __dtostr(double d,char *buf,unsigned int maxlen,unsigned int prec) __THROW;
+
 #ifdef __GNUC__
 long long int strtoll(const char *nptr, char **endptr, int base) __THROW;
 unsigned long long int strtoull(const char *nptr, char **endptr, int base) __THROW;
-int __lltostr(char *s, int size, unsigned long long i, int base, char UpCase) __THROW;
+int __lltostr(char *s, unsigned int size, unsigned long long i, unsigned int base, int UpCase) __THROW;
 #endif
 
 int atoi(const char *nptr) __THROW;

@@ -26,7 +26,7 @@ int execvp(const char *file, char *const argv[]) {
       buf[0]='.';
       cur--;
     } else
-      memmove(buf,cur,next-cur);
+      memmove(buf,cur,(size_t)(next-cur));
     buf[next-cur]='/';
     memmove(&buf[next-cur+1],file,strlen(file)+1);
     if (execve(buf,argv,environ)==-1) {

@@ -1,5 +1,6 @@
 #include <sys/ioctl.h>
 
+int __libc_tcflush(int fd, int queue_selector);
 int __libc_tcflush(int fd, int queue_selector)
 {
   return ioctl(fd, TCFLSH, queue_selector);

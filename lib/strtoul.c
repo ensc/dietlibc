@@ -2,6 +2,7 @@
 #include "dietfeatures.h"
 #include <errno.h>
 #include <limits.h>
+#include <stdlib.h>
 
 unsigned long int strtoul(const char *nptr, char **endptr, int base)
 {

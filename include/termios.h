@@ -228,8 +228,11 @@ speed_t cfgetospeed(struct termios *termios_p) __THROW;
 int cfsetospeed(struct termios *termios_p, speed_t speed) __THROW;
 speed_t cfgetispeed(struct termios *termios_p) __THROW;
 int cfsetispeed(struct termios *termios_p, speed_t speed) __THROW;
+void cfmakeraw(struct termios *t) __THROW;
 
 int tcflush(int fd, int queue_selector) __THROW;
 int tcdrain(int fd) __THROW;
+int tcflow (int fd,int action) __THROW;
+int tcsendbreak (int fd,int duration) __THROW;
 
 #endif

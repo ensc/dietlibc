@@ -1,6 +1,5 @@
 #include <stdarg.h>
-
-int vsscanf(const char *str, const char *format, va_list arg_ptr);
+#include <stdio.h>
 
 int sscanf(const char *str, const char *format, ...)
 {

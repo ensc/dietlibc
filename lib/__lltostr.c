@@ -1,9 +1,11 @@
 #include <string.h>
 
+int __lltostr(char *s, int size, unsigned long long i, int base, char UpCase);
+
 int __lltostr(char *s, int size, unsigned long long i, int base, char UpCase)
 {
   char *tmp;
-  int j=0;
+  unsigned int j=0;
 
   s[--size]=0;
 

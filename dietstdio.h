@@ -47,7 +47,7 @@ struct __stdio_file {
  * However, if next is BUFINPUT and the buffer is an input buffer, it
  * will not be flushed. Vice versa for output */
 extern int __fflush4(FILE *stream,int next);
-extern int __buffered_outs(const char *s,int len);
+extern int __buffered_outs(const char *s,size_t len);
 
 /* ..scanf */
 struct arg_scanf {

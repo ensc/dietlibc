@@ -41,7 +41,6 @@ loff_t lseek64(int fildes, loff_t offset, int whence) __THROW;
 
 int chdir(const char *path) __THROW;
 int fchdir(int fd) __THROW;
-int mkdir(const char *pathname, mode_t mode) __THROW;
 int rmdir(const char *pathname) __THROW;
 char *getcwd(char *buf, size_t size) __THROW;
 
@@ -75,12 +74,10 @@ pid_t setsid (void) __THROW;
 int dup (int oldfd) __THROW;
 int dup2 (int oldfd,int newfd) __THROW;
 
-int mknod(const char *pathname, mode_t mode, dev_t dev) __THROW;
-
 struct dirent;
 struct dirent64;
-int getdents(unsigned int fd, struct dirent *dirp, unsigned int count) __THROW;
-int getdents64(unsigned int fd, struct dirent64 *dirp, unsigned int count) __THROW;
+int getdents(int fd, struct dirent *dirp, unsigned int count) __THROW;
+int getdents64(int fd, struct dirent64 *dirp, unsigned int count) __THROW;
 
 pid_t fork(void) __THROW;
 pid_t vfork(void) __THROW;
@@ -144,8 +141,6 @@ int setreuid(uid_t ruid, uid_t euid) __THROW;
 
 int rename(const char *oldpath, const char *newpath) __THROW;
 int ftruncate(int fd, off_t length) __THROW;
-
-int mkstemp(char *Template) __THROW;
 
 int select(int n, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct timeval *timeout) __THROW;
 

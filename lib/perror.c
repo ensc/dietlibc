@@ -1,6 +1,7 @@
 #include "dietfeatures.h"
 #include <unistd.h>
 #include <string.h>
+#include <stdio.h>
 
 #define _BSD_SOURCE
 #include <errno.h>

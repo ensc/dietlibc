@@ -5,6 +5,7 @@
 #ifndef __NO_STAT64
 extern size_t __pread(int fd, void *buf, size_t count, off_t a,off_t b);
 
+size_t __libc_pread64(int fd, void *buf, size_t count, off64_t offset);
 size_t __libc_pread64(int fd, void *buf, size_t count, off64_t offset) {
   return __pread(fd,buf,count,__LONG_LONG_PAIR (offset&0xffffffff,offset>>32));
 }

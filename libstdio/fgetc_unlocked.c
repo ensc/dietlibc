@@ -1,8 +1,6 @@
 #include "dietstdio.h"
 #include <unistd.h>
 
-extern int feof(FILE *stream);
-
 int fgetc_unlocked(FILE *stream) {
   unsigned char c;
   if (stream->ungotten) {

@@ -2,12 +2,6 @@
 #include <unistd.h>
 #include <string.h>
 
-extern int opterr;
-extern int optopt;
-
-extern int optind;
-extern char *optarg;
-
 /* fsck, no GNU style permutation of argv this time. */
 
 static void getopterror(void) {

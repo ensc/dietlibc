@@ -2,6 +2,7 @@
 
 #include <sys/types.h>
 #include <sys/utsname.h>
+#include <unistd.h>
 
 int getdomainname(char *name,size_t len) {
   struct utsname u;

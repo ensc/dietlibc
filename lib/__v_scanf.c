@@ -52,7 +52,7 @@ int __v_scanf(struct arg_scanf* fn, const unsigned char *format, va_list arg_ptr
     /* format string ... */
     case '%':
       {
-	int _div=0;
+	unsigned int _div=0;
 	int width=-1;
 	char flag_width=0;
 	char flag_discard=0;
@@ -68,7 +68,7 @@ in_scan:
 
 	/* check for % */
 	case '%':
-	  if (tpch != ch) goto err_out;
+	  if ((unsigned char)tpch != ch) goto err_out;
 	  tpch=A_GETC(fn);
 	  break;
 
@@ -326,7 +326,7 @@ exp_out:
 
     /* check if equal format string... */
     default:
-      if (tpch != ch) goto err_out;
+      if ((unsigned char)tpch != ch) goto err_out;
       tpch=A_GETC(fn);
       break;
     }

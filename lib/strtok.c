@@ -1,4 +1,4 @@
-char *strtok_r(char *s, const char *delim, char **ptrptr);
+#include <string.h>
 
 static char *strtok_pos;
 

@@ -1,4 +1,5 @@
 #include "dietfeatures.h"
+#include <string.h>
 
 char *strchr(register const char *t, int c) {
   register char ch;

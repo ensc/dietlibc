@@ -10,7 +10,7 @@ struct str_data {
 
 static int sgetc(struct str_data* sd) {
   register unsigned int ret = *(sd->str++);
-  return (ret)?ret:-1;
+  return (ret)?(int)ret:-1;
 }
 
 static int sputc(int c, struct str_data* sd) {

@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 typedef void (*function)(void);
 
 #define NUM_ATEXIT	32

@@ -1,3 +1,4 @@
+int __isxdigit_ascii ( int ch );
 int __isxdigit_ascii ( int ch )
 {
     return (unsigned int)( ch         - '0') < 10u  || 

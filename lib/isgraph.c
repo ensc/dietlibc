@@ -1,5 +1,5 @@
-int __isgraph_ascii ( int ch ) 
-{
+int __isgraph_ascii ( int ch );
+int __isgraph_ascii ( int ch ) {
   return (unsigned int)(ch - '!') < 127u - '!';
 }
 

@@ -73,17 +73,17 @@ int  __decompose_floatp ( long double number,
 /*
  *  So, die ist zum Zerlegen von Festkommazahlen am besten geeignet.
  *
- *  Die nichtnegative |bergebende Festkomma wird in einen Integeranteil und
+ *  Die nichtnegative übergebende Festkomma wird in einen Integeranteil und
  *  einen Bruchanteil zerlegt.
  *
  *  Der Bruchanteil wird in digits_frac[0...precision_frac-1] gespeichert,
  *  falls precision_frac != 0 ist.
  *
- *  Der Integeranteil wird ab digits_int + precision_int - 1 r|ckwrts
- *  geschrieben.  Zur|ckgeliefert wird ein Zeiger auf das erste Zeichen, das
+ *  Der Integeranteil wird ab digits_int + precision_int - 1 rückwrts
+ *  geschrieben.  Zurückgeliefert wird ein Zeiger auf das erste Zeichen, das
  *  bei der Konvertierung != '0' ist (Ausnahme ist die 0.0 selbst). Zeichen
  *  zwischen digits_int und diesem Zeiger (exklusive des Zeichens unter dem
- *  Zeiger) sind unbestimmt.  W|nscht man dort Nullen oder Leerzeichen,
+ *  Zeiger) sind unbestimmt.  Wünscht man dort Nullen oder Leerzeichen,
  *  sollte man mittels memset() dieses vorher initialsieren.
  */
 

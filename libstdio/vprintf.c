@@ -2,7 +2,7 @@
 #include <unistd.h>
 #include "dietstdio.h"
 
-__attribute__((weak)) int __buffered_outs(const char *s,int len) {
+__attribute__((weak)) int __buffered_outs(const char *s,size_t len) {
   return write(1,s,len)==len?1:0;
 }
 

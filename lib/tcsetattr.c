@@ -1,10 +1,9 @@
-#define tcsetattr libc_tcsetattr
 #include <termios.h>
 #include <sys/ioctl.h>
-#undef tcsetattr
 
 #include <errno.h>
 #include "dietfeatures.h"
+#include <termios.h>
 
 int tcsetattr(int fildes, int optional_actions, struct termios *termios_p)
 {

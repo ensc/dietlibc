@@ -1,9 +1,11 @@
 #include <sys/types.h>
+#include <string.h>
 
-char *memchr(const char *s, int c, size_t n) {
+void* memchr(const void *s, int c, size_t n) {
+  register const char* t=s;
   int i;
   for (i=n; i; --i)
-    if (*s++==c)
-      return (char*)s;
+    if (*t++==c)
+      return (char*)t;
   return 0;
 }

@@ -1,9 +1,16 @@
 #include <sys/types.h>
 #include "dietstdio.h"
 #include <unistd.h>
+#include <stdlib.h>
 #include "dietwarning.h"
 
 int setvbuf(FILE *stream, char *buf, int flags , size_t size) {
+  stream->buf=buf;
+  if (!(stream->flags&STATICBUF)) free(stream->buf);
+  stream->flags|=STATICBUF;
+  stream->buf=buf;
+  stream->buflen=size;
+  stream->bm=stream->bs=0;
   switch (flags) {
   case _IONBF: stream->flags = (stream->flags & ~(BUFLINEWISE)) | NOBUF; break;
   case _IOLBF: stream->flags = (stream->flags & ~(BUFLINEWISE|NOBUF)) | BUFLINEWISE; break;
@@ -12,5 +19,3 @@ int setvbuf(FILE *stream, char *buf, int flags , size_t size) {
   }
   return 0;
 }
-
-link_warning("setvbuf","warning: setvbuf does not implement changing the buffer in diet libc.")

@@ -5,6 +5,7 @@
 #include <pthread.h>
 #include "dietstdio.h"
 
+int __stdio_parse_mode(const char *mode);
 int __stdio_parse_mode(const char *mode) {
   int f=0;
   for (;;) {

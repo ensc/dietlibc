@@ -3,6 +3,7 @@
 
 extern char **environ;
 
+int __exec_shell(const char *file, char *const argv[]);
 int __exec_shell(const char *file, char *const argv[]) {
   int i;
 

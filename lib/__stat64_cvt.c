@@ -1,6 +1,8 @@
 #include <sys/stat.h>
 #ifndef __NO_STAT64
 
+void __stat64_cvt(const struct stat *src,struct stat64 *dest);
+
 void __stat64_cvt(const struct stat *src,struct stat64 *dest) {
   dest->st_dev=src->st_dev;
   dest->st_ino=src->st_ino;

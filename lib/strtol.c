@@ -2,8 +2,7 @@
 #include "dietfeatures.h"
 #include <errno.h>
 #include <limits.h>
-
-extern unsigned long int strtoul(const char *nptr, char **endptr, int base);
+#include <stdlib.h>
 
 #define ABS_LONG_MIN 2147483648UL
 long int strtol(const char *nptr, char **endptr, int base)

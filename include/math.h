@@ -76,4 +76,9 @@ double copysign(double value, double sign) __attribute__((__const__));
 void sincos(double x, double* sinx, double* cosx);
 double ipow (double mant, int expo);
 #endif
+
+int isnan(double d) __attribute__((__const__));
+int isinf(double d) __attribute__((__const__));
+int finite(double d) __attribute__((__const__));
+
 #endif

@@ -1,6 +1,8 @@
 #include <stdio.h>
 /* convert double to string.  Helper for sprintf. */
 
+int __dtostr(double d,char *buf,int maxlen,int prec);
+
 int __dtostr(double d,char *buf,int maxlen,int prec) {
   unsigned long long *x=(unsigned long long *)&d;
   /* step 1: extract sign, mantissa and exponent */

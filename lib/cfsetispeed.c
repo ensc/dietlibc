@@ -6,7 +6,7 @@
 
 int cfsetispeed(struct termios *termios_p, speed_t speed)
 {
-  if ((speed & ~CBAUD) != 0 && (speed < B57600 || speed > B460800)) {
+  if ((speed & (speed_t)~CBAUD) != 0 && (speed < B57600 || speed > B460800)) {
     errno=EINVAL;
     return -1;
   }

@@ -5,7 +5,7 @@
 
 size_t fwrite(const void *ptr, size_t size, size_t nmemb, FILE *stream) {
   int res;
-  long len=size*nmemb;
+  unsigned long len=size*nmemb;
   long i;
   if (len>stream->buflen || (stream->flags&NOBUF)) {
     fflush(stream);

@@ -8,6 +8,7 @@
 extern int __stdio_atexit;
 extern void __stdio_flushall(void);
 
+FILE* __stdio_init_file_nothreads(int fd);
 FILE* __stdio_init_file_nothreads(int fd) {
   FILE *tmp=(FILE*)malloc(sizeof(FILE));
   if (!tmp) goto err_out;

@@ -1,6 +1,6 @@
 #include <sys/reboot.h>
 
-int __reboot(int magic1, int magic2, int cmd);
+int __reboot(unsigned int magic1, unsigned int magic2, int cmd);
 
 int reboot(int cmd)
 {

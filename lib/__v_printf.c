@@ -6,11 +6,8 @@
 #include "dietstdio.h"
 #include "dietwarning.h"
 
-extern int __ltostr(char *s, int size, unsigned long i, int base, char UpCase);
-extern int __dtostr(double d,char *buf,int maxlen,int prec);
-
-static inline int skip_to(const unsigned char *format) {
-  int nr;
+static inline unsigned int skip_to(const unsigned char *format) {
+  int unsigned nr;
   for (nr=0; format[nr] && (format[nr]!='%'); ++nr);
   return nr;
 }
@@ -18,13 +15,13 @@ static inline int skip_to(const unsigned char *format) {
 #define A_WRITE(fn,buf,sz)	((fn)->put((void*)(buf),(sz),(fn)->data))
 
 static char* pad_line[16]= { "                ", "0000000000000000", };
-static inline int write_pad(struct arg_printf* fn, int len, char padwith) {
+static inline int write_pad(struct arg_printf* fn, int len, int padwith) {
   int nr=0;
   for (;len>15;len-=16,nr+=16) {
     A_WRITE(fn,pad_line[(padwith=='0')?1:0],16);
   }
   if (len>0) {
-    A_WRITE(fn,pad_line[(padwith=='0')?1:0],len); nr+=len;
+    A_WRITE(fn,pad_line[(padwith=='0')?1:0],(unsigned int)len); nr+=len;
   }
   return nr;
 }
@@ -34,7 +31,7 @@ int __v_printf(struct arg_printf* fn, const unsigned char *format, va_list arg_p
   int len=0;
 
   while (*format) {
-    int sz = skip_to(format);
+    unsigned int sz = skip_to(format);
     if (sz) {
       A_WRITE(fn,format,sz); len+=sz;
       format+=sz;
@@ -53,8 +50,8 @@ int __v_printf(struct arg_printf* fn, const unsigned char *format, va_list arg_p
       char flag_dot=0;
       signed char flag_long=0;
 
-      char base;
-      int width=0, preci=0;
+      unsigned int base;
+      unsigned int width=0, preci=0;
 
       int number=0;
 #ifdef WANT_LONGLONG_PRINTF
@@ -106,7 +103,7 @@ inn_printf:
       case '8':
       case '9':
 	if(flag_dot) return -1;
-	width=strtol(format-1,(char**)&s,10);
+	width=strtoul(format-1,(char**)&s,10);
 	format=s;
 	goto inn_printf;
 
@@ -120,7 +117,8 @@ inn_printf:
 	  preci=va_arg(arg_ptr,int);
 	  ++format;
 	} else {
-	  preci=strtol(format,(char**)&s,10);
+	  long int tmp=strtol(format,(char**)&s,10);
+	  preci=tmp<0?0:tmp;
 	  format=s;
 	}
 	goto inn_printf;
@@ -143,11 +141,11 @@ inn_printf:
 
 print_out:
 	if (width && (!flag_left)) {
-	  len+=write_pad(fn,width-sz,padwith);
+	  len+=write_pad(fn,(signed int)width-(signed int)sz,padwith);
 	}
 	A_WRITE(fn,s,sz); len+=sz;
 	if (width && (flag_left)) {
-	  len+=write_pad(fn,width-sz,' ');
+	  len+=write_pad(fn,(signed int)width-(signed int)sz,' ');
 	}
 	break;
 
@@ -241,7 +239,8 @@ num_printf:
 	  if (flag_dot) {
 	    char *tmp;
 	    if ((tmp=strchr(buf,'.'))) {
-	      while (preci>-1 && *++tmp) --preci;
+	      ++tmp;
+	      while (preci>0 && *++tmp) --preci;
 	      *tmp=0;
 	    }
 	  }

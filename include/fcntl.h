@@ -479,10 +479,6 @@ struct flock64 {
 #endif
 
 extern int fcntl (int __fd, int __cmd, ...) __THROW;
-extern int open (const char *__file, int __oflag, ...) __THROW;
-extern int open64 (const char *__file, int __oflag, ...) __THROW;
-extern int creat (const char *__file, mode_t __mode) __THROW;
-extern int creat64 (const char *__file, mode_t __mode) __THROW;
 extern int lockf (int __fd, int __cmd, off_t __len) __THROW;
 extern int lockf64 (int __fd, int __cmd, off64_t __len) __THROW;
 

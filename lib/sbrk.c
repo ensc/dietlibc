@@ -4,6 +4,7 @@ extern int __brk(void *end_data_segment);
 
 extern void* __curbrk;
 
+void* __sbrk(ptrdiff_t increment);
 void* __sbrk(ptrdiff_t increment) {
   void* oldbrk;
   if (__curbrk==0)
