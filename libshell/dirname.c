@@ -1,25 +1,34 @@
-#include <string.h>
 #include <libgen.h>
-
+#include <string.h>
 /*
-       path           dirname        basename
-       "/usr/lib"     "/usr"         "lib"
-       "/usr/"        "/"            "usr"
-       "usr"          "."            "usr"
-       "/"            "/"            "/"
-       "."            "."            "."
-       ".."           "."            ".."
+        path           dirname        basename
+        "/usr/lib"     "/usr"         "lib"
+        "/usr/"        "/"            "usr"
+        "usr"          "."            "usr"
+        "/"            "/"            "/"
+        "."            "."            "."
+        ".."           "."            ".."
+        NULL           "."            "."
+        ""             "."            "."
 */
 
-char *dirname(char *path) {
+static char *dot=".";
+#define SLASH '/'
+#define EOL (char)0
+char *dirname(char *path)
+{
   char *c;
-again:
-  if (!(c=strrchr(path,'/'))) return ".";
-  while (c[1]==0) {	/* remove trailing slashes */
-    if (c==path) return c;	/* unless path=='/' */
-    *c=0;
-    if (*--c!='/') break;
+  if ( path  == NULL || *path == EOL ) return dot;
+  for(;;) {
+    if ( !(c=strrchr(path,SLASH)) ) return dot; /* no slashes */
+    if ( c[1]==EOL && c!=path ) {   /* remove trailing slashes */
+      while ( *c==SLASH && c!=path ) *c--=EOL;
+      continue;
+    }
+    if ( c!=path )
+      while ( *c==SLASH ) *c--=EOL; /* slashes in the middle */
+    else
+      path[1]=EOL;                  /* slash is first symbol */
+    return path;
   }
-  if (*c=='/') { if (c!=path) *c=0; return path; }
-  goto again;
 }
