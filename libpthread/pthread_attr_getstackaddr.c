@@ -8,6 +8,6 @@ int pthread_attr_getstackaddr(pthread_attr_t *attr, void **stack)
 {
   __THREAD_INIT();
 
-  *stack=atty->__stackaddr;
+  *stack=attr->__stackaddr;
   return 0;
 }

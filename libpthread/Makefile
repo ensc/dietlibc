@@ -28,17 +28,22 @@ PTHREAD_OBJS = \
 	pthread_attr_getschedparam.o \
 	pthread_attr_getschedpolicy.o \
 	pthread_attr_getscope.o \
+	pthread_attr_getstackaddr.o \
+	pthread_attr_getstacksize.o \
 	pthread_attr_init.o \
 	pthread_attr_setdetachstate.o \
 	pthread_attr_setinheritsched.o \
 	pthread_attr_setschedparam.o \
 	pthread_attr_setschedpolicy.o \
 	pthread_attr_setscope.o \
+	pthread_attr_setstackaddr.o \
+	pthread_attr_setstacksize.o \
  \
 	pthread_cancel.o pthread_setcancelstate.o \
 	pthread_setcanceltype.o pthread_testcancel.o \
  \
 	pthread_mutex_init.o \
+	pthread_mutex_destroy.o \
 	pthread_mutex_lock.o \
 	pthread_mutex_trylock.o \
 	pthread_mutex_unlock.o \

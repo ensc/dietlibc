@@ -6,7 +6,7 @@
 
 int pthread_attr_setstackaddr(pthread_attr_t *attr, void *stack)
 {
-  __THREAD_INIT;
+  __THREAD_INIT();
 
   attr->__stackaddr=stack;
   return 0;
