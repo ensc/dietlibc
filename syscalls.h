@@ -1,9 +1,3 @@
-#ifndef __ASSEMBLER__
-
-#include <linux/unistd.h>
-
-#else
-
 #ifdef __i386__
 
 #include "i386/syscalls.h"
@@ -54,7 +48,5 @@
 #ifdef __hppa__
 
 #include "parisc/syscalls.h"
-
-#endif
 
 #endif

@@ -123,6 +123,8 @@ int pause(void) __THROW;
 #if defined _FILE_OFFSET_BITS && _FILE_OFFSET_BITS == 64
 #define open open64
 #define creat creat64
+#define truncate truncate64
+#define ftruncate ftruncate64
 #endif
 
 extern char* getlogin(void) __THROW;
@@ -144,7 +146,12 @@ int setreuid(uid_t ruid, uid_t euid) __THROW;
 #define setegid(egid) setregid(-1,egid)
 
 int rename(const char *oldpath, const char *newpath) __THROW;
+int truncate(const char *path, off_t length) __THROW;
 int ftruncate(int fd, off_t length) __THROW;
+#ifndef __NO_STAT64
+int truncate64(const char *path, loff_t length) __THROW;
+int ftruncate64(int fd, loff_t length) __THROW;
+#endif
 
 int select(int n, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct timeval *timeout) __THROW;
 

@@ -452,6 +452,7 @@
 #define __ARGS_madvise			0
 #define __ARGS_fcntl64			0
 
+#ifdef __ASSEMBLER__
 #define syscall_weak(name,wsym,sym) __syscall_weak $__NR_##name, wsym, sym, __ARGS_##name
 .macro __syscall_weak name wsym sym typ
 .text
@@ -493,3 +494,4 @@
 .endif
 .endm
 
+#endif

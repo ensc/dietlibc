@@ -311,25 +311,25 @@ $(OBJDIR)/liblatin1.a $(OBJDIR)/libcompat.a $(DESTDIR)$(ILIBDIR)
 .PHONY: sparc ppc mips arm alpha i386 parisc mipsel powerpc s390 sparc64
 
 arm sparc ppc alpha i386 mips parisc s390 sparc64:
-	$(MAKE) ARCH=$@ CROSS=$@-linux- all t
+	$(MAKE) ARCH=$@ CROSS=$@-linux- all
 
 # Cross compile for little endian MIPS
 mipsel:
-	$(MAKE) ARCH=$@ CROSS=mips-linux- all t
+	$(MAKE) ARCH=$@ CROSS=mips-linux- all
 
 mips-gnu:
-	$(MAKE) ARCH=$@ CROSS=$@-linux-gnu- all t
+	$(MAKE) ARCH=$@ CROSS=$@-linux-gnu- all
 
 # Some people named their cross compiler toolchain powerpc-linux-gcc
 powerpc:
-	$(MAKE) ARCH=ppc CROSS=powerpc-linux- all t
+	$(MAKE) ARCH=ppc CROSS=powerpc-linux- all
 
 cross:
 	$(MAKE) arm sparc ppc alpha i386 mips sparc64
 
 
 # these depend on dietfeatures.h for large file backward compatibility
-$(OBJDIR)/__fstat64.o $(OBJDIR)/__lstat64.o $(OBJDIR)/__stat64.o $(OBJDIR)/lseek64.o $(OBJDIR)/readdir64.o: dietfeatures.h
+$(OBJDIR)/__fstat64.o $(OBJDIR)/__lstat64.o $(OBJDIR)/__stat64.o $(OBJDIR)/lseek64.o $(OBJDIR)/readdir64.o $(OBJDIR)/stat64.o $(OBJDIR)/lstat64.o $(OBJDIR)/fstat64.o $(OBJDIR)/truncate64.o $(OBJDIR)/__truncate64.o $(OBJDIR)/ftruncate64.o $(OBJDIR)/__ftruncate64.o $(PICODIR)/dyn_syscalls.o $(PICODIR)/__truncate64.o $(PICODIR)/__ftruncate64.o $(PICODIR)/__stat64.o $(PICODIR)/__lstat64.o $(PICODIR)/__fstat64.o: dietfeatures.h
 
 # these depend on dietfeatures.h for thread support
 $(OBJDIR)/alloc.o $(OBJDIR)/perror.o $(OBJDIR)/logging.o $(OBJDIR)/unified.o $(OBJDIR)/clone.o $(OBJDIR)/set_errno.o: dietfeatures.h

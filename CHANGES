@@ -3,6 +3,7 @@
   check in mktime fix (from Luc Van Oostenryck)
   add libm2.s from contrib to i386 (oops, how long has it been sitting
     there?)
+  add truncate64 and ftruncate64 and prototype for truncate (only had ftruncate)
 
 0.17:
   fix several bugs in getservent_r
