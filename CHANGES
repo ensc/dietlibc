@@ -45,6 +45,7 @@
   use above to flag a few BSDisms ;-)
   include <sys/cdefs.h> in errno.h, fixes __attribute_dontuse__ breakage
   endmntent now returns 1 (Florian Westphal)
+  strtoul return value fixes (Jan Bobrowski)
 
 0.22:
   fix i386 libm

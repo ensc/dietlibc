@@ -8,6 +8,7 @@ unsigned long int strtoul(const char *nptr, char **endptr, int base)
 {
   int neg = 0;
   unsigned long int v=0;
+  const char* orig;
 
   while(isspace(*nptr)) ++nptr;
   if (*nptr == '-') { neg=1; nptr++; }
@@ -24,10 +25,14 @@ skip0x:
     } else
       base=10;
   }
+  orig=nptr;
   while(*nptr) {
     register unsigned char c=*nptr;
     c=(c>='a'?c-'a'+10:c>='A'?c-'A'+10:c<='9'?c-'0':0xff);
-    if (c>=base) break;
+    if (c>=base) {
+      if (nptr==orig) { errno=EINVAL; return ULONG_MAX; }
+      break;
+    }
     {
       register unsigned long int w=v*base;
       if (w<v) {
@@ -39,6 +44,5 @@ skip0x:
     ++nptr;
   }
   if (endptr) *endptr=(char *)nptr;
-  errno=0;	/* in case v==ULONG_MAX, ugh! */
   return (neg?-v:v);
 }
