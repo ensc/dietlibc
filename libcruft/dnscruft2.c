@@ -94,7 +94,7 @@ int __dns_gethostbyx_r(const char* name, struct hostent* result,
 #endif
 	  /* header, question, answer, authority, additional */
 	  if (inpkg[0]!=packet[0] || inpkg[1]!=packet[1]) continue;	/* wrong ID */
-	  if ((inpkg[2]&0xf9) != 0x81) continue;	/* not answer */
+	  if ((inpkg[2]&0xf9) != (_res.options&RES_RECURSE?0x81:0x80)) continue;	/* not answer */
 	  if ((inpkg[3]&0x0f) != 0) {
 	    *h_errnop=HOST_NOT_FOUND;
 	    return 1;

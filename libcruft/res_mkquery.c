@@ -48,7 +48,7 @@ int res_mkquery(int op, const char *dname, int class, int type, char* data,
 		int datalen, const unsigned char* newrr, char* buf, int buflen) {
   unsigned char packet[512];
   memmove(packet,dnspacket,12);
-  if (_res.options&RES_RECURSE==0) packet[3]=0;
+  if ((_res.options&RES_RECURSE)==0) packet[2]=0;
   *(unsigned short*)packet=rand();
   {
     unsigned char* x;
