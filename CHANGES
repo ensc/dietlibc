@@ -1,6 +1,8 @@
 0.18:
   add stpcpy (from Thomas Ogrisegg)
   check in mktime fix (from Luc Van Oostenryck)
+  add libm2.s from contrib to i386 (oops, how long has it been sitting
+    there?)
 
 0.17:
   fix several bugs in getservent_r
