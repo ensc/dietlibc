@@ -80,7 +80,17 @@ xdrproc_t elproc;				/* xdr routine to handle each element */
 	if ((c > maxsize) && (xdrs->x_op != XDR_FREE)) {
 		return (FALSE);
 	}
-	nodesize = c * elsize;
+	/* duh, look for integer overflow (fefe) */
+	{
+	  unsigned int i;
+	  nodesize = 0;
+	  for (i=c; i; --i) {
+	    unsigned int tmp=nodesize+elsize;
+	    if (tmp<nodesize)	/* overflow */
+	      return FALSE;
+	    nodesize=tmp;
+	  }
+	}
 
 	/*
 	 * if we are deserializing, we may need to allocate an array.

@@ -1,12 +1,13 @@
 0.19:
   current gcc cvs makes __thread a keyword (Eric Troan)
-  be more strict regarding hostile DNS packets.
+  be more strict regarding hostile DNS packets (me)
   fix ia64 compile problems (Gerrit Pape)
   make killpg a function and not a macro (broke bash 2.05b)
   fix ia64 start code and unified syscall (me)
   add sparc/strlen.S from Thomas Ogrisegg
   add more space to ARM __jmp_buf in setjmp.h (Andre)
   fix libcompat/syscall.S (did't compile on arm)
+  add integer overflow fix in xdr_array after bugtraq advisory (me)
 
 0.18:
   add stpcpy (from Thomas Ogrisegg)
