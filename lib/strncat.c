@@ -16,16 +16,16 @@ char *strncat(char *s, const char *t, size_t n) {
   register char *max;
   s+=strlen(s);
 #ifdef WANT_NON_COMPLIANT_STRNCAT
-  if ((max=s+n-1)<=s) goto fini;
+  if (__unlikely(max=s+n-1)<=s) goto fini;
 #else
-  if ((max=s+n)==s) goto fini;
+  if (__unlikely(max=s+n)==s) goto fini;
 #endif
   for (;;) {
-    if (!(*s = *t)) break; if (++s==max) break; ++t;
+    if (__unlikely(!(*s = *t))) break; if (__unlikely(++s==max)) break; ++t;
 #ifndef WANT_SMALL_STRING_ROUTINES
-    if (!(*s = *t)) break; if (++s==max) break; ++t;
-    if (!(*s = *t)) break; if (++s==max) break; ++t;
-    if (!(*s = *t)) break; if (++s==max) break; ++t;
+    if (__unlikely(!(*s = *t))) break; if (__unlikely(++s==max)) break; ++t;
+    if (__unlikely(!(*s = *t))) break; if (__unlikely(++s==max)) break; ++t;
+    if (__unlikely(!(*s = *t))) break; if (__unlikely(++s==max)) break; ++t;
 #endif
   }
   *s=0;

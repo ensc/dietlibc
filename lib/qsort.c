@@ -34,11 +34,11 @@ void dumparray() {
 void isort(void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *));
 void isort(void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *)) {
   size_t i;
-  while (expect(nmemb>1,1)) {
+  while (__likely(nmemb>1)) {
     char *min=base;
     char *tmp=min+size;
     for (i=1; i<nmemb; ++i) {
-      if (expect(compar(tmp,min)<0,0))
+      if (__unlikely(compar(tmp,min)<0))
 	min=tmp;
       tmp+=size;
     }
@@ -99,8 +99,8 @@ void qsort(void *base, size_t nmemb, size_t size, int (*compar)(const void *, co
   v=max;
   min=base; lmemb=0;
   for (;;) {
-    while (expect(compar(min,v)<0,1)) { min+=size; ++lmemb; }
-    while (expect(compar(max-=size,v)>0,1)) ;
+    while (__likely(compar(min,v)<0)) { min+=size; ++lmemb; }
+    while (__likely(compar(max-=size,v)>0)) ;
     if (min>=max) break;
     iswap(min,max,size);
   }

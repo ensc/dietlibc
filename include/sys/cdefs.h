@@ -31,10 +31,14 @@
 #define __builtin_expect(foo,bar) (foo)
 #define expect(foo,bar) (foo)
 #else
-#define expect(foo,bar) __builtin_expect(foo,bar)
+#define expect(foo,bar) __builtin_expect((long)(foo),bar)
 #define __attribute_malloc__ __attribute__((__malloc__))
 #endif
 #endif
+
+/* idea for these macros taken from Linux kernel */
+#define __likely(foo) expect((foo),1)
+#define __unlikely(foo) expect((foo),0)
 
 #ifndef __attribute_malloc__
 #define __attribute_malloc__
