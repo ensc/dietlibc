@@ -7,10 +7,10 @@
 #include <signal.h>
 #include <setjmp.h>
 
-#define PTHREAD_THREADS_MAX 128
+#define PTHREAD_THREADS_MAX	128
 
-#define MAX_SPIN_COUNT 50
-#define SPIN_SLEEP_DURATION 2000001
+#define MAX_SPIN_COUNT		50
+#define SPIN_SLEEP_DURATION	2000001
 
 /* Fast locks (not abstract because mutexes and conditions aren't abstract). */
 struct _pthread_fastlock {
@@ -54,9 +54,36 @@ typedef unsigned long int pthread_t;
 
 /* ONCE */
 typedef int pthread_once_t;
-#define PTHREAD_ONCE_INIT       0
+#define PTHREAD_ONCE_INIT	0
+
 int __pthread_once(pthread_once_t* once_control, void (*init_routine)(void));
 int pthread_once(pthread_once_t* once_control, void (*init_routine)(void));
+
+/* CANCEL */
+
+enum {
+  PTHREAD_CANCEL_DISABLE,
+#define PTHREAD_CANCEL_DISABLE PTHREAD_CANCEL_DISABLE
+  PTHREAD_CANCEL_ENABLE,
+#define PTHREAD_CANCEL_ENABLE PTHREAD_CANCEL_ENABLE
+};
+
+enum {
+  PTHREAD_CANCEL_ASYNCHRONOUS,
+#define PTHREAD_CANCEL_ASYNCHRONOUS PTHREAD_CANCEL_ASYNCHRONOUS
+  PTHREAD_CANCEL_DEFERRED,
+#define PTHREAD_CANCEL_DEFERRED PTHREAD_CANCEL_DEFERRED
+};
+
+#define PTHREAD_CANCELED ((void *) -1)
+
+int pthread_cancel(pthread_t thread);
+int pthread_setcancelstate(int state, int *oldstate);
+
+int pthread_setcanceltype(int type, int *oldtype);
+
+void pthread_testcancel(void);
+
 
 /* THREADS */
 int pthread_create (pthread_t *__thread,
