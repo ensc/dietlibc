@@ -12,7 +12,7 @@ typedef uint8_t uint_least8_t;
 typedef uint16_t uint_least16_t;
 typedef uint32_t uint_least32_t;
 
-#ifndef __STRICT_ANSI__
+#if !defined(__STRICT_ANSI__) || __STDC_VERSION__ + 0 >= 199900L
 typedef int64_t int_least64_t;
 typedef uint64_t uint_least64_t;
 #endif

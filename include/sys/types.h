@@ -144,7 +144,7 @@ typedef daddr_t __daddr_t __attribute_dontuse__;
 typedef uint8_t u_int8_t __attribute_dontuse__;
 typedef uint16_t u_int16_t __attribute_dontuse__;
 typedef uint32_t u_int32_t __attribute_dontuse__;
-#ifndef __STRICT_ANSI__
+#if !defined(__STRICT_ANSI__) || __STDC_VERSION__ + 0 >= 199900L
 typedef uint64_t u_int64_t __attribute_dontuse__;
 #endif
 #endif

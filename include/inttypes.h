@@ -239,7 +239,7 @@ typedef unsigned int uint32_t;
 typedef signed long int intptr_t;
 typedef unsigned long int uintptr_t;
 
-#ifndef __STRICT_ANSI__
+#if !defined(__STRICT_ANSI__) || __STDC_VERSION__ + 0 >= 199900L
 __extension__ typedef signed long long int64_t;
 __extension__ typedef unsigned long long uint64_t;
 __extension__ typedef signed long long int intmax_t;

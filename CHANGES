@@ -12,6 +12,7 @@
   faster string routines and a small fix for alloc (Thomas Ogrisegg)
   remove C++ comments from header files
   add ftrylockfile
+  C99 fixes and a new printf test from Enrico Scholz
 
 0.24:
   work around incompatible Linux select() modifying the timeout in

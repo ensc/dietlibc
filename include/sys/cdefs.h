@@ -48,7 +48,7 @@
 
 #define __ptr_t void*
 
-#ifdef __STRICT_ANSI__
+#if defined(__STRICT_ANSI__) && __STDC_VERSION__ + 0 < 199900L
 #define inline
 #endif
 

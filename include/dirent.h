@@ -14,7 +14,7 @@ struct dirent {
   char		d_name[256]; /* We must not include limits.h! */
 };
 
-#ifndef __STRICT_ANSI__
+#if !defined(__STRICT_ANSI__) || __STDC_VERSION__ + 0 >= 199900L
 struct dirent64 {
   uint64_t	d_ino;
   int64_t	d_off;
