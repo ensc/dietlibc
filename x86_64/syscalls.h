@@ -220,19 +220,18 @@
 
 #define __NR_nfsservctl                        180
 
-#define __NR_getpmsg                           181
-#define __NR_putpmsg                           182
+#define __NR_getpmsg                           181	/* reserved for LiS/STREAMS */
+#define __NR_putpmsg                           182	/* reserved for LiS/STREAMS */
 
-#define __NR_afs_syscall                       183
+#define __NR_afs_syscall                       183	/* reserved for AFS */ 
 
 #define __NR_tuxcall      		184 /* reserved for tux */
 
-#define __NR_security			185 /* reserved for security */
+#define __NR_security			185
 
 #define __NR_gettid		186
 
 #define __NR_readahead		187
-
 #define __NR_setxattr		188
 #define __NR_lsetxattr		189
 #define __NR_fsetxattr		190
@@ -245,9 +244,9 @@
 #define __NR_removexattr	197
 #define __NR_lremovexattr	198
 #define __NR_fremovexattr	199
-#define __NR_tkill	200	/* 2.5 only */
-#define __NR_time		201
-#define __NR_futex		202 /* 2.5 only */
+#define __NR_tkill	200
+#define __NR_time      201
+#define __NR_futex     202
 #define __NR_sched_setaffinity    203
 #define __NR_sched_getaffinity     204
 #define __NR_set_thread_area	205
@@ -259,8 +258,8 @@
 #define __NR_get_thread_area	211
 #define __NR_lookup_dcookie	212
 #define __NR_epoll_create	213
-#define __NR_epoll_ctl	233
-#define __NR_epoll_wait	232
+#define __NR_epoll_ctl_old	214
+#define __NR_epoll_wait_old	215
 #define __NR_remap_file_pages	216
 #define __NR_getdents64	217
 #define __NR_set_tid_address	218
@@ -277,6 +276,26 @@
 #define __NR_clock_getres	229
 #define __NR_clock_nanosleep	230
 #define __NR_exit_group		231
+#define __NR_epoll_wait		232
+#define __NR_epoll_ctl		233
+#define __NR_tgkill		234
+#define __NR_utimes		235
+#define __NR_vserver		236
+#define __NR_vserver		236
+#define __NR_mbind 		237
+#define __NR_set_mempolicy 	238
+#define __NR_get_mempolicy 	239
+#define __NR_mq_open 		240
+#define __NR_mq_unlink 		241
+#define __NR_mq_timedsend 	242
+#define __NR_mq_timedreceive	243
+#define __NR_mq_notify 		244
+#define __NR_mq_getsetattr 	245
+#define __NR_kexec_load 	246
+#define __NR_waitid		247
+#define __NR_add_key		248
+#define __NR_request_key	249
+#define __NR_keyctl		250
 
 #define __NR_syscall_max __NR_exit_group
 

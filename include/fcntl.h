@@ -597,6 +597,10 @@ extern int fcntl (int __fd, int __cmd, ...) __THROW;
 #define O_ASYNC FASYNC
 #endif
 
+#ifdef _GNU_SOURCE
+ssize_t readahead(int fd, off64_t *offset, size_t count);
+#endif
+
 __END_DECLS
 
 #endif

@@ -94,15 +94,16 @@
 #define __NR_shmat			1114
 #define __NR_shmdt			1115
 #define __NR_shmctl			1116
+/* also known as klogctl() in GNU libc: */
 #define __NR_syslog			1117
 #define __NR_setitimer			1118
 #define __NR_getitimer			1119
-#define __NR_old_stat			1120
-#define __NR_old_lstat			1121
-#define __NR_old_fstat			1122
+/* 1120 was __NR_old_stat */
+/* 1121 was __NR_old_lstat */
+/* 1122 was __NR_old_fstat */
 #define __NR_vhangup			1123
 #define __NR_lchown			1124
-#define __NR_vm86			1125
+#define __NR_remap_file_pages		1125
 #define __NR_wait4			1126
 #define __NR_sysinfo			1127
 #define __NR_clone			1128
@@ -209,9 +210,9 @@
 #define __NR_futex			1230
 #define __NR_sched_setaffinity		1231
 #define __NR_sched_getaffinity		1232
-#define __NR_security			1233
-#define __NR_alloc_hugepages		1234
-#define __NR_free_hugepages		1235
+#define __NR_set_tid_address		1233
+#define __NR_fadvise64			1234
+#define __NR_tgkill			1235
 #define __NR_exit_group			1236
 #define __NR_lookup_dcookie		1237
 #define __NR_io_setup			1238
@@ -224,15 +225,32 @@
 #define __NR_epoll_wait			1245
 #define __NR_restart_syscall		1246
 #define __NR_semtimedop			1247
-#define __NR_sys_timer_create		1248
-#define __NR_sys_timer_settime		1249
-#define __NR_sys_timer_gettime		1250
-#define __NR_sys_timer_getoverrun	1251
-#define __NR_sys_timer_delete		1252
-#define __NR_sys_clock_settime		1253
-#define __NR_sys_clock_gettime		1254
-#define __NR_sys_clock_getres		1255
-#define __NR_sys_clock_nanosleep	1256
+#define __NR_timer_create		1248
+#define __NR_timer_settime		1249
+#define __NR_timer_gettime		1250
+#define __NR_timer_getoverrun		1251
+#define __NR_timer_delete		1252
+#define __NR_clock_settime		1253
+#define __NR_clock_gettime		1254
+#define __NR_clock_getres		1255
+#define __NR_clock_nanosleep		1256
+#define __NR_fstatfs64			1257
+#define __NR_statfs64			1258
+#define __NR_mbind			1259
+#define __NR_get_mempolicy		1260
+#define __NR_set_mempolicy		1261
+#define __NR_mq_open			1262
+#define __NR_mq_unlink			1263
+#define __NR_mq_timedsend		1264
+#define __NR_mq_timedreceive		1265
+#define __NR_mq_notify			1266
+#define __NR_mq_getsetattr		1267
+#define __NR_kexec_load			1268
+#define __NR_vserver			1269
+#define __NR_waitid			1270
+#define __NR_add_key			1271
+#define __NR_request_key		1272
+#define __NR_keyctl			1273
 
 #define syscall(name, sym) \
 .text; \

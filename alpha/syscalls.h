@@ -315,7 +315,7 @@
 #define __NR_getdents64			377
 #define __NR_gettid			378
 #define __NR_readahead			379
-#define __NR_security			380 /* syscall for security modules */
+/* 380 is unused */
 #define __NR_tkill			381
 #define __NR_setxattr			382
 #define __NR_lsetxattr			383
@@ -338,8 +338,6 @@
 #define __NR_io_getevents		400
 #define __NR_io_submit			401
 #define __NR_io_cancel			402
-#define __NR_alloc_hugepages		403
-#define __NR_free_hugepages		404
 #define __NR_exit_group			405
 #define __NR_lookup_dcookie		406
 #define __NR_sys_epoll_create		407
@@ -347,6 +345,33 @@
 #define __NR_sys_epoll_wait		409
 #define __NR_remap_file_pages		410
 #define __NR_set_tid_address		411
+#define __NR_restart_syscall		412
+#define __NR_fadvise64			413
+#define __NR_timer_create		414
+#define __NR_timer_settime		415
+#define __NR_timer_gettime		416
+#define __NR_timer_getoverrun		417
+#define __NR_timer_delete		418
+#define __NR_clock_settime		419
+#define __NR_clock_gettime		420
+#define __NR_clock_getres		421
+#define __NR_clock_nanosleep		422
+#define __NR_semtimedop			423
+#define __NR_tgkill			424
+#define __NR_stat64			425
+#define __NR_lstat64			426
+#define __NR_fstat64			427
+#define __NR_vserver			428
+#define __NR_mbind			429
+#define __NR_get_mempolicy		430
+#define __NR_set_mempolicy		431
+#define __NR_mq_open			432
+#define __NR_mq_unlink			433
+#define __NR_mq_timedsend		434
+#define __NR_mq_timedreceive		435
+#define __NR_mq_notify			436
+#define __NR_mq_getsetattr		437
+#define __NR_waitid			438
 
 #define syscall_weak(name,wsym,sym) \
 .text ; \

@@ -189,6 +189,7 @@
 #define __NR_putpmsg		188	/* some people actually want streams */
 #define __NR_vfork		189
 #define __NR_ugetrlimit		190	/* SuS compliant getrlimit */
+#define __NR_readahead		191
 #define __NR_mmap2		192
 #define __NR_truncate64		193
 #define __NR_ftruncate64	194
@@ -252,6 +253,23 @@
 #define __NR_statfs64		252
 #define __NR_fstatfs64		253
 #define __NR_fadvise64_64	254
+#define __NR_rtas		255
+#define __NR_sys_debug_setcontext 256
+/* Number 257 is reserved for vserver */
+/* Number 258 is reserved for new sys_remap_file_pages */
+/* Number 259 is reserved for new sys_mbind */
+/* Number 260 is reserved for new sys_get_mempolicy */
+/* Number 261 is reserved for new sys_set_mempolicy */
+#define __NR_mq_open		262
+#define __NR_mq_unlink		263
+#define __NR_mq_timedsend	264
+#define __NR_mq_timedreceive	265
+#define __NR_mq_notify		266
+#define __NR_mq_getsetattr	267
+#define __NR_kexec_load		268
+#define __NR_add_key		269
+#define __NR_request_key	270
+#define __NR_keyctl		271
 
 #define syscall_weak(name,wsym,sym) \
 .text; \

@@ -154,7 +154,7 @@
 #define __NR_poll               153 /* Common                                      */
 #define __NR_getdents64		154 /* Linux specific				   */
 #define __NR_fcntl64		155 /* Linux sparc32 Specific                      */
-/* #define __NR_getdirentries   156    SunOS Specific                              */
+/* #define __NR_getdirentires 	156    SunOS Specific                              */
 #define __NR_statfs             157 /* Common                                      */
 #define __NR_fstatfs            158 /* Common                                      */
 #define __NR_umount             159 /* Common                                      */
@@ -265,6 +265,23 @@
 #define __NR_timer_getoverrun	264
 #define __NR_timer_delete	265
 #define __NR_timer_create	266
+/* #define __NR_vserver		267 Reserved for VSERVER */
+#define __NR_io_setup		268
+#define __NR_io_destroy		269
+#define __NR_io_submit		270
+#define __NR_io_cancel		271
+#define __NR_io_getevents	272
+#define __NR_mq_open		273
+#define __NR_mq_unlink		274
+#define __NR_mq_timedsend	275
+#define __NR_mq_timedreceive	276
+#define __NR_mq_notify		277
+#define __NR_mq_getsetattr	278
+#define __NR_waitid		279
+#define __NR_sys_setaltroot	280
+#define __NR_add_key		281
+#define __NR_request_key	282
+#define __NR_keyctl		283
 
 #define syscall_weak(name,wsym,sym) \
 .text; \

@@ -13,6 +13,7 @@
     make diet libc compile with -Werror on 13 platforms
   ppc64 now compiles again
   typo in libcompat/syscall.S for WANT_THREAD_SAFE (Björn Döbel)
+  syscall.h update for all architectures
 
 0.28:
   add tcgetsid (Yuri Kozlov)
