@@ -251,6 +251,10 @@ extern char **__environ;
 #define getdents getdents64
 #endif
 
+#ifdef _GNU_SOURCE
+int pivot_root(const char *new_root, const char *put_old) __THROW;
+#endif
+
 __END_DECLS
 
 #endif
