@@ -79,8 +79,8 @@ t1:
 	$(CROSS)gcc -g -o t1 t.c
 
 install:
-	cp start.o $(prefix)/lib/dietstart.o
-	cp dietlibc.a $(prefix)/lib/libdietc.a
+	cp start.o $(INSTALLPREFIX)$(prefix)/lib/dietstart.o
+	cp dietlibc.a $(INSTALLPREFIX)$(prefix)/lib/libdietc.a
 
 .PHONY: sparc ppc mips arm alpha i386
 

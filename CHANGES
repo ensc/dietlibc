@@ -3,6 +3,7 @@
     incorrectly.
   new reboot() from Olaf.
   added prototypes for getsockopt and setsockopt.
+  added experimental sem*
 
 0.7.2:
   added several prototypes to already implemented functions and
