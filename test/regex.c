@@ -15,6 +15,10 @@ int main() {
   assert(regexec(&r,"@fefe.de",0,0,0)==0);
   regfree(&r);
 
+  assert(regcomp(&r,"usenet-[0-9]{8}@fefe.de",REG_EXTENDED)==0);
+  assert(regexec(&r,"usenet-12345678@fefe.de",0,0,0)==0);
+  regfree(&r);
+
   assert(regcomp(&r,"(abuse|borland|bounceok|cdb|clickbank|der|dnscache|dsniff|gilda|myspace|password|postmaster|publicfile|qmail|qmaill|rfc2460|spam|stackguard|staroffice|susewindows|tdsl|true|vmware|web|yadocfaq|zeroseek)@fefe.de",REG_EXTENDED)==0);
   assert(regexec(&r,"abuse@fefe.de",0,0,0)==0);
   regfree(&r);
