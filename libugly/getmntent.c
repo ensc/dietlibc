@@ -5,11 +5,11 @@
 
 struct mntent *getmntent(FILE *filep) {
   static struct mntent m;
-  char buf[1024];
+  static char buf[1024];
   do {
     char *tmp=buf;
     int num;
-    fgets(buf,1024,filep);
+    if (!fgets(buf,1024,filep)) return 0;
 /* "/dev/ide/host0/bus0/target0/lun0/part2 / reiserfs defaults 1 1" */
     for (num=0; num<6; ++num) {
       switch (num) {
