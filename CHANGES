@@ -1,4 +1,6 @@
 0.18:
+  add stpcpy (from Thomas Ogrisegg)
+  check in mktime fix (from Luc Van Oostenryck)
 
 0.17:
   fix several bugs in getservent_r

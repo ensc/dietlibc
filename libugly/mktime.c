@@ -10,7 +10,7 @@ time_t  mktime ( register struct tm* const t )
     if ( t->tm_year < 70 )
         return (time_t) -1;
 
-    day = t->tm_yday = __spm [t->tm_mon] + t->tm_mday-1 + ( __isleap (t->tm_year+1900)  &  (t->tm_mon > 2) );
+    day = t->tm_yday = __spm [t->tm_mon] + t->tm_mday-1 + ( __isleap (t->tm_year+1900)  &  (t->tm_mon > 1) );
 
     for ( i = 70; i < t->tm_year; i++ )
         day += 365 + __isleap (i+1900);

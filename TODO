@@ -29,3 +29,10 @@ look at mktime: "Falls tm_isdst == -1 gesetzt, so sollte mktime
 versuchen herauszufinden, ob Sommerzeit eingestellt ist (und laut linux
 manpage auch tzname setzen), ansonsten die angegebene DST
 berücksichtigen."
+
+remove strings.h?  Matthias Andree says it confuses
+  AC_CHECK_HEADERS([strings.h]) from autoconf.
+
+better rand()?
+
+try to make zebra compile.
