@@ -47,8 +47,13 @@
 #define SO_ACCEPTCONN		30
 
 /* Socket types. */
+#ifdef __mips__
+#define SOCK_DGRAM	1		/* datagram (conn.less) socket	*/
+#define SOCK_STREAM	2		/* stream (connection) socket	*/
+#else
 #define SOCK_STREAM	1		/* stream (connection) socket	*/
 #define SOCK_DGRAM	2		/* datagram (conn.less) socket	*/
+#endif
 #define SOCK_RAW	3		/* raw socket			*/
 #define SOCK_RDM	4		/* reliably-delivered message	*/
 #define SOCK_SEQPACKET	5		/* sequential packet socket	*/
