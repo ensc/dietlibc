@@ -33,6 +33,13 @@
     3.2.2+, don't know if it's gcc or us (Gerrit Pape)
   remove _null_auth declaration in librpc/rpc_prot.c (Thayne Harbaugh)
   fix regex bug with ^$ not matching "" (Anthony de Boer)
+  Olaf: removing "<arch>/mmap.*" where no arch-specific impementation is
+      needed. (added "syscalls.s/mmap.S")
+    - fixing the vsyscall in the dynamic library... (self made problem)
+    - removing warning in "res_query.c"
+    - changing type of stream-mutex to recursive
+    - sparc/sparc64: shrink of the unified syscall and the special syscalls
+      (fork/pipe) to use the "unified_syscall_error_handler"
 
 0.22:
   fix i386 libm

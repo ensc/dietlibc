@@ -74,10 +74,9 @@ __vsyscall:
 .text
 .type __unified_syscall_256,@function
 __unified_syscall_256:
-	movzwl %ax, %eax
-	jmp .L23
-.L22:
-.size __unified_syscall_256,.L22-__unified_syscall_256
+	movzwl	%ax, %eax
+	jmp	1f
+.size __unified_syscall_256,.-__unified_syscall_256
 .type exit,@function
 .weak exit
 exit:
@@ -88,18 +87,27 @@ __exit:
 	mov $__NR_exit, %al
 __unified_syscall:
 	movzbl	%al, %eax
-.L23:
+1:
 	push	%edi
 	push	%esi
 	push	%ebx
 	movl	%esp,%edi
+#ifdef WANT_SYSENTER
+	/* PIC-code ... */
+	pushl	%ebp
+	PIC_INIT
+	movl	.Lvsyscall@GOTOFF(%ebx),%ebp
+	pushl	%ebx
+#endif
 	movl	0x10(%edi),%ebx
 	movl	0x14(%edi),%ecx
 	movl	0x18(%edi),%edx
 	movl	0x1c(%edi),%esi
 	movl	0x20(%edi),%edi
 #ifdef WANT_SYSENTER
-	call	*.Lvsyscall /* 0xffffe000 */
+	call	*%ebp
+	popl	%ebx
+	popl	%ebp
 #else
 	int	$0x80
 #endif
@@ -109,7 +117,9 @@ __unified_syscall:
 
 	/* PIC-code Ohhhhh My. */
 	push	%eax
+#ifndef WANT_SYSENTER
 	PIC_INIT
+#endif
 	call	__errno_location@PLT
 	popl	%ebx
 	movl	%ebx,(%eax)

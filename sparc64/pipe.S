@@ -6,21 +6,13 @@ pipe:
 	mov	%o0, %o2
 	mov	__NR_pipe, %g1
 	ta	0x6d
-	bcc	%xcc, 1f
+	bcs,pn	%xcc, 1f
 	nop
-	save	%sp, -192, %sp
-#ifdef WANT_THREAD_SAFE
-	call	__errno_location
-	nop
-#else
-	sethi	%hi(errno), %o0
-	or	%o0, %lo(errno), %o0
-#endif
-	st	%i0, [ %o0 ]
-	ret
-	restore	%g0, -1, %o0
-
-1:	st	%o0, [ %o2 ]
+	st	%o0, [ %o2 ]
 	st	%o1, [ %o2 + 4 ]
 	retl
 	mov	%g0, %o0
+
+1:	sethi	%hi(__unified_syscall_error_handler), %g1
+	jmp	%g1+%lo(__unified_syscall_error_handler)
+	nop

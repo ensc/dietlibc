@@ -9,9 +9,9 @@ static FILE __stderr = {
   .next=0,
   .popen_kludge=0,
   .ungetbuf=0,
-  .ungotten=0
+  .ungotten=0,
 #ifdef WANT_THREAD_SAFE
-  , .m=PTHREAD_MUTEX_INITIALIZER
+  .m=PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP,
 #endif
 };
 

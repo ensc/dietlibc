@@ -25,13 +25,11 @@ __clone:
 	tst	%o1
 	bne	.Lstart		/* we are the child :) */
 	nop
-	mov	%o0, %i0	/* return child pid */
 	ret
-	restore
+	restore %o0, %g0, %o0	/* return child pid */
 
 .Lerror:
 	call	__errno_location
-	nop
 	mov	EINVAL, %l0
 	st	%l0, [%o0]
 	ret
