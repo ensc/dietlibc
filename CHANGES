@@ -25,6 +25,7 @@
   add vsyscall support for linux 2.5 on recent CPUs
   add a few new 2.5 syscalls, adapt to renamed epoll syscalls
   Olaf: fixing the vsyscall support so that the binaries still work on 2.4
+  remove getline macro, caused problems with GNU sed
 
 0.22:
   fix i386 libm

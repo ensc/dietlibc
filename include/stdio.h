@@ -140,7 +140,6 @@ void funlockfile(FILE* f) __THROW;
 #ifdef _GNU_SOURCE
 ssize_t getline(char **lineptr, size_t *n, FILE *stream);
 ssize_t getdelim(char **lineptr, size_t *n, int delim, FILE *stream);
-#define getline(lineptr,n,stream) getdelim(lineptr,n,'\n',stream)
 #endif
 
 #endif
