@@ -71,7 +71,7 @@ struct _dl_handle {
   struct _dl_handle *prev;
   /* ok last GDB used part was prev */
 
-  unsigned int flags;		/* FLAGS */
+  unsigned long flags;		/* FLAGS */
 
   char *	name;		/* name of shared object */
 
@@ -89,6 +89,7 @@ struct _dl_handle {
   _dl_rel_t*	plt_rel;	/* PLT relocation table */
 
   /* INIT / FINI */
+  void (*init)(void);
   void (*fini)(void);
 };
 

@@ -1,7 +1,7 @@
 .text
 .align 2
-.global __testandsets
-.type	__testandsets,@function
+.global __testandset
+.type	__testandset,@function
 __testandset:
 1:	ldq_l	$0, 0($16)		/* load lock */
 	bne	$0, 1f			/* ok there is a lock... */
