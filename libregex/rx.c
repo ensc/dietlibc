@@ -153,7 +153,7 @@ static int matchatom(void*__restrict__ x,const unsigned char*__restrict__ s,int 
 #ifdef DEBUG
     printf("matching atom LINEEND against \"%s\"\n",s);
 #endif
-    if ((*s && *s!='\n') || (eflags&REG_NOTEOL)==0) break;
+    if ((*s && *s!='\n') || (eflags&REG_NOTEOL)) break;
     goto match;
   case WORDSTART:
 #ifdef DEBUG

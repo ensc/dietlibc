@@ -36,8 +36,12 @@ int main() {
   printf("regcomp %d\n",regcomp(&r,"^([A-Za-z ]+>|[]>:|}][]>:|}]*)",REG_EXTENDED|REG_NEWLINE|REG_NOSUB|REG_ICASE));
   printf("regexec %d\n",regexec(&r,"fnord",1,0,0));
 #endif
+#if 0
   printf("regcomp %d\n",regcomp(&r,"^Subject:",REG_EXTENDED|REG_ICASE));
   printf("regexec %d\n",regexec(&r,"Subject: duh",1,0,0));
+#endif
+  printf("regcomp %d\n",regcomp(&r,"^To:([^@]*)?$",REG_EXTENDED|REG_ICASE|REG_NOSUB));
+  printf("regexec %d\n",regexec(&r,"To: <Undisclosed Recipients>",1,0,0));
   regfree(&r);
   return 0;
 }
