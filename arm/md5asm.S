@@ -34,6 +34,9 @@
 *   - Original MD5Update function renamed __MD5Update.
 *   - __MD5Transform symbol no longer exported.
 *
+* 2002/02/25:  Andre McCurdy <armccurdy@yahoo.co.uk>
+*   - MD5Update re-written in assembler (saves 12 bytes + lots of cycles :-)
+*
 ******************************************************************************
 *
 * Notes:
@@ -74,44 +77,42 @@ MD5Init:
 
 
     @ --
-    @ void MD5Update (MD5_CTX* ctx, const uint8_t* buf, size_t len);
+    @ void MD5Update (MD5_CTX* ctx, const uint8_t* buf, signed int len);
     @
-    @ Performs alignment checking and correction before passing
+    @ Performs alignment checking and correction before passing input data
     @ on to __MD5Update which does the real work.
-    @
-    @ Code comes straight from gcc, and could obviously do with
-    @ some optimisation.... :-)
-    @
+    @ If 'buf' is known to always be correctly aligned, this wrapper
+    @ function may be skipped.
     @ --
 
-MD5Update:
-    stmfd   sp!, {r4, r5, r6, r7, r8, lr}
-    mov     r7, r1
-    mov     r6, r2
-    tst     r7, #3
-    mov     r8, r0
-    sub     sp, sp, #256
-    bne     2f
-    bl      __MD5Update
-    b       3f
-1:  mov     r5, sp
-    mov     r0, r5
-    mov     r1, r7
+1:  stmdb   sp!, { r4 - r7, lr }
+    mov     r4, r0                          @ r4 = ctx
+    mov     r5, r1                          @ r5 = buf
+    mov     r6, r2                          @ r6 = len
+    sub     sp, sp, #256                    @ create 256 byte temp buffer
+    cmp     r6, #0
+2:  addle   sp, sp, #256                    @ return temp buffer to stack
+    ldmleia sp!, { r4 - r7, pc }            @ return
     cmp     r6, #256
-    movcc   r4, r6
-    movcs   r4, #256
-    mov     r2, r4
-    bl      memcpy
-    mov     r0, r8
+    movcc   r7, r6
+    movcs   r7, #256                        @ r7 = min(len, 256) == datalength
+    mov     r0, sp
     mov     r1, r5
-    mov     r2, r4
-    add     r7, r7, #256
-    sub     r6, r6, #256
-    bl      __MD5Update
-2:  cmp     r6, #0
-    bgt     1b
-3:  add     sp, sp, #256
-    ldmfd   sp!, {r4, r5, r6, r7, r8, pc}
+    mov     r2, r7
+    bl      memcpy                          @ memcpy (temp, buf, datalength);
+    mov     r0, r4
+    mov     r1, sp
+    mov     r2, r7
+    bl      __MD5Update                     @ __MD5Update (ctx, temp, datalength);
+    add     r5, r5, #256                    @ buf += 256
+    subs    r6, r6, #256                    @ len -= 256
+    b       2b
+
+MD5Update:
+
+    tst     r1, #3
+    bne     1b                              @ 'buf' not aligned (fixup is required)
+                                            @ else drop through to __MD5Update with minimal overhead.
 
 
     @ --

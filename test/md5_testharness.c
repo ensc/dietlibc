@@ -23,7 +23,6 @@ static const char *rawdata = "abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmn
                              "ghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789"
                              "hijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789";
 
-
 /*
    You will just have to trust me that these are correct... :-)
 */
@@ -50,10 +49,6 @@ int main (int argc, char *argv[])
    char hash_outer_as_ascii[32+1];
 
    char *result;
-
-   /*
-      Test the aligned case (all hashed strings start from begining of rawdata).
-   */
 
    /*
       Test the aligned case (all hashed strings start from begining of rawdata).

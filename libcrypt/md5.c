@@ -24,31 +24,28 @@
 
 #if (__BYTE_ORDER == __BIG_ENDIAN)
 /*
-   Block copy with endian swap.
-   src and dst must both be 32bit aligned.
+   Block copy and convert byte order to little-endian.
+   dst must be 32bit aligned.
    Length is the number of 32bit words 
 */   
-static void CopyWithEndianSwap (uint32_t *dst, const uint8_t *src, int length) {
+static void CopyToLittleEndian (uint32_t *dst, const uint8_t *src, int length) {
   while (length--) {
     *dst=(((uint32_t)src[3])<<24) |
 	 (((uint32_t)src[2])<<16) |
-	 (((uint32_t)src[1])<<8) |
+	 (((uint32_t)src[1])<< 8) |
 	   (uint32_t)src[0];
-    src+=4; ++dst;
+    src+=4;
+    dst++;
   }
 }
 #endif
 
-/*
- *  Assembler versions of __MD5Transform, MD5Init and MD5Update
- *  currently exist for x86 and little-endian ARM.
- *
- *  For other targets, we need to use the C versions below.
- */
-   /*
-      Test the aligned case (all hashed strings start from begining of rawdata).
-   */
 
+/*
+   Assembler versions of __MD5Transform, MD5Init and MD5Update
+   currently exist for x86 and little-endian ARM.
+   For other targets, we need to use the C versions below.
+*/
 
 #if !(defined (__i386__) || ((defined (__arm__) && (__BYTE_ORDER == __LITTLE_ENDIAN))))
 
@@ -89,7 +86,7 @@ static void __MD5Transform (uint32_t state[4], const uint8_t *in, int repeat) {
       uint32_t tempBuffer[16];
 #if (__BYTE_ORDER == __BIG_ENDIAN)
 
-      CopyWithEndianSwap (tempBuffer, in, 16);
+      CopyToLittleEndian (tempBuffer, in, 16);
       x = tempBuffer;
 #else
       if ((long)in & 3) {
@@ -184,7 +181,7 @@ static void __MD5Transform (uint32_t state[4], const uint8_t *in, int repeat) {
 void MD5Update (MD5_CTX *context, const uint8_t *input, size_t inputBytes) {
    int i;
    int byteIndex;
-   int partLen;
+   unsigned int partLen;
    int len;
 
    /* Compute number of bytes mod 64 */
@@ -200,9 +197,9 @@ void MD5Update (MD5_CTX *context, const uint8_t *input, size_t inputBytes) {
    /* Transform as many times as possible. */
    if (inputBytes >= partLen) {
       memcpy (context->buffer + byteIndex, input, partLen);
-      __MD5Transform (context->state, (const uint32_t *) context->buffer, 1);
+      __MD5Transform (context->state, (const uint8_t *) context->buffer, 1);
       len = (inputBytes - partLen) / 64;
-      __MD5Transform (context->state, (const uint32_t *) &input[partLen], len);
+      __MD5Transform (context->state, &input[partLen], len);
       i = partLen + 64 * len;
       byteIndex = 0;
    } else
@@ -227,7 +224,7 @@ void MD5Final (uint8_t digest[16], MD5_CTX* context) {
    finalBlock[0] = 0x80;
 
 #if (__BYTE_ORDER == __BIG_ENDIAN)
-   CopyWithEndianSwap (bits, context->count, 2);
+   CopyToLittleEndian (bits, (const uint8_t *) context->count, 2);
 #else
    memcpy(bits, context->count, 8);
 #endif
@@ -236,7 +233,7 @@ void MD5Final (uint8_t digest[16], MD5_CTX* context) {
    MD5Update (context, (const uint8_t *) bits, 8);
 
 #if (__BYTE_ORDER == __BIG_ENDIAN)
-   CopyWithEndianSwap ((uint32_t *) digest, context->state, 4);
+   CopyToLittleEndian ((uint32_t *) digest, (const uint8_t *) context->state, 4);
 #else
    memcpy (digest, context->state, 16);
 #endif
