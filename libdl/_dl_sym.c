@@ -12,14 +12,14 @@ static void *_dl_sym_search(struct _dl_handle * h, int symbol)
   void *sym=0;
   struct _dl_handle * tmp;
   char *name = h->dyn_str_tab+h->dyn_sym_tab[symbol].st_name;
-  DEBUG(printf("_dl_sym_search: search for: %s\n",name);)
+  DEBUG("_dl_sym_search: search for: %s\n",name);
   for (tmp=_dl_root_handle;tmp && (!sym);tmp=tmp->next) {
-    DEBUG(printf("_dl_sym_search: searching: %08lx %08lx\n",(long)tmp, (long)h);)
+    DEBUG("_dl_sym_search: searching: %08lx %08lx\n",(long)tmp, (long)h);
     if (tmp==h) continue;
 //    if (!tmp->flag_global) continue;
-    DEBUG(printf("_dl_sym_search: searching in %s\n",tmp->name);)
+    DEBUG("_dl_sym_search: searching in %s\n",tmp->name);
     sym=_dlsym((void*)tmp,name);
-    DEBUG(if (sym) printf("_dl_sym_search: found: %s @ %08lx\n",name,(long)sym);)
+    if (sym) DEBUG("_dl_sym_search: found: %s @ %08lx\n",name,(long)sym);
   }
 //  if (sym) return sym;
 //  return &dummy; // sym;
@@ -35,6 +35,6 @@ void *_dl_sym(struct _dl_handle * h, int symbol)
   else {
     ret = _dl_sym_search(h,symbol);
   }
-  DEBUG(printf("_dl_sym %d -> %08lx\n",symbol,(long)ret);)
+  DEBUG("_dl_sym %d -> %08lx\n",symbol,(long)ret);
   return ret;
 }

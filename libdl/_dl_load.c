@@ -54,7 +54,7 @@ static struct _dl_handle *_dl_map_lib(const char*fn, const char*pathname, int fd
 
   if (fd==-1) return 0;
 
-  DEBUG(printf("_dl_load: %s\n",pathname);)
+  DEBUG("_dl_load: %s\n",pathname);
 
   if (fstat(fd,&st)<0) {
     close(fd);
@@ -165,68 +165,68 @@ struct _dl_handle* _dl_dyn_scan(struct _dl_handle* dh, void* dyn_addr, int flags
 
   int i;
 
-  DEBUG(printf("_dl_load pre resolv %08lx\n",(long)dyn_tab);)
+  DEBUG("_dl_load pre resolv %08lx\n",(long)dyn_tab);
   dh->dyn_str_tab = 0;
   dh->flag_global = flags&RTLD_GLOBAL;
 
-  DEBUG(printf("_dl_load IN resolv\n");)
+  DEBUG("_dl_load IN resolv\n");
   for(i=0;dyn_tab[i].d_tag;i++) {
 //    DEBUG(printf("_dl_load dyn %d, %08lx\n",dyn_tab[i].d_tag, dyn_tab[i].d_un.d_val);)
     if (dyn_tab[i].d_tag==DT_HASH) {
       dh->hash_tab = (unsigned long*)(dh->mem_base+dyn_tab[i].d_un.d_ptr);
-      DEBUG(printf("_dl_load have hash @ %08lx\n",(long)dh->hash_tab);)
+      DEBUG("_dl_load have hash @ %08lx\n",(long)dh->hash_tab);
     }
     if (dyn_tab[i].d_tag==DT_SYMTAB) {
       dh->dyn_sym_tab = (Elf32_Sym*)(dh->mem_base+dyn_tab[i].d_un.d_ptr);
-      DEBUG(printf("_dl_load have dyn_sym_tab @ %08lx\n",(long)dh->dyn_sym_tab);)
+      DEBUG("_dl_load have dyn_sym_tab @ %08lx\n",(long)dh->dyn_sym_tab);
     }
     if (dyn_tab[i].d_tag==DT_STRTAB) {
       dh->dyn_str_tab = (char*)(dh->mem_base+dyn_tab[i].d_un.d_ptr);
-      DEBUG(printf("_dl_load have dyn_str_tab @ %08lx\n",(long)dh->dyn_str_tab);)
+      DEBUG("_dl_load have dyn_str_tab @ %08lx\n",(long)dh->dyn_str_tab);
     }
 
     /* INIT / FINI */
     if (dyn_tab[i].d_tag==DT_FINI) {
       dh->fini = (void(*)(void))(dh->mem_base+dyn_tab[i].d_un.d_val);
-      DEBUG(printf("_dl_load have fini @ %08lx\n",(long)dh->fini);)
+      DEBUG("_dl_load have fini @ %08lx\n",(long)dh->fini);
     }
     if (dyn_tab[i].d_tag==DT_INIT) {
       init = (void(*)(void))(dh->mem_base+dyn_tab[i].d_un.d_val);
-      DEBUG(printf("_dl_load have init @ %08lx\n",(long)init);)
+      DEBUG("_dl_load have init @ %08lx\n",(long)init);
     }
 
     /* PLT / Relocation entries for PLT in GOT */
     if (dyn_tab[i].d_tag==DT_PLTGOT) {
       got=(unsigned long*)(dh->mem_base+dyn_tab[i].d_un.d_val);
       dh->pltgot=got;
-      DEBUG(printf("_dl_load have plt got @ %08lx\n",(long)got);)
+      DEBUG("_dl_load have plt got @ %08lx\n",(long)got);
     }
     if (dyn_tab[i].d_tag==DT_PLTREL) {
       pltreltype=dyn_tab[i].d_un.d_val;
-      DEBUG(printf("_dl_load have pltreltype @ %08lx\n",(long)pltreltype);)
+      DEBUG("_dl_load have pltreltype @ %08lx\n",(long)pltreltype);
     }
     if (dyn_tab[i].d_tag==DT_PLTRELSZ) {
       pltrelsize=dyn_tab[i].d_un.d_val;
-      DEBUG(printf("_dl_load have pltrelsize @ %08lx\n",(long)pltrelsize);)
+      DEBUG("_dl_load have pltrelsize @ %08lx\n",(long)pltrelsize);
     }
     if (dyn_tab[i].d_tag==DT_JMPREL) {
       jmprel=(dh->mem_base+dyn_tab[i].d_un.d_val);
       dh->plt_rel=jmprel;
-      DEBUG(printf("_dl_load have jmprel @ %08lx\n",(long)jmprel);)
+      DEBUG("_dl_load have jmprel @ %08lx\n",(long)jmprel);
     }
 
     /* Relocation */
     if (dyn_tab[i].d_tag==DT_REL) {
       rel=dyn_tab[i].d_un.d_val;
-      DEBUG(printf("_dl_load have rel @ %08lx\n",(long)rel);)
+      DEBUG("_dl_load have rel @ %08lx\n",(long)rel);
     }
     if (dyn_tab[i].d_tag==DT_RELENT) {
       relent=dyn_tab[i].d_un.d_val;
-      DEBUG(printf("_dl_load have relent  @ %08lx\n",(long)relent);)
+      DEBUG("_dl_load have relent  @ %08lx\n",(long)relent);
     }
     if (dyn_tab[i].d_tag==DT_RELSZ) {
       relsize=dyn_tab[i].d_un.d_val;
-      DEBUG(printf("_dl_load have relsize @ %08lx\n",(long)relsize);)
+      DEBUG("_dl_load have relsize @ %08lx\n",(long)relsize);
     }
 
     if (dyn_tab[i].d_tag==DT_TEXTREL) {
@@ -241,16 +241,16 @@ struct _dl_handle* _dl_dyn_scan(struct _dl_handle* dh, void* dyn_addr, int flags
       if (dyn_tab[i].d_tag==DT_RPATH) {
 	char *rpath=dh->dyn_str_tab+dyn_tab[i].d_un.d_val;
 	_dl_set_rpath(rpath);
-	DEBUG(printf("_dl_load have runpath: %s\n",rpath);)
+	DEBUG("_dl_load have runpath: %s\n",rpath);
       }
     }
   }
 
-  DEBUG(printf("_dl_load post dynamic scan %08lx\n",(long)dh);)
+  DEBUG("_dl_load post dynamic scan %08lx\n",(long)dh);
 
   if ((got=_dlsym(dh,"_GLOBAL_OFFSET_TABLE_"))) {
     dh->got=got;
-    DEBUG(printf("_dl_load found a GOT @ %08lx\n",(long)got);)
+    DEBUG("_dl_load found a GOT @ %08lx\n",(long)got);
     /* GOT */
     got[0]+=(unsigned long)dh->mem_base;	/* reloc dynamic pointer */
     got[1] =(unsigned long)dh;
@@ -268,7 +268,7 @@ struct _dl_handle* _dl_dyn_scan(struct _dl_handle* dh, void* dyn_addr, int flags
 
   /* here unprotect the text as writable IF TEXTREL is given */
   if (rel) {
-    DEBUG(printf("_dl_load try to relocate some values\n");)
+    DEBUG("_dl_load try to relocate some values\n");
     if (_dl_relocate(dh,(Elf32_Rel*)rel,relsize/relent)) {
       munmap(dh->mem_base,dh->mem_size);
       _dl_free_handle(dh);
@@ -281,7 +281,7 @@ struct _dl_handle* _dl_dyn_scan(struct _dl_handle* dh, void* dyn_addr, int flags
   for(i=0;dyn_tab[i].d_tag;i++) {
     if (dyn_tab[i].d_tag==DT_NEEDED) {
       char *lib_name=dh->dyn_str_tab+dyn_tab[i].d_un.d_val;
-      DEBUG(printf("_dl_load needed for this lib: %s\n",lib_name);)
+      DEBUG("_dl_load needed for this lib: %s\n",lib_name);
       _dl_queue_lib(lib_name,flags);
     }
   }
@@ -291,7 +291,7 @@ struct _dl_handle* _dl_dyn_scan(struct _dl_handle* dh, void* dyn_addr, int flags
   /* do PTL / GOT relocation */
   if (pltreltype == DT_REL) {
     Elf32_Rel *tmp = jmprel;
-    DEBUG(printf("_dl_load: rel got\n");)
+    DEBUG("_dl_load: rel got\n");
     for (;(char*)tmp<(((char*)jmprel)+pltrelsize);(char*)tmp=((char*)tmp)+sizeof(Elf32_Rel)) {
       if ((flags&RTLD_NOW)) {
 	unsigned long sym=(unsigned long)_dl_sym(dh,ELF32_R_SYM(tmp->r_info));
@@ -304,13 +304,13 @@ struct _dl_handle* _dl_dyn_scan(struct _dl_handle* dh, void* dyn_addr, int flags
       }
       else
 	*((unsigned long*)(dh->mem_base+tmp->r_offset))+=(unsigned long)dh->mem_base;
-      DEBUG(printf("_dl_load rel @ %08lx with type %d -> %d\n",(long)dh->mem_base+tmp->r_offset,ELF32_R_TYPE(tmp->r_info),ELF32_R_SYM(tmp->r_info));)
-      DEBUG(printf("_dl_load -> %08lx\n",*((unsigned long*)(dh->mem_base+tmp->r_offset)));)
+      DEBUG("_dl_load rel @ %08lx with type %d -> %d\n",(long)dh->mem_base+tmp->r_offset,ELF32_R_TYPE(tmp->r_info),ELF32_R_SYM(tmp->r_info));
+      DEBUG("_dl_load -> %08lx\n",*((unsigned long*)(dh->mem_base+tmp->r_offset)));
     }
   }
   if (pltreltype == DT_RELA) {
     Elf32_Rela *tmp = jmprel;
-    DEBUG(printf("_dl_load: rela got\n");)
+    DEBUG("_dl_load: rela got\n");
     for (;(char*)tmp<(((char*)jmprel)+pltrelsize);(char*)tmp=((char*)tmp)+sizeof(Elf32_Rel)) {
       if ((flags&RTLD_NOW)) {
 	unsigned long sym=(unsigned long)_dl_sym(dh,ELF32_R_SYM(tmp->r_info));
@@ -323,15 +323,15 @@ struct _dl_handle* _dl_dyn_scan(struct _dl_handle* dh, void* dyn_addr, int flags
       }
       else
 	*((unsigned long*)(dh->mem_base+tmp->r_offset))=(unsigned long)(dh->mem_base+tmp->r_addend);
-      DEBUG(printf("_dl_load rela @ %08lx with type %d -> %d\n",(long)dh->mem_base+tmp->r_offset,ELF32_R_TYPE(tmp->r_info),ELF32_R_SYM(tmp->r_info));)
-      DEBUG(printf("_dl_load -> %08lx\n",*((unsigned long*)(dh->mem_base+tmp->r_offset)));)
+      DEBUG("_dl_load rela @ %08lx with type %d -> %d\n",(long)dh->mem_base+tmp->r_offset,ELF32_R_TYPE(tmp->r_info),ELF32_R_SYM(tmp->r_info));
+      DEBUG("_dl_load -> %08lx\n",*((unsigned long*)(dh->mem_base+tmp->r_offset)));
     }
   }
 
   // _dl_load depending libs ...
-  DEBUG(printf("_dl_load post resolv, pre init\n");)
+  DEBUG("_dl_load post resolv, pre init\n");
   if (init) init();
-  DEBUG(printf("_dl_load post resolv, post init\n");)
+  DEBUG("_dl_load post resolv, post init\n");
 
   return dh;
 }

@@ -4,7 +4,11 @@
 #include <elf.h>
 #include <dlfcn.h>
 
-#define DEBUG(x)	//x
+#ifdef DEBUG_ALL
+#define DEBUG(x, args...)	printf(x , ## args )
+#else
+#define DEBUG(x, args...)
+#endif
 
 struct _dl_handle {
   struct _dl_handle *next;

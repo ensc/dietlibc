@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "../libdl/_dl_int.h"
 
 struct elf_aux {
@@ -21,7 +22,7 @@ static void _fini_run(struct _dl_handle * tmp) {
 }
 static struct _dl_handle* dlh;
 static void tt_fini(void) {
-  DEBUG(printf("dyn fini\n");)
+  DEBUG("dyn fini\n");
   _fini_run(dlh);
 }
 
@@ -56,18 +57,18 @@ int main(int argc, char**argv, char**envp)
 
     case AT_PHDR:
       ph32=(Elf32_Phdr*)ea->val;
-      DEBUG(printf("program header @ %08x\n",ph32);)
+      DEBUG("program header @ %08lx\n",(long)ph32);
       break;
     case AT_PHENT:
       ph_size=ea->val;
-      DEBUG(printf("program header size %08x\n",ph_size);)
+      DEBUG("program header size %08lx\n",ph_size);
       break;
     case AT_PHNUM:
       ph_num=ea->val;
-      DEBUG(printf("program header # %d\n",ph_num);)
+      DEBUG("program header # %ld\n",ph_num);
       break;
 
-#if DEBUG(1+)0
+#if 0
     case AT_BASE:
       printf("base: %08x\n",ea->val);
       break;
@@ -91,15 +92,15 @@ int main(int argc, char**argv, char**envp)
 
     case AT_PAGESZ:
       pg_size=ea->val;
-      DEBUG(printf("page size %d\n",pg_size);)
+      DEBUG("page size %ld\n",pg_size);
       break;
 
     case AT_ENTRY:
       dyn_start=(void(*)())ea->val;
-      DEBUG(printf("start program  @ %08x\n",dyn_start);)
+      DEBUG("start program  @ %08lx\n",(long)dyn_start);
       break;
 
-#if DEBUG(1+)0
+#if 0
     case AT_PLATFORM:
       printf("CPU: %s\n",ea->val);
       break;
@@ -112,7 +113,7 @@ int main(int argc, char**argv, char**envp)
 #endif
 
     default:
-      DEBUG(printf("%08x: %08x %08x\n",ea,ea->type,ea->val);)
+      DEBUG("%08lx: %08lx %08lx\n",(long)ea,(long)ea->type,(long)ea->val);
       break;
     }
   }
@@ -132,7 +133,7 @@ int main(int argc, char**argv, char**envp)
   dlh = _dl_dyn_scan(dlh,(void*)o,0);
 
   if (!dlh) {
-    DEBUG(printf("error in dyn_scan");)
+    DEBUG("error in dyn_scan");
     _exit(23);
   }
 
@@ -140,7 +141,7 @@ int main(int argc, char**argv, char**envp)
   dlh->fini=0;
 
   if (dyn_start==ldso_start) {
-    DEBUG(printf("error in dyn_scan");)
+    DEBUG("error in dyn_scan");
     _exit(42);
   }
 

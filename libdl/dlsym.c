@@ -12,15 +12,15 @@ void *_dlsym(void *handle, char *symbol)
     unsigned long* chain = HASH_CHAIN(h->hash_tab);
     unsigned long  ind;
 
-//    DEBUG(printf("dlsym: bucket(%08x,\"%s\")\n",bhash,symbol);)
+//    DEBUG("dlsym: bucket(%08x,\"%s\")\n",bhash,symbol);
 
     ind = HASH_BUCKET(h->hash_tab)[bhash];
-//    DEBUG(printf("dlsym: chain (%08x,\"%s\")\n",ind,symbol);)
+//    DEBUG("dlsym: chain (%08x,\"%s\")\n",ind,symbol);
 
     while (ind) {
       char *name = h->dyn_str_tab;
       int ptr = h->dyn_sym_tab[ind].st_name;
-//      DEBUG(printf("dlsym: symbol(\"%s\",\"%s\")\n",name+ptr,symbol);)
+//      DEBUG("dlsym: symbol(\"%s\",\"%s\")\n",name+ptr,symbol);
       if (strcmp(name+ptr,symbol)==0) {
 	if (h->dyn_sym_tab[ind].st_value!=0) {
 	  ret = (long*)(h->mem_base+h->dyn_sym_tab[ind].st_value);
@@ -29,7 +29,7 @@ void *_dlsym(void *handle, char *symbol)
       }
       ind = chain[ind];
     }
-    DEBUG(printf("dlsym: symbol \"%s\" @ %08lx\n",symbol,(long)ret);)
+    DEBUG("dlsym: symbol \"%s\" @ %08lx\n",symbol,(long)ret);
   }
   return ret;
 }
