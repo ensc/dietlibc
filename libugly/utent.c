@@ -47,7 +47,7 @@ struct utmp *getutid(struct utmp *ut) {
     }
 
     if ((ut->ut_type >= INIT_PROCESS) && (ut->ut_type <= DEAD_PROCESS)) {
-      if (ut->ut_id == tmp->ut_id) break;
+      if (!strncmp(ut->ut_id,tmp->ut_id,4)) break;
     }
   }
   return tmp;
