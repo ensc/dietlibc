@@ -51,48 +51,50 @@ asm(".text \n"
 "	movl	(%ebp), %ecx		# argc \n"
 "	leal	4(%ebp), %esi		# argv \n"
 "	leal	4(%esi,%ecx,4), %eax	# envp \n"
-
-"# PIC code \n"
+/* PIC code */
 "	call	getpic \n"
 "	addl	$_GLOBAL_OFFSET_TABLE_, %ebx \n"
-
-"# for calculation of load addr, get 'relocated' address of _DYNAMIC \n"
+/* for calculation of load addr, get 'relocated' address of _DYNAMIC */
 "	leal	_DYNAMIC@GOTOFF(%ebx), %edx \n"
-
-"# put parameter on stack and call _dl_main \n"
+/* get load-address */
+"	movl	%edx, %edi \n"
+"	subl	(%ebx), %edi		# 'unrelocated' address of _DYNAMIC \n"
+"	pushl	%edi \n"
+/* put parameter on stack and call _dl_main */
 "	pushl	%edx \n"
 "	pushl	%eax \n"
 "	pushl	%esi \n"
 "	pushl	%ecx \n"
 "	call	_dl_main \n"
-
-"# restore stack \n"
+/* restore stack */
 "	movl	%ebp, %esp \n"
-
-"# get fini pointer \n"
+/* get fini pointer */
 "	movl	fini_entry@GOTOFF(%ebx), %edx \n"
-
-"# clear callee-save-register like kernel \n"
+/* clear callee-save-register like kernel */
 "	xorl	%ebx, %ebx \n"
 "	xorl	%ebp, %ebp \n"
 "	xorl	%edi, %edi \n"
 "	xorl	%esi, %esi \n"
-
-"# jump to program entry point \n"
+/* jump to program entry point */
 "	jmp	*%eax \n"
 
+".type	_dl_sys_read,@function \n"
 "_dl_sys_read: \n"
 "	movb	$3,%al \n"
 "	jmp	_dl_sys_call3 \n"
+".type	_dl_sys_write,@function \n"
 "_dl_sys_write: \n"
 "	movb	$4,%al \n"
 "	jmp	_dl_sys_call3 \n"
+".type	_dl_sys_open,@function \n"
 "_dl_sys_open: \n"
 "	movb	$5,%al \n"
 "	jmp	_dl_sys_call3 \n"
+".type	_dl_sys_close,@function \n"
 "_dl_sys_close: \n"
 "	movb	$6,%al \n"
 "	jmp	_dl_sys_call3 \n"
+".type	_dl_sys_mmap,@function \n"
 "_dl_sys_mmap: \n"
 "	movb	$90,%al \n"
 "	leal	4(%esp),%edx \n"
@@ -100,17 +102,22 @@ asm(".text \n"
 "	call	_dl_sys_call3 \n"
 "	popl	%ecx \n"
 "	ret \n"
+".type	_dl_sys_munmap,@function \n"
 "_dl_sys_munmap: \n"
 "	movb	$91,%al \n"
 "	jmp	_dl_sys_call3 \n"
+".type	_dl_sys_fstat,@function \n"
 "_dl_sys_fstat: \n"
 "	movb	$108,%al \n"
 "	jmp	_dl_sys_call3 \n"
+".type	_dl_sys_mprotect,@function \n"
 "_dl_sys_mprotect: \n"
 "	movb	$125,%al \n"
 "	jmp	_dl_sys_call3 \n"
+".type _dl_sys_exit,@function \n"
 "_dl_sys_exit: \n"
 "	movb	$1,%al \n"
+".type	_dl_sys_call3,@function \n"
 "_dl_sys_call3: \n"
 "	movzbl	%al,%eax \n"
 "	pushl	%ebx \n"
@@ -124,21 +131,22 @@ asm(".text \n"
 
 ".type	_dl_jump,@function \n"
 "_dl_jump: \n"
-"	pushl	%eax		# save register args... \n"
+/* save temp-register (posible reg-args) */
+"	pushl	%eax \n"
 "	pushl	%ecx \n"
 "	pushl	%edx \n"
-
+/* call resolve */
 "	push	16(%esp)	# 2. arg from plt \n"
 "	push	16(%esp)	# 1. arg from plt \n"
 "	call	do_resolve \n"
 "	add	$8, %esp \n"
-
-"	popl	%edx		# restore register args... \n"
+/* restore temp-register */
+"	popl	%edx \n"
 "	popl	%ecx \n"
 "	xchgl	%eax, (%esp)	# restore eax and save function pointer (for return) \n"
 "	ret	$8		# remove arguments from plt and jump to REAL function \n"
 
-"# GET Position In Code :) \n"
+/* GET Position In Code :) */
 "getpic:	movl	(%esp), %ebx \n"
 "	ret");
 
@@ -165,65 +173,76 @@ static inline int work_on_pltgot(struct _dl_handle*dh) {
 asm(".text \n"
 ".type _start,function \n"
 "_start: \n"
-"	mov	r4, sp \n"
+/* common startup */
+"	mov	r4, sp			@ save stack pointer \n"
 "	mov	fp, #0			@ start new stack frame \n"
-
 "	ldr	a1, [sp], #4		@ argc \n"
 "	mov	a2, sp			@ argv \n"
-
 "	add	a3, a2, a1, lsl #2	@ envp \n"
 "	add	a3, a3, #4 \n"
-
+/* PIC code startup */
 "	ldr	sl, .L_got		@ PIC code \n"
 "1:	add	sl, pc, sl \n"
-
-"	ldr	a4, .L_la		@ get 'relocated' address of _DYNAMIC \n"
+/* get loadaddress */
+"	ldr	a4, [sl] \n"
+"	sub	a4, sl, a4 \n"
+"	str	a4, [sp,#-4]! \n"
+/* get 'relocated' address of _DYNAMIC */
+"	ldr	a4, .L_dy \n"
 "	add	a4, a4, sl \n"
-
-"	bl	_dl_main		@ call _dl_main \n"
-
+/* call _dl_main */
+"	bl	_dl_main \n"
+/* restore stack pointer */
 "	mov	sp, r4 \n"
-
-"	mov	lr, a1			@ save program entry point \n"
-
-"	ldr	a1, [pc, #.L_fe-(.+8)]	@ agrument 1: global fini entry \n"
+/* save program entry point */
+"	mov	lr, a1 \n"
+/* abi: agrument 1: global fini entry */
+"	ldr	a1, [pc, #.L_fe-(.+8)] \n"
 "	ldr	a1, [sl, a1] \n"
-
+/* jump to program entry point */
 "	mov	pc, lr \n"
-
+/* startup-code data */
 ".L_got: .long	_GLOBAL_OFFSET_TABLE_-(1b+8) \n"
-".L_la:	.long	_DYNAMIC(GOTOFF) \n"
+".L_dy:	.long	_DYNAMIC(GOTOFF) \n"
 ".L_fe:	.long	fini_entry(GOTOFF) \n"
 
+".type	_dl_sys_exit,function \n"
 "_dl_sys_exit: \n"
 "	swi	#0x900001		@ exit \n"
 "	eor	pc, lr, lr		@ OR DIE ! \n"
 "	mov	pc, lr \n"
-
+".type	_dl_sys_read,function \n"
 "_dl_sys_read: \n"
 "	swi	#0x900003		@ read \n"
 "	mov	pc, lr \n"
+".type	_dl_sys_write,function \n"
 "_dl_sys_write: \n"
 "	swi	#0x900004		@ write \n"
 "	mov	pc, lr \n"
+".type	_dl_sys_open,function \n"
 "_dl_sys_open: \n"
 "	swi	#0x900005		@ open \n"
 "	mov	pc, lr \n"
+".type	_dl_sys_close,function \n"
 "_dl_sys_close: \n"
 "	swi	#0x900006		@ close \n"
 "	mov	pc, lr \n"
+".type	_dl_sys_mmap,function \n"
 "_dl_sys_mmap: \n"
 "	stmdb	sp!,{r0,r1,r2,r3} \n"
 "	mov	r0, sp \n"
 "	swi	#0x900090		@ mmap \n"
 "	add	sp, sp, #16 \n"
 "	mov	pc, lr \n"
+".type	_dl_sys_munmap,function \n"
 "_dl_sys_munmap: \n"
 "	swi	#0x900091		@ munmap \n"
 "	mov	pc, lr \n"
+".type	_dl_sys_fstat,function \n"
 "_dl_sys_fstat: \n"
 "	swi	#0x900108		@ fstat \n"
 "	mov	pc, lr \n"
+".type	_dl_sys_mprotect,function \n"
 "_dl_sys_mprotect: \n"
 "	swi	#0x900125		@ mprotect \n"
 "	mov	pc, lr \n"
@@ -518,11 +537,12 @@ err_out_close:
   }
 
   if (ld_nr==1) {
+    unsigned long addr  =_ELF_DWN_ROUND(at_pagesize,ld[0]->p_vaddr);
     unsigned long offset=_ELF_DWN_ROUND(at_pagesize,ld[0]->p_offset);
     unsigned long off   =_ELF_RST_ROUND(at_pagesize,ld[0]->p_offset);
     unsigned long length=_ELF_UP_ROUND(at_pagesize,ld[0]->p_memsz+off);
     ret=_dl_get_handle();
-    m=(char*)do_map_in(0,length,ld[0]->p_flags,fd,offset);
+    m=(char*)do_map_in((void*)addr,length,ld[0]->p_flags,fd,offset);
     if (m==MAP_FAILED) goto err_out_free;
     /* zero pad bss */
     l=ld[0]->p_offset+ld[0]->p_filesz;
@@ -532,7 +552,7 @@ err_out_close:
     ret->mem_size=length;
   }
   else if (ld_nr==2) { /* aem... yes Quick & Really Dirty / for the avarage 99% */
-//    unsigned long text_addr = _ELF_DWN_ROUND(at_pagesize,ld[0]->p_vaddr);	/* do we need this ? */
+    unsigned long text_addr = _ELF_DWN_ROUND(at_pagesize,ld[0]->p_vaddr);
     unsigned long text_offset=_ELF_DWN_ROUND(at_pagesize,ld[0]->p_offset);
     unsigned long text_off   =_ELF_RST_ROUND(at_pagesize,ld[0]->p_offset);
     unsigned long text_size  =_ELF_UP_ROUND(at_pagesize,ld[0]->p_memsz+text_off);
@@ -543,14 +563,22 @@ err_out_close:
     unsigned long data_size  =_ELF_UP_ROUND(at_pagesize,ld[1]->p_memsz+data_off);
     unsigned long data_fsize =_ELF_UP_ROUND(at_pagesize,ld[1]->p_filesz+data_off);
 
+    /* handle data_addr relative to text_addr */
+    data_addr-=text_addr;
+
     ret=_dl_get_handle();
     /* mmap all mem_blocks for *.so */
-    m=(char*)do_map_in(0,text_size+data_size,ld[0]->p_flags,fd,text_offset);
+    m=(char*)do_map_in((void*)text_addr,text_size+data_size,ld[0]->p_flags,fd,text_offset);
     if (m==MAP_FAILED) {
 err_out_free:
       _dl_free_handle(ret);
       _dl_sys_close(fd);
       return 0;
+    }
+    /* are we loaded where we wanna be ? */
+    if (text_addr && (m!=(void*)text_addr)) {
+      munmap(m,text_size+data_size);
+      goto err_out_free;
     }
 
     /* release data,bss part */
