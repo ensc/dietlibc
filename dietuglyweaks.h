@@ -14,5 +14,7 @@ __fflush_stderr:
 flockfile:
 .weak funlockfile
 funlockfile:
+.global __you_tried_to_link_a_dietlibc_object_against_glibc
+__you_tried_to_link_a_dietlibc_object_against_glibc:
 
 #endif

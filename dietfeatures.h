@@ -60,6 +60,10 @@
 /* do you want crypt(3) to use MD5 if the salt starts with "$1$"? */
 #define WANT_CRYPT_MD5
 
+/* do you want diet to include a safeguard dependency to make linking
+ * against glibc fail? */
+#define WANT_SAFEGUARD
+
 /* stop uncommenting here ;-) */
 #ifndef WANT_FASTER_STRING_ROUTINES
 #define WANT_SMALL_STRING_ROUTINES

@@ -38,6 +38,10 @@ int main(int argc,char *argv[]) {
   int compile=0;
   char diethome[]=DIETHOME;
   char platform[1000]=DIETHOME "/bin-";
+#ifdef WANT_SAFEGUARD
+  char safeguard1[]="-include";
+  char safeguard2[]=DIETHOME "/include/dietref.h";
+#endif
   const char *nostdlib="-nostdlib";
   const char *libgcc="-lgcc";
   char dashL[1000]="-L";
@@ -125,6 +129,12 @@ int main(int argc,char *argv[]) {
       *dest++=argv[1];
       if (_link) { *dest++=(char*)nostdlib; *dest++=dashL; }
       if (compile || _link) *dest++=a;
+#ifdef WANT_SAFEGUARD
+      if (compile) {
+	*dest++=safeguard1;
+	*dest++=safeguard2;
+      }
+#endif
       if (_link) { *dest++=b; }
 #ifdef WANT_DYNAMIC
       if (_link) { *dest++=d; }

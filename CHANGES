@@ -21,6 +21,13 @@
   opendir did not close-on-exec (thanks, Laurent Bercot).
   DNS will now properly signal errors and set h_errno.
   A few more cleanups (thanks, Andreas Jabs and Matthias Andree).
+  Added an uber-cool linker safeguard feature!  Idea by Matthias Andree.
+    If you enable WANT_SAFEGUARD in dietfeatures.h, diet will include an
+    external reference to a symbol that is only in the diet libc.  So,
+    when you accidentally link a diet libc compiled object file against
+    glibc, the linker will barf.  This will bloat your object files, but
+    you can remove all the references with "strip -R .note" from
+    the binaries in the end (which you should do anyway).
 
 0.11:
   fix major oops in DNS routines (only with WANT_FULL_RESOLV_CONF enabled).
