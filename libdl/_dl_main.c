@@ -180,7 +180,7 @@ static inline int work_on_pltgot(struct _dl_handle*dh) {
 
 #warning "x86_64 is not tested yet..."
 
-static unsigned long x86_64__got=0;
+static unsigned long*x86_64__got=0;
 static unsigned long __start=(unsigned long)&_start;
 
 asm(".text \n"
@@ -264,7 +264,7 @@ asm(".text \n"
 "	pushq	%rcx \n"
 "	pushq	%r8 \n"
 "	pushq	%r9 \n"
-/* dynlib habdle */
+/* dynlib handle */
 "	movq	56(%rsp),%rdi \n"
 /* dyntab entry = 24*(index) */
 "	movq	64(%rsp),%rsi \n"
@@ -275,13 +275,13 @@ asm(".text \n"
 /* save return value */
 "	movq	%rax,%r11 \n"
 /* restore register args */
-"	pushq	%r9 \n"
-"	pushq	%r8 \n"
-"	pushq	%rcx \n"
-"	pushq	%rdx \n"
-"	pushq	%rsi \n"
-"	pushq	%rdi \n"
-"	pushq	%rax \n"
+"	popq	%r9 \n"
+"	popq	%r8 \n"
+"	popq	%rcx \n"
+"	popq	%rdx \n"
+"	popq	%rsi \n"
+"	popq	%rdi \n"
+"	popq	%rax \n"
 /* remove arguments from plt */
 "	addq	$16,%rsp \n"
 /* jump to REAL function */
@@ -290,14 +290,7 @@ asm(".text \n"
    );
 
 static inline unsigned long* get_got(void) {
-#if 0
-  register unsigned long *got;
-  asm("leaq _DYNAMIC@GOTPCREL(%%rip), %0 \n"
-      "subq _DYNAMIC@GOT, %0 " : "=r"(got));
-  return got;
-#else
-  return (unsigned long*)x86_64__got;
-#endif
+  return x86_64__got;
 }
 
 static inline int work_on_pltgot(struct _dl_handle*dh) {

@@ -15,7 +15,9 @@ static struct {
 static
 #endif
 int _dl_queue_lib(const char*name,int flags) {
-  if (_dl_find_lib(name)==0) {
+  struct _dl_handle*ret;
+  if ((ret=_dl_find_lib(name))) ++(ret->lnk_count);
+  else {
     register int tmp;
     if ((tmp=_dl_queue_stop+1)>=MAX_QUEUE) tmp=0;
     if (tmp==_dl_queue_start) return -1;
