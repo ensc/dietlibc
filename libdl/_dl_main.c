@@ -2,6 +2,8 @@
 
 /*
  * the is the dietlibc libdl dynamic-linker
+ *
+ * NEED to be compiled with -fPIC ...
  */
 #include "_dl_int.h"
 
@@ -71,17 +73,10 @@ _dl_jump:
 	pushl	%ecx
 	pushl	%edx
 
-	pushl	%ebx		# callee save
-
-	call	getpic
-	addl	$_GLOBAL_OFFSET_TABLE_,%ebx
-
 	push	20(%esp)	# 2. arg from plt
 	push	20(%esp)	# 1. arg from plt
-	call	do_rel@PLT
+	call	do_rel
 	add	$8, %esp
-
-	popl	%ebx		# callee save
 
 	popl	%edx		# restore register args...
 	popl	%ecx
@@ -110,8 +105,9 @@ _start:
 
 	ldr	a1, [sp], #4		@ argc
 	mov	a2, sp			@ argv
-	add	a3, a2, a1, lsl #2
-	add	a3, a3, #4		@ envp
+
+	add	a3, a2, a1, lsl #2	@ envp
+	add	a3, a3, #4
 
 	ldr	sl, .L_got		@ PIC code
 1:	add	sl, pc, sl
@@ -144,13 +140,13 @@ _exit:
 _dl_jump:
 	stmdb	sp!, {r0, r1, r2, r3}	@ save arguments
 
-	sub	r1, ip, lr
+	sub	r1, ip, lr		@ dyntab entry
 	sub	r1, r1, #4
-	add	r1, r1, r1		@ dyntab entry
+	add	r1, r1, r1
 
 	ldr	r0, [lr, #-4]		@ dynlib handle
 
-	bl	do_rel(PLT)
+	bl	do_rel
 
 	mov	r12, r0
 	ldmia	sp!, {r0, r1, r2, r3, lr} @ restore arguments
@@ -166,14 +162,31 @@ static inline unsigned long* get_got(void) {
 #error "arch not supported"
 #endif
 
-#define DT_NUM 23
+/* exit ! */
+static void _DIE_() { _exit(213); }
 
-static void bootstrap(Elf_Dyn*_dynamic) {
+/* lazy function resolver */
+static unsigned long do_rel(struct _dl_handle * tmp_dl, unsigned long off) {
+  Elf_Rel *tmp = ((void*)tmp_dl->plt_rel)+off;
+  int sym=ELF_R_SYM(tmp->r_info);
+  register unsigned long sym_val;
 
+  /* modify GOT for REAL symbol */
+  //sym_val=((unsigned long)(tmp_dl->mem_base+tmp_dl->dyn_sym_tab[sym].st_value));
+  sym_val=(unsigned long)_dl_sym(tmp_dl,sym);
+  *((unsigned long*)(tmp_dl->mem_base+tmp->r_offset))=sym_val;
+
+  /* JUMP (arg sysdep...) */
+  if (sym_val) return sym_val;
+  /* can't find symbol */
+  return (unsigned long)_DIE_;
 }
 
-static void _DIE_() { _exit(113); }
+/* bootstarp code */
+static void bootstrap(Elf_Dyn*_dynamic) {
+}
 
+/* start of libdl dynamic linker */
 static unsigned long _dl_main(int argc,char*argv[],char*envp[],unsigned long _dynamic) {
   unsigned long*got;
   unsigned long load_addr;
