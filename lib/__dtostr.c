@@ -1,6 +1,15 @@
 #include <stdlib.h>
 #include <endian.h>
+#include <math.h>
 /* convert double to string.  Helper for sprintf. */
+
+static int copystring(char* buf,int maxlen, const char* s) {
+  int i;
+  for (i=0; i<3&&i<maxlen; ++i)
+    buf[i]=s[i];
+  if (i<maxlen) { buf[i]=0; ++i; }
+  return i;
+}
 
 int __dtostr(double d,char *buf,unsigned int maxlen,unsigned int prec,unsigned int prec2) {
 #if 1
@@ -16,13 +25,16 @@ int __dtostr(double d,char *buf,unsigned int maxlen,unsigned int prec,unsigned i
 #endif
 /*  unsigned long long m=*x & ((1ull<<52)-1); */
   /* step 2: exponent is base 2, compute exponent for base 10 */
-  signed long e10=1+(long)(e*0.30102999566398119802); /* log10(2) */
+  signed long e10;
   /* step 3: calculate 10^e10 */
   unsigned int i;
   double backup=d;
   double tmp;
   char *oldbuf=buf;
 
+  if (isnan(d)) return copystring(buf,maxlen,"nan");
+  if (i=isinf(d)) return copystring(buf,maxlen,i>0?"inf":"-inf");
+  e10=1+(long)(e*0.30102999566398119802); /* log10(2) */
   /* Wir iterieren von Links bis wir bei 0 sind oder maxlen erreicht
    * ist.  Wenn maxlen erreicht ist, machen wir das nochmal in
    * scientific notation.  Wenn dann von prec noch was übrig ist, geben

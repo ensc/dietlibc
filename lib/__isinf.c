@@ -1,10 +1,10 @@
 #include <math.h>
 
-int isnan(double d) {
+int isinf(double d) {
   unsigned long long *x=(unsigned long long *)&d;
-  return (*x==0x7FF8000000000000ll || *x==0x7FF0000000000000);
+  return (*x==0x7FF0000000000000ll?1:*x==0xFFF0000000000000?-1:0);
 }
-int __isnan(double d) __attribute__((alias("isnan")));
+int __isinf(double d) __attribute__((alias("isinf")));
 
 #if 0
 TestFromIeeeExtended("7FFF0000000000000000");   /* +infinity */

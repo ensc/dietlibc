@@ -31,6 +31,7 @@
   fix fread() from a pipe (oops, tried to lseek)
   #define _POSIX_VDISABLE in termios.h (Laurent Bercot)
   two *printf fixes (Gernot Tenchio)
+  add nan and +-inf handling in __dtostr
 
 0.21:
   use gcc's size_t, ptrdiff_t and wchar_t types (Olaf)
