@@ -268,6 +268,7 @@ __unified_syscall:
 #include "../syscalls.s/epoll_create.S"
 #include "../syscalls.s/epoll_ctl.S"
 #include "../syscalls.s/epoll_wait.S"
+#include "../syscalls.s/sendfile64.S"
 
 #undef __PIC__
 #undef __socketcall

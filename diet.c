@@ -26,8 +26,8 @@ static void error(const char *message) {
 
 static const char* Os[] = {
   "i386","-Os","-mpreferred-stack-boundary=2",
-	 "-malign-functions=0","-malign-jumps=0",
-	 "-malign-loops=0","-fomit-frame-pointer",0,
+	 "-malign-functions=1","-malign-jumps=1",
+	 "-malign-loops=1","-fomit-frame-pointer",0,
   "x86_64","-Os","-fno-omit-frame-pointer",0,
   "sparc","-Os","-mcpu=supersparc",0,
   "sparc64","-Os","-m64",0,

@@ -131,6 +131,7 @@ __unified_syscall:
 #include "../syscalls.s/sched_yield.S"
 #include "../syscalls.s/select.S"
 #include "../syscalls.s/sendfile.S"
+#include "../syscalls.s/sendfile64.S"
 #include "../syscalls.s/setdomainname.S"
 #include "../syscalls.s/setfsgid.S"
 #include "../syscalls.s/setfsuid.S"
