@@ -7,7 +7,7 @@
 
 /* #include <stdio.h> */
 
-char* tzname[2];
+char* tzname[2]={"GMT","GMT"};
 
 #ifdef WANT_TZFILE_PARSER
 static char *tzfile=0;
