@@ -1,3 +1,6 @@
+#ifndef _SCHED_H
+#define _SCHED_H 1
+
 #include <time.h>
 
 /* fix broken kernel header */
@@ -31,3 +34,4 @@ int sched_get_priority_min(int policy);
 int __sched_rr_get_interval(pid_t pid, struct timespec *tp);
 int sched_rr_get_interval(pid_t pid, struct timespec *tp);
 
+#endif
