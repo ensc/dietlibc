@@ -5,7 +5,7 @@ typedef void (*function)(void);
 #define NUM_ATEXIT	32
 
 static function __atexitlist[NUM_ATEXIT];
-static int atexit_counter = 0;
+static int atexit_counter;
 
 int atexit(function t) {
   if (atexit_counter<NUM_ATEXIT) {

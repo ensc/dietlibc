@@ -10,7 +10,7 @@
 char* tzname[2]={"GMT","GMT"};
 
 #ifdef WANT_TZFILE_PARSER
-static char *tzfile=0;
+static char *tzfile;
 static int tzlen=-1;
 
 void __maplocaltime(void);

@@ -11,7 +11,7 @@
 #include <arpa/inet.h>
 #include "dietfeatures.h"
 
-static char* hostmap=0;
+static char* hostmap;
 static unsigned int hostlen;
 
 static char *cur;

@@ -144,7 +144,7 @@ void free(void *ptr) __attribute__((weak,alias("_alloc_libc_free")));
 void if_freenameindex(void* ptr) __attribute__((alias("free")));
 
 #ifdef WANT_MALLOC_ZERO
-static __alloc_t zeromem[2]={{0},{0}};
+static __alloc_t zeromem[2];
 #endif
 
 static void* _alloc_libc_malloc(size_t size) {

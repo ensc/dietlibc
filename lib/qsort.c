@@ -54,7 +54,7 @@ void qsort(void *base, size_t nmemb, size_t size, int (*compar)(const void *, co
   char *dmax=base+(nmemb-1)*size;
   char dmemb=nmemb;
 #endif
-  static int level=0;
+//  static int level=0;
   char* v;	/* pivot */
   char* mid, *max, *min;
   size_t lmemb;
@@ -69,7 +69,7 @@ void qsort(void *base, size_t nmemb, size_t size, int (*compar)(const void *, co
   assert(left>=0 && right<=1000);
 #endif
   if (nmemb<=8) {
-    --level;
+//    --level;
     return isort(base,nmemb,size,compar);
   }
   {
@@ -123,5 +123,5 @@ void qsort(void *base, size_t nmemb, size_t size, int (*compar)(const void *, co
 //    printf("+-right %d [%d..%d] of [%d..%d]\n",level+1,left+lmemb,right,left,right);
     qsort(min+size,nmemb-lmemb-1,size,compar);
   }
-  --level;
+//  --level;
 }

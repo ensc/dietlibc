@@ -19,7 +19,7 @@
 #define MAX_LOGTAG 1000
 
 /* those have to be global *sigh* */
-static volatile int	connected = 0;  /* have done connect */
+static volatile int	connected;	/* have done connect */
 static volatile int	LogMask = 0xff; /* mask of priorities to be logged */
 static char		LogTag[MAX_LOGTAG];	/* string to tag the entry with */
 static int		LogFile = -1;   /* fd for log */

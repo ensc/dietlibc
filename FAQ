@@ -249,3 +249,15 @@ A: diet -Os uses some platform dependant gcc options to create tighter
 
    If you get this options not for diet -Os gcc but for diet -Os
    i386-linux-gcc, put this in ~/.diet/i386-linux-gcc instead.
+
+
+Q: I see lots of uninitialized variables, like "static int foo;".  What gives?
+A: "static" global variables are initialized to 0.  ANSI C guarantees that.
+   Technically speaking, static variables go into the .bss ELF segment,
+   while "static int foo=0" goes into .data.  Because .bss is zero
+   filled by the OS, it does not need to be in the actual binary.  So it
+   is in fact better to not initialize static variables if the desired
+   initialization value is 0 anyway.  The same is true for pointers, by
+   the way.  On all platforms supported by the diet libc, numeric zero
+   is also the pointer value for NULL.  So not initializing a static
+   pointer yields NULL.

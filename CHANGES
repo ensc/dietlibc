@@ -49,6 +49,7 @@
   Olaf: fixing the diet wrapper for sparc and changing the options for mips
   fix i386/atol (Hynek Schlawack)
   fix i386/copysign (Hynek Schlawack)
+  remove =0 for static variables (Thomas Ogrisegg)
 
 0.22:
   fix i386 libm
