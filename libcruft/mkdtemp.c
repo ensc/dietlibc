@@ -8,7 +8,7 @@ int mkdtemp(char* template) {
   char *tmp=template+strlen(template)-6;
   int randfd,i;
   unsigned int random;
-  for (i=0; i<6; ++i) if (tmp[i]!='X') { errno=EINVAL; return -1; }
+  for (i=0; i<6; ++i) if (tmp[i]!='X') { errno=EINVAL; return 0; }
   randfd=open("/dev/urandom",O_RDONLY);
   do {
     read(randfd,&random,sizeof(random));
@@ -18,5 +18,5 @@ int mkdtemp(char* template) {
     }
   } while(mkdir(template,0700));
   close(randfd);
-  return 0;
+  return template;
 }
