@@ -35,18 +35,6 @@ A: Yes.  Just type something like "make ARCH=arm CROSS=arm-linux- all".
      $ CC="diet sparc-linux-gcc -static" ./configure --disable-nls
 
 
-Q: I keep getting warnings about asm/posix_types.h when compiling the diet libc.
-A: The diet libc works with Linux 2.2 and Linux 2.4 headers and assumes
-   that your system-wide headers (in /usr/include) actually work.  On
-   your systems (seems to be common on Mandrake), gcc has tried to "fix"
-   the headers and broke them in the process.  If this is the case, the
-   path that gcc mentions in the warning will contain "/gcc-lib/".  You
-   can either ignore the warning (no harmful consequences as far as we
-   know) or delete the offending asm/posix_types.h from the gcc dir (NOT
-   from the kernel source tree!).  Rumour has it that this will be fixed
-   in kernel 2.4.6.  Thumbs up! ;)
-
-
 Q: There are a few warnings about possibly uninitialized variables when
    compiling the diet libc.  Can't you remove them?
 A: This type of warning can only be removed by a) compiling without
@@ -57,10 +45,12 @@ A: This type of warning can only be removed by a) compiling without
    don't add initializers ;-)
 
 
-Q: Cross-Compiling on sparc fails because it tries to include a missing
-   file, asm/asm_offsets.h.  What gives?
-A: This file is dynamically generated.  As far as I know, it is not
-   needed for user space, so you could, if you wanted, just delete the
-   reference to it.  But you can also create it by going to the Linux
-   kernel directory and running "make ARCH=sparc oldconfig" and "make
-   ARCH=sparc dep".
+Q: When linking binaries, I get warnings about stdio and printf all the
+   time.  What gives?
+A: Since the diet libc was written to make writing small programs
+   possible, it also tries to assist in the process of seeing causes of
+   bloat.  Premier causes for bloat are stdio and the printf family of
+   functions.  The diet libc will also warn you if you still use
+   assert() (which is normally not enabled in production code) or if you
+   use functions that use static buffers (like gethostbyname and
+   friends).
