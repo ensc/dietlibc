@@ -10,7 +10,7 @@
 
 void die (int v,const char *s)
 {
-  write(1,s,strlen(s)); write(1,"\n",1);
+  write(2,s,strlen(s)); write(2,"\n",1);
   exit(v);
 }
 
@@ -131,7 +131,7 @@ int main(int argc, char *argv[])
   long n;
   int in;
 
-  if (argc!=2) die(0,"usage: elftrunc [prog]");
+  if (argc!=2 && argc!=3) die(0,"usage: elftrunc srcprogname [dstprogname]");
 
   if ((in=open (argv[1],O_RDONLY))<0) die(1,"open input file");
   if ((n=read(in,buf,EI_NIDENT))<1) die(2,"read header of input");
@@ -150,5 +150,9 @@ int main(int argc, char *argv[])
     trunc32(in);
 
   close(in);
+  if (argc==3)
+      rename(fn,argv[2]);
   return 0;
 }
+
+
