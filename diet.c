@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "dietfeatures.h"
+
 /* goal:
  *   when invoked as
  * "diet gcc -c t.c"
@@ -71,6 +73,9 @@ int main(int argc,char *argv[]) {
       char **newargv;
       char **dest;
       char *a,*b,*c;
+#ifdef WANT_DYNAMIC
+      char *d,*e;
+#endif
 /* we need to add -I... if the command line contains -c, -S or -E */
       for (i=2; i<argc; ++i)
 	if (!strcmp(argv[i],"-c") || !strcmp(argv[i],"-S") || !strcmp(argv[i],"-E"))
@@ -82,7 +87,7 @@ int main(int argc,char *argv[]) {
 	if (!strcmp(argv[i],"-o"))
 	  if (!compile) link=1;
 #endif
-      newargv=alloca(sizeof(char*)*(argc+6));
+      newargv=alloca(sizeof(char*)*(argc+8));
       a=alloca(strlen(diethome)+20);
       b=alloca(strlen(platform)+20);
       c=alloca(strlen(platform)+20);
@@ -91,14 +96,27 @@ int main(int argc,char *argv[]) {
       strcpy(b,platform); strcat(b,"/start.o");
       strcpy(c,platform); strcat(c,"/dietlibc.a");
 
+#ifdef WANT_DYNAMIC
+      d=alloca(strlen(platform)+20);
+      e=alloca(strlen(platform)+20);
+      strcpy(d,platform); strcat(d,"/dyn_start.o");
+      strcpy(e,platform); strcat(e,"/dyn_stop.o");
+#endif
+
       dest=newargv;
       *dest++=argv[1];
       if (link) { *dest++=nostdlib; *dest++=dashL; }
       if (compile || link) *dest++=a;
       if (link) { *dest++=b; }
+#ifdef WANT_DYNAMIC
+      if (link) { *dest++=d; }
+#endif
       for (i=2; i<argc; ++i)
 	*dest++=argv[i];
       if (link) { *dest++=c; *dest++=libgcc; }
+#ifdef WANT_DYNAMIC
+      if (link) { *dest++=e; }
+#endif
       *dest=0;
       execvp(newargv[0],newargv);
       goto error;

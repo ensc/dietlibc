@@ -4,7 +4,9 @@ OBJDIR=bin-$(ARCH)
 
 HOME=$(shell pwd)
 
-all: $(OBJDIR) $(OBJDIR)/start.o $(OBJDIR)/dietlibc.a $(OBJDIR)/liblatin1.a $(OBJDIR)/librpc.a $(OBJDIR)/libpthread.a $(OBJDIR)/elftrunc $(OBJDIR)/diet
+all: $(OBJDIR) $(OBJDIR)/start.o $(OBJDIR)/dyn_start.o $(OBJDIR)/dyn_stop.o \
+	$(OBJDIR)/dietlibc.a $(OBJDIR)/liblatin1.a $(OBJDIR)/librpc.a $(OBJDIR)/libpthread.a \
+	$(OBJDIR)/diet $(OBJDIR)/elftrunc
 
 CFLAGS=-pipe
 CROSS=
@@ -83,10 +85,10 @@ $(OBJDIR)/libdietc.so: $(OBJDIR)/dietlibc.a
 
 $(SYSCALLOBJ): syscalls.h
 
-$(OBJDIR)/elftrunc: contrib/elftrunc.c $(OBJDIR)/start.o $(OBJDIR)/dietlibc.a
-	$(CROSS)$(CC) -Iinclude $(CFLAGS) -nostdlib -o $@ $^ -lgcc
+$(OBJDIR)/elftrunc: $(OBJDIR)/diet contrib/elftrunc.c
+	$(OBJDIR)/diet $(CROSS)$(CC) $(CFLAGS) -o $@ contrib/elftrunc.c
 
-$(OBJDIR)/diet: diet.c $(OBJDIR)/start.o $(OBJDIR)/dietlibc.a
+$(OBJDIR)/diet: $(OBJDIR)/start.o $(OBJDIR)/dyn_start.o diet.c $(OBJDIR)/dietlibc.a $(OBJDIR)/dyn_stop.o
 	$(CROSS)$(CC) -Iinclude $(CFLAGS) -nostdlib -o $@ $^ -DDIETHOME=\"$(HOME)\"
 	$(CROSS)strip -R .comment -R .note $@
 
