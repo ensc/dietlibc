@@ -134,7 +134,7 @@ ifneq ($(DEBUG),)
 CFLAGS = -g
 COMMENT = :
 endif
-CFLAGS += -Wall -W -Wchar-subscripts -Wmissing-prototypes -Wmissing-declarations -Wno-switch -Wno-unused
+CFLAGS += -Wall -W -Wchar-subscripts -Wmissing-prototypes -Wmissing-declarations -Wno-switch -Wno-unused -Wredundant-decls
 
 PWD=$(shell pwd)
 
@@ -150,17 +150,17 @@ $(OBJDIR) $(PICODIR):
 % :: %,v
 
 $(OBJDIR)/pstart.o: start.S
-	$(CROSS)$(CC) -I. -Iinclude $(CFLAGS) -DPROFILING -c $< -o $@
+	$(CROSS)$(CC) -I. -isystem include $(CFLAGS) -DPROFILING -c $< -o $@
 
 $(OBJDIR)/%.o: %.S $(ARCH)/syscalls.h
-	$(CROSS)$(CC) -I. -Iinclude $(CFLAGS) -c $< -o $@
+	$(CROSS)$(CC) -I. -isystem include $(CFLAGS) -c $< -o $@
 
 $(OBJDIR)/pthread_%.o: libpthread/pthread_%.c
-	$(CROSS)$(CC) -I. -Iinclude $(CFLAGS) -c $< -o $@
+	$(CROSS)$(CC) -I. -isystem include $(CFLAGS) -c $< -o $@
 	$(COMMENT) -$(CROSS)strip -x -R .comment -R .note $@
 
 $(OBJDIR)/%.o: %.c
-	$(CROSS)$(CC) -I. -Iinclude $(CFLAGS) -c $< -o $@
+	$(CROSS)$(CC) -I. -isystem include $(CFLAGS) -c $< -o $@
 	$(COMMENT) -$(CROSS)strip -x -R .comment -R .note $@
 
 DIETLIBC_OBJ = $(OBJDIR)/unified.o \
@@ -214,21 +214,21 @@ dyn_lib: $(PICODIR) $(PICODIR)/libc.so $(PICODIR)/dstart.o \
 	$(PICODIR)/diet-dyn $(PICODIR)/diet-dyn-i
 
 $(PICODIR)/%.o: %.S $(ARCH)/syscalls.h
-	$(CROSS)$(CC) -I. -Iinclude $(CFLAGS) -fPIC -D__DYN_LIB -c $< -o $@
+	$(CROSS)$(CC) -I. -isystem include $(CFLAGS) -fPIC -D__DYN_LIB -c $< -o $@
 
 $(PICODIR)/pthread_%.o: libpthread/pthread_%.c
-	$(CROSS)$(CC) -I. -Iinclude $(CFLAGS) -fPIC -D__DYN_LIB -c $< -o $@
+	$(CROSS)$(CC) -I. -isystem include $(CFLAGS) -fPIC -D__DYN_LIB -c $< -o $@
 	$(COMMENT) $(CROSS)strip -x -R .comment -R .note $@
 
 $(PICODIR)/%.o: %.c
-	$(CROSS)$(CC) -I. -Iinclude $(CFLAGS) -fPIC -D__DYN_LIB -c $< -o $@
+	$(CROSS)$(CC) -I. -isystem include $(CFLAGS) -fPIC -D__DYN_LIB -c $< -o $@
 	$(COMMENT) $(CROSS)strip -x -R .comment -R .note $@
 
 $(PICODIR)/dstart.o: start.S
-	$(CROSS)$(CC) -I. -Iinclude $(CFLAGS) -fPIC -D__DYN_LIB -c $< -o $@
+	$(CROSS)$(CC) -I. -isystem include $(CFLAGS) -fPIC -D__DYN_LIB -c $< -o $@
 
 $(PICODIR)/dyn_so_start.o: dyn_start.c
-	$(CROSS)$(CC) -I. -Iinclude $(CFLAGS) -fPIC -D__DYN_LIB -D__DYN_LIB_SHARED -c $< -o $@
+	$(CROSS)$(CC) -I. -isystem include $(CFLAGS) -fPIC -D__DYN_LIB -D__DYN_LIB_SHARED -c $< -o $@
 	$(COMMENT) $(CROSS)strip -x -R .comment -R .note $@
 
 DYN_LIBC_PIC = $(LIBOBJ) $(LIBSTDIOOBJ) $(LIBUGLYOBJ) \
@@ -250,7 +250,7 @@ $(PICODIR)/libpthread.so: $(DYN_PTHREAD_OBJS) dietfeatures.h
 	$(CROSS)$(CC) -nostdlib -shared -o $@ $(CFLAGS) -fPIC $(DYN_PTHREAD_OBJS) -L$(PICODIR) -lc -Wl,-soname=libpthread.so
 
 $(PICODIR)/libdl.so: libdl/_dl_main.c dietfeatures.h
-	$(CROSS)$(CC) -D__OD_CLEAN_ROOM -DNODIETREF -fPIC -nostdlib -shared -o $@ $(CFLAGS) -I. -Iinclude libdl/_dl_main.c -Wl,-soname=libdl.so
+	$(CROSS)$(CC) -D__OD_CLEAN_ROOM -DNODIETREF -fPIC -nostdlib -shared -o $@ $(CFLAGS) -I. -isystem include libdl/_dl_main.c -Wl,-soname=libdl.so
 
 #$(PICODIR)/libdl.so: $(DYN_LIBDL_OBJS) dietfeatures.h
 #	$(CROSS)$(CC) -nostdlib -shared -o $@ $(CFLAGS) -fPIC $(DYN_LIBDL_OBJS) -L$(PICODIR) -ldietc -Wl,-soname=libdl.so
@@ -269,19 +269,19 @@ VERSION=dietlibc-$(shell head -n 1 CHANGES|sed 's/://')
 CURNAME=$(notdir $(shell pwd))
 
 $(OBJDIR)/diet: $(OBJDIR)/start.o $(OBJDIR)/dyn_start.o diet.c $(OBJDIR)/dietlibc.a $(OBJDIR)/dyn_stop.o
-	$(CROSS)$(CC) -Iinclude $(CFLAGS) -nostdlib -o $@ $^ -DDIETHOME=\"$(HOME)\" -DVERSION=\"$(VERSION)\" -lgcc
+	$(CROSS)$(CC) -isystem include $(CFLAGS) -nostdlib -o $@ $^ -DDIETHOME=\"$(HOME)\" -DVERSION=\"$(VERSION)\" -lgcc
 	$(CROSS)strip -R .comment -R .note $@
 
 $(OBJDIR)/diet-i: $(OBJDIR)/start.o $(OBJDIR)/dyn_start.o diet.c $(OBJDIR)/dietlibc.a $(OBJDIR)/dyn_stop.o
-	$(CROSS)$(CC) -Iinclude $(CFLAGS) -nostdlib -o $@ $^ -DDIETHOME=\"$(prefix)\" -DVERSION=\"$(VERSION)\" -DINSTALLVERSION -lgcc
+	$(CROSS)$(CC) -isystem include $(CFLAGS) -nostdlib -o $@ $^ -DDIETHOME=\"$(prefix)\" -DVERSION=\"$(VERSION)\" -DINSTALLVERSION -lgcc
 	$(CROSS)strip -R .comment -R .note $@
 
 $(PICODIR)/diet-dyn: $(PICODIR)/start.o $(PICODIR)/dyn_start.o diet.c
-	$(CROSS)$(CC) -Iinclude $(CFLAGS) -fPIC -nostdlib -o $@ $^ -DDIETHOME=\"$(HOME)\" -D__DYN_LIB -DVERSION=\"$(VERSION)\" -L$(PICODIR) -lc -lgcc $(PICODIR)/dyn_stop.o -Wl,-dynamic-linker=$(HOME)/$(PICODIR)/libdl.so
+	$(CROSS)$(CC) -isystem include $(CFLAGS) -fPIC -nostdlib -o $@ $^ -DDIETHOME=\"$(HOME)\" -D__DYN_LIB -DVERSION=\"$(VERSION)\" -L$(PICODIR) -lc -lgcc $(PICODIR)/dyn_stop.o -Wl,-dynamic-linker=$(HOME)/$(PICODIR)/libdl.so
 	$(CROSS)strip -R .command -R .note $@
 
 $(PICODIR)/diet-dyn-i: $(PICODIR)/start.o $(PICODIR)/dyn_start.o diet.c
-	$(CROSS)$(CC) -Iinclude $(CFLAGS) -fPIC -nostdlib -o $@ $^ -DDIETHOME=\"$(prefix)\" -D__DYN_LIB -DVERSION=\"$(VERSION)\" -L$(PICODIR) -lc -lgcc $(PICODIR)/dyn_stop.o -Wl,-dynamic-linker=$(ILIBDIR)/libdl.so -DINSTALLVERSION
+	$(CROSS)$(CC) -isystem include $(CFLAGS) -fPIC -nostdlib -o $@ $^ -DDIETHOME=\"$(prefix)\" -D__DYN_LIB -DVERSION=\"$(VERSION)\" -L$(PICODIR) -lc -lgcc $(PICODIR)/dyn_stop.o -Wl,-dynamic-linker=$(ILIBDIR)/libdl.so -DINSTALLVERSION
 	$(CROSS)strip -R .command -R .note $@
 
 $(OBJDIR)/djb: $(OBJDIR)/compile $(OBJDIR)/load
@@ -312,7 +312,7 @@ $(OBJDIR)/exports: $(OBJDIR)/dietlibc.a
 
 .PHONY: t t1
 t:
-	$(CROSS)$(CC) -g $(CFLAGS) -fno-builtin -nostdlib -Iinclude -o t t.c $(OBJDIR)/start.o $(OBJDIR)/dyn_start.o $(OBJDIR)/dietlibc.a -lgcc $(OBJDIR)/dyn_stop.o -Wl,-Map,mapfile
+	$(CROSS)$(CC) -g $(CFLAGS) -fno-builtin -nostdlib -isystem include -o t t.c $(OBJDIR)/start.o $(OBJDIR)/dyn_start.o $(OBJDIR)/dietlibc.a -lgcc $(OBJDIR)/dyn_stop.o -Wl,-Map,mapfile
 
 t1:
 	$(CROSS)$(CC) -g -o t1 t.c

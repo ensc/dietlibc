@@ -219,7 +219,7 @@ pp:
       b=alloca(strlen(platform)+20);
       c=alloca(strlen(platform)+20);
 
-      strcpy(a,"-I"); strcat(a,diethome); strcat(a,"/include");
+      strcpy(a,diethome); strcat(a,"/include");
 #ifndef __DYN_LIB
       strcpy(b,platform);
       if (profile) strcat(b,"/pstart.o"); else strcat(b,"/start.o");
@@ -284,9 +284,15 @@ pp:
 	*dest++=argv[i];
       }
 #ifndef __DYN_LIB
-      if (compile || _link) *dest++=a;
+      if (compile || _link) {
+	*dest++="-isystem";
+	*dest++=a;
+      }
 #else
-      if (compile || _link || shared) *dest++=a;
+      if (compile || _link || shared) {
+	*dest++="-isystem";
+	*dest++=a;
+      }
 #endif
       *dest++="-D__dietlibc__";
       if (mangleopts) {
