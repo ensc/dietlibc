@@ -16,7 +16,7 @@ extern iconv_t iconv_open (const char *tocode, const char *fromcode) __THROW;
 /* Convert at most *INBYTESLEFT bytes from *INBUF according to the
    code conversion algorithm specified by CD and place up to
    *OUTBYTESLEFT bytes in buffer at *OUTBUF.  */
-extern size_t iconv (iconv_t cd, const char** inbuf,
+extern size_t iconv (iconv_t cd, char** inbuf,
 		     size_t* inbytesleft,
 		     char** outbuf,
 		     size_t* outbytesleft) __THROW;

@@ -3,7 +3,10 @@ enum charset {
   ISO_8859_1,
   UTF_8,
   UCS_2,
-  UCS_4
+  UCS_4,
+  UTF_16_BE,
+  UTF_16_LE,
+  UTF_16
 };
 
 #define ic_from(x)	(((x)    )&0xffff)
