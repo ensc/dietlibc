@@ -87,6 +87,10 @@ void foo(int tmp,...) {
 extern int __lltostr(char *s, int size, unsigned long long i, int base, char UpCase);
 
 int main(int argc,char *argv[]) {
+  printf("%.24s", "Sun Jan  2 08:29:13 1994\n");
+#if 0
+  printf("%.*s\n",13,"fnord");
+#endif
 #if 0
   double d=strtod(argv[1],0);
   printf("%g|\n",d);
@@ -99,7 +103,7 @@ int main(int argc,char *argv[]) {
 #if 0
   printf("%lld\n",-1ll);
 #endif
-#if 1
+#if 0
   char *str="e";
   setbuf(stdout,0);
   printf("foo\n");

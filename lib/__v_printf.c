@@ -116,10 +116,11 @@ inn_printf:
 
       case '.':
 	flag_dot=1;
-	if (*++format=='*') {
+	if (*format=='*') {
 	  preci=va_arg(arg_ptr,int);
+	  ++format;
 	} else {
-	  preci=strtol(format-1,(char**)&s,10);
+	  preci=strtol(format,(char**)&s,10);
 	  format=s;
 	}
 	goto inn_printf;
@@ -178,7 +179,7 @@ print_out:
 	goto num_printf;
       case 'o':
 	base=8;
-	sz=1;
+	sz=0;
 	if (flag_hash) {
 	  buf[1]='0';
 	  ++sz;
