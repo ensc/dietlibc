@@ -2,7 +2,11 @@
 
 .text
 .globl syscall
+#ifdef __arm__
+.type syscall,function
+#else
 .type syscall,@function
+#endif
 
 syscall:
 #ifdef __i386__
