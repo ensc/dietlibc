@@ -3,6 +3,7 @@
 
 #include <sys/cdefs.h>
 #include <sys/types.h>
+#include <sys/stat.h>
 
 __BEGIN_DECLS
 
@@ -170,6 +171,12 @@ extern int mincore (void *__start, size_t __len, unsigned char *__vec);
 
 extern void *mmap64 (void *__addr, size_t __len, int __prot,
 		     int __flags, int __fd, off64_t __offset) __THROW;
+
+#ifndef __NO_STAT64
+#if defined _FILE_OFFSET_BITS && _FILE_OFFSET_BITS == 64
+#define mmap(a,b,c,d,e,f) mmap64(a,b,c,d,e,f)
+#endif
+#endif
 
 int mlockall(int flags) __THROW;
 int mlock(const void *addr, size_t len) __THROW;
