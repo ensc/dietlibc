@@ -8,6 +8,7 @@ size_t fread( void *ptr, size_t size, size_t nmemb, FILE *stream) {
   unsigned long i,j;
   j=size*nmemb;
 #ifdef WANT_UNGETC
+  if (!j) return 0;
   if (stream->ungotten) {
     *(char*)ptr=stream->ungetbuf;
     ptr=((char*)ptr)+1;

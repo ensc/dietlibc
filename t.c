@@ -35,10 +35,14 @@ int foo;
 
 int main(int argc,char *argv[]) {
   char buf[100];
+  printf("%d\n",fread(buf,1,0,stdin));
+#if 0
+  char buf[100];
   memset(buf,17,100);
   buf[0]=0;
   strncat(buf,"foobarbaz23",10);
   puts(buf);
+#endif
 #if 0
   int aflag = 0;
   int bflag = 0;
