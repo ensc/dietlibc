@@ -29,7 +29,9 @@ void *_dlsym(void *handle, char *symbol)
       }
       ind = chain[ind];
     }
+#ifdef DEBUG
     printf("dlsym: symbol \"%s\" @ %08lx\n",symbol,(long)ret);
+#endif
 
   }
   return ret;

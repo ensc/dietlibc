@@ -29,7 +29,9 @@ static int _dl_search_path(char *buf, int len, const char*path, const int pathle
       else
 	buf[0]=0;
       strncat(buf, filename, --l);
+#ifdef DEBUG
 //      printf("_dl_search: %s\n",buf);
+#endif
       if ((fd=open(buf,O_RDONLY))!=-1) return fd;
     }
   }

@@ -50,7 +50,6 @@ struct _dl_handle* _dl_get_handle() {
 }
 
 struct _dl_handle* _dl_find_lib(const char* name) {
-  printf("_dl_find_lib: %s\n",name);
   if (_dl_root_handle) {
     struct _dl_handle* tmp;
     for (tmp=_dl_root_handle;tmp;tmp=tmp->next) {

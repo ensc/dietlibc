@@ -24,7 +24,9 @@ int _dl_apply_relocate(struct _dl_handle* dh, Elf32_Rel *rel) {
   rel = (void*)rel+(long)dh->mem_base;
   loc = (Elf32_Addr *)(dh->mem_base+rel->r_offset);
 
+#ifdef DEBUG
   printf("_dl_apply_relocate %d @ %08lx\n",ELF32_R_TYPE(rel->r_info),(unsigned long)loc);
+#endif
 
   typ = ELF32_R_TYPE(rel->r_info);
 

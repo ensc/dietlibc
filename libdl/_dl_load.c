@@ -28,7 +28,9 @@ static void *do_map_in(void *base, unsigned long length, int flags, int fd, unsi
 }
 
 static void exit_now(void) {
+#ifdef DEBUG
   printf("exit_now: symbol not found\n");
+#endif
   _exit(213);
 }
 
@@ -40,7 +42,7 @@ unsigned long do_rel(struct _dl_handle * tmp_dl, unsigned long off)
 
   register unsigned long sym_val;
 
-#if 1
+#ifdef DEBUG
   printf("do_rel %08lx %08lx\n",(long)tmp_dl,off);
   printf("do_rel %08lx+%lx\n",(long)tmp_dl->plt_rel,off);
   printf("do_rel @ %08lx with type %d -> %d\n",(long)tmp->r_offset,ELF32_R_TYPE(tmp->r_info),sym);
@@ -52,7 +54,9 @@ unsigned long do_rel(struct _dl_handle * tmp_dl, unsigned long off)
   sym_val=(unsigned long)_dl_sym(tmp_dl,sym);
   *((unsigned long*)(tmp_dl->mem_base+tmp->r_offset))=sym_val;
 
+#ifdef DEBUG
   printf("do_rel sym %08lx\n",(long)sym_val);
+#endif
   /* JUMP (arg sysdep...) */
   if (sym_val) return sym_val;
   return (unsigned long)exit_now;
@@ -79,7 +83,9 @@ void *_dl_load(const char*fn, const char*pathname, int fd, int flags)
 
   if (fd==-1) return 0;
 
+#ifdef DEBUG
   printf("_dl_load: %s\n",pathname);
+#endif
 
   if (fstat(fd,&st)<0) {
     close(fd);
@@ -166,7 +172,9 @@ void *_dl_load(const char*fn, const char*pathname, int fd, int flags)
   }
   close(fd);
 
+#ifdef DEBUG
   printf("_dl_load pre resolv\n");
+#endif
   if (ret) {
     Elf32_Dyn* dyn_tab = (void*)m+dyn->p_vaddr;
     void (*init)()=0;
@@ -182,63 +190,89 @@ void *_dl_load(const char*fn, const char*pathname, int fd, int flags)
 
     ret->flag_global = flags&RTLD_GLOBAL;
 
+#ifdef DEBUG
     printf("_dl_load IN resolv\n");
+#endif
     for(i=0;dyn_tab[i].d_tag;i++) {
       if (dyn_tab[i].d_tag==DT_HASH) {
 	ret->hash_tab = (unsigned long*)(m+dyn_tab[i].d_un.d_ptr);
+#ifdef DEBUG
 	printf("_dl_load have hash @ %08lx\n",(long)ret->hash_tab);
+#endif
       }
       if (dyn_tab[i].d_tag==DT_SYMTAB) {
 	ret->dyn_sym_tab = (Elf32_Sym*)(m+dyn_tab[i].d_un.d_ptr);
+#ifdef DEBUG
 	printf("_dl_load have dyn_sym_tab @ %08lx\n",(long)ret->dyn_sym_tab);
+#endif
       }
       if (dyn_tab[i].d_tag==DT_STRTAB) {
 	ret->dyn_str_tab = (char*)(m+dyn_tab[i].d_un.d_ptr);
+#ifdef DEBUG
 	printf("_dl_load have dyn_str_tab @ %08lx\n",(long)ret->dyn_str_tab);
+#endif
       }
 
       /* INIT / FINI */
       if (dyn_tab[i].d_tag==DT_FINI) {
 	ret->fini = (void(*)(void))(m+dyn_tab[i].d_un.d_val);
+#ifdef DEBUG
 	printf("_dl_load have fini @ %08lx\n",(long)ret->fini);
+#endif
       }
       if (dyn_tab[i].d_tag==DT_INIT) {
 	init = (void(*)(void))(m+dyn_tab[i].d_un.d_val);
+#ifdef DEBUG
 	printf("_dl_load have init @ %08lx\n",(long)init);
+#endif
       }
 
       /* PLT / Relocation entries for PLT in GOT */
       if (dyn_tab[i].d_tag==DT_PLTGOT) {
 	got=(unsigned long*)(m+dyn_tab[i].d_un.d_val);
 	ret->pltgot=got;
+#ifdef DEBUG
 	printf("_dl_load have plt got @ %08lx\n",(long)got);
+#endif
       }
       if (dyn_tab[i].d_tag==DT_PLTREL) {
 	pltreltype=dyn_tab[i].d_un.d_val;
+#ifdef DEBUG
 	printf("_dl_load have pltreltype @ %08lx\n",(long)pltreltype);
+#endif
       }
       if (dyn_tab[i].d_tag==DT_PLTRELSZ) {
 	pltrelsize=dyn_tab[i].d_un.d_val;
+#ifdef DEBUG
 	printf("_dl_load have pltrelsize @ %08lx\n",(long)pltrelsize);
+#endif
       }
       if (dyn_tab[i].d_tag==DT_JMPREL) {
 	jmprel=(m+dyn_tab[i].d_un.d_val);
 	ret->plt_rel=jmprel;
+#ifdef DEBUG
 	printf("_dl_load have jmprel @ %08lx\n",(long)jmprel);
+#endif
       }
 
       /* Relocation */
       if (dyn_tab[i].d_tag==DT_REL) {
 	rel=dyn_tab[i].d_un.d_val;
+#ifdef DEBUG
 	printf("_dl_load have rel @ %08lx\n",(long)rel);
+#endif
       }
       if (dyn_tab[i].d_tag==DT_RELENT) {
 	relent=dyn_tab[i].d_un.d_val;
+#ifdef DEBUG
 	printf("_dl_load have relent  @ %08lx\n",(long)relent);
+#endif
       }
       if (dyn_tab[i].d_tag==DT_RELSZ) {
 	relsize=dyn_tab[i].d_un.d_val;
+#ifdef DEBUG
 	printf("_dl_load have relsize @ %08lx\n",(long)relsize);
+#endif
       }
 
       if (dyn_tab[i].d_tag==DT_TEXTREL) {
@@ -248,11 +282,15 @@ void *_dl_load(const char*fn, const char*pathname, int fd, int flags)
 	return 0;
       }
     }
+#ifdef DEBUG
     printf("_dl_load post dynamic scan\n");
+#endif
 
     if ((got=_dlsym(ret,"_GLOBAL_OFFSET_TABLE_"))) {
       ret->got=got;
+#ifdef DEBUG
       printf("_dl_load found a GOT @ %08lx\n",(long)got);
+#endif
       /* GOT */
       got[0]+=(unsigned long)m;	/* reloc dynamic pointer */
       got[1]=(unsigned long)dl_test;
@@ -267,7 +305,9 @@ void *_dl_load(const char*fn, const char*pathname, int fd, int flags)
     }
 
     if (rel) {
+#ifdef DEBUG
       printf("_dl_load try to relocate some values \n");
+#endif
       _dl_relocate(ret,(Elf32_Rel*)rel,relsize/relent);
     }
 
@@ -275,7 +315,9 @@ void *_dl_load(const char*fn, const char*pathname, int fd, int flags)
     for(i=0;dyn_tab[i].d_tag;i++) {
       if (dyn_tab[i].d_tag==DT_NEEDED) {
 	char *lib_name=ret->dyn_str_tab+dyn_tab[i].d_un.d_val;
+#ifdef DEBUG
 	printf("_dl_load needed for this lib: %s\n",lib_name);
+#endif
 	//_dl_open(lib_name,flags);
 	_dl_queue_lib(lib_name,flags);
       }
@@ -286,7 +328,9 @@ void *_dl_load(const char*fn, const char*pathname, int fd, int flags)
     /* do PTL / GOT relocation */
     if (pltreltype == DT_REL) {
       Elf32_Rel *tmp = jmprel;
+#ifdef DEBUG
       printf("_dl_load: rel got\n");
+#endif
       for (;(char*)tmp<(((char*)jmprel)+pltrelsize);(char*)tmp=((char*)tmp)+sizeof(Elf32_Rel)) {
 	if ((flags&RTLD_NOW)) {
 	  unsigned long sym=(unsigned long)_dl_sym(ret,ELF32_R_SYM(tmp->r_info));
@@ -299,13 +343,17 @@ void *_dl_load(const char*fn, const char*pathname, int fd, int flags)
 	}
 	else
 	  *((unsigned long*)(m+tmp->r_offset))+=(unsigned long)m;
+#ifdef DEBUG
 	printf("_dl_load rel @ %08lx with type %d -> %d\n",(long)m+tmp->r_offset,ELF32_R_TYPE(tmp->r_info),ELF32_R_SYM(tmp->r_info));
 	printf("_dl_load -> %08lx\n",*((unsigned long*)(m+tmp->r_offset)));
+#endif
       }
     }
     if (pltreltype == DT_RELA) {
       Elf32_Rela *tmp = jmprel;
+#ifdef DEBUG
       printf("_dl_load: rela got\n");
+#endif
       for (;(char*)tmp<(((char*)jmprel)+pltrelsize);(char*)tmp=((char*)tmp)+sizeof(Elf32_Rel)) {
 	if ((flags&RTLD_NOW)) {
 	  unsigned long sym=(unsigned long)_dl_sym(ret,ELF32_R_SYM(tmp->r_info));
@@ -318,16 +366,22 @@ void *_dl_load(const char*fn, const char*pathname, int fd, int flags)
 	}
 	else
 	  *((unsigned long*)(m+tmp->r_offset))=(unsigned long)(m+tmp->r_addend);
+#ifdef DEBUG
 	printf("_dl_load rela @ %08lx with type %d -> %d\n",(long)m+tmp->r_offset,ELF32_R_TYPE(tmp->r_info),ELF32_R_SYM(tmp->r_info));
 	printf("_dl_load -> %08lx\n",*((unsigned long*)(m+tmp->r_offset)));
+#endif
       }
     }
 
     // _dl_load depending libs ...
+#ifdef DEBUG
     printf("_dl_load post resolv, pre init\n");
+#endif
     if (init) init();
   }
+#ifdef DEBUG
   printf("_dl_load post resolv, post init\n");
+#endif
 
   return ret;
 }

@@ -12,14 +12,22 @@ static void *_dl_sym_search(struct _dl_handle * h, int symbol)
   void *sym=0;
   struct _dl_handle * tmp;
   char *name = h->dyn_str_tab+h->dyn_sym_tab[symbol].st_name;
+#ifdef DEBUG
   printf("_dl_sym_search: search for: %s\n",name);
+#endif
   for (tmp=_dl_root_handle;tmp && (!sym);tmp=tmp->next) {
+#ifdef DEBUG
     printf("_dl_sym_search: searching: %08lx %08lx\n",(long)tmp, (long)h);
+#endif
 //    if (tmp==h) continue;
 //    if (!tmp->flag_global) continue;
+#ifdef DEBUG
     printf("_dl_sym_search: searching in %s\n",tmp->name);
+#endif
     sym=_dlsym((void*)tmp,name);
+#ifdef DEBUG
     if (sym) printf("_dl_sym_search: found: %s @ %08lx\n",name,(long)sym);
+#endif
   }
 //  if (sym) return sym;
 //  return &dummy; // sym;
@@ -35,6 +43,8 @@ void *_dl_sym(struct _dl_handle * h, int symbol)
   else {
     ret = _dl_sym_search(h,symbol);
   }
+#ifdef DEBUG
   printf("_dl_sym %d -> %08lx\n",symbol,(long)ret);
+#endif
   return ret;
 }
