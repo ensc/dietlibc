@@ -402,7 +402,7 @@
   add readdir64 and automatic mapping if _FILE_OFFSET_BITS == 64
   make diet not include the linker safeguard stuff when preprocessing
   Olaf: port to S/390!
-  me: fix vfork (it was put into dietlibc.a twice)
+  fix vfork (it was put into dietlibc.a twice)
   res_query did not initialize last
   diet (not diet-dyn, of course) now adds -static to the gcc command line
   fixed fflush on input streams (tic from ncurses exposed this)
@@ -487,7 +487,7 @@
     a little over 300 bytes on x86.
   Guillaume Cottenceau just wrote me that strncat should be even more
     broken than it already is: it should append n bytes AND THEN \0!
-    I wonder how many programmers have produces off-by-one errors here...
+    I wonder how many programmers have produced off-by-one errors here...
   Fix regexec offset return.  autoconf now believes that diet libc has
     POSIX regular expressions.
   Fix fnmatch (a/b/* matched a/b/c/d even if FNM_PATHNAME was set)
