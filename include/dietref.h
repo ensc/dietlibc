@@ -3,20 +3,23 @@
  * glibc will fail. */
 
 #ifndef NODIETREF
-#include <endian.h>
 #ifdef __ASSEMBLER__
+#include <endian.h>
 .section .note
+.long	4
+.long	2f-1f
+.long	0
+.ascii	"diet"
+1:
 #if (__WORDSIZE == 64)
 .quad __you_tried_to_link_a_dietlibc_object_against_glibc
 #else
 .long __you_tried_to_link_a_dietlibc_object_against_glibc
 #endif
+2:
 .previous
 #else
-#if (__WORDSIZE == 64)
-__asm__ (".section .note\n\t.quad __you_tried_to_link_a_dietlibc_object_against_glibc\n\t.previous");
-#else
-__asm__ (".section .note\n\t.long __you_tried_to_link_a_dietlibc_object_against_glibc\n\t.previous");
-#endif
+#include <dietrefdef.h>
+__dietref("__you_tried_to_link_a_dietlibc_object_against_glibc");
 #endif
 #endif
