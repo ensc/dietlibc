@@ -146,3 +146,17 @@ A: untar binutils and gcc (I used version 2.11.2 and 3.0.4 respectively)
    This is a gcc bug and you should complain using gccbug, because you
    can't cross-compile libc unless you successfully installed the cross
    compiler.
+
+
+Q: Where are the xdr_* symbols?
+Q: Where are the RPC symbols?
+Q: util-linux says that rpcgen output does not work?!
+A: Add -lrpc.  The code is from Sun and frankly it is so ugly and so
+   rarely used that I don't want to include it in libc.
+
+
+Q: I am missing som BSD/GNU extension!
+A: I started adding a few of them to libcompat.  You have to link it in
+   manually, though, as using them is bad for portability and I want
+   people to make a conscious effort to write non-portable applications
+   by not including them in the libc itself.
