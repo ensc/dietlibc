@@ -96,8 +96,8 @@ _dl_jump:
 	pushl	%ecx
 	pushl	%edx
 
-	push	20(%esp)	# 2. arg from plt
-	push	20(%esp)	# 1. arg from plt
+	push	16(%esp)	# 2. arg from plt
+	push	16(%esp)	# 1. arg from plt
 	call	do_resolve
 	add	$8, %esp
 
