@@ -63,4 +63,10 @@
 #define __deprecated__
 #endif
 
+#if (__GNUC_ > 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 3))
+# define __nonnull(params) __attribute__ ((__nonnull__ params))
+#else
+# define __nonnull(params)
+#endif
+
 #endif
