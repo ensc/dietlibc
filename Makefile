@@ -48,7 +48,7 @@ CROSS=
 
 CC=gcc
 
-VPATH=lib:libstdio:libugly:libcruft:libcrypt:libshell:liblatin1:librpc:libregex:syscalls.c
+VPATH=lib:libstdio:libugly:libcruft:libcrypt:libshell:liblatin1:libdl:librpc:libregex:syscalls.c
 
 SYSCALLOBJ=$(patsubst syscalls.s/%.S,$(OBJDIR)/%.o,$(wildcard syscalls.s/*.S))
 
@@ -61,6 +61,8 @@ LIBSHELLOBJ=$(patsubst libshell/%.c,$(OBJDIR)/%.o,$(wildcard libshell/*.c))
 
 LIBRPCOBJ=$(patsubst librpc/%.c,$(OBJDIR)/%.o,$(wildcard librpc/*.c))
 LIBREGEXOBJ=$(patsubst libregex/%.c,$(OBJDIR)/%.o,$(wildcard libregex/*.c))
+
+LIBDLOBJ=$(patsubst libdl/%.c,$(OBJDIR)/%.o,$(wildcard libdl/*.c)) $(OBJDIR)/_dl_jump.o
 
 LIBPTHREAD_OBJS=$(patsubst libpthread/%.c,$(OBJDIR)/%.o,$(shell ./threadsafe.sh)) $(OBJDIR)/__testandset.o
 
@@ -118,6 +120,49 @@ $(OBJDIR)/libpthread.a: $(LIBPTHREAD_OBJS) dietfeatures.h
 $(OBJDIR)/libdietc.so: $(OBJDIR)/dietlibc.a
 	$(CROSS)ld -whole-archive -shared -o $@ $^
 
+# added dynamic linker
+$(OBJDIR)/libdl.a: $(LIBDLOBJ)
+	$(CROSS)ar cru $@ $(LIBDLOBJ)
+
+dynlinker/diet-linux.so: $(OBJDIR)/libdl.a
+	make -C dynlinker
+
+# added real dynamic dietlibc.so
+PICODIR = pic-$(ARCH)
+
+$(PICODIR):
+	mkdir $@
+
+dyn_lib: $(PICODIR)/libdietc.so $(PICODIR)/start.o $(PICODIR)/libpthread.so
+
+$(PICODIR)/%.o: %.S
+	$(CROSS)$(CC) -I. -Iinclude $(CFLAGS) -fPIC -D__DYN_LIB -c $< -o $@
+
+$(PICODIR)/pthread_%.o: libpthread/pthread_%.c
+	$(CROSS)$(CC) -I. -Iinclude $(CFLAGS) -fPIC -D__DYN_LIB -c $< -o $@
+	$(COMMENT) $(CROSS)strip -x -R .comment -R .note $@
+
+$(PICODIR)/%.o: %.c
+	$(CROSS)$(CC) -I. -Iinclude $(CFLAGS) -fPIC -D__DYN_LIB -c $< -o $@
+	$(COMMENT) $(CROSS)strip -x -R .comment -R .note $@
+
+$(PICODIR)/start.o: start.S
+
+DYN_LIBC_PIC = $(LIBOBJ) $(LIBSTDIOOBJ) $(LIBUGLYOBJ) \
+$(LIBCRUFTOBJ) $(LIBCRYPTOBJ) $(LIBSHELLOBJ) $(LIBREGEXOBJ)
+
+DYN_LIBC_OBJ = $(PICODIR)/dyn_syscalls.o \
+	$(patsubst $(OBJDIR)/%.o,$(PICODIR)/%.o,$(DYN_LIBC_PIC))
+
+DYN_PTHREAD_OBJS = $(patsubst $(OBJDIR)/%.o,$(PICODIR)/%.o,$(LIBPTHREAD_OBJS))
+
+$(PICODIR)/libdietc.so: $(PICODIR) $(DYN_LIBC_OBJ)
+	$(CROSS)$(CC) -nostdlib -shared -o $@ $(DYN_LIBC_OBJ) -lgcc
+
+$(PICODIR)/libpthread.so: $(DYN_PTHREAD_OBJS) dietfeatures.h
+	$(CROSS)$(CC) -nostdlib -shared -o $@ $(DYN_PTHREAD_OBJS) -L$(PICODIR) -ldietc
+
+
 $(SYSCALLOBJ): syscalls.h
 
 $(OBJDIR)/elftrunc: $(OBJDIR)/diet contrib/elftrunc.c
@@ -139,7 +184,7 @@ $(OBJDIR)/load:
 
 clean:
 	rm -f *.o *.a t t1 compile load elftrunc exports mapfile libdietc.so
-	rm -rf bin-*
+	rm -rf bin-* pic-*
 	$(MAKE) -C examples clean
 
 tar: clean
