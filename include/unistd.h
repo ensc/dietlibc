@@ -64,7 +64,7 @@ int execvp(const char *file, char *const argv[]) __THROW;
 int execl(const char *path, ...) __THROW;
 int execle(const char *path, ...) __THROW;
 
-pid_t getpid(void) __THROW __attribute__((__const__));
+pid_t getpid(void) __THROW;
 pid_t getppid(void) __THROW;
 
 int setpgid (pid_t pid,pid_t pgid) __THROW;
