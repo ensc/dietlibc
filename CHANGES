@@ -26,6 +26,7 @@
     strftime updates.
     Make _FILE_OFFSET_BITS includes -Wundef clean
   Andre found a typo in endian.h for big endian mips
+  Ryan told me that fmod was not included in libm.  Oops.
 
 0.14:
   fix brk again (missing __brk, trivial oversight)
