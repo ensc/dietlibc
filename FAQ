@@ -169,3 +169,10 @@ A: Always use the CVS version.  We generally don't add unstable test
    standardized, remember?).  In fact, we don't add much stuff at all.
    Most changes are bug fixes and optimizations, and in general you'll
    want those.
+
+
+Q: Does the diet libc support profiling (with gprof)?
+A: There is experimental support for profiling, but so far it only works
+   on x86.  To use it, do "make profiling" before make install.  Then,
+   diet will link in the support code if it finds a -pg on the gcc
+   command line.
