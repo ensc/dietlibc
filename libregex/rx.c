@@ -335,7 +335,7 @@ static const char* parseregex(struct regex*__restrict__ r,const char*__restrict_
   const char *tmp;
   r->m=matchregex;
   r->num=0; r->b=0; r->pieces=0;
-  p->brackets=0;
+  p->brackets=1;
   for (;;) {
     tmp=parsebranch(&b,s,p,&r->pieces);
     if (tmp==s) return s;
@@ -400,6 +400,8 @@ int regexec(const regex_t*__restrict__ preg, const char*__restrict__ string, siz
   while (*string) {
     matched=preg->r.m((void*)&preg->r,string,string-orig,(regex_t*)preg,0,eflags);
     if (matched>=0) {
+      ((regex_t*)preg)->l[0].rm_so=string-orig;
+      ((regex_t*)preg)->l[0].rm_eo=string-orig+matched;
       if ((preg->cflags&REG_NOSUB)==0) memmove(pmatch,preg->l,nmatch*sizeof(regmatch_t));
       return 0;
     }

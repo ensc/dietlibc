@@ -34,8 +34,15 @@
 int foo;
 
 int main(int argc,char *argv[]) {
+  regex_t t;
+  regmatch_t rm;
+  regcomp(&t,"abc",0);
+  printf("%d\n",regexec(&t,"xabc",1,&rm,0));
+  printf("ofs %d\n",rm.rm_so);
+#if 0
   char buf[100];
   printf("%d\n",fread(buf,1,0,stdin));
+#endif
 #if 0
   char buf[100];
   memset(buf,17,100);

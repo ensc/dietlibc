@@ -14,6 +14,8 @@
   Guillaume Cottenceau just wrote me that strncat should be even more
     broken than it already is: it should append n bytes AND THEN \0!
     I wonder how many programmers have produces off-by-one errors here...
+  Fix regexec offset return.  autoconf now believes that diet libc has
+    POSIX regular expressions.
 
 0.10:
   update getpagesize.
