@@ -43,7 +43,8 @@ A: The diet libc works with Linux 2.2 and Linux 2.4 headers and assumes
    path that gcc mentions in the warning will contain "/gcc-lib/".  You
    can either ignore the warning (no harmful consequences as far as we
    know) or delete the offending asm/posix_types.h from the gcc dir (NOT
-   from the kernel source tree!).
+   from the kernel source tree!).  Rumour has it that this will be fixed
+   in kernel 2.4.6.  Thumbs up! ;)
 
 
 Q: There are a few warnings about possibly uninitialized variables when
