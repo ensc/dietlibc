@@ -251,7 +251,6 @@ void encrypt(char block[64], int edflag)
 char * crypt(const char *pw, const char *salt)
 {
   register int i, j, c;
-  int  temp;
   static char block[66], iobuf[16];
 
   for(i=0; i < 66; i++)
