@@ -15,7 +15,7 @@ extern double strtod(const char *s,char **f);
 int vsscanf(const char *str, const char *format, va_list arg_ptr)
 {
   int n=0,div;
-  char ch;
+  unsigned char ch;
 
   char flag_discard, flag_malloc, flag_half, flag_long, flag_longlong;
   char flag_width;
@@ -217,6 +217,63 @@ inn_vsscanf:
 	if (*(str=skip_ws(str)))
 	{
 	  while (width && (!isspace(*str)))
+	  {
+	    if (!flag_discard) *(s++)=*(str);
+	    if (!*str) break;
+	    ++str;
+	    --width;
+	  }
+	}
+	break;
+
+      case '[':
+	{
+	  char cset[256];
+	  int flag_not=0;
+	  int flag_dash=0;
+	  memset(cset,0,sizeof(cset));
+	  ch=*format++;
+
+	  /* first char specials */
+	  if (ch=='^')
+	  {
+	    flag_not=1;
+	    ch=*format++;
+	  }
+	  if ((ch=='-')||(ch==']'))
+	  {
+	    cset[ch]=1;
+	    ch=*format++;
+	  }
+
+	  /* almost all non special chars */
+	  for (;(*format) && (*format!=']');++format) {
+	    if (flag_dash)
+	    {
+	      register unsigned char tmp=*format;
+	      for (;ch<=tmp;++ch) cset[ch]=1;
+	      flag_dash=0;
+	      ch=*(++format);
+	    }
+	    else if (*format=='-') flag_dash=1;
+	    else
+	    {
+	      cset[ch]=1;
+	      ch=*format;
+	    }
+	  }
+
+	  /* last char specials */
+	  if (flag_dash) cset['-']=1;
+	  else cset[ch]=1;
+
+	  /* like %c or %s */
+	  if (!flag_discard)
+	  {
+	    s=(char *)va_arg(arg_ptr,char*);
+	    ++n;
+	  }
+	  while (width && (cset[(unsigned char)(*str)]-flag_not))
 	  {
 	    if (!flag_discard) *(s++)=*(str);
 	    if (!*str) break;
