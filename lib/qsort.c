@@ -43,7 +43,7 @@ void isort(void *base, size_t nmemb, size_t size, int (*compar)(const void *, co
       tmp+=size;
     }
     iswap(min,base,size);
-    (char*)base+=size;
+    base=(void*)((char*)base+size);
     nmemb-=1;
   }
 }
