@@ -41,6 +41,10 @@ __BEGIN_DECLS
 #include <asm/ia64-sigcontext.h>
 #endif
 
+#ifdef __s390__
+#include <asm/s390-sigcontext.h>
+#endif
+
 __END_DECLS
 
 #endif
