@@ -107,7 +107,7 @@ mips:
 __fstat64.o __lstat64.o __stat64.o: dietfeatures.h
 
 # these depend on dietfeatures.h for thread support
-alloc.o perror.o logging.o: dietfeatures.h
+alloc.o perror.o logging.o unified.o: dietfeatures.h
 
 # these depend on dietfeatures.h for linker warnings
 assert_fail.o sprintf.o vsnprintf.o ___div.o fflush.o setvbuf.o system.o sendfile.o: dietfeatures.h
