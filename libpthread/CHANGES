@@ -26,3 +26,9 @@ buggy (g)libc haven't to change... (f..k glibc, the headers HAVE to be
 CONSISTENT)
 a public defined symbol on arch X have to be in Y to unless marked...
 that is mainly speaking SCHED.H ! arg....
+
+Fri Mar 30 18:47:37 MEST 2001
+
+uff found some logic errors and fixed them.
+pthread_create had a problem with user provided stacks.
+

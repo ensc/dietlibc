@@ -20,7 +20,7 @@ static struct _pthread_fastlock __manager_thread_signal_lock = {0};
 static struct _pthread_fastlock __manager_thread_data_lock = {1};
 static struct _pthread_fastlock __manager_thread_data_go_lock = {1};
 
-#define DEBUG
+//#define DEBUG
 
 /* find thread */
 int __find_thread_id(int pid)
