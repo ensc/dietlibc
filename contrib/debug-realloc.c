@@ -14,7 +14,7 @@ void* malloc(size_t size) {
   if (n==MAP_FAILED) return 0;
   m=n-size;  while (m<n) m+=4096;
 //  mprotect(m,size+sizeof(struct malloced),PROT_READ|PROT_WRITE);
-  mprotect(n,((unsigned long)m&4095)+sizeof(struct malloced),PROT_READ|PROT_WRITE);
+  mprotect(n,((unsigned long)m&4095)+sizeof(struct malloced)+(size&~4095),PROT_READ|PROT_WRITE);
   ((struct malloced*)n)->len=size;
   ((struct malloced*)n)->maplen=s;
   ((struct malloced*)n)->next=root;
