@@ -244,6 +244,7 @@ __unified_syscall:
 #include "../syscalls.s/unlink.S"
 #include "../syscalls.s/utime.S"
 #include "../syscalls.s/vhangup.S"
+#include "../syscalls.s/msync.S"
 
 #include "../syscalls.s/chown32.S"
 #include "../syscalls.s/fchown32.S"

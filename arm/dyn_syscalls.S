@@ -177,6 +177,7 @@ __unified_syscall:
 #include "../syscalls.s/waitpid.S"
 #include "../syscalls.s/write.S"
 #include "../syscalls.s/writev.S"
+#include "../syscalls.s/msync.S"
 
 #include "../syscalls.s/chown32.S"
 #include "../syscalls.s/fchown32.S"
