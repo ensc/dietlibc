@@ -60,9 +60,10 @@
   use expect() in a few strategic places
   try to add sigcontext and ucontext for x86_64
   add ffs, ffsl, ffsll
-  Olaf: fxing the error sting list and sparc bug (Gerrit Pape)
+  Olaf: fixing the error string list and sparc bug (Gerrit Pape)
   first throw, then attributes (Andreas Jabs)
   unbuffered fputc was broken on big endian (big oops, thanks Gerrit Pape)
+  fix parisc struct stat (Gerrit Pape)
 
 0.22:
   fix i386 libm
