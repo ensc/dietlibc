@@ -246,8 +246,10 @@ pp:
 #endif
       for (i=2; i<argc; ++i) {
 	if (mangleopts)
-	  if (argv[i][0]=='-' && (argv[i][1]=='O' || argv[i][1]=='f' || argv[i][1]=='m'))
-	    continue;
+	  if (argv[i][0]=='-' && (argv[i][1]=='O' || argv[i][1]=='f' || argv[i][1]=='m')) {
+	    if (strcmp(argv[i],"-fpic") && strcmp(argv[i],"-fno-pic"))
+	      continue;
+	  }
 	*dest++=argv[i];
       }
 #ifndef __DYN_LIB
