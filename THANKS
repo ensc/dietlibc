@@ -14,5 +14,8 @@ Jeff Garzik contributed {get,set}{pw,gr,sp}ent.
 
 Uwe Ohse went through the code and many bugs.
 
+Frank Klemm contributed the math library and a lot of correctness and
+smallness patches and rewrote many functions in ix86 assembly language.
+
 I also grabbed code from glibc (mostly assembly routines), and looked at
 the OpenBSD libc for inspiration.

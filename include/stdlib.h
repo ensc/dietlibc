@@ -49,9 +49,6 @@ void *bsearch(const void *key, const void *base, size_t nmemb, size_t size, int 
 
 extern char **environ;
 
-#define EXIT_SUCCESS 0
-#define EXIT_FAILURE 1
-
 /* now this function is the greatest bullshit I have ever seen.
  * The ISO people must be out of their minds. */
 typedef struct { int quot,rem; } div_t;
