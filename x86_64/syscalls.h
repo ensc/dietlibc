@@ -259,7 +259,7 @@ wsym: ; \
 .type sym,@function; \
 .global sym; \
 sym: \
-	mov	$__NR_##name,%rax; \
+	mov	$__NR_##name,%al; \
 	jmp	__unified_syscall
 
 #define syscall(name,sym) \
@@ -267,6 +267,6 @@ sym: \
 .type sym,@function; \
 .global sym; \
 sym: \
-	mov	$__NR_##name,%rax; \
+	mov	$__NR_##name,%al; \
 	jmp	__unified_syscall
 

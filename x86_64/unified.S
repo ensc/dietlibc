@@ -7,12 +7,13 @@
 exit:
 .global _exit
 _exit:
-	movq	$SYS_exit,%rax
+	mov	$SYS_exit,%al
 
 #ifndef __DYN_LIB
 .global __unified_syscall
 #endif
 __unified_syscall:
+	movzbq	%al, %rax
 	syscall
 	cmpq	$0, %rax
 	jge	.Lnoerror
