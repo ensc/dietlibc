@@ -3,8 +3,8 @@
 #include <sys/types.h>
 #include <string.h>
 
-char *strncpy(char *dest, const char *src, size_t n)
-{
+#undef strncpy
+char *strncpy(char *dest, const char *src, size_t n) {
   memccpy(dest,src,0,n);
   return dest;
 }
