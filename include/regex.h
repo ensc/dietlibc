@@ -23,7 +23,9 @@ typedef struct {
 
 #define RE_DUP_MAX 255
 
-typedef int (*matcher)(void*,const char*,int ofs,regmatch_t* matches,int plus);
+struct __regex_t;
+
+typedef int (*matcher)(void*,const char*,int ofs,struct __regex_t *t,int plus,int eflags);
 
 typedef struct __regex_t {
   struct regex {
@@ -34,6 +36,7 @@ typedef struct __regex_t {
     struct branch *b;
   } r;
   int brackets,cflags;
+  regmatch_t *l;
 } regex_t;
 
 int regcomp(regex_t *preg, const char *regex, int cflags) __THROW;

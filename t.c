@@ -20,6 +20,7 @@
 #include <sys/mman.h>
 #include <ctype.h>
 #include <mntent.h>
+#include <regex.h>
 
 #if 0
 int compint(const void *a,const void *b) {
@@ -45,11 +46,16 @@ static int rand() {
 extern double atof(const char *c);
 
 int main(int argc,char *argv[]) {
+  regex_t t;
+  regcomp(&t,"\\<foobAr",0);
+  printf("%d\n",regexec(&t," fooBarbaz",0,0,0));
+#if 0
   float my_float = 9.2334;
   char buffer[100];
 
   sprintf(buffer, "%.2f", my_float);
   fprintf(stdout, "%s", buffer);
+#endif
 #if 0
   printf("%d\n",setenv("foo","bar",0));
   printf("%d\n",setenv("foo","bar",1));

@@ -39,6 +39,8 @@
   imported fix for entlib by Jeff Garzik.
   add glob implementation from Guillaume Cottenceau (Thanks!!)
   add libdl fragments from Olaf (Yeah!  One step closer to dynamic linking!)
+  add REG_ICASE and word start/end handling to my regular expressions.
+  my regular expressions now actually match substrings (i.e. "foobar" to "bar").
 
 0.9:
   fixed initgroups (oops)
