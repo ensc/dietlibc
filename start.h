@@ -1,10 +1,14 @@
 .section ".bss"
-	.align 8
+.align 8
 
-	.weak errno
+.weak errno
 errno:
+.global __errno
+__errno:
 	.long 0
 
-	.weak environ
+.weak environ
 environ:
+.global __environ
+__environ:
 	.long 0
