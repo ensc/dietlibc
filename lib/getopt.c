@@ -56,7 +56,7 @@ int getopt(int c,char*v[],char*o)
   {
     if (nextchar)
     {
-      if (ret=(*(++nextchar)))
+      if ((ret=(*(++nextchar))))
       {
 	switch (getopt_check(ret,o,ol))
 	{
