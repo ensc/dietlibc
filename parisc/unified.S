@@ -32,5 +32,9 @@ __unified_syscall:
 	ldi -1, %ret0
 	nop
 .Lnoerr:
+
+/* here we go and "reuse" the return for weak-void functions */
+#include "dietuglyweaks.h"
+
 	bv,n %r0(%rp)
 	nop
