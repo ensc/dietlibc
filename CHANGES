@@ -10,6 +10,7 @@
     the built-in defaults.
   add file "SECURITY".  I will document design tradeoffs that have
     security implications there.
+  fixed regex LINEEND condition
 
 0.20:
   calloc was botched
