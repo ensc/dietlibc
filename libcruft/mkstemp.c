@@ -16,7 +16,6 @@ int mkstemp(char* template) {
       int hexdigit=(random>>(i*5))&0x1f;
       tmp[i]=hexdigit>9?hexdigit+'a'-10:hexdigit+'0';
     }
-    puts(template);
     res=open(template,O_CREAT|O_RDWR|O_EXCL,0600);
     if (res>=0) return res;
   }
