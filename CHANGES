@@ -25,6 +25,7 @@
   add memrchr (Emil)
   remove __attribute__((const)) from getpid() (Yuri Kozlov)
   make getserv* also work if proto is NULL (Jens Låås)
+  now clone on parisc works (Thomas Ogrisegg)
 
 0.17:
   fix several bugs in getservent_r
