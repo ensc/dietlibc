@@ -1,3 +1,5 @@
+0.17:
+
 0.16:
   "diet -v" or "diet -Os" segfaulted without further arguments.
   Andre found two very embarassing bugs in my four lines of md5 glue.

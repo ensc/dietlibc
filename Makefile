@@ -111,7 +111,7 @@ PWD=$(shell pwd)
 .SUFFIXES:
 .SUFFIXES: .S .c
 
-$(OBJDIR):
+$(OBJDIR) $(PICODIR):
 	mkdir $@
 
 % :: %,v
@@ -166,9 +166,6 @@ dynlinker/diet-linux.so: $(OBJDIR)/libdl.a
 
 # added real dynamic dietlibc.so
 PICODIR = pic-$(ARCH)
-
-$(PICODIR):
-	mkdir $@
 
 dyn_lib: $(PICODIR) $(PICODIR)/libdietc.so $(PICODIR)/dstart.o \
 	$(PICODIR)/dyn_so_start.o $(PICODIR)/dyn_start.o $(PICODIR)/dyn_stop.o \
