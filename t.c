@@ -94,9 +94,9 @@ int main(int argc,char *argv[]) {
   char *tmp;
   printf("%lu\n",strtol("0xf0000000",&tmp,0));
 #endif
-#if 0
+#if 1
   struct mntent* me;
-  FILE* f=fopen("/tmp/mounts","r");
+  FILE* f=fopen("/etc/fstab","r");
   while (me=getmntent(f)) {
     printf("%s %s %s %s %d %d\n",me->mnt_fsname,me->mnt_dir,me->mnt_type,me->mnt_opts,me->mnt_freq,me->mnt_passno);
   }
@@ -253,7 +253,7 @@ int main(int argc,char *argv[]) {
   printf("%p %p\n",inet_ntop(AF_INET6,ip,buf,100),buf);
   puts(buf);
 #endif
-#if 1
+#if 0
   struct addrinfo *ai;
   struct addrinfo hints;
   char buf[16];
