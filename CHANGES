@@ -13,6 +13,9 @@
   remove some compiler warnings (Luc Van Oostenryck)
   better rand() from Knuth's TAOCP (Luc Van Oostenryck)
   fix unified x86_64 unified syscall 64-bit return value issue (Gwenole)
+  the getdents64 emulation was broken and repairing it opened a can of
+    worms.  So I ripped it out.  I also changed the readdir64 emulation
+    to work if there is no getdents64.
 
 0.21:
   use gcc's size_t, ptrdiff_t and wchar_t types (Olaf)

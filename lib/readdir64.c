@@ -5,6 +5,11 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
+#include "syscalls.h"
+
+#ifndef __NR_getdents64
+#define WANT_LARGEFILE_BACKCOMPAT
+#endif
 
 #ifndef WANT_LARGEFILE_BACKCOMPAT
 struct dirent64* readdir64(DIR *d) {
@@ -17,11 +22,15 @@ struct dirent64* readdir64(DIR *d) {
 }
 #else
 struct dirent64* readdir64(DIR *d) {
+#ifndef __NR_getdents64
   static int trygetdents64=1;
+#endif
   struct dirent* o;
   static struct dirent64 d64;
 again:
+#ifndef __NR_getdents64
   if (!trygetdents64) {
+#endif
     if (!d->num || (d->cur += ((struct dirent*)(d->buf+d->cur))->d_reclen)>=d->num) {
       int res=getdents(d->fd,(struct dirent*)d->buf, sizeof (d->buf)-1);
       if (res<=0) return 0;
@@ -34,6 +43,7 @@ again:
     strcpy(d64.d_name,o->d_name);
     d64.d_type=0;	/* is this correct? */
     return &d64;
+#ifndef __NR_getdents64
   }
   if (!d->num || (d->cur += ((struct dirent64*)(d->buf+d->cur))->d_reclen)>=d->num) {
     int res=getdents64(d->fd,(struct dirent64*)d->buf,sizeof (d->buf));
@@ -47,5 +57,6 @@ again:
     d->num=res; d->cur=0;
   }
   return (struct dirent64*)(d->buf+d->cur);
+#endif
 }
 #endif
