@@ -3,6 +3,7 @@
     incorrectly.
   new reboot() from Olaf.
   added prototypes for getsockopt and setsockopt.
+  define EXIT_SUCCESS and EXIT_FAILURE
   added experimental sem*
 
 0.7.2:

@@ -64,7 +64,7 @@ clean:
 	$(MAKE) -C examples clean
 
 tar: clean
-	if test -d armv4l; then test -s armv4l || rmdir armv4l; fi
+	rm -f armv4l
 	ln -sf arm armv4l
 	cd ..; tar cvvf dietlibc.tar.bz2 dietlibc --use=bzip2 --exclude CVS
 
