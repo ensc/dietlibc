@@ -10,6 +10,9 @@
     stat64 (they also define STAT64_HAS_BROKEN_ST_INO).  If this does
     not work for you, please tell me!
   Removed bogus __seek_types enum, it's a bunch of #defines now.
+  Fixed stdio line buffering.  The code was already there but I forgot
+    to mark stdio and stdout as line buffered.  This should really be
+    done dynamically using isatty, though.
 
 0.6.14:
   *scanf did not append the 0 byte for %s.

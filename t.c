@@ -9,6 +9,8 @@
 
 int main() {
   printf("%d\n",strcmp("ustar","ustar"));
+  sleep(1);
+  printf("duh\n");
 #if 0
   int i;
   for (i=0; i<5; i++) {

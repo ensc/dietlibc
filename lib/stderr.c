@@ -1,7 +1,7 @@
 #include <dietstdio.h>
 
 #ifdef WANT_BUFFERED_STDIO
-static FILE __stderr = { 2, 0, 0, 0 };
+static FILE __stderr = { 2, BUFLINEWISE, 0, 0 };
 
 int __fflush_stderr() {
   return fflush(stderr);
