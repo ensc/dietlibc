@@ -1,5 +1,6 @@
-#include <linux/types.h>
-#include <linux/unistd.h>
+#include <sys/types.h>
+#include <errno.h>
+#include "syscalls.h"
 
 int mmap(void*start,size_t length,int prot,int flags,int fd,off_t offset) {
   unsigned long __sc_ret, __sc_err;
@@ -29,9 +30,10 @@ int mmap(void*start,size_t length,int prot,int flags,int fd,off_t offset) {
 	      "r"   (__sc_6),
 	      "r"   (__sc_7),
 	      "r"   (__sc_8)
-	    : __syscall_clobbers);
+	    : "r4", "r5", "r6", "r7", "r8", "r9", "r10", "r11", "r12");
     __sc_ret = __sc_3;
     __sc_err = __sc_0;
   }
-  __syscall_return (int);
+  return (__sc_err & 0x10000000 ? errno = __sc_ret, __sc_ret = -1 : 0),
+	  (int) __sc_ret;
 }

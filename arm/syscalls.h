@@ -1,3 +1,4 @@
+#define __NR_SYSCALL_BASE	0x900000
 
 #define __NR_exit			(__NR_SYSCALL_BASE+  1)
 #define __NR_fork			(__NR_SYSCALL_BASE+  2)
