@@ -86,6 +86,10 @@ typedef int sig_atomic_t;
 
 typedef void (*sighandler_t)(int);
 
+#ifdef _BSD_SOURCE
+typedef sighandler_t sig_t;
+#endif
+
 #define SIG_DFL ((sighandler_t)0)	/* default signal handling */
 #define SIG_IGN ((sighandler_t)1)	/* ignore signal */
 #define SIG_ERR ((sighandler_t)-1)	/* error return from signal */

@@ -12,8 +12,6 @@
 #include <resolv.h>
 #include "dietfeatures.h"
 
-extern int h_errno;
-
 extern void __dns_make_fd(void);
 extern int __dns_fd;
 
@@ -158,11 +156,12 @@ int __dns_gethostbyx_r(const char* name, struct hostent* result,
 	  *h_errnop=0;
 	  *RESULT=result;
 	  return 0;
-	}
+	} /* timeout */
 /*kaputt:*/
       }
     }
   }
+  *h_errnop=TRY_AGAIN;
   return 1;
 }
 
