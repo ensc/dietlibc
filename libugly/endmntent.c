@@ -2,6 +2,7 @@
 #include <mntent.h>
 
 int endmntent(FILE *filep) {
-  return fclose(filep);
+  fclose(filep);
+  return 1;
 }
 
