@@ -283,9 +283,9 @@ inn_vsscanf:
 	  }
 	}
 	break;
+#endif
       }
       break;
-#endif
 
     default:
       if (prevfmt<format) {
