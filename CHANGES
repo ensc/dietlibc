@@ -35,6 +35,7 @@
     Thanks, Anthony de Boer
   Olaf: added clone and a new unified_syscall for PowerPC
     also dynlinker is now available (i386 only at this time)
+  crufted together a stdarg.h implementation from the various gcc headers.
 
 0.10:
   update getpagesize.
