@@ -23,7 +23,7 @@ unsigned long int strtoul(const char *ptr, char **endptr, int base)
     if (*nptr=='0') {
       base=8;
 skip0x:
-      if (nptr[1]=='x'||nptr[1]=='X') {
+      if ((nptr[1]=='x'||nptr[1]=='X') && isxdigit(nptr[2])) {
 	nptr+=2;
 	base=16;
       }

@@ -7,6 +7,7 @@
 
 main() {
   char* c, *s;
+
   assert(strtol(s="123",&c,0)==123 && c==s+3);
   assert(strtol(s="+123",&c,0)==123 && c==s+4);
   assert(strtol(s="  123",&c,0)==123 && c==s+5);
@@ -61,7 +62,7 @@ main() {
 #endif
 
   assert(strtoul(s="  0",&c,0)==0 && c==s+3);
-  assert(strtoul(s="0xffffffffg",&c,0)==0xffffffff && c==s+10 && errno==0);
+  errno=0; assert(strtoul(s="0xffffffffg",&c,0)==0xffffffff && c==s+10 && errno==0);
 #if LONG_MAX == 0x7fffffff
   assert(strtoul(s="-0xfedcba98",&c,0)==0x01234568 && c==s+11 && errno==0);
   assert(strtoul(s="0xf1f2f3f4f5",&c,0)==0xffffffff && c==s+12 && errno==ERANGE);
@@ -72,6 +73,8 @@ main() {
   assert(strtoul(s="0xf1f2f3f4f5f6f7f8f9",&c,0)==0xffffffffffffffff && c==s+20 && errno==ERANGE);
   assert(strtoul(s="-0x123456789abcdef01",&c,0)==0xffffffffffffffff && c==s+20 && errno==ERANGE);
 #endif
+
+  assert(strtoul(s="0x,",&c,0)==0 && c==s+1);
   return 0;
 }
 
