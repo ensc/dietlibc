@@ -2,4 +2,4 @@
 CFLAGS+=-Os -Iinclude -fomit-frame-pointer -fstrict-aliasing
 VPATH:=alpha:syscalls.s:$(VPATH)
 
-LIBOBJ+=divq.o divl.o remq.o reml.o seteuid.o
+LIBOBJ+=divq.o divl.o remq.o reml.o seteuid.o __time.o
