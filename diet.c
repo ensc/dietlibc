@@ -113,6 +113,9 @@ int main(int argc,char *argv[]) {
 #ifdef __sh__
       shortplatform="sh";
 #endif
+#ifdef __hppa__
+      shortplatform="parisc";
+#endif
       strcat(platform,shortplatform);
     }
     strcat(dashL,platform);

@@ -104,6 +104,18 @@ typedef long int __jmp_buf[58];
 #endif
 #endif
 
+#ifdef __hppa__
+#ifndef __ASSEMBLER__
+typedef double __jmp_buf[21];
+#endif
+#endif
+
+#ifdef __hppa__
+#ifndef __ASSEMBLER__
+typedef double __jmp_buf[21];
+#endif
+#endif
+
 #ifndef __ASSEMBLER__
 
 //typedef int sig_atomic_t;

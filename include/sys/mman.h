@@ -91,6 +91,25 @@
 #define MADV_SEQUENTIAL	0x2		/* read-ahead aggressively */
 #define MADV_WILLNEED	0x3		/* pre-fault pages */
 #define MADV_DONTNEED	0x4		/* discard these pages */
+
+#elif defined(__hppa__)
+#define MAP_TYPE    0x03        /* Mask for type of mapping */
+#define MAP_FIXED   0x04        /* Interpret addr exactly */
+#define MAP_ANONYMOUS   0x10        /* don't use a file */
+
+#define MAP_DENYWRITE   0x0800      /* ETXTBSY */
+#define MAP_EXECUTABLE  0x1000      /* mark it as an executable */
+#define MAP_LOCKED  0x2000      /* pages are locked */
+#define MAP_NORESERVE   0x4000      /* don't check for reservations */
+#define MAP_GROWSDOWN   0x8000      /* stack-like segment */
+
+#define MS_SYNC     1       /* synchronous memory sync */
+#define MS_ASYNC    2       /* sync memory asynchronously */
+#define MS_INVALIDATE   4       /* invalidate the caches */
+
+#define MCL_CURRENT 1       /* lock all current mappings */
+#define MCL_FUTURE  2
+
 #endif
 
 /* compatibility flags */

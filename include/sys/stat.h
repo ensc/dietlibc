@@ -346,6 +346,53 @@ __extension__	long long	st_size;
 __extension__	unsigned long long	st_ino;
 };
 
+#elif defined(__hppa__)
+
+struct stat {
+	unsigned long long st_dev;
+	unsigned short int _pad1;
+	unsigned long st_ino;
+	unsigned long st_mode;
+	unsigned long st_nlink;
+	unsigned long st_uid;
+	unsigned long st_gid;
+	unsigned long long st_rdev;
+	unsigned short int _pad2;
+	unsigned long st_size;
+	unsigned long st_blksize;
+	unsigned long st_blocks;
+	unsigned long st_atime;
+	unsigned long int unused1;
+	unsigned long st_mtime;
+	unsigned long int unused2;
+	unsigned long st_ctime;
+	unsigned long int unused3;
+	unsigned long long unused4;
+};
+
+struct stat64 {
+	unsigned long long st_dev;
+	unsigned int __pad1;
+	unsigned long __st_ino;
+	unsigned long st_mode;
+	unsigned long st_nlink;
+	unsigned long st_uid;
+	unsigned long st_gid;
+	unsigned long long st_rdev;
+	unsigned int __pad2;
+	unsigned long long st_size;
+	unsigned long long st_blksize;
+
+	unsigned long long st_blocks;
+ 	unsigned long st_atime;
+	unsigned long int __unused1;
+	unsigned long st_mtime;
+	unsigned long int __unused2;
+	unsigned long st_ctime;
+	unsigned long int __unused3;
+	unsigned long long st_ino;
+};
+
 #endif
 
 #define S_IFMT  00170000

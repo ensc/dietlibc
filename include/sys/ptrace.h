@@ -362,6 +362,31 @@ struct pt_regs {
 #define PT_FPR0	48	/* each FP reg occupies 2 slots in this space */
 #define PT_FPR31 (PT_FPR0 + 2*31)
 #define PT_FPSCR (PT_FPR0 + 2*32 + 1)
+
+#elif defined(__hppa__)
+
+struct pt_regs {
+	unsigned long gr[32];	/* PSW is in gr[0] */
+	__u64 fr[32];
+	unsigned long sr[ 8];
+	unsigned long iasq[2];
+	unsigned long iaoq[2];
+	unsigned long cr27;
+	unsigned long pad0;     /* available for other uses */
+	unsigned long orig_r28;
+	unsigned long ksp;
+	unsigned long kpc;
+	unsigned long sar;	/* CR11 */
+	unsigned long iir;	/* CR19 */
+	unsigned long isr;	/* CR20 */
+	unsigned long ior;	/* CR21 */
+	unsigned long ipsw;	/* CR22 */
+};
+
+#define PTRACE_SINGLEBLOCK	12	/* resume execution until next branch */
+#define PTRACE_GETSIGINFO	13	/* get child's siginfo structure */
+#define PTRACE_SETSIGINFO	14	/* set child's siginfo structure */
+
 #endif
 
 extern long int ptrace (int request, ...) __THROW;

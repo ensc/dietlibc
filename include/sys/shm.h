@@ -58,7 +58,7 @@ struct shm_info {
   unsigned long swap_successes;
 };
 
-#if defined(__i386__) || defined(__mips__) || defined(__arm__) || defined(__powerpc__) || defined(__s390__)
+#if defined(__i386__) || defined(__mips__) || defined(__arm__) || defined(__powerpc__) || defined(__s390__) || defined(__hppa__)
 #define PAGE_SIZE 4096UL
 #elif defined(__alpha__) || defined(__sparc__)
 /* sun4* has 4k except sun4 architecture, sparc64 has 8k */

@@ -37,7 +37,11 @@ else
 ifeq ($(MYARCH),mipsel)
 ARCH=mipsel
 else
+ifeq ($(MYARCH),parisc)
+ARCH=parisc
+else
 $(error unknown architecture, please fix Makefile)
+endif
 endif
 endif
 endif

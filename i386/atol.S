@@ -1,54 +1,54 @@
+/*
+  Copyright (C) 2001, 2002 Thomas M. Ogrisegg
+
+  This is free software. You can redistribute and
+  modify it under the terms of the GNU General Public
+  Public License.
+
+  atol.S
+    i386 assembler implementation of atoi(3) & atol(3)
+*/
 
 .text
-.type   atoi,@function
-.type   atol,@function
-.global atoi
-.global atol
+.globl atoi
+.globl atol
+.type atoi,@function
+.type atol,@function
 
 atoi:
-atol:
-        movl    4(%esp),%ecx
-        push    %edi
-
-        xorl    %edi,%edi               # sign = +1
-        incl    %edi
-
-        decl    %ecx
-.Lspaces:
-        incl    %ecx                    # while ( isspace(*p) ) p++;
-        movb    (%ecx),%al
-        cmpb    $' ',%al
-        je      .Lspaces
-        subb    $9,%al
-        cmpb    $5,%al
-        jc      .Lspaces                # c = *p - 9;
-
-        cmpb    $'+'-9,%al              # if ( c == '+' - 9 ) p++;
-        je      .Lpos
-        cmpb    $'-'-9,%al              # else if ( c == '-' - 9 ) sign = -sign, p++;
-        jne     .Lnosign
-        neg     %edi
-.Lpos:  incl    %ecx
-.Lnosign:
-
-        xorl    %edx,%edx               # value = 0;
-.Lcont: movzbl  (%ecx),%eax             # while ( (unsigned) (*p - '0') < 10 )
-        inc     %ecx
-        subb    $'0',%al
-        cmpb    $10,%al
-        jnc     .Lfini
-        imull   $10,%edx                #     value = 10*value + (*p - '0');
-        addl    %eax,%edx
-        jmp     .Lcont
-
-.Lfini: xchg    %edx,%eax               # return value * sign;
-        imul    %edi,%eax
-
-        pop     %edi
-        ret
-
-.Lende:
-
-.size    atoi,.Lende-atoi
-.size    atol,.Lende-atol
-
+	pushl %esi
+	movl 0x8(%esp), %esi
+	xorl %eax, %eax
+	xorl %edx, %edx
+	xorb %cl, %cl
+.LSpace:
+	lodsb
+	cmpb $0x21, %al
+	jng .LSpace
+	cmpb $'+', %al
+	jz .Lfe5
+	cmpb $'-', %al
+	jnz .Lfe3
+	inc %cl
+	jmp .Lfe5
+.Lfe2:
+	imul $0xa, %edx
+	addl %eax, %edx
+.Lfe5:
+	lodsb
+.Lfe3:
+	cmpb $47, %al
+	jng .Lout
+	subb $('0'), %al
+	cmpb $0xa, %al
+	jng .Lfe2
+.Lout:
+	movl %edx, %eax
+	or %cl, %cl
+	jz .Lreturn
+	negl %eax
+.Lreturn:
+	popl %esi
+	ret
+.size	atoi, . - atoi
+.size	atol, . - atol

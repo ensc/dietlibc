@@ -1,4 +1,8 @@
 0.14:
+  a new i386/atol.S that is 4 bytes smaller (and faster, too!).  Thanks,
+    Thomas Ogrisegg!
+  Thomas also contributed a PA-RISC port including testandset and clone,
+    so libpthread should also work!  Great work, Thomas.
 
 0.13:
   add readdir64 and automatic mapping if _FILE_OFFSET_BITS == 64

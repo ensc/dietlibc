@@ -47,4 +47,10 @@
 
 #endif
 
+#ifdef __hppa__
+
+#include "parisc/syscalls.h"
+
+#endif
+
 #endif

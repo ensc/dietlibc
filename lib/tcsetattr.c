@@ -3,7 +3,7 @@
 #include <errno.h>
 #include "dietfeatures.h"
 
-#if !defined(__powerpc__) && !defined(__sparc__) && !defined(__alpha__)
+#if !defined(__powerpc__) && !defined(__sparc__) && !defined(__alpha__) && !defined(__hppa__)
 #if TCSANOW==0 && TCSADRAIN==1 && TCSAFLUSH==2 && TCSETSW-TCSETS==1 && TCSETSF-TCSETS==2
 #define shortcut
 #endif

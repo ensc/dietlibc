@@ -482,6 +482,66 @@ struct flock64 {
   pid_t  l_pid;
 };
 
+#elif defined(__hppa__)
+
+/* Copied from bits/fcntl.h */
+
+#define O_RDONLY    00000000
+#define O_WRONLY    00000001
+#define O_RDWR      00000002
+#define O_ACCMODE   00000003
+#define O_APPEND    00000010
+#define O_BLKSEEK   00000100 /* HPUX only */
+#define O_CREAT     00000400 /* not fcntl */
+#define O_TRUNC     00001000 /* not fcntl */
+#define O_EXCL      00002000 /* not fcntl */
+#define O_ASYNC     00020000
+#define O_SYNC      00100000
+#define O_NONBLOCK  00200004 /* HPUX has separate NDELAY & NONBLOCK */
+#define O_NDELAY    O_NONBLOCK
+#define O_NOCTTY    00400000 /* not fcntl */
+#define O_DIRECTORY  00010000
+
+#define F_DUPFD     0   /* Duplicate file descriptor.  */
+#define F_GETFD     1   /* Get file descriptor flags.  */
+#define F_SETFD     2   /* Set file descriptor flags.  */
+#define F_GETFL     3   /* Get file status flags.  */
+#define F_SETFL     4   /* Set file status flags.  */
+#define F_GETLK     5   /* Get record locking info.  */
+#define F_SETLK     6   /* Set record locking info (non-blocking).  */
+#define F_SETLKW    7   /* Set record locking info (blocking).  */
+
+#define F_GETLK64   8   /* Get record locking info.  */
+#define F_SETLK64   9   /* Set record locking info (non-blocking).  */
+#define F_SETLKW64  10  /* Set record locking info (blocking).  */
+
+#define FD_CLOEXEC  1   /* actually anything with low bit set goes */
+
+#define F_RDLCK     1   /* Read lock.  */
+#define F_WRLCK     2   /* Write lock.  */
+#define F_UNLCK     3   /* Remove lock.  */
+
+#define F_EXLCK     4   /* or 3 */
+#define F_SHLCK     8   /* or 4 */
+
+struct flock
+{
+    short int l_type;   /* Type of lock: F_RDLCK, F_WRLCK, or F_UNLCK.  */
+    short int l_whence; /* Where `l_start' is relative to (like `lseek').  */
+    off_t l_start;    /* Offset where the lock begins.  */
+    off_t l_len;  /* Size of the locked area; zero means until EOF.  */
+    pid_t l_pid;  /* Process holding the lock.  */
+};
+
+struct flock64
+{
+    short int l_type;   /* Type of lock: F_RDLCK, F_WRLCK, or F_UNLCK.  */
+    short int l_whence; /* Where `l_start' is relative to (like `lseek').  */
+    off64_t l_start;  /* Offset where the lock begins.  */
+    off64_t l_len;    /* Size of the locked area; zero means until EOF.  */
+    pid_t l_pid;  /* Process holding the lock.  */
+};
+
 #endif
 
 extern int fcntl (int __fd, int __cmd, ...) __THROW;
