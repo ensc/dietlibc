@@ -1,6 +1,8 @@
 #ifndef _SYS_SELECT_H
 #define _SYS_SELECT_H
 
+#include <string.h>
+
 typedef long int fd_mask;
 
 #define NFDBITS	(8 * sizeof(unsigned long))
