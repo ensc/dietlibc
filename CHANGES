@@ -1,6 +1,7 @@
 0.10:
   update getpagesize.
   add personality.
+  add "%*s" and "%*.*s" support to vsnprintf.
 
 0.9:
   fixed initgroups (oops)

@@ -42,9 +42,7 @@ static int rand() {
 extern double atof(const char *c);
 
 int main(int argc,char *argv[]) {
-  printf("%d\n",fgetc(stdin));
-  printf("%d\n",ungetc(23,stdin));
-  printf("%d\n",fgetc(stdin));
+  printf("%*.*s\n",5,7,"foo bar baz");
 #if 0
   struct passwd *p=getpwnam("leitner");
   struct spwd *s=getspnam("leitner");

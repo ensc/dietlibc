@@ -26,7 +26,10 @@ ifeq ($(CFLAGS),-pipe)
 CFLAGS+=-O -fomit-frame-pointer
 endif
 
-#CFLAGS = -g
+ifneq ($(DEBUG),)
+CFLAGS = -g
+COMMENT = :
+endif
 CFLAGS += -Wall
 
 PWD=$(shell pwd)
@@ -44,7 +47,7 @@ $(OBJDIR)/%.o: %.S
 
 $(OBJDIR)/%.o: %.c
 	$(CROSS)$(CC) -I. -Iinclude $(CFLAGS) -c $< -o $@
-	$(CROSS)strip -x -R .comment -R .note $@
+	$(COMMENT) $(CROSS)strip -x -R .comment -R .note $@
 
 DIETLIBC_OBJ = $(SYSCALLOBJ) $(LIBOBJ) $(LIBSTDIOOBJ) $(LIBUGLYOBJ) \
 $(LIBCRUFTOBJ) $(LIBCRYPTOBJ) $(LIBSHELLOBJ) \

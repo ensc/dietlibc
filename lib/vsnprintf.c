@@ -89,10 +89,19 @@ inn_vsnprintf:
 	format=pb;
 	goto inn_vsnprintf;
 
+      case '*':
+	width=va_arg(arg_ptr,int);
+	goto inn_vsnprintf;
+
       case '.':
 	flag_dot=1;
-	preci=strtol(format,&pb,10);
-	format=pb;
+	if (*format=='*') {
+	  preci=va_arg(arg_ptr,int);
+	  ++format;
+	} else {
+	  preci=strtol(format,&pb,10);
+	  format=pb;
+	}
 	goto inn_vsnprintf;
 
 /* Format conversion chars */
@@ -108,6 +117,8 @@ inn_vsnprintf:
 	if (!pb) pb="(null)";
 #endif
 	buf_len=strlen(pb);
+	if (flag_dot && buf_len>preci) buf_len=preci;
+	if (buf_len>size-apos) buf_len=size-apos;
 
 print_out:
 	if (str) {
@@ -115,7 +126,7 @@ print_out:
 	  {
 	    for (pad=width-buf_len; pad>0; --pad) str[apos++]=padwith;
 	  }
-	  for(i=0;(pb[i])&&(apos<size);i++) { str[apos++]=pb[i]; } /* strncpy */
+	  for(i=0;i<buf_len;++i) { str[apos++]=pb[i]; } /* strncpy */
 	  if (width && (flag_left))
 	  {
 	    for (pad=width-buf_len; pad>0; --pad) str[apos++]=padwith;
@@ -124,8 +135,7 @@ print_out:
 	  if (width) {
 	    apos+=width>buf_len?width:buf_len;
 	  } else {
-	    int a=strlen(pb);
-	    if (a>size) apos+=size; else apos+=a;
+	    apos+=size>buf_len?buf_len:size;
 	  }
 	}
 

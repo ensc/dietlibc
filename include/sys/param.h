@@ -3,4 +3,6 @@
 
 #include <limits.h>
 
+#define MAXPATHLEN     PATH_MAX
+
 #endif
