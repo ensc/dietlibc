@@ -1,6 +1,8 @@
-.global environ
-#ifdef __alpha__
-.comm   environ,8
-#else
-.comm   environ,4
-#endif
+.section ".bss"
+.align 8
+
+.type environ,object
+.weak environ
+environ:
+	.long 0
+

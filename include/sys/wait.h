@@ -4,6 +4,8 @@
 #include <sys/cdefs.h>
 #include <sys/resource.h>
 
+#define _POSIX_VERSION
+
 #define WNOHANG		0x00000001
 #define WUNTRACED	0x00000002
 
