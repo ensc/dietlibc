@@ -63,6 +63,8 @@
   Added overflow handling for strtoul and strtol.
   Added WANT_ETC_HOSTS in dietfeatures.h and made gethostbyname/2 use
     it before falling back to DNS if enabled.
+  Added a littie backwards compatibility cruft for gpm (man, do these
+    sources stink!)
 
 0.10:
   update getpagesize.

@@ -76,7 +76,12 @@ void closelog(void) {
 #endif
 
 int main(int argc,char *argv[]) {
+#if 0
+  printf("0x%8.7lx\n",0xfefe);
+#endif
+#if 0
   puts(ttyname(0));
+#endif
 #if 0
   char buf[1024];
   struct hostent* r;

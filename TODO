@@ -20,3 +20,5 @@ logging.
 new stdio.
 
 EINTR handling (*puke*).  What about EAGAIN?
+
+bizarre printf bullshit: "%8.7lx",0xfefe should yield " 000fefe"?!
