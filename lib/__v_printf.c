@@ -182,6 +182,7 @@ print_out:
       case 'x':
 	base=16;
 	sz=0;
+	if (flag_dot) width=preci;
 	if (flag_hash) {
 	  buf[1]='0';
 	  buf[2]=ch;

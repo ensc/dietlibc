@@ -37,8 +37,9 @@ int __dtostr(double d,char *buf,unsigned int maxlen,unsigned int prec,unsigned i
     return i;
   }
 
-  if (d < 0.0) { d=-d; *buf='-'; --maxlen; buf++; }
-  
+  if (d < 0.0) { d=-d; *buf='-'; --maxlen; ++buf; }
+  if (d < 1.0) { *buf='0'; --maxlen; ++buf; }
+
    /*
       Perform rounding. It needs to be done before we generate any
       digits as the carry could propagate through the whole number.
