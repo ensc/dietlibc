@@ -57,6 +57,7 @@ int __dtostr(double d,char *buf,unsigned int maxlen,unsigned int prec,unsigned i
       else
 	digit=(int)(fraction);		/* floor() */
       if (!first || digit) {
+	first=0;
 	*buf=digit+'0'; ++buf;
 	if (!maxlen) {
 	  /* use scientific notation */
