@@ -13,6 +13,7 @@
   Use -isystem instead of -I for our system includes (Paul Jarc)
   Add MNT_DETACH to sys/mount.h
   add pselect
+  fix for tzfile (Felix J. Ogris)
 
 0.25:
   fix sprintf

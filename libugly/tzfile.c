@@ -103,22 +103,19 @@ time_t __tzfile_map(time_t t, int *isdst, int forward) {
       }
     }
   } else {	/* reverse map, for mktime */
-    time_t prevtz,nexttz=0,lastval=0;
+    time_t nexttz=0,lastval=0;
 //    printf("tzh_timecnt: %d\n",tzh_timecnt);
     for (i=0; i<tzh_timecnt-1; ++i) {
-      char* x,* tz;
-      int j;
-      long k;
+      unsigned char* x, j;
+      long k=0;
 //      printf("ab %ld: ",__myntohl(tmp+i*4));
-      prevtz=nexttz;
       x=tmp+tzh_timecnt*4;
       j=x[i-1];
-      tz+=tzh_timecnt*5+tzh_leapcnt*4+tzh_typecnt*6;
       nexttz=__myntohl(x+tzh_timecnt+j*6);
 //      printf("%ld - %ld (want %ld)\n",lastval,__myntohl(tmp+i*4)-nexttz,t);
       if (lastval <= t && (k=(__myntohl(tmp+i*4)-nexttz)) > t) {
-//	printf("FOUND!1!!  Offset %d\n",prevtz);
-	return t-prevtz;
+//	printf("FOUND!1!!  Offset %d\n",nexttz);
+	return t-nexttz;
       }
       lastval=k;
     }
