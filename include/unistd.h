@@ -209,4 +209,6 @@ void setusershell(void);
 void endusershell(void);
 #endif
 
+#define   _POSIX_VERSION  199506L
+
 #endif
