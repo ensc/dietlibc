@@ -78,7 +78,7 @@ int gethostbyaddr_r(const char* addr, size_t length, int format,
     }
     memcpy(buf,addr,result->h_length);
     result->h_addr_list[0]=buf;
-    result->h_addr_list[1]=buf;
+    result->h_addr_list[1]=0;
   }
   return res;
 }
