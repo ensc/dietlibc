@@ -1,6 +1,7 @@
 #include <signal.h>
 #include <asm/errno.h>
 #include <errno.h>
+#include <unistd.h>
 #include "dietwarning.h"
 
 #define SHELL_PATH      "/bin/sh"       /* Path of the shell.  */

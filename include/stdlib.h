@@ -29,6 +29,7 @@ int __lltostr(char *s, int size, unsigned long long i, int base, char UpCase) __
 int atoi(const char *nptr) __THROW;
 double atof(const char *nptr) __THROW;
 
+void exit(int status) __THROW __attribute__((noreturn));
 void abort(void) __THROW;
 
 /* warning: the rand() implementation of the diet libc really sucks. */

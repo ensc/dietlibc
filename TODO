@@ -2,9 +2,4 @@ provide __divq for Alpha.
 
 popen, pclose -> libdietugly
 
-buffer.o(.text+0x281): undefined reference to `setbuf'
-buffer.o(.text+0x8bf): undefined reference to `shmget'
-buffer.o(.text+0x9ec): undefined reference to `shmdt'
-buffer.o(.text+0xa8a): undefined reference to `shmctl'
-buffer.o(.text+0xad5): undefined reference to `shmat'
-
+sem* for Alpha.

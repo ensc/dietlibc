@@ -18,7 +18,7 @@ __unified_syscall:
 	mvn	r0, #0
 	mov	pc, lr
 
-#ifdef WANT_THREAD_SAVE
+#ifndef WANT_THREAD_SAVE
 .L0:
 	.long errno
 #endif

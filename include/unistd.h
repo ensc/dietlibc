@@ -80,6 +80,8 @@ int sync(void) __THROW;
 
 int isatty(int desc) __THROW;
 
+void _exit(int status) __THROW __attribute__((noreturn));
+
 extern int daemon (int nochdir,int noclose) __THROW;
 
 #if _FILE_OFFSET_BITS == 64

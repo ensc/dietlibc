@@ -1,4 +1,5 @@
 #include "getopt.h"
+#include <string.h>
 
 /*
  * by Olaf Dreesen

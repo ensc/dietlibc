@@ -4,7 +4,10 @@
 #include <sys/cdefs.h>
 #include <sys/types.h>
 
+/* man, the Linux kernel headers suck */
+#define __USE_BSD
 #include <linux/termios.h>
+#undef __USE_BSD
 
 pid_t tcgetpgrp(int fd) __THROW;
 int tcsetpgrp(int fd, pid_t pgrpid) __THROW;

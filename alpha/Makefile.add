@@ -1,5 +1,5 @@
 
-CFLAGS+=-Os -fno-builtin -Iinclude -fomit-frame-pointer -fstrict-aliasing
+CFLAGS+=-Os -Iinclude -fomit-frame-pointer -fstrict-aliasing
 VPATH:=alpha:syscalls.s:$(VPATH)
 
 LIBOBJ+=divq.o

@@ -5,6 +5,16 @@
 #include <sys/types.h>
 #include <linux/socket.h>
 
+#ifndef SOCK_DGRAM
+/* the Linux kernel headers suck really badly on non-x86 */
+#define SOCK_STREAM	1		/* stream (connection) socket	*/
+#define SOCK_DGRAM	2		/* datagram (conn.less) socket	*/
+#define SOCK_RAW	3		/* raw socket			*/
+#define SOCK_RDM	4		/* reliably-delivered message	*/
+#define SOCK_SEQPACKET	5		/* sequential packet socket	*/
+#define SOCK_PACKET	10		/* linux specific way of	*/
+#endif
+
 int socket(int domain, int type, int protocol) __THROW;
 int accept(int s, struct sockaddr *addr, socklen_t *addrlen) __THROW;
 int connect(int sockfd, const struct sockaddr *serv_addr, socklen_t addrlen) __THROW;

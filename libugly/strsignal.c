@@ -1,6 +1,8 @@
 #include <signal.h>
 /* F....ng Kernel haeder is damn broken... */
+#ifndef _NSIG
 #define _NSIG 64
+#endif
 #include <asm/signal.h>
 
 char * strsignal(int sig) {

@@ -86,7 +86,7 @@ int __dns_gethostbyx_r(const char* name, struct hostent* result,
 	if (poll(&duh,1,1) == 1) {
 	  /* read and parse answer */
 	  unsigned char inpkg[1500];
-	  int len=read(__dns_fd,inpkg,1500);
+	  /*int len=*/ read(__dns_fd,inpkg,1500);
 	  /* header, question, answer, authority, additional */
 	  if (inpkg[0]!=packet[0] || inpkg[1]!=packet[1]) continue;	/* wrong ID */
 	  if ((inpkg[2]&0xf9) != 0x81) continue;	/* not answer */
@@ -129,7 +129,8 @@ int __dns_gethostbyx_r(const char* name, struct hostent* result,
 		  if (decofs<0) break;
 		  tmp=inpkg+decofs;
 		  slen=strlen(name);
-		}
+		} else
+		  slen=strlen(name);
 		strcpy(cur,name);
 		if (names==0)
 		  result->h_name=cur;
@@ -155,7 +156,7 @@ int __dns_gethostbyx_r(const char* name, struct hostent* result,
 	  *RESULT=result;
 	  return 0;
 	}
-kaputt:
+/*kaputt:*/
       }
     }
   }
