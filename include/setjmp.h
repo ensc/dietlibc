@@ -118,7 +118,7 @@ typedef double __jmp_buf[21];
 
 #ifndef __ASSEMBLER__
 
-//typedef int sig_atomic_t;
+/* typedef int sig_atomic_t; */
 #define __sig_atomic_t sig_atomic_t
 
 # define _SIGSET_NWORDS	(1024 / (8 * sizeof (unsigned long int)))
