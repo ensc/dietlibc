@@ -18,12 +18,13 @@ __start:
 	lw	$a0, 0($sp)	/* load argc */
 	addu	$a1, $sp, 4	/* load argv.  huh?  should be 4, right? */
 
-	and     $sp, 0xfffffff8	/* align stack to 8 bytes */
-	subu    $sp, 16		/* make room for 4 arguments */
+	and	$sp, 0xfffffff8	/* align stack to 8 bytes */
+	subu	$sp, 24		/* make room for 4 arguments, RA + pad */
 	/* I don't understand the MIPS calling convention.  Why do you
 	   need to make room on the stack for arguments you pass in
 	   registers?  Anyway, if we don't do this, the arguments are
 	   garbled. */
+	sw	$ra, 20($sp)	/* close stack frame */
 
 	addu	$a2, $a0, 1	/* load envp */
 	sll	$a2, $a2, 2
