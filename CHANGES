@@ -19,6 +19,8 @@
   fix gethostent alias list termination.  Major oops.
   add execle and two DNS constants (from Johannes Kloos).
   opendir did not close-on-exec (thanks, Laurent Bercot).
+  DNS will now properly signal errors and set h_errno.
+  A few more cleanups (thanks, Andreas Jabs and Matthias Andree).
 
 0.11:
   fix major oops in DNS routines (only with WANT_FULL_RESOLV_CONF enabled).

@@ -75,10 +75,10 @@ void *alloca(size_t size) __THROW; /* gcc built-in */
 
 char *realpath(const char *path, char *resolved_path) __THROW;
 
-int mkstemp(char *template);
-char* mkdtemp(char *template);
+int mkstemp(char *_template);
+char* mkdtemp(char *_template);
 
-char* mktemp(char *template);
+char* mktemp(char *_template);
 
 int abs(int i) __THROW __attribute__((const));
 long int labs(long int i) __THROW __attribute__((const));

@@ -64,7 +64,7 @@ int execvp(const char *file, char *const argv[]) __THROW;
 int execl(const char *path, ...) __THROW;
 int execle(const char *path, ...) __THROW;
 
-pid_t getpid(void) __attribute__((__const__)) __THROW;
+pid_t getpid(void) __THROW __attribute__((__const__));
 pid_t getppid(void) __THROW;
 
 int setpgid (pid_t pid,pid_t pgid) __THROW;
@@ -154,7 +154,7 @@ char *crypt(const char *key, const char *salt) __THROW;
 void encrypt(char block[64], int edflag) __THROW;
 void setkey(const char *key) __THROW;
 
-size_t getpagesize(void) __attribute__((__const__)) __THROW;
+size_t getpagesize(void) __THROW __attribute__((__const__));
 
 int getdomainname(char *name, size_t len) __THROW;
 int setdomainname(const char *name, size_t len) __THROW;
