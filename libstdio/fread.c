@@ -12,7 +12,6 @@ size_t fread( void *ptr, size_t size, size_t nmemb, FILE *stream) {
   if (stream->ungotten) {
     stream->ungotten=0;
     *(char*)ptr=stream->ungetbuf;
-    --j;
     ++i;
   }
   if (!j) return 1;
