@@ -20,6 +20,9 @@ int raise (int sig) __THROW;
 int sigaction(int signum, const struct sigaction *act, struct sigaction *oldact) __THROW;
 int sigaltstack(const struct sigaltstack *newstack, struct sigaltstack *oldstack) __THROW;
 
+int sigsuspend(const sigset_t *mask) __THROW;
+int sigpending(sigset_t *set) __THROW;
+
 #ifndef SIGCLD
 #define SIGCLD SIGCHLD
 #endif

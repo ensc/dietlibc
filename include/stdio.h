@@ -3,6 +3,7 @@
 
 #include <sys/cdefs.h>
 #include <sys/types.h>
+#include <sys/stat.h>
 
 typedef struct __stdio_file FILE;
 
@@ -56,9 +57,16 @@ long ftell(FILE *stream) __THROW;
 off_t fseeko(FILE *stream, off_t offset, int whence) __THROW;
 off_t ftello(FILE *stream) __THROW;
 
-#ifdef __quad_t
-off64_t fseeko64(FILE *stream, off64_t offset, int whence) __THROW;
-off64_t ftello64(FILE *stream) __THROW;
+#ifndef __NO_STAT64
+loff_t fseeko64(FILE *stream, loff_t offset, int whence) __THROW;
+loff_t ftello64(FILE *stream) __THROW;
+
+#if _FILE_OFFSET_BITS == 64
+#define off_t loff_t
+#define fseeko(foo,bar,baz) fseeko64(foo,bar,baz)
+#define ftello(foo) ftello64(foo)
+#endif
+
 #endif
 
 void rewind(FILE *stream) __THROW;

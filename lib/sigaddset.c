@@ -1,14 +1,7 @@
-#define __KERNEL__
-#define sigaddset foobar
-#include <asm/signal.h>
-#undef sigaddset
+#include <signal.h>
 
-int __sigaddset(sigset_t *set, int signo) {
-  unsigned long sig = signo - 1;
-  if (_NSIG_WORDS == 1)
-    set->sig[0] |= 1UL << sig;
-  else
-    set->sig[sig / _NSIG_BPW] |= 1UL << (sig % _NSIG_BPW);
+int __sigaddset(sigset_t *set, int sig) {
+  *set |= (1UL << (sig-1));
   return 0;
 }
 

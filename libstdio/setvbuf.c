@@ -15,4 +15,4 @@ int setvbuf(FILE *stream, char *buf, int flags , size_t size) {
   return 0;
 }
 
-link_warning("setvbuf","setvbuf does not implement changing the buffer in diet libc.")
+link_warning("setvbuf","warning: setvbuf does not implement changing the buffer in diet libc.")

@@ -27,10 +27,23 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <netdb.h>
+#include <signal.h>
 
 int foo;
 
 int main(int argc,char *argv[]) {
+  sigset_t s;	/* sigsetops */
+
+#if 0
+  if (fork()==0) {
+    sleep(2);
+    exit(0);
+  }
+#endif
+  sigemptyset(&s);
+  sigaddset(&s,SIGCHLD);
+  sigaddset(&s,SIGHUP);
+  sigsuspend(&s);
 #if 0
   char buf[1024];
   FILE *f=popen("uname -srm","r");
@@ -53,7 +66,7 @@ int main(int argc,char *argv[]) {
   printf("%p %p\n",inet_ntop(AF_INET6,ip,buf,100),buf);
   puts(buf);
 #endif
-#if 1
+#if 0
   struct addrinfo *ai;
   struct addrinfo hints;
   char buf[16];
