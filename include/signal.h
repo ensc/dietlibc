@@ -8,6 +8,8 @@
 #include <linux/types.h>
 #include <linux/signal.h>
 
+typedef int sig_atomic_t;
+
 typedef void (*sighandler_t)(int);
 
 int sigemptyset(sigset_t *set) __THROW;

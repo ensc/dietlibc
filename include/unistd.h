@@ -116,6 +116,9 @@ void _exit(int status) __THROW __attribute__((noreturn));
 
 extern int daemon (int nochdir,int noclose) __THROW;
 
+int pause(void) __THROW;
+int reboot (int flag) __THROW;
+
 #if _FILE_OFFSET_BITS == 64
 #define open open64
 #define creat creat64
@@ -148,7 +151,7 @@ int select(int n, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct t
 
 int nice(int inc) __THROW;
 
-extern char *__environ[];
+extern char **__environ;
 
 char *crypt(const char *key, const char *salt) __THROW;
 void encrypt(char block[64], int edflag) __THROW;

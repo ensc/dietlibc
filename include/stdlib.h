@@ -31,6 +31,9 @@ int atoi(const char *nptr) __THROW;
 long int atol(const char *nptr) __THROW;
 double atof(const char *nptr) __THROW;
 
+#define EXIT_FAILURE 1
+#define EXIT_SUCCESS 0
+
 void exit(int status) __THROW __attribute__((noreturn));
 void abort(void) __THROW;
 

@@ -22,7 +22,7 @@ struct protoent *getprotoent(void) {
   char *last;
   int aliasidx;
   if (protofd<0) {
-    protofd=open(_PATH_SERVICES,O_RDONLY);
+    protofd=open(_PATH_PROTOCOLS,O_RDONLY);
     if (protofd<0) return 0;
     protolen=lseek(protofd,0,SEEK_END);
     protomap=mmap(0,protolen,PROT_READ|PROT_WRITE,MAP_PRIVATE,protofd,0);
