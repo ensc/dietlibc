@@ -25,6 +25,7 @@ _start:
 	movl gp = @gprel(0f)  /* base offset */
 	;;
 	adds out2 = 24, out1  /* get offset to environ/envp */
+	;;
 0:	
 	ld8 out0 = [out1], 8  /* load argc and set argv */
 	mov r9 = ip
