@@ -42,6 +42,7 @@ extern void __dns_readstartfiles(void);
 int res_mkquery(int op, const char *dname, int class, int type, char* data,
 		int datalen, const unsigned char* newrr, char* buf, int buflen) {
   unsigned char packet[512];
+  unsigned long len=0;
   memmove(packet,dnspacket,12);
   if ((_res.options&RES_RECURSE)==0) packet[2]=0;
   *(unsigned short*)packet=rand();
@@ -52,10 +53,12 @@ int res_mkquery(int op, const char *dname, int class, int type, char* data,
     while (*y) {
       while (*y=='.') ++y;
       for (tmp=y; *tmp && *tmp!='.'; ++tmp) ;
+      if (tmp-y > 63) return -1;
       *x=tmp-y;
       if (!(tmp-y)) break;
+      if ((len+=*x+1) > 254) return -1;
       ++x;
-      if (x>=packet+510-(tmp-y)) { return -1; }
+//      if (x>=packet+510-(tmp-y)) { return -1; }
       memmove(x,y,tmp-y);
       x+=tmp-y;
       if (!*tmp) {
