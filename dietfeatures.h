@@ -35,9 +35,6 @@
  * string */
 /* #define WANT_FULL_POSIX_COMPAT */
 
-/* read the comment in lib/strncat.c for an explanation */
-#define WANT_NON_COMPLIANT_STRNCAT
-
 /* on i386, Linux has an alternate syscall method since 2002/12/16 */
 /* on my Athlon XP, it is twice as fast, but it's only in kernel 2.5 */
 /* 20040118: enabling this breaks User Mode Linux!  It's their fault. */
