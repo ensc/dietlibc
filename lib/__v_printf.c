@@ -17,6 +17,18 @@ static inline int skip_to(const unsigned char *format) {
 
 #define A_WRITE(fn,buf,sz)	((fn)->put((void*)(buf),1,(sz),(fn)->data))
 
+static char* pad_line[16]= { "                ", "0000000000000000", };
+static inline int write_pad(struct arg_printf* fn, int len, char padwith) {
+  int nr=0;
+  for (;len>15;len-=16,nr+=16) {
+    A_WRITE(fn,pad_line[(padwith=='0')?1:0],16);
+  }
+  if (len>0) {
+    A_WRITE(fn,pad_line[(padwith=='0')?1:0],len); nr+=len;
+  }
+  return nr;
+}
+
 int __v_printf(struct arg_printf* fn, const unsigned char *format, va_list arg_ptr)
 {
   int len=0;
@@ -28,11 +40,10 @@ int __v_printf(struct arg_printf* fn, const unsigned char *format, va_list arg_p
       format+=sz;
     }
     if (*format=='%') {
-      char buf[1024];
+      char buf[128];
 
       unsigned char ch, *s, padwith=' ';
 
-//      char flag_zero=0;
       char flag_in_sign=0;
       char flag_upcase=0;
       char flag_hash=0;
@@ -131,38 +142,31 @@ inn_printf:
 
 print_out:
 	if (width && (!flag_left)) {
-	  int pad;
-	  for (pad=width-sz; pad>0; --pad) {
-	    A_WRITE(fn,&padwith,1); ++len;
-	  }
+	  len+=write_pad(fn,width-sz,padwith);
 	}
 	A_WRITE(fn,s,sz); len+=sz;
 	if (width && (flag_left)) {
-	  int pad;
-	  for (pad=width-sz; pad>0; --pad) {
-	    padwith=' ';
-	    A_WRITE(fn,&padwith,1); ++len;
-	  }
+	  len+=write_pad(fn,width-sz,' ');
 	}
 	break;
 
       /* print an integer value */
       case 'b':
 	base=2;
+	sz=0;
 	goto num_printf;
       case 'p':
 	flag_hash=1;
-	width=sizeof(void *)<<1;
-	padwith='0';
 	ch='x';
       case 'X':
 	flag_upcase=(ch=='X');
       case 'x':
 	base=16;
+	sz=0;
 	if (flag_hash) {
-	  char min[2]="0x";
-	  min[1]=ch;
-	  A_WRITE(fn,min,2); len+=2;
+	  buf[1]='0';
+	  buf[2]=ch;
+	  sz=2;
 	}
 	goto num_printf;
       case 'd':
@@ -170,11 +174,14 @@ print_out:
 	flag_in_sign=1;
       case 'u':
 	base=10;
+	sz=1;
 	goto num_printf;
       case 'o':
 	base=8;
+	sz=0;
 	if (flag_hash) {
-	  A_WRITE(fn,"0",1); ++len;
+	  buf[1]='0';
+	  ++sz;
 	}
 
 num_printf:
@@ -202,10 +209,10 @@ num_printf:
 	if (flag_long<-1) number&=0xff;
 #ifdef WANT_LONGLONG_PRINTF
 	if (flag_long>1)
-	  sz = __lltostr(buf+1,sizeof(buf)-1,(unsigned long long) llnumber,base,flag_upcase);
+	  sz += __lltostr(buf+1+sz,sizeof(buf)-5,(unsigned long long) llnumber,base,flag_upcase);
 	else
 #endif
-	  sz = __ltostr(buf+1,sizeof(buf)-1,(unsigned long) number,base,flag_upcase);
+	  sz += __ltostr(buf+1+sz,sizeof(buf)-5,(unsigned long) number,base,flag_upcase);
 
 	s=buf+1;
 
