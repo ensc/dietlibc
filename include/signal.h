@@ -23,18 +23,20 @@
 #define SIGTRAP		 5
 #define SIGABRT		 6
 #define SIGIOT		 6
-#define SIGBUS		 7
 #define SIGFPE		 8
 #define SIGKILL		 9
-#define SIGUSR1		10
 #define SIGSEGV		11
-#define SIGUSR2		12
 #define SIGPIPE		13
 #define SIGALRM		14
 #define SIGTERM		15
+
+#if defined(__i386__) || defined(__x86_64__) || defined(__powerpc__) || defined(__arm__) \
+	|| defined(__s390__) || defined(__ia64__)
+#define SIGBUS		 7
+#define SIGUSR1		10
+#define SIGUSR2		12
 #define SIGSTKFLT	16
 #define SIGCHLD		17
-#define SIGCLD		SIGCHLD
 #define SIGCONT		18
 #define SIGSTOP		19
 #define SIGTSTP		20
@@ -47,16 +49,106 @@
 #define SIGPROF		27
 #define SIGWINCH	28
 #define SIGIO		29
-#define SIGPOLL		SIGIO
 #define SIGPWR		30
 #define SIGSYS		31
 #define SIGUNUSED	31
+#elif defined(__alpha__) || defined(__sparc__)
+#define SIGEMT		 7
+#define SIGBUS		10
+#define SIGSYS		12
+#define SIGURG		16
+#define SIGSTOP		17
+#define SIGTSTP		18
+#define SIGCONT		19
+#define SIGCHLD		20
+#define SIGTTIN		21
+#define SIGTTOU		22
+#define SIGIO		23
+#define SIGXCPU		24
+#define SIGXFSZ		25
+#define SIGVTALRM	26
+#define SIGPROF		27
+#define SIGWINCH	28
+#define SIGPWR		29
+#define SIGUSR1		30
+#define SIGUSR2		31
+#ifdef (__alpha__)
+#define SIGINFO		SIGPWR
+#endif
+#elif defined(__mips__)
+#define SIGEMT		 7
+#define SIGBUS		10
+#define SIGSYS		12
+#define SIGUSR1		16
+#define SIGUSR2		17
+#define SIGCHLD		18
+#define SIGPWR		19
+#define SIGWINCH	20
+#define SIGURG		21
+#define SIGIO		22
+#define SIGSTOP		23
+#define SIGTSTP		24
+#define SIGCONT		25
+#define SIGTTIN		26
+#define SIGTTOU		27
+#define SIGVTALRM	28
+#define SIGPROF		29
+#define SIGXCPU		30
+#define SIGXFSZ		31
+#elif defined(__hppa__)
+#define SIGEMT		 7
+#define SIGBUS		10
+#define SIGSYS		12
+#define SIGUSR1		16
+#define SIGUSR2		17
+#define SIGCHLD		18
+#define SIGPWR		19
+#define SIGVTALRM	20
+#define SIGPROF		21
+#define SIGIO		22
+#define SIGWINCH	23
+#define SIGSTOP		24
+#define SIGTSTP		25
+#define SIGCONT		26
+#define SIGTTIN		27
+#define SIGTTOU		28
+#define SIGURG		29
+#define SIGPWR		30
+#define SIGUNUSED	31
+
+#define SIGXCPU		33
+#define SIGXFSZ		34
+#define SIGSTKFLT	36
+
+#else
+#error signal layout not yet known
+#endif
+
+#define SIGCLD		SIGCHLD
+#define SIGLOST		SIGPWR
+#define SIGPOLL		SIGIO
 
 /* These should not be considered constants from userland.  */
+#ifdef __hppa__
+#define SIGRTMIN	37
+#else
 #define SIGRTMIN	32
+#endif
 #define SIGRTMAX	(_NSIG-1)
 
 /* SA_FLAGS values: */
+#ifdef __hppa__
+#define SA_ONSTACK      0x00000001
+#define SA_RESETHAND    0x00000004
+#define SA_NOCLDSTOP    0x00000008
+#define SA_SIGINFO      0x00000010
+#define SA_NODEFER      0x00000020
+#define SA_RESTART      0x00000040
+#define SA_NOCLDWAIT    0x00000080 /* not supported yet */
+#define _SA_SIGGFAULT   0x00000100 /* HPUX */
+#define SA_INTERRUPT    0x20000000 /* dummy -- ignored */
+#define SA_RESTORER     0x04000000 /* obsolete -- ignored */
+#else
 #define SA_NOCLDSTOP	0x00000001
 #define SA_NOCLDWAIT	0x00000002 /* not supported yet */
 #define SA_SIGINFO	0x00000004
@@ -66,6 +158,7 @@
 #define SA_INTERRUPT	0x20000000 /* dummy -- ignored */
 #define SA_NODEFER	0x40000000
 #define SA_RESETHAND	0x80000000
+#endif
 
 /* ugh, historic Linux legacy, for gpm :-( */
 #define SA_NOMASK	SA_NODEFER
