@@ -45,4 +45,15 @@ extern struct hostent *gethostbyaddr (const void *__addr, socklen_t __len,
 extern struct hostent *gethostbyname (const char *__name) __THROW;
 extern struct hostent *gethostbyname2 (const char *__name, int __af) __THROW;
 
+/* this glibc "invention" is so ugly, I'm going to throw up any minute
+ * now */
+extern int gethostbyname_r(const char* NAME, struct hostent* RESULT_BUF,char* BUF,
+			   size_t BUFLEN, struct hostent** RESULT,
+			   int* H_ERRNOP) __THROW;
+
+#define HOST_NOT_FOUND 1
+#define TRY_AGAIN 2
+#define NO_RECOVERY 3
+#define NO_ADDRESS 4
+
 #endif

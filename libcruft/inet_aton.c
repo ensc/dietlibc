@@ -38,6 +38,6 @@ int inet_aton(const char *cp, struct in_addr *inp) {
     }
     return 0;
   }
-  inp->s_addr=ip;
+  inp->s_addr=htonl(ip);
   return 1;
 }

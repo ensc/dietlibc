@@ -14,6 +14,7 @@
 #include <sys/shm.h>
 #include <math.h>
 #include <termios.h>
+#include <netdb.h>
 
 #if 0
 int compint(const void *a,const void *b) {
@@ -37,7 +38,8 @@ static int rand() {
 #endif
 
 int main(int argc,char *argv[]) {
-  printf("%g %g\n",1e-10,1e10);
+  struct hostent *foo=gethostbyname("knuth.fefe.de");
+/*  printf("%g %g\n",1e-10,1e10); */
 #if 0
   double d=0.0;
   long long t=0x12345678ABCDEF01;
