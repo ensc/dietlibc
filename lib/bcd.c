@@ -31,13 +31,13 @@ int  __decompose_floatp ( long double number,
     if ( number > 0.L ) {
     
     	// Exponent abtrennen
-        if ( number >= 10.L )
+        if ( number >= 10.L ) {
             for ( i = sizeof(powers)/sizeof(*powers)-1; i >= 0; i--)
                 if ( number >= powers [i] ) {
                     number /= powers [i];
                     ret += 1 << i;
                 }
-        else if ( number < 1.L )
+	} else if ( number < 1.L )
             for ( i = sizeof(powers)/sizeof(*powers)-1; i >= 0; i--)
                if ( number * powers [i] < 10.L ) {
                    number *= powers [i];

@@ -21,10 +21,12 @@ Return value    return their return values as doubles.
 
 #include <math.h>
 
-#define M_1_PI          0.318309886183790671538
 #define M_C             0.5772156649015328
+#if 0
+#define M_1_PI          0.318309886183790671538
 #define M_2_PI          0.636619772367581343076
 #define M_PI            3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117067982148
+#endif
 
 
 #define EXPL(x)   ((((short *)&x)[4] & 0x7FFF) >> 0)
