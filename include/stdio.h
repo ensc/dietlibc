@@ -4,7 +4,6 @@
 #include <sys/cdefs.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-/* #include <unistd.h> */
 
 typedef struct __stdio_file FILE;
 
@@ -110,5 +109,13 @@ int setvbuf(FILE *stream, char *buf, int mode , size_t size) __THROW;
 
 FILE *popen(const char *command, const char *type) __THROW;
 int pclose(FILE *stream) __THROW;
+
+#ifndef SEEK_SET
+#define SEEK_SET 0
+#define SEEK_CUR 1
+#define SEEK_END 2
+#endif
+
+char *tmpnam(char *s) __THROW;	/* DO NOT USE!!! Use mkstemp instead! */
 
 #endif

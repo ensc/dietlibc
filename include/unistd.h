@@ -21,9 +21,11 @@ int getopt(int argc, char *const argv[], const char *options);
 /* Test for access to NAME using the real UID and real GID.  */
 extern int access (const char *__name, int __type) __THROW;
 
+#ifndef SEEK_SET
 #define SEEK_SET 0
 #define SEEK_CUR 1
 #define SEEK_END 2
+#endif
 
 #define STDIN_FILENO   0
 #define STDOUT_FILENO  1
