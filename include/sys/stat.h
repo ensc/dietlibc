@@ -189,6 +189,7 @@ __extension__	long long	st_size;
 	time_t		st_ctime;
 	unsigned long	reserved2;	/* Reserved for st_atime expansion  */
 	unsigned long	st_blksize;
+	unsigned long   st_pad2;
 __extension__	long long	st_blocks;
 };
 #elif defined(__powerpc__)
