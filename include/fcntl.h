@@ -358,11 +358,9 @@ struct flock64 {
 #define F_SETSIG	10	/*  for sockets. */
 #define F_GETSIG	11	/*  for sockets. */
 
-//#if !defined(__powerpc64__)
 #define F_GETLK64	12	/*  using 'struct flock64' */
 #define F_SETLK64	13
 #define F_SETLKW64	14
-//#endif
 
 /* for F_[GET|SET]FL */
 #define FD_CLOEXEC	1	/* actually anything with low bit set goes */
@@ -399,7 +397,6 @@ struct flock {
   pid_t l_pid;
 };
 
-//#if !defined(__powerpc64__)
 struct flock64 {
   short  l_type;
   short  l_whence;
@@ -407,7 +404,6 @@ struct flock64 {
   loff_t l_len;
   pid_t  l_pid;
 };
-//#endif
 
 #elif defined (__arm__)
 

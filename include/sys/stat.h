@@ -243,7 +243,6 @@ struct stat {
 
 /* This matches struct stat64 in glibc2.1.
  */
-//#if !defined(__powerpc64__)
 struct stat64 {
 __extension__	unsigned long long st_dev; 	/* Device.  */
 __extension__	unsigned long long st_ino;	/* File serial number.  */
@@ -266,7 +265,6 @@ __extension__	long long st_blocks;		/* Number 512-byte blocks allocated. */
 	unsigned long int __unused4;
 	unsigned long int __unused5;
 };
-//#endif
 #elif defined(__arm__)
 struct stat {
 	unsigned short	st_dev;
