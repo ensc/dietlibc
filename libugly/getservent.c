@@ -86,6 +86,7 @@ error:
 
 struct servent *getservbyport(int port, const char *proto) {
   struct servent *s;
+  cur=servicesmap;
   for (s=getservent(); s; s=getservent()) {
     if (port==s->s_port && !strcmp(proto,s->s_proto))
       return s;

@@ -115,6 +115,7 @@ struct protoent *getprotobyname(const char *name) {
 
 struct protoent *getprotobynumber(int proto) {
   struct protoent *s;
+  setprotoent(0);
   for (s=getprotoent(); s; s=getprotoent()) {
     if (proto==s->p_proto)
       return s;
