@@ -19,7 +19,9 @@ int main() {
   strcat(buf,"baz.");
   assert(!strcmp(buf,"foo bar baz."));
   memset(buf,0,100);
-  snprintf(buf,1,"x");
+  assert(snprintf(buf,1,"x")==1);
+  assert(!strcmp(buf,""));
+  assert(snprintf(buf,0,"x")==1);
   assert(!strcmp(buf,""));
   return 0;
 }
