@@ -339,8 +339,9 @@ mips-gnu:
 powerpc:
 	$(MAKE) ARCH=ppc CROSS=powerpc-linux- all
 
+CROSS_ARCH=arm sparc ppc alpha i386 mips sparc64 x86_64 s390 parisc
 cross:
-	$(MAKE) arm sparc ppc alpha i386 mips sparc64 x86_64 s390 parisc
+	$(MAKE) $(subst $(ARCH),,$(CROSS_ARCH))
 
 
 # these depend on dietfeatures.h for large file backward compatibility
