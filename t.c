@@ -31,13 +31,19 @@
 int foo;
 
 int main(int argc,char *argv[]) {
+  char buf[1024];
+  FILE *f=popen("uname -srm","r");
+  fgets(buf,1023,f);
+  pclose(f);
+  write(1,buf,strlen(buf));
+#if 0
   char type[64];
   char filename[256];
   int major,minor;
   int len;
   printf("%d\n",sscanf("GET / HTTP/1.0\r\n","%4[A-Z] %255[^ \t\r\n] HTTP/%d.%d",type,filename,&major,&minor));
   printf("%s %s %d %d\n",type,filename,major,minor);
-
+#endif
 #if 0
   char buf[100];
   char ip[16];

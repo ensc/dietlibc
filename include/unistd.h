@@ -5,10 +5,13 @@
 #include <dirent.h>
 #include <sys/types.h>
 #include <sys/time.h>
-#include <getopt.h>
 #include <linux/sysctl.h>
 #include <sys/stat.h>
 #include <sys/fsuid.h>
+
+extern int optind,opterr;
+extern char *optarg;
+int getopt(int argc, char *const argv[], const char *options);
 
 /* Values for the second argument to access.
    These may be OR'd together.  */

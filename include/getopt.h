@@ -1,9 +1,7 @@
 #ifndef __GETOPT_H__
 #define __GETOPT_H__
 
-extern int optind,opterr;
-extern char *optarg;
-int getopt(int argc, char *const argv[], const char *options);
+#include <unistd.h>
 
 /* the following was taken from GNU getopt, it's not actually supported
  * by the diet libc! */
