@@ -5,6 +5,7 @@
 
 extern unsigned long int strtoul(const char *nptr, char **endptr, int base);
 
+#define ABS_LONG_MIN 2147483648UL
 long int strtol(const char *nptr, char **endptr, int base)
 {
   int neg=0;
@@ -14,8 +15,8 @@ long int strtol(const char *nptr, char **endptr, int base)
 
   if (*nptr == '-') { neg=-1; ++nptr; }
   v=strtoul(nptr,endptr,base);
-  if (v>=LONG_MAX) {
-    if (v==LONG_MAX && !neg) {
+  if (v>=ABS_LONG_MIN) {
+    if (v==ABS_LONG_MIN && neg) {
       errno=0;
       return v;
     }
