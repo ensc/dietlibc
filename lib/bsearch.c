@@ -1,12 +1,14 @@
+#include <assert.h>
 #include <stdlib.h>
 
 void *bsearch(const void *key, const void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *)) {
   const char *v, *r;
   int res;
-  r=base+(nmemb-1)*size;
+  if (--nmemb<0) return 0;
+  r=((const char*)base)+(nmemb-1)*size;
   do {
     register int num=nmemb/2;
-    v=base+num*size;
+    v=((const char*)base)+num*size;
     if ((res=compar(key,v))<0) {
       r=v-size;
       nmemb=num;

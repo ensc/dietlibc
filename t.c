@@ -49,8 +49,13 @@ static int rand() {
 
 extern double atof(const char *c);
 
+int compar(const void*a,const void*b) {
+  return *(char*)a - *(char*)b;
+}
 
 int main(int argc,char *argv[]) {
+  char foo[10]="abcdefghij";
+  printf("%c\n",*((char*)bsearch("j",foo,10,1,compar)));
 #if 0
   char foo[10];
   printf("%d %d\n",abs(-3),abs(23));
@@ -87,7 +92,7 @@ int main(int argc,char *argv[]) {
   char buf[PATH_MAX];
   printf("%s\n",realpath("../../incoming/..///.zshrc",buf));
 #endif
-#if 1
+#if 0
   regex_t t;
   regcomp(&t,"^OpenSSH[-_]2\\.[012]",5);
   printf("%d\n",regexec(&t,"OpenSSH_2.5.2p2",0,0,0));
