@@ -28,11 +28,19 @@
    Length is the number of 32bit words 
 */   
 static void CopyWithEndianSwap (uint32_t *dst, const uint32_t *src, int length) {
-   while (length--) {
-      uint32_t value = *src++;
-
-      *dst++ = ((((value)<<24)|((value)>>8))^((((value)^(((value)<<16)|((value)>>16)))&~0x00ff0000)>>8));
-   }
+  unsigned char* in=(unsigned char*)src;
+  while (length--) {
+#if 0
+    uint32_t value = *src++;
+    *dst++ = ((((value)<<24)|((value)>>8))^((((value)^(((value)<<16)|((value)>>16)))&~0x00ff0000)>>8));
+#else
+    *dst=(((uint32_t)in[0])<<24) |
+	 (((uint32_t)in[1])<<16) |
+	 (((uint32_t)in[2])<<8) |
+	   (uint32_t)in[3];
+    in+=4; ++dst;
+#endif
+  }
 }
 #endif
 
@@ -79,13 +87,17 @@ static void __MD5Transform (uint32_t state[4], const uint32_t *in, int repeat) {
    uint32_t  d = state[3];
 
    for ( ; repeat; repeat--) {
-#if (__BYTE_ORDER == __BIG_ENDIAN)
       uint32_t tempBuffer[16];
+#if (__BYTE_ORDER == __BIG_ENDIAN)
 
       CopyWithEndianSwap (tempBuffer, in, 16);
       x = tempBuffer;
 #else
-      x = (uint32_t *) in;
+      if ((long)in & 4) {
+	memcpy(tempBuffer, in, 16);
+	x = tempBuffer;
+      } else
+	x = (uint32_t *) in;
 #endif
 
       FF (a, b, c, d, x[ 0],  7, 0xd76aa478); /*  1 */     /* Round 1 */
