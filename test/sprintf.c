@@ -25,5 +25,7 @@ int main() {
   assert(!strcmp(buf,""));
   assert(snprintf(buf,0,"x")==1);
   assert(!strcmp(buf,""));
+  assert(sprintf(buf,"%03o",10)==3);
+  assert(!strcmp(buf,"012"));
   return 0;
 }
