@@ -43,6 +43,21 @@ static const char* Os[] = {
   "x86_64","-Os","-fstrict-aliasing","-momit-leaf-frame-pointer","-mfance-math-387",0,
   0};
 
+static void usage(void) {
+  __write2(
+#ifdef __DYN_LIB
+	   "dyn-"
+#endif
+	   "diet version " VERSION
+#ifndef INSTALLVERSION
+	   " (non-install version in source tree)"
+#endif
+	   "\n\n");
+  error("usage: diet [-v] [-Os] gcc command line\n"
+	"e.g.   diet -Os gcc -c t.c\n"
+	"or     diet sparc-linux-gcc -o foo foo.c bar.o\n");
+}
+
 int main(int argc,char *argv[]) {
   int _link=0;
   int compile=0;
@@ -78,37 +93,22 @@ int main(int argc,char *argv[]) {
 #endif
   strcpy(dashL,"-L");
 
-  if (argc<2) {
-usage:
-    if (verbose) {
-      __write2(
-#ifdef __DYN_LIB
-	       "dyn-"
-#endif
-	       "diet version " VERSION
-#ifndef INSTALLVERSION
-               " (non-install version in source tree)"
-#endif
-	       "\n\n");
-    }
-    error("usage: diet [-v] [-Os] gcc command line\n"
-	  "e.g.   diet -Os gcc -c t.c\n"
-	  "or     diet sparc-linux-gcc -o foo foo.c bar.o\n");
-  }
-  if (!strcmp(argv[1],"-v")) {
-    ++argv; --argc;
-    verbose=1;
-  }
-  if (argv[1] && !strcmp(argv[1],"-Os")) {
-    ++argv; --argc;
-    mangleopts=1;
-  }
-  if (!argv[1]) goto usage;
+  do {
+    if (!argv[1]) usage();
+    if (!strcmp(argv[1],"-v")) {
+      ++argv; --argc;
+      verbose=1;
+    } else if (argv[1] && !strcmp(argv[1],"-Os")) {
+      ++argv; --argc;
+      mangleopts=1;
+    } else break;
+  } while (1);
   {
-    char *tmp=strchr(argv[1],0)-2;
-    char *tmp2,*tmp3;
     char *cc=argv[1];
+    char *tmp=strchr(cc,0)-2;
+    char *tmp2,*tmp3;
     if (tmp<cc) goto donttouch;
+    if (!strstr(cc,"cc")) goto donttouch;
     if ((tmp2=strstr(cc,"linux-"))) {	/* cross compiling? */
       int len=strlen(platform);
       --tmp2;
@@ -179,7 +179,7 @@ usage:
 	  strcpy(shortplatform,"mipsel");
     }
     strcat(dashL,platform);
-    if (!strcmp(tmp,"cc")) {
+    if (strcmp(tmp,"ld")) {
       char **newargv;
       char **dest;
       char *a,*b,*c;
@@ -364,7 +364,6 @@ incorporated:
       }
       execvp(newargv[0],newargv);
       goto error;
-    } else if (!strcmp(tmp,"ld")) {
     }
   }
 donttouch:

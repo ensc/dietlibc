@@ -97,7 +97,7 @@ profiling: $(OBJDIR)/libgmon.a $(OBJDIR)/pstart.o
 CFLAGS=-pipe -nostdinc
 CROSS=
 
-CC=gcc
+CC?=gcc
 
 VPATH=lib:libstdio:libugly:libcruft:libcrypt:libshell:liblatin1:libcompat:libdl:librpc:libregex:libm:profiling
 
