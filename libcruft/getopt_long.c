@@ -1,14 +1,5 @@
-#include <getopt.h>
-#include <unistd.h>
 #include <string.h>
-
-extern int opterr;
-extern int optopt;
-
-extern int optind;
-extern char *optarg;
-
-/* fsck, no GNU style permutation of argv this time. */
+#include <getopt.h>
 
 static void getopterror(void) {
   static char error[]="Unknown option `-x'.\n";
@@ -18,7 +9,8 @@ static void getopterror(void) {
   }
 }
 
-int getopt(int argc,char*const argv[], const char* optstring) {
+int getopt_long(int argc, char * const argv[], const char *optstring,
+		const struct option *longopts, int *longindex) {
   static int lastidx=0,lastofs=0;
   char *tmp;
 again:
@@ -27,6 +19,41 @@ again:
   if (argv[optind][1]=='-' && argv[optind][2]==0) {
     ++optind;
     return -1;
+  }
+  if (argv[optind][1]=='-') {	/* long option */
+    char* arg=argv[optind]+2;
+    char* max=strchr(arg,'=');
+    const struct option* o;
+    if (!max) max=arg+strlen(arg);
+    for (o=longopts; o->name; ++o) {
+      if (!strncmp(o->name,arg,max-arg)) {	/* match */
+	if (longindex) *longindex=o-longopts;
+	if (o->has_arg>0) {
+	  if (*max=='=')
+	    optarg=max+1;
+	  else {
+	    optarg=argv[optind+1];
+	    if (!optarg && o->has_arg==1) {	/* no argument there */
+	      if (*optstring==':') return ':';
+	      write(2,"argument required: `",20);
+	      write(2,arg,max-arg);
+	      write(2,"'.\n",3);
+	      ++optind;
+	      return '?';
+	    }
+	    ++optind;
+	  }
+	  ++optind;
+	}
+	if (!o->flag) return o->val;
+	return 0;
+      }
+    }
+    if (*optstring==':') return ':';
+    write(2,"invalid option `",16);
+    write(2,arg,max-arg);
+    write(2,"'.\n",3);
+    return '?';
   }
   if (lastidx!=optind) {
     lastidx=optind; lastofs=0;
@@ -57,4 +84,3 @@ again:
     return '?';
   }
 }
-
