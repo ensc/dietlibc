@@ -3,8 +3,10 @@
 
 #include <limits.h>
 
-#define MAXPATHLEN     PATH_MAX
-#define MAXHOSTNAMELEN 64
+#define MAXPATHLEN	PATH_MAX
+#define MAXHOSTNAMELEN	64
+#define NGROUPS		32
+#define NOGROUP		(-1)
 
 #undef MIN
 #undef MAX
