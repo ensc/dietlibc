@@ -64,8 +64,8 @@ void *_dl_load(const char* filename, const char*pathname, int fd, int flags);
 struct _dl_handle* _dl_dyn_scan(struct _dl_handle* dh, void* dyn_addr, int flags);
 
 /* _dl_search.c */
-extern const char *_dl_search_rpath;
 void _dl_set_rpath(const char *path);
+const char* _dl_get_rpath();
 int _dl_search(char *buf, int len, const char *filename);
 
 /* _dl_sym.c */

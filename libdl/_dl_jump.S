@@ -6,12 +6,20 @@ _dl_jump:
 .type	_dl_jump,@function
 
 #ifdef __DYN_LIB
+	pushl	%ebx
+	movl	%esp,%ebx
+	pushl	8(%ebx)
+	pushl	4(%ebx)
+	call	1f
+1:	popl	%ebx
+	addl	$_GLOBAL_OFFSET_TABLE_+[.-1b],%ebx
 	call	do_rel@PLT
+	addl	$8,%esp
+	popl	%ebx
 #else
 	call	do_rel
 #endif
-	pop	%edx
-	pop	%edx
+	addl	$8,%esp
 	jmp	*%eax
 
 #endif

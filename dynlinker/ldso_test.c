@@ -152,18 +152,28 @@ int main(int argc, char**argv, char**envp)
   {
     struct _dl_handle* dlso;
     if ((dlso = _dl_find_lib("libdl.so"))) {
-      struct _dl_handle* tmp;
-      const char *rmp;
+      struct _dl_handle* *tmp;
+      void(*rmp)(const char*rp);
       write(2,"libdl.so",8);
       write(2," used.\n",7);
-      if ((tmp=_dlsym(dlso,"_dl_root_handle" ))) tmp=_dl_root_handle;
-      if ((tmp=_dlsym(dlso,"_dl_top_handle"  ))) tmp=_dl_top_handle;
-      if ((tmp=_dlsym(dlso,"_dl_free_list"   ))) tmp=_dl_free_list;
-      if ((rmp=_dlsym(dlso,"_dl_search_rpath"))) {
-	printf("set @ %08x> %s\n",rmp,_dl_search_rpath);
-	rmp=_dl_search_rpath;
+      if ((tmp=_dlsym(dlso,"_dl_root_handle" ))) *tmp=_dl_root_handle;
+      if ((tmp=_dlsym(dlso,"_dl_top_handle"  ))) *tmp=_dl_top_handle;
+      if ((tmp=_dlsym(dlso,"_dl_free_list"   ))) *tmp=_dl_free_list;
+      if ((rmp=_dlsym(dlso,"_dl_set_rpath"))) {
+	rmp(_dl_get_rpath());
       }
     }
+  }
+  {
+    struct _dl_handle* dietc;
+    if ((dietc=_dl_find_lib("libdietc.so"))) {
+      char***tmp;
+      if ((tmp=_dlsym(dietc,"environ"))) {
+	*tmp=envp;
+      }
+      else _exit(665);
+    }
+    else _exit(666);
   }
 #endif
 

@@ -7,6 +7,12 @@ Replacement for standard ld.so
 
 It is still test-code only and depends on dietlibc/libdl code
 
+Thu Nov  1 17:35:15 MET 2001
+
+now "interact" with the loaded libdietc.so ....
+environ is of copy relocation type.
+(I think this has to be done different...)
+
 
 Mon Oct 22 14:55:51 MEST 2001
 

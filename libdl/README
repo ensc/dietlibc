@@ -2,6 +2,14 @@ this is the experimental libdl
 
 written by Olaf Dreesen
 
+Thu Nov  1 18:41:36 MET 2001
+
+ufffff.... now the libdl code can be used in the libdl.so :)
+Status: it works in my clean room on i386, arm-code started
+
+TODO: see below :)
+
+
 Wed Jul  4 11:55:00 MEST 2001
 
 Uwe Ohse pointed to some flaws in my code, I have started to fix them....
