@@ -46,7 +46,16 @@ void fnord(char*x,...) {
   }
 }
 
+char *strlcpy2(char *dest, const char *src, size_t n)
+{
+  memccpy(dest,src,0,n-1);
+  return dest;
+}
+
 int main(int argc,char *argv[]) {
+  char buf[100];
+  strlcpy2(buf,"fnord",5);
+  puts(buf);
 #if 0
   fnord("fnord","foo\n","bar\n",0);
   assert(0);
@@ -328,7 +337,7 @@ int main(int argc,char *argv[]) {
   strftime(buf,512,"%A %B %Y\n",duh);
   puts(buf);
 #endif
-#if 1
+#if 0
   struct in_addr bar;
   struct hostent *foo;
 /*  inet_aton("160.45.10.8",&bar); */

@@ -12,4 +12,7 @@ syslog and crypt were contributed by René Müller.
 
 Jeff Garzik contributed {get,set}{pw,gr,sp}ent.
 
-I also grabbed code from glibc (mostly assembly routines).
+Uwe Ohse went through the code and many bugs.
+
+I also grabbed code from glibc (mostly assembly routines), and looked at
+the OpenBSD libc for inspiration.
