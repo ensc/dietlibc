@@ -7,12 +7,13 @@ strcasecmp:
 	movl 0xc(%esp), %edx
 	xorl %eax, %eax
 	xorl %ecx, %ecx
+	cld
 .Lloop:
 	lodsb
 	movb (%edx), %cl
 	incl %edx
 	or %al, %al
-	jz .Lret
+	jz .Lfinifirst
 	cmp $'A', %al
 	jnge .Lcmp
 	cmp $'z', %al
@@ -25,3 +26,6 @@ strcasecmp:
 .Lret:
 	popl %esi
 	ret
+.Lfinifirst:
+	subl %ecx, %eax
+	jmp .Lret
