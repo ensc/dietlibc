@@ -60,6 +60,7 @@
   use expect() in a few strategic places
   try to add sigcontext and ucontext for x86_64
   add ffs, ffsl, ffsll
+  Olaf: fxing the error sting list (Gerrit Pape)
 
 0.22:
   fix i386 libm
