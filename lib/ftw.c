@@ -13,6 +13,8 @@ int ftw(const char*dir,int(*f)(const char*file,const struct stat*sb,int flag),in
   struct dirent*de;
   struct stat sb;
   int r;
+  int oldlen=0;
+  char*filename;
   if(chdir(dir))return-1;
   cd=alloca(PATH_MAX+1);
   if(!getcwd(cd,PATH_MAX))return-1;
@@ -22,10 +24,10 @@ int ftw(const char*dir,int(*f)(const char*file,const struct stat*sb,int flag),in
   while((de=readdir(d))){
     int flg;
     size_t nl;
-    char*filename;
     if(de->d_name[0]=='.'){if(!de->d_name[1])continue;if(de->d_name[1]=='.'&&!de->d_name[2])continue;}
     nl=strlen(de->d_name);
-    filename=alloca(nl+cdl+2);
+    if (nl+cdl+2>oldlen)
+      filename=alloca(oldlen=nl+cdl+2);
     memmove(filename,cd,cdl);
     filename[cdl]='/';
     memmove(filename+cdl+1,de->d_name,nl+1);
