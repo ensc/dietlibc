@@ -1,3 +1,4 @@
+#include <sys/time.h>
 #include "dietwarning.h"
 
 double difftime(time_t time1, time_t time0) {
