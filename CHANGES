@@ -16,6 +16,8 @@
   epoll_event needs to be packed on x86_64 (pointed out by Indan Zupancic)
   work around make dependency problem breaking mipsel by creating kludge
     mipsel/syscalls.h (Samium Gromoff)
+  Fix i386 unified syscall -EMEDIUMTYPE handling (Juergen Sawinski via
+    Clifford Wolf)
 
 0.24:
   work around incompatible Linux select() modifying the timeout in

@@ -72,6 +72,8 @@ __vsyscall:
 
 /* OK this is basicaly unified.S */
 .text
+.type __you_tried_to_link_a_dietlibc_object_against_glibc,@function
+.type __nop,@function
 .type __unified_syscall_256,@function
 __unified_syscall_256:
 	movzwl	%ax, %eax

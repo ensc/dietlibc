@@ -48,7 +48,7 @@ __unified_syscall:
 	int	$0x80
 #endif
 	cmp	$-124,%eax
-	jbe	.Lnoerror
+	jb	.Lnoerror
 	neg	%eax
 #ifdef WANT_THREAD_SAFE
 	movl	%eax,%ebx
