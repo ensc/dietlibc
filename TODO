@@ -4,6 +4,6 @@ vfprintf appears to be broken on ppc.
 
 "locale"
 
-fnmatch (ugh)
-
 fscanf
+
+sscanf support for character classes ("%[^ ]").
