@@ -156,7 +156,7 @@ int __dns_gethostbyx_r(const char* name, struct hostent* result,
 	    }
 	  }
 	  if (!names) {
-	    *h_errnop=HOST_NOT_FOUND;
+	    *h_errnop=NO_DATA;
 	    return 1;
 	  }
 /*	  printf("%d answers\n",((unsigned short)inpkg[6]<<8)+inpkg[7]);
