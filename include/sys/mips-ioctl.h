@@ -165,3 +165,13 @@
 #define TIOCGICOUNT     0x5492 /* read serial port inline interrupt counts */
 #define TIOCGHAYESESP	0x5493 /* Get Hayes ESP configuration */
 #define TIOCSHAYESESP	0x5494 /* Set Hayes ESP configuration */
+
+/* Socket-level I/O control calls. */
+#define FIOGETOWN	_IOR('f', 123, int)
+#define FIOSETOWN 	_IOW('f', 124, int)
+
+#define SIOCATMARK	_IOR('s', 7, int)
+#define SIOCSPGRP	_IOW('s', 8, pid_t)
+#define SIOCGPGRP	_IOR('s', 9, pid_t)
+
+#define SIOCGSTAMP	0x8906			/* Get stamp - linux-specific */
