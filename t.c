@@ -25,12 +25,26 @@
 #include <sys/types.h>
 #include <sys/msg.h>
 #include <string.h>
+#include <sys/socket.h>
+#include <netdb.h>
 
 int foo;
 
 int main(int argc,char *argv[]) {
+  struct addrinfo *ai;
+  printf("%d\n",getaddrinfo("knuth.fefe.de","ssh",0,&ai));
+  while (ai) {
+    printf("found host %s, port %d, family %s, socktype %s\n",ai->ai_canonname,
+	   ntohs(ai->ai_family==AF_INET6?((struct sockaddr_in6*)ai->ai_addr)->sin6_port:
+				   ((struct sockaddr_in*)ai->ai_addr)->sin_port),
+	   ai->ai_family==AF_INET6?"PF_INET6":"PF_INET",
+	   ai->ai_socktype==SOCK_STREAM?"SOCK_STREAM":"SOCK_DGRAM");
+    ai=ai->ai_next;
+  }
+#if 0
   int i=foo;
   printf("load average is %3.2f\n",0.0);
+#endif
 #if 0
   struct dirent **namelist;
   int n;

@@ -84,41 +84,6 @@ error:
   return 0;
 }
 
-void setservent(int stayopen) {
-  cur=servicesmap;
-}
-
-struct servent *getservbyname(const char *name, const char *proto) {
-  struct servent *s;
-  setservent(0);
-  for (s=getservent(); s; s=getservent()) {
-    char **tmp;
-#if 0
-    write(1,"found ",6);
-    write(1,s->s_name,strlen(s->s_name));
-    write(1,"/",1);
-    write(1,s->s_proto,strlen(s->s_proto));
-    write(1,"\n",1);
-    if (!strcmp(name,"auth")) {
-      tmp=s->s_aliases;
-      write(1,"  aka ",5);
-      while (*tmp) {
-	write(1,*tmp,strlen(*tmp));
-	write(1,", ",2);
-	++tmp;
-      }
-      write(1,"\n",1);
-    }
-#endif
-    if (!strcmp(name,s->s_name) && !strcmp(proto,s->s_proto))
-      return s;
-    tmp=s->s_aliases;
-    while (*tmp)
-      if (!strcmp(name,*tmp++)) return s;
-  }
-  return 0;
-}
-
 struct servent *getservbyport(int port, const char *proto) {
   struct servent *s;
   for (s=getservent(); s; s=getservent()) {
@@ -133,5 +98,33 @@ void endservent(void) {
   if (servicesfd!=-1) close(servicesfd);
   servicesmap=(char*)-1;
   servicesfd=-1;
+}
+
+void setservent(int stayopen) {
+  endservent();
+}
+
+struct servent *getservbyname(const char *name, const char *proto) {
+  struct servent *s;
+  setservent(0);
+  for (s=getservent(); s; s=getservent()) {
+    char **tmp;
+#if 0
+    write(1,"found ",6);
+    write(1,s->s_name,strlen(s->s_name));
+    write(1,"/",1);
+    write(1,s->s_proto,strlen(s->s_proto));
+    write(1,"\n",1);
+    if (!strcmp(s->s_name,"ssh")) {
+      write(2,"ssh!\n",5);
+    }
+#endif
+    if (!strcmp(name,s->s_name) && !strcmp(proto,s->s_proto))
+      return s;
+    tmp=s->s_aliases;
+    while (*tmp)
+      if (!strcmp(name,*tmp++)) return s;
+  }
+  return 0;
 }
 
