@@ -43,16 +43,14 @@ int __dns_gethostbyx_r(const char* name, struct hostent* result,
   int size;
 
   if (lookfor==1) {
-    result->h_aliases=(char**)(buf+8*4);
     result->h_addrtype=AF_INET;
     result->h_length=4;
-    result->h_addr_list=(char**)buf;
   } else {
-    result->h_aliases=(char**)(buf+8*16);
     result->h_addrtype=AF_INET6;
     result->h_length=16;
-    result->h_addr_list=(char**)buf;
   }
+  result->h_aliases=(char**)(buf+8*sizeof(char*));
+  result->h_addr_list=(char**)buf;
   result->h_aliases[0]=0;
 
   cur=buf+16*sizeof(char*);
@@ -113,7 +111,7 @@ invalidpacket:
 	  else
 	    result->h_aliases[names-1]=cur;
 	  result->h_aliases[names]=0;
-	  ++names;
+	  if (names<8) ++names;
 /*		cur+=slen+1; */
 	  cur+=(slen|3)+1;
 	  result->h_addr_list[ips++] = cur;

@@ -13,6 +13,8 @@ int main() {
     int i;
     for (i=0; foo->h_addr_list[i]; ++i)
       printf("%s -> %s\n",foo->h_name,inet_ntoa(*(struct in_addr*)foo->h_addr_list[i]));
+    for (i=0; foo->h_aliases[i]; ++i)
+      printf("  also known as %s\n",foo->h_aliases[i]);
   }
   return 0;
 }

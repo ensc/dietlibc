@@ -3,6 +3,7 @@
   various x86_64 fixes (Gwenole Beauchesne)
   fix assert for 64-bit platforms (Gwenole Beauchesne)
   remove many warning from test suite (Gwenole Beauchesne)
+  hopefully fix resolver (again, Gwenole)
 
 0.22:
   fix i386 libm
