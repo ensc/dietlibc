@@ -85,11 +85,11 @@ void foo(int tmp,...) {
   if (l!=-1) write(2,"kaputt\n",7);
 }
 
-extern int __lltostr(char *s, int size, unsigned long long i, int base, char UpCase);
-
 int main(int argc,char *argv[]) {
+#if 0
   char template[]="/tmp/duh/fnord-XXXXXX";
   printf("%d\n",mkdtemp(template));
+#endif
 #if 0
   char *inbuf="\xe2\x89\xa0";
 //  char *inbuf="\xc2\xa9";
@@ -221,17 +221,25 @@ int main(int argc,char *argv[]) {
 #if 0
   puts(ttyname(0));
 #endif
-#if 0
+#if 1
   char buf[1024];
   struct hostent* r;
-  while (r=gethostent_r(buf,1024)) {
+  r=gethostbyname("borg");
+  {
+/*  while (r=gethostent_r(buf,1024)) { */
     if (r && r->h_name) {
-      printf("name %s\n", r->h_name);
-    }
-    if (r && (r->h_addr_list)[0]) {
-      struct in_addr address;
-      address = *((struct in_addr *) (r->h_addr_list)[0]);
-      printf("addr %s\n", inet_ntoa(address));
+      int i;
+      printf("name \"%s\"; ", r->h_name);
+      for (i=0; i<8; ++i)
+	if (r->h_aliases[i]) {
+	  printf("alias \"%s\"; ",r->h_aliases[i]);
+	}
+      if ((r->h_addr_list)[0]) {
+	struct in_addr address;
+	address = *((struct in_addr *) (r->h_addr_list)[0]);
+	printf("addr %s; ", inet_ntoa(address));
+      }
+      putchar('\n');
     }
   }
 #endif

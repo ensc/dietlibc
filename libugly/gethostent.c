@@ -24,7 +24,11 @@ struct hostent* gethostent_r(char* buf, int len) {
   char* max=buf+len;
   int aliasidx;
   if (!hostmap) {
+#if 1
+    int hostfd=open("hosts",O_RDONLY);
+#else
     int hostfd=open(_PATH_HOSTS,O_RDONLY);
+#endif
     if (hostfd<0) return 0;
     hostlen=lseek(hostfd,0,SEEK_END);
     hostmap=mmap(0,hostlen,PROT_READ|PROT_WRITE,MAP_PRIVATE,hostfd,0);
