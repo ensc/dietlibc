@@ -3,7 +3,7 @@
 
 int tcgetpgrp(int fildes)
 {
-  int foo,res;
+  int foo;
   if (ioctl(fildes, TIOCGPGRP, &foo)==-1)
     return -1;
   else
