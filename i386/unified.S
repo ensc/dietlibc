@@ -6,7 +6,8 @@
 .type __vsyscall,@object
 .global __vsyscall
 __vsyscall:
-.long .Lcallint80
+.Lvsyscall:
+.long	.Lcallint80
 #endif
 
 .text
@@ -42,7 +43,7 @@ __unified_syscall:
 	movl	0x1c(%edi),%esi
 	movl	0x20(%edi),%edi
 #ifdef WANT_SYSENTER
-	call	*__vsyscall /* 0xffffe000 */
+	call	*.Lvsyscall /* 0xffffe000 */
 #else
 	int	$0x80
 #endif

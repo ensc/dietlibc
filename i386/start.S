@@ -42,9 +42,11 @@ _start:
 1:
 	movl	(%edx),%edi
 	test	%edi,%edi
-	jz 1f
+	jz	1f
+	addl	$8,%edx
 	cmpl	$32,%edi
-	movl	4(%edx),%edi
+	jne	1b
+	movl	-4(%edx),%edi
 	PUT_VAR %edi, __vsyscall, %edx
 1:
 #endif
