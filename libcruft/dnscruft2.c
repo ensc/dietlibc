@@ -71,7 +71,7 @@ int __dns_gethostbyx_r(const char* name, struct hostent* result,
       for (j=30; j>0; --j) {
 	sendto(__dns_fd,packet,size,0,(struct sockaddr*)&(_res.nsaddr_list[i]),sizeof(struct sockaddr));
 	if (++i > _res.nscount) i=0;
-	if (poll(&duh,1,1) == 1) {
+	if (poll(&duh,1,15) == 1) {
 	  /* read and parse answer */
 	  unsigned char inpkg[1500];
 	  char *tmp;
