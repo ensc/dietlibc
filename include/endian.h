@@ -47,7 +47,7 @@
 # define __LONG_LONG_PAIR(HI, LO) HI, LO
 #endif
 
-#if defined(__alpha__) || defined(__mips64) || defined(__sparc64)
+#if defined(__alpha__) || defined(__mips64) || defined(__sparc_v9__)
 #define __WORDSIZE 64
 #endif
 

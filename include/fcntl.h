@@ -307,6 +307,9 @@ struct flock {
   short __unused;
 };
 
+#ifdef __sparc_v9__
+#define flock64 flock
+#else
 struct flock64 {
   short l_type;
   short l_whence;
@@ -315,6 +318,7 @@ struct flock64 {
   pid_t l_pid;
   short __unused;
 };
+#endif
 
 #elif defined(__powerpc__)
 
