@@ -257,9 +257,7 @@ t1:
 install: $(OBJDIR)/start.o $(OBJDIR)/dietlibc.a $(OBJDIR)/liblatin1.a $(OBJDIR)/elftrunc $(OBJDIR)/diet-i
 	$(INSTALL) -d $(DESTDIR)$(ILIBDIR) $(DESTDIR)$(MAN1DIR) $(DESTDIR)$(BINDIR)
 	$(INSTALL) $(OBJDIR)/start.o $(DESTDIR)$(ILIBDIR)/start.o
-	$(INSTALL) $(OBJDIR)/dietlibc.a $(DESTDIR)$(ILIBDIR)/libc.a
-	$(INSTALL) $(OBJDIR)/libpthread.a $(DESTDIR)$(ILIBDIR)/libpthread.a
-	$(INSTALL) $(OBJDIR)/liblatin1.a $(DESTDIR)$(ILIBDIR)/liblatin1.a
+	$(INSTALL) -m 644 $(OBJDIR)/dietlibc.a $(OBJDIR)/libm.a $(OBJDIR)/libpthread.a $(OBJDIR)/liblatin1.a $(DESTDIR)$(ILIBDIR)
 	$(INSTALL) $(OBJDIR)/diet-i $(DESTDIR)$(BINDIR)/diet
 	-$(INSTALL) $(PICODIR)/diet-dyn-i $(DESTDIR)$(BINDIR)/diet-dyn
 	-$(INSTALL) $(PICODIR)/libdietc.so $(DESTDIR)$(ILIBDIR)/libc.so
