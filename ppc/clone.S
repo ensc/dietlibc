@@ -39,7 +39,7 @@ __clone:
 
 .Lclone_parent:
 	lmw	29,16(1)	/* restore saved registers */
-	addi	 1, 1,30	/* free stack */
+	addi	 1, 1,32	/* free stack */
 	bnslr+			/* had cloned a thread so return to parent */
 	b	error_unified_syscall
 
