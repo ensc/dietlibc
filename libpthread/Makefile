@@ -18,6 +18,7 @@ PTHREAD_OBJS = \
  \
 	pthread_create.o pthread_detach.o \
 	pthread_join.o pthread_self.o \
+	pthread_exit.o \
  \
 	pthread_attr_getdetachstate.o \
 	pthread_attr_getinheritsched.o \
