@@ -105,6 +105,7 @@ int main(int argc,char *argv[]) {
   char buf[101];
   __dtostr(-123456789.456,buf,100,6,2);
   puts(buf);
+  return 0;
 #if 0
   time_t t=1009921588;
   puts(asctime(localtime(&t)));

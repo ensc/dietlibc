@@ -5,6 +5,7 @@
     libpthread will work once we implement clone!  Great work, Thomas.
   made the fake locale more believable.
   If you need gettext, use http://www.ca.postgresql.org/~petere/gettext.html
+  moved _exit into the unified syscall on x86.
 
 0.13:
   add readdir64 and automatic mapping if _FILE_OFFSET_BITS == 64
