@@ -130,12 +130,10 @@ void _dl_set_rpath(const char *path);
 const char* _dl_get_rpath();
 int _dl_search(char *buf, int len, const char *filename);
 
-/* _dl_sym.c */
-void *_dl_sym_search(struct _dl_handle * h, int symbol);
-void *_dl_sym(struct _dl_handle * h, int symbol);
 /* dlsym.c */
-void *_dl_sym_search_str(struct _dl_handle*h,char*name);
 void *_dlsym(void*dh,char*symbol);
+void *_dl_sym_search_str(struct _dl_handle*h,char*name);
+void *_dl_sym(struct _dl_handle * h, int symbol);
 
 /* _dl_queue.c */
 int _dl_queue_lib(const char* name, int flags);

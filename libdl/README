@@ -2,6 +2,13 @@ this is the experimental libdl
 
 written by Olaf Dreesen
 
+Fri Nov 15 16:23:28 CET 2002
+
+  fixing the copy-relocation bug.
+
+  TODO as last time.... plus
+	- dlsym with RTLD_NEXT
+
 Wed Nov  6 19:08:00 CET 2002
 
   Ups.. misunderstood the manual-page of dlopen.

@@ -5,12 +5,12 @@
 #if 1
 /* don't trash the athlon return stack */
 .text
-.getpic:
+.Lgetpic:
 	mov	(%esp),%ebx
 	ret
 
 .macro PIC_INIT
-	call	.getpic
+	call	.Lgetpic
 	addl	$_GLOBAL_OFFSET_TABLE_, %ebx
 .endm
 #else

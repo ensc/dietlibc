@@ -44,7 +44,7 @@ static int _dl_apply_relocate(struct _dl_handle*dh,_dl_rel_t*rel) {
 #ifdef DEBUG
     pf(__FUNCTION__); pf(": R_386_COPY !\n");
 #endif
-    memcpy(loc,(void*)(unsigned long)_dl_sym_search(dh,ELF_R_SYM(rel->r_info)),len);
+    memcpy(loc,(void*)(unsigned long)_dl_sym(dh,ELF_R_SYM(rel->r_info)),len);
   } else if (typ==R_386_GLOB_DAT) {	/* 6 */
     *loc=(unsigned long)_dl_sym(dh,ELF_R_SYM(rel->r_info));
   } else if (typ==R_386_JMP_SLOT) {	/* 7 */
@@ -63,7 +63,7 @@ static int _dl_apply_relocate(struct _dl_handle*dh,_dl_rel_t*rel) {
 #ifdef DEBUG
     pf(__FUNCTION__); pf(": R_ARM_COPY !\n");
 #endif
-    memcpy(loc,(void*)(unsigned long)_dl_sym_search(dh,ELF_R_SYM(rel->r_info)),len);
+    memcpy(loc,(void*)(unsigned long)_dl_sym(dh,ELF_R_SYM(rel->r_info)),len);
   } else if (typ==R_ARM_GLOB_DAT) {	/* 21 */
     *loc=(unsigned long)_dl_sym(dh,ELF_R_SYM(rel->r_info));
   } else if (typ==R_ARM_JUMP_SLOT) {	/* 22 */

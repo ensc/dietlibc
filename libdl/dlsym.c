@@ -30,7 +30,7 @@ void *_dlsym(void*handle,char*symbol) {
 //      pf(__FUNCTION__); pf(": symbol(\""); pf(name+ptr); pf("\",\"); pf(symbol); pf("\")\n");
 #endif
       if (strcmp(name+ptr,symbol)==0) {
-	if (dh->dyn_sym_tab[ind].st_value!=0) {
+	if (ELF_ST_TYPE(dh->dyn_sym_tab[ind].st_shndx)!=0) {
 	  sym=(long*)(dh->mem_base+dh->dyn_sym_tab[ind].st_value);
 	  break;	/* ok found ... */
 	}
@@ -54,7 +54,6 @@ void*_dl_sym_search_str(struct _dl_handle*dh,char*name) {
   pf(__FUNCTION__); pf(": search for: "); pf(name); pf("\n");
 #endif
   for (tmp=_dl_root_handle;tmp && (!sym);tmp=tmp->next) {
-    if (tmp==dh) continue;
 //    if (!(tmp->flags&RTLD_GLOBAL)) continue;
 #ifdef DEBUG
     pf(__FUNCTION__); pf(": searching in "); pf(tmp->name); pf("\n");
@@ -64,6 +63,18 @@ void*_dl_sym_search_str(struct _dl_handle*dh,char*name) {
     if (sym) { pf(__FUNCTION__); pf(": found: "); pf(name); pf(" @ "); ph((long)sym); pf("\n"); }
 #endif
   }
+  return sym;
+}
+
+#ifdef __DIET_LD_SO__
+static
+#endif
+void*_dl_sym(struct _dl_handle*dh,int symbol) {
+  char *name=dh->dyn_str_tab+dh->dyn_sym_tab[symbol].st_name;
+  void*sym=_dl_sym_search_str(dh,name);
+#ifdef DEBUG
+  pf(__FUNCTION__); pf(": "); ph(symbol); pf(" -> "); ph((long)sym); pf("\n");
+#endif
   return sym;
 }
 

@@ -252,6 +252,8 @@ pp:
 #ifndef __DYN_LIB
       if (_link) { *dest++=(char*)nostdlib; *dest++=dashstatic; *dest++=dashL; }
 #else
+      /* avoid R_*_COPY relocations */
+      *dest++="-fPIC";
       if (_link || shared) { *dest++=(char*)nostdlib; *dest++=dashL; }
 #endif
 #ifdef WANT_SAFEGUARD

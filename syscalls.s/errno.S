@@ -5,3 +5,4 @@
 .weak errno
 errno:
 	.long 0
+.size errno,.-errno

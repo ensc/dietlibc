@@ -7,7 +7,7 @@ SRC = $(wildcard *.c) # test/test.c
 OBJ = _dl_jump.o $(SRC:.c=.o)
 
 #CFLAGS = -Wall -D__OD_CLEAN_ROOM -DNODIETREF -fPIC -g -O
-CFLAGS = -Wall -O2 -D__OD_CLEAN_ROOM -DNODIETREF -fPIC -frerun-loop-opt -fschedule-insns2 # -fomit-frame-pointer
+CFLAGS = -Wall -O2 -D__OD_CLEAN_ROOM -DNODIETREF -fPIC -frerun-loop-opt -fschedule-insns2 $(DEB) # -fomit-frame-pointer
 
 %.o : %.S
 	$(DCC) $(CFLAGS) -c -o $@ $^

@@ -409,7 +409,6 @@ static struct r_debug* _dl_debug_init(Elf_Addr dl_base) {
 #include "_dl_alloc.c"
 
 #include "dlsym.c"
-#include "_dl_sym.c"
 
 #include "_dl_search.c"
 

@@ -12,3 +12,5 @@ environ:
 #else
 	.long 0
 #endif
+.size environ,.-environ
+.size __environ,.-__environ
