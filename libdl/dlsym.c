@@ -23,7 +23,7 @@ void *_dlsym(void *handle, char *symbol)
 //      printf("dlsym: symbol(\"%s\",\"%s\")\n",name+ptr,symbol);
       if (strcmp(name+ptr,symbol)==0) {
 	if (h->dyn_sym_tab[ind].st_value!=0) {
-	  ret = h->mem_base+h->dyn_sym_tab[ind].st_value;
+	  ret = (long*)(h->mem_base+h->dyn_sym_tab[ind].st_value);
 	  break;	/* ok found ... */
 	}
       }

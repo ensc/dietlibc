@@ -27,6 +27,6 @@ void _dl_open_dep() {
   while (_dl_start!=_dl_stop) {
     register int tmp=_dl_start;
     (++_dl_start>=MAX_QUEUE)?_dl_start=0:0;
-    _dl_open(_dl_queue[tmp].name,_dl_queue[tmp].flags);
+    dlopen(_dl_queue[tmp].name,_dl_queue[tmp].flags);
   }
 }

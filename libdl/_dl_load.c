@@ -139,7 +139,7 @@ static struct _dl_handle *_dl_map_lib(const char*fn, const char*pathname, int fd
   close(fd);
 
   if (ret) {
-    ret->lnk_count=0;
+    ret->lnk_count=1;
     ret->name=strdup(fn);
     ret->dyn_str_tab=(char*)m+dyn->p_vaddr;
   }
