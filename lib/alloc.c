@@ -5,7 +5,10 @@
 #include <linux/unistd.h>
 #include <asm/mman.h>
 #include <linux/errno.h>
+#include "dietfeatures.h"
+#ifdef WANT_THREAD_SAVE
 #include <pthread.h>
+#endif
 
 #if 0
 #include <sys/mman.h>
@@ -58,8 +61,10 @@ typedef struct t_alloc_head {
 /* freelist handler */
 static alloc_head base = {&base,0};
 static char *alloc_get_end = MEM_ALLOC_START;
+#ifdef WANT_THREAD_SAVE
 static int inalloc=0;
 static pthread_mutex_t mutex_alloc = PTHREAD_MUTEX_INITIALIZER;
+#endif
 
 void free(void *ptr)
 {
@@ -69,7 +74,9 @@ void free(void *ptr)
 
   block=START_BLOCK(ptr);
 
+#ifdef WANT_THREAD_SAVE
   if (!inalloc) pthread_mutex_lock(&mutex_alloc);
+#endif
   prev=&base;
   for (p=prev->ptr ; ; prev=p, p=p->ptr)
   {
@@ -95,7 +102,9 @@ void free(void *ptr)
     prev->size += block->size;
     prev->ptr   = block->ptr;
   }
+#ifdef WANT_THREAD_SAVE
   if (!inalloc) pthread_mutex_unlock(&mutex_alloc);
+#endif
 }
 
 static void *alloc_get_mem(unsigned long size)
@@ -142,8 +151,10 @@ void *malloc(size_t size)
   /* needed MEM_ALLOC_MIN */
   need=MIN_ALLOC(size);
 
+#ifdef WANT_THREAD_SAVE
   pthread_mutex_lock(&mutex_alloc);
   inalloc=1;
+#endif
   prev=&base;
   for (p=prev->ptr;;prev=p,p=p->ptr)
   {
@@ -173,8 +184,10 @@ void *malloc(size_t size)
       }
       p->ptr=p;		/* self-link */
 
+#ifdef WANT_THREAD_SAVE
       inalloc=0;
       pthread_mutex_unlock(&mutex_alloc);
+#endif
       return (void*)START_DATA(p);
     }
     else if (p==&base)
@@ -183,8 +196,10 @@ void *malloc(size_t size)
     }
   }
 err_out:
+#ifdef WANT_THREAD_SAVE
   inalloc=0;
   pthread_mutex_unlock(&mutex_alloc);
+#endif
   return NULL;
 }
 
