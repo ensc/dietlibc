@@ -1,7 +1,7 @@
 #include "syscalls.h"
 
-#ifdef __getresuid
+#ifdef __NR_getresuid
 
-syscall(getresuid)
+syscall(getresuid,getresuid)
 
 #endif
