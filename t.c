@@ -32,8 +32,16 @@
 
 int foo;
 
+char* fump(char*dest,const char*src) {
+  fprintf(stderr,"dest %p (%s), src %p (%s)\n",dest,dest,src,src);
+  return dest;
+}
+
 int main(int argc,char *argv[]) {
-  printf("%lld %d\n",5ll,17);
+  char *t="foobar";
+  char *c;
+  char buf[1000];
+  puts(strcat(strcpy(buf,"HOME="),t));
 #if 0
   struct netent* n=getnetbyname("loopback");
   printf("%s %s\n",n->n_name,inet_ntoa(*(struct in_addr*)&n->n_net));
