@@ -205,6 +205,7 @@ num_vsnprintf:
       case 'f':
       case 'g':
 	{
+	  int g=(ch=='g');
 	  double d=va_arg(arg_ptr,double);
 	  buf_len=__dtostr(d,buf,sizeof(buf),width?width:6);
 	  if (flag_dot) {
@@ -214,6 +215,15 @@ num_vsnprintf:
 	      *tmp=0;
 	    }
 	  }
+	  if (g) {
+	    char *tmp;
+	    if ((tmp=strchr(buf,'.'))) {
+	      while (*tmp) ++tmp;
+	      while (*--tmp=='0') ;
+	      if (*--tmp=='.') *tmp=0; else tmp[1]=0;
+	    }
+	  }
+	  buf_len=strlen(buf);
 	  pb=buf;
 	  goto print_out;
 	}

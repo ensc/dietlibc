@@ -99,7 +99,6 @@ int __dtostr(double d,char *buf,int maxlen,int prec) {
     } else
       tmp/=10.0;
   }
-done:
   *buf=0;
   return buf-oldbuf;
 }

@@ -30,7 +30,7 @@ int foo;
 
 int main(int argc,char *argv[]) {
   int i=foo;
-  printf("load average is %3.2f\n",0.0);
+  printf("load average is %3.2g\n",0.0);
 #if 0
   struct dirent **namelist;
   int n;
