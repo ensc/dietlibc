@@ -34,18 +34,20 @@ while (<FILE>) {
       $total{$foo}="?";
 #      print "$i, $src, $dest -> $foo\n";
     }
-#    s/\$\(patsubst.*\)\)/join(' ',@list)/e;
+    s/\$\(patsubst.*\)\)/join(' ',@list)/e;
 #    print "$a - $b - $c\n";
   }
   print OUT $_;
 }
 close FILE;
 
-print OUT "\n\n# static.pl computed static dependencies follow\n\n";
+print OUT "\n\ninclude sMakefile.\$(ARCH)\n";
+close OUT;
 foreach $i (@arch) {
   my %dep;
   my @archvpath=@vpath;
   open SRC,"$i/Makefile.add" || die "no $i/Makefile.add?!\n";
+  open OUT,">sMakefile.$i" || die "could not create sMakefile.$i\n";
   while (<SRC>) {
     if (m/^VPATH:?=(.*)\n$/) {
 #      print;
@@ -70,5 +72,5 @@ foreach $i (@arch) {
       }
     }
   }
+  close OUT;
 }
-close OUT;

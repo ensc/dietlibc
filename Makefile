@@ -1,5 +1,36 @@
 MYARCH=$(shell uname -m | sed 's/i[4-9]86/i386/')
-ARCH=$(MYARCH)
+
+ifeq ($(MYARCH),i386)
+ARCH=i386
+else
+ifeq ($(MYARCH),mips)
+ARCH=mips
+else
+ifeq ($(MYARCH),alpha)
+ARCH=alpha
+else
+ifeq ($(MYARCH),ppc)
+ARCH=ppc
+else
+ifeq ($(MYARCH),arm)
+ARCH=arm
+else
+ifeq ($(MYARCH),sparc)
+ARCH=sparc
+else
+ifeq ($(MYARCH),mipsel)
+ARCH=mipsel
+else
+$(error unknown architecture, please fix Makefile)
+endif
+endif
+endif
+endif
+endif
+endif
+endif
+
+# ARCH=$(MYARCH)
 
 OBJDIR=bin-$(ARCH)
 
