@@ -45,6 +45,7 @@
 #include <features.h>
 #ifdef __dietlibc__
 #include <md5.h>
+#include <write12.h>
 #endif
 
 #if 0

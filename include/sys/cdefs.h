@@ -52,4 +52,8 @@
 #define __extension__
 #endif
 
+#ifndef __i386__
+#define regparm(x)
+#endif
+
 #endif
