@@ -71,7 +71,7 @@
 .global __MD5Transform
 
 	.align	32
-repeat:	
+.Lrepeat:	
 
         /* Round 1 */
         FF (a, b, c, d, X0   , S11, 0xd76aa478); /*  1 */
@@ -162,9 +162,9 @@ repeat:
 	movl	c, 8(%eax)
 	movl	d,12(%eax)
 
-start:
+.Lstart:
 	decl	12+32(%esp)
-	jns	repeat
+	jns	.Lrepeat
     
 	popal
 	ret
@@ -177,7 +177,7 @@ __MD5Transform:
 	movl	 4(%eax),b
 	movl	 8(%eax),c
 	movl	12(%eax),d
-	jmp	start
+	jmp	.Lstart
 	
 .Lende:
 .size	__MD5Transform, .Lende-__MD5Transform
@@ -220,7 +220,7 @@ MD5Update:
 
 	movl 	COUNT, %ebp
 	shrl 	$3, %ebp
-	andl 	$63,%ebp		; ebp = ByteIndex	
+	andl 	$63,%ebp		// ebp = ByteIndex	
 
 //  if ( (context->count[0] += inputBytes << 3 ) < (inputBytes << 3) )
 //      context->count[1]++;
@@ -234,14 +234,14 @@ MD5Update:
 // partLen = 64 - ByteIndex;
 
 	movl	$64, %eax
-	subl	%ebp, %eax		; eax = partLen
+	subl	%ebp, %eax		// eax = partLen
 
 // i = 0;
 // if ( partLen <= inputBytes ) {
 
-	xorl	%ecx,%ecx		; ecx = i
+	xorl	%ecx,%ecx		// ecx = i
 	cmpl	INPUTBYTES, %eax	
-	ja 	ende
+	ja 	.Lende2
 
 //      memcpy ( context->buffer + ByteIndex, input, partLen );
 
@@ -279,7 +279,7 @@ MD5Update:
 	addl	%eax, %ecx
 	xorl	%ebp, %ebp
 	
-ende:	
+.Lende2:	
 
 //  }
 //  memcpy ( context->buffer + ByteIndex, input + i, inputBytes - i );
