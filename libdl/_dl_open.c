@@ -33,7 +33,7 @@ unsigned long do_rel(struct _dl_handle * tmp_dl, unsigned long off)
 
   register unsigned long sym_val;
 
-#if 0
+#if 1
   printf("do_rel %08x %08x\n",tmp_dl,off);
   printf("do_rel %08x+%x\n",tmp_dl->plt_rel,off);
   printf("do_rel @ %08x with type %d -> %d\n",tmp->r_offset,ELF32_R_TYPE(tmp->r_info),sym);
@@ -41,7 +41,8 @@ unsigned long do_rel(struct _dl_handle * tmp_dl, unsigned long off)
 #endif
 
   /* modify GOT for REAL symbol */
-  sym_val=((unsigned long)(tmp_dl->mem_base+tmp_dl->dyn_sym_tab[sym].st_value));
+  //sym_val=((unsigned long)(tmp_dl->mem_base+tmp_dl->dyn_sym_tab[sym].st_value));
+  sym_val=(unsigned long)_dl_sym(tmp_dl,sym);
   *((unsigned long*)(tmp_dl->mem_base+tmp->r_offset))=sym_val;
 
   printf("do_rel sym %08x\n",sym_val);
@@ -200,10 +201,10 @@ void *_dl_open(const char*pathname, int fd, int flag)
       }
     }
 
-  printf("_dl_open post resolv, pre init\n");
+    printf("_dl_open post resolv, pre init\n");
     init();
   }
-  printf("_dl_open post resolv, init\n");
+  printf("_dl_open post resolv, post init\n");
 
   close(fd);
   return ret;
