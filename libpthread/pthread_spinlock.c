@@ -14,7 +14,7 @@ static void __pthread_acquire(int * spinlock)
     } else {
       tm.tv_sec = 0;
       tm.tv_nsec = SPIN_SLEEP_DURATION;
-      nanosleep(&tm, 0);
+      __libc_nanosleep(&tm, 0);
       cnt = 0;
     }
   }

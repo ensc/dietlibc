@@ -89,6 +89,23 @@ int signal_manager_thread(_pthread_descr td);
 extern pthread_once_t __thread_inited;
 void __thread_init();
 #define __THREAD_INIT() __pthread_once(&__thread_inited, __thread_init)
-#define __TEST_CNACEL() pthread_testcancel()
+#define __TEST_CANCEL() pthread_testcancel()
+
+/* diet libc syscalls */
+
+pid_t __libc_fork(void);
+
+int __libc_close(int fd);
+int __libc_creat(const char *pathname, mode_t mode);
+int __libc_fcntl(int fd, int cmd, void *arg);
+int __libc_fsync(int fd);
+int __libc_nanosleep(const struct timespec *req, struct timespec *rem);
+int __libc_open(const char *pathname, int flags, mode_t mode);
+int __libc_pause(void);
+int __libc_read(int fd, void *buf, size_t count);
+int __libc_sigsuspend(const sigset_t *mask);
+int __libc_tcdrain(int fd);
+pid_t __libc_waitpid(pid_t pid, int *status, int options);
+int __libc_write(int fd, const void *buf, size_t count);
 
 #endif

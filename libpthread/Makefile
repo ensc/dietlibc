@@ -47,7 +47,19 @@ PTHREAD_OBJS = \
 	pthread_mutexattr_init.o \
 	pthread_mutexattr_setkind_np.o \
  \
-	pthread_atfork.o
+	pthread_atfork.o \
+	pthread_sys_close.o \
+	pthread_sys_create.o \
+	pthread_sys_fcntl.o \
+	pthread_sys_fsync.o \
+	pthread_sys_nanosleep.o \
+	pthread_sys_open.o \
+	pthread_sys_pause.o \
+	pthread_sys_read.o \
+	pthread_sys_sigsuspend.o \
+	pthread_sys_tcdrain.o \
+	pthread_sys_waitpid.o \
+	pthread_sys_write.o
 
 %.o : %.c
 	$(CC) $(CFLAGS) -c -o $@ $?

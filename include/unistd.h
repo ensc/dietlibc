@@ -38,7 +38,7 @@ int open64(const char* pathname,int flags, ...) __THROW;
 int creat(const char* pathname,mode_t mode) __THROW;
 int creat64(const char* pathname,mode_t mode) __THROW;
 int write(int fd,const void* buf,size_t len) __THROW;
-int read(int fd,const void* buf,size_t len) __THROW;
+int read(int fd,void* buf,size_t len) __THROW;
 int close(int fd) __THROW;
 
 int unlink(const char *pathname) __THROW;

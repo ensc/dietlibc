@@ -4,8 +4,6 @@
 #include <pthread.h>
 #include "thread_internal.h"
 
-pid_t __libc_fork(void);
-
 #define PTHREAD_NUM_ATFORK 4
 
 struct {
@@ -36,6 +34,8 @@ pid_t fork(void)
 {
   pid_t pid;
   int i=PTHREAD_NUM_ATFORK;
+
+  __TEST_CANCEL();
 
   do {
     --i;

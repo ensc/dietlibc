@@ -80,7 +80,7 @@ void __thread_wait_some_time()
   struct timespec reg;
   reg.tv_sec=0;
   reg.tv_nsec=SPIN_SLEEP_DURATION;
-  nanosleep(&reg,0);
+  __libc_nanosleep(&reg,0);
 }
 
 /* cleanup a thread struct */
@@ -204,7 +204,7 @@ static void __manager_SIGCHLD(int sig)
   int pid, status, i;
 
   while(1) {
-    pid = waitpid (-1, &status, WNOHANG);
+    pid = __libc_waitpid (-1, &status, WNOHANG);
     if (pid <= 0) break;
 
     for (i=0; i<_max_used_thread_id; i++) {
