@@ -20,8 +20,8 @@
 #define _PATH_WTMP	"/var/log/wtmp"
 #ifdef _BSD_SOURCE
 /* die, BSD, die!!! */
-#define PATH_UTMP _PATH_UTMP
-#define PATH_WTMP _PATH_WTMP
+#define UTMP_FILE _PATH_UTMP
+#define WTMP_FILE _PATH_WTMP
 #endif
 #endif
 
