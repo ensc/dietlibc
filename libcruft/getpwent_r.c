@@ -18,7 +18,7 @@ int getpwent_r(struct passwd *res, char *buf, size_t buflen,
 	       struct passwd **res_sig) {
   size_t i,j,n;
   unsigned long l;
-  if (!__ps.buffirst) setpwent();
+  setpwent();
   if (!__ps.buffirst) goto error;
   if (__ps.cur>=__ps.buflen) goto error;
 again:
@@ -29,9 +29,10 @@ again:
 parseerror:
       while (__ps.cur+j<__ps.buflen) {
 	if (__ps.buffirst[__ps.cur+j]=='\n') {
-	  __ps.cur+=j;
+	  __ps.cur+=j+1;
 	  goto again;
 	}
+	++j;
       }
     }
     switch (i) {

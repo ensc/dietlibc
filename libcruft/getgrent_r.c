@@ -20,7 +20,7 @@ int getgrent_r(struct group *res, char *buf, size_t buflen,
 	       struct group **res_sig) {
   size_t i,j,n,g;
   unsigned long l;
-  if (!__ps.buffirst) setgrent();
+  setgrent();
   if (!__ps.buffirst) goto error;
   if (__ps.cur>=__ps.buflen) goto error;
   res->gr_mem=(char**)buf;
@@ -35,9 +35,10 @@ again:
 parseerror:
 	while (__ps.cur+j<__ps.buflen) {
 	  if (__ps.buffirst[__ps.cur+j]=='\n') {
-	    __ps.cur+=j;
+	    __ps.cur+=j+1;
 	    goto again;
 	  }
+	  ++j;
 	}
       }
     }

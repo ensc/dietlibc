@@ -7,7 +7,9 @@
 /* open and mmap file, fill in struct state, return 0.
  * return -1 on failure */
 int __prepare_parse(const char* filename,struct state* s) {
-  int fd=open(filename,O_RDONLY);
+  int fd;
+  if (s->buffirst) return 0;
+  fd=open(filename,O_RDONLY);
   if (fd>=0) {
     s->buflen=lseek(fd,0,SEEK_END);
     s->buffirst=mmap(0,s->buflen,PROT_READ,MAP_SHARED,fd,0);

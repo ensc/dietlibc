@@ -22,7 +22,17 @@ struct servent {
 
 extern void endservent (void) __THROW;
 extern void setservent(int stayopen) __THROW;
-extern struct servent *getservent (void) __THROW;
+
+extern int getservent_r(struct servent *res, char *buf, size_t buflen,
+			 struct servent **res_sig) __THROW;
+extern int getservbyname_r(const char* name,const char* proto,
+			   struct servent *res, char *buf, size_t buflen,
+			   struct servent **res_sig) __THROW;
+extern int getservbyport_r(int port,const char* proto,
+			   struct servent *res, char *buf, size_t buflen,
+			   struct servent **res_sig) __THROW;
+
+extern struct servent *getservent(void) __THROW;
 extern struct servent *getservbyname (const char *__name,
 				      const char *__proto) __THROW;
 extern struct servent *getservbyport (int __port, const char *__proto)

@@ -18,7 +18,7 @@ int getspent_r(struct spwd *res, char *buf, size_t buflen,
 	       struct spwd **res_sig) {
   size_t i,j,n;
   unsigned long l;
-  if (!__ps.buffirst) setspent();
+  setspent();
   if (!__ps.buffirst) goto error;
   if (__ps.cur>=__ps.buflen) goto error;
 again:
@@ -29,14 +29,15 @@ again:
 parseerror:
       while (__ps.cur+j<__ps.buflen) {
 	if (__ps.buffirst[__ps.cur+j]=='\n') {
-	  __ps.cur+=j;
+	  __ps.cur+=j+1;
 	  goto again;
 	}
+	++j;
       }
     }
     if (i>1) {
       if (scan_ulong(__ps.buffirst+__ps.cur,&l)!=j) goto parseerror;
-      if (j==0) l=-1;
+      if (j==0) l=(unsigned long)-1;
     }
     switch (i) {
     case 0:

@@ -32,6 +32,7 @@
   add getpwent_r ala glibc and replace getpwent
   do the same for getgrent and getspent
   remove entlib (new code is smaller)
+  rewrite getserv* to use parselib (and provide ..._r, too)
 
 0.11:
   fix major oops in DNS routines (only with WANT_FULL_RESOLV_CONF enabled).

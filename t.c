@@ -110,16 +110,15 @@ int traverse(const char* file, const struct stat* sb, int flag) {
 }
 #endif
 
-#include <shadow.h>
-
 int main(int argc,char *argv[]) {
-  struct spwd sp,*tmp;
-  char buf[1000];
-  while (getspent_r(&sp,buf,sizeof(buf),&tmp)==0) {
+  struct servent* se;
+  if (se=getservbyname("pop-3","tcp")) {
     int i;
-    printf("name %s\tpassword %s\n",sp.sp_namp,sp.sp_pwdp);
-    printf("  %ld %d %d %d %d %d %d\n",sp.sp_lstchg, sp.sp_min,
-	   sp.sp_max, sp.sp_warn, sp.sp_inact, sp.sp_expire, sp.sp_flag);
+    printf("name %s\tport %d\tproto %s\n",se->s_name,se->s_port,se->s_proto);
+    for (i=0; i<16; ++i) {
+      if (!se->s_aliases[i]) break;
+      printf("  alias %s\n",se->s_aliases[i]);
+    }
   }
 #if 0
   fd_set f;
