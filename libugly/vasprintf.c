@@ -11,6 +11,7 @@ int vasprintf(char **s, const char *format, va_list ap)
   va_list arg_ptr;
   va_copy(arg_ptr,ap);
   n=vsnprintf(0,1000000,format,arg_ptr);
+  va_close(arg_ptr);
   if ((*s=malloc(n+1))) {
     n=vsnprintf(*s,n+1,format,ap);
     return n;

@@ -21,6 +21,7 @@ int execlp(const char* file, const char *arg,...) {
     va_end (bak);
     return execvp(file,argv);
   }
+  va_end (bak);
   errno=ENOMEM;
   return -1;
 }
