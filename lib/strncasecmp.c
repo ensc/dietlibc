@@ -4,7 +4,7 @@
 
 int strncasecmp(const char *s, const char *t, size_t n) {
   register char x;
-  register char* u=s+n;
+  register const char* u=s+n;
   for (;;) {
     x = tolower(*s); if (x!=tolower(*t)) break; if (!x) break; if (++s>=u) return 0; ++t;
 #ifndef WANT_SMALL_STRING_ROUTINES

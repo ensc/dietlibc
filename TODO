@@ -1,1 +1,3 @@
 provide __divq for Alpha.
+
+popen, pclose -> libdietugly
