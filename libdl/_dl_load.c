@@ -33,7 +33,7 @@ static struct _dl_handle *_dl_map_lib(const char*fn, const char*pathname, int fd
   int ps=getpagesize();
   int i;
   unsigned char buf[1024];
-  char *m=0,*d;
+  char *m=0,*d=0;
 
   unsigned long l;
   struct stat st;
@@ -115,7 +115,7 @@ static struct _dl_handle *_dl_map_lib(const char*fn, const char*pathname, int fd
 
     /* zero pad bss */
     l = data_off+ld[1]->p_filesz;
-    memset(d+l,0,data_size-l);
+    memset(d+l,0,data_fsize-l);
 
     /* more bss ? */
     if (data_size>data_fsize) {
