@@ -10,6 +10,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <arpa/nameser.h>
+#include <fcntl.h>
 #include "dietfeatures.h"
 
 extern void __dns_make_fd(void);
@@ -34,11 +35,39 @@ int res_query(const char *dname, int class, int type, unsigned char *answer, int
     {
       int i;	/* current server */
       int j;	/* timeout count down */
-      struct pollfd duh;
       struct timeval last,now;
+#ifdef WANT_IPV6_PLUGPLAY_DNS
+      static int pnpfd=-1;
+      static struct sockaddr_in6 pnpsa;
+      struct pollfd duh[2];
+
+      if (pnpfd<0) {
+	pnpfd=socket(PF_INET,SOCK_DGRAM,IPPROTO_UDP);
+	if (pnpfd>=0) fcntl(pnpfd,F_SETFD,FD_CLOEXEC);
+      }
+      pnpsa.sin6_family=AF_INET6;
+      pnpsa.sin6_scope_id=0;
+      pnpsa.sin6_port=htons(53);
+      memmove(&pnpsa.sin6_addr,"\xff\x04\x00\x00\x00\x00\x00\x00\x00\x00dnspnp",16);
+
+      duh[1].events=POLLIN;
+      duh[1].fd=pnpfd;
+
+      if (strchr(dname,'.')) {
+	duh[1].fd=-1;
+	duh[1].revents=0;
+      }
+#else
+      struct pollfd duh[1];
+#endif
       i=0;
-      duh.events=POLLIN;
+      duh[0].events=POLLIN;
       last.tv_sec=0;
+#ifdef WANT_IPV6_PLUGPLAY_DNS
+      if (duh[1].fd!=-1)
+	sendto(pnpfd,packet,size,0,(struct sockaddr*)(&pnpsa),sizeof(struct sockaddr_in6));
+      /* if it doesn't work, we don't care */
+#endif
       for (j=120; j>0; --j) {
 	gettimeofday(&now,0);
 	if (now.tv_sec-last.tv_sec>10) {
@@ -52,25 +81,58 @@ int res_query(const char *dname, int class, int type, unsigned char *answer, int
 	    __dns_make_fd();
 	    tmpfd=__dns_fd;
 	  }
-	  duh.fd=tmpfd;
+#ifdef WANT_IPV6_PLUGPLAY_DNS
+	  if (duh[0].fd!=-1) {
+#endif
+	  duh[0].fd=tmpfd;
 	  if (sendto(tmpfd,packet,size,0,s,sizeof(struct sockaddr_in6))==0)
 	    gettimeofday(&last,0);
+#ifdef WANT_IPV6_PLUGPLAY_DNS
+	  }
+#endif
 #else
-	  duh.fd=__dns_fd;
+	  duh[0].fd=__dns_fd;
 	  if (sendto(__dns_fd,packet,size,0,(struct sockaddr*)&(_res.nsaddr_list[i]),sizeof(struct sockaddr))==0)
 	    gettimeofday(&last,0);
 #endif
 	  last=now;
 	}
 	if (++i >= _res.nscount) i=0;
-	if (poll(&duh,1,1000) == 1) {
+#ifdef WANT_IPV6_PLUGPLAY_DNS
+	if (duh[0].fd==-1 && duh[1].fd==-1) goto nxdomain;
+	duh[0].revents=0;
+	if (poll(duh[0].fd==-1?duh+1:duh,duh[0].fd==-1?1:2,1000) > 0) {
+#else
+	if (poll(duh,1,1000) == 1) {
+#endif
 	  /* read and parse answer */
 	  unsigned char inpkg[1500];
-	  int len=read(duh.fd,inpkg,1500);
+#ifdef WANT_IPV6_PLUGPLAY_DNS
+	  int len;
+	  len=read(duh[0].revents&POLLIN?duh[0].fd:duh[1].fd,inpkg,1500);
+#else
+	  int len=read(duh[0].fd,inpkg,1500);
+#endif
 	  /* header, question, answer, authority, additional */
 	  if (inpkg[0]!=packet[0] || inpkg[1]!=packet[1]) continue;	/* wrong ID */
 	  if ((inpkg[2]&0xf9) != (_res.options&RES_RECURSE?0x81:0x80)) continue;	/* not answer */
-	  if ((inpkg[3]&0x0f) != 0) { h_errno=HOST_NOT_FOUND; return -1; }		/* error */
+	  if ((inpkg[3]&0x0f) != 0) {
+#ifdef WANT_IPV6_PLUGPLAY_DNS
+/* if the normal DNS server says NXDOMAIN, still give the multicast method some time */
+	    if (duh[0].revents&POLLIN) {
+	      duh[0].fd=-1;
+	      if (duh[1].fd!=-1) {
+		if (j>10) j=10;
+		continue;
+	      }
+	    } else
+	      continue;
+/* ignore NXDOMAIN from the multicast socket */
+nxdomain:
+#endif
+	    h_errno=HOST_NOT_FOUND;
+	    return -1;
+	  }		/* error */
 	  if (len>anslen) {
 	    h_errno=NO_RECOVERY;
 	    return -1;

@@ -90,10 +90,6 @@ void __dns_readstartfiles(void) {
   int len;
   if (_res.nscount>0) return;
   {
-    struct sockaddr_in to;
-#ifdef WANT_IPV6_DNS
-    struct sockaddr_in6 to6;
-#endif
     char *cacheip=getenv("DNSCACHEIP");
 #ifdef WANT_FULL_RESOLV_CONF
     __dns_search=0;

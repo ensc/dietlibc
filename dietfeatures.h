@@ -79,6 +79,10 @@
  * against glibc fail?  This may fail with older binutils. */
 #define WANT_SAFEGUARD
 
+/* this enables an experimental DNS hack of mine.
+ * See http://www.fefe.de/ipv6pnpdns.html */
+#define WANT_IPV6_PLUGPLAY_DNS
+
 /* dy you want that malloc(0) return a pointer to a "zero-length" object
  * that is realloc-able; means realloc(..,size) gives a NEW object (like a
  * call to malloc(size)).

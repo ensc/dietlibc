@@ -8,6 +8,8 @@
   remove several warnings (Johannes Stezenbach)
   Olaf: fixing tmpfile (missing parameter) and __dtostr (gcc 2.95)
   Olaf: add the pthread-semaphore support.
+  implemented experimental plug-and-play IPv6 DNS
+    (see dietfeatures.h, see http://www.fefe.de/ipv6pnpdns.html)
 
 0.23:
   update sys/soundcard.h
