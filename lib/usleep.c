@@ -1,4 +1,5 @@
 #include <time.h>
+#include <unistd.h>
 
 /* nano * 1000 == usecs
  * usecs * 1000 == msecs

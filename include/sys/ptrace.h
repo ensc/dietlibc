@@ -164,27 +164,29 @@ struct pt_regs {
 
 #define STACK_FRAME_OVERHEAD	96	/* size of minimum stack frame */
 
+#include <inttypes.h>
+
 /* this typedef defines how a Program Status Word looks like */
 typedef struct {
-        __u32   mask;
-        __u32   addr;
+        uint32_t   mask;
+        uint32_t   addr;
 } psw_t __attribute__ ((aligned(8)));
 
 typedef union
 {
 	float   f;
 	double  d;
-        __u64   ui;
+        uint64_t   ui;
 	struct
 	{
-		__u32 hi;
-		__u32 lo;
+		uint32_t hi;
+		uint32_t lo;
 	} fp;
 } freg_t;
 
 typedef struct
 {
-	__u32   fpc;
+	uint32_t   fpc;
 	freg_t  fprs[NUM_FPRS];              
 } s390_fp_regs;
 
@@ -197,27 +199,29 @@ typedef struct
 typedef struct
 {
 	psw_t psw;
-	__u32 gprs[NUM_GPRS];
-	__u32 acrs[NUM_ACRS];
-	__u32 orig_gpr2;
+	uint32_t gprs[NUM_GPRS];
+	uint32_t acrs[NUM_ACRS];
+	uint32_t orig_gpr2;
 } s390_regs;
 
 struct pt_regs 
 {
 	psw_t psw;
-	__u32 gprs[NUM_GPRS];
-	__u32 acrs[NUM_ACRS];
-	__u32 orig_gpr2;
-	__u32 trap;
-        __u32 old_ilc;
+	uint32_t gprs[NUM_GPRS];
+	uint32_t acrs[NUM_ACRS];
+	uint32_t orig_gpr2;
+	uint32_t trap;
+        uint32_t old_ilc;
 };
 
 typedef struct
 {
-	__u32 cr[3];
+	uint32_t cr[3];
 } per_cr_words  __attribute__((packed));
 
 #define PER_EM_MASK 0xE8000000
+
+typedef uint32_t addr_t;
 
 typedef	struct
 {
@@ -241,9 +245,9 @@ typedef	struct
 
 typedef struct
 {
-	__u16          perc_atmid;          /* 0x096 */
-	__u32          address;             /* 0x098 */
-	__u8           access_id;           /* 0x0a1 */
+	uint16_t          perc_atmid;          /* 0x096 */
+	uint32_t          address;             /* 0x098 */
+	uint8_t           access_id;           /* 0x0a1 */
 } per_lowcore_words  __attribute__((packed));
 
 typedef struct
@@ -283,8 +287,8 @@ typedef struct
 	 * These addresses are copied into cr10 & cr11 if single
 	 * stepping is switched off
 	 */
-	__u32     starting_addr;
-	__u32     ending_addr;
+	uint32_t     starting_addr;
+	uint32_t     ending_addr;
 	union {
 		per_lowcore_words words;
 		per_lowcore_bits  bits;
@@ -293,7 +297,7 @@ typedef struct
 
 typedef struct
 {
-	__u32  len;
+	uint32_t  len;
 	addr_t kernel_addr;
 	addr_t process_addr;
 } ptrace_area;
@@ -330,8 +334,8 @@ typedef struct
 
 /* Sequence of bytes for breakpoint illegal instruction.  */
 #define S390_BREAKPOINT     {0x0,0x1}
-#define S390_BREAKPOINT_U16 ((__u16)0x0001)
-#define S390_SYSCALL_OPCODE ((__u16)0x0a00)
+#define S390_BREAKPOINT_U16 ((uint16_t)0x0001)
+#define S390_SYSCALL_OPCODE ((uint16_t)0x0a00)
 #define S390_SYSCALL_SIZE   2
 
 /*
@@ -341,9 +345,9 @@ typedef struct
 struct user_regs_struct
 {
 	psw_t psw;
-	__u32 gprs[NUM_GPRS];
-	__u32 acrs[NUM_ACRS];
-	__u32 orig_gpr2;
+	uint32_t gprs[NUM_GPRS];
+	uint32_t acrs[NUM_ACRS];
+	uint32_t orig_gpr2;
 	s390_fp_regs fp_regs;
 	/*
 	 * These per registers are in here so that gdb can modify them
@@ -684,9 +688,11 @@ struct pt_regs {
 
 #elif defined(__hppa__)
 
+#include <inttypes.h>
+
 struct pt_regs {
 	unsigned long gr[32];	/* PSW is in gr[0] */
-	__u64 fr[32];
+	uint64_t fr[32];
 	unsigned long sr[ 8];
 	unsigned long iasq[2];
 	unsigned long iaoq[2];

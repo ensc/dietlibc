@@ -106,7 +106,7 @@ void *sbrk(ptrdiff_t increment) __THROW;
 int gethostname(char *name, size_t len) __THROW;
 int sethostname(const char *name, size_t len) __THROW;
 
-void usleep(unsigned long usec) __THROW;
+int usleep(unsigned long useconds) __THROW;
 unsigned int sleep(unsigned int seconds) __THROW;
 
 unsigned int alarm(unsigned int seconds) __THROW;

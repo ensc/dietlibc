@@ -7,7 +7,6 @@
 extern int __isleap(int year);
 
 int nanosleep(const struct timespec *req, struct timespec *rem) __THROW;
-int usleep(unsigned long usec); /* SUSv2 */
 
 time_t mktime(struct tm *timeptr) __THROW __pure__;
 
