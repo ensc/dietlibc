@@ -12,21 +12,13 @@
 .text
 __unified_syscall4:
 	ldmfd	sp!, {r4, r5, r6}
-	b	__unified_syscall
-.weak exit
-exit:
-.type _exit,function
-.global _exit
-_exit:
-__exit:
-	swi	__NR_exit
 __unified_syscall:
 	cmn	r0, #4096
 	movcc	pc, lr
-	rsb	r0, r0, #0
+	rsb	r1, r0, #0
 
 	/* and PIC-code with no REAL changes ... ARM RULZ ! */
-	stmdb	sp!, {r0, lr}
+	stmdb	sp!, {r1, lr}
 	bl	__errno_location(PLT)
 	ldmia	sp!, {r1, lr}
 	str	r1, [r0]
