@@ -12,10 +12,6 @@ void __stdio_flushall(void) {
   fflush(0);
 }
 
-extern int __fflush_stdin(void);
-extern int __fflush_stdout(void);
-extern int __fflush_stderr(void);
-
 int fflush(FILE *stream) {
   if (stream==0) {
     int res;
