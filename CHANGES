@@ -12,6 +12,7 @@
     yet, but it's a start.
   added getdents64 backwards compatibility and include it in large file
     support #defines
+  perror now checks if the message is NULL like glibc (Thomas Ogrisegg)
 
 0.17:
   fix several bugs in getservent_r

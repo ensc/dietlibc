@@ -15,8 +15,10 @@ void  perror ( const char* prepend )
     if ( (unsigned int) errno < (unsigned int) __SYS_NERR )
         message = sys_errlist [errno];
 
-    write ( 2, prepend, strlen(prepend) );
-    write ( 2, ": ", 2 );
+    if (prepend) {
+      write ( 2, prepend, strlen(prepend) );
+      write ( 2, ": ", 2 );
+    }
     write ( 2, message, strlen(message) );
     write ( 2, "\n", 1 );
 }
