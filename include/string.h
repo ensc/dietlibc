@@ -52,5 +52,6 @@ char *strsignal(int signum) __THROW;
 char *strtok(char *s, const char *delim) __THROW;
 char *strtok_r(char *s, const char *delim, char **ptrptr) __THROW;
 
+int ffs(int i) __THROW __attribute__((__const__));
 
 #endif
