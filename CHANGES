@@ -14,6 +14,8 @@
     insightful discussions and patches I partially used for the last three)
   added getpriority and setpriority (also by Abraham)
   oops, I broke strtoul in a recent optimization attempt.
+  oi, setjmp and longjmp were broken on other platforms, too!
+    Thanks to Sébastien Côté for reporting this.
 
 0.7:
   clone support for i386,alpha,arm and sparc by Olaf.

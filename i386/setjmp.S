@@ -1,6 +1,4 @@
-#define _ASM
-#define _SETJMP_H
-#include <bits/setjmp.h>
+#include <setjmp.h>
 
 /* setjmp for i386.
    Copyright (C) 1995, 1996, 1997 Free Software Foundation, Inc.

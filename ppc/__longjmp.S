@@ -1,6 +1,4 @@
-#define _ASM
-#define _SETJMP_H
-#include <bits/setjmp.h>
+#include <setjmp.h>
 
 
 #ifdef PIC
