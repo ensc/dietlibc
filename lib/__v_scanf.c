@@ -149,7 +149,7 @@ scan_hex:
 		}
 	      }
 	    }
-	    while (tpch!=-1) {
+	    while ((width)&&(tpch!=-1)) {
 	      register unsigned long c=tpch&0xff;
 #ifdef WANT_LONGLONG_SCANF
 	      register unsigned long long d=c|0x20;
@@ -164,6 +164,7 @@ scan_hex:
 #else
 	      v=(d<v)?ULONG_MAX:d+c;
 #endif
+	      --width;
 	      tpch=A_GETC(fn);
 	    }
 	    if ((ch|0x20)<'p') {
