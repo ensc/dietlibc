@@ -78,10 +78,8 @@ LIBLATIN1_OBJS=$(patsubst liblatin1/%.c,$(OBJDIR)/%.o,$(wildcard liblatin1/*.c))
 $(OBJDIR)/liblatin1.a: $(LIBLATIN1_OBJS)
 	$(CROSS)ar cru $@ $^
 
-$(OBJDIR)/libpthread.a: $(LIBPTHREAD_OBJS)
-	$(CROSS)ar cru $@ $^
-
-$(OBJDIR)/libpthread.a: dietfeatures.h
+$(OBJDIR)/libpthread.a: $(LIBPTHREAD_OBJS) dietfeatures.h
+	$(CROSS)ar cru $@ $(LIBPTHREAD_OBJS)
 
 $(OBJDIR)/libdietc.so: $(OBJDIR)/dietlibc.a
 	$(CROSS)ld -whole-archive -shared -o $@ $^
