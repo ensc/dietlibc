@@ -17,6 +17,8 @@ strtod:
 #    unsigned int          expo;
 
         movl    4(%esp),%ecx                    # %ecx = p
+        pushl   %eax
+        pushl   %eax
         xorl    %edx,%edx
         incl    %edx                            # %ebx = sign
 
@@ -46,10 +48,9 @@ strtod:
         cmpb    $'-'-9,%al
         jne     .Lnosign
         negl    %edx
-.Lplus:   incl    %ecx
+.Lplus: incl    %ecx
 .Lnosign:
-        push    %edx
-        push    %eax
+        movl    %edx,4(%esp)                    # SP[4] = sign
 
 
 #    while ( (unsigned int)(*p - '0') < 10u )
@@ -137,7 +138,7 @@ strtod:
         je      .Lexpminus
         fcompp
         fldz
-        movl    4+4*2(%esp),%ecx
+        movl    4+4*6(%esp),%ecx
         jmp     .Lende
 
 .Lexpminus:
@@ -192,13 +193,14 @@ strtod:
 #}
 
 .Lende:
-        pop     %eax
-        fimull  (%esp)
+        fimull  4(%esp)
+
         popl    %eax
-        movl    8(%esp),%eax
-        andl    %eax,%eax
-        jz      .Lnostore
-        movl    %ecx,(%eax)
+        popl    %eax
+#        movl    8(%esp),%eax
+#        andl    %eax,%eax
+#        jz      .Lnostore
+#        movl    %ecx,(%eax)
 .Lnostore:
         ret
 

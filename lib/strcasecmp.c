@@ -1,17 +1,17 @@
-#include <ctype.h>
-#include "dietfeatures.h"
 
-int strcasecmp(register const char *s,register const char *t) {
-  register char x;
+int  strcasecmp ( const char* s1, const char* s2 )
+{
+    register unsigned int  x2;
+    register unsigned int  x1;
 
-  for (;;) {
-    x = tolower(*s); if (x != tolower(*t)) break; if (!x) break; ++s; ++t;
-#ifndef WANT_SMALL_STRING_ROUTINES
-    x = tolower(*s); if (x != tolower(*t)) break; if (!x) break; ++s; ++t;
-    x = tolower(*s); if (x != tolower(*t)) break; if (!x) break; ++s; ++t;
-    x = tolower(*s); if (x != tolower(*t)) break; if (!x) break; ++s; ++t;
-#endif
-  }
-  return ((int)(unsigned int)(unsigned char) x)
-       - ((int)(unsigned int)(unsigned char) *t);
+    while (1) {
+        x2 = *s2++ - 'A'; if (x2 < 26u) x2 += 32;
+        x1 = *s1++ - 'A'; if (x1 < 26u) x1 += 32;
+        if ( x2 != x1 )
+            break;
+        if ( x1 == -'A' )
+            break;
+    }
+
+    return x1 - x2;
 }

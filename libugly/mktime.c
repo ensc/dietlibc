@@ -3,7 +3,7 @@
 /* seconds per day */
 #define SPD 24*60*60
 
-extern time_t __spm[];
+extern short __spm[];
 
 time_t mktime(struct tm *t) {
   time_t x=0;

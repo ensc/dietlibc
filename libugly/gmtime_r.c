@@ -3,7 +3,7 @@
 /* seconds per day */
 #define SPD 24*60*60
 
-extern time_t __spm[];
+extern short __spm[];
 
 struct tm *gmtime_r(const time_t *timep, struct tm *r) {
   time_t i;

@@ -1,7 +1,7 @@
 #include <time.h>
 
 /* seconds per month -- nonleap! */
-const time_t __spm[12] =
+const short __spm[12] =
   { 0,
     (31),
     (31+28),

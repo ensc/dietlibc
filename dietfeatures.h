@@ -51,6 +51,12 @@
 /* do you want gethostbyname and friends to consult /etc/hosts? */
 #define WANT_ETC_HOSTS
 
+/* do you want math functions high precision rather than fast/small? */
+#define WANT_HIGH_PRECISION_MATH
+
+/* do you want support for matherr? */
+#define WANT_MATHERR
+
 /* stop uncommenting here ;-) */
 #ifndef WANT_FASTER_STRING_ROUTINES
 #define WANT_SMALL_STRING_ROUTINES

@@ -36,7 +36,7 @@
 #include <stdarg.h>
 #include <sys/wait.h>
 #include <libgen.h>
-
+#include <math.h>
 #include <errno.h>
 #include <syslog.h>
 #include <sys/un.h>
@@ -87,7 +87,14 @@ void foo(int tmp,...) {
 extern int __lltostr(char *s, int size, unsigned long long i, int base, char UpCase);
 
 int main(int argc,char *argv[]) {
+#if 0
+  char buf[101];
+  __dtostr(M_PI,buf,100,6);
+#endif
+  printf("%d\n",strcasecmp("foo","FOO"));
+#if 0
   printf("%.24s", "Sun Jan  2 08:29:13 1994\n");
+#endif
 #if 0
   printf("%.*s\n",13,"fnord");
 #endif
