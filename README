@@ -12,10 +12,7 @@ To compile:
 
 	$ make
 
-make should compile the diet libc itself without warnings.  In addition
-to the diet libc, the default make target includes t, which is a test
-program and probably contains code which produces warnings.  You can
-safely ignore them.
+make should compile the diet libc itself.
 
 When make is done, it will have created dietlibc.a in bin-i386 (or
 bin-ppc, bin-alpha, bin-sparc, bin-ppc or bin-arm, depending on your
