@@ -8,7 +8,7 @@ LIBDIR=${prefix}/lib
 BINDIR=${prefix}/bin
 MAN1DIR=${prefix}/man/man1
 
-MYARCH=$(shell uname -m | sed 's/i[4-9]86/i386/')
+MYARCH=$(shell uname -m | sed -e 's/i[4-9]86/i386/' -e 's/armv[3-6][lb]/arm/')
 
 # This extra-ugly cruft is here so make will not run uname and sed each
 # time it looks at $(OBJDIR).  This alone sped up running make when
@@ -235,10 +235,14 @@ clean:
 	$(MAKE) -C dynlinker clean
 	$(MAKE) -C libdl clean
 
-tar: clean
-	rm -f armv4l
-	ln -sf arm armv4l
-	cd ..; tar cvvf dietlibc.tar.bz2 dietlibc --use=bzip2 --exclude CVS
+VERSION=dietlibc-$(shell head -1 CHANGES|sed 's/://')
+CURNAME=$(notdir $(shell pwd))
+
+tar: clean rename
+       cd ..; tar cvvf $(VERSION).tar.bz2 $(VERSION) --use=bzip2 --exclude CVS
+
+rename:
+       if test $(CURNAME) != $(VERSION); then cd .. && mv $(CURNAME) $(VERSION); fi
 
 $(OBJDIR)/exports: $(OBJDIR)/dietlibc.a
 	nm -g $(OBJDIR)/dietlibc.a | grep -w T | awk '{ print $$3 }' | sort -u > $(OBJDIR)/exports

@@ -36,6 +36,7 @@ static const char* Os[] = {
 int main(int argc,char *argv[]) {
   int _link=0;
   int compile=0;
+  int preprocess=0;
   char diethome[]=DIETHOME;
 #ifdef INSTALLVERSION
   char platform[1000]=DIETHOME "/lib-";
@@ -113,9 +114,12 @@ int main(int argc,char *argv[]) {
       char *d,*e,*f;
 #endif
 /* we need to add -I... if the command line contains -c, -S or -E */
-      for (i=2; i<argc; ++i)
-	if (!strcmp(argv[i],"-c") || !strcmp(argv[i],"-S") || !strcmp(argv[i],"-E"))
+      for (i=2; i<argc; ++i) {
+	if (!strcmp(argv[i],"-c") || !strcmp(argv[i],"-S"))
 	  compile=1;
+	if (!strcmp(argv[i],"-E"))
+	  preprocess=compile=1;
+      }
 /* we need to add -nostdlib if we are not compiling*/
       _link=!compile;
 #ifdef __DYN_LIB
@@ -168,7 +172,7 @@ int main(int argc,char *argv[]) {
       if (_link || shared) { *dest++=(char*)nostdlib; *dest++=dashL; }
 #endif
 #ifdef WANT_SAFEGUARD
-      if (compile) {
+      if (compile && !preprocess) {
 	*dest++=safeguard1;
 	*dest++=safeguard2;
       }
