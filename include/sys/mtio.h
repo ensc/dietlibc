@@ -2,7 +2,6 @@
 #define _SYS_MTIO_H
 
 #include <sys/ioctl.h>
-#include <sys/types.h>	/* for daddr_t */
 
 __BEGIN_DECLS
 
@@ -69,8 +68,9 @@ struct mtget {
   long int mt_gstat;	/* generic (device independent) status */
   long int mt_erreg;	/* error register */
   /* The next two fields are not always used */
-  daddr_t mt_fileno;	/* number of current file on tape */
-  daddr_t mt_blkno;	/* current block number */
+  /* these really are daddr_t, but that is only declared with _BSD_SOURCE */
+  long mt_fileno;	/* number of current file on tape */
+  long mt_blkno;	/* current block number */
 };
 
 /*
