@@ -176,4 +176,30 @@ int _sysctl(struct __sysctl_args *args) __THROW;
 #define _SC_NPROCESSORS_CONF _SC_NPROCESSORS_ONLN
 long sysconf(int name) __THROW;
 
+/* Linux only: */
+int getresuid(uid_t *ruid, uid_t *euid, uid_t *suid) __THROW;
+int getresgid(gid_t *rgid, gid_t *egid, gid_t *sgid) __THROW;
+int setresuid(uid_t ruid, uid_t euid, uid_t suid) __THROW;
+int setresgid(gid_t rgid, gid_t egid, gid_t sgid) __THROW;
+
+/* 32-bit uid support */
+int chown32(const char *path, uid32_t owner, gid32_t group) __THROW;
+int fchown32(int fd, uid32_t owner, gid32_t group) __THROW;
+int lchown32(const char *path, uid32_t owner, gid32_t group) __THROW;
+uid32_t getuid32(void) __THROW;
+uid32_t geteuid32(void) __THROW;
+gid32_t getgid32(void) __THROW;
+gid32_t getegid32(void) __THROW;
+int setuid32(uid32_t uid) __THROW;
+int setgid32(gid32_t gid) __THROW;
+int setreuid32(uid32_t ruid, uid32_t euid) __THROW;
+int setregid32(gid32_t rgid, gid32_t egid) __THROW;
+#define seteuid32(euid) setreuid32(-1,euid)
+#define setegid32(egid) setregid32(-1,egid)
+int getgroups32(int size, gid32_t list[]) __THROW;
+int getresuid32(uid32_t *ruid, uid32_t *euid, uid32_t *suid);
+int getresgid32(gid32_t *rgid, gid32_t *egid, gid32_t *sgid);
+int setresuid32(uid32_t ruid, uid32_t euid, uid32_t suid) __THROW;
+int setresgid32(gid32_t rgid, gid32_t egid, gid32_t sgid) __THROW;
+
 #endif

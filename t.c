@@ -96,6 +96,9 @@ extern char* strcpy2(char*a,char*b);
 
 int main(int argc,char *argv[]) {
 #if 0
+  printf("%u\n",getuid32());
+#endif
+#if 0
   FILE *f;
   int i;
   char addr6p[8][5];
@@ -110,7 +113,7 @@ int main(int argc,char *argv[]) {
     }
   }
 #endif
-#if 1
+#if 0
   printf("%s\n",crypt("test","$1$"));
 #endif
 #if 0

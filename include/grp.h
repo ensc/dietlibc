@@ -20,6 +20,7 @@ extern void setgrent(void) __THROW;
 extern void endgrent(void) __THROW;
 
 extern int setgroups(size_t n, const gid_t *groups) __THROW;
+extern int setgroups32(size_t n, const gid32_t *groups) __THROW;
 extern int initgroups(const char *user, gid_t group) __THROW;
 
 #endif

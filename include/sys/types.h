@@ -65,6 +65,9 @@ __extension__ typedef signed long long off64_t;
 __extension__ typedef unsigned long long ino64_t;
 __extension__ typedef signed long long blkcnt64_t;
 
+typedef uint32_t uid32_t;
+typedef uint32_t gid32_t;
+
 typedef long int fpos_t;
 
 #define socklen_t socklen_t

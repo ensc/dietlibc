@@ -11,6 +11,7 @@
   add Frank Klemm's optimized md5
   add -Os option to diet (see diet.1).
   several IPv6 constants and HZ were missing, thanks Johannes Kloos.
+  add 32-bit uid/gid syscalls.
 
 0.11:
   fix major oops in DNS routines (only with WANT_FULL_RESOLV_CONF enabled).

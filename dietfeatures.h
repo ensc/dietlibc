@@ -36,7 +36,7 @@
 #define WANT_LINKER_WARNINGS
 
 /* you need to define this if you want to run your programs with large
- * file support on kernel 2.2 or 2.4 */
+ * file support on kernel 2.2 or 2.0 */
 #define WANT_LARGEFILE_BACKCOMPAT
 
 /* do you want localtime(3) to read /etc/localtime?
