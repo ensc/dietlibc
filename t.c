@@ -224,7 +224,7 @@ int main(int argc,char *argv[]) {
 #if 1
   char buf[1024];
   struct hostent* r;
-  r=gethostbyname("borg");
+  r=gethostbyname("duh");
   {
 /*  while (r=gethostent_r(buf,1024)) { */
     if (r && r->h_name) {
