@@ -13,8 +13,8 @@ int mkstemp(char* template) {
   int randfd;
   int i,res;
   unsigned int random;
-  if (tmp<template) goto fnord;
-  for (i=0; i<6; ++i) if (tmp[i]!='X') { fnord: errno=EINVAL; return -1; }
+  if (tmp<template) goto error;
+  for (i=0; i<6; ++i) if (tmp[i]!='X') { error: errno=EINVAL; return -1; }
   randfd=open("/dev/urandom",O_RDONLY);
   for (;;) {
     read(randfd,&random,sizeof(random));

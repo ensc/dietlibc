@@ -8,8 +8,8 @@ char* mkdtemp(char* template) {
   char *tmp=template+strlen(template)-6;
   int randfd,i;
   unsigned int random;
-  if (tmp<template) goto fnord;
-  for (i=0; i<6; ++i) if (tmp[i]!='X') { fnord: errno=EINVAL; return 0; }
+  if (tmp<template) goto error;
+  for (i=0; i<6; ++i) if (tmp[i]!='X') { error: errno=EINVAL; return 0; }
   randfd=open("/dev/urandom",O_RDONLY);
   for (;;) {
     read(randfd,&random,sizeof(random));

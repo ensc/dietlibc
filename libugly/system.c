@@ -28,7 +28,7 @@ int __libc_system (const char *line)
   if (sigaction(SIGINT,  &sa, &intr)<0) return -1;
   if (sigaction(SIGQUIT, &sa, &quit)<0) {
     save = errno;
-fnord:
+undo:
     sigaction (SIGINT, &intr, (struct sigaction*)0);
     errno=save;
     return -1;
@@ -38,7 +38,7 @@ fnord:
   if (sigprocmask(SIG_BLOCK,&block,&omask)<0) {
     save=errno;
     sigaction (SIGQUIT, &quit, (struct sigaction*)0);
-    goto fnord;
+    goto undo;
   }
 
   pid=fork();

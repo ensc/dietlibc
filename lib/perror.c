@@ -7,11 +7,11 @@
 
 void perror(const char *s) {
   register const char *message="[unknown error]";
-  register int fnord=errno;
+  register int save=errno;
   write(2,s,strlen(s));
   write(2,": ",2);
-  if (fnord>=0 && fnord<sys_nerr)
-    message=sys_errlist[fnord];
+  if (save>=0 && save<sys_nerr)
+    message=sys_errlist[save];
   write(2,message,strlen(message));
   write(2,"\n",1);
 }

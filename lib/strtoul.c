@@ -9,11 +9,11 @@ unsigned long int strtoul(const char *nptr, char **endptr, int base)
 
   while(isspace(*nptr)) ++nptr;
   if (*nptr == '+') ++nptr;
-  if (base==16 && nptr[0]=='0') goto fnord;
+  if (base==16 && nptr[0]=='0') goto skip0x;
   if (!base) {
     if (*nptr=='0') {
       base=8;
-fnord:
+skip0x:
       if (nptr[1]=='x'||nptr[1]=='X') {
 	nptr+=2;
 	base=16;
