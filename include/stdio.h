@@ -53,6 +53,14 @@ int puts(const char *s) __THROW;
 
 long fseek(FILE *stream, long offset, int whence) __THROW;
 long ftell(FILE *stream) __THROW;
+off_t fseeko(FILE *stream, off_t offset, int whence) __THROW;
+off_t ftello(FILE *stream) __THROW;
+
+#ifdef __quad_t
+off64_t fseeko64(FILE *stream, off64_t offset, int whence) __THROW;
+off64_t ftello64(FILE *stream) __THROW;
+#endif
+
 void rewind(FILE *stream) __THROW;
 int fgetpos(FILE *stream, fpos_t *pos) __THROW;
 int fsetpos(FILE *stream, fpos_t *pos) __THROW;
