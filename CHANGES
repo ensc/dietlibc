@@ -10,6 +10,8 @@
   Michal's patch also fixed several of the outstanding warnings.  Thanks!
   Andre sent a patch to add ARM profiling.  He says it does not work
     yet, but it's a start.
+  added getdents64 backwards compatibility and include it in large file
+    support #defines
 
 0.17:
   fix several bugs in getservent_r
