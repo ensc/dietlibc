@@ -1,6 +1,8 @@
 #ifndef _GLOB_H
 #define _GLOB_H
 
+#include <sys/cdefs.h>
+#include <sys/types.h>
 
 typedef struct {
 	size_t gl_pathc;    /* Count of paths matched so far  */

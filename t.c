@@ -102,6 +102,7 @@ extern char* strcpy2(char*a,char*b);
      __asm__ __volatile__ ("rdtsc" : "=a" (low) : : "edx")
 
 int main(int argc,char *argv[]) {
+  printf("%g\n",atof("30"));
 #if 0
   char* buf[]={"FOO=FNORD","A=B","C=D","PATH=/usr/bin:/bin",0};
   environ=buf;
@@ -336,7 +337,7 @@ int main(int argc,char *argv[]) {
 #if 0
   puts(ttyname(0));
 #endif
-#if 1
+#if 0
   char buf[1024];
   struct hostent* r;
   int i=0;
