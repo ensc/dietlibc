@@ -76,15 +76,19 @@ void __dns_readstartfiles(void) {
 	}
       }
 #ifdef WANT_FULL_RESOLV_CONF
-      if (!strncmp(buf,"search",6) || !strncmp(buf,"domain",6)) {
+      else if (!strncmp(buf,"search",6) || !strncmp(buf,"domain",6)) {
 	buf+=6;
-	while (buf<last && isblank(*buf)) {
+	while (buf<last && *buf!='\n') {
+	  char save;
 	  while (buf<last && isblank(*buf)) ++buf;
 	  __dns_domains[__dns_search]=buf;
 	  while (buf<last && (*buf=='.' || *buf=='-' || isalnum(*buf))) ++buf;
-	  if (buf<last) *buf++=0;
-	  if ((__dns_domains[__dns_search]=strdup(__dns_domains[__dns_search])))
+	  save=*buf;
+	  if (buf<last) *buf=0;
+	  if (__dns_domains[__dns_search]<buf &&
+	      (__dns_domains[__dns_search]=strdup(__dns_domains[__dns_search])))
 	    ++__dns_search;
+	  if (buf<last) *buf=save;
 	}
 	continue;
       }

@@ -228,11 +228,11 @@ int main(int argc,char *argv[]) {
   foo[6]=0;
   puts(foo);
 #endif
-#if 0
+#if 1
   struct hostent * host;
   struct in_addr i;
 
-  host = gethostbyname2("borg",AF_INET6);
+  host = gethostbyname2("knuth",AF_INET);
 
   if (!host)
     printf("host null\n");
