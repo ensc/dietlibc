@@ -159,7 +159,7 @@ struct _dl_handle* _dl_dyn_scan(struct _dl_handle* dh, void* dyn_addr, int flags
   void* jmprel=0;
   int pltreltype=0;
   int pltrelsize=0;
-  int rel=0;
+  unsigned long rel=0;
   int relent=0;
   int relsize=0;
 
@@ -217,7 +217,7 @@ struct _dl_handle* _dl_dyn_scan(struct _dl_handle* dh, void* dyn_addr, int flags
 
     /* Relocation */
     else if (dyn_tab[i].d_tag==DT_REL) {
-      rel=dyn_tab[i].d_un.d_val;
+      rel=(unsigned long)(dh->mem_base+dyn_tab[i].d_un.d_val);
       DEBUG("_dl_load have rel @ %08lx\n",(long)rel);
     }
     else if (dyn_tab[i].d_tag==DT_RELENT) {

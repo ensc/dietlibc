@@ -1,5 +1,8 @@
 # local "test" make file
 
+CC  = gcc
+DCC = diet $(CC)
+
 SRC = $(wildcard *.c) # test/test.c
 OBJ = _dl_jump.o $(SRC:.c=.o)
 
@@ -7,10 +10,10 @@ OBJ = _dl_jump.o $(SRC:.c=.o)
 CFLAGS = -Wall -O2 -D__OD_CLEAN_ROOM -DNODIETREF -fPIC -frerun-loop-opt -fschedule-insns2 # -fomit-frame-pointer
 
 %.o : %.S
-	diet gcc $(CFLAGS) -c -o $@ $^
+	$(DCC) $(CFLAGS) -c -o $@ $^
 
 %.o : %.c
-	diet gcc $(CFLAGS) -c -o $@ $^
+	$(DCC) $(CFLAGS) -c -o $@ $^
 
 it: _dl_main.o
 

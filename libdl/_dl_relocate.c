@@ -25,7 +25,6 @@ static int _dl_apply_relocate(struct _dl_handle* dh, _dl_rel_t *rel) {
   int typ,ret=0;
   Elf_Addr *loc;
 
-  rel = (void*)rel+(long)dh->mem_base;
   loc = (Elf_Addr *)(dh->mem_base+rel->r_offset);
 
   DEBUG("_dl_apply_relocate %d @ %08lx (%08lx)\n",ELF_R_TYPE(rel->r_info),(unsigned long)loc,*(unsigned long*)loc);
@@ -81,4 +80,3 @@ int _dl_relocate(struct _dl_handle* dh, _dl_rel_t *rel, int num) {
   }
   return 0;
 }
-

@@ -14,12 +14,12 @@ static void (*fini_entry)(void);
 
 #warning "Ignore all warnings about 'used but never defined' functions..."
 static void _dl_jump(void);
-static void _dl_sys_exit(int);
+static void _dl_sys_exit(int val);
+static int _dl_sys_write(int fd,char*buf,unsigned long len);
 
 #ifdef __i386__
 
 asm(".text
-.global _start
 .type _start,@function
 _start:
 	movl	%esp, %ebp		# save stack
@@ -59,7 +59,7 @@ _start:
 	xorl	%esi, %esi
 
 # jump to program entry point
-#	ret
+	ret
 
 # test / debug code :)
 _dl_sys_exit:
@@ -67,6 +67,17 @@ _dl_sys_exit:
 	popl	%ebx
 	int	$0x80
 	hlt
+
+_dl_sys_write:
+	pushl	%ebx
+	movl	%esp,%ebx
+	movl	16(%ebx),%edx
+	movl	12(%ebx),%ecx
+	movl	8(%ebx),%ebx
+	movl	$4,%eax
+	int	$0x80
+	popl	%ebx
+	ret
 
 #.global _dl_jump
 .type	_dl_jump,@function
@@ -97,10 +108,17 @@ static inline unsigned long* get_got(void) {
   return got;
 }
 
+static inline unsigned long get_base(void) {
+  unsigned long ret;
+  asm("leal	_start@GOTOFF(%%ebx),%0\n"
+      "subl	_start@GOT(%%ebx),%0" : "=r"(ret) : : "cc");
+  return ret;
+}
+
 #elif __arm__
 
 asm(".text
-.global _start
+.type _start,function
 _start:
 	mov	r4, sp
 	mov	fp, #0			@ start new stack frame
@@ -137,6 +155,10 @@ _dl_sys_exit:
 	eor	lr, lr, lr		@ OR DIE !
 	mov	pc, lr
 
+_dl_sys_write:
+	swi	#4			@ write
+	mov	pc, lr
+
 @.global _dl_jump
 .type	_dl_jump,function
 _dl_jump:
@@ -160,9 +182,18 @@ static inline unsigned long* get_got(void) {
   return got;
 }
 
+static unsigned long get_base(void) {		/* no inline otherwise _start it too far away :( */
+  extern void __dl_start asm ("_start");
+  unsigned long gaddr = (unsigned long)&__dl_start;
+  unsigned long raddr;
+  asm ("adr %0, _start" : "=r"(raddr) );
+  return raddr - gaddr;
+}
+
 #else
 #error "libdl: arch not supported"
 #endif
+
 
 /* here do the code includes */
 
@@ -205,6 +236,39 @@ fini:
   return dest;
 }
 
+/* strcmp.c */
+static int _dl_lib_strcmp(register const unsigned char *s,register const unsigned char *t) {
+  register char x;
+  for (;;) {
+    x = *s; if (x != *t) break; if (!x) break; ++s; ++t;
+  }
+  return ((int)(unsigned int)x) - ((int)(unsigned int)*t);
+}
+
+/* memcpy.c */
+static void* _dl_lib_memcpy(void* dst, const void* src, unsigned long count) {
+  register char *d=dst;
+  register const char *s=src;
+  ++count;	/* this actually produces better code than using count-- */
+  while (--count) {
+    *d = *s;
+    ++d; ++s;
+  }
+  return dst;
+}
+
+static void *memset(void *dst, int ch, unsigned long count) {
+  register char *d=dst;
+  ++count;
+  while (--count) {
+    *d=ch;
+    ++d;
+  }
+  return dst;
+}
+
+#define memcpy(d,s,c) _dl_lib_memcpy(d,s,c)
+
 
 /* dlerror.c */
 static int _dl_error;
@@ -221,10 +285,10 @@ static struct _dl_err_msg {
   MSG("shared object is not position independent: "),
   MSG("can't resolve all symbols in: "),
   MSG("can't find symbol: "),
+  MSG("invalid relocation type in: "),
 };
 
-const char *dlerror(void)
-{
+const char *dlerror(void) {
   static char buf[1024];
   register int len=sizeof(buf)-1;
   buf[0]=0;
@@ -243,15 +307,17 @@ const char *dlerror(void)
 }
 
 
-/* strcmp.c */
+static struct _dl_handle* _dl_root_handle;
 
-static int _dl_lib_strcmp(register const unsigned char *s,register const unsigned char *t) {
-  register char x;
-  for (;;) {
-    x = *s; if (x != *t) break; if (!x) break; ++s; ++t;
-  }
-  return ((int)(unsigned int)x) - ((int)(unsigned int)*t);
+static void _fini_run(struct _dl_handle * tmp) {
+  if (tmp->fini) tmp->fini();
+  if (tmp->next) _fini_run(tmp->next);
 }
+static void tt_fini(void) {
+  DEBUG("dyn fini\n");
+  _fini_run(_dl_root_handle);
+}
+
 
 /* dlsym.c + _dl_sym.c */
 #include "elf_hash.h"
@@ -295,7 +361,6 @@ static void *_dl_sym_search(struct _dl_handle *dh, int symbol) {
   char *name=dh->dyn_str_tab+dh->dyn_sym_tab[symbol].st_name;
   DEBUG("_dl_sym_search: search for: %s\n",name);
   for (tmp=_dl_root_handle;tmp && (!sym);tmp=tmp->next) {
-    DEBUG("_dl_sym_search: searching: %08lx %08lx\n",(long)tmp, (long)dh);
     if (tmp==dh) continue;
     DEBUG("_dl_sym_search: searching in %s\n",tmp->name);
     sym=_dlsym((void*)tmp,name);
@@ -315,6 +380,7 @@ static void *_dl_sym(struct _dl_handle *dh, int symbol) {
   return sym;
 }
 
+#include "_dl_relocate.c"
 
 /* lazy function resolver */
 static unsigned long do_resolve(struct _dl_handle *dh, unsigned long off) {
@@ -325,7 +391,6 @@ static unsigned long do_resolve(struct _dl_handle *dh, unsigned long off) {
   if (0) sym_val=(unsigned long)do_resolve; /* TRICK: no warning */
 
   /* modify GOT for REAL symbol */
-  //sym_val=((unsigned long)(tmp_dl->mem_base+tmp_dl->dyn_sym_tab[sym].st_value));
   sym_val=(unsigned long)_dl_sym(dh,sym);
   *((unsigned long*)(dh->mem_base+tmp->r_offset))=sym_val;
 
@@ -335,22 +400,278 @@ static unsigned long do_resolve(struct _dl_handle *dh, unsigned long off) {
   return (unsigned long)_DIE_;
 }
 
-/* bootstarp code */
-static void bootstrap(struct _dl_handle*dh,Elf_Dyn*_dynamic,unsigned long load_addr) {
+/* dynamic section parser */
+static struct _dl_handle* _dl_dyn_scan(struct _dl_handle*dh,Elf_Dyn*_dynamic) {
+  void(*init)(void)=0;
+  unsigned long* tmp;
+
+  _dl_rel_t* plt_rel=0;
+  unsigned long  plt_relsz=0;
+
+  _dl_rel_t* rel=0;
+  unsigned long relent=0;
+  unsigned long relsize=0;
+
   int i;
+
+  DEBUG("_dl_dyn_scan pre dynamic scan %08lx\n",(unsigned long)dh);
+
   for(i=0;_dynamic[i].d_tag;i++) {
-    switch (_dynamic[i].d_tag) {
+    switch(_dynamic[i].d_tag) {
     case DT_HASH:
+      dh->hash_tab = (unsigned long*)(dh->mem_base+_dynamic[i].d_un.d_ptr);
+      DEBUG("_dl_dyn_scan have hash @ %08lx\n",(long)dh->hash_tab);
+      break;
+    case DT_SYMTAB:
+      dh->dyn_sym_tab = (Elf_Sym*)(dh->mem_base+_dynamic[i].d_un.d_ptr);
+      DEBUG("_dl_dyn_scan have dyn_sym_tab @ %08lx\n",(long)dh->dyn_sym_tab);
+      break;
     case DT_STRTAB:
+      dh->dyn_str_tab = (char*)(dh->mem_base+_dynamic[i].d_un.d_ptr);
+      DEBUG("_dl_dyn_scan have dyn_str_tab @ %08lx\n",(long)dh->dyn_str_tab);
+      break;
+
+    case DT_FINI:
+      dh->fini = (void(*)(void))(dh->mem_base+_dynamic[i].d_un.d_val);
+      DEBUG("_dl_dyn_scan have fini @ %08lx\n",(long)dh->fini);
+      break;
+    case DT_INIT:
+      init = (void(*)(void))(dh->mem_base+_dynamic[i].d_un.d_val);
+      DEBUG("_dl_dyn_scan have init @ %08lx\n",(long)dh->init);
+      break;
+
+    case DT_PLTGOT:
+      dh->pltgot = (unsigned long*)(dh->mem_base+_dynamic[i].d_un.d_val);
+      DEBUG("_dl_dyn_scan have plt got @ %08lx\n",(long)dh->pltgot);
+      break;
+
     case DT_JMPREL:
-      _dynamic[i].d_un.d_ptr+=load_addr;
+      plt_rel = (_dl_rel_t*)(dh->mem_base+_dynamic[i].d_un.d_val);
+      dh->plt_rel = plt_rel;
+      DEBUG("_dl_dyn_scan have jmprel @ %08lx\n",(long)plt_rel);
       break;
+    case DT_PLTRELSZ:
+      plt_relsz = _dynamic[i].d_un.d_val;
+      DEBUG("_dl_load have pltrelsize @ %08lx\n",(long)plt_relsz);
+      break;
+
+    case DT_REL:
+      rel = (_dl_rel_t*)(dh->mem_base+_dynamic[i].d_un.d_val);
+      DEBUG("_dl_dyn_scan have rel @ %08lx\n",(long)rel);
+      break;
+    case DT_RELENT:
+      relent=_dynamic[i].d_un.d_val;
+      DEBUG("_dl_dyn_scan have relent  @ %08lx\n",(long)relent);
+      break;
+    case DT_RELSZ:
+      relsize=_dynamic[i].d_un.d_val;
+      DEBUG("_dl_dyn_scan have relsize @ %08lx\n",(long)relsize);
+      break;
+
+    case DT_SONAME:
+      if (dh->name) {
+	dh->name = dh->dyn_str_tab+_dynamic[i].d_un.d_val;
+	DEBUG("_dl_dyn_scan have soname: %s\n",dh->name);
+      }
+      break;
+
+    case DT_PLTREL:
+      if (_dynamic[i].d_un.d_val!=_DL_REL_T) {
+	DEBUG("_dl_dyn_scan have incompatible relocation type\n");
+	_dl_error = 5;
+	return 0;
+      }
+      break;
+
+    case DT_TEXTREL:
+      DEBUG("_dl_dyn_scan found possible textrelocation -> %s is no compiled as a shared library\n",dh->name);
+      _dl_error = 2;
+      return 0;
+      break;
+
     default:
-      break;
+      DEBUG("_dl_dyn_scan: unknown %d, %08lx\n",_dynamic[i].d_tag,_dynamic[i].d_un.d_val);
     }
   }
+
+#if 0
+  if (dh->name==0) {
+    for(i=0;_dynamic[i].d_tag;i++) {
+      if (_dynamic[i].d_tag==DT_RPATH) {
+	char *rpath=dh->dyn_str_tab+_dynamic[i].d_un.d_val;
+	_dl_set_rpath(rpath);
+	DEBUG("_dl_dyn_scan have runpath: %s\n",rpath);
+      }
+    }
+  }
+#endif
+
+  DEBUG("_dl_dyn_scan post dynamic scan %08lx\n",(unsigned long)dh);
+
+  if ((tmp=_dlsym(dh,"_GLOBAL_OFFSET_TABLE_"))) {
+    dh->got=tmp;
+    DEBUG("_dl_dyn_scan found a GOT @ %08lx\n",tmp);
+    /* GOT */
+    tmp[0]+=(unsigned long)dh->mem_base;	/* reloc dynamic pointer */
+    tmp[1] =(unsigned long)dh;
+    tmp[2] =(unsigned long)(_dl_jump);		/* sysdep jump to do_resolve */
+  }
+  else {
+    _dl_error = 2;
+    return 0;
+  }
+
+  DEBUG("_dl_dyn_scan pre load depending libraries %08lx\n",(unsigned long)dh);
+  /* load depending libs */
+#if 0
+  for(i=0;_dynamic[i].d_tag;i++) {
+    if (_dynamic[i].d_tag==DT_NEEDED) {
+      char *lib_name=dh->dyn_str_tab+_dynamic[i].d_un.d_val;
+      DEBUG("_dl_dyn_scan needed for this lib: %s\n",lib_name);
+      _dl_queue_lib(lib_name,dh->flag_global);
+    }
+  }
+  if (_dl_open_dep()) {
+    _dl_error = 0;
+    return 0;
+  }
+#endif
+
+  DEBUG("_dl_dyn_scan post load depending libraries, pre resolve %08lx\n",(unsigned long)dh);
+
+  /* relocation */
+  if (rel) {
+    DEBUG("_dl_dyn_scan try to relocate some values\n");
+
+    for (i=0;i<(relsize/relent);++i) {
+      _dl_sys_write(2,"reloc\n",6);
+      if (_dl_apply_relocate(dh,rel+i)) {
+	_dl_error=3;
+	return 0;
+      }
+    }
+
+  }
+
+  /* do PTL / GOT relocation */
+  if (plt_rel) {
+    _dl_rel_t *tmp,*max=((void*)plt_rel)+plt_relsz;
+    DEBUG("_dl_dyn_scan rel plt/got\n");
+    for(tmp=plt_rel;tmp<max;(char*)tmp=((char*)tmp)+sizeof(_dl_rel_t)) {
+      if (dh->flag_global&RTLD_NOW) {
+	unsigned long sym=(unsigned long)_dl_sym(dh,ELF_R_SYM(tmp->r_info));
+	if (sym) *((unsigned long*)(dh->mem_base+tmp->r_offset))=sym;
+	else {
+	  _dl_error = 3;
+	  return 0;
+	}
+      }
+      else
+	_DL_REL_PLT(dh->mem_base,tmp);
+    }
+  }
+
+  DEBUG("_dl_dyn_scan post resolve, pre init %08lx\n",(unsigned long)dh);
+  if (init) init();
+  DEBUG("_dl_dyn_scan post init %08lx\n",(unsigned long)dh);
+
+  return dh;
 }
-//void _dl_dyn_scan(struct _dl_handle*dh,Elf_Dyn*_dynamic,unsigned long load_addr) __attribute__((alias("bootstrap")));
+
+
+/* ELF AUX parser */
+static unsigned long _dl_elfaux(register unsigned long*ui) {
+  register struct elf_aux {
+    unsigned long type;
+    unsigned long val;
+  } *ea;
+  unsigned long dyn_start=(unsigned long)_DIE_;
+
+  Elf_Phdr *ph=0;
+  unsigned long ph_size;
+  unsigned long ph_num;
+  unsigned long pg_size;
+
+
+  while (*ui) ++ui;
+  /* now *ui points to the tailing NULL-pointer of the envirioment */
+
+  /* walk the elf_aux table */
+  for (ea=(struct elf_aux*)(ui+1); ea->type; ++ea) {
+    switch (ea->type) {
+    case AT_EXECFD:
+    case AT_NOTELF:
+      _dl_sys_exit(42);
+      break;
+
+    case AT_PHDR:
+      ph=(Elf_Phdr*)ea->val;
+      DEBUG("program header @ %08lx\n",(long)ph);
+      break;
+    case AT_PHENT:
+      ph_size=ea->val;
+      DEBUG("program header size %08lx\n",ph_size);
+      break;
+    case AT_PHNUM:
+      ph_num=ea->val;
+      DEBUG("program header # %ld\n",ph_num);
+      break;
+
+#if 0
+    case AT_BASE:
+      DEBUG("base: %08x\n",ea->val);
+      break;
+    case AT_FLAGS:
+      DEBUG("flags %08x\n",ea->val);
+      break;
+
+    case AT_UID:
+      DEBUG(" UID: %d\n",ea->val);
+      break;
+    case AT_EUID:
+      DEBUG("EUID: %d\n",ea->val);
+      break;
+    case AT_GID:
+      DEBUG(" GID: %d\n",ea->val);
+      break;
+    case AT_EGID:
+      DEBUG("EGID: %d\n",ea->val);
+      break;
+#endif
+
+#if 1
+    case AT_PAGESZ:
+      pg_size=ea->val;
+      DEBUG("page size %ld\n",pg_size);
+      break;
+#endif
+
+    case AT_ENTRY:
+      if (ea->val!=(unsigned long)_start) {
+	dyn_start=ea->val;
+	_dl_sys_write(1,"start\n",6);
+	DEBUG("start program  @ %08lx\n",(long)dyn_start);
+      }
+      break;
+
+#if 0
+    case AT_PLATFORM:
+      DEBUG("CPU: %s\n",ea->val);
+      break;
+    case AT_HWCAP:
+      DEBUG("CPU capabilities: %08x\n",ea->val);
+      break;
+    case AT_CLKTCK:
+      DEBUG("CLK per sec %d\n", ea->val);
+      break;
+#endif
+
+    default:
+    }
+  }
+
+  return dyn_start;
+}
 
 
 /* start of libdl dynamic linker */
@@ -366,20 +687,28 @@ static unsigned long _dl_main(int argc,char*argv[],char*envp[],unsigned long _dy
 
   /* first element of GOT points to _DYNAMIC (ELF convention)
    * _dynamic - (UNRELOCATED offset) == load address */
-  load_addr=_dynamic-got[0];
+  /* load_addr=_dynamic-got[0]; */
+  load_addr=get_base();
 
-  got[0]=_dynamic;		/* write relocated address of _DYNAMIC */
+  memset(&my_dh,0,sizeof(my_dh));
+  my_dh.mem_base=(char*)load_addr;
+  my_dh.name="libdl.so";
+  my_dh.lnk_count=1;
+
+//  got[0]=_dynamic;		/* write relocated address of _DYNAMIC */
   got[1]=0;			/* NOT YET (my_dh) */
   got[2]=(unsigned long)(_DIE_);/* NO lazy symbol relocation as long as we are not ready */
 
   /* bootstrap relocation */
-  bootstrap(&my_dh,(Elf_Dyn*)_dynamic,load_addr);
+  if (_dl_dyn_scan(&my_dh,(Elf_Dyn*)_dynamic)==0) {
+    _dl_sys_write(2,"error will dyn_scan myself\n",27);
+    return (unsigned long)_DIE_;
+  }
 
-  got[2]=(unsigned long)(_dl_jump);/* NO lazy symbol relocation as long as we are not ready */
-  /* now we are save to use anything :) */
+  /* now we are save to use anything :) (hopefuly) */
 
-  fini_entry=0;
-  return load_addr;
+  fini_entry=tt_fini;
+  return _dl_elfaux((unsigned long*)envp);
 }
 
 #endif
