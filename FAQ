@@ -64,3 +64,32 @@ A: The getopt in the diet libc adheres to the Single Unix Specification.
    will not see -v as option but rather as non-option argument.  If you
    need GNU getopt behaviour, please use GNU getopt instead of the diet
    libc code.
+
+
+Q: I get linker errors about missing __ctype_b!
+A: This happens when you link in code that was compiled with the glibc
+   headers.  The most common culprit is a library like -lncurses or
+   -lcrypto.  All of the libraries you use have to be compiled with the
+   diet libc headers (CC="diet gcc")!
+
+
+Q: My program links, but when I run it, I get no output at all and it
+   appears to terminate immediately.
+A: This normally happens if you link in glibc.  The most common reason
+   for this is because you use -lz, for example, and gcc chooses to link
+   in /usr/lib/libz.so.  All shared libraries reference glibc as
+   dependency, which turns your program into a dynamically linked glibc
+   program, which has a different memory layout in glibc.  The result is
+   that output is written to the wrong file handle (use strace to see
+   for yourself), the program gets an error and terminates (or dumps
+   core).
+
+
+Q: Why aren't you compatible to glibc?  I thought the interface was a
+   standard?
+A: Yes, the interface is, but a lot of details are missing.  For
+   example, the diet libc uses a different "struct stat" layout than
+   glibc.  We use the one from the kernel, glibc uses an own one and
+   links in translation code.  This is part of the reason why glibc is
+   so big and ugly.  If we support all of this, we end up as bloated as
+   glibc.
