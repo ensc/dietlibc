@@ -31,6 +31,10 @@ _start:
 	add %r19, %r24, %r24
 	ldil LP%environ, %r19
 	ldo RP%environ(%r19), %r19
+
+	/* Expand the stack to store the 5th through 7th args */
+	ldo 64(%sp), %sp
+
 	stw %r24, 0(%sr0, %r19)
 	ldil L%$global$, %dp
 	bl main, %rp
