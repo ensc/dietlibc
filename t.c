@@ -34,6 +34,7 @@
 #include <resolv.h>
 #include <fnmatch.h>
 #include <stdarg.h>
+#include <sys/wait.h>
 
 void fnord(char*x,...) {
   int i;
@@ -53,10 +54,7 @@ char *strlcpy2(char *dest, const char *src, size_t n)
 }
 
 int main(int argc,char *argv[]) {
-  FILE *f=popen("id","r");
-  char buf[1024];
-  fgets(buf,1024,f);
-  write(1,buf,strlen(buf));
+  printf("%d\n",WEXITSTATUS(system("exit 17")));
 #if 0
   fnord("fnord","foo\n","bar\n",0);
   assert(0);

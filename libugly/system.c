@@ -1,6 +1,7 @@
 #include <signal.h>
 #include <errno.h>
 #include <unistd.h>
+#include <sys/wait.h>
 #include "dietwarning.h"
 #include "dietfeatures.h"
 
@@ -14,7 +15,8 @@ int sigaction(int signum,  const  struct  sigaction  *act, struct sigaction *old
 
 int __libc_system (const char *line)
 {
-  struct sigaction sa, intr, quit, child;
+  struct sigaction sa, intr, quit;
+  sigset_t block,omask;
   int save,pid,ret=-1;
 
   if (line == 0) return __libc_system("exit 0") == 0;
@@ -23,17 +25,20 @@ int __libc_system (const char *line)
   sa.sa_flags = 0;
   sigemptyset (&sa.sa_mask);
 
-  if (sigaction(SIGCHLD,  &sa, &child)<0) return -1;
-  if (sigaction(SIGINT,  &sa, &intr)<0) goto fnord;
+  if (sigaction(SIGINT,  &sa, &intr)<0) return -1;
   if (sigaction(SIGQUIT, &sa, &quit)<0) {
     save = errno;
+fnord:
     sigaction (SIGINT, &intr, (struct sigaction*)0);
     errno=save;
-fnord:
-    save = errno;
-    sigaction (SIGCHLD, &child, (struct sigaction*)0);
-    errno=save;
     return -1;
+  }
+  sigemptyset(&block);
+  sigaddset(&block,SIGCHLD);
+  if (sigprocmask(SIG_BLOCK,&block,&omask)<0) {
+    save=errno;
+    sigaction (SIGQUIT, &quit, (struct sigaction*)0);
+    goto fnord;
   }
 
   pid=fork();
@@ -55,7 +60,7 @@ fnord:
 
     sigaction(SIGINT,  &intr, (struct sigaction*)0);
     sigaction(SIGQUIT, &quit, (struct sigaction*)0);
-    sigaction(SIGCHLD, &child, (struct sigaction*)0);
+    sigprocmask(SIG_SETMASK,&omask,0);
 
     execve(SHELL_PATH,(char *const *)nargs, environ);
     _exit(127);
@@ -63,7 +68,7 @@ fnord:
   save = errno;
   sigaction (SIGINT,  &intr, (struct sigaction *)0);
   sigaction (SIGQUIT, &quit, (struct sigaction *)0);
-  sigaction (SIGCHLD, &child, (struct sigaction *)0);
+  sigprocmask(SIG_SETMASK,&omask,0);
   errno=save;
   return ret;
 }
