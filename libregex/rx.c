@@ -18,6 +18,11 @@
 /* now declared in regex.h: */
 /* typedef int (*matcher)(void*,const char*,int ofs,regmatch_t* matches,int plus,int eflags); */
 
+/* one would think that this is approach is an order of magnitude slower
+ * than the standard NFA approach, but it isn't.  The busybox grep took
+ * 0.26 seconds for a fixed string compared to 0.19 seconds for the
+ * glibc regex. */
+
 /* first part: parse a regex into a parse tree */
 struct bracketed {
   unsigned int cc[32];

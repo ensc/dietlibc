@@ -46,13 +46,13 @@ static int rand() {
 extern double atof(const char *c);
 
 int main(int argc,char *argv[]) {
+#if 0
   char buf[PATH_MAX];
   printf("%s\n",realpath("../../incoming/..///.zshrc",buf));
-#if 0
-  regex_t t;
-  regcomp(&t,"\\<foobAr",0);
-  printf("%d\n",regexec(&t," fooBarbaz",0,0,0));
 #endif
+  regex_t t;
+  regcomp(&t,"foo",0);
+  printf("%d\n",regexec(&t,"/* built-in 'exec' handler */",0,0,0));
 #if 0
   float my_float = 9.2334;
   char buffer[100];
