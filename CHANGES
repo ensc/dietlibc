@@ -8,6 +8,8 @@
   signal is now a correct signal (Olaf)
   read optimizer cflags for diet -Os gcc from ~/.diet/gcc, overriding
     the built-in defaults.
+  add file "SECURITY".  I will document design tradeoffs that have
+    security implications there.
 
 0.20:
   calloc was botched
