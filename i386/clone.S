@@ -1,4 +1,5 @@
 #include "syscalls.h"
+#include <errno.h>
 
 .text
 .type clone,@function
@@ -7,6 +8,8 @@ clone:
 .type __clone,@function
 .global __clone
 __clone:
+	mov	$-EINVAL, %eax
+
 	movl	4(%esp), %ecx	/* have non null thread_funcion */
 	jecxz	.Lclone_error
 
