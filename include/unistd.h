@@ -137,4 +137,8 @@ int nice(int inc) __THROW;
 
 extern char *__environ[];
 
+char *crypt(const char *key, const char *salt);
+void encrypt(char block[64], int edflag);
+void setkey(const char *key);
+
 #endif
