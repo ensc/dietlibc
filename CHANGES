@@ -28,6 +28,9 @@
   now clone on parisc works (Thomas Ogrisegg)
   getopt* fix from Thomas Walpuski
   add syscall() to libcompat (Thomas Ogrisegg)
+  fix strncpy and strrchr i386 assembly versions for dynamic linking
+    (John K. Holm)
+  allow short option grouping in getopt* (Ralf Wildenhues)
 
 0.17:
   fix several bugs in getservent_r

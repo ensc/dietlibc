@@ -93,7 +93,10 @@ shortopt:
 	return ':';
       }
       ++optind;
-    } else ++lastofs;
+    } else {
+      ++lastofs;
+      return optopt;
+    }
 found:
     ++optind;
     return optopt;
