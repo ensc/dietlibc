@@ -23,5 +23,9 @@ executing it.
 When passed the -Os option before the gcc argument, diet will mangle the
 gcc options to include the best known for-size optimization settings for
 the platform.
+.SH FILES
+~/.diet/\fIcompiler\fR may contain compiler options as you would
+specify them on the command line, i.e. separated by spaces.  Those will
+then be used instead of the built-in defaults for diet -Os.
 .SH AUTHOR
 Felix von Leitner <felix-dietlibc@fefe.de>

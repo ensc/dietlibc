@@ -6,6 +6,8 @@
   add WANT_INET_ADDR_DNS to make gethostbyname not look up IP numbers
     but use them to fill in the struct hostent directly.
   signal is now a correct signal (Olaf)
+  read optimizer cflags for diet -Os gcc from ~/.diet/gcc, overriding
+    the built-in defaults.
 
 0.20:
   calloc was botched

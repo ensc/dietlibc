@@ -1,5 +1,6 @@
 #include <string.h>
 #include <unistd.h>
+#include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <write12.h>
@@ -62,6 +63,7 @@ int main(int argc,char *argv[]) {
   char dashstatic[]="-static";
   int i;
   int mangleopts=0;
+  char manglebuf[1024];
 
 #ifdef INSTALLVERSION
   strcpy(platform,DIETHOME "/lib-");
@@ -280,6 +282,34 @@ pp:
       *dest++="-D__dietlibc__";
       if (mangleopts) {
 	const char **o=Os;
+
+	{
+	  int fd;
+	  char* tmp=getenv("HOME");
+	  if (tmp) {
+	    if (strlen(tmp)+strlen(cc)<900) {
+	      strcpy(manglebuf,tmp);
+	      strcat(manglebuf,"/.diet/");
+	      strcat(manglebuf,cc);
+	      if ((fd=open(manglebuf,O_RDONLY))>=0) {
+		int len=read(fd,manglebuf,1023);
+		if (len>0) {
+		  int i;
+		  manglebuf[len]=0;
+		  *dest++=manglebuf;
+		  for (i=1; i<len; ++i) {
+		    if (manglebuf[i]==' ' || manglebuf[i]=='\n') {
+		      manglebuf[i]=0;
+		      if (i+1<len)
+			*dest++=manglebuf+i+1;
+		    }
+		  }
+		  goto incorporated;
+		}
+	      }
+	    }
+	  }
+	}
 	for (o=Os;*o;++o) {
 	  if (!strcmp(*o,shortplatform)) {
 	    ++o;
@@ -292,6 +322,7 @@ pp:
 	    while (*o) ++o;
 	}
       }
+incorporated:
       if (_link) {
 	if (profile) *dest++="-lgmon";
 	*dest++=c; *dest++=(char*)libgcc;
