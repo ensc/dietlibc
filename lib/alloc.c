@@ -42,7 +42,8 @@ typedef union {
 #define PAGE_ALIGN(s)	(((s)+MEM_BLOCK_SIZE-1)&(unsigned long)(~(MEM_BLOCK_SIZE-1)))
 
 /* a simple mmap :) */
-__attribute__((regparm(1)))
+static void *do_mmap(unsigned long size) __attribute__((regparm(1)));
+
 static void *do_mmap(unsigned long size) {
   return mmap(0, size, PROT_READ|PROT_WRITE, MAP_ANONYMOUS|MAP_PRIVATE, -1, 0);
 }
@@ -62,7 +63,8 @@ static __alloc_t* __small_mem[8];
 
 static inline int __ind_shift() { return (MEM_BLOCK_SIZE==4096)?4:5; }
 
-__attribute__((regparm(1)))
+static size_t get_index(size_t _size) __attribute__((regparm(1)));
+
 static size_t get_index(size_t _size) {
   register size_t idx=0;
   if (_size) {
@@ -73,7 +75,8 @@ static size_t get_index(size_t _size) {
 }
 
 /* small mem */
-__attribute__((regparm(2)))
+static void __small_free(void*_ptr,size_t _size) __attribute__((regparm(2)));
+
 static void __small_free(void*_ptr,size_t _size) {
   __alloc_t* ptr=BLOCK_START(_ptr);
   size_t size=_size;
@@ -85,7 +88,8 @@ static void __small_free(void*_ptr,size_t _size) {
   __small_mem[idx]=ptr;
 }
 
-__attribute__((regparm(1)))
+static void* __small_malloc(size_t _size) __attribute__((regparm(1)));
+
 static void* __small_malloc(size_t _size) {
   __alloc_t *ptr;
   size_t size=_size;
