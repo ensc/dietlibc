@@ -52,7 +52,7 @@ int main(int argc,char *argv[]) {
 #ifdef __sparc__
       strcat(platform,"sparc");
 #endif
-#ifdef __ppc__
+#ifdef __powerpc__
       strcat(platform,"ppc");
 #endif
 #ifdef __i386__
