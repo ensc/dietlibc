@@ -1,3 +1,6 @@
+0.16:
+  "diet -v" or "diet -Os" segfaulted without further arguments.
+
 0.15:
   vfork sucks.  I reverted to the old behavior where vfork==fork.
   fix bsearch (and remove i386 assembly bsearch, needs to be redone).

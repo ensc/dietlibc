@@ -19,7 +19,7 @@
 */
 
 static void error(const char *message) {
-  write(2,message,strlen(message));
+  __write2(message);
   exit(1);
 }
 
@@ -68,6 +68,18 @@ int main(int argc,char *argv[]) {
   int mangleopts=0;
 
   if (argc<2) {
+usage:
+    if (verbose) {
+      __write2(
+#ifdef __DYN_LIB
+	       "dyn-"
+#endif
+	       "diet version " VERSION
+#ifndef INSTALLVERSION
+               " (non-install version in source tree)"
+#endif
+	       "\n\n");
+    }
     error("usage: diet [-v] [-Os] gcc command line\n"
 	  "e.g.   diet -Os gcc -c t.c\n"
 	  "or     diet sparc-linux-gcc -o foo foo.c bar.o\n");
@@ -76,10 +88,11 @@ int main(int argc,char *argv[]) {
     ++argv; --argc;
     verbose=1;
   }
-  if (!strcmp(argv[1],"-Os")) {
+  if (argv[1] && !strcmp(argv[1],"-Os")) {
     ++argv; --argc;
     mangleopts=1;
   }
+  if (!argv[1]) goto usage;
   {
     char *tmp=strchr(argv[1],0)-2;
     char *tmp2;
@@ -276,10 +289,10 @@ pp:
       if (verbose) {
 	int i;
 	for (i=0; newargv[i]; i++) {
-	  write(2,newargv[i],strlen(newargv[i]));
-	  write(2," ",1);
+	  __write2(newargv[i]);
+	  __write2(" ");
 	}
-	write(2,"\n",1);
+	__write2("\n");
       }
       execvp(newargv[0],newargv);
       goto error;

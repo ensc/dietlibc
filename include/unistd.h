@@ -116,7 +116,7 @@ int isatty(int desc) __THROW;
 
 void _exit(int status) __THROW __attribute__((noreturn));
 
-extern int daemon (int nochdir,int noclose) __THROW;
+extern int daemon(int nochdir,int noclose) __THROW;
 
 int pause(void) __THROW;
 
