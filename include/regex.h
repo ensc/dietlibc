@@ -19,10 +19,21 @@ typedef struct {
 #define REG_NOTBOL 1
 #define REG_NOTEOL 2
 
+#define REG_NOMATCH -1
+
 #define RE_DUP_MAX 255
 
+typedef int (*matcher)(void*,const char*,int ofs,regmatch_t* matches,int plus);
+
 typedef struct __regex_t {
-  struct atom *list;
+  struct regex {
+    matcher m;
+    void* next;
+    int pieces;
+    int num;
+    struct branch *b;
+  } r;
+  int brackets,cflags;
 } regex_t;
 
 int regcomp(regex_t *preg, const char *regex, int cflags) __THROW;

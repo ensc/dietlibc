@@ -9,7 +9,7 @@ CROSS=
 
 CC=gcc
 
-VPATH=lib:libstdio:libugly:libcruft:libcrypt:libshell:liblatin1:librpc:syscalls.c
+VPATH=lib:libstdio:libugly:libcruft:libcrypt:libshell:liblatin1:librpc:libregex:syscalls.c
 
 SYSCALLOBJ=$(patsubst syscalls.s/%.S,$(OBJDIR)/%.o,$(wildcard syscalls.s/*.S))
 
@@ -21,6 +21,7 @@ LIBCRYPTOBJ=$(patsubst libcrypt/%.c,$(OBJDIR)/%.o,$(wildcard libcrypt/*.c))
 LIBSHELLOBJ=$(patsubst libshell/%.c,$(OBJDIR)/%.o,$(wildcard libshell/*.c))
 
 LIBRPCOBJ=$(patsubst librpc/%.c,$(OBJDIR)/%.o,$(wildcard librpc/*.c))
+LIBREGEXOBJ=$(patsubst libregex/%.c,$(OBJDIR)/%.o,$(wildcard libregex/*.c))
 
 include $(ARCH)/Makefile.add
 
@@ -52,7 +53,7 @@ $(OBJDIR)/%.o: %.c
 	$(COMMENT) $(CROSS)strip -x -R .comment -R .note $@
 
 DIETLIBC_OBJ = $(SYSCALLOBJ) $(LIBOBJ) $(LIBSTDIOOBJ) $(LIBUGLYOBJ) \
-$(LIBCRUFTOBJ) $(LIBCRYPTOBJ) $(LIBSHELLOBJ) \
+$(LIBCRUFTOBJ) $(LIBCRYPTOBJ) $(LIBSHELLOBJ) $(LIBREGEXOBJ) \
 $(OBJDIR)/__longjmp.o $(OBJDIR)/setjmp.o $(OBJDIR)/unified.o \
 $(OBJDIR)/mmap.o $(OBJDIR)/clone.o
 
