@@ -4,6 +4,8 @@
   fix ia64 compile problems (Gerrit Pape)
   make killpg a function and not a macro (broke bash 2.05b)
   fix ia64 start code and unified syscall (me)
+  add sparc/strlen.S from Thomas Ogrisegg
+  add more space to ARM __jmp_buf in setjmp.h (Andre)
 
 0.18:
   add stpcpy (from Thomas Ogrisegg)
