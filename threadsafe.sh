@@ -1,5 +1,5 @@
 #!/bin/sh
-(gcc -E - << EOF | grep -q WANT_THREAD_SAFE) || echo libpthread/pthread_*.c
+(gcc -E - << EOF | grep WANT_THREAD_SAFE > /dev/null) || echo libpthread/pthread_*.c
 #include "dietfeatures.h"
 WANT_THREAD_SAFE
 EOF

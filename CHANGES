@@ -5,6 +5,9 @@
     - fixing type of 'unsetenv'
     - adding missing realtime syscalls 'clock_*' 'timer_*' and types
   ARGH!  gcc 3.4 breaks regparm attributes on i386!
+  grep portability fixes (Gunnar Ritter)
+  add empty libcrypt.a to help compile code from others (Gunnar Ritter)
+  add make uninstall
 
 0.25:
   fix sprintf
