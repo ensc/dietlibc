@@ -29,6 +29,7 @@
    - fixing strtoXXX (Gernot Tenchio, patch modified)
    - fixing the *scanf return behavior (reported by Enrico Scholz)
   add printf test
+  change sys_siglist to char** (removes linker warning)
 
 0.23:
   update sys/soundcard.h

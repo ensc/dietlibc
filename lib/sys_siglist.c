@@ -1,4 +1,4 @@
-const char *const sys_siglist[] = {
+const char *const __sys_siglist[] = {
   "Signal 0",
   "Hangup",
   "Interrupt",
@@ -172,3 +172,4 @@ const char *const sys_siglist[] = {
   0
 };
 
+const char *const* sys_siglist=__sys_siglist;

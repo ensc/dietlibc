@@ -499,7 +499,7 @@ int killpg(int pgrp, int sig) __THROW;
 
 int sigwait(const sigset_t* set,int* sig) __THROW;
 
-extern const char *const sys_siglist[];
+extern const char *const* sys_siglist;
 
 #include <sys/ucontext.h>
 
