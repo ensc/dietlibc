@@ -12,7 +12,11 @@
 
 #ifdef __sparc__
 
+#ifdef __sparc_v9__
+#include "sparc64/syscalls.h"
+#else
 #include "sparc/syscalls.h"
+#endif
 
 #endif
 

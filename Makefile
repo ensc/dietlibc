@@ -32,6 +32,9 @@ else
 ifeq ($(MYARCH),sparc)
 ARCH=sparc
 else
+ifeq ($(MYARCH),sparc64)
+ARCH=sparc64
+else
 ifeq ($(MYARCH),s390)
 ARCH=s390
 else
@@ -42,6 +45,7 @@ ifeq ($(MYARCH),parisc)
 ARCH=parisc
 else
 $(error unknown architecture, please fix Makefile)
+endif
 endif
 endif
 endif
@@ -297,9 +301,9 @@ $(OBJDIR)/libcompat.a $(DESTDIR)$(ILIBDIR)
 	if test -f $(PICODIR)/libdietc.so -a ! -f $(DESTDIR)/etc/diet.ld.conf; then echo "$(ILIBDIR)" > $(DESTDIR)/etc/diet.ld.conf; fi
 	for i in `find include -name \*.h`; do install -m 644 -D $$i $(DESTDIR)$(prefix)/$$i; done
 
-.PHONY: sparc ppc mips arm alpha i386 parisc mipsel powerpc s390
+.PHONY: sparc ppc mips arm alpha i386 parisc mipsel powerpc s390 sparc64
 
-arm sparc ppc alpha i386 mips parisc s390:
+arm sparc ppc alpha i386 mips parisc s390 sparc64:
 	$(MAKE) ARCH=$@ CROSS=$@-linux- all t
 
 # Cross compile for little endian MIPS
@@ -314,7 +318,7 @@ powerpc:
 	$(MAKE) ARCH=ppc CROSS=powerpc-linux- all t
 
 cross:
-	$(MAKE) arm sparc ppc alpha i386 mips
+	$(MAKE) arm sparc ppc alpha i386 mips sparc64
 
 
 # these depend on dietfeatures.h for large file backward compatibility

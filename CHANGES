@@ -27,6 +27,7 @@
   fix i386 rand/random to use correct RAND_MAX (thanks, Jaroslav
     Macodiseas)
   sys/ipc.h now includes sys/types.h
+  Olaf: started to make the sparc64 port
 
 0.15:
   vfork sucks.  I reverted to the old behavior where vfork==fork.
