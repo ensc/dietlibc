@@ -2,6 +2,7 @@
   vsnprintf(0,...) estimated the length of strings with a padding width
     incorrectly.
   new reboot() from Olaf.
+  added prototypes for getsockopt and setsockopt.
 
 0.7.2:
   added several prototypes to already implemented functions and

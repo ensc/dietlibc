@@ -22,4 +22,6 @@ int getsockname(int  s , struct sockaddr * name , socklen_t * namelen) __THROW;
 int getsockopt(int s, int level, int optname, void *optval, socklen_t *optlen) __THROW;
 int setsockopt(int s, int level, int optname, const void *optval, socklen_t optlen) __THROW;
 
+int listen(int s, int backlog) __THROW;
+
 #endif
