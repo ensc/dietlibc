@@ -15,7 +15,7 @@
 #define SHMGET		23
 #define SHMCTL		24
 
-#define IPC_PRIVATE ((__kernel_key_t) 0)  
+#define IPC_PRIVATE ((key_t) 0)  
 
 #define IPC_CREAT  00001000   /* create if key is nonexistent */
 #define IPC_EXCL   00002000   /* fail if key exists */

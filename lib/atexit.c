@@ -1,6 +1,6 @@
 typedef void (*function)(void);
 
-#define NUM_ATEXIT	8
+#define NUM_ATEXIT	32
 
 static function __atexitlist[NUM_ATEXIT];
 

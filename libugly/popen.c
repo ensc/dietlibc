@@ -20,7 +20,7 @@ FILE *popen(const char *command, const char *type) {
     dup2(pfd[fd0],fd0); close(pfd[fd0]);
     argv[2]=(char*)command;
     execve("/bin/sh",(char*const*)argv,environ);
-    _exit(255);
+    _exit(127);
   }
   close(pfd[fd0]);
   {

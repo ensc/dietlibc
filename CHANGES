@@ -44,6 +44,9 @@
   realpath returns NULL if "." cannot be opened (thanks, Uwe Ohse)
   putenv erroneously accepted (and mishandled) entries without "=".
     Thanks, Uwe.
+  popen returned 255 instead of 127 if /bin/sh could not be run.
+    Thanks, Uwe.
+  fgetc did not set the internal EOF indicator on EOF.  Thanks, Uwe.
 
 0.10:
   update getpagesize.

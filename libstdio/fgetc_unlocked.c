@@ -31,9 +31,9 @@ int fgetc_unlocked(FILE *stream) {
   ++stream->bm;
   return c;
 #else
-  if (read(stream->fd,&c,1)!=1) {
-    stream->flags|=ERRORINDICATOR;
-    return EOF;
+  switch (read(stream->fd,&c,1)) {
+  case 0: stream->flags|=EOFINDICATOR; return EOF;
+  case -1: stream->flags|=ERRORINDICATOR; return EOF;
   }
   return c;
 #endif

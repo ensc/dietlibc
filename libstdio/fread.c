@@ -10,6 +10,7 @@ size_t fread( void *ptr, size_t size, size_t nmemb, FILE *stream) {
 #ifdef WANT_UNGETC
   if (!j) return 0;
   if (stream->ungotten) {
+    stream->ungotten=0;
     *(char*)ptr=stream->ungetbuf;
     ptr=((char*)ptr)+1;
     --j;
@@ -29,6 +30,7 @@ size_t fread( void *ptr, size_t size, size_t nmemb, FILE *stream) {
   fflush(stream);
 #ifdef WANT_UNGETC
   if (stream->ungotten) {
+    stream->ungotten=0;
     *(char*)ptr=stream->ungetbuf;
     ptr=((char*)ptr)+1;
     --j;
