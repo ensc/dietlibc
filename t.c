@@ -26,7 +26,10 @@
 #include <sys/msg.h>
 #include <string.h>
 
+int foo;
+
 int main(int argc,char *argv[]) {
+  int i=foo;
 #if 0
   struct dirent **namelist;
   int n;
