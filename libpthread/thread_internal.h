@@ -41,7 +41,7 @@ struct _pthread_descr_struct {
 
 } __attribute__ ((aligned(32)));
 
-int testandset(int *spinlock);
+int __testandset(int *spinlock);
 
 void __pthread_lock(struct _pthread_fastlock * lock);
 int __pthread_trylock(struct _pthread_fastlock * lock);

@@ -4,11 +4,8 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-#include "thread_internal.h"
-
 #include <stdio.h>
-
-int testandset(int*lock);
+#include "thread_internal.h"
 
 static struct _pthread_descr_struct threads[PTHREAD_THREADS_MAX];
 
@@ -145,7 +142,7 @@ _pthread_descr __thread_get_free()
 
   for (i=0; i<PTHREAD_THREADS_MAX; i++)
     if (threads[i].pid==0)
-      if (!testandset(&threads[i].pid)) // atomic get slot :)
+      if (!(__testandset(&threads[i].pid))) // atomic get slot :)
 	return threads+i;
 
   return 0;

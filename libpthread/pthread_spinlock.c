@@ -7,7 +7,7 @@ static void __pthread_acquire(int * spinlock)
   int cnt = 0;
   struct timespec tm;
 
-  while (testandset(spinlock)) {
+  while (__testandset(spinlock)) {
     if (cnt < MAX_SPIN_COUNT) {
       sched_yield();
       cnt++;
@@ -27,7 +27,7 @@ void __pthread_lock(struct _pthread_fastlock * lock)
 
 int __pthread_trylock(struct _pthread_fastlock * lock)
 {
-  return testandset(&lock->__spinlock);
+  return __testandset(&lock->__spinlock);
 }
 
 int __pthread_unlock(struct _pthread_fastlock * lock)
