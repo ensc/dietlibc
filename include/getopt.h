@@ -3,8 +3,6 @@
 
 #include <unistd.h>
 
-/* the following was taken from GNU getopt, it's not actually supported
- * by the diet libc! */
 extern int optopt;
 
 struct option {
