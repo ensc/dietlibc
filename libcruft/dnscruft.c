@@ -20,7 +20,8 @@ int __dns_fd6=-1;
 void __dns_make_fd(void);
 void __dns_make_fd6(void);
 void __dns_readstartfiles(void);
-int __dns_decodename(unsigned char *packet,unsigned int offset,unsigned char *dest,unsigned int maxlen);
+int __dns_decodename(unsigned char *packet,unsigned int offset,unsigned char *dest,
+		     unsigned int maxlen,unsigned char* behindpacket);
 
 void __dns_make_fd(void) {
   int tmp;
@@ -149,12 +150,14 @@ void __dns_readstartfiles(void) {
 }
 
 /* return length of decoded data or -1 */
-int __dns_decodename(unsigned char *packet,unsigned int offset,unsigned char *dest,unsigned int maxlen) {
+int __dns_decodename(unsigned char *packet,unsigned int offset,unsigned char *dest,
+		     unsigned int maxlen,unsigned char* behindpacket) {
   unsigned char *tmp;
   unsigned char *max=dest+maxlen;
   unsigned char *after=packet+offset;
   int ok=0;
   for (tmp=after; maxlen>0&&*tmp; ) {
+    if (tmp>=behindpacket) return -1;
     if ((*tmp>>6)==3) {		/* goofy DNS decompression */
       unsigned int ofs=((unsigned int)(*tmp&0x3f)<<8)|*(tmp+1);
       if (ofs>=(unsigned int)offset) return -1;	/* RFC1035: "pointer to a _prior_ occurrance" */
@@ -164,6 +167,7 @@ int __dns_decodename(unsigned char *packet,unsigned int offset,unsigned char *de
     } else {
       unsigned int duh;
       if (dest+*tmp+1>max) return -1;
+      if (tmp+*tmp+1>=behindpacket) return -1;
       for (duh=*tmp; duh>0; --duh)
 	*dest++=*++tmp;
       *dest++='.'; ok=1;

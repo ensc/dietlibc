@@ -21,8 +21,6 @@ extern int __dns_fd6;
 
 extern void __dns_readstartfiles(void);
 
-extern int __dns_decodename(unsigned char *packet,unsigned int offset,unsigned char *dest,unsigned int maxlen);
-
 int res_query(const char *dname, int class, int type, unsigned char *answer, int anslen) {
   unsigned char packet[512];
   int size;

@@ -1,5 +1,6 @@
 0.19:
   current gcc cvs makes __thread a keyword (Eric Troan)
+  be more strict regarding hostile DNS packets.
 
 0.18:
   add stpcpy (from Thomas Ogrisegg)

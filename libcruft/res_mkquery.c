@@ -39,8 +39,6 @@ extern struct sockaddr __dns_server_ips[];
 
 extern void __dns_readstartfiles(void);
 
-extern int __dns_decodename(unsigned char *packet,unsigned int offset,unsigned char *dest,unsigned int maxlen);
-
 int res_mkquery(int op, const char *dname, int class, int type, char* data,
 		int datalen, const unsigned char* newrr, char* buf, int buflen) {
   unsigned char packet[512];
