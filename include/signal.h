@@ -490,6 +490,8 @@ int sigtimedwait(const sigset_t *mask, siginfo_t *info, const struct timespec *t
 int sigqueueinfo(int pid, int sig, siginfo_t *info) __THROW;
 int siginterrupt(int sig, int flag) __THROW;
 
+int killpg(int pgrp, int sig) __THROW;
+
 /* 0 is OK ! kernel puts in MAX_THREAD_TIMEOUT :) */
 #define sigwaitinfo(m, i) sigtimedwait((m),(i),0)
 

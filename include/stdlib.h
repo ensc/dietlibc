@@ -42,6 +42,7 @@ void exit(int status) __THROW __attribute__((noreturn));
 void abort(void) __THROW;
 
 extern int rand(void) __THROW;
+extern int rand_r(unsigned int *seed) __THROW;
 extern void srand(unsigned int seed) __THROW;
 #ifdef _BSD_SOURCE
 extern int random(void) __THROW;
@@ -97,7 +98,6 @@ char *ptsname (int fd) __THROW;
 #define EXIT_FAILURE 1
 #define EXIT_SUCCESS 0
 
-/* warning: the rand() implementation of the diet libc really sucks. */
-#define RAND_MAX 32767
+#define RAND_MAX 	((1<<31) -2)
 
 #endif

@@ -1,4 +1,5 @@
 #include <string.h>
+#include <strings.h>
 #include "dietfeatures.h"
 #include <errno.h>
 #include <stdlib.h>

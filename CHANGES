@@ -9,6 +9,9 @@
   fix DNS timeout and IPv6 socket reuse
   strtoul now accepts "-1" as well (Thomas Ogrisegg)
   add i386 strcasecmp and __ltostr (Thomas Ogrisegg)
+  add killpg prototype (Luc Van Oostenryck)
+  remove some compiler warnings (Luc Van Oostenryck)
+  better rand() from Knuth's TAOCP (Luc Van Oostenryck)
 
 0.21:
   use gcc's size_t, ptrdiff_t and wchar_t types (Olaf)
