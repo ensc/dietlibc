@@ -10,14 +10,6 @@
 
 #include "entlib.h" /* this is our only include */
 
-
-/* not in glibc 2.2.2 paths.h.  should it stay local, or
- * move to dietlibc/include/paths.h?
- */
-#ifndef _PATH_PASSWD
-#define _PATH_PASSWD "/etc/passwd"
-#endif
-
 static struct __ent_state *st = NULL; /* state held across calls */
 static struct passwd pw;
 

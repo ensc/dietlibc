@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <dirent.h>
 #include <pwd.h>
+#include <shadow.h>
 #include <stdio.h>
 #include <assert.h>
 #include <sys/mount.h>
@@ -41,6 +42,8 @@ static int rand() {
 extern double atof(const char *c);
 
 int main(int argc,char *argv[]) {
+  struct passwd *p=getpwnam("leitner");
+  struct shadow *s=getspnam("leitner");
   printf("%g\n",30.0123);
 #if 0
   time_t t=time(0);

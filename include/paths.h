@@ -9,4 +9,8 @@
 #define _PATH_CONSOLE "/dev/console"
 #define _PATH_MOUNTED "/etc/mtab"
 
+#define _PATH_PASSWD "/etc/passwd"
+#define _PATH_GROUP "/etc/group"
+#define _PATH_SHADOW "/etc/shadow"
+
 #endif

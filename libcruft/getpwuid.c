@@ -2,12 +2,12 @@
 #include <string.h>
 #include <stdlib.h>
 
-struct passwd *getpwnam(const char * name) {
+struct passwd *getpwuid(uid_t uid) {
   struct passwd *tmp;
   setpwent();
   for (;;) {
     tmp=getpwent();
-    if (!strcmp(tmp->pw_name,name))
+    if (tmp->pw_uid==uid)
       return tmp;
     free(tmp);
   }

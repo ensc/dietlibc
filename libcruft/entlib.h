@@ -18,6 +18,7 @@
 #include <errno.h>	/* for errno */
 #include <string.h>	/* for memmove(3) */
 #include <stdlib.h>	/* for atoi(3) */
+#include <paths.h>	/* for the file locations */
 
 #include <pwd.h>	/* for struct passwd */
 #include <grp.h>	/* for struct group */

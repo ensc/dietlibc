@@ -12,13 +12,6 @@
 
 #define MAX_GROUP_MEMBERS 16 /* matches Linux kernel task struct */
 
-/* not in glibc 2.2.2 paths.h.  should it stay local, or
- * move to dietlibc/include/paths.h?
- */
-#ifndef _PATH_GROUP
-#define _PATH_GROUP "/etc/group"
-#endif
-
 static struct __ent_state *st = NULL; /* state held across calls */
 static char *gr_mem[MAX_GROUP_MEMBERS+1];
 static struct group gr;
