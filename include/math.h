@@ -54,6 +54,9 @@ double exp10(double d) __THROW __attribute__((__const__));
 double log(double d) __THROW __attribute__((__const__));
 double log10(double d) __THROW __attribute__((__const__));
 
+double exp2(double d) __THROW __attribute__((__const__));
+double log2(double d) __THROW __attribute__((__const__));
+
 double pow(double x, double y) __THROW __attribute__((__const__));
 
 double sqrt(double x) __THROW __attribute__((__const__));

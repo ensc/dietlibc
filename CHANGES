@@ -1,4 +1,5 @@
 0.28:
+  add tcgetsid (Yuri Kozlov)
 
 0.27:
   change DNS routines to look for ip6.arpa instead of ip6.int

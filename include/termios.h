@@ -381,6 +381,7 @@ int tcflush(int fd, int queue_selector) __THROW;
 int tcdrain(int fd) __THROW;
 int tcflow (int fd,int action) __THROW;
 int tcsendbreak (int fd,int duration) __THROW;
+pid_t tcgetsid(int fildes) __THROW;
 
 __END_DECLS
 
