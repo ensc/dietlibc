@@ -50,6 +50,7 @@
   add <sys/io.h>, ioperm syscall.
   add flock to <sys/file.h>
   fixes to bsearch and the regular expressions.
+  add fake herror.
 
 0.9:
   fixed initgroups (oops)
