@@ -1,9 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <write12.h>
 
 void die(const char* message) {
-  __write2(message);
+  puts(message);
   exit(1);
 }
 
