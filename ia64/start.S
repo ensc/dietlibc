@@ -31,10 +31,13 @@ _start:
 	;;
 	sub gp = r9, gp       /* subtract program counter */
 	;;
-	addl r15 = @ltoff(environ), gp /* offset to environ */
+	addl r15 = @ltoff(environ#), gp /* offset to environ */
+	;;
 	ld8  r14 = [r15]
+	;;
 	st8  [r14] = out2           /* store envp in environ */
 	br.call.sptk.few rp = main  /* call main */
+	;;
 	mov r32 = r8                /* store return code */
 	br _exit                    /* branch to _exit */
 .endp _start

@@ -5,7 +5,7 @@
   modify it under the terms of the GNU General Public
   Public License.
 
-  This file is part of the hppa-Port of dietlibc
+  This file is part of the ia64-Port of dietlibc
 
   unified.S
     General system-call interface
@@ -23,19 +23,18 @@
 .proc  _exit
 
 _exit:
-	mov r0 = 1025
+	mov r15 = 1025
 .endp _exit
 .size _exit, . - _exit
 
 __unified_syscall:
 	break.i 0x100000
+	movl r2=errno
 	cmp.eq p6,p0=-1,r10
 	;;
 __error_unified_syscall:
-(p6)	addl r33  = @ltoff(errno), gp
-(p6)	ld8  r33  = [r33]
-(p6)	st4 [r33] = r8
-(p6)	mov r8 = -1
+(p6)    st4 [r2]=r8
+(p6)    mov r8=-1
 
 #include "dietuglyweaks.h"
 

@@ -3,6 +3,7 @@
   be more strict regarding hostile DNS packets.
   fix ia64 compile problems (Gerrit Pape)
   make killpg a function and not a macro (broke bash 2.05b)
+  fix ia64 start code and unified syscall (me)
 
 0.18:
   add stpcpy (from Thomas Ogrisegg)
