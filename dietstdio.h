@@ -6,6 +6,7 @@
 #ifdef WANT_THREAD_SAFE
 #include <pthread.h>
 #endif
+#include <stdarg.h>
 
 #ifdef WANT_SMALL_STDIO_BUFS
 #define BUFSIZE 128
@@ -83,3 +84,13 @@ extern FILE *stdout, *stderr, *stdin;
 #define EOF (int)(-1)
 
 extern int __buffered_outs(const char *s,int len);
+
+/* ..scanf */
+struct arg_scanf {
+  void *data;
+  int (*getch)(void*);
+  int (*putch)(int,void*);
+};
+
+int __v_scanf(struct arg_scanf* fn, const unsigned char *format, va_list arg_ptr);
+
