@@ -34,6 +34,9 @@ char *strncat(char *dest, const char *src, size_t n) __THROW;
 size_t strspn(const char *s, const char *accept) __THROW;
 size_t strcspn(const char *s, const char *reject) __THROW;
 
+char *strpbrk(const char *s, const char *accept) __THROW;
+char *strsep(char **stringp, const char *delim) __THROW;
+
 void* memset(void *s, int c, size_t n) __THROW;
 
 #undef NULL

@@ -6,8 +6,12 @@
 #ifndef __cplusplus
 #define throw ()
 #define __THROW
+#define __BEGIN_DECLS
+#define __END_DECLS
 #else
 #define __THROW throw ()
+#define __BEGIN_DECLS extern "C" {
+#define __END_DECLS }
 #endif
 
 #ifndef __GNUC__

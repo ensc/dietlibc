@@ -19,10 +19,12 @@
 #define _PATH_CONSOLE	"/dev/console"
 #define BUF_SIZE 512	/* messagebuffer size (>= 200) */
 
+#define MAX_LOGTAG 80
+
 /* those have to be global *sigh* */
 static volatile int	connected = 0;  /* have done connect */
 static volatile int	LogMask = 0xff; /* mask of priorities to be logged */
-static char		*LogTag = NULL; /* string to tag the entry with */
+static char		LogTag[MAX_LOGTAG];	/* string to tag the entry with */
 static int		LogFile = -1;   /* fd for log */
 static int		LogType = SOCK_DGRAM; /* type of socket connection */
 static int		LogFacility = LOG_USER; /* default facility code */
@@ -50,10 +52,7 @@ void closelog(void)
 
   closelog_intern();
 
-  if (LogTag != NULL) {
-    free(LogTag);
-    LogTag = NULL;
-  }
+  LogTag[0]=0;
   LogType = SOCK_DGRAM;
 
 #ifdef WANT_THREAD_SAVE
@@ -79,15 +78,27 @@ static void openlog_intern(int option, int facility)
       }
     }
     if ((LogFile != -1) && !connected) {
+#ifdef WANT_THREAD_SAVE
       int old_errno = (*(__errno_location()));
+#else
+      int old_errno=errno;
+#endif
       if(connect(LogFile, &SyslogAddr, sizeof(SyslogAddr)) == -1) {
+#ifdef WANT_THREAD_SAVE
 	int saved_errno = (*(__errno_location()));
+#else
+	int saved_errno=errno;
+#endif
 	close(LogFile);
 	LogFile = -1;
 	if((LogType == SOCK_DGRAM) && (saved_errno == EPROTOTYPE)) {
 	  /* retry with SOCK_STREAM instead of SOCK_DGRAM */
 	  LogType = SOCK_STREAM;
+#ifdef WANT_THREAD_SAVE
 	  (*(__errno_location()))=old_errno;
+#else
+	  errno=old_errno;
+#endif
 	  continue;
 	}
       }
@@ -98,23 +109,15 @@ static void openlog_intern(int option, int facility)
 }
 
 /* has to be secured against multiple, simultanious call's in threaded environment */
-void openlog(char *ident, int option, int facility)
+void openlog(const char *ident, int option, int facility)
 {
-  char a;
-
 #ifdef WANT_THREAD_SAVE
   pthread_mutex_lock(&syslog_mutex);
 #endif
 
-  if (LogTag != NULL) free(LogTag);
-  if (ident != NULL) {
-    if(strlen(ident) > 80) {
-      a = ident[80];
-      ident[80] = '\0';
-      LogTag = strdup(ident);
-      ident[80] = a;
-    }
-    else LogTag = strdup(ident);
+  if (ident) {
+    strncpy(LogTag,ident,MAX_LOGTAG);
+    LogTag[MAX_LOGTAG-1]=0;
   }
   openlog_intern(option, facility);
 
@@ -149,7 +152,11 @@ void vsyslog(int priority, const char *format, va_list arg_ptr)
   int sigpipe;
   struct sigaction action, oldaction;
   struct sigaction *oldaction_ptr = NULL;
+#ifdef WANT_THREAD_SAVE
   int saved_errno = (*(__errno_location()));
+#else
+  int saved_errno = errno;
+#endif
 
   /* check for invalid priority/facility bits */
   if (priority & ~(LOG_PRIMASK|LOG_FACMASK)) {
@@ -172,14 +179,18 @@ void vsyslog(int priority, const char *format, va_list arg_ptr)
   else
     headerlen = snprintf(buffer, 130, "<%d>%s %s: ", priority, time_buf, LogTag);
 
-  if (LogTag == NULL) {
+  if (!LogTag[0]) {
     if ((LogStat & LOG_PID) != LOG_PID)
       headerlen = snprintf(buffer, 130, "<%d>%s (unknown)[%d]: ", priority, time_buf, pid);
-    strcat(buffer+headerlen, "no openlog with ident, please check code!");
+    strcat(buffer+headerlen, "syslog without openlog w/ ident, please check code!");
     buflen = 41;
   }
   else {
+#ifdef WANT_THREAD_SAVE
     (*(__errno_location()))=saved_errno;
+#else
+    errno=saved_errno;
+#endif
     buflen = vsnprintf(buffer+headerlen, BUF_SIZE - headerlen, format, arg_ptr);
   }
   if (LogStat & LOG_PERROR) {

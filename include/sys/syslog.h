@@ -2,6 +2,7 @@
 #define _SYS_SYSLOG_H 1
 
 #include <sys/cdefs.h>
+#include <stdarg.h>
 
 #define _PATH_LOG	"/dev/log"
 
@@ -79,7 +80,7 @@
 /* Open connection to system logger.  */
 /* against the glibc-routine ident has not to be const ! */
 /* instead ident is limited to 80 characters ! */
-void openlog (char *ident, int option, int  facility);
+void openlog (const char *ident, int option, int  facility);
 
 void closelog (void) __THROW;
 
@@ -88,5 +89,14 @@ int setlogmask (int mask) __THROW;
 void syslog (int priority, const char *format, ...) __THROW;
 
 void vsyslog (int priority, const char *format, va_list arg_ptr) __THROW;
+
+/* yuck yuck yuck, only needed for syslogd. */
+typedef struct _code {
+  char *c_name;
+  int c_val;
+} CODE;
+
+extern CODE prioritynames[];
+extern CODE facilitynames[];
 
 #endif

@@ -15,6 +15,7 @@
 #include <math.h>
 #include <termios.h>
 #include <netdb.h>
+#include <sys/mman.h>
 
 #if 0
 int compint(const void *a,const void *b) {
@@ -40,8 +41,11 @@ static int rand() {
 extern double atof(const char *c);
 
 int main(int argc,char *argv[]) {
+  char *t=mmap(0,1024,PROT_READ|PROT_WRITE,MAP_ANONYMOUS|MAP_PRIVATE|MAP_FIXED,-1,0);
+#if 0
   time_t t=time(0);
   puts(asctime(localtime(&t)));
+#endif
 #if 0
   struct servent *foo=getservbyname("ident","tcp");
   if (foo)

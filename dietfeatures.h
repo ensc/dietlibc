@@ -3,8 +3,6 @@
 
 /* feel free to comment some of these out to reduce code size */
 
-#if 1
-
 /*#define WANT_FLOATING_POINT_IN_PRINTF
 #define WANT_FLOATING_POINT_IN_SCANF */
 #define WANT_NULL_PRINTF
@@ -34,8 +32,6 @@
 /* do you want localtime(3) to read /etc/localtime?
  * Needed for daylight saving time etc. */
 #define WANT_TZFILE_PARSER
-
-#endif
 
 /* stop uncommenting here ;-) */
 #ifndef WANT_FASTER_STRING_ROUTINES
