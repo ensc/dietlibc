@@ -1,32 +1,36 @@
-
 .text
-.type   tanh,@function
-.global tanh
 
-tanh:                           # note: exp(x) = 2^(x*log2(e))
-        fldl2e
-        fmull    4(%esp)        # x*log2(e)
-        fld      %st(0)         # x*log2(e)              x*log2(e)
-        frndint                 # int(x*log2(e))         x*log2(e)
-        fxch                    # x*log2(e)              int(x*log2(e))
-        fsub     %st(1),%st(0)  # frac(x*log2(e))        int(x*log2(e))
-        f2xm1                   # 2^(fract(x*log2(e)))-1 int(x*log2(e))
-        fld1                    # 1                      2^(fract(x*log2(e)))-1         int(x*log2(e))
-        faddp    %st(0),%st(1)  # 2^(fract(x*log2(e)))   int(x*log2(e))
-        fscale                  # 2^(x*log2(e))          int(x*log2(e))
-        fstp     %st(1)         # 2^(x*log2(e))
+.global tanhf,tanh,tanhl
+	.type	tanhf,@function
+	.type	tanh,@function
+	.type	tanhl,@function
+tanhf:
+	fldl2e
+	fmuls 4(%esp)
+	call __finexp
+	jmp fintanh
+tanh:
+	fldl2e
+	fmull 4(%esp)
+	call __finexp
+fintanh:
+	fld1
+	fdiv %st(1),%st	# st(0)=1/exp(x), st(1)=exp(x)
+	fst %st(2)	# st(2)=1/exp(x)
+	fadd %st(1),%st(0)
+	fstp %st(3)	# st(2)=exp(x)+exp(-x), st(1)=exp(-x), st(0)=exp(x)
+	fsubp		# st(1)=exp(x)+exp(-x), st(0)=exp(x)-exp(-x)
+	fdivp
+	ret
 
-# now we have y = exp(x), but tanh(x) = (y - 1/y) / (y + 1/y)
-
-        fld1
-        fdiv    %st(1),%st(0)   # 1/y           y
-        fld     %st(0)          # 1/y           1/y             y
-        fadd    %st(2)          # y+1/y         1/y             y
-        fxch    %st(2)          # y             1/y             y+1/y
-        fsubp                   # y-1/y         y+1/y
-        fdivp                   # (y-1/y)/(y+1/y)
-        ret
+tanhl:
+	fldl2e
+	fldt 4(%esp)
+	fmulp
+	call __finexp
+	jmp fintanh
 
 .Lende:
-
 .size    tanh,.ende-tanh
+.size    tanhf,.ende-tanhf
+.size    tanhl,.ende-tanhl

@@ -93,4 +93,9 @@ double lgamma(double x);
 
 double rint(double x);
 
+double modf(double x, double * iptr);
+
+double frexp(double x, int *exp);
+double ldexp(double x, int exp);
+
 #endif

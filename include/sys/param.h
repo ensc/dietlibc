@@ -7,6 +7,7 @@
 #define MAXHOSTNAMELEN	64
 #define NGROUPS		32
 #define NOGROUP		(-1)
+#define NOFILE		OPEN_MAX
 
 #undef MIN
 #undef MAX

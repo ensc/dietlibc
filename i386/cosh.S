@@ -1,29 +1,34 @@
-
 .text
-.type   cosh,@function
-.global cosh
 
-cosh:                           # note: exp(x) = 2^(x*log2(e))
-        fldl2e
-        fmull    4(%esp)        # x*log2(e)
-        fld      %st(0)         # x*log2(e)              x*log2(e)
-        frndint                 # int(x*log2(e))         x*log2(e)
-        fxch                    # x*log2(e)              int(x*log2(e))
-        fsub     %st(1),%st(0)  # frac(x*log2(e))        int(x*log2(e))
-        f2xm1                   # 2^(fract(x*log2(e)))-1 int(x*log2(e))
-        fld1                    # 1                      2^(fract(x*log2(e)))-1         int(x*log2(e))
-        faddp    %st(0),%st(1)  # 2^(fract(x*log2(e)))   int(x*log2(e))
-        fscale                  # 2^(x*log2(e))          int(x*log2(e))
-        fstp     %st(1)         # 2^(x*log2(e))
+.global coshf,cosh,coshl
+	.type	coshf,@function
+	.type	cosh,@function
+	.type	coshl,@function
+coshf:
+	fldl2e
+	fmuls 4(%esp)
+	jmp fincosh
+cosh:
+	fldl2e
+	fmull 4(%esp)
+fincosh:
+	call __finexp
+	fld1
+	fdiv %st(1),%st(0)	# st(0)=1/exp(x), st(1)=exp(x)
+	faddp %st,%st(1)
+	pushl $0x3f000000	# 1/2
+	flds (%esp)
+	popl %eax
+	fmulp
+	ret
 
-# now we have y = exp(x), but cosh(x) = (y + 1/y) * 0.5
-
-        fld1
-        fdiv    %st(1),%st(0)
-        faddp
-        fmuls   __half
-        ret
+coshl:
+	fldl2e
+	fldt 4(%esp)
+	fmulp
+	jmp fincosh
 
 .Lende:
-
 .size    cosh,.ende-cosh
+.size    coshf,.ende-coshf
+.size    coshl,.ende-coshl
