@@ -31,6 +31,12 @@
 int foo;
 
 int main(int argc,char *argv[]) {
+  char buf[100];
+  char ip[16];
+  memset(ip,0,16);
+  printf("%p %p\n",inet_ntop(AF_INET6,ip,buf,100),buf);
+  puts(buf);
+#if 0
   struct addrinfo *ai;
   struct addrinfo hints;
   char buf[16];
@@ -54,6 +60,7 @@ int main(int argc,char *argv[]) {
     }
     ai=ai->ai_next;
   }
+#endif
 #if 0
   int i=foo;
   printf("load average is %3.2f\n",0.0);
