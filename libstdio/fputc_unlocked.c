@@ -13,7 +13,8 @@ int fputc_unlocked(int c, FILE *stream) {
   if ((stream->flags&BUFLINEWISE) && c=='\n')	/* puke */
     if (fflush(stream)) return EOF;
 #else
-  write(stream->fd,&c,1);
+  char ch=c;
+  write(stream->fd,&ch,1);
 #endif
   return 0;
 }

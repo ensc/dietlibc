@@ -95,9 +95,10 @@ int main(int argc,char *argv[]) {
       *dest++=argv[1];
       if (link) { *dest++=nostdlib; *dest++=dashL; }
       if (compile || link) *dest++=a;
+      if (link) { *dest++=b; }
       for (i=2; i<argc; ++i)
 	*dest++=argv[i];
-      if (link) { *dest++=b; *dest++=c; *dest++=libgcc; }
+      if (link) { *dest++=c; *dest++=libgcc; }
       *dest=0;
       execvp(newargv[0],newargv);
       goto error;
