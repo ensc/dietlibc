@@ -28,7 +28,7 @@ int putenv(const char *string) {
     }
     ++envc;
   }
-  if (*tmp) {
+  if (tmp) {
     newenv=(char**)malloc((envc+2)*sizeof(char*));
     if (!newenv) return -1;
     newenv[0]=(char*)string;
