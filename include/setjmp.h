@@ -18,15 +18,17 @@ typedef int __jmp_buf[6];
 
 #ifdef __x86_64__
 #ifndef __ASSEMBLER__
-typedef long __jmp_buf[6];
+typedef long __jmp_buf[8];
 #endif
-# define JB_BX	0
-# define JB_SI	1
-# define JB_DI	2
-# define JB_BP	3
-# define JB_SP	4
-# define JB_PC	5
-# define JB_SIZE 48
+# define JB_RBX	0
+# define JB_RBP	1
+# define JB_R12	2
+# define JB_R13	3
+# define JB_R14	4
+# define JB_R15	5
+# define JB_RSP	6
+# define JB_PC	7
+# define JB_SIZE 64
 #endif
 
 #ifdef __s390__
