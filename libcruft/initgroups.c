@@ -8,18 +8,22 @@ static int _getgrouplist(const char*user,gid_t group,gid_t*groups,int*ngroups) {
   struct group*g;
   int ret=0;
 
-  if (__likely(n<size)) groups[n]=group;
+  if (0<size) { groups[n++]=group; }
+  else { *ngroups=0; return (-1); }
 
   setgrent();
   while ((g=getgrent())) {
-    char **duh=g->gr_mem;
+    char **duh;
+    if (g->gr_gid==group) continue;
+    duh=g->gr_mem;
     while (*duh) {
       if (!strcmp(*duh,user)) {
-	if (__unlikely(++n>=NGROUPS_MAX)) {
+	if (n>=size) {
 	  ret=~ret;
 	  goto err_out;
 	}
-	if (__likely(n<size)) groups[n]=g->gr_gid;
+	groups[n++]=g->gr_gid;
+	break;
       }
       duh++;
     }
