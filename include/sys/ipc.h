@@ -2,6 +2,7 @@
 #define _SYS_IPC_H
 
 #include <sys/cdefs.h>
+#include <sys/types.h>
 
 #define SEMOP		 1
 #define SEMGET		 2
@@ -15,7 +16,7 @@
 #define SHMGET		23
 #define SHMCTL		24
 
-#define IPC_PRIVATE ((key_t) 0)  
+#define IPC_PRIVATE ((key_t) 0)
 
 #define IPC_CREAT  00001000   /* create if key is nonexistent */
 #define IPC_EXCL   00002000   /* fail if key exists */
