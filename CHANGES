@@ -14,6 +14,7 @@
   add .size directive to i386 syscalls
   shove a few more bytes off the i386 socket calls
   setjmp, longjmp and clone for x86_64 are now implemented but not tested (Olaf)
+  fix sparc signals
 
 0.20:
   calloc was botched
