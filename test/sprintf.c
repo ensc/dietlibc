@@ -14,6 +14,8 @@ int main() {
   assert(!strcmp(buf,"0.000009"));
   sprintf(buf,"%f", 1e-2);
   assert(!strcmp(buf,"0.010000"));
+  sprintf(buf,"%6d",-1);
+  assert(!strcmp(buf,"    -1"));
   strcpy(buf,"foo ");
   sprintf(buf+strlen(buf),"%s","bar ");
   strcat(buf,"baz.");

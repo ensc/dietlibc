@@ -145,11 +145,13 @@ inn_printf:
 
 print_out:
 	if (width && (!flag_left)) {
+#if 0
 	  if (flag_in_sign) {
 	    A_WRITE(fn,s,1); ++len;
 	    ++s; --sz;
 	    --width;
 	  }
+#endif
 	  if (flag_hash>0) {
 	    A_WRITE(fn,s,flag_hash); len+=flag_hash;
 	    s+=flag_hash; sz-=flag_hash;
