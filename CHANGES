@@ -14,6 +14,9 @@
     limits.h instead)
   added remove.c and enough cruft to limits.h to make it compile lzo,
     lzop and bzip2.
+  added mktime, asctime_r, asctime and ctime (needed for gzip).
+  Someone will need to implement a reader for the glibc localtime file
+    format some day :-(
 
 0.7.1:
   optimized away the static arrays from __ltostr and __lltostr.

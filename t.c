@@ -6,11 +6,20 @@
 #include <stdio.h>
 #include <assert.h>
 #include <sys/mount.h>
+#include <time.h>
 
 int main() {
-  int a,b,c;
-  printf("sscanf returned %d\n",sscanf("Mem: 123 456 789\n","Mem: %d %d %d",&a,&b,&c));
-  printf("got %d %d %d\n",a,b,c);
+  struct tm duh;
+  time_t t;
+  char buf[30];
+  duh.tm_sec=42;
+  duh.tm_min=23;
+  duh.tm_hour=17;
+  duh.tm_mday=2;
+  duh.tm_mon=7;
+  duh.tm_year=100;
+  t=mktime(&duh);
+  printf("%s\n",asctime_r(&duh,buf));
 #if 0
   int i;
   for (i=0; i<5; i++) {
