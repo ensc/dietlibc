@@ -41,8 +41,12 @@ long int telldir (DIR *__dirp) __THROW;
 int scandir(const char *dir, struct dirent ***namelist,
       int (*selection)(const struct dirent *),
       int (*compar)(const struct dirent **, const struct dirent **)) __THROW;
+int scandir64(const char *dir, struct dirent64 ***namelist,
+      int (*selection)(const struct dirent64 *),
+      int (*compar)(const struct dirent64 **, const struct dirent64 **)) __THROW;
 
 int alphasort(const struct dirent **a, const struct dirent **b) __THROW __attribute__((const));
+int alphasort64(const struct dirent64 **a, const struct dirent64 **b) __THROW __attribute__((const));
 
 #define MAXNAMLEN NAME_MAX
 
@@ -53,6 +57,8 @@ extern int dirfd(DIR *dirp) __THROW;
 #if defined _FILE_OFFSET_BITS && _FILE_OFFSET_BITS == 64
 #define dirent dirent64
 #define readdir readdir64
+#define scandir scandir64
+#define alphasort alphasort64
 #endif
 
 #endif
