@@ -40,6 +40,7 @@ void* memset(void *s, int c, size_t n) __THROW;
 
 #define bzero(s,n) memset(s,0,n)
 #define bcmp(s1,s2,n) memcmp(s1,s2,n)
+#define bcopy(src,dest,n) memcpy(dest,src,n)
 
 char *strerror(int errnum) __THROW;
 char *strsignal(int signum) __THROW;

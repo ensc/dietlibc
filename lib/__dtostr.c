@@ -30,9 +30,13 @@ int __dtostr(double d,char *buf,int maxlen,int prec) {
     while (i>10) { tmp=tmp*1e-10; i-=10; }
     while (i>1) { tmp=tmp/10; --i; }
   }
-  while (d/tmp<1) {
-    --e10;
-    tmp/=10.0;
+  if (d<1) {
+    tmp=1;
+  } else {
+    while (d/tmp<1) {
+      --e10;
+      tmp/=10.0;
+    }
   }
   /* step 4: see if precision is sufficient to display all digits */
   if (e10>prec) {

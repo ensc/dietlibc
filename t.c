@@ -37,6 +37,8 @@ static int rand() {
 }
 #endif
 
+extern double atof(const char *c);
+
 int main(int argc,char *argv[]) {
   struct hostent *foo=gethostbyname("knuth.fefe.de");
 /*  if (foo)
