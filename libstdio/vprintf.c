@@ -1,11 +1,10 @@
 #include <stdarg.h>
+#include <unistd.h>
 #include "dietstdio.h"
 
-static int __aaa_cheap_outs(const char *s,int len) {
+__attribute__((weak)) int __buffered_outs(const char *s,int len) {
   return write(1,s,len)==len?1:0;
 }
-
-int __buffered_outs(const char *s,int len)  __attribute__((weak,alias("__aaa_cheap_outs")));
 
 int vprintf(const char *format, va_list ap)
 {
