@@ -268,7 +268,7 @@ register int len;
 			continue;
 		}
 		current = (len < current) ? len : current;
-		bcopy(rstrm->in_finger, addr, current);
+		memmove(addr, rstrm->in_finger, current);
 		rstrm->in_finger += current;
 		addr += current;
 		len -= current;
@@ -385,7 +385,7 @@ register unsigned int len;
 	while (len > 0) {
 		current = (unsigned long) rstrm->out_boundry - (unsigned long) rstrm->out_finger;
 		current = (len < current) ? len : current;
-		bcopy(addr, rstrm->out_finger, current);
+		memmove(rstrm->out_finger, addr, current);
 		rstrm->out_finger += current;
 		addr += current;
 		len -= current;

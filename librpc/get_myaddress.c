@@ -64,6 +64,6 @@ void get_myaddress(struct sockaddr_in* addr)
 		exit(1);
 	}
 	addr->sin_family = AF_INET;
-	bcopy((char *) hp->h_addr, (char *) &addr->sin_addr, hp->h_length);
+	memmove((char *) &addr->sin_addr, (char *) hp->h_addr, hp->h_length);
 	addr->sin_port = htons(PMAPPORT);
 }

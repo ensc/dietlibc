@@ -83,7 +83,7 @@ register struct rpc_msg *msg;
 			stat = AUTH_BADCRED;
 			goto done;
 		}
-		bcopy((char*) buf, aup->aup_machname, (unsigned int) str_len);
+		memmove(aup->aup_machname, (char*) buf, (unsigned int) str_len);
 		aup->aup_machname[str_len] = 0;
 		str_len = RNDUP(str_len);
 		buf += str_len / sizeof(long);

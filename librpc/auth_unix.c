@@ -152,7 +152,7 @@ AUTH *authunix_create __P ((char *machname, uid_t uid,
 		return (NULL);
 	}
 #endif
-	bcopy(mymem, au->au_origcred.oa_base, (unsigned int) len);
+	memmove(au->au_origcred.oa_base, mymem, (unsigned int) len);
 
 	/*
 	 * set auth handle to reflect new cred.

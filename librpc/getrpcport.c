@@ -50,7 +50,7 @@ extern int getrpcport (const char * host, unsigned long prognum,
 
 	if ((hp = gethostbyname(host)) == NULL)
 		return (0);
-	bcopy(hp->h_addr, (char *) &addr.sin_addr, hp->h_length);
+	memmove((char *) &addr.sin_addr, hp->h_addr, hp->h_length);
 	addr.sin_family = AF_INET;
 	addr.sin_port = 0;
 	return (pmap_getport(&addr, prognum, versnum, proto));

@@ -12,7 +12,8 @@
 /* 128 or 2048 bytes buffer size? */
 /* #define WANT_SMALL_STDIO_BUFS */
 
-/* #define SLASH_PROC_OK */
+/* this is only for meaningful for ttyname so far */
+/* #define SLASH_PROC_OK 1 */
 
 #define WANT_BUFFERED_STDIO
 

@@ -40,6 +40,7 @@
   fixed word delimiters in regex (they looked for space, i.e. "," did
     not work as delimiter)
   errno.h now declares sys_errlist and sys_nerr.
+  ttyname should return 0 if !isatty.  Thanks, Uwe Ohse.
 
 0.10:
   update getpagesize.

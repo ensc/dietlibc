@@ -83,14 +83,14 @@ register struct rpc_msg *cmsg;
 			IXDR_PUT_ENUM(buf, oa->oa_flavor);
 			IXDR_PUT_LONG(buf, oa->oa_length);
 			if (oa->oa_length) {
-				bcopy(oa->oa_base, (char*) buf, oa->oa_length);
+				memmove((char*) buf, oa->oa_base, oa->oa_length);
 				buf += RNDUP(oa->oa_length) / sizeof(long);
 			}
 			oa = &cmsg->rm_call.cb_verf;
 			IXDR_PUT_ENUM(buf, oa->oa_flavor);
 			IXDR_PUT_LONG(buf, oa->oa_length);
 			if (oa->oa_length) {
-				bcopy(oa->oa_base, (char*) buf, oa->oa_length);
+				memmove((char*) buf, oa->oa_base, oa->oa_length);
 				/* no real need....
 				   buf += RNDUP(oa->oa_length) / sizeof (long);
 				 */
@@ -132,7 +132,7 @@ register struct rpc_msg *cmsg;
 						return (FALSE);
 					}
 				} else {
-					bcopy((char*) buf, oa->oa_base, oa->oa_length);
+					memmove(oa->oa_base, (char*) buf, oa->oa_length);
 					/* no real need....
 					   buf += RNDUP(oa->oa_length) /
 					   sizeof (long);
@@ -165,7 +165,7 @@ register struct rpc_msg *cmsg;
 						return (FALSE);
 					}
 				} else {
-					bcopy((char*) buf, oa->oa_base, oa->oa_length);
+					memmove(oa->oa_base, (char*) buf, oa->oa_length);
 					/* no real need...
 					   buf += RNDUP(oa->oa_length) /
 					   sizeof (long);

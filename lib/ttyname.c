@@ -19,6 +19,7 @@ char *ttyname(int fd) {
   struct stat s;
   char *c=buf+8;
   int n;
+  if (!isatty(fd)) return 0;
   if (fstat(fd,&s)) return 0;
   if (S_ISCHR(s.st_mode)) {
     n=minor(s.st_rdev);
