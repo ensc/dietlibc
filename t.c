@@ -53,9 +53,10 @@ char *strlcpy2(char *dest, const char *src, size_t n)
 }
 
 int main(int argc,char *argv[]) {
-  char buf[100];
-  strlcpy2(buf,"fnord",5);
-  puts(buf);
+  FILE *f=popen("id","r");
+  char buf[1024];
+  fgets(buf,1024,f);
+  write(1,buf,strlen(buf));
 #if 0
   fnord("fnord","foo\n","bar\n",0);
   assert(0);

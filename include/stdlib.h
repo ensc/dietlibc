@@ -14,6 +14,7 @@ int putenv(const char *string) __THROW;
 int setenv(const char *name, const char *value, int overwrite) __THROW;
 void unsetenv(const char *name) __THROW;
 
+int system (const char * string) __THROW;
 int atexit(void (*function)(void)) __THROW;
 
 double strtod(const char *nptr, char **endptr) __THROW;

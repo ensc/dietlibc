@@ -9,14 +9,12 @@
 
 extern char **environ;
 
-int __libc_fork(void);
-int __libc_waitpid(int pid, int *status, int options);
 int execve(const char*filename, char *const argv[], char *const envp[]);
 int sigaction(int signum,  const  struct  sigaction  *act, struct sigaction *oldact);
 
 int __libc_system (const char *line)
 {
-  struct sigaction sa, intr, quit;
+  struct sigaction sa, intr, quit, child;
   int save,pid,ret=-1;
 
   if (line == 0) return __libc_system("exit 0") == 0;
@@ -25,20 +23,25 @@ int __libc_system (const char *line)
   sa.sa_flags = 0;
   sigemptyset (&sa.sa_mask);
 
-  if (sigaction(SIGINT,  &sa, &intr)<0) return -1;
+  if (sigaction(SIGCHLD,  &sa, &child)<0) return -1;
+  if (sigaction(SIGINT,  &sa, &intr)<0) goto fnord;
   if (sigaction(SIGQUIT, &sa, &quit)<0) {
     save = errno;
     sigaction (SIGINT, &intr, (struct sigaction*)0);
     errno=save;
+fnord:
+    save = errno;
+    sigaction (SIGCHLD, &child, (struct sigaction*)0);
+    errno=save;
     return -1;
   }
 
-  pid=__libc_fork();
+  pid=fork();
   if (pid>0)
   { /* parent */
     int n;
     do
-      n=__libc_waitpid(pid, &ret, 0);
+      n=waitpid(pid, &ret, 0);
     while ((n==-1) && (errno==EINTR));
     if (n!=pid) ret=-1;
   }
@@ -52,6 +55,7 @@ int __libc_system (const char *line)
 
     sigaction(SIGINT,  &intr, (struct sigaction*)0);
     sigaction(SIGQUIT, &quit, (struct sigaction*)0);
+    sigaction(SIGCHLD, &child, (struct sigaction*)0);
 
     execve(SHELL_PATH,(char *const *)nargs, environ);
     _exit(127);
@@ -59,6 +63,7 @@ int __libc_system (const char *line)
   save = errno;
   sigaction (SIGINT,  &intr, (struct sigaction *)0);
   sigaction (SIGQUIT, &quit, (struct sigaction *)0);
+  sigaction (SIGCHLD, &child, (struct sigaction *)0);
   errno=save;
   return ret;
 }

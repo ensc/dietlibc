@@ -40,13 +40,16 @@
   fixed word delimiters in regex (they looked for space, i.e. "," did
     not work as delimiter)
   errno.h now declares sys_errlist and sys_nerr.
-  ttyname should return 0 if !isatty.  Thanks, Uwe Ohse.
-  realpath returns NULL if "." cannot be opened (thanks, Uwe Ohse)
-  putenv erroneously accepted (and mishandled) entries without "=".
-    Thanks, Uwe.
-  popen returned 255 instead of 127 if /bin/sh could not be run.
-    Thanks, Uwe.
-  fgetc did not set the internal EOF indicator on EOF.  Thanks, Uwe.
+  Uwe Ohse reported all of the following bugs:
+    ttyname should return 0 if !isatty.
+    realpath returns NULL if "." cannot be opened
+    putenv erroneously accepted (and mishandled) entries without "=".
+    popen returned 255 instead of 127 if /bin/sh could not be run.
+    fgetc did not set the internal EOF indicator on EOF.
+    bsearch contained an assumption about integer arithmetic overflow
+      behavior.
+    system did not set SIGCHLD and thus contained a race.
+    popen did not set close-on-exec and could leak an fd on malloc error.
 
 0.10:
   update getpagesize.
