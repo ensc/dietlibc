@@ -54,3 +54,13 @@ A: Since the diet libc was written to make writing small programs
    assert() (which is normally not enabled in production code) or if you
    use functions that use static buffers (like gethostbyname and
    friends).
+
+
+Q: My program stopped parsing command line arguments properly!  Now what?
+A: The getopt in the diet libc adheres to the Single Unix Specification.
+   In particular, it initialized optind to 1 (not 0) and breaks if
+   someone sets optint to 0 (as some misguided legacy programs to).
+   Also, it does not reorder arguments, i.e. something like "rm -f foo -v"
+   will not see -v as option but rather as non-option argument.  If you
+   need GNU getopt behaviour, please use GNU getopt instead of the diet
+   libc code.
