@@ -58,7 +58,7 @@ typedef struct t_alloc_head {
 /* freelist handler */
 static alloc_head base = {&base,0};
 static char *alloc_get_end = MEM_ALLOC_START;
-static pthread_mutex_t mutex_free = PTHREAD_MUTEX_INITIALIZER;
+static int inalloc=0;
 static pthread_mutex_t mutex_alloc = PTHREAD_MUTEX_INITIALIZER;
 
 void free(void *ptr)
@@ -69,7 +69,7 @@ void free(void *ptr)
 
   block=START_BLOCK(ptr);
 
-  pthread_mutex_lock(&mutex_free);
+  if (!inalloc) pthread_mutex_lock(&mutex_alloc);
   prev=&base;
   for (p=prev->ptr ; ; prev=p, p=p->ptr)
   {
@@ -95,7 +95,7 @@ void free(void *ptr)
     prev->size += block->size;
     prev->ptr   = block->ptr;
   }
-  pthread_mutex_unlock(&mutex_free);
+  if (!inalloc) pthread_mutex_unlock(&mutex_alloc);
 }
 
 static void *alloc_get_mem(unsigned long size)
@@ -143,6 +143,7 @@ void *malloc(size_t size)
   need=MIN_ALLOC(size);
 
   pthread_mutex_lock(&mutex_alloc);
+  inalloc=1;
   prev=&base;
   for (p=prev->ptr;;prev=p,p=p->ptr)
   {
@@ -172,6 +173,7 @@ void *malloc(size_t size)
       }
       p->ptr=p;		/* self-link */
 
+      inalloc=0;
       pthread_mutex_unlock(&mutex_alloc);
       return (void*)START_DATA(p);
     }
@@ -181,6 +183,7 @@ void *malloc(size_t size)
     }
   }
 err_out:
+  inalloc=0;
   pthread_mutex_unlock(&mutex_alloc);
   return NULL;
 }
