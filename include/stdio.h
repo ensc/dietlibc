@@ -50,6 +50,7 @@ int fputs(const char *s, FILE *stream) __THROW;
 
 #define getchar() fgetc(stdin)
 #define getc(stream) fgetc(stream)
+#define getc_unlocked(stream) fgetc_unlocked(stream)
 
 int puts(const char *s) __THROW;
 
