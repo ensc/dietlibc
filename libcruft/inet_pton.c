@@ -92,11 +92,7 @@ int inet_pton(int AF, const char *CP, void *BUF) {
     if (CP[len=scan_ip6(CP,BUF)])
       return 0;
   } else {
-#ifdef WANT_THREAD_SAFE
-    *(__errno_location())=EAFNOSUPPORT;
-#else
     errno=EAFNOSUPPORT;
-#endif
     return -1;
   }
   return 1;

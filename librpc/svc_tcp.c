@@ -48,6 +48,7 @@ static char sccsid[] = "@(#)svc_tcp.c 1.21 87/08/11 Copyr 1984 Sun Micro";
 #include <errno.h>
 #include <string.h>
 #include <unistd.h>
+#include "dietfeatures.h"
 
 /*
  * Ops vector for TCP/IP based rpc service handle

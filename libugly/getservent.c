@@ -80,11 +80,7 @@ error:
   if (servicesfd!=-1) close(servicesfd);
   servicesmap=(char*)-1;
   servicesfd=-1;
-#ifdef WANT_THREAD_SAFE
-  *(__errno_location())=ENOMEM;
-#else
   errno=ENOMEM;
-#endif
   return 0;
 }
 

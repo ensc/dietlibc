@@ -56,13 +56,6 @@ int __get_errno()
   if (errno) return *errno;
   return ENODATA;
 }
-/* thread set_errno */
-void __set_errno(int error)
-{
-  int *errno=__errno_location();
-  if (errno) *errno=error;
-  else *errno=ENODATA;
-}
 
 /* thread self */
 _pthread_descr __thread_self()

@@ -119,11 +119,7 @@ static void *alloc_get_mem(unsigned long size)
 	     MAP_ANONYMOUS|MAP_PRIVATE, -1, 0);
     if (tmp==MAP_FAILED)
     {
-#ifdef WANT_THREAD_SAFE
-      *(__errno_location()) = ENOMEM;
-#else
       errno = ENOMEM;
-#endif
       return NULL;	/* PANIC ! */
     }
     alloc_get_end=tmp;

@@ -16,11 +16,7 @@ int lockf(int fd, int cmd, off_t len) {
       return -1;
     if (fl.l_type == F_UNLCK || fl.l_pid == getpid ())
       return 0;
-#ifdef WANT_THREAD_SAFE
-    *(__errno_location())=EACCES;
-#else
     errno=EACCES;
-#endif
     return -1;
   case F_ULOCK:
     fl.l_type=F_UNLCK;
@@ -35,11 +31,7 @@ int lockf(int fd, int cmd, off_t len) {
     cmd = F_SETLK;
     break;
   default:
-#ifdef WANT_THREAD_SAFE
-    *(__errno_location())=EINVAL;
-#else
     errno=EINVAL;
-#endif
     return -1;
   }
   return fcntl(fd,cmd,&fl);

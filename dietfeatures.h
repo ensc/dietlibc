@@ -58,6 +58,7 @@
 
 #ifdef WANT_THREAD_SAFE
 #define errno (*__errno_location())
+#define _REENTRANT
 #endif
 
 #endif

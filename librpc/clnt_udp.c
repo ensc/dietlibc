@@ -45,8 +45,7 @@ static char sccsid[] = "@(#)clnt_udp.c 1.39 87/08/11 Copyr 1984 Sun Micro";
 #include <errno.h>
 #include <rpc/pmap_clnt.h>
 #include <unistd.h>
-
-extern int errno;
+#include "dietfeatures.h"
 
 /*
  * UDP bases client side rpc operations

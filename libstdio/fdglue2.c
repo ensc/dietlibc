@@ -1,7 +1,7 @@
-#include "dietstdio.h"
 #include <unistd.h>
 #include <fcntl.h>
 #include <errno.h>
+#include "dietstdio.h"
 #include <stdlib.h>
 #include <pthread.h>
 
@@ -14,11 +14,7 @@ FILE* __stdio_init_file_nothreads(int fd) {
   FILE *tmp=(FILE*)malloc(sizeof(FILE));
   if (!tmp) {
     close(fd);
-#ifdef WANT_THREAD_SAFE
-    *(__errno_location())=ENOMEM;
-#else
     errno=ENOMEM;
-#endif
     return 0;
   }
   tmp->fd=fd;

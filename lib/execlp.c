@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <stdlib.h>
+#include "dietfeatures.h"
 #include "dietstdarg.h"
 
 int execlp(const char* file, const char *arg,...) {
@@ -21,6 +22,6 @@ int execlp(const char* file, const char *arg,...) {
     va_end (bak);
     return execvp(file,argv);
   }
-  __set_errno(ENOMEM);
+  errno=ENOMEM;
   return -1;
 }

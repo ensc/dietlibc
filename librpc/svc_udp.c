@@ -45,6 +45,7 @@ static char sccsid[] = "@(#)svc_udp.c 1.24 87/08/11 Copyr 1984 Sun Micro";
 #include <errno.h>
 #include <string.h>
 #include <unistd.h>
+#include "dietfeatures.h"
 
 #define rpc_buffer(xprt) ((xprt)->xp_p1)
 
@@ -63,8 +64,6 @@ static struct xp_ops svcudp_op = {
 	svcudp_freeargs,
 	svcudp_destroy
 };
-
-extern int errno;
 
 /*
  * kept in xprt->xp_p2

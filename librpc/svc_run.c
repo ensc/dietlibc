@@ -39,6 +39,7 @@ static char sccsid[] = "@(#)svc_run.c 1.1 87/10/13 Copyr 1984 Sun Micro";
 #include <rpc/rpc.h>
 #include <errno.h>
 #include <unistd.h>
+#include "dietfeatures.h"
 
 void svc_run()
 {
@@ -47,7 +48,6 @@ void svc_run()
 #else
 	int readfds;
 #endif							/* def FD_SETSIZE */
-	extern int errno;
 
 	for (;;) {
 #ifdef FD_SETSIZE

@@ -74,11 +74,7 @@ error:
   if (protofd!=-1) close(protofd);
   protomap=(char*)-1;
   protofd=-1;
-#ifdef WANT_THREAD_SAFE
-  *(__errno_location())=ENOMEM;
-#else
   errno=ENOMEM;
-#endif
   return 0;
 }
 

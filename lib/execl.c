@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <stdlib.h>
+#include "dietfeatures.h"
 
 int execl( const char *path,...) {
   va_list ap;
@@ -19,6 +20,6 @@ int execl( const char *path,...) {
     va_end (ap);
     return execve(path,argv,environ);
   }
-  __set_errno(ENOMEM);
+  errno=ENOMEM;
   return -1;
 }

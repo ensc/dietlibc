@@ -1,3 +1,4 @@
+#include <errno.h>
 #include "dietfeatures.h"
 
 #include <stdio.h>
@@ -63,27 +64,15 @@ static void openlog_intern(int option, int facility)
       }
     }
     if ((LogFile != -1) && !connected) {
-#ifdef WANT_THREAD_SAFE
-      int old_errno = (*(__errno_location()));
-#else
       int old_errno=errno;
-#endif
       if(connect(LogFile, &SyslogAddr, sizeof(SyslogAddr)) == -1) {
-#ifdef WANT_THREAD_SAFE
-	int saved_errno = (*(__errno_location()));
-#else
 	int saved_errno=errno;
-#endif
 	close(LogFile);
 	LogFile = -1;
 	if((LogType == SOCK_DGRAM) && (saved_errno == EPROTOTYPE)) {
 	  /* retry with SOCK_STREAM instead of SOCK_DGRAM */
 	  LogType = SOCK_STREAM;
-#ifdef WANT_THREAD_SAFE
-	  (*(__errno_location()))=old_errno;
-#else
 	  errno=old_errno;
-#endif
 	  continue;
 	}
       }
@@ -122,11 +111,7 @@ void vsyslog(int priority, const char *format, va_list arg_ptr)
   int sigpipe;
   struct sigaction action, oldaction;
   struct sigaction *oldaction_ptr = NULL;
-#ifdef WANT_THREAD_SAFE
-  int saved_errno = (*(__errno_location()));
-#else
   int saved_errno = errno;
-#endif
 
   /* check for invalid priority/facility bits */
   if (priority & ~(LOG_PRIMASK|LOG_FACMASK)) {
@@ -156,11 +141,7 @@ void vsyslog(int priority, const char *format, va_list arg_ptr)
     buflen = 41;
   }
   else {
-#ifdef WANT_THREAD_SAFE
-    (*(__errno_location()))=saved_errno;
-#else
     errno=saved_errno;
-#endif
     buflen = vsnprintf(buffer+headerlen, BUF_SIZE - headerlen, format, arg_ptr);
   }
   if (LogStat & LOG_PERROR) {

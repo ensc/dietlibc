@@ -5,7 +5,7 @@
 
 int sigemptyset(sigset_t *set) {
 /*  if (set==NULL) {
-    __set_errno(EINVAL);
+    errno=EINVAL;
     return -1;
   } */
   memset(set,0,sizeof(*set));

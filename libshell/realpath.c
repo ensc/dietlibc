@@ -9,11 +9,7 @@ char *realpath(const char *path, char *resolved_path) {
   int fd=open(".",O_RDONLY);
   char *tmp="";
   if (chdir(path)) {
-#ifdef WANT_THREAD_SAFE
-    if (*__errno_location()==ENOTDIR)
-#else
     if (errno==ENOTDIR)
-#endif
     {
       if ((tmp=strrchr(path,'/'))) {
 	memmove(resolved_path,path,tmp-path);

@@ -30,7 +30,7 @@ int __libc_system (const char *line)
   if (sigaction(SIGQUIT, &sa, &quit)<0) {
     save = errno;
     sigaction (SIGINT, &intr, (struct sigaction*)0);
-    __set_errno (save);
+    errno=save;
     return -1;
   }
 
@@ -60,7 +60,7 @@ int __libc_system (const char *line)
   save = errno;
   sigaction (SIGINT,  &intr, (struct sigaction *)0);
   sigaction (SIGQUIT, &quit, (struct sigaction *)0);
-  __set_errno(save);
+  errno=save;
   return ret;
 }
 

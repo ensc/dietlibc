@@ -78,11 +78,7 @@ error:
   if (netfd!=-1) close(netfd);
   netmap=(char*)-1;
   netfd=-1;
-#ifdef WANT_THREAD_SAFE
-  *(__errno_location())=ENOMEM;
-#else
   errno=ENOMEM;
-#endif
   return 0;
 }
 

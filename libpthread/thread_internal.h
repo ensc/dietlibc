@@ -9,6 +9,8 @@
 #error "the diet libc is not compiled with thread safeness enabled!"
 #endif
 
+#undef errno
+
 /* cleanup */
 #define PTHREAD_MAX_CLEANUP 8
 struct thread_cleanup_t {

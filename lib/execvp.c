@@ -12,11 +12,7 @@ int execvp(const char *file, char *const argv[]) {
   char buf[PATH_MAX];
   if (strchr((char*)file,'/')) {
     if (execve(file,argv,environ)==-1) {
-#ifdef WANT_THREAD_SAFE
-      if (*(__errno_location())==ENOEXEC)
-#else
       if (errno==ENOEXEC)
-#endif
 	__exec_shell(file,argv);
       return -1;
     }
@@ -34,20 +30,9 @@ int execvp(const char *file, char *const argv[]) {
     buf[next-cur]='/';
     memmove(&buf[next-cur+1],file,strlen(file)+1);
     if (execve(buf,argv,environ)==-1) {
-#ifdef WANT_THREAD_SAFE
-      if (*(__errno_location())==ENOEXEC)
-#else
       if (errno==ENOEXEC)
-#endif
 	return __exec_shell(buf,argv);
-#ifdef WANT_THREAD_SAFE
-      {
-	int err = *(__errno_location());
-	if ((err!=EACCES) && (err!=ENOENT)) return -1;
-      }
-#else
       if ((errno!=EACCES) && (errno!=ENOENT)) return -1;
-#endif
     }
     if (*next==0) break;
     next++;

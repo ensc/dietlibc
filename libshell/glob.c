@@ -24,6 +24,7 @@
 #include <fnmatch.h>
 #include <dirent.h>
 #include <pwd.h>
+#include "dietfeatures.h"
 
 #include <glob.h>
 
@@ -38,7 +39,7 @@ static int cmp_func(const void * a, const void * b)
 		return 1;
 	if (s2 == NULL)
 		return -1;
-	return strcmp(s1, s2);
+	return strcoll(s1, s2);
 }
 
 
@@ -61,7 +62,7 @@ static int glob_in_dir(const char *pattern, const char *directory, int flags,
 		int save = errno;
 		if (dp)
 			closedir (dp);
-		__set_errno(save);
+		errno=save;
 	}
 	int add_entry(const char * name) {
 		pglob->gl_pathv	= (char **) realloc(pglob->gl_pathv,
@@ -146,7 +147,7 @@ int glob(const char *pattern, int flags, int errfunc(const char * epath, int eer
 	char * ptr, * ptr2;
 
 	if (pattern == NULL || pglob == NULL || (flags & ~__GLOB_FLAGS) != 0) {
-		__set_errno (EINVAL);
+		errno=EINVAL;
 		return -1;
 	}
 

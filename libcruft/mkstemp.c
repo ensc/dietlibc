@@ -2,13 +2,14 @@
 #include <fcntl.h>
 #include <string.h>
 #include <errno.h>
+#include "dietfeatures.h"
 
 int mkstemp(char* template) {
   char *tmp=template+strlen(template)-6;
   int randfd;
   int i,res;
   unsigned int random;
-  for (i=0; i<6; ++i) if (tmp[i]!='X') { __set_errno(EINVAL); return -1; }
+  for (i=0; i<6; ++i) if (tmp[i]!='X') { errno=EINVAL; return -1; }
   randfd=open("/dev/urandom",O_RDONLY);
   for (;;) {
     read(randfd,&random,sizeof(random));

@@ -37,6 +37,7 @@
 #include <errno.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include "dietfeatures.h"
 
 /*
  * Bind a socket to a privileged IP port
@@ -48,7 +49,6 @@ struct sockaddr_in *sin;
 	int res;
 	static short port;
 	struct sockaddr_in myaddr;
-	extern int errno;
 	int i;
 
 #define STARTPORT 600
