@@ -3,6 +3,7 @@
 #include <fcntl.h>
 #include <termios.h>
 #include <sys/ioctl.h>
+#include <errno.h>
 
 extern int __ltostr(char *s, int size, unsigned long i, int base, char UpCase);
 
@@ -42,7 +43,8 @@ int openpty(int *amaster, int *aslave, char *name, struct termios
   if (*aslave<0) goto kaputt;
   *amaster=fd;
   if (name) strcpy(name,buf);
-  if (termp) tcsetattr(*aslave,TCSAFLUSH,termp);
+  if (termp)
+    while (tcsetattr(*aslave,TCSAFLUSH,termp) && errno==EINTR);
   if (winp) ioctl(*aslave, TIOCSWINSZ, winp);
   return 0;
 kaputt:
