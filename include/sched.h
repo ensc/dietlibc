@@ -21,6 +21,8 @@
 
 #define CLONE_SIGNAL    (CLONE_SIGHAND | CLONE_THREA)
 
+int clone(void*(*fn)(void*),void*stack,int flags,void*arg);
+
 /*
  * Scheduling policies
  */

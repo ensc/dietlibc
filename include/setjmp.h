@@ -111,36 +111,30 @@ typedef double __jmp_buf[21];
 #endif
 
 #ifndef __ASSEMBLER__
+#include <signal.h>
 
 /* typedef int sig_atomic_t; */
 #define __sig_atomic_t sig_atomic_t
 
-# define _SIGSET_NWORDS	(1024 / (8 * sizeof (unsigned long int)))
-typedef struct
-  {
-    unsigned long int __val[_SIGSET_NWORDS];
-  } __sigset_t;
-
 /* Calling environment, plus possibly a saved signal mask.  */
-typedef struct __jmp_buf_tag	/* C++ doesn't like tagless structs.  */
-  {
-    /* NOTE: The machine-dependent definitions of `__sigsetjmp'
-       assume that a `jmp_buf' begins with a `__jmp_buf'.
-       Do not move this member or add others before it.  */
-    __jmp_buf __jmpbuf;		/* Calling environment.  */
-    int __mask_was_saved;	/* Saved the signal mask?  */
-    __sigset_t __saved_mask;	/* Saved signal mask.  */
-  } jmp_buf[1];
+typedef struct __jmp_buf_tag {	/* C++ doesn't like tagless structs.  */
+/* NOTE: The machine-dependent definitions of `__sigsetjmp'
+ * assume that a `jmp_buf' begins with a `__jmp_buf'.
+ * Do not move this member or add others before it.  */
+  __jmp_buf __jmpbuf;		/* Calling environment.  */
+  int __mask_was_saved;		/* Saved the signal mask?  */
+  sigset_t __saved_mask;	/* Saved signal mask.  */
+} jmp_buf[1];
 
-extern int __sigsetjmp (jmp_buf __env, int __savemask) __THROW;
+extern int __sigsetjmp(jmp_buf __env,int __savemask) __THROW;
 
-extern void longjmp (jmp_buf __env, int __val)
-     __THROW __attribute__ ((__noreturn__));
+extern void longjmp(jmp_buf __env,int __val)
+     __THROW __attribute__((__noreturn__));
 
 typedef jmp_buf sigjmp_buf;
 
-extern void siglongjmp (sigjmp_buf __env, int __val)
-     __THROW __attribute__ ((__noreturn__));
+extern void siglongjmp(sigjmp_buf __env,int __val)
+     __THROW __attribute__((__noreturn__));
 
 #define setjmp(env) __sigsetjmp(env,0)
 #define sigsetjmp(a,b) __sigsetjmp(a,b)
