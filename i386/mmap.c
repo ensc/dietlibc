@@ -1,8 +1,12 @@
+#include <asm/unistd.h>
 #include <linux/types.h>
 #include <linux/unistd.h>
 
-char* _mmap(unsigned long *buffer);
-asm("_mmap: movb $__NR_mmap, %al ; jmp __unified_syscall");
+static inline char* _mmap(unsigned long *buffer) {
+  register char* res;
+  asm("jmp __unified_syscall" : "=a" (res) : "a" (__NR_mmap));
+  return res;
+}
 
 char *mmap(char *addr, size_t len, int prot, int flags, int fd, unsigned long off) {
   unsigned long buffer[6];
