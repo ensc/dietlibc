@@ -14,8 +14,6 @@ void *dlopen(const char *filename, int flags)
     }
     return _dl_open(filename,flags);
   }
-  /* dietld.so has allocated the top for the dynamic program.
-   * (if there is a dietld.so :) not yet functional
-   * (started the implementation) )*/
+  /* dietld.so has allocated the top for the dynamic program. */
   return _dl_root_handle;
 }
