@@ -4,7 +4,7 @@
 #define	__LITTLE_ENDIAN	1234
 #define	__BIG_ENDIAN	4321
 
-#if defined(__i386__) || defined(__x86_64__)
+#if defined(__i386__) || defined(__x86_64__) || defined(__ia64__)
 #define __BYTE_ORDER		__LITTLE_ENDIAN
 #define __FLOAT_WORD_ORDER	__BYTE_ORDER
 #endif
@@ -47,7 +47,7 @@
 # define __LONG_LONG_PAIR(HI, LO) HI, LO
 #endif
 
-#if defined(__alpha__) || defined(__mips64) || defined(__sparc_v9__) || defined(__x86_64__)
+#if defined(__alpha__) || defined(__mips64) || defined(__sparc_v9__) || defined(__x86_64__) || defined(__ia64__)
 #define __WORDSIZE 64
 #endif
 

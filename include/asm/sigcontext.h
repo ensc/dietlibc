@@ -29,4 +29,8 @@
 #include <asm/parisc-sigcontext.h>
 #endif
 
+#ifdef __ia64__
+#include <asm/ia64-sigcontext.h>
+#endif
+
 #endif

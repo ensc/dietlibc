@@ -1,0 +1,41 @@
+/*
+  Copyright (C) 2002 Thomas M. Ogrisegg
+
+  This is free software. You can redistribute and
+  modify it under the terms of the GNU General Public
+  Public License.
+
+  This file is part of the IA64-Port of the dietlibc
+
+  start.S
+    Implemenation of the _start startup function
+*/
+
+.psr abi64
+.psr lsb
+.lsb
+
+.text
+.globl _start
+.proc  _start
+
+_start:
+	alloc r2 = ar.pfs,0,0,7,0
+	adds out1 = 16, sp    /* base arguments */
+	movl gp = @gprel(0f)  /* base offset */
+	;;
+	adds out2 = 24, out1  /* get offset to environ/envp */
+0:	
+	ld8 out0 = [out1], 8  /* load argc and set argv */
+	mov r9 = ip
+	;;
+	sub gp = r9, gp       /* subtract program counter */
+	;;
+	addl r15 = @ltoff(environ), gp /* offset to environ */
+	ld8  r14 = [r15]
+	st8  [r14] = out2           /* store envp in environ */
+	br.call.sptk.few rp = main  /* call main */
+	mov r32 = r8                /* store return code */
+	br _exit                    /* branch to _exit */
+.endp _start
+.size _start, . - _start

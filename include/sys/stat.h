@@ -393,6 +393,29 @@ struct stat64 {
 	unsigned long long st_ino;
 };
 
+#elif defined(__ia64__)
+
+struct stat {
+	unsigned long st_dev;
+	unsigned long st_ino;
+	unsigned long st_nlink;
+	unsigned int  st_mode;
+	unsigned int  st_uid;
+	unsigned int  st_gid;
+	unsigned int  __pad;
+	unsigned long st_rdev;
+	unsigned long st_size;
+	unsigned long st_atime;
+	unsigned long reserved;
+	unsigned long st_mtime;
+	unsigned long reserved2;
+	unsigned long st_ctime;
+	unsigned long reserved3;
+	unsigned long st_blksize;
+	long          st_blocks;
+	unsigned long pad[3];
+};
+
 #endif
 
 #define S_IFMT  00170000

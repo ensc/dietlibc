@@ -7,5 +7,8 @@
 .weak __environ
 __environ:
 environ:
+#if __WORDSIZE == 64
+	.quad 0
+#else
 	.long 0
-
+#endif

@@ -713,6 +713,109 @@ struct pt_regs {
 #define PTRACE_GETSIGINFO	13	/* get child's siginfo structure */
 #define PTRACE_SETSIGINFO	14	/* set child's siginfo structure */
 
+#elif defined(__ia64__)
+
+struct pt_regs {
+	unsigned long cr_ipsr;		/* interrupted task's psr */
+	unsigned long cr_iip;		/* interrupted task's instruction pointer */
+	unsigned long cr_ifs;		/* interrupted task's function state */
+	unsigned long ar_unat;		/* interrupted task's NaT register (preserved) */ 
+	unsigned long ar_pfs;		/* prev function state  */
+	unsigned long ar_rsc;		/* RSE configuration */
+	unsigned long ar_rnat;		/* RSE NaT */ 
+	unsigned long ar_bspstore;	/* RSE bspstore */
+	unsigned long pr;		/* 64 predicate registers (1 bit each) */
+	unsigned long b6;		/* scratch */
+	unsigned long loadrs;		/* size of dirty partition << 16 */
+	unsigned long r1;		/* the gp pointer */
+	unsigned long r2;		/* scratch */
+	unsigned long r3;		/* scratch */
+	unsigned long r12;		/* interrupted task's memory stack pointer */
+	unsigned long r13;		/* thread pointer */
+	unsigned long r14;		/* scratch */
+	unsigned long r15;		/* scratch */
+	unsigned long r8;		/* scratch (return value register 0) */
+	unsigned long r9;		/* scratch (return value register 1) */
+	unsigned long r10;		/* scratch (return value register 2) */
+	unsigned long r11;		/* scratch (return value register 3) */
+	unsigned long r16;		/* scratch */
+	unsigned long r17;		/* scratch */
+	unsigned long r18;		/* scratch */
+	unsigned long r19;		/* scratch */
+	unsigned long r20;		/* scratch */
+	unsigned long r21;		/* scratch */
+	unsigned long r22;		/* scratch */
+	unsigned long r23;		/* scratch */
+	unsigned long r24;		/* scratch */
+	unsigned long r25;		/* scratch */
+	unsigned long r26;		/* scratch */
+	unsigned long r27;		/* scratch */
+	unsigned long r28;		/* scratch */
+	unsigned long r29;		/* scratch */
+	unsigned long r30;		/* scratch */
+	unsigned long r31;		/* scratch */
+	unsigned long ar_ccv;		/* compare/exchange value (scratch) */
+	unsigned long ar_fpsr;		/* floating point status (preserved) */
+	unsigned long b0;		/* return pointer (bp) */
+	unsigned long b7;		/* scratch */
+	struct ia64_fpreg f6;		/* scratch */
+	struct ia64_fpreg f7;		/* scratch */
+	struct ia64_fpreg f8;		/* scratch */
+	struct ia64_fpreg f9;		/* scratch */
+};
+
+struct switch_stack {
+	unsigned long caller_unat;	/* user NaT collection register (preserved) */ 
+	unsigned long ar_fpsr;		/* floating-point status register */
+
+	struct ia64_fpreg f2;		/* preserved */
+	struct ia64_fpreg f3;		/* preserved */
+	struct ia64_fpreg f4;		/* preserved */
+	struct ia64_fpreg f5;		/* preserved */
+
+	struct ia64_fpreg f10;		/* scratch, but untouched by kernel */
+	struct ia64_fpreg f11;		/* scratch, but untouched by kernel */
+	struct ia64_fpreg f12;		/* scratch, but untouched by kernel */
+	struct ia64_fpreg f13;		/* scratch, but untouched by kernel */
+	struct ia64_fpreg f14;		/* scratch, but untouched by kernel */
+	struct ia64_fpreg f15;		/* scratch, but untouched by kernel */
+	struct ia64_fpreg f16;		/* preserved */
+	struct ia64_fpreg f17;		/* preserved */
+	struct ia64_fpreg f18;		/* preserved */
+	struct ia64_fpreg f19;		/* preserved */
+	struct ia64_fpreg f20;		/* preserved */
+	struct ia64_fpreg f21;		/* preserved */
+	struct ia64_fpreg f22;		/* preserved */
+	struct ia64_fpreg f23;		/* preserved */
+	struct ia64_fpreg f24;		/* preserved */
+	struct ia64_fpreg f25;		/* preserved */
+	struct ia64_fpreg f26;		/* preserved */
+	struct ia64_fpreg f27;		/* preserved */
+	struct ia64_fpreg f28;		/* preserved */
+	struct ia64_fpreg f29;		/* preserved */
+	struct ia64_fpreg f30;		/* preserved */
+	struct ia64_fpreg f31;		/* preserved */
+
+	unsigned long r4;		/* preserved */
+	unsigned long r5;		/* preserved */
+	unsigned long r6;		/* preserved */
+	unsigned long r7;		/* preserved */
+
+	unsigned long b0;		/* so we can force a direct return in copy_thread */
+	unsigned long b1;
+	unsigned long b2;
+	unsigned long b3;
+	unsigned long b4;
+	unsigned long b5;
+
+	unsigned long ar_pfs;		/* previous function state */
+	unsigned long ar_lc;		/* loop counter (preserved) */
+	unsigned long ar_unat;		/* NaT bits for r4-r7 */
+	unsigned long ar_rnat;		/* RSE NaT collection register */ 
+	unsigned long ar_bspstore;	/* RSE dirty base (preserved) */
+	unsigned long pr;		/* 64 predicate registers (1 bit each) */
+};
+
 #endif
 
 extern long int ptrace(int request, ...) __THROW;

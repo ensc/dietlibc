@@ -146,6 +146,9 @@ usage:
 #ifdef __x86_64__
       shortplatform="x86_64";
 #endif
+#ifdef __ia64__
+	  shortplatform="ia64";
+#endif
       {
 	char *tmp=platform+strlen(platform);
 	strcpy(tmp,shortplatform);

@@ -8,7 +8,7 @@
 
 #define F_LINUX_SPECIFIC_BASE	1024
 
-#if defined(__i386__) || defined(__s390__) || defined(__x86_64__)
+#if defined(__i386__) || defined(__s390__) || defined(__x86_64__) || defined(__ia64__)
 
 /* open/fcntl - O_SYNC is only implemented on blocks devices and on files
    located on an ext2 file system */

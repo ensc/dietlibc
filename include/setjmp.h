@@ -185,6 +185,12 @@ typedef double __jmp_buf[21];
 #endif
 #endif
 
+#ifdef __ia64__
+#ifndef __ASSEMBLER__
+typedef long __jmp_buf[70] __attribute__ ((aligned(16)));
+#endif
+#endif
+
 #ifndef __ASSEMBLER__
 #include <signal.h>
 

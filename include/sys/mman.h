@@ -130,6 +130,25 @@
 #define MCL_CURRENT 1       /* lock all current mappings */
 #define MCL_FUTURE  2
 
+#elif defined(__ia64__)
+
+#define MAP_TYPE    0x0f        /* Mask for type of mapping */
+#define MAP_FIXED   0x10        /* Interpret addr exactly */
+#define MAP_ANONYMOUS   0x20        /* don't use a file */
+
+#define MAP_GROWSDOWN   0x0100      /* stack-like segment */
+#define MAP_GROWSUP 0x0200      /* register stack-like segment */
+#define MAP_DENYWRITE   0x0800      /* ETXTBSY */
+#define MAP_EXECUTABLE  0x1000      /* mark it as an executable */
+#define MAP_LOCKED  0x2000      /* pages are locked */
+#define MAP_NORESERVE   0x4000      /* don't check for reservations */
+#define MAP_WRITECOMBINED 0x10000   /* write-combine the area */
+#define MAP_NONCACHED   0x20000     /* don't cache the memory */
+
+#define MS_ASYNC    1       /* sync memory asynchronously */
+#define MS_INVALIDATE   2       /* invalidate the caches */
+#define MS_SYNC     4       /* synchronous memory sync */
+
 #endif
 
 #endif
