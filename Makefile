@@ -1,4 +1,4 @@
-all: start.o dietlibc.a elftrunc
+all: start.o dietlibc.a liblatin1.a elftrunc
 
 ARCH=$(shell uname -m | sed 's/i[4-9]86/i386/')
 
@@ -7,7 +7,7 @@ CROSS=
 
 CC=gcc
 
-VPATH=lib:libstdio:libugly:libcruft:syscalls.c
+VPATH=lib:libstdio:libugly:libcruft:liblatin1:syscalls.c
 
 SYSCALLOBJ=$(patsubst syscalls.s/%.S,%.o,$(wildcard syscalls.s/*.S))
 
@@ -37,13 +37,17 @@ PWD=$(shell pwd)
 
 %.o: %.c
 	$(CROSS)$(CC) -I. -Iinclude $(CFLAGS) -c $<
-#	$(CROSS)strip -x -R .comment -R .note $@
+	$(CROSS)strip -x -R .comment -R .note $@
 
 DIETLIBC_OBJ = $(SYSCALLOBJ) $(LIBOBJ) $(LIBSTDIOOBJ) $(LIBUGLYOBJ) \
 $(LIBCRUFTOBJ) __longjmp.o setjmp.o unified.o mmap.o clone.o
 
 dietlibc.a: $(DIETLIBC_OBJ) start.o
 	$(CROSS)ar cru dietlibc.a $(DIETLIBC_OBJ)
+
+LIBLATIN1_OBJS=$(patsubst liblatin1/%.c,%.o,$(wildcard liblatin1/*.c))
+liblatin1.a: $(LIBLATIN1_OBJS)
+	$(CROSS)ar cru $@ $^
 
 libdietc.so: dietlibc.a
 	$(CROSS)ld -whole-archive -shared -o $@ $^

@@ -39,6 +39,7 @@
   added pseudo-locale support for is* (they are now weak aliases,
     isupper -> __isupper_ascii etc).  So, for example, liblatin1 can
     overwrite the default is* functions.
+  added liblatin1.a
 
 0.7.2:
   added several prototypes to already implemented functions and
