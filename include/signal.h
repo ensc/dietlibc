@@ -8,7 +8,6 @@ __BEGIN_DECLS
 #define __WANT_POSIX1B_SIGNALS__
 
 #include <sys/types.h>
-#include <sys/time.h>
 
 #define NSIG		32
 
@@ -539,6 +538,7 @@ int sigwait(const sigset_t* set,int* sig) __THROW;
 
 extern const char *const* sys_siglist;
 
+#include <sys/time.h>
 #include <sys/ucontext.h>
 
 __END_DECLS

@@ -3,7 +3,6 @@
 
 #include <sys/cdefs.h>
 #include <sys/types.h>
-#include <sys/select.h>
 
 __BEGIN_DECLS
 
@@ -21,6 +20,8 @@ struct timezone {
   int tz_minuteswest;	/* minutes west of Greenwich */
   int tz_dsttime;	/* type of dst correction */
 };
+
+#include <sys/select.h>
 
 #define	ITIMER_REAL	0
 #define	ITIMER_VIRTUAL	1
