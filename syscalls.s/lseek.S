@@ -1,3 +1,3 @@
 #include "syscalls.h"
 
-syscall(lseek,lseek)
+syscall_weak(lseek,lseek,__libc_lseek)

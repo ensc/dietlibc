@@ -1,3 +1,3 @@
 #include "syscalls.h"
 
-syscall(waitpid,waitpid)
+syscall_weak(waitpid,waitpid,__libc_waitpid)

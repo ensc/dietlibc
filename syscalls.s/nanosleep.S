@@ -1,3 +1,3 @@
 #include "syscalls.h"
 
-syscall(nanosleep,nanosleep)
+syscall_weak(nanosleep,nanosleep,__libc_nanosleep)

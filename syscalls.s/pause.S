@@ -1,3 +1,3 @@
 #include "syscalls.h"
 
-syscall(pause,pause)
+syscall_weak(pause,pause,__libc_pause)

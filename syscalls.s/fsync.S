@@ -1,3 +1,3 @@
 #include "syscalls.h"
 
-syscall(fsync,fsync)
+syscall_weak(fsync,fsync,__libc_fsync)

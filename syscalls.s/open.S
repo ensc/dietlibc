@@ -1,3 +1,3 @@
 #include "syscalls.h"
 
-syscall(open,open)
+syscall_weak(open,open,__libc_open)

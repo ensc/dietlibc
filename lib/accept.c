@@ -2,7 +2,7 @@
 
 extern int socketcall(int callno,long* args);
 
-int accept(int a, void * addr, void * addr2) {
+int __libc_accept(int a, void * addr, void * addr2) {
 #ifdef __i386__
   return socketcall(SYS_ACCEPT, (long*)&a);
 #else
@@ -11,4 +11,4 @@ int accept(int a, void * addr, void * addr2) {
 #endif
 }
 
-int __libc_accept(int a, void * addr, void * addr2) __attribute__((weak,alias("accept")));
+int accept(int a, void * addr, void * addr2) __attribute__((weak,alias("__libc_accept")));

@@ -2,7 +2,7 @@
 
 extern int socketcall(int callno,long* args);
 
-int recv(int a, const void * b, size_t c, int flags) {
+int __libc_recv(int a, const void * b, size_t c, int flags) {
 #ifdef __i386__
   return socketcall(SYS_RECV,(long*)&a);
 #else
@@ -11,3 +11,5 @@ int recv(int a, const void * b, size_t c, int flags) {
 #endif
 }
 
+int recv(int a, const void * b, size_t c, int flags)
+  __attribute__ ((weak, alias("__libc_recv")));

@@ -13,7 +13,7 @@ int execve(const char*filename, char *const argv[], char *const envp[]);
 void __set_errno(int errno);
 int sigaction(int signum,  const  struct  sigaction  *act, struct sigaction *oldact);
 
-int system (const char *line)
+int __libc_system (const char *line)
 {
   struct sigaction sa, intr, quit;
   int save,pid,ret=-1;
@@ -61,3 +61,5 @@ int system (const char *line)
   __set_errno(save);
   return ret;
 }
+
+int system (const char *line) __attribute__((weak,alias("__libc_system")));
