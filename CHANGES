@@ -19,6 +19,7 @@
     Thanks, Thomas Ogrisegg!
   added negated character classes to fnmatch (not required by POSIX)
   make the utmp routines open utmp read-only if read-write doesn't work.
+  remove syscalls.c directory, it is obsolete now with unified syscalls
 
 0.12:
   more contributions from Frank Klemm.

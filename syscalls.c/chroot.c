@@ -1,4 +1,0 @@
-#include "syscalls.h"
-
-_syscall1(int,chroot,void*,path)
-
