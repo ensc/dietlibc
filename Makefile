@@ -135,7 +135,7 @@ PICODIR = pic-$(ARCH)
 $(PICODIR):
 	mkdir $@
 
-dyn_lib: $(PICODIR)/libdietc.so $(PICODIR)/start.o $(PICODIR)/libpthread.so
+dyn_lib: $(PICODIR) $(PICODIR)/libdietc.so $(PICODIR)/start.o $(PICODIR)/libpthread.so
 
 $(PICODIR)/%.o: %.S
 	$(CROSS)$(CC) -I. -Iinclude $(CFLAGS) -fPIC -D__DYN_LIB -c $< -o $@

@@ -7,7 +7,7 @@
 #include "../syscalls.s/errno.S"
 
 #include <dietfeatures.h>
-#include <syscalls.h>
+#include "syscalls.h"
 
 /* ok now include all syscalls.s/*.S and sysdep *.S */
 
