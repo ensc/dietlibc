@@ -12,10 +12,6 @@
 @ parameters on the stack - all we need do here is push the first four and
 @ call the syscall.
 @
-@ Note that because mmap uses the stack slightly differently to the other
-@ syscalls, we need to bypass some of the common exit code in
-@ __unified_syscall by jumping directly to __unified_syscall_1
-@
 
 .global mmap
 
@@ -24,5 +20,5 @@ mmap:
 	mov	r0, sp
 	swi	__NR_mmap
 	add	sp, sp, #16
-	b	__unified_syscall_1
+	b	__unified_syscall
 

@@ -20,11 +20,11 @@ _exit:
 @
 
 .global __unified_syscall
-.global __unified_syscall_1
+.global __unified_syscall4
 
-__unified_syscall:
+__unified_syscall4:
 	ldmia	sp!, {r4, r5, r6}
-__unified_syscall_1:
+__unified_syscall:
 	cmn	r0, #4096
 	movcc	pc, lr			@ return value comes direct from kernel.
 
@@ -41,3 +41,6 @@ __unified_syscall_1:
 
 /* here we go and "reuse" the return for weak-void functions */
 #include "dietuglyweaks.h"
+
+	mov	pc, lr			@ return
+

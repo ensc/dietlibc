@@ -24,15 +24,22 @@
 * 2002/02/12:  Andre McCurdy <armccurdy@yahoo.co.uk>
 *   - Original created.
 *
+* 2002/02/13:  Andre McCurdy <armccurdy@yahoo.co.uk>
+*   - Rewrote MD5Update in assembler (saves 52 bytes).
+*   - Added guard so we don't compile anything for Big-Endian targets.
+*
 ******************************************************************************
 *
 * Notes:
 *
-* This code works correctly on Little-Endian targets only.
-* It is believed to be PIC safe (ie can be used as part of a shared library).
+* This code is believed to be Position Independent (ie can be safely used
+* as part of a shared library).
 *
 *****************************************************************************/
 
+#include <endian.h>
+
+#if (__BYTE_ORDER == __LITTLE_ENDIAN)
 
    .global MD5Init
    .global MD5Update
@@ -45,14 +52,9 @@
     @ void MD5Init (MD5_CTX* ctx);
     @ --
 
-1: .word    0x67452301                      @ initial MD5 Context->state[0]
-   .word    0xefcdab89                      @ initial MD5 Context->state[1]
-   .word    0x98badcfe                      @ initial MD5 Context->state[2]
-   .word    0x10325476                      @ initial MD5 Context->state[3]
-
 MD5Init:
 
-    adr     r1, 1b                          @ r1 = base address of MD5InitData array
+    adr     r1, 1f                          @ r1 = base address of MD5InitData array
     ldmia   r1, { r1 - r3, r12 }            @ load 4 elements from MD5InitData array
     stmia   r0, { r1 - r3, r12 }            @ store into MD5 Context->state[0..3]
     mov     r1, #0
@@ -60,64 +62,54 @@ MD5Init:
     str     r1, [r0, #0x14]                 @ initial count[1] = 0
     mov     pc, lr                          @ return
 
+1: .word    0x67452301                      @ initial MD5 Context->state[0]
+   .word    0xefcdab89                      @ initial MD5 Context->state[1]
+   .word    0x98badcfe                      @ initial MD5 Context->state[2]
+   .word    0x10325476                      @ initial MD5 Context->state[3]
+
 
     @ --
     @ void MD5Update (MD5_CTX* ctx, const uint8_t* buf, size_t len);
-    @ 
-    @ For now, MD5Update comes straight from C via gcc.
-    @ It could obviously do with some optimisation... :-)
     @ --
 
 MD5Update:
-
-    stmfd   sp!, {r4, r5, r6, r7, r8, lr}
-    mov     r5, r0
-    mov     r7, r2
-    mov     r2, r7, asl #3
-    mov     r8, r1
-    ldr     r3, [r5, #16]
-    add     ip, r3, r2
-    cmp     ip, r2
-    mov     r3, r3, lsr #3
-    and     r4, r3, #63
-    ldrcc   r3, [r5, #20]
-    addcc   r3, r3, #1
-    strcc   r3, [r5, #20]
-    rsb     r6, r4, #64
-    add     r0, r5, r4
-    cmp     r7, r6
-    ldr     r3, [r5, #20]
-    add     r3, r3, r7, lsr #29
-    str     ip, [r5, #16]
-    add     r0, r0, #24
-    mov     r2, r6
-    mov     ip, #0
-    str     r3, [r5, #20]
+    stmdb   sp!, { r4 - r8, lr }
+    add     r4, r0, #(6 * 4)                @ r4 = &context->buffer[0]
+    ldmdb   r4, { r0, r3 }                  @ r0 = count[0], r3 = count[1]
+    mov     r5, r1                          @ r5 = input
+    mov     r6, r0, lsr #3                  @ r6 = (context->count[0] >> 3)
+    and     r6, r6, #0x3f                   @ r6 = (context->count[0] >> 3) & 0x3f == byteIndex
+    adds    r0, r0, r2, lsl #3
+    adc     r3, r3, r2, lsr #29
+    stmdb   r4, { r0, r3 }                  @ context->count += (inputBytes * 8)
+    rsb     r7, r6, #64                     @ r7 = (64 - byteIndex) == partLen
+    subs    r8, r2, r7                      @ r8 = (inputBytes - partLen)
+    add     r0, r4, r6
     bcc     1f
-    rsb     r4, r6, r7
-    bl      memcpy
-    mov     r4, r4, lsr #6
-    add     r1, r5, #24
+    mov     r2, r7
+    bl      memcpy                          @ memcpy (&context->buffer[byteIndex], input, partLen);
+    sub     r0, r4, #(6 * 4)
+    mov     r1, r4
     mov     r2, #1
-    mov     r0, r5
-    bl      __MD5Transform
-    mov     r2, r4
-    add     r1, r8, r6
-    mov     r0, r5
-    bl      __MD5Transform
-    add     ip, r6, r4, asl #6
-    mov     r4, #0
-1:  add     r0, r5, r4
-    add     r1, r8, ip
-    rsb     r2, ip, r7
-    add     r0, r0, #24
-    ldmfd   sp!, {r4, r5, r6, r7, r8, lr}
-    b       memcpy
+    bl      __MD5Transform                  @ __MD5Transform (context->state, context->buffer, 1);
+    sub     r0, r4, #(6 * 4)
+    add     r1, r5, r7
+    mov     r2, r8, lsr #6                  @ r2 = ((inputBytes - partLen) / 64) == len
+    bl      __MD5Transform                  @ __MD5Transform (context->state, &input[partLen], len);
+    mov     r0, r4
+    bic     r2, r8, #0x3f
+    add     r1, r2, r7
+    add     r1, r1, r5
+    sub     r2, r8, r2
+1:  ldmia   sp!, { r4 - r8, lr }
+    b       memcpy                          @ classic tail-call optimisation...
 
 
     @ --
-    @ void __MD5Transform (unsigned long *buf, unsigned long *in, int repeat);
+    @ void __MD5Transform (uint32_t *buf, const uint32_t *in, int repeat);
     @ --
+
+MD5MagicData:
 
 1: .word     0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee
    .word     0xf57c0faf, 0x4787c62a, 0xa8304613, 0xfd469501, ( 3f- 4f-4)
@@ -162,7 +154,7 @@ __MD5Transform:
     add     r5, r5, r7                      @ d   = (((b ^ c) & a) ^ c) + d
     add     r5, r5, r11                     @ d   = (((b ^ c) & a) ^ c) + d + (in[i+1] + MD5MagicData[i+1])
     add     r5, r2, r5, ROR #(32 - 12)      @ d   = a + (d rotated left by 12 places)
-    
+
     add     r12, r12, r8                    @ r12 = in[i+2] + MD5MagicData[i+2]
     eor     r8, r2, r3                      @ r8  =   (a ^ b)
     and     r8, r8, r5                      @ r8  =  ((a ^ b) & d)
@@ -209,7 +201,7 @@ __MD5Transform:
     add     r2, r2, r6                      @ a   = (((b ^ c) & d) ^ c) + a
     add     r2, r2, r10                     @ a   = (((b ^ c) & d) ^ c) + a + (in[x] + MD5MagicData[i])
     add     r2, r3, r2, ROR #(32 -  5)      @ a   = b + (a rotated left by  5 places)
-    
+
     add     r11, r11, r7                    @ r11 = in[x] + MD5MagicData[i+1]
     eor     r7, r2, r3                      @ r7  =   (a ^ b)
     and     r7, r7, r4                      @ r7  =  ((a ^ b) & c)
@@ -217,7 +209,7 @@ __MD5Transform:
     add     r5, r5, r7                      @ d   = (((a ^ b) & c) ^ b) + d
     add     r5, r5, r11                     @ d   = (((a ^ b) & c) ^ b) + d + (in[x] + MD5MagicData[i+1])
     add     r5, r2, r5, ROR #(32 -  9)      @ d   = a + (d rotated left by  9 places)
-    
+
     add     r12, r12, r8                    @ r12 = in[x] + MD5MagicData[i+2]
     eor     r8, r5, r2                      @ r8  =   (d ^ a)
     and     r8, r8, r3                      @ r8  =  ((d ^ a) & b)
@@ -352,4 +344,8 @@ __MD5Transform:
     stmia   r0, { r2 - r5 }
     bne     2b
     ldmia   sp!, { r0, r2, r4 - r11, pc }   @ restore all callee saved registers and return
+
+
+#endif   /* __BYTE_ORDER == __LITTLE_ENDIAN */
+
 
