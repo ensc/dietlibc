@@ -1,3 +1,3 @@
 #include "syscalls.h"
 
-syscall(msync,msync)
+syscall_weak(msync,msync,__libc_msync)
