@@ -3,7 +3,7 @@
 #include <dirent.h>
 #include <stdlib.h>
 
-struct dirent* __dietreaddir(DIR *d) {
+struct dirent* readdir(DIR *d) {
   if (!d->num || (d->cur += ((struct dirent*)(d->buf+d->cur))->d_reclen)>=d->num) {
     int res=getdents(d->fd,(struct dirent*)d->buf,1023);
     if (res<=0) return 0;

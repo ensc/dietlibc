@@ -1,3 +1,7 @@
+0.7.3:
+  vsnprintf(0,...) estimated the length of strings with a padding width
+    incorrectly.
+
 0.7.2:
   added several prototypes to already implemented functions and
     <sys/reboot.h>.  Thanks for Abraham for pointing this out.

@@ -11,9 +11,12 @@
 #include <stdio.h>
 
 int main() {
+  printf("%-19s %10lu %9lu %9lu %3d%% %s\n","/dev/ide/host0/bus0/target0/lun0/part2",8393688,705683,1337084,85,"/");
+#if 0
   char buf[100];
   fgets(buf,100,stdin); printf("got %d bytes\n",strlen(buf));
   fgets(buf,100,stdin); printf("got %d bytes\n",strlen(buf));
+#endif
 #if 0
   struct tm duh;
   time_t t;

@@ -120,9 +120,9 @@ print_out:
 	    for (pad=width-buf_len; pad>0; --pad) str[apos++]=padwith;
 	  }
 	} else {
-	  if (width)
-	    apos+=width;
-	  else {
+	  if (width) {
+	    apos+=width>buf_len?width:buf_len;
+	  } else {
 	    int a=strlen(pb);
 	    if (a>size) apos+=size; else apos+=a;
 	  }

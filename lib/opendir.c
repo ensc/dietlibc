@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <fcntl.h>
 
-DIR *__dietopendir (const char *name) {
+DIR *opendir (const char *name) {
   DIR *t=(DIR*)malloc(sizeof(DIR));
   if (t) {
     if ((t->fd=open(name,O_RDONLY|O_DIRECTORY))>=0) {
