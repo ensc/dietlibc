@@ -76,12 +76,14 @@ void closelog(void) {
 #endif
 
 int main(int argc,char *argv[]) {
+#if 0
   char* name;
   int ptyfd,ttyfd;
   int i=openpty(&ptyfd,&ttyfd,0,0,0);
   if (i<0) perror("openpty");
   printf("%d %d\n",ptyfd,ttyfd);
   printf("%s %s\n",ttyname(ptyfd),ttyname(ttyfd));
+#endif
 #if 0
   printf("0x%8.7lx\n",0xfefe);
 #endif
@@ -119,16 +121,16 @@ int main(int argc,char *argv[]) {
 #endif
 //  putchar('c');
 //  write(1,"fnord\n",6);
-#if 0
+#if 1
   struct addrinfo *ai;
-  getaddrinfo("::","22",0,&ai);
+  getaddrinfo("nagus","22",0,&ai);
 #endif
 #if 0
   struct hostent host,*res;
   char buf[4096];
   int fnord;
 
-  gethostbyname2_r("knuth",AF_INET,&host,buf,4096,&res,&fnord);
+  gethostbyname2_r("nagus",AF_INET,&host,buf,4096,&res,&fnord);
 #endif
 #if 0
   char buf[128];
@@ -327,7 +329,7 @@ int main(int argc,char *argv[]) {
   struct hostent * host;
   struct in_addr i;
 
-  host = gethostbyname2("knuth",AF_INET);
+  host = gethostbyname2("nagus",AF_INET);
 
   if (!host)
     printf("host null\n");

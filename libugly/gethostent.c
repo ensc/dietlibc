@@ -151,6 +151,6 @@ struct protoent *getprotobynumber(int proto) {
 
 void endhostent(void) {
   if (hostmap!=(char*)-1) munmap(hostmap,hostlen);
-  hostmap=(char*)-1;
+  hostmap=0;
 }
 
