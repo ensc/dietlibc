@@ -81,7 +81,7 @@ void __dns_readstartfiles(void) {
 	buf+=6;
 	while (buf<last && *buf!='\n') {
 	  char save;
-	  while (buf<last && isblank(*buf)) ++buf;
+	  while (buf<last && (*buf==',' || isblank(*buf))) ++buf;
 	  __dns_domains[__dns_search]=buf;
 	  while (buf<last && (*buf=='.' || *buf=='-' || isalnum(*buf))) ++buf;
 	  save=*buf;

@@ -84,4 +84,10 @@ int abs(int i) __THROW __attribute__((const));
 long int labs(long int i) __THROW __attribute__((const));
 __extension__ long long int llabs(long long int i) __THROW __attribute__((const));
 
+#ifdef _XOPEN_SOURCE
+int grantpt (int fd) __THROW;
+int unlockpt (int fd) __THROW;
+char *ptsname (int fd) __THROW;
+#endif
+
 #endif

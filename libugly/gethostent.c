@@ -109,49 +109,6 @@ void sethostent(int stayopen) {
   cur=hostmap;
 }
 
-#if 0
-struct protoent *getprotobyname(const char *name) {
-  struct protoent *s;
-  setprotoent(0);
-  for (s=getprotoent(); s; s=getprotoent()) {
-    char **tmp;
-#if 0
-    write(1,"found ",6);
-    write(1,s->p_name,strlen(s->p_name));
-    write(1,"/",1);
-    write(1,s->p_proto,strlen(s->p_proto));
-    write(1,"\n",1);
-    if (!strcmp(name,"auth")) {
-      tmp=s->p_aliases;
-      write(1,"  aka ",5);
-      while (*tmp) {
-	write(1,*tmp,strlen(*tmp));
-	write(1,", ",2);
-	++tmp;
-      }
-      write(1,"\n",1);
-    }
-#endif
-    if (!strcmp(name,s->p_name))
-      return s;
-    tmp=s->p_aliases;
-    while (*tmp)
-      if (!strcmp(name,*tmp++)) return s;
-  }
-  return 0;
-}
-
-struct protoent *getprotobynumber(int proto) {
-  struct protoent *s;
-  setprotoent(0);
-  for (s=getprotoent(); s; s=getprotoent()) {
-    if (proto==s->p_proto)
-      return s;
-  }
-  return 0;
-}
-#endif
-
 void endhostent(void) {
   if (hostmap!=(char*)-1) munmap(hostmap,hostlen);
   hostmap=0;

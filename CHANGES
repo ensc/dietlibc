@@ -29,9 +29,11 @@
   Ryan told me that fmod was not included in libm.  Oops.
   strstr(whatever,"") returned NULL, not whatever.  Found by a new test
     suite entry for strstr that I wrote.
-  Thomas Oggrisegg suggested the following:
+  Thomas Oggrisegg suggested or sent patches for the following:
     add <asm/sigcontext.h> for profiling support.
     make strncpy a #define in string.h to save a few bytes.
+    an i386 assembler getenv implementation (roughly half the size)
+    add grantpt, ptsname, unlockpt
   add a getenv test suite entry.
   Andre contributed an ARM assembler md5 implementation and he fixed mmap
     on ARM.
@@ -39,6 +41,7 @@
   getservent_r did not parse lines without aliases.  Thanks, Jaroslav
     Macodiseas!
   fix MIPS start code (argv[0] was always corrupt)
+  removed annoying -Wconversion gcc switch
 
 0.14:
   fix brk again (missing __brk, trivial oversight)
