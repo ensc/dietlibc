@@ -234,6 +234,7 @@ __unified_syscall:
 #undef __PIC__
 #undef __socketcall
 /* oh what a kludge! */
+#define socketcall .Lsocketcall
 #include "../i386/send.S"
 #include "../i386/recv.S"
 #include "../i386/socket.S"
@@ -251,6 +252,8 @@ __unified_syscall:
 #include "../i386/getpeername.S"
 #include "../i386/connect.S"
 #include "../i386/bind.S"
+#undef socketcall
+.Lsocketcall:
 #include "../i386/socketcall.S"
 #define __PIC__
 #undef __socketcall
