@@ -1,11 +1,10 @@
 #include <endian.h>
 #include <sys/types.h>
-
-extern size_t __pwrite(int fd, void *buf, size_t count, off_t a, off_t b);
+#include <unistd.h>
 
 size_t __libc_pwrite(int fd, void *buf, size_t count, off_t offset);
 size_t __libc_pwrite(int fd, void *buf, size_t count, off_t offset) {
-  return __pwrite(fd,buf,count,__LONG_LONG_PAIR(0,offset));
+  return pwrite64(fd,buf,count,offset);
 }
 
-int pwrite(int fd, void *buf, size_t count, off_t offset) __attribute__((weak,alias("__libc_pwrite")));
+ssize_t pwrite(int fd, const void *buf, size_t count, off_t offset) __attribute__((weak,alias("__libc_pwrite")));

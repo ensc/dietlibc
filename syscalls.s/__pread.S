@@ -1,3 +1,3 @@
 #include "syscalls.h"
 
-syscall(pread,__pread)
+syscall_weak(pread,pread64,__libc_pread64)

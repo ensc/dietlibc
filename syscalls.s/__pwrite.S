@@ -1,3 +1,3 @@
 #include "syscalls.h"
 
-syscall(pwrite,__pwrite)
+syscall_weak(pwrite,pwrite64,__libc_pwrite64)

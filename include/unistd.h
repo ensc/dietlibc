@@ -58,6 +58,8 @@ int unlink(const char *pathname) __THROW;
 
 ssize_t pread(int fd, void *buf, size_t count, off_t offset);
 ssize_t pwrite(int fd, const void *buf, size_t count, off_t offset);
+ssize_t pread64(int fd, void *buf, size_t count, off64_t offset);
+ssize_t pwrite64(int fd, const void *buf, size_t count, off64_t offset);
 
 int execve(const char *filename, char *const argv [], char *const envp[]) __THROW;
 int execlp(const char *file, const char *arg, ...) __THROW;
