@@ -1,5 +1,5 @@
 
 LIBOBJ+=
 LIBMATH=acos.o asin.o atan.o atan2.o ceil.o cos.o exp.o exp10.o exp2.o expm1.o fabs.o floor.o hypot.o log.o log10.o log2.o sin.o sqrt.o tan.o
-CFLAGS+=-march=i386 -mcpu=i386 -Os -fomit-frame-pointer
+CFLAGS+=-march=i386 -mcpu=i386 -Os -fomit-frame-pointer -malign-functions=0 -malign-jumps=0
 VPATH:=i386:syscalls.s:$(VPATH)
