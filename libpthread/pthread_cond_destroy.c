@@ -9,8 +9,7 @@ int pthread_cond_destroy(pthread_cond_t *cond)
   __THREAD_INIT();
 
   if (cond->wait_chain) {
-    (*__errno_location())=EBUSY;
-    return 1;
+    return EBUSY;
   }
 
   memset(cond,0,sizeof(pthread_cond_t));

@@ -13,6 +13,5 @@ int pthread_mutexattr_setkind_np(pthread_mutexattr_t *attr, int kind)
     attr->__mutexkind=kind;
     return 0;
   }
-  (*(__errno_location()))=EINVAL;
-  return -1;
+  return EINVAL;
 }

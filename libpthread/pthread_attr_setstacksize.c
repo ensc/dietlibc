@@ -12,6 +12,5 @@ int pthread_attr_setstacksize(pthread_attr_t *attr, size_t stacksize)
     attr->__stacksize=stacksize;
     return 0;
   }
-  (*(__errno_location()))=EINVAL;
-  return -1;
+  return EINVAL;
 }

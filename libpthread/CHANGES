@@ -1,6 +1,12 @@
 This is the pthread implementation of dietlibc.
 Written from scratch by Olaf Dreesen.
 
+Mon Aug  6 15:46:39 MEST 2001
+
+  Ups... did the wrong error handling... the error is returned not put to
+  errno...
+  probably thread_key is not SMP save...
+
 Thu Apr 12 16:47:12 MEST 2001
 
   added conditional variables...

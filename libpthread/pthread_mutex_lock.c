@@ -23,8 +23,7 @@ int pthread_mutex_lock(pthread_mutex_t *mutex)
   }
   else if (mutex->kind==PTHREAD_MUTEX_ERRORCHECK_NP)
   {
-    (*(__errno_location()))=EDEADLK;
-    return -1;
+    return EDEADLK;
   }
 
   if (mutex->kind==PTHREAD_MUTEX_RECURSIVE_NP) ++(mutex->count);

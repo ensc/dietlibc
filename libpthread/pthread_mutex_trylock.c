@@ -18,16 +18,13 @@ int pthread_mutex_trylock(pthread_mutex_t *mutex)
   if (this!=mutex->owner) {
     /* wait for mutex to free */
     if (__pthread_trylock(&(mutex->lock))) {
-      (*(__errno_location()))=EBUSY;
-      return -1;
+      return EBUSY;
     }
 
     mutex->owner=this;
   }
-  else if (mutex->kind==PTHREAD_MUTEX_ERRORCHECK_NP)
-  {
-    (*(__errno_location()))=EDEADLK;
-    return -1;
+  else if (mutex->kind==PTHREAD_MUTEX_ERRORCHECK_NP) {
+    return EDEADLK;
   }
 
   if (mutex->kind==PTHREAD_MUTEX_RECURSIVE_NP) ++(mutex->count);

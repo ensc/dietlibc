@@ -20,15 +20,13 @@ struct thread_cleanup_t {
 
 /* the thread descriptor / internal */
 struct _pthread_descr_struct {
-  /* runtime handling */
-  struct _pthread_descr_struct *joined; /* a joined thread or NULL */
-
   /* conditional variables */
   struct _pthread_descr_struct *waitnext; /* an other waiting thread or NULL */
   int  waiting;			/* internal waiting "lock" */
 
   /* thread/process data */
   int  pid;			/* Process id */
+  int  exited;			/* Process is dead */
 
   int  policy;			/* thread scheduling policy */
   int  priority;		/* thread priority */
@@ -44,7 +42,7 @@ struct _pthread_descr_struct {
 
   /* thread exit handling */
   void  *retval;		/* thread return value */
-  int   join;			/* thread waits for other to return */
+  int  joined;			/* flag other thread has joined */
   jmp_buf jmp_exit;		/* pthread_exit jump */
 
   /* thread flags */
@@ -89,7 +87,8 @@ _pthread_descr __get_thread_struct(int id);
 _pthread_descr __thread_get_free(void);
 _pthread_descr __thread_self(void);
 
-void __thread_cleanup(_pthread_descr th);
+int __thread_join(_pthread_descr join, void **return_value);
+#define __thread_cleanup(th) (void)__thread_join((th),0)
 
 void __thread_wait_some_time(void);
 

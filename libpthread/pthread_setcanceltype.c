@@ -20,6 +20,5 @@ int pthread_setcanceltype(int type, int *oldtype)
     return 0;
   }
 
-  (*(__errno_location()))=EINVAL;
-  return -1;
+  return EINVAL;
 }

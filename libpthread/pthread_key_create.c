@@ -19,7 +19,7 @@ int pthread_key_create(pthread_key_t *key, void (*destructor)(const void*))
     if (!__thread_keys[i].used) {
       __thread_keys[i].used=1;
       __thread_keys[i].destructor=destructor;
-      memset(__thread_keys[i].tkd,0,PTHREAD_THREADS_MAX*sizeof(struct _thread_key));
+      memset(__thread_keys[i].tkd,0,PTHREAD_THREADS_MAX*sizeof(void*));
       *key=i;
       ret=0;
       break;
@@ -29,7 +29,7 @@ int pthread_key_create(pthread_key_t *key, void (*destructor)(const void*))
   __pthread_unlock(&__thread_keys_lock);
   __NO_ASYNC_CANCEL_END;
 
-  if (ret) (*__errno_location())=EAGAIN;
-  return ret;
+  if (ret) return EAGAIN;
+  return 0;
 }
 

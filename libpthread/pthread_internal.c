@@ -78,8 +78,10 @@ _pthread_descr __thread_get_free()
 
   for (i=0; i<PTHREAD_THREADS_MAX; i++) {
     if (threads[i].pid==0) {
-      threads[i].pid=1; /* mark as taken */
       ret = threads+i;
+      /* clear struct */
+      memset(ret,0,sizeof(struct _pthread_descr_struct));
+      ret->pid=1; /* mark as taken */
       if (i>=_max_used_thread_id) _max_used_thread_id=i+1;
       break;
     }
@@ -99,19 +101,20 @@ void __thread_wait_some_time()
   __libc_nanosleep(&reg,0);
 }
 
-/* cleanup a thread struct */
-void __thread_cleanup(_pthread_descr th)
+/* cleanup/join a thread */
+int __thread_join(_pthread_descr th, void**return_value)
 {
-  /* lib provided stack should be freed */
+  /* mark thread th as joined */
+  if (__testandset(&(th->joined))) return EINVAL;
+  /* wait for thread to exit */
+  while(!th->exited) __thread_wait_some_time();
+  /* put return value to caller */
+  if (return_value) *return_value=th->retval;
+  /* cleanup thread */
   if (th->stack_begin) free(th->stack_begin);
-
-  /* an other thread has joined this on */
-  if (th->joined) {
-    th->joined->retval=th->retval;
-    th->joined->join=0;
-    th->joined=0;
-  }
-  th->pid=0;	/* mark struct as free */
+  th->joined=0;
+  th->pid=0;
+  return 0;
 }
 
 /* SIGHUP handler (thread cancel) PTHREAD_CANCEL_ASYNCHRONOUS */
@@ -190,7 +193,6 @@ static void *__mthread_starter(void *arg)
     if (td->canceled) return (void*)42;
   } while (__pthread_trylock(&td->go));
 
-//  __pthread_lock(&td->go);
 #ifdef DEBUG
   printf("post starter %d, parameter %8p\n", td->pid, td->func);
 #endif
@@ -212,13 +214,6 @@ static void *__mthread_starter(void *arg)
 #ifdef DEBUG
   printf("end starter %d, retval %8p\n", td->pid, td->retval);
 #endif
-
-  /* wake joined thread and put retval */
-  if (td->joined) {
-    td->joined->retval=td->retval;
-    td->joined->join=0;
-    td->joined=0;
-  }
 
   /* execute all functions on the cleanup-stack */
   for (i=PTHREAD_MAX_CLEANUP;i;) {
@@ -244,7 +239,11 @@ static void __manager_SIGCHLD(int sig)
 
     for (i=0; i<_max_used_thread_id; i++) {
       if (threads[i].pid==pid) {
-	__thread_cleanup(threads+i);
+	++threads[i].exited;
+	if (threads[i].detached) {
+	  threads[i].joined=0;
+	  __thread_cleanup(threads+i);
+	}
 	break;
       }
     }
@@ -272,7 +271,7 @@ static void* __manager_thread(void *arg)
   while(1) {
     do {
       __thread_wait_some_time();
-      if (getppid()<0) __manager_SIGTERM(0);
+      if (getppid()<2) __manager_SIGTERM(0);
     } while (__pthread_trylock(&__manager_thread_data_lock));
 
     __manager_thread_data->pid =

@@ -11,6 +11,8 @@ void __thread_start__key(int id)
 {
   int i;
 
+  if (id<2) return;
+
   __NO_ASYNC_CANCEL_BEGIN;
   __pthread_lock(&__thread_keys_lock);
 
@@ -26,8 +28,10 @@ void __thread_exit__key(int id)
 {
   int i,try;
 
+  if (id<2) return;
+
   __NO_ASYNC_CANCEL_BEGIN;
-  __pthread_lock(&__thread_keys_lock);
+//  __pthread_lock(&__thread_keys_lock);
 
   for (i=0; i<PTHREAD_KEYS_MAX; i++) {
     if ((__thread_keys[i].used) && (__thread_keys[i].destructor)) {
@@ -36,6 +40,6 @@ void __thread_exit__key(int id)
     }
   }
 
-  __pthread_unlock(&__thread_keys_lock);
+//  __pthread_unlock(&__thread_keys_lock);
   __NO_ASYNC_CANCEL_STOP;
 }

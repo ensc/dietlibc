@@ -17,7 +17,6 @@ int pthread_attr_setschedparam(pthread_attr_t *attr, const struct sched_param *p
     attr->__schedparam.sched_priority=param->sched_priority;
     return 0;
   }
-  (*(__errno_location()))=EINVAL;
-  return -1;
+  return EINVAL;
 }
 

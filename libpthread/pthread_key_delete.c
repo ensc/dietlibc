@@ -10,8 +10,7 @@ int pthread_key_delete(pthread_key_t key)
   __THREAD_INIT();
 
   if (key>=PTHREAD_KEYS_MAX) {
-    (*__errno_location())=EINVAL;
-    return -1;
+    return EINVAL;
   }
 
   __thread_keys[key].used=0;

@@ -10,13 +10,13 @@ int pthread_getschedparam(pthread_t target_thread, int *policy, struct sched_par
   __THREAD_INIT();
 
   if (__find_thread_id(target_thread)<0) {
-    (*(__errno_location()))=ESRCH;
-    return -1;
+    return ESRCH;
   }
 
-  if ((p=sched_getscheduler(target_thread))!=-1) {
-    *policy=p;
-    return sched_getparam(target_thread,param);
+  if (((p=sched_getscheduler(target_thread))==-1)||
+      (sched_getparam(target_thread,param) ==-1)) {
+    return (*(__errno_location()));
   }
-  return -1;
+  *policy=p;
+  return 0;
 }

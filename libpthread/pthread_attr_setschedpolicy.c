@@ -17,9 +17,8 @@ int pthread_attr_setschedpolicy(pthread_attr_t *attr, int policy)
       attr->__schedpolicy=policy;
       return 0;
     }
-    (*(__errno_location()))=ENOTSUP;
+    return ENOTSUP;
   }
   else
-    (*(__errno_location()))=EINVAL;
-  return -1;
+    return EINVAL;
 }

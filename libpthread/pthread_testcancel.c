@@ -10,7 +10,7 @@ void pthread_testcancel()
 
   thread=__thread_self();
 
-  if (thread->canceled) {
+  if (thread && thread->canceled) {
     pthread_exit(PTHREAD_CANCELED);
   }
 }

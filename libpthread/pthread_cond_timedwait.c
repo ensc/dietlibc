@@ -43,12 +43,12 @@ int pthread_cond_timedwait(pthread_cond_t *cond, pthread_mutex_t *mutex,
   __TEST_CANCEL();
 
   if (ret) {
-    if ((*__errno_location())!=EINTR) return -1;
+    register int err = (*__errno_location());
+    if (err!=EINTR) return err;
     return 0;
   }
 
-  (*__errno_location())=ETIMEDOUT;
-  return -1;
+  return ETIMEDOUT;
 }
 
 

@@ -20,6 +20,5 @@ int pthread_setcancelstate(int state, int *oldstate)
     return 0;
   }
 
-  (*(__errno_location()))=EINVAL;
-  return -1;
+  return EINVAL;
 }

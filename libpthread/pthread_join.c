@@ -16,35 +16,24 @@ int pthread_join(pthread_t th, void **thread_return)
   j=__find_thread_id(th);
 
   if (j==-1) {
-    (*(__errno_location()))=ESRCH;
-    return -1;
+    return ESRCH;
   }
 
   thread = __get_thread_struct(j);
 
   /* error handling */
   if (thread==0) {
-    (*(__errno_location()))=ESRCH;
-    return -1;
+    return ESRCH;
   }
 
   if (this==thread) {
-    (*(__errno_location()))=EDEADLK;
-    return -1;
+    return EDEADLK;
   }
 
   if (thread->detached || thread->joined) {
-    (*(__errno_location()))=EINVAL;
-    return -1;
+    return EINVAL;
   }
 
-  thread->joined=this;
-  this->join=1;
-
-  while(this->join) __thread_wait_some_time();
-
-  if (thread_return) *thread_return=this->retval;
-
-  return 0;
+  return __thread_join(thread,thread_return);
 }
 

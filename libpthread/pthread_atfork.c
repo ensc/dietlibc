@@ -36,7 +36,7 @@ int pthread_atfork(void (*prepare)(void),
   __pthread_unlock(&__atfork_struct_lock);
   __NO_ASYNC_CANCEL_END;
 
-  if (ret) (*(__errno_location()))=ENOMEM;
+  if (ret) ret=ENOMEM;
   return ret;
 }
 

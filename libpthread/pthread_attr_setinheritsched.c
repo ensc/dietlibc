@@ -13,6 +13,5 @@ int pthread_attr_setinheritsched(pthread_attr_t *attr, int inherit)
     attr->__inheritsched=inherit;
     return 0;
   }
-  (*(__errno_location()))=EINVAL;
-  return -1;
+  return EINVAL;
 }

@@ -15,7 +15,6 @@ int pthread_setspecific(pthread_key_t key, const void *value)
     __thread_keys[key].tkd[id]=value;
     return 0;
   }
-  (*__errno_location())=EINVAL;
-  return -1;
+  return EINVAL;
 }
 

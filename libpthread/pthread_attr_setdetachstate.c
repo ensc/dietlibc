@@ -13,6 +13,5 @@ int pthread_attr_setdetachstate(pthread_attr_t *attr, int detachstate)
     attr->__detachstate=detachstate;
     return 0;
   }
-  (*(__errno_location()))=EINVAL;
-  return -1;
+  return EINVAL;
 }

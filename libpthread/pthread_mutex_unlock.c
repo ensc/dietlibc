@@ -24,10 +24,8 @@ int pthread_mutex_unlock(pthread_mutex_t *mutex)
     mutex->owner=0;
     __pthread_unlock(&(mutex->lock));
   }
-  else if (mutex->kind==PTHREAD_MUTEX_ERRORCHECK_NP)
-  {
-    (*(__errno_location()))=EPERM;
-    return -1;
+  else if (mutex->kind==PTHREAD_MUTEX_ERRORCHECK_NP) {
+    return EPERM;
   }
 
   return 0;
