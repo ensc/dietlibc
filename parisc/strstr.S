@@ -10,7 +10,7 @@ strstr:
 	ldb,ma 1(%r26), %r19
 	ldi 2, %ret0
 .L1:
-	cmpb,=,n %r0, %r19, .Lret
+	cmpb,=,n %r0, %r19, .Lret2
 	cmpb,<> %r20, %r19, .L1
 	ldb,ma 1(%r26), %r19
 	copy %r19, %r24
@@ -25,8 +25,10 @@ strstr:
 	cmpb,<>,n %r21, %r0, .Lloop
 	nop
 .Lret:
+	addi 0, %r26, %ret0
+.Lret2:
 	bv %r0(%rp)
-	addi -2, %r26, %ret0
+	addi -2, %ret0, %ret0
 	.EXIT
 	.PROCEND
 	.EXPORT strstr
