@@ -1,8 +1,13 @@
 INSTALL=install
-prefix=/usr
+prefix=/opt/diet
 # Set the following to install to a different root
-#INSTALLPREFIX=/tmp/fefix
+#DESTDIR=/tmp/fefix
 # Use "make DEBUG=1" to compile a debug version.
+
+LIBDIR=${prefix}/lib
+BINDIR=${prefix}/bin
+INCLUDEDIR=${prefix}/include
+MAN1DIR=${prefix}/man/man1
 
 MYARCH=$(shell uname -m | sed 's/i[4-9]86/i386/')
 
@@ -233,10 +238,15 @@ t1:
 	$(CROSS)$(CC) -g -o t1 t.c
 
 install: $(OBJDIR)/start.o $(OBJDIR)/dietlibc.a $(OBJDIR)/liblatin1.a $(OBJDIR)/elftrunc $(OBJDIR)/diet
-	$(INSTALL) $(OBJDIR)/start.o $(INSTALLPREFIX)$(prefix)/lib/dietstart.o
-	$(INSTALL) $(OBJDIR)/dietlibc.a $(INSTALLPREFIX)$(prefix)/lib/libdietc.a
-	$(INSTALL) $(OBJDIR)/liblatin1.a $(INSTALLPREFIX)$(prefix)/lib/libdietlatin1.a
-	$(INSTALL) $(OBJDIR)/diet $(INSTALLPREFIX)$(prefix)/bin/diet
+	$(INSTALL) -d $(DESTDIR)$(LIBDIR) $(DESTDIR)$(MAN1DIR) $(DESTDIR)$(BINDIR)
+	$(INSTALL) $(OBJDIR)/start.o $(DESTDIR)$(LIBDIR)/dietstart.o
+	$(INSTALL) $(OBJDIR)/dietlibc.a $(DESTDIR)$(LIBDIR)/libdietc.a
+	$(INSTALL) $(OBJDIR)/liblatin1.a $(DESTDIR)$(LIBDIR)/libdietlatin1.a
+	$(INSTALL) $(OBJDIR)/diet $(DESTDIR)$(BINDIR)/diet
+	$(INSTALL) -m 644 diet.1 $(DESTDIR)$(MAN1DIR)/diet.1
+
+blub:
+	for i in `find include -name \*.h`; do echo $$i; done
 
 .PHONY: sparc ppc mips arm alpha i386
 
