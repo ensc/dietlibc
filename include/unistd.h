@@ -56,8 +56,8 @@ int close(int fd) __THROW;
 
 int unlink(const char *pathname) __THROW;
 
-int pread(int fd, void *buf, size_t count, off_t offset);
-int pwrite(int fd, const void *buf, size_t count, off_t offset);
+ssize_t pread(int fd, void *buf, size_t count, off_t offset);
+ssize_t pwrite(int fd, const void *buf, size_t count, off_t offset);
 
 int execve(const char *filename, char *const argv [], char *const envp[]) __THROW;
 int execlp(const char *file, const char *arg, ...) __THROW;

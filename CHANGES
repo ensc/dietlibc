@@ -9,6 +9,7 @@
   add empty libcrypt.a to help compile code from others (Gunnar Ritter)
   add make uninstall
   fix pread64
+  Olaf: fix for pread,pwrite and pwrite64 (wrong hi-,low-offset order)
 
 0.25:
   fix sprintf
