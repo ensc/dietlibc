@@ -8,6 +8,9 @@
   try to remove kernel 2.4 header dependency in IPv6 sockaddr_in6
     initialization of getaddrinfo.
   fix vsnprintf %X (printed lower case)
+  I wrote a new getopt.  It appears to actually work (it is POSIX
+    compliant, it does not sort argv like the GNU version) and is only
+    a little over 300 bytes on x86.
 
 0.10:
   update getpagesize.
