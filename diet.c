@@ -187,7 +187,7 @@ pp:
 	if (!strcmp(argv[i],"-o"))
 	  if (!compile) _link=1;
 #endif
-      newargv=alloca(sizeof(char*)*(argc+20));
+      newargv=alloca(sizeof(char*)*(argc+21));
       a=alloca(strlen(diethome)+20);
       b=alloca(strlen(platform)+20);
       c=alloca(strlen(platform)+20);
@@ -262,6 +262,7 @@ pp:
 #else
       if (compile || _link || shared) *dest++=a;
 #endif
+      *dest++="-D__dietlibc__";
       if (mangleopts) {
 	const char **o=Os;
 	for (o=Os;*o;++o) {

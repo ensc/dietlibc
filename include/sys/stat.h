@@ -447,11 +447,11 @@ extern int lstat64(const char *__file, struct stat64 *__buf) __THROW;
 #endif
 
 #if defined _FILE_OFFSET_BITS && _FILE_OFFSET_BITS == 64
-#define lstat(file,buf) lstat64(file,buf)
-#define fstat(file,buf) fstat64(file,buf)
+#define lstat lstat64
+#define fstat fstat64
 #define stat stat64
-#define pread(fd,buf,count,offset) pread64(fd,buf,count,offset)
-#define pwrite(fd,buf,count,offset) pwrite64(fd,buf,count,offset)
+#define pread pread64
+#define pwrite pwrite64
 #endif
 
 #define major(dev) (((dev)>>8) & 0xff)

@@ -179,6 +179,9 @@ int _sysctl(struct __sysctl_args *args) __THROW;
 #define _SC_NPROCESSORS_CONF _SC_NPROCESSORS_ONLN
 long sysconf(int name) __THROW;
 
+pid_t tcgetpgrp(int fd) __THROW;
+int tcsetpgrp(int fd, pid_t pgrpid) __THROW;
+
 /* Linux only: */
 int getresuid(uid_t *ruid, uid_t *euid, uid_t *suid) __THROW;
 int getresgid(gid_t *rgid, gid_t *egid, gid_t *sgid) __THROW;

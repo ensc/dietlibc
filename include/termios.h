@@ -259,8 +259,6 @@ struct termios {
 #define	TCSADRAIN	1
 #define	TCSAFLUSH	2
 
-pid_t tcgetpgrp(int fd) __THROW;
-int tcsetpgrp(int fd, pid_t pgrpid) __THROW;
 int tcgetattr(int fd, struct termios *termios_p) __THROW;
 int tcsetattr(int fd, int optional_actions, struct termios *termios_p) __THROW;
 speed_t cfgetospeed(struct termios *termios_p) __THROW;
