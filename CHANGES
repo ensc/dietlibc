@@ -3,6 +3,7 @@
   optimized away the static arrays (and more!) from strtoul and strtoull.
   added system (by Olaf).
   added tolower and toupper
+  added getopt from Olaf (~600 bytes on x86!)
 
 0.7:
   clone support for i386,alpha,arm and sparc by Olaf.
