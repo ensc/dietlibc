@@ -190,7 +190,7 @@ asm(".text \n"
 "_start: \n"
 "	movq	%rsp,%rbp		# save stack \n"
 "	movq	(%rbp), %rdi		# argc \n"
-"	leaq	4(%rbp),%rsi		# argv \n"
+"	leaq	8(%rbp),%rsi		# argv \n"
 "	leaq	8(%rsi,%rdi,8),%rdx	# envp \n"
 /* needs to determine the load-address... */
 "	leaq	_DYNAMIC@GOTPCREL(%rip), %rcx \n"
@@ -286,7 +286,7 @@ asm(".text \n"
 
    );
 
-static unsigned long* get_got(void) {
+static inline unsigned long* get_got(void) {
   unsigned long*ret;
   asm("lea _GLOBAL_OFFSET_TABLE_(%%rip),%0" : "=r"(ret) );
   return ret;
