@@ -8,6 +8,8 @@
   fix ptrace.h for S/390 and ARM
   provide a PORTING document so we don't lose track of which file need
     to be touched to port the diet libc to a new platform.
+  remove a few warnings
+  provide a prototype for usleep.
 
 0.15:
   vfork sucks.  I reverted to the old behavior where vfork==fork.
