@@ -1,5 +1,3 @@
 #include "syscalls.h"
 
-.weak __libc_read
-__libc_read:
-syscall(read,read)
+syscall_weak(read,read,__libc_read)

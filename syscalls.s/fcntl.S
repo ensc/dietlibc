@@ -1,5 +1,3 @@
 #include "syscalls.h"
 
-.weak __libc_fcntl
-__libc_fcntl:
-syscall(fcntl,fcntl)
+syscall_weak(fcntl,fcntl,__libc_fcntl)

@@ -1,4 +1,3 @@
 #include "syscalls.h"
 
-.weak __libc_accept
-syscall(accept,accept)
+syscall_weak(accept,accept,__libc_accept)

@@ -1,4 +1,3 @@
 #include "syscalls.h"
 
-.weak __libc_sendto
-syscall(sendto,sendto)
+syscall_weak(sendto,sendto,__libc_sendto)

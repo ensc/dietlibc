@@ -1,5 +1,3 @@
 #include "syscalls.h"
 
-.weak __libc_sendfile
-__libc_sendfile:
-syscall(sendfile,sendfile)
+syscall_weak(sendfile,sendfile,__libc_sendfile)

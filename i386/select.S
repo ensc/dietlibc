@@ -1,6 +1,3 @@
 #include "syscalls.h"
 
-.text
-.weak select
-select:
-syscall(_newselect,select)
+syscall_weak(_newselect,select,__libc_select)

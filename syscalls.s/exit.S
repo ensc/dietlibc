@@ -1,6 +1,3 @@
 #include "syscalls.h"
 
-.text
-.weak exit
-exit:
-syscall(exit,_exit)
+syscall_weak(exit,exit,_exit)

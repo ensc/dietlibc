@@ -1,6 +1,3 @@
 #include "syscalls.h"
 
-.text
-.weak sigprocmask
-sigprocmask:
-syscall(sigprocmask,__sigprocmask)
+syscall_weak(sigprocmask,sigprocmask,__sigprocmask)

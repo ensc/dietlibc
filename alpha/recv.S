@@ -1,4 +1,3 @@
 #include "syscalls.h"
 
-.weak __libc_recv
-syscall(recv,recv)
+syscall_weak(recv,recv,__libc_recv)

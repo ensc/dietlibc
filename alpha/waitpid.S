@@ -2,8 +2,9 @@
 
 .text
 .align 2
-.weak __libc_waitpid
-.global waitpid
+.weak waitpid
 waitpid:
+.global __libc_waitpid
+__libc_waitpid:
 	clr	$19
 	br	wait4

@@ -1,4 +1,3 @@
 #include "syscalls.h"
 
-.weak __libc_connect
-syscall(connect,connect)
+syscall_weak(connect,connect,__libc_connect)

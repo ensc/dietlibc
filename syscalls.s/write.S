@@ -1,5 +1,3 @@
 #include "syscalls.h"
 
-.weak __libc_write
-__libc_write:
-syscall(write,write)
+syscall_weak(write,write,__libc_write)

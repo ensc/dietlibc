@@ -1,4 +1,3 @@
 #include "syscalls.h"
 
-.weak __libc_send
-syscall(send,send)
+syscall_weak(send,send,__libc_send)

@@ -1,8 +1,10 @@
 #include "syscalls.h"
 
 .text
-.global fork
+.weak fork
 fork:
+.global __libc_fork
+__libc_fork:
 	mov	2, %g1
 	ta	0x10
 	bcc,a	1f

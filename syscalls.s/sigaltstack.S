@@ -1,6 +1,3 @@
 #include "syscalls.h"
 
-.text
-.weak sigaltstack
-sigaltstack:
-syscall(sigaltstack,__sigaltstack)
+syscall_weak(sigaltstack,sigaltstack,__sigaltstack)
