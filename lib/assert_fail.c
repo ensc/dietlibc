@@ -9,7 +9,7 @@ void __assert_fail (const char *assertion, const char *file, unsigned int line, 
 {
   unsigned int alen=strlen(assertion);
   unsigned int flen=strlen(file);
-  unsigned int fulen=strlen(function);
+  unsigned int fulen=function?strlen(function):0;
   char *buf=(char*)alloca(alen+flen+fulen+50);
   if (buf) {
     char *tmp;
