@@ -1,4 +1,7 @@
-0.6.15:
+0.7.1:
+  optimized away the static array from __ltostr and __lltostr.
+
+0.7:
   clone support for i386,alpha,arm and sparc by Olaf.
   Initial dynamic loading glue for i386, also by Olaf.
   We don't have a dynamic loader yet, so this is not yet usable.

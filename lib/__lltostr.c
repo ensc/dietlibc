@@ -1,7 +1,5 @@
 #include <string.h>
 
-static char *num="0123456789abcdefghijklmnopqrstuvwxyz";
-
 int __lltostr(char *s, int size, unsigned long long i, int base, char UpCase)
 {
   char *tmp;
@@ -23,8 +21,7 @@ int __lltostr(char *s, int size, unsigned long long i, int base, char UpCase)
   while((tmp>s)&&(i))
   {
     tmp--;
-    *tmp=num[i%base];
-    if ((UpCase)&&(*tmp>96)) (*tmp)-=' ';
+    if ((*tmp=i%base+'0')>'9') *tmp+=(UpCase?'A':'a')-'9'-1;
     i=i/base;
     j++;
   }
