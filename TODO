@@ -14,3 +14,6 @@ real DNS errors.
 Try to improve code size and quality with __restrict__.
 
 FPU exception handling (for mawk)
+
+gethostbyname/gethostbyname2: move static hostent to dynamic buffer so
+they can be free()d.
