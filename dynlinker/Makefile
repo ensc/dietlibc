@@ -1,16 +1,20 @@
 #CFLAGS = -g
 CFLAGS = -Os # -fomit-frame-pointer
 
-DYNLINK = /tmp/test.so
+DYNLINK = diet-linux.so
 
 all: $(DYNLINK)
 
-$(DYNLINK): ldso_start.S ldso_test.c ../libdl/libdl.a
+DLIBS   = ../bin-i386/libdl.a ../bin-i386/dietlibc.a
+LINKOPS = -Wl,-Ttext=0x1080,-N,-eldso_start
+
+$(DYNLINK): ldso_start.S ldso_test.c $(DLIBS)
 	$(CC) -I.. -I../include $(CFLAGS) -c ldso_test.c
-	gcc -nostdlib $(CFLAGS) -o $@ \
-		ldso_start.S ldso_test.o ../libdl/libdl.a ../bin-i386/dietlibc.a -lgcc \
-		-Wl,-Ttext=0x1080,-N,-eldso_start
+	gcc -nostdlib $(CFLAGS) -o $@ ldso_start.S ldso_test.o $(DLIBS) -lgcc $(LINKOPS)
 	strip -R .comment -R .note $@
+
+install: $(DYNLINK)
+	cp $(DYNLINK) /lib
 
 clean:
 	$(RM) *.o *.a *.so *.out *~ /tmp/test.so

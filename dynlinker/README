@@ -7,8 +7,13 @@ Replacement for standard ld.so
 
 It is still test-code only and depends on dietlibc/libdl code
 
+
+
+Thu Jun 21 16:03:52 MEST 2001
+
 1. STATUS: it works on i386.
 	ARM is in progress
 	other no code available
 
-
+	basicaly look to the libdl README. all supported there schould work
+	here.
