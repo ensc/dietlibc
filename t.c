@@ -40,9 +40,13 @@ static int rand() {
 extern double atof(const char *c);
 
 int main(int argc,char *argv[]) {
+  time_t t=time(0);
+  puts(asctime(localtime(&t)));
+#if 0
   struct servent *foo=getservbyname("ident","tcp");
   if (foo)
     printf("found service %s on port %d\n",foo->s_name,foo->s_port);
+#endif
 #if 0
   char buf[128];
   strcpy(buf,"/tmp/foo.XXXXXXX");

@@ -31,6 +31,10 @@
  * file support on kernel 2.2 or 2.4 */
 #define WANT_LARGEFILE_BACKCOMPAT
 
+/* do you want localtime(3) to read /etc/localtime?
+ * Needed for daylight saving time etc. */
+#define WANT_TZFILE_PARSER
+
 #endif
 
 /* stop uncommenting here ;-) */

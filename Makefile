@@ -37,7 +37,7 @@ PWD=$(shell pwd)
 
 %.o: %.c
 	$(CROSS)$(CC) -I. -Iinclude $(CFLAGS) -c $<
-	$(CROSS)strip -x -R .comment -R .note $@
+#	$(CROSS)strip -x -R .comment -R .note $@
 
 DIETLIBC_OBJ = $(SYSCALLOBJ) $(LIBOBJ) $(LIBSTDIOOBJ) $(LIBUGLYOBJ) \
 $(LIBCRUFTOBJ) __longjmp.o setjmp.o unified.o mmap.o clone.o
@@ -123,3 +123,5 @@ tty.o: dietfeatures.h
 # these depend on dietfeatures.h for ungetc support ;-)
 ungetc.o: dietfeatures.h
 
+# these depend on dietfeatures.h for WANT_TZFILE_PARSER
+localtime_r.o: dietfeatures.h
