@@ -19,6 +19,7 @@
 #include <netdb.h>
 #include <sys/mman.h>
 #include <ctype.h>
+#include <mntent.h>
 
 #if 0
 int compint(const void *a,const void *b) {
@@ -44,10 +45,25 @@ static int rand() {
 extern double atof(const char *c);
 
 int main(int argc,char *argv[]) {
+  struct mntent* m;
+  FILE *f=setmntent("/etc/mtab","r");
+  m=getmntent(f);
+#if 0
+                      char    *mnt_fsname;    /* name of mounted file system */
+                      char    *mnt_dir;       /* file system path prefix */
+                      char    *mnt_type;      /* mount type (see mntent.h) */
+                      char    *mnt_opts;      /* mount options (see mntent.h) */
+                      int     mnt_freq;       /* dump frequency in days */
+                      int     mnt_passno;     /* pass number on parallel fsck */
+#endif
+  printf("%s %s %s %s %d %d\n",m->mnt_fsname,m->mnt_dir,m->mnt_type,m->mnt_opts,m->mnt_freq,m->mnt_passno);
+
+#if 0
   char*tmp;
   int n=asprintf(&tmp,"foo %s %d\n","bar",23);
   write(1,tmp,n);
   free(tmp);
+#endif
 #if 0
   struct passwd *p=getpwnam("leitner");
   struct spwd *s=getspnam("leitner");

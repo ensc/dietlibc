@@ -11,4 +11,10 @@ strtol and friends need overflow handling.
 
 add search/domain handling for /etc/resolv.conf
 
-add ipv6 gethostbyname2
+setenv
+
+glob, globfree
+
+realpath
+
+regerror

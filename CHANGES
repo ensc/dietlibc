@@ -25,6 +25,7 @@
   add ut_name alias to ut_host in struct utmp.
   add inet_ntop, inet_pton, gethostbyname2.
   add sysinfo, recvmsg, sendmsg.
+  add endmntent, getmntent, setmntent.
 
 0.9:
   fixed initgroups (oops)
