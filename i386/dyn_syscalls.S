@@ -203,13 +203,12 @@ __unified_syscall:
 #include "../syscalls.s/vhangup.S"
 /* so now this was the last u.s.c. */
 
-/* other asm-files w.o. changes ... */
-#define __errno_location __errno_location@PLT
+/* other asm-files ... */
+#define PIC
+
 #define _exit __exit
 #include "clone.S"
 #undef _exit
-
-#define PIC
 
 #include "__longjmp.S"
 #include "setjmp.S"

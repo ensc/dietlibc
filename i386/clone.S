@@ -43,7 +43,14 @@ __clone:
 .Lclone_error:
 	negl	%eax
 	pushl	%eax
+#ifdef PIC
+	call	1f
+1:	popl	%ebx
+	addl	$_GLOBAL_OFFSET_TABLE_+[.-1b], %ebx
+	call	__errno_location@PLT
+#else
 	call	__errno_location
+#endif
 	popl	%ecx
 	movl	%ecx, (%eax)
 	xorl	%eax, %eax
