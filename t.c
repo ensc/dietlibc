@@ -11,6 +11,10 @@
 int main() {
   struct tm duh;
   time_t t;
+  time(&t);
+  gmtime_r(&t,&duh);
+  printf("%s\n",asctime(&duh));
+#if 0
   char buf[30];
   duh.tm_sec=42;
   duh.tm_min=23;
@@ -20,6 +24,7 @@ int main() {
   duh.tm_year=100;
   t=mktime(&duh);
   printf("%s\n",asctime_r(&duh,buf));
+#endif
 #if 0
   int i;
   for (i=0; i<5; i++) {

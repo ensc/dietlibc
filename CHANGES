@@ -17,6 +17,8 @@
   added mktime, asctime_r, asctime and ctime (needed for gzip).
   Someone will need to implement a reader for the glibc localtime file
     format some day :-(
+  added unlink prototype to unistd.h.
+  added gmtime and gmtime_r.
 
 0.7.1:
   optimized away the static arrays from __ltostr and __lltostr.

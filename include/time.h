@@ -32,4 +32,7 @@ time_t mktime(struct tm *timeptr) __THROW __pure__;
 char *asctime(const struct tm *timeptr) __THROW;
 char *asctime_r(const struct tm *timeptr, char *buf) __THROW;
 
+struct tm* gmtime(const time_t *t) __THROW;
+struct tm* gmtime_r(const time_t *t, struct tm *r) __THROW;
+
 #endif

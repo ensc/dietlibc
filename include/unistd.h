@@ -28,6 +28,8 @@ int write(int fd,const void* buf,size_t len) __THROW;
 int read(int fd,const void* buf,size_t len) __THROW;
 int close(int fd) __THROW;
 
+int unlink(const char *pathname) __THROW;
+
 int pread(int fd, void *buf, size_t count, off_t offset);
 int pwrite(int fd, const void *buf, size_t count, off_t offset);
 
