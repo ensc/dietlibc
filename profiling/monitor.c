@@ -12,7 +12,7 @@
 #include <sys/uio.h>
 #include <unistd.h>
 #include <fcntl.h>
-#include "gmon.h"
+#include <sys/gmon.h>
 
 typedef unsigned short u_short;
 

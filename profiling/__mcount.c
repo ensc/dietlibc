@@ -1,5 +1,5 @@
 #include <unistd.h>
-#include "gmon.h"
+#include <sys/gmon.h>
 
 extern struct monparam mparam;
 
