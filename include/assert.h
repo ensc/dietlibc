@@ -15,9 +15,13 @@ extern void __assert_fail (__const char *__assertion, __const char *__file,
 #endif
 
 #undef assert
+#ifdef NDEBUG
+#define assert(expr)
+#else
 # define assert(expr)							      \
   ((void) ((expr) ? 0 :							      \
 	   (__assert_fail (#expr,				      \
 			   __FILE__, __LINE__, __ASSERT_FUNCTION), 0)))
+#endif
 
 #endif

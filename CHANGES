@@ -10,6 +10,10 @@
     idea is to start separating now what we will separate for shared
     libraries anyway.
   optimized x86 unified-syscall by Olaf.
+  added limits.h, removed __ARCHBITS from endian.h (use __WORDSIZE from
+    limits.h instead)
+  added remove.c and enough cruft to limits.h to make it compile lzo,
+    lzop and bzip2.
 
 0.7.1:
   optimized away the static arrays from __ltostr and __lltostr.

@@ -42,6 +42,8 @@ int fputs(const char *s, FILE *stream);
 #define putc(c,stream) fputc(c,stream)
 #define putchar(c) fputc(c,stdout)
 
+#define getchar() fgetc(stdin)
+
 int puts(const char *s);
 
 int fseek( FILE *stream, long offset, int whence);
