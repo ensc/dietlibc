@@ -155,5 +155,6 @@ int _sysctl(struct __sysctl_args *args) __THROW;
 int  sendfile(int out_fd, int in_fd, off_t *offset, size_t count) __THROW;
 
 int getdtablesize(void) __THROW;
+char *getpass(const char * prompt) __THROW;
 
 #endif

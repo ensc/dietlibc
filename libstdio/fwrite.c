@@ -26,5 +26,5 @@ size_t fwrite( const void *ptr, size_t size, size_t nmemb, FILE *stream) {
     stream->flags|=ERRORINDICATOR;
     return 0;
   }
-  return res/size;
+  return size?res/size:0;
 }

@@ -27,6 +27,7 @@ int main(int argc,char *argv[]) {
   char platform[1000]=DIETHOME "/bin-";
   char *nostdlib="-nostdlib";
   char *libgcc="-lgcc";
+  char dashL[1000]="-L";
   int i;
 
   if (argc<2) {
@@ -65,6 +66,7 @@ int main(int argc,char *argv[]) {
       strcat(platform,"mips");
 #endif
     }
+    strcat(dashL,platform);
     if (!strcmp(tmp,"cc")) {
       char **newargv;
       char **dest;
@@ -80,7 +82,7 @@ int main(int argc,char *argv[]) {
 	if (!strcmp(argv[i],"-o"))
 	  if (!compile) link=1;
 #endif
-      newargv=alloca(sizeof(char*)*(argc+5));
+      newargv=alloca(sizeof(char*)*(argc+6));
       a=alloca(strlen(diethome)+20);
       b=alloca(strlen(platform)+20);
       c=alloca(strlen(platform)+20);
@@ -91,7 +93,7 @@ int main(int argc,char *argv[]) {
 
       dest=newargv;
       *dest++=argv[1];
-      if (link) *dest++=nostdlib;
+      if (link) { *dest++=nostdlib; *dest++=dashL; }
       if (compile || link) *dest++=a;
       for (i=2; i<argc; ++i)
 	*dest++=argv[i];

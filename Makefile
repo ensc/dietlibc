@@ -59,7 +59,7 @@ $(OBJDIR)/mmap.o $(OBJDIR)/clone.o
 $(OBJDIR)/dietlibc.a: $(DIETLIBC_OBJ) $(OBJDIR)/start.o
 	$(CROSS)ar cru $@ $(DIETLIBC_OBJ)
 
-$(OBJDIR)/librpc.a: $(OBJDIR) $(LIBRPCOBJ)
+$(OBJDIR)/librpc.a: $(LIBRPCOBJ)
 	$(CROSS)ar cru $@ $(LIBRPCOBJ)
 
 LIBLATIN1_OBJS=$(patsubst liblatin1/%.c,$(OBJDIR)/%.o,$(wildcard liblatin1/*.c))

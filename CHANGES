@@ -14,6 +14,9 @@
   added Sun RPC code and removed as many warnings as possible in a
     heroic act of self-mutilation.
   added getproto* and getdtablesize for the RPC cruft :-(
+  added getpass.  mount from util-linux actually compiles now!
+  fix the sig*set routines.  mount actually works now *bg*
+  fix fwrite dividing by zero when trying to fwrite n records of size 0.
 
 0.9:
   fixed initgroups (oops)
