@@ -1,3 +1,7 @@
+0.10:
+  update getpagesize.
+  add personality.
+
 0.9:
   fixed initgroups (oops)
   Cleanup appending file open for stdio (thanks, James Antill)
