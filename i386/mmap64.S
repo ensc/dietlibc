@@ -1,5 +1,12 @@
+#include <dietfeatures.h>
 #include <syscalls.h>
 #include <errno.h>
+
+#ifdef __DYN_LIB
+#ifndef WANT_THREAD_SAFE
+#define WANT_THREAD_SAFE
+#endif
+#endif
 
 .text
 .global mmap64
@@ -32,7 +39,11 @@ mmap64:
 .Lerror:
 #ifdef WANT_THREAD_SAFE
   movl	%eax,%ebx
+#ifdef __DYN_LIB
+  call	__errno_location@PLT
+#else
   call	__errno_location
+#endif
   movl	%ebx,(%eax)
   orl	$-1,%eax
 #else

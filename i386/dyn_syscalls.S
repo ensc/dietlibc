@@ -59,7 +59,6 @@
 /* OK this is basicaly unified.S */
 .text
 .type __unified_syscall_256,@function
-.global __unified_syscall_256
 __unified_syscall_256:
 	movzwl %ax, %eax
 	jmp .L23
