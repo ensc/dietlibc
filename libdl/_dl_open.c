@@ -258,26 +258,6 @@ void *_dl_open(const char*pathname, int fd, int flag)
       _dl_relocate(ret,(Elf32_Rel*)rel,relsize/relent);
     }
 
-
-    if (pltreltype == DT_REL) {
-      Elf32_Rel *tmp = jmprel;
-      printf("_dl_open: rel got\n");
-      for (;(char*)tmp<(((char*)jmprel)+pltrelsize);(char*)tmp=((char*)tmp)+sizeof(Elf32_Rel)) {
-	*((unsigned long*)(m+tmp->r_offset))+=(unsigned long)m;
-	printf("_dl_open rel @ %08lx with type %d -> %d\n",(long)m+tmp->r_offset,ELF32_R_TYPE(tmp->r_info),ELF32_R_SYM(tmp->r_info));
-	printf("_dl_open -> %08lx\n",*((unsigned long*)(m+tmp->r_offset)));
-      }
-    }
-    if (pltreltype == DT_RELA) {
-      Elf32_Rela *tmp = jmprel;
-      printf("_dl_open: rela got\n");
-      for (;(char*)tmp<(((char*)jmprel)+pltrelsize);(char*)tmp=((char*)tmp)+sizeof(Elf32_Rel)) {
-	*((unsigned long*)(m+tmp->r_offset))=(unsigned long)(m+tmp->r_addend);
-	printf("_dl_open rela @ %08lx with type %d -> %d\n",(long)m+tmp->r_offset,ELF32_R_TYPE(tmp->r_info),ELF32_R_SYM(tmp->r_info));
-	printf("_dl_open -> %08lx\n",*((unsigned long*)(m+tmp->r_offset)));
-      }
-    }
-
     // load other libs
     for(i=0;dyn_tab[i].d_tag;i++) {
       if (dyn_tab[i].d_tag==DT_NEEDED) {
@@ -286,6 +266,45 @@ void *_dl_open(const char*pathname, int fd, int flag)
 	dlopen(lib_name,flag);
       }
     }
+
+    /* do PTL / GOT relocation */
+    if (pltreltype == DT_REL) {
+      Elf32_Rel *tmp = jmprel;
+      printf("_dl_open: rel got\n");
+      for (;(char*)tmp<(((char*)jmprel)+pltrelsize);(char*)tmp=((char*)tmp)+sizeof(Elf32_Rel)) {
+	if ((flag&RTLD_NOW)) {
+	  unsigned long sym=(unsigned long)_dl_sym(ret,ELF32_R_SYM(tmp->r_info));
+	  if (sym) *((unsigned long*)(m+tmp->r_offset))=sym;
+	  else {
+	    _dl_free_handle(ret);
+	    return 0;
+	  }
+	}
+	else
+	  *((unsigned long*)(m+tmp->r_offset))+=(unsigned long)m;
+	printf("_dl_open rel @ %08lx with type %d -> %d\n",(long)m+tmp->r_offset,ELF32_R_TYPE(tmp->r_info),ELF32_R_SYM(tmp->r_info));
+	printf("_dl_open -> %08lx\n",*((unsigned long*)(m+tmp->r_offset)));
+      }
+    }
+    if (pltreltype == DT_RELA) {
+      Elf32_Rela *tmp = jmprel;
+      printf("_dl_open: rela got\n");
+      for (;(char*)tmp<(((char*)jmprel)+pltrelsize);(char*)tmp=((char*)tmp)+sizeof(Elf32_Rel)) {
+	if ((flag&RTLD_NOW)) {
+	  unsigned long sym=(unsigned long)_dl_sym(ret,ELF32_R_SYM(tmp->r_info));
+	  if (sym) *((unsigned long*)(m+tmp->r_offset))=sym;
+	  else {
+	    _dl_free_handle(ret);
+	    return 0;
+	  }
+	}
+	else
+	  *((unsigned long*)(m+tmp->r_offset))=(unsigned long)(m+tmp->r_addend);
+	printf("_dl_open rela @ %08lx with type %d -> %d\n",(long)m+tmp->r_offset,ELF32_R_TYPE(tmp->r_info),ELF32_R_SYM(tmp->r_info));
+	printf("_dl_open -> %08lx\n",*((unsigned long*)(m+tmp->r_offset)));
+      }
+    }
+
 
     // _dl_open depending libs ...
     printf("_dl_open post resolv, pre init\n");
