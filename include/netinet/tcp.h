@@ -4,20 +4,20 @@
 #include <inttypes.h>
 #include <endian.h>
 
-struct tcphdr {		/* size 20/0x14 */
-  uint16_t source;	/* offset 0 */
-  uint16_t dest;	/* offset 2 */
-  uint32_t seq;		/* offset 4 */
-  uint32_t ack_seq;	/* offset 8 */
+struct tcphdr {		/* size 20/0x14      40/0x28 with IP header */
+  uint16_t source;	/* offset 0          20/0x14 */
+  uint16_t dest;	/* offset 2          22/0x16 */
+  uint32_t seq;		/* offset 4          24/0x18 */
+  uint32_t ack_seq;	/* offset 8          28/0x1c */
 #if __BYTE_ORDER == __LITTLE_ENDIAN
   uint16_t res1:4, doff:4, fin:1, syn:1, rst:1, psh:1, ack:1, urg:1, ece:1, cwr:1;
 #else
   uint16_t doff:4, res1:4, cwr:1, ece:1, urg:1, ack:1, psh:1, rst:1, syn:1, fin:1;
 #endif
-			/* offset 12/0xc */
-  uint16_t window;	/* offset 14/0xe */
-  uint16_t check;	/* offset 16/0x10 */
-  uint16_t urg_ptr;	/* offset 18/0x12 */
+			/* offset 12/0xc     32/0x20 */
+  uint16_t window;	/* offset 14/0xe     34/0x22 */
+  uint16_t check;	/* offset 16/0x10    36/0x24 */
+  uint16_t urg_ptr;	/* offset 18/0x12    38/0x26 */
 };
 
 
