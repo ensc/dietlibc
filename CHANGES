@@ -28,6 +28,7 @@
   remove getline macro, caused problems with GNU sed
   make assert equal (void)0 under -DNDEBUG (Enrico Scholz)
   make __attribute_malloc__ #define safe (Matthias Andree)
+  add BSD utimes to libcompat (Andreas Krennmair)
 
 0.22:
   fix i386 libm
