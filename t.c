@@ -213,7 +213,7 @@ int main(int argc,char *argv[]) {
   snprintf( strport, sizeof(strport), "%d", 80 );
   puts(strport);
 #endif
-#if 0
+#if 1
   struct addrinfo *ai;
   struct addrinfo hints;
   char buf[16];
@@ -328,7 +328,7 @@ int main(int argc,char *argv[]) {
 #if 0
   puts(ttyname(0));
 #endif
-#if 1
+#if 0
   char buf[1024];
   struct hostent* r;
   r=gethostbyname("line.org");

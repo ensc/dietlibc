@@ -61,7 +61,8 @@ int __dns_gethostbyx_r(const char* name, struct hostent* result,
   max=buf+buflen;
   names=ips=0;
 
-  if ((size=res_mkquery(QUERY,name,C_IN,lookfor,0,0,0,packet,512))<0) return 1;
+  __dns_readstartfiles();
+  if ((size=res_mkquery(QUERY,name,C_IN,lookfor,0,0,0,packet,512))<0) return -1;
   {
     {
       int i;	/* current server */
@@ -69,17 +70,16 @@ int __dns_gethostbyx_r(const char* name, struct hostent* result,
       struct pollfd duh;
       struct timeval last,now;
       i=0;
-      __dns_readstartfiles();
       duh.fd=__dns_fd;
       duh.events=POLLIN;
-      last.tv_usec=0;
+      last.tv_sec=0;
       for (j=10; j>0; --j) {
 	gettimeofday(&now,0);
 	if (now.tv_sec-last.tv_sec>10) {
 	  sendto(__dns_fd,packet,(size_t)size,0,(struct sockaddr*)&(_res.nsaddr_list[i]),sizeof(struct sockaddr));
 	  gettimeofday(&last,0);
 	}
-	if (++i > _res.nscount) i=0;
+	if (++i >= _res.nscount) i=0;
 	if (poll(&duh,1,15000) == 1) {
 	  /* read and parse answer */
 	  unsigned char inpkg[1500];
@@ -97,7 +97,7 @@ int __dns_gethostbyx_r(const char* name, struct hostent* result,
 	  if ((inpkg[2]&0xf9) != (_res.options&RES_RECURSE?0x81:0x80)) continue;	/* not answer */
 	  if ((inpkg[3]&0x0f) != 0) {
 	    *h_errnop=HOST_NOT_FOUND;
-	    return 1;
+	    return -1;
 	  }
 	  tmp=inpkg+12;
 	  {
@@ -131,7 +131,7 @@ int __dns_gethostbyx_r(const char* name, struct hostent* result,
 		int slen;
 		if (lookfor==1 || lookfor==28) /* A or AAAA*/ {
 		  slen=strlen(Name);
-		  if (cur+slen+8+(lookfor==28?12:0)>=max) { *h_errnop=NO_RECOVERY; return 1; }
+		  if (cur+slen+8+(lookfor==28?12:0)>=max) { *h_errnop=NO_RECOVERY; return -1; }
 		} else if (lookfor==12) /* PTR */ {
 		  decofs=__dns_decodename(inpkg,(size_t)(tmp-(char*)inpkg),Name,256);
 		  if (decofs<0) break;
@@ -167,7 +167,7 @@ int __dns_gethostbyx_r(const char* name, struct hostent* result,
 	  }
 	  if (!names) {
 nodata:     *h_errnop=NO_DATA;
-	    return 1;
+	    return -1;
 	  }
 /*	  printf("%d answers\n",((unsigned short)inpkg[6]<<8)+inpkg[7]);
 	  printf("ok\n");*/
@@ -180,7 +180,7 @@ nodata:     *h_errnop=NO_DATA;
     }
   }
   *h_errnop=TRY_AGAIN;
-  return 1;
+  return -1;
 }
 
 #ifdef WANT_FULL_RESOLV_CONF
@@ -199,6 +199,7 @@ int __dns_gethostbyx_r(const char* name, struct hostent* result,
   Buf[len]=Buf[MAXDNAME]=0;
 //  printf("appending %d: %p\n",count,__dns_domains[count]);
   while ((res=__dns_gethostbyx_r_inner(tmp,result,buf,buflen,RESULT,h_errnop,lookfor))) {
+    if (res==-1 && *h_errnop!=HOST_NOT_FOUND) break;
     if (count==__dns_search) break;
     Buf[len]='.';
 //    printf("appending %d: %p (%s)\n",count,__dns_domains[count],__dns_domains[count]);

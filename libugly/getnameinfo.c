@@ -23,6 +23,7 @@ int getnameinfo(const struct sockaddr *sa, socklen_t salen, char *host,
       if (gethostbyaddr_r(addr,f==AF_INET6?16:4,f,&h,buf,4096,&H,&herrno)) {
 	switch (herrno) {
 	case TRY_AGAIN: return EAI_AGAIN;
+	case NO_DATA:
 	case HOST_NOT_FOUND: return EAI_NONAME;
 	}
       }

@@ -24,6 +24,7 @@ int res_query(const char *dname, int class, int type, unsigned char *answer, int
   int size;
   __dns_make_fd();
 
+  __dns_readstartfiles();
   if ((size=res_mkquery(QUERY,dname,class,type,0,0,0,packet,512))<0) { h_errno=NO_RECOVERY; return -1; }
   {
     {
@@ -32,7 +33,6 @@ int res_query(const char *dname, int class, int type, unsigned char *answer, int
       struct pollfd duh;
       struct timeval last,now;
       i=0;
-      __dns_readstartfiles();
       duh.fd=__dns_fd;
       duh.events=POLLIN;
       for (j=10; j>0; --j) {
@@ -41,7 +41,7 @@ int res_query(const char *dname, int class, int type, unsigned char *answer, int
 	  sendto(__dns_fd,packet,size,0,(struct sockaddr*)&(_res.nsaddr_list[i]),sizeof(struct sockaddr));
 	  gettimeofday(&last,0);
 	}
-	if (++i > _res.nscount) i=0;
+	if (++i >= _res.nscount) i=0;
 	if (poll(&duh,1,1000) == 1) {
 	  /* read and parse answer */
 	  unsigned char inpkg[1500];
