@@ -201,9 +201,9 @@ int __thread_cleanup(_pthread_descr td) {
 
 /* suspend till timeout or restart signal / in NO_ASYNC_CANCEL */
 void __thread_suspend_till(_pthread_descr this,int cancel,const struct timespec*abstime) {
+  sigset_t newmask,oldmask;
   struct timeval tv;
   struct timespec reg;
-  sigjmp_buf jmpbuf;
 
   gettimeofday(&tv,0);
   reg.tv_nsec=abstime->tv_nsec-tv.tv_usec*1000;
@@ -213,35 +213,29 @@ void __thread_suspend_till(_pthread_descr this,int cancel,const struct timespec*
     reg.tv_sec-=1;
   }
 
-  if (sigsetjmp(jmpbuf,1)==0) {
-    sigset_t newmask,oldmask;
-    this->p_sig_jmp=&jmpbuf;
-    this->p_sig=0;
-    /* Unblock the restart signal */
-    sigemptyset(&newmask);
-    sigaddset(&newmask,PTHREAD_SIG_RESTART);
-    sigprocmask(SIG_UNBLOCK,&newmask,&oldmask);
+  this->p_sig=0;
+  /* Unblock the restart signal */
+  sigemptyset(&newmask);
+  sigaddset(&newmask,PTHREAD_SIG_RESTART);
+  sigprocmask(SIG_UNBLOCK,&newmask,&oldmask);
 
-    while(1) {
-      if (cancel && (this->cancelstate==PTHREAD_CANCEL_ENABLE) && this->canceled) break;
-      if (reg.tv_sec<0||__libc_nanosleep(&reg,&reg)==0) break;
-    }
-    sigprocmask(SIG_SETMASK,&oldmask,0);
-    this->p_sig_jmp=0;
+  while(this->p_sig!=PTHREAD_SIG_RESTART) {
+    if (cancel && (this->cancelstate==PTHREAD_CANCEL_ENABLE) && this->canceled) break;
+    if (reg.tv_sec<0||__libc_nanosleep(&reg,&reg)==0) break;
   }
+  sigprocmask(SIG_SETMASK,&oldmask,0);
 }
 
 /* suspend till restart signal */
-void __thread_suspend(_pthread_descr td,int cancel) {
+void __thread_suspend(_pthread_descr this,int cancel) {
   sigset_t mask;
-  td->p_sig_jmp=0;
-  td->p_sig=0;
+  this->p_sig=0;
   sigprocmask(SIG_SETMASK,0,&mask);
   sigdelset(&mask,PTHREAD_SIG_RESTART);
   do {
-    if (cancel && (td->cancelstate==PTHREAD_CANCEL_ENABLE) && td->canceled) break;
+    if (cancel && (this->cancelstate==PTHREAD_CANCEL_ENABLE) && this->canceled) break;
     sigsuspend(&mask);
-  } while (td->p_sig!=PTHREAD_SIG_RESTART);
+  } while (this->p_sig!=PTHREAD_SIG_RESTART);
 }
 
 /* restart a thread */
@@ -253,16 +247,11 @@ void __thread_restart(_pthread_descr td) {
 
 /* restart signal handler */
 static void pthread_handle_sigrestart(int sig) {
-  sigjmp_buf*jmp;
   _pthread_descr this=__thread_self();
   this->p_sig=sig;
 #ifdef DEBUG
   printf("pthread_handle_sigrestart(%d) in %d\n",sig,this->pid);
 #endif
-  if ((jmp=this->p_sig_jmp)) {
-    this->p_sig_jmp=0;	/* clear away was used */
-    siglongjmp(*(jmp),1);
-  }
 }
 
 /* cancel signal */

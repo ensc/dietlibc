@@ -66,7 +66,6 @@ struct _pthread_descr_struct {
 
   /* signal handling */
   char p_sig;			/* signal */
-  sigjmp_buf *p_sig_jmp;	/* jump on signal */
 
   /* creation parameter (RO) */
   void*(*func)(void*arg);	/* thread function */
