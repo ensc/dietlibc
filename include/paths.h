@@ -13,6 +13,8 @@
 #define _PATH_GROUP "/etc/group"
 #define _PATH_SHADOW "/etc/shadow"
 
+#define	_PATH_SHELLS	"/etc/shells"
+
 #define _PATH_VARRUN	"/var/run/"
 
 #endif

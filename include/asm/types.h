@@ -25,4 +25,6 @@ typedef int64_t __s64;
 
 typedef size_t __kernel_size_t;
 
+typedef struct { int val[2]; } __kernel_fsid_t;
+
 #endif

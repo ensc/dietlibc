@@ -43,6 +43,9 @@
     longer a line separator but starts a comment, switched to .macro)
   changed all st_[cma]time types to signed long so comparisons against
     LONG_MIN will work correctly.  (GNU tar does this)
+  fixed two bugs regarding ungetc.
+  add getusershell, setusershell, endusershell (for vs_ftpd)
+  add prctl, dirfd (also for vs_ftpd)
 
 0.11:
   fix major oops in DNS routines (only with WANT_FULL_RESOLV_CONF enabled).

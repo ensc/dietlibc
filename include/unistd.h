@@ -164,7 +164,6 @@ int getdtablesize(void) __THROW;
 char *getpass(const char * prompt) __THROW;
 
 /* warning: linux specific: */
-int sendfile(int out_fd, int in_fd, signed long *offset, size_t count) __THROW;
 int llseek(int fildes, unsigned long hi, unsigned long lo, loff_t* result,int whence) __THROW;
 
 /* include <linux/sysctl.h> to get all the definitions! */
@@ -203,5 +202,11 @@ int getresuid32(uid32_t *ruid, uid32_t *euid, uid32_t *suid);
 int getresgid32(gid32_t *rgid, gid32_t *egid, gid32_t *sgid);
 int setresuid32(uid32_t ruid, uid32_t euid, uid32_t suid) __THROW;
 int setresgid32(gid32_t rgid, gid32_t egid, gid32_t sgid) __THROW;
+
+#ifdef _BSD_SOURCE
+char *getusershell(void);
+void setusershell(void);
+void endusershell(void);
+#endif
 
 #endif

@@ -46,4 +46,8 @@ int alphasort(const struct dirent **a, const struct dirent **b) __THROW __attrib
 
 #define MAXNAMLEN NAME_MAX
 
+#ifdef _BSD_SOURCE
+extern int dirfd(DIR *dirp) __THROW;
+#endif
+
 #endif
