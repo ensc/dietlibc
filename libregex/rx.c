@@ -329,6 +329,10 @@ static int matchbranch(void*__restrict__ x,const char*__restrict__ s,int ofs,str
   return -1;
 }
 
+static int matchempty(void*__restrict__ x,const char*__restrict__ s,int ofs,struct __regex_t*__restrict__ preg,int plus,int eflags) {
+  return 0;
+}
+
 static const char* parsebranch(struct branch*__restrict__ b,const char*__restrict__ s,regex_t*__restrict__ rx,int*__restrict__ pieces) {
   struct piece p;
   const char *tmp;	/* the gcc warning here is bogus */
@@ -339,7 +343,9 @@ static const char* parsebranch(struct branch*__restrict__ b,const char*__restric
       if (b->num==0) {
 	tmp=s+1;
 	p.a.type=EMPTY;
+	p.a.m=matchempty;
 	p.min=p.max=1;
+	p.m=matchpiece;
       }
     } else {
       tmp=parsepiece(&p,s,rx);
