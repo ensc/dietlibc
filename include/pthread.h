@@ -239,6 +239,6 @@ int pthread_detach (pthread_t __th);
 pthread_t pthread_self (void);
 int pthread_equal (pthread_t __thread1, pthread_t __thread2);
 
-#define pthread_sigmask(h,n,o) sigprocmask((h),(n),(o))
+int pthread_sigmask(int how, const sigset_t*newset, sigset_t *oldset);
 
 #endif
