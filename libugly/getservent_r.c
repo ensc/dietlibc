@@ -60,7 +60,7 @@ copy:
 	int k;
 	k=scan_ulong(__ps.buffirst+__ps.cur,&l);
 	if (__ps.buffirst[__ps.cur+k]!='/') goto parseerror;
-	res->s_port=l;
+	res->s_port=htons(l);
 	res->s_proto=buf+n;
 	j-=k+1; __ps.cur+=k+1;
 	goto copy;
