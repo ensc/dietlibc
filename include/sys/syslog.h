@@ -85,8 +85,8 @@ void closelog (void) __THROW;
 
 int setlogmask (int mask) __THROW;
 
-void syslog (int pri, const char *fmt, ...) __THROW;
+void syslog (int priority, const char *format, ...) __THROW;
 
-void vsyslog (int pri, const char *fmt, va_list *ap) __THROW;
+void vsyslog (int priority, const char *format, va_list arg_ptr) __THROW;
 
 #endif
