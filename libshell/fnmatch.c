@@ -70,5 +70,5 @@ int fnmatch(const char *pattern, const char *string, int flags) {
       return fnmatch(pattern+1,string+1,flags);
     break;
   }
-  return 1;
+  return FNM_NOMATCH;
 }
