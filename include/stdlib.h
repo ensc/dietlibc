@@ -32,5 +32,7 @@ void abort(void) __THROW;
 
 extern char **environ;
 
+#define EXIT_SUCCESS 0
+#define EXIT_FAILURE 1
 
 #endif
