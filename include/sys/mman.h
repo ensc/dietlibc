@@ -4,6 +4,11 @@
 #include <sys/cdefs.h>
 #include <sys/types.h>
 #include <linux/mman.h>
+#include <asm/page.h>
+
+#ifndef PAGE_SIZE
+#warning PAGE_SIZE undefined
+#endif
 
 #define MAP_FAILED      ((void *) -1)
 

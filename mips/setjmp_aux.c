@@ -23,6 +23,7 @@
    __sigsetjmp, which arranges to pass in the stack pointer and the frame
    pointer.  We do things this way because it's difficult to reliably
    access them in C.  */
+extern int __sigjmp_save(jmp_buf env, int savemask);
 
 int
 __sigsetjmp_aux (jmp_buf env, int savemask, int sp, int fp)
