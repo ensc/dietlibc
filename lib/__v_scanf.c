@@ -327,6 +327,7 @@ exp_out:
     /* check if equal format string... */
     default:
       if (tpch != ch) goto err_out;
+      tpch=A_GETC(fn);
       break;
     }
   }
