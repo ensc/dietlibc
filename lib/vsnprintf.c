@@ -128,8 +128,8 @@ print_out:
 	  }
 	  for(i=0;i<buf_len;++i) { str[apos++]=pb[i]; } /* strncpy */
 	  if (width && (flag_left))
-	  {
-	    for (pad=width-buf_len; pad>0; --pad) str[apos++]=padwith;
+	  { /* left pad ALLWAYS with blanks ... */
+	    for (pad=width-buf_len; pad>0; --pad) str[apos++]=' ';
 	  }
 	} else {
 	  if (width) {

@@ -45,7 +45,7 @@ static void getopt_sort(char*v[],int oi)
 }
 
 static char* nextchar;
-int getopt(int c,char*v[],char*o)
+int getopt(int c,char*const v[],const char*o)
 {
   int ol=strlen(o);
   int ret=0;

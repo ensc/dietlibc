@@ -3,7 +3,7 @@
 
 extern int optind,opterr;
 extern char *optarg;
-int getopt(int argc, char *argv[], char *options);
+int getopt(int argc, char *const argv[], const char *options);
 
 /* the following was taken from GNU getopt, it's not actually supported
  * by the diet libc! */
