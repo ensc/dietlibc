@@ -15,15 +15,13 @@ _start:
    argument info starts after one register window (16 words) past the SP.  */
 	ldx	[%sp+(BIAS+(22*8))], %o0
 	add	%sp, (BIAS+(23*8)), %o1
-	add	%o1, %o0, %o2
-	add	%o2, %o0, %o2
-	add	%o2, %o0, %o2
-	add	%o2, %o0, %o2
-	add	%o2, 4, %o2
+	smul	%o0, 8, %o2
+	add	%o2, %o1, %o2
+	add	%o2, 8, %o2
 
 	sethi	%hi(environ), %o3
 	or	%o3, %lo(environ), %o3
-	st	%o2, [%o3]
+	stx	%o2, [%o3]
 
 /* When starting a binary via the dynamic linker, %g1 contains the
    address of the shared library termination function, which will be
