@@ -76,21 +76,21 @@
 #define IPOPT_TS_TSANDADDR	1		/* timestamps and addresses */
 #define IPOPT_TS_PRESPEC	3		/* specified modules only */
 
-struct iphdr {
+struct iphdr {				/* size 20/0x14 */
 #if __BYTE_ORDER == __LITTLE_ENDIAN
-  unsigned char ihl:4, version:4;
+  unsigned char ihl:4, version:4;	/* offset 0; version=ip version (4) */
 #else
-  unsigned char version:4, ihl:4;
+  unsigned char version:4, ihl:4;	/* offset 0; ihl=ip header length, measured in words (5) */
 #endif
-  unsigned char tos;
-  unsigned short tot_len;
-  unsigned short id;
-  unsigned short frag_off;
-  unsigned char ttl;
-  unsigned char protocol;
-  unsigned short check;
-  unsigned int saddr;
-  unsigned int daddr;
+  unsigned char tos;			/* offset 1 */
+  unsigned short tot_len;		/* offset 2; total bytes in packet in network byte order */
+  unsigned short id;			/* offset 4 */
+  unsigned short frag_off;		/* offset 6 */
+  unsigned char ttl;			/* offset 8 */
+  unsigned char protocol;		/* offset 9; 1=ICMP, 6=TCP, 17=UDP (see netinet/in.h) */
+  unsigned short check;			/* offset 10/0xa */
+  unsigned int saddr;			/* offset 12/0xc */
+  unsigned int daddr;			/* offset 16/0x10 */
   /*The options start here. */
 };
 
