@@ -244,9 +244,7 @@ install: $(OBJDIR)/start.o $(OBJDIR)/dietlibc.a $(OBJDIR)/liblatin1.a $(OBJDIR)/
 	$(INSTALL) $(OBJDIR)/liblatin1.a $(DESTDIR)$(LIBDIR)/libdietlatin1.a
 	$(INSTALL) $(OBJDIR)/diet $(DESTDIR)$(BINDIR)/diet
 	$(INSTALL) -m 644 diet.1 $(DESTDIR)$(MAN1DIR)/diet.1
-
-blub:
-	for i in `find include -name \*.h`; do echo $$i; done
+	for i in `find include -name \*.h`; do install -D $$i $(DESTDIR)$(INCLUDEDIR)/$$i; done
 
 .PHONY: sparc ppc mips arm alpha i386
 
