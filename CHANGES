@@ -20,10 +20,11 @@
   several fixes to stdio (thanks to S-Lang's excellent test suite!)
   added ungetc (does it work?)
   added inet_aton (yuck!)
-  added gethostbyname
+  added gethostbyname, gethostbyaddr, gethostbyname_r and gethostbyaddr_r
   added h_errno and __h_errno_location
   added inet_ntoa
   added setpgrp and getpgrp, strsignal and execv (thanks, Olaf)
+  add bcopy macro
 
 0.7.2:
   added several prototypes to already implemented functions and
