@@ -92,15 +92,15 @@ int __dns_decodename(unsigned char *packet,int offset,unsigned char *dest,int ma
       if (ofs>=offset) return -1;	/* RFC1035: "pointer to a _prior_ occurrance" */
       if (after<tmp+2) after=tmp+2;
       tmp=packet+ofs;
+      ok=0;
     } else {
       unsigned int duh;
-      if (*tmp==0) break;
       if (dest+*tmp+1>max) return -1;
       for (duh=*tmp; duh>0; --duh)
 	*dest++=*++tmp;
       *dest++='.'; ok=1;
       ++tmp;
-      if (tmp>after) after=tmp;
+      if (tmp>after) { after=tmp; if (!*tmp) ++after; }
     }
   }
   if (ok) --dest;

@@ -48,33 +48,24 @@ static int rand() {
 
 extern double atof(const char *c);
 
-FILE* logfile;
-
-void vlog_message(const char * s, va_list args) {
-        fprintf(logfile, "* ");
-        vfprintf(logfile, s, args);
-        fprintf(logfile, "\n");
-        fflush(logfile);
-}
-
-
-void log_message(const char * s, ...) {
-        va_list args;
-        va_start(args, s);
-        vlog_message(s, args);
-        va_end(args);
-        return;
-}
 
 int main(int argc,char *argv[]) {
-  char * p = "plop";
-  int i = 3;
+  struct hostent * host;
+  struct in_addr i;
 
-  logfile = fopen("test-out", "w");
+  host = gethostbyname("ftp.ciril.fr");
 
-  log_message("Hi");
-  log_message("the number is %d and the string %s", i, p);
+  if (!host)
+    printf("host null\n");
 
+  if (host && host->h_name) {
+    printf("name %s\n", host->h_name);
+  }
+  if (host && (host->h_addr_list)[0]) {
+    struct in_addr address;
+    address = *((struct in_addr *) (host->h_addr_list)[0]);
+    printf("addr %s\n", inet_ntoa(address));
+  }
 #if 0
   struct msgbuf bla;
   bla.mtype=0;

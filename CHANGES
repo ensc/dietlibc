@@ -44,6 +44,7 @@
   wrap getcwd to comply to man page (the syscall returns the number of
     bytes, not the buffer)
   add realpath.
+  fix vfprintf.
 
 0.9:
   fixed initgroups (oops)

@@ -94,6 +94,13 @@ int __dns_gethostbyx_r(const char* name, struct hostent* result,
 	  /* read and parse answer */
 	  unsigned char inpkg[1500];
 	  /*int len=*/ read(__dns_fd,inpkg,1500);
+#if 0
+	  {
+	    int tft=open("duh",0);
+	    read(tft,inpkg,1500);
+	    close(tft);
+	  }
+#endif
 	  /* header, question, answer, authority, additional */
 	  if (inpkg[0]!=packet[0] || inpkg[1]!=packet[1]) continue;	/* wrong ID */
 	  if ((inpkg[2]&0xf9) != 0x81) continue;	/* not answer */
