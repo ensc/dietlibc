@@ -47,4 +47,4 @@ void __siglongjmp (sigjmp_buf env, int val)
 void siglongjmp (sigjmp_buf env, int val) __attribute__((weak,alias("__siglongjmp")));
 void longjmp (sigjmp_buf env, int val) __attribute__((weak,alias("__siglongjmp")));
 void _longjmp (sigjmp_buf env, int val) __attribute__((weak,alias("__siglongjmp")));
-void __libc_longjmp (sigjmp_buf env, int val) __attribute__((weak,alias("__siglongjmp")));
+void __libc_longjmp (sigjmp_buf env, int val) __attribute__((alias("__siglongjmp")));
