@@ -7,7 +7,11 @@
 #include <pthread.h>
 #endif
 
+#ifdef WANT_SMALL_STDIO_BUFS
 #define BUFSIZE 128
+#else
+#define BUFSIZE 2048
+#endif
 
 typedef struct __file {
   int fd;

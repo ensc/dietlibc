@@ -8,12 +8,15 @@
 #define WANT_CHARACTER_CLASSES_IN_SCANF
 #define WANT_NULL_PRINTF
 
+/* 128 or 2048 bytes buffer size? */
+/* #define WANT_SMALL_STDIO_BUFS */
+
 /* #define SLASH_PROC_OK */
 
 #define WANT_BUFFERED_STDIO
 
 /* use errno_location instead of errno */
-/* #define WANT_THREAD_SAFE */
+#define WANT_THREAD_SAFE
 
 /* make the startcode, etc. dynamic aware */
 /* #undef WANT_DYNAMIC */

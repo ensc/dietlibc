@@ -88,7 +88,7 @@ int main(int argc,char *argv[]) {
   char buf[PATH_MAX];
   printf("%s\n",realpath("../../incoming/..///.zshrc",buf));
 #endif
-#if 0
+#if 1
   regex_t t;
   regcomp(&t,"^OpenSSH_2\\.5\\.[012]",5);
   printf("%d\n",regexec(&t,"OpenSSH_2.5.2p2",0,0,0));

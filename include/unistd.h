@@ -8,6 +8,7 @@
 #include <getopt.h>
 #include <linux/sysctl.h>
 #include <sys/stat.h>
+#include <sys/fsuid.h>
 
 /* Values for the second argument to access.
    These may be OR'd together.  */

@@ -366,8 +366,12 @@ static void piece_putnext(struct piece*__restrict__ p,void*__restrict__ next) {
 
 static void branch_putnext(struct branch*__restrict__ b,void*__restrict__ next) {
   int i;
-  for (i=0; i<b->num-1; ++i)
-    piece_putnext(&b->p[i],&b->p[i+1]);
+  for (i=0; i<b->num-1; ++i) {
+    if (b->p[i+1].min==1 && b->p[i+1].max==1)
+      piece_putnext(&b->p[i],&b->p[i+1].a);
+    else
+      piece_putnext(&b->p[i],&b->p[i+1]);
+  }
   piece_putnext(&b->p[i],0);
   b->next=next;
 }

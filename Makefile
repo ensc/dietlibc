@@ -167,3 +167,6 @@ $(OBJDIR)/localtime_r.o: dietfeatures.h
 
 # these depend on dietfeatures.h for WANT_BUGGY_GLIBC_STRSEP
 $(OBJDIR)/strsep.o: dietfeatures.h
+
+# these depend on dietfeatures.h for WANT_SMALL_STDIO_BUFS
+$(LIBSTDIOOBJ): dietfeatures.h
