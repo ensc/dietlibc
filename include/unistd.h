@@ -131,6 +131,8 @@ int mkstemp(char *Template) __THROW;
 
 int select(int n, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct timeval *timeout) __THROW;
 
+int nice(int inc) __THROW;
+
 extern char *__environ[];
 
 #endif

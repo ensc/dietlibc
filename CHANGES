@@ -35,6 +35,10 @@
   add large file backwards compatibility support (so gzip will run on
     kernel 2.2 and 2.0)
   added shutdown
+  added nice
+  added pseudo-locale support for is* (they are now weak aliases,
+    isupper -> __isupper_ascii etc).  So, for example, liblatin1 can
+    overwrite the default is* functions.
 
 0.7.2:
   added several prototypes to already implemented functions and

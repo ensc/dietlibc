@@ -1,1 +1,17 @@
-time appears to be broken on Alpha
+time appears to be broken on Alpha.
+
+vfprintf appears to be broken on ppc.
+
+localtime does not parse the glibc timezone files and does not parse the
+TZ environment variable yet.  It uses the kernel timezone which does not
+account for daylight saving.
+
+getpwent
+getgrnam
+getgrgid
+fgetgrent
+getgrent
+setgrent
+endgrent
+
+"locale"

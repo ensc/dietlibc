@@ -15,6 +15,10 @@
 #define SOCK_PACKET	10		/* linux specific way of	*/
 #endif
 
+struct sockaddr_storage {
+  char __tmp[sizeof(struct sockaddr)];
+};
+
 int socket(int domain, int type, int protocol) __THROW;
 int accept(int s, struct sockaddr *addr, socklen_t *addrlen) __THROW;
 int connect(int sockfd, const struct sockaddr *serv_addr, socklen_t addrlen) __THROW;
