@@ -64,16 +64,16 @@ __extension__	long long	st_size;
 
 __extension__	unsigned long long	st_ino;
 };
-#elif defined(__sparc64__)
+#elif defined(__sparc__) && defined(__arch64__)
 
 struct stat {
-	unsigned   st_dev;
+	unsigned int  st_dev;
 	unsigned long   st_ino;
 	unsigned int  st_mode;
 	short   st_nlink;
 	unsigned int   st_uid;
 	unsigned int   st_gid;
-	unsigned   st_rdev;
+	unsigned int  st_rdev;
 	long   st_size;
 	time_t  st_atime;
 	time_t  st_mtime;
