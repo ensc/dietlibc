@@ -3,9 +3,15 @@
 #include <errno.h>
 #include "dietfeatures.h"
 
+#if !defined(__powerpc__) && !defined(__sparc__) && !defined(__alpha__)
+#if TCSANOW==0 && TCSADRAIN==1 && TCSAFLUSH==2 && TCSETSW-TCSETS==1 && TCSETSF-TCSETS==2
+#define shortcut
+#endif
+#endif
+
 int  tcsetattr ( int fildes, int optional_actions, struct termios* termios_p )
 {
-#if TCSANOW==0 && TCSADRAIN==1 && TCSAFLUSH==2 && TCSETSW-TCSETS==1 && TCSETSF-TCSETS==2
+#ifdef shortcut
 
     if ( (unsigned int)optional_actions < 3u )
         return ioctl ( fildes, TCSETS+optional_actions, termios_p );

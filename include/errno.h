@@ -516,6 +516,8 @@
 #define EMEDIUMTYPE	124	/* Wrong medium type */
 #endif
 
+#define __SYS_NERR  ((EMEDIUMTYPE) + 1)
+
 #ifndef __ASSEMBLER__
 
 #ifndef _REENTRANT

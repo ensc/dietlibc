@@ -5,9 +5,6 @@
 #define _BSD_SOURCE
 #include <errno.h>
 
-#define __NO_CODE
-#include "errlist.c"
-
 extern const char  __sys_err_unknown [];
 
 const char*  strerror ( int errnum )

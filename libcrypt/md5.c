@@ -103,7 +103,7 @@ void  __MD5Transform ( uint32_t state[4], const uint8_t block[64], size_t repeat
     register uint32_t         c;
     register uint32_t         d;
     
-    if (rep == 0)
+    if (repeat == 0)
         return;
     
 rep:

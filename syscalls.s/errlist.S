@@ -5,7 +5,13 @@
 .globl sys_errlist
 .section	.rodata
 	.align 4
+#ifdef __arm__
+	.type	 sys_errlist,object
+	.type	 sys_nerr,object
+#else
 	.type	 sys_errlist,@object
+	.type	 sys_nerr,@object
+#endif
 
 sys_errlist:
 	.long .LC000
@@ -137,7 +143,6 @@ sys_errlist:
 
 .globl sys_nerr
 	.align 4
-	.type	 sys_nerr,@object
 	.size	 sys_nerr,4
 
 sys_nerr:
