@@ -31,6 +31,9 @@ FILE* __stdio_init_file_nothreads(int fd) {
   tmp->next=__stdio_root;
   __stdio_root=tmp;
 #endif
+#ifdef WANT_UNGETC
+  tmp->ungotten=0;
+#endif
   return tmp;
 }
 

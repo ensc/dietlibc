@@ -22,7 +22,7 @@
 /* #define WANT_FASTER_STRING_ROUTINES */
 
 /* read the comment in lib/strncat.c for an explanation */
-#define WANT_NON_COMPLIANT_STRNCAT
+/* #define WANT_NON_COMPLIANT_STRNCAT */
 
 /* do you want ungetc?  makes fgetc more complex */
 #define WANT_UNGETC

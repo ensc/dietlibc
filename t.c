@@ -51,12 +51,14 @@ extern double atof(const char *c);
 
 
 int main(int argc,char *argv[]) {
+#if 0
   char foo[10];
   printf("%d %d\n",abs(-3),abs(23));
   strcpy(foo,"foo");
   strncat(foo,"barbaz",3);
   foo[6]=0;
   puts(foo);
+#endif
 #if 0
   struct hostent * host;
   struct in_addr i;
@@ -85,10 +87,10 @@ int main(int argc,char *argv[]) {
   char buf[PATH_MAX];
   printf("%s\n",realpath("../../incoming/..///.zshrc",buf));
 #endif
-#if 0
+#if 1
   regex_t t;
-  regcomp(&t,"foo",0);
-  printf("%d\n",regexec(&t,"/* built-in 'exec' handler */",0,0,0));
+  regcomp(&t,"^OpenSSH[-_]2\\.[012]",5);
+  printf("%d\n",regexec(&t,"OpenSSH_2.5.2p2",0,0,0));
 #endif
 #if 0
   float my_float = 9.2334;

@@ -45,12 +45,13 @@ int listen(int s, int backlog) __THROW;
 #define SHUT_RDWR 2
 int shutdown(int s, int how) __THROW;
 
+#if 0
 int getnameinfo(const struct sockaddr *sa, socklen_t salen, char *host,
 		size_t hostlen, char *serv, size_t servlen, int flags) __THROW;
-
 int getaddrinfo(const char *node, const char *service, const struct
 		addrinfo *hints, struct addrinfo **res) __THROW;
 void freeaddrinfo(struct addrinfo *res) __THROW;
 char *gai_strerror(int errcode) __THROW;
+#endif
 
 #endif
