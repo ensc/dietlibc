@@ -48,13 +48,12 @@ static char sccsid[] =
 #include <netdb.h>
 #include <stdio.h>
 #include <errno.h>
+#include <netinet/in.h>
 //#include <net/if.h>
 #include <sys/ioctl.h>
 #define NAMELEN 255
 #define MAX_BROADCAST_SIZE 1400
 #include <unistd.h>
-
-extern int errno;
 
 /*
  * Get a copy of the current port maps.

@@ -20,5 +20,7 @@ extern struct passwd *getpwnam (const char *__name) __THROW;
 extern struct passwd *getpwent(void) __THROW;
 extern void setpwent(void) __THROW;
 extern void endpwent(void) __THROW;
+int putpwent(const struct passwd *p, FILE *stream) __THROW;
+
 
 #endif

@@ -49,6 +49,7 @@ static char sccsid[] = "@(#)pmap_rmt.c 1.21 87/08/27 Copyr 1984 Sun Micro";
 //#include <net/if.h>
 #include <sys/ioctl.h>
 #include <arpa/inet.h>
+#include <netinet/in.h>
 #define MAX_BROADCAST_SIZE 1400
 #include <unistd.h>
 #include <string.h>
@@ -78,7 +79,7 @@ enum clnt_stat pmap_rmtcall (struct sockaddr_in *addr,
   struct rmtcallres r;
   enum clnt_stat stat;
 
-  addr->sin_port = htons(PMAPPORT);
+  addr->sin_port = htons((short)PMAPPORT);
   client = clntudp_create(addr, PMAPPROG, PMAPVERS, timeout, &socket);
   if (client != (CLIENT *) NULL) {
     a.prog = prog;
@@ -281,7 +282,7 @@ resultproc_t eachresult;		/* call with each result obtained */
 	nets = getbroadcastnets(addrs, sock, inbuf);
 	memset((char*)&baddr,0,sizeof(baddr));
 	baddr.sin_family = AF_INET;
-	baddr.sin_port = htons(PMAPPORT);
+	baddr.sin_port = htons((short)PMAPPORT);
 	baddr.sin_addr.s_addr = htonl(INADDR_ANY);
 /*	baddr.sin_addr.S_un.S_addr = htonl(INADDR_ANY); */
 	(void) gettimeofday(&t, (struct timezone *) 0);
@@ -316,7 +317,7 @@ resultproc_t eachresult;		/* call with each result obtained */
 	for (t.tv_sec = 4; t.tv_sec <= 14; t.tv_sec += 2) {
 		for (i = 0; i < nets; i++) {
 			baddr.sin_addr = addrs[i];
-			if (sendto(sock, outbuf, outlen, 0,
+			if (sendto(sock, outbuf, (size_t)outlen, 0,
 					   (struct sockaddr *) &baddr,
 					   sizeof(struct sockaddr)) != outlen) {
 				perror("Cannot send broadcast packet");
@@ -359,7 +360,7 @@ resultproc_t eachresult;		/* call with each result obtained */
 			stat = RPC_CANTRECV;
 			goto done_broad;
 		}
-		if (inlen < sizeof(unsigned long))
+		if ((size_t)inlen < sizeof(unsigned long))
 			goto recv_again;
 		/*
 		 * see if reply transaction id matches sent id.

@@ -66,7 +66,7 @@ unsigned int protocol;
 	register CLIENT *client;
 	struct pmap parms;
 
-	address->sin_port = htons(PMAPPORT);
+	address->sin_port = htons((unsigned short)PMAPPORT);
 	client = clntudp_bufcreate(address, PMAPPROG,
 							   PMAPVERS, timeout, &socket, RPCSMALLMSGSIZE,
 							   RPCSMALLMSGSIZE);
