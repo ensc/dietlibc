@@ -5,6 +5,8 @@
 #include <sys/types.h>
 #include <time.h>
 
+__BEGIN_DECLS
+
 #define UT_LINESIZE	32
 #define UT_NAMESIZE	32
 #define UT_HOSTSIZE	256
@@ -106,5 +108,7 @@ void utmpname(const char *file) __THROW;
 
 void updwtmp(const char *wtmp_file, const struct utmp *ut);
 void logwtmp(const char *line, const char *name, const char *host);
+
+__END_DECLS
 
 #endif

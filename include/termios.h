@@ -4,6 +4,8 @@
 #include <sys/cdefs.h>
 #include <sys/types.h>
 
+__BEGIN_DECLS
+
 struct winsize {
   unsigned short ws_row;
   unsigned short ws_col;
@@ -379,5 +381,7 @@ int tcflush(int fd, int queue_selector) __THROW;
 int tcdrain(int fd) __THROW;
 int tcflow (int fd,int action) __THROW;
 int tcsendbreak (int fd,int duration) __THROW;
+
+__END_DECLS
 
 #endif

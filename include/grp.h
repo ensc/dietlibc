@@ -4,6 +4,8 @@
 #include <sys/cdefs.h>
 #include <sys/types.h>
 
+__BEGIN_DECLS
+
 struct group
   {
     char *gr_name;		/* Group name.	*/
@@ -31,5 +33,7 @@ int getgrgid_r(uid_t uid,
 extern int setgroups(size_t n, const gid_t *groups) __THROW;
 extern int setgroups32(size_t n, const gid32_t *groups) __THROW;
 extern int initgroups(const char *user, gid_t group) __THROW;
+
+__END_DECLS
 
 #endif

@@ -5,6 +5,8 @@
 #include <sys/types.h>
 #include <sys/select.h>
 
+__BEGIN_DECLS
+
 struct timespec {
   time_t tv_sec;	/* seconds */
   long tv_nsec;		/* nanoseconds */
@@ -74,5 +76,7 @@ struct tm {
 
 int utimes(char * filename, struct timeval * tvp);
 #endif
+
+__END_DECLS
 
 #endif

@@ -3,6 +3,8 @@
 
 #include <sys/ipc.h>
 
+__BEGIN_DECLS
+
 #define SHMMAX 0x2000000		 /* max shared seg size (bytes) */
 #define SHMMIN 1			 /* min shared seg size (bytes) */
 #define SHMMNI 4096			 /* max num of segs system wide */
@@ -71,5 +73,7 @@ extern int shmget(key_t key, int size, int shmflg) __THROW;
 extern void *shmat(int shmid, const void *shmaddr, int shmflg) __THROW;
 extern int shmdt (const void *shmaddr) __THROW;
 extern int shmctl(int shmid, int cmd, struct shmid_ds *buf) __THROW;
+
+__END_DECLS
 
 #endif

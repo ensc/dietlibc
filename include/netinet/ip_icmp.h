@@ -5,6 +5,8 @@
 #include <inttypes.h>
 #include <netinet/ip.h>
 
+__BEGIN_DECLS
+
 struct icmphdr {
   uint8_t type;		/* message type */
   uint8_t code;		/* type sub-code */
@@ -141,5 +143,7 @@ struct icmphdr {
 	(type) == ICMP_TSTAMP || (type) == ICMP_TSTAMPREPLY || \
 	(type) == ICMP_IREQ || (type) == ICMP_IREQREPLY || \
 	(type) == ICMP_MASKREQ || (type) == ICMP_MASKREPLY)
+
+__END_DECLS
 
 #endif

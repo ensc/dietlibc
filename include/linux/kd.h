@@ -2,6 +2,8 @@
 #define _LINUX_KD_H
 #include <linux/types.h>
 
+__BEGIN_DECLS
+
 /* 0x4B is 'K', to avoid collision with termios and vt */
 
 #define GIO_FONT	0x4B60	/* gets font in expanded form */
@@ -10,9 +12,9 @@
 #define GIO_FONTX	0x4B6B	/* get font using struct consolefontdesc */
 #define PIO_FONTX	0x4B6C	/* set font using struct consolefontdesc */
 struct consolefontdesc {
-	unsigned short charcount;	/* characters in font (256 or 512) */
-	unsigned short charheight;	/* scan lines per character (1-32) */
-	char *chardata;			/* font data in expanded form */
+  unsigned short charcount;	/* characters in font (256 or 512) */
+  unsigned short charheight;	/* scan lines per character (1-32) */
+  char* chardata;			/* font data in expanded form */
 };
 
 #define PIO_FONTRESET   0x4B6D	/* reset to default font */
@@ -58,19 +60,19 @@ typedef char scrnmap_t;
 
 #define GIO_UNIMAP	0x4B66	/* get unicode-to-font mapping from kernel */
 struct unipair {
-	unsigned short unicode;
-	unsigned short fontpos;
+  unsigned short unicode;
+  unsigned short fontpos;
 };
 struct unimapdesc {
-	unsigned short entry_ct;
-	struct unipair *entries;
+  unsigned short entry_ct;
+  struct unipair *entries;
 };
 #define PIO_UNIMAP	0x4B67	/* put unicode-to-font mapping in kernel */
 #define PIO_UNIMAPCLR	0x4B68	/* clear table, possibly advise hash algorithm */
 struct unimapinit {
-	unsigned short advised_hashsize;  /* 0 if no opinion */
-	unsigned short advised_hashstep;  /* 0 if no opinion */
-	unsigned short advised_hashlevel; /* 0 if no opinion */
+  unsigned short advised_hashsize;  /* 0 if no opinion */
+  unsigned short advised_hashstep;  /* 0 if no opinion */
+  unsigned short advised_hashlevel; /* 0 if no opinion */
 };
 
 #define UNI_DIRECT_BASE 0xF000	/* start of Direct Font Region */
@@ -95,9 +97,9 @@ struct unimapinit {
 #define	KDSKBLED	0x4B65	/* set led flags (not lights) */
 
 struct kbentry {
-	unsigned char kb_table;
-	unsigned char kb_index;
-	unsigned short kb_value;
+  unsigned char kb_table;
+  unsigned char kb_index;
+  unsigned short kb_value;
 };
 #define		K_NORMTAB	0x00
 #define		K_SHIFTTAB	0x01
@@ -108,24 +110,24 @@ struct kbentry {
 #define KDSKBENT	0x4B47	/* sets one entry in translation table */
 
 struct kbsentry {
-	unsigned char kb_func;
-	unsigned char kb_string[512];
+  unsigned char kb_func;
+  unsigned char kb_string[512];
 };
 #define KDGKBSENT	0x4B48	/* gets one function key string entry */
 #define KDSKBSENT	0x4B49	/* sets one function key string entry */
 
 struct kbdiacr {
-        unsigned char diacr, base, result;
+  unsigned char diacr, base, result;
 };
 struct kbdiacrs {
-        unsigned int kb_cnt;    /* number of entries in following array */
-	struct kbdiacr kbdiacr[256];    /* MAX_DIACR from keyboard.h */
+  unsigned int kb_cnt;    /* number of entries in following array */
+  struct kbdiacr kbdiacr[256];    /* MAX_DIACR from keyboard.h */
 };
 #define KDGKBDIACR      0x4B4A  /* read kernel accent table */
 #define KDSKBDIACR      0x4B4B  /* write kernel accent table */
 
 struct kbkeycode {
-	unsigned int scancode, keycode;
+  unsigned int scancode, keycode;
 };
 #define KDGETKEYCODE	0x4B4C	/* read kernel keycode table entry */
 #define KDSETKEYCODE	0x4B4D	/* write kernel keycode table entry */
@@ -133,8 +135,8 @@ struct kbkeycode {
 #define KDSIGACCEPT	0x4B4E	/* accept kbd generated signals */
 
 struct kbd_repeat {
-	int delay;	/* in msec; <= 0: don't change */
-	int rate;	/* in msec; <= 0: don't change */
+  int delay;	/* in msec; <= 0: don't change */
+  int rate;	/* in msec; <= 0: don't change */
 };
 
 #define KDKBDREP        0x4B52  /* set keyboard delay/repeat rate;
@@ -143,11 +145,11 @@ struct kbd_repeat {
 #define KDFONTOP	0x4B72	/* font operations */
 
 struct console_font_op {
-	unsigned int op;	/* operation code KD_FONT_OP_* */
-	unsigned int flags;	/* KD_FONT_FLAG_* */
-	unsigned int width, height;	/* font size */
-	unsigned int charcount;
-	unsigned char *data;	/* font data with height fixed to 32 */
+  unsigned int op;	/* operation code KD_FONT_OP_* */
+  unsigned int flags;	/* KD_FONT_FLAG_* */
+  unsigned int width, height;	/* font size */
+  unsigned int charcount;
+  unsigned char* data;	/* font data with height fixed to 32 */
 };
 
 #define KD_FONT_OP_SET		0	/* Set font */
@@ -163,5 +165,7 @@ struct console_font_op {
 /* note: 0x4B00-0x4B4E all have had a value at some time;
    don't reuse for the time being */
 /* note: 0x4B60-0x4B6D, 0x4B70-0x4B72 used above */
+
+__END_DECLS
 
 #endif /* _LINUX_KD_H */

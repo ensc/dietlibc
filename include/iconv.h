@@ -4,6 +4,8 @@
 #include <sys/cdefs.h>
 #include <sys/types.h>
 
+__BEGIN_DECLS
+
 /* Identifier for conversion method from one codeset to another.  */
 typedef unsigned int iconv_t;
 
@@ -21,5 +23,7 @@ extern size_t iconv (iconv_t cd, const char** inbuf,
 
 /* Free resources allocated for descriptor CD for code conversion.  */
 extern int iconv_close (iconv_t cd) __THROW;
+
+__END_DECLS
 
 #endif /* iconv.h */

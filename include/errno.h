@@ -528,6 +528,8 @@
 
 #include <sys/cdefs.h>
 
+__BEGIN_DECLS
+
 #ifndef _REENTRANT
 extern int errno;
 #else
@@ -543,6 +545,8 @@ extern int *__errno_location(void);
 extern const char *const sys_errlist[] __attribute_dontuse__;
 extern int sys_nerr __attribute_dontuse__;
 #endif
+
+__END_DECLS
 
 #endif
 

@@ -6,6 +6,8 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+__BEGIN_DECLS
+
 #define F_LINUX_SPECIFIC_BASE	1024
 
 #if defined(__i386__) || defined(__s390__) || defined(__x86_64__) || defined(__ia64__)
@@ -553,5 +555,7 @@ extern int fcntl (int __fd, int __cmd, ...) __THROW;
 #if !defined(O_ASYNC) && defined(FASYNC)
 #define O_ASYNC FASYNC
 #endif
+
+__END_DECLS
 
 #endif

@@ -1,6 +1,10 @@
 #ifndef _LINUX_LOOP_H
 #define _LINUX_LOOP_H
 
+#include <sys/cdefs.h>
+
+__BEGIN_DECLS
+
 /* stolen form kernel */
 
 #define LO_NAME_SIZE	64
@@ -12,18 +16,18 @@
 #define LO_FLAGS_BH_REMAP	4
 
 struct loop_info {
-	int		lo_number;	/* ioctl r/o */
-	dev_t		lo_device;	/* ioctl r/o */
-	unsigned long	lo_inode;	/* ioctl r/o */
-	dev_t		lo_rdevice;	/* ioctl r/o */
-	int		lo_offset;
-	int		lo_encrypt_type;
-	int		lo_encrypt_key_size;	/* ioctl w/o */
-	int		lo_flags;	/* ioctl r/o */
-	char		lo_name[LO_NAME_SIZE];
-	unsigned char	lo_encrypt_key[LO_KEY_SIZE]; /* ioctl w/o */
-	unsigned long	lo_init[2];
-	char		reserved[4];
+  int		lo_number;	/* ioctl r/o */
+  dev_t		lo_device;	/* ioctl r/o */
+  unsigned long	lo_inode;	/* ioctl r/o */
+  dev_t		lo_rdevice;	/* ioctl r/o */
+  int		lo_offset;
+  int		lo_encrypt_type;
+  int		lo_encrypt_key_size;	/* ioctl w/o */
+  int		lo_flags;	/* ioctl r/o */
+  char		lo_name[LO_NAME_SIZE];
+  unsigned char	lo_encrypt_key[LO_KEY_SIZE]; /* ioctl w/o */
+  unsigned long	lo_init[2];
+  char		reserved[4];
 };
 
 /* Loop filter types */
@@ -43,5 +47,7 @@ struct loop_info {
 #define LOOP_CLR_FD	0x4C01
 #define LOOP_SET_STATUS	0x4C02
 #define LOOP_GET_STATUS	0x4C03
+
+__END_DECLS
 
 #endif

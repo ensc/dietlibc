@@ -7,6 +7,8 @@
 #include <sys/types.h>
 #include <alloca.h>
 
+__BEGIN_DECLS
+
 void *calloc(size_t nmemb, size_t size) __attribute_malloc__ __THROW;
 void *malloc(size_t size) __attribute_malloc__ __THROW;
 void free(void *ptr) __THROW;
@@ -96,5 +98,7 @@ char *ptsname (int fd) __THROW;
 #define RAND_MAX 	((1<<31) -2)
 
 #define MB_CUR_MAX 1
+
+__END_DECLS
 
 #endif

@@ -4,6 +4,8 @@
 #include <sys/cdefs.h>
 #include <sys/time.h>
 
+__BEGIN_DECLS
+
 extern int __isleap(int year);
 
 int nanosleep(const struct timespec *req, struct timespec *rem) __THROW;
@@ -36,5 +38,7 @@ struct tm* localtime_r(const time_t* t, struct tm* r) __THROW;
 struct tm* gmtime_r(const time_t* t, struct tm* r) __THROW;
 
 clock_t clock(void);
+
+__END_DECLS
 
 #endif

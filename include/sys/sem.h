@@ -3,6 +3,8 @@
 
 #include <sys/ipc.h>
 
+__BEGIN_DECLS
+
 /* semop flags */
 #define SEM_UNDO        0x1000  /* undo the operation on exit */
 
@@ -77,5 +79,7 @@ extern int semget( key_t key, int nsems, int semflg) __THROW;
 extern int semctl(int semid, int semnum, int cmd, ...) __THROW;
 
 extern int semop(int semid, struct sembuf *sops, unsigned nsops) __THROW;
+
+__END_DECLS
 
 #endif

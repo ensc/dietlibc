@@ -4,6 +4,8 @@
 #include <sys/cdefs.h>
 #include <sys/types.h>
 
+__BEGIN_DECLS
+
 #define MREMAP_MAYMOVE	1UL
 #define MREMAP_FIXED	2UL
 
@@ -177,5 +179,7 @@ int munlockall(void) __THROW;
 int madvise(void *start, size_t length, int advice) __THROW;
 
 #define _POSIX_MAPPED_FILES
+
+__END_DECLS
 
 #endif

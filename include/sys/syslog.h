@@ -4,6 +4,8 @@
 #include <sys/cdefs.h>
 #include <stdarg.h>
 
+__BEGIN_DECLS
+
 #define _PATH_LOG	"/dev/log"
 
 /*
@@ -98,5 +100,7 @@ typedef struct _code {
 
 extern CODE prioritynames[];
 extern CODE facilitynames[];
+
+__END_DECLS
 
 #endif

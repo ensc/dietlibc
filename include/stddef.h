@@ -1,6 +1,10 @@
 #ifndef _STDDEF_H
 #define _STDDEF_H
 
+#include <sys/cdefs.h>
+
+__BEGIN_DECLS
+
 /* ugh.  This is normally provided by gcc. */
 
 #ifdef __GNUC__
@@ -19,5 +23,7 @@ typedef int wchar_t;
 
 #undef offsetof
 #define offsetof(type,member) ((size_t) &((type*)0)->member)
+
+__END_DECLS
 
 #endif

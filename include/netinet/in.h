@@ -5,6 +5,8 @@
 #include <sys/socket.h>
 #include <endian.h>
 
+__BEGIN_DECLS
+
 /* Standard well-defined IP protocols.  */
 enum {
   IPPROTO_IP = 0,		/* Dummy protocol for TCP		*/
@@ -400,5 +402,7 @@ uint16_t ntohs(uint16_t netshort);
 
 /* old legacy bullshit */
 int bindresvport(int sd, struct sockaddr_in* _sin);
+
+__END_DECLS
 
 #endif

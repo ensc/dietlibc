@@ -5,6 +5,8 @@
 #include <signal.h>
 #include <setjmp.h>
 
+__BEGIN_DECLS
+
 #define PTHREAD_STACK_SIZE	16384
 
 #if defined(__alpha__) || defined(__x86_64__) || defined(__sparc64__)
@@ -248,5 +250,7 @@ int pthread_detach(pthread_t __th);
 int pthread_equal(pthread_t __thread1,pthread_t __thread2);
 
 int pthread_sigmask(int how,const sigset_t*newset,sigset_t*oldset);
+
+__END_DECLS
 
 #endif

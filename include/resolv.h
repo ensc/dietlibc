@@ -6,6 +6,8 @@
 #include <stdio.h>
 #include <netinet/in.h>
 
+__BEGIN_DECLS
+
 #ifndef _PATH_RESCONF
 #define _PATH_RESCONF        "/etc/resolv.conf"
 #endif
@@ -96,17 +98,17 @@ extern const struct res_sym __p_type_syms[];
 
 int res_init(void) __THROW;
 
-int res_query(const char *dname, int class, int type,
+int res_query(const char *dname, int _class, int type,
       unsigned char *answer, int anslen) __THROW;
 
-int res_search(const char *dname, int class, int type,
+int res_search(const char *dname, int _class, int type,
       unsigned char *answer, int anslen) __THROW;
 
 int res_querydomain(const char *name, const char *domain,
-      int class, int type, unsigned char *answer,
+      int _class, int type, unsigned char *answer,
       int anslen) __THROW;
 
-int res_mkquery(int op, const char *dname, int class,
+int res_mkquery(int op, const char *dname, int _class,
       int type, char *data, int datalen, const unsigned char* newrr,
       char *buf, int buflen) __THROW;
 
@@ -120,5 +122,7 @@ int dn_comp(unsigned char *msg, unsigned char *comp_dn,
 int dn_expand(unsigned char *msg, unsigned char *eomorig,
       unsigned char *comp_dn, unsigned char *exp_dn,
       int length) __THROW;
+
+__END_DECLS
 
 #endif

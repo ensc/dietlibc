@@ -5,6 +5,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
+__BEGIN_DECLS
+
 extern ssize_t sendfile (int out_fd, int in_fd, off_t* offset,
 			 size_t count) __THROW;
 
@@ -16,5 +18,7 @@ extern ssize_t sendfile64 (int out_fd, int in_fd, loff_t* offset,
 #define sendfile(outfd,infd,offset,count) sendfile64(outfd,infd,offset,count)
 #endif
 #endif
+
+__END_DECLS
 
 #endif	/* sys/sendfile.h */

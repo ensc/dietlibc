@@ -3,6 +3,8 @@
 
 #include <sys/cdefs.h>
 
+__BEGIN_DECLS
+
 #ifdef __PRETTY_FUNCTION__
 #define __ASSERT_FUNCTION __PRETTY_FUNCTION__
 #else
@@ -35,5 +37,7 @@ extern void __assert_fail (const char *__assertion, const char *__file,
 			   __FILE__, __LINE__, __ASSERT_FUNCTION), 0)))
 #endif
 #endif
+
+__END_DECLS
 
 #endif

@@ -5,6 +5,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
+__BEGIN_DECLS
+
 typedef struct __stdio_file FILE;
 
 FILE *fopen (const char *path, const char *mode) __THROW;
@@ -141,5 +143,7 @@ void funlockfile(FILE* f) __THROW;
 ssize_t getline(char **lineptr, size_t *n, FILE *stream);
 ssize_t getdelim(char **lineptr, size_t *n, int delim, FILE *stream);
 #endif
+
+__END_DECLS
 
 #endif

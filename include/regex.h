@@ -4,6 +4,8 @@
 #include <sys/cdefs.h>
 #include <sys/types.h>
 
+__BEGIN_DECLS
+
 typedef ptrdiff_t regoff_t;
 
 typedef struct {
@@ -25,7 +27,7 @@ typedef struct {
 
 struct __regex_t;
 
-typedef int (*matcher)(void*,const char*,int ofs,struct __regex_t *t,int plus,int eflags);
+typedef int (*matcher)(void*,const char*,int ofs,struct __regex_t* t,int plus,int eflags);
 
 typedef struct __regex_t {
   struct regex {
@@ -33,17 +35,17 @@ typedef struct __regex_t {
     void* next;
     int pieces;
     int num;
-    struct branch *b;
+    struct branch* b;
   } r;
   int brackets,cflags;
-  regmatch_t *l;
+  regmatch_t* l;
 } regex_t;
 #define re_nsub r.pieces
 
-int regcomp(regex_t *preg, const char *regex, int cflags) __THROW;
-int regexec(const regex_t *preg, const char *string, size_t nmatch, regmatch_t pmatch[], int eflags) __THROW;
-size_t regerror(int errcode, const regex_t *preg, char *errbuf, size_t errbuf_size) __THROW;
-void regfree(regex_t *preg) __THROW;
+int regcomp(regex_t* preg, const char* regex, int cflags) __THROW;
+int regexec(const regex_t* preg, const char* string, size_t nmatch, regmatch_t pmatch[], int eflags) __THROW;
+size_t regerror(int errcode, const regex_t* preg, char* errbuf, size_t errbuf_size) __THROW;
+void regfree(regex_t* preg) __THROW;
 
 enum __regex_errors {
   REG_NOERROR,
@@ -65,7 +67,9 @@ enum __regex_errors {
   REG_ESPACE /* regcomp ran out of space */
 };
 
-char * re_comp(char * regex);
-int re_exec(char * string);
+char* re_comp(char* regex);
+int re_exec(char* string);
+
+__END_DECLS
 
 #endif

@@ -37,6 +37,8 @@
 
 #include <sys/types.h>
 
+__BEGIN_DECLS
+
 #define DES_MAXLEN 	65536	/* maximum # of bytes to encrypt  */
 #define DES_QUICKLEN	16	/* maximum # of bytes to encrypt quickly */
 
@@ -68,5 +70,7 @@ struct desparams
 #define des_data UDES.UDES_data	/* direct data here if quick */
 #define des_buf	UDES.UDES_buf	/* otherwise, pointer to data */
   };
+
+__END_DECLS
 
 #endif

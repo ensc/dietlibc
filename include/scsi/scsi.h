@@ -24,6 +24,10 @@
 #ifndef _SCSI_SCSI_H
 #define _SCSI_SCSI_H	1
 
+#include <sys/cdefs.h>
+
+__BEGIN_DECLS
+
 /*
  *      SCSI opcodes
  */
@@ -220,5 +224,7 @@ struct ccs_modesel_head
 
 /* Used to get the bus number for a device.  */
 #define SCSI_IOCTL_GET_BUS_NUMBER 0x5386
+
+__END_DECLS
 
 #endif /* scsi/scsi.h */

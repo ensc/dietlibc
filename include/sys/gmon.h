@@ -1,6 +1,10 @@
 #ifndef __DLC_GMON_H_
 #define __DLC_GMON_H_
 
+#include <sys/cdefs.h>
+
+__BEGIN_DECLS
+
 # define HISTCOUNTER	unsigned short
 # define HISTFRACTION	2
 # define HASHFRACTION	2
@@ -95,5 +99,7 @@ extern struct __bb * __bb_head;
 extern void __monstartup(unsigned long, unsigned long);
 extern void monstartup(unsigned long, unsigned long);
 extern void _mcleanup(void);
+
+__END_DECLS
 
 #endif

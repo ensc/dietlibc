@@ -1,6 +1,10 @@
 #ifndef _SYS_KD_H
 #define _SYS_KD_H
 
+#include <sys/cdefs.h>
+
+__BEGIN_DECLS
+
 /* 0x4B is 'K', to avoid collision with termios and vt */
 
 #define GIO_FONT	0x4B60	/* gets font in expanded form */
@@ -179,5 +183,7 @@ struct console_font_op {
 #define KD_FONT_OP_COPY		3	/* Copy from another console */
 
 #define KD_FONT_FLAG_DONT_RECALC 	1	/* Don't recalculate hw charcell size [compat] */
+
+__END_DECLS
 
 #endif

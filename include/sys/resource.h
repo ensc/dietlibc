@@ -4,6 +4,8 @@
 #include <time.h>
 #include <sys/cdefs.h>
 
+__BEGIN_DECLS
+
 #define RUSAGE_SELF	0
 #define RUSAGE_CHILDREN	(-1)
 #define RUSAGE_BOTH	(-2)		/* sys_wait4() uses this */
@@ -63,5 +65,7 @@ int getrusage (int who, struct rusage *usage);
 int setrlimit (int resource, const struct rlimit *rlim);
 
 typedef unsigned long rlim_t;
+
+__END_DECLS
 
 #endif

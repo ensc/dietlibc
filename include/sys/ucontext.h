@@ -4,6 +4,8 @@
 #include <asm/sigcontext.h>
 #include <signal.h>
 
+__BEGIN_DECLS
+
 typedef struct sigcontext mcontext_t;
 
 #if defined(__i386__) || defined(__arm__) || defined(__mips__) || defined(__mips64__) || defined(__powerpc__) || defined(__hppa__)
@@ -106,5 +108,7 @@ struct ucontext {
 #endif
 
 typedef struct ucontext ucontext_t;
+
+__END_DECLS
 
 #endif

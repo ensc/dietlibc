@@ -3,6 +3,8 @@
 
 #include <sys/cdefs.h>
 
+__BEGIN_DECLS
+
 #if defined(__i386__) || defined(__x86_64__) || defined(__ia64__)
 #include <sys/i386-ioctl.h>
 #elif defined(__alpha__)
@@ -28,5 +30,7 @@
 #define EP_ISPOLLED	_IOWR('P', 4, struct pollfd)
 
 int ioctl(int d, int request, ...) __THROW;
+
+__END_DECLS
 
 #endif

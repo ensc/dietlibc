@@ -33,6 +33,10 @@
 #ifndef _RPC_TYPES_H
 #define _RPC_TYPES_H 1
 
+#include <sys/cdefs.h>
+
+__BEGIN_DECLS
+
 typedef int bool_t;
 typedef int enum_t;
 /* This needs to be changed to uint32_t in the future */
@@ -70,5 +74,7 @@ typedef unsigned long rpcport_t;
 #ifndef MAXHOSTNAMELEN
 #define        MAXHOSTNAMELEN  64
 #endif
+
+__END_DECLS
 
 #endif /* rpc/types.h */

@@ -4,11 +4,12 @@
 #include <sys/cdefs.h>
 #include <sys/stat.h>
 
-struct FTW
-  {
-    int base;
-    int level;
-  };
+__BEGIN_DECLS
+
+struct FTW {
+  int base;
+  int level;
+};
 
 int ftw (const char *dir, int (*fn)(const char *file, const struct stat *sb, int flag), int depth) __THROW;
 int  nftw (const char *dir, int (*fn)(const char *file, const struct stat *sb, int flag, struct FTW *s), int depth, int flags) __THROW;
@@ -47,5 +48,7 @@ typedef int (*__nftw64_func_t) (const char *__filename,
 				const struct stat64 *__status,
 				int __flag, struct FTW *__info) __THROW;
 #endif
+
+__END_DECLS
 
 #endif

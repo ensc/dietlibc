@@ -5,6 +5,8 @@
 #include <sys/types.h>
 #include <stdio.h>
 
+__BEGIN_DECLS
+
 struct passwd {
   char *pw_name;		/* Username.  */
   char *pw_passwd;		/* Password.  */
@@ -38,4 +40,7 @@ extern void fsetpwent(int fd) __THROW;
 extern int fgetpwent_r(int fd,struct passwd *res, 
 		char *buf, size_t buflen,
 	       	struct passwd **res_sig);
+
+__END_DECLS
+
 #endif

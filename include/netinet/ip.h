@@ -5,6 +5,8 @@
 #include <endian.h>
 #include <netinet/in.h>
 
+__BEGIN_DECLS
+
 #define	IPVERSION	4               /* IP version number */
 #define	IP_MAXPACKET	65535		/* maximum packet size */
 
@@ -117,5 +119,7 @@ struct ip {
   unsigned short ip_sum;		/* checksum */
   struct in_addr ip_src, ip_dst;	/* source and dest address */
 };
+
+__END_DECLS
 
 #endif

@@ -7,6 +7,10 @@
 #ifndef _LINUX_NFS_H
 #define _LINUX_NFS_H
 
+#include <sys/cdefs.h>
+
+__BEGIN_DECLS
+
 #define NFS_PROGRAM	100003
 #define NFS_PORT	2049
 #define NFS_MAXDATA	8192
@@ -84,5 +88,7 @@ enum nfs_ftype {
 	NFBAD = 7,
 	NFFIFO = 8
 };
+
+__END_DECLS
 
 #endif /* _LINUX_NFS_H */

@@ -5,6 +5,8 @@
 #include <sys/types.h>
 #include <limits.h>
 
+__BEGIN_DECLS
+
 struct dirent {
   long		d_ino;
   off_t		d_off;
@@ -60,5 +62,7 @@ extern int dirfd(DIR *dirp) __THROW __attribute_dontuse__;
 #define scandir scandir64
 #define alphasort alphasort64
 #endif
+
+__END_DECLS
 
 #endif

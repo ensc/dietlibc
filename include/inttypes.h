@@ -4,6 +4,8 @@
 #include <sys/cdefs.h>
 #include <endian.h>
 
+__BEGIN_DECLS
+
 # if __WORDSIZE == 64
 #  define __PRI64_PREFIX	"l"
 #  define __PRIPTR_PREFIX	"l"
@@ -243,5 +245,7 @@ __extension__ typedef unsigned long long uint64_t;
 __extension__ typedef signed long long int intmax_t;
 __extension__ typedef unsigned long long int uintmax_t;
 #endif
+
+__END_DECLS
 
 #endif

@@ -5,6 +5,8 @@
 #include <sys/types.h>
 #include <locale.h>
 
+__BEGIN_DECLS
+
 #define gettext(msgid) dgettext(0,msgid)
 #define dgettext(domainname,msgid) dcgettext(domainname,msgid,LC_MESSAGES)
 
@@ -19,5 +21,7 @@ char* dcngettext(const char *domainname,
 char* textdomain(const char *domainname) __THROW;
 char* bindtextdomain(const char *domainname, const char *dirname) __THROW;
 char* bind_textdomain_codeset(const char *domainname, const char *codeset) __THROW;
+
+__END_DECLS
 
 #endif

@@ -25,24 +25,26 @@
 
 #include <sys/types.h>
 
+__BEGIN_DECLS
+
 /*
    Define the MD5 context structure.
    Please DO NOT change the order or contents of the structure as
    various assembler files depend on it !!
 */
-typedef struct
-{
-   uint32_t state[4];       /* state (ABCD) */
-   uint32_t count[2];       /* number of bits, modulo 2^64 (least sig word first) */
-   uint8_t  buffer[64];     /* input buffer for incomplete buffer data */
-}
-MD5_CTX;
+typedef struct {
+  uint32_t state[4];       /* state (ABCD) */
+  uint32_t count[2];       /* number of bits, modulo 2^64 (least sig word first) */
+  uint8_t  buffer[64];     /* input buffer for incomplete buffer data */
+} MD5_CTX;
 
-void  MD5Init   (MD5_CTX* ctx);
-void  MD5Update (MD5_CTX* ctx, const uint8_t* buf, size_t len);
-void  MD5Final  (uint8_t digest[16], MD5_CTX* ctx);
+void MD5Init(MD5_CTX* ctx);
+void MD5Update(MD5_CTX* ctx, const uint8_t* buf, size_t len);
+void MD5Final(uint8_t digest[16], MD5_CTX* ctx);
 
-char* md5crypt  (const char* pw, const char* salt);
+char* md5crypt(const char* pw, const char* salt);
+
+__END_DECLS
 
 #endif
 

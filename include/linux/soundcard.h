@@ -36,6 +36,10 @@
 #define SOUND_VERSION	0x030802
 #define OPEN_SOUND_SYSTEM
 
+#include <sys/cdefs.h>
+
+__BEGIN_DECLS
+
 /* In Linux we need to be prepared for cross compiling */
 #include <sys/ioctl.h>
 
@@ -1305,4 +1309,7 @@ extern int OSS_write_patch2(int fd, unsigned char *buf, int len);
 #endif
 
 #endif
+
+__END_DECLS
+
 #endif

@@ -3,6 +3,8 @@
 
 #include <sys/cdefs.h>
 
+__BEGIN_DECLS
+
 extern int ioperm(unsigned long from, unsigned long num, int turn_on) __THROW;
 extern int iopl(int level) __THROW;
 
@@ -40,5 +42,7 @@ static inline void outl (unsigned int value, unsigned short int port) {
 }
 #endif
 #endif
+
+__END_DECLS
 
 #endif

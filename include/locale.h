@@ -3,6 +3,8 @@
 
 #include <sys/cdefs.h>
 
+__BEGIN_DECLS
+
 enum {
   LC_CTYPE = 0,
   LC_NUMERIC = 1,
@@ -80,5 +82,7 @@ struct lconv {
 
 char *setlocale (int category, const char *locale) __THROW;
 struct lconv *localeconv (void) __THROW;
+
+__END_DECLS
 
 #endif

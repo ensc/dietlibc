@@ -1,6 +1,10 @@
 #ifndef _SYS_TIMEX_H
 #define _SYS_TIMEX_H
 
+#include <sys/cdefs.h>
+
+__BEGIN_DECLS
+
 struct timex {
   unsigned int modes;	/* mode selector */
   long int offset;	/* time offset (usec) */
@@ -46,5 +50,7 @@ struct timex {
 #define TIME_BAD  5 /* clock not synchronized */
 
 int adjtimex(struct timex *buf);
+
+__END_DECLS
 
 #endif

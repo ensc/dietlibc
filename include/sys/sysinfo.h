@@ -3,6 +3,8 @@
 
 #include <sys/cdefs.h>
 
+__BEGIN_DECLS
+
 #define SI_LOAD_SHIFT	16
 struct sysinfo {
   long uptime;			/* Seconds since boot */
@@ -23,5 +25,7 @@ struct sysinfo {
 
 
 int sysinfo(struct sysinfo *info) __THROW;
+
+__END_DECLS
 
 #endif

@@ -5,6 +5,8 @@
 #include <sys/types.h>
 #include <endian.h>
 
+__BEGIN_DECLS
+
 #if defined(__i386__)
 struct stat {
 	unsigned short	st_dev;
@@ -512,5 +514,7 @@ extern int mkfifo (const char *__path, mode_t __mode) __THROW;
 #define S_IREAD S_IRUSR
 #define S_IWRITE S_IWUSR
 #define S_IEXEC S_IXUSR
+
+__END_DECLS
 
 #endif

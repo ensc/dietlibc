@@ -3,6 +3,8 @@
 
 #include <sys/cdefs.h>
 
+__BEGIN_DECLS
+
 enum {
   POLLIN	= 0x0001,
 #define POLLIN		POLLIN
@@ -43,5 +45,7 @@ struct pollfd {
 };
 
 extern int poll(struct pollfd *ufds, unsigned int nfds, int timeout) __THROW;
+
+__END_DECLS
 
 #endif	/* _SYS_POLL_H */

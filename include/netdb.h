@@ -4,6 +4,8 @@
 #include <sys/cdefs.h>
 #include <sys/types.h>
 
+__BEGIN_DECLS
+
 /* Absolute file name for network data base files.  */
 #define	_PATH_HEQUIV		"/etc/hosts.equiv"
 #define	_PATH_HOSTS		"/etc/hosts"
@@ -120,5 +122,7 @@ void herror(const char *s) __THROW;
 
 #define NI_MAXHOST 1025
 #define NI_MAXSERV 32
+
+__END_DECLS
 
 #endif

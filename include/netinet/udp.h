@@ -4,6 +4,8 @@
 #include <sys/cdefs.h>
 #include <sys/types.h>
 
+__BEGIN_DECLS
+
 struct udphdr {		/* size 8     28/0x1c with IP header */
   uint16_t source;	/* offset 0   20/0x14 */
   uint16_t dest;	/* offset 2   22/0x16 */
@@ -12,5 +14,7 @@ struct udphdr {		/* size 8     28/0x1c with IP header */
 };
 
 #define SOL_UDP            17      /* sockopt level for UDP */
+
+__END_DECLS
 
 #endif

@@ -3,6 +3,8 @@
 
 #include <inttypes.h>
 
+__BEGIN_DECLS
+
 typedef int8_t int_least8_t;
 typedef int16_t int_least16_t;
 typedef int32_t int_least32_t;
@@ -26,5 +28,7 @@ typedef unsigned long int uint_fast32_t;
 typedef unsigned long long int uint_fast64_t;
 
 #include <endian.h>
+
+__END_DECLS
 
 #endif

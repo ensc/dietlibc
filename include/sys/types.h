@@ -4,6 +4,8 @@
 #include <inttypes.h>
 #include <stddef.h>
 
+__BEGIN_DECLS
+
 typedef unsigned long int blkcnt_t;	/* Used for file block counts */
 typedef unsigned long int blksize_t;	/* Used for block sizes */
 typedef unsigned long int clock_t;	/* Used for system times in
@@ -126,5 +128,7 @@ typedef uint32_t u_int32_t;
 typedef uint64_t u_int64_t;
 #endif
 #endif
+
+__END_DECLS
 
 #endif

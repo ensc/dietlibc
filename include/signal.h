@@ -3,6 +3,8 @@
 
 #include <sys/cdefs.h>
 
+__BEGIN_DECLS
+
 #define __WANT_POSIX1B_SIGNALS__
 
 #include <sys/types.h>
@@ -496,5 +498,7 @@ int killpg(int pgrp, int sig) __THROW;
 #define sigwaitinfo(m, i) sigtimedwait((m),(i),0)
 
 extern const char *const sys_siglist[];
+
+__END_DECLS
 
 #endif

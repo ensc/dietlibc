@@ -4,6 +4,8 @@
 #include <sys/cdefs.h>
 #include <sys/types.h>
 
+__BEGIN_DECLS
+
 /* For setsockoptions(2) */
 #if defined(__alpha__) || defined(__mips__)
 #define SOL_SOCKET	0xffff
@@ -522,5 +524,7 @@ const char *gai_strerror(int errcode) __THROW;
 #define SIOCDEVPRIVATE	0x89F0		/* to 89FF */
 
 #define _LINUX_SOCKET_H
+
+__END_DECLS
 
 #endif

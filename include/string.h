@@ -4,6 +4,8 @@
 #include <sys/cdefs.h>
 #include <sys/types.h>
 
+__BEGIN_DECLS
+
 char *strcpy(char *dest, const char *src) __THROW;
 
 void *memccpy(void *dest, const void *src, int c, size_t n) __THROW;
@@ -70,5 +72,7 @@ size_t strxfrm(char *dest, const char *src, size_t n) __THROW;
 #endif
 
 char *stpcpy(char *dest, const char *src);
+
+__END_DECLS
 
 #endif

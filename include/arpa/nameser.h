@@ -1,7 +1,10 @@
 #ifndef _ARPA_NAMESER_H
 #define _ARPA_NAMESER_H
 
+#include <sys/cdefs.h>
 #include <endian.h>
+
+__BEGIN_DECLS
 
 #define NS_PACKETSZ	512	/* maximum packet size */
 #define NS_MAXDNAME	1025	/* maximum domain name */
@@ -249,5 +252,7 @@ typedef struct {
 #define C_HS            ns_c_hs
 #define C_NONE          ns_c_none
 #define C_ANY           ns_c_any
+
+__END_DECLS
 
 #endif

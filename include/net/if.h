@@ -4,6 +4,8 @@
 #include <sys/cdefs.h>
 #include <sys/socket.h>
 
+__BEGIN_DECLS
+
 /* Standard interface flags. */
 #define IFF_UP		0x1		/* interface is up		*/
 #define IFF_BROADCAST	0x2		/* broadcast address valid	*/
@@ -98,5 +100,7 @@ struct if_nameindex {
 
 struct if_nameindex* if_nameindex(void) __THROW;
 void if_freenameindex(struct if_nameindex* ptr) __THROW;
+
+__END_DECLS
 
 #endif

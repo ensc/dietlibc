@@ -28,6 +28,8 @@
 
 #include <sys/types.h>
 
+__BEGIN_DECLS
+
 /* New interface introduced in the 3.x SG drivers follows */
 
 /* Same structure as used by readv() Linux system call. It defines one
@@ -270,5 +272,6 @@ struct sg_header
 				  the new interface is used */
 #define SG_DEF_UNDERRUN_FLAG 0
 
+__END_DECLS
 
 #endif	/* scsi/sg.h */

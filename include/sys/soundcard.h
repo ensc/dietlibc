@@ -40,6 +40,8 @@
 /* In Linux we need to be prepared for cross compiling */
 #include <sys/ioctl.h>
 
+__BEGIN_DECLS
+
 /*
  *	Supported card ID numbers (Should be somewhere else?)
  */
@@ -1306,5 +1308,7 @@ extern int OSS_write_patch2(int fd, unsigned char *buf, int len);
 #endif
 
 #endif
+
+__END_DECLS
 
 #endif

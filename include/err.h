@@ -4,6 +4,8 @@
 #include <sys/cdefs.h>
 #include <stdarg.h>
 
+__BEGIN_DECLS
+
 void err(int s, const char *f, ...) __attribute__((__deprecated__,noreturn,format(printf,2,3)));
 void errc(int s, int e, const char *f, ...) __attribute__((__deprecated__,noreturn,format(printf,3,4)));
 void errx(int s, const char *f, ...) __attribute__((__deprecated__,noreturn,format(printf,2,3)));
@@ -19,5 +21,7 @@ void verrx(int s, const char *f, va_list va) __attribute__((__deprecated__,noret
 void vwarn(const char *f, va_list va) __attribute__((__deprecated__,format(printf,1,0)));
 void vwarnc(int e, const char *f, va_list va) __attribute__((__deprecated__,format(printf,2,0)));
 void vwarnx(const char *f, va_list va) __attribute__((__deprecated__,format(printf,1,0)));
+
+__END_DECLS
 
 #endif

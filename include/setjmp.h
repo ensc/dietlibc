@@ -3,6 +3,8 @@
 
 #include <sys/cdefs.h>
 
+__BEGIN_DECLS
+
 #ifdef __i386__
 #ifndef __ASSEMBLER__
 typedef int __jmp_buf[6];
@@ -227,5 +229,7 @@ extern void siglongjmp(sigjmp_buf __env,int __val)
 #define sigsetjmp(a,b) __sigsetjmp(a,b)
 
 #endif
+
+__END_DECLS
 
 #endif

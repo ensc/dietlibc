@@ -4,6 +4,8 @@
 #include <stddef.h>
 #include <sys/cdefs.h>
 
+__BEGIN_DECLS
+
 int strcasecmp(const char *s1, const char *s2) __THROW __pure;
 int strncasecmp(const char *s1, const char *s2, size_t n) __THROW __pure;
 int ffs(int i) __THROW __attribute__((__const__));
@@ -19,5 +21,7 @@ char  *rindex(const char *, int) __THROW __pure __attribute_dontuse__;
 #define bcmp(a,b,n) memcmp(a,b,n)
 #define index(a,b) strchr(a,b)
 #define rindex(a,b) strrchr(a,b)
+
+__END_DECLS
 
 #endif

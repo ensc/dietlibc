@@ -3,6 +3,8 @@
 
 #include <sys/socket.h>
 
+__BEGIN_DECLS
+
 #define MAX_ADDR_LEN	7
 
 /* ARP protocol HARDWARE identifiers. */
@@ -110,4 +112,7 @@ struct arphdr
   unsigned char ar_pln;		/* length of protocol address	*/
   unsigned short ar_op;		/* ARP opcode (command)		*/
 };
+
+__END_DECLS
+
 #endif

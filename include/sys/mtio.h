@@ -3,6 +3,8 @@
 
 #include <sys/ioctl.h>
 
+__BEGIN_DECLS
+
 /* structure for MTIOCTOP - mag tape op command */
 struct mtop {
   short int mt_op;	/* operations defined below */
@@ -336,5 +338,7 @@ struct mtftformat {
 #ifndef DEFTAPE
 #define DEFTAPE "/dev/tape/0"
 #endif
+
+__END_DECLS
 
 #endif

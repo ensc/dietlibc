@@ -5,6 +5,8 @@
 #include <sys/types.h>
 #define _LINUX_CONFIG_H
 
+__BEGIN_DECLS
+
 #define BLOCK_SIZE	1024
 #define BLOCK_SIZE_BITS	10
 
@@ -76,5 +78,7 @@ int  mount(const char* specialfile, const char* dir, const char* filesystemtype,
 
 int umount(const char *specialfile) __THROW;
 int umount2(const char *specialfile, int mflag) __THROW;
+
+__END_DECLS
 
 #endif

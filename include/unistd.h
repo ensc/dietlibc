@@ -7,6 +7,8 @@
 #include <sys/stat.h>
 #include <sys/fsuid.h>
 
+__BEGIN_DECLS
+
 extern int optind,opterr;
 extern char *optarg;
 int getopt(int argc, char *const argv[], const char *options);
@@ -244,5 +246,7 @@ char * cuserid(char * string); /* ugh! */
 
 extern int lockf (int __fd, int __cmd, off_t __len) __THROW;
 extern int lockf64 (int __fd, int __cmd, off64_t __len) __THROW;
+
+__END_DECLS
 
 #endif

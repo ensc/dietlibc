@@ -3,6 +3,8 @@
 
 #include <sys/types.h>
 
+__BEGIN_DECLS
+
 #ifdef __alpha__
 typedef unsigned int umode_t;
 #else
@@ -28,5 +30,7 @@ typedef unsigned long __kernel_size_t;
 #else
 typedef unsigned int __kernel_size_t;
 #endif
+
+__END_DECLS
 
 #endif

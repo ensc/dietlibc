@@ -1,6 +1,10 @@
 #ifndef _ASM_SIGCONTEXT_H
 #define _ASM_SIGCONTEXT_H
 
+#include <sys/cdefs.h>
+
+__BEGIN_DECLS
+
 #if defined(__i386__) || defined(__x86_64__)
 #include <asm/i386-sigcontext.h>
 #endif
@@ -32,5 +36,7 @@
 #ifdef __ia64__
 #include <asm/ia64-sigcontext.h>
 #endif
+
+__END_DECLS
 
 #endif

@@ -1,6 +1,10 @@
 #ifndef _NET_IF_ETHER_H
 #define _NET_IF_ETHER_H
 
+#include <sys/cdefs.h>
+
+__BEGIN_DECLS
+
 /* taken from <linux/if_ether.h> */
 
 #define ETH_ALEN	6		/* Octets in one ethernet addr	 */
@@ -70,5 +74,7 @@ struct ethhdr {
 	unsigned char	h_source[ETH_ALEN];	/* source ether addr	*/
 	unsigned short	h_proto;		/* packet type ID field	*/
 };
+
+__END_DECLS
 
 #endif

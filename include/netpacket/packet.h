@@ -1,6 +1,10 @@
 #ifndef __NETPACKET_PACKET_H
 #define __NETPACKET_PACKET_H
 
+#include <sys/cdefs.h>
+
+__BEGIN_DECLS
+
 struct sockaddr_ll {
   unsigned short int sll_family;
   unsigned short int sll_protocol;
@@ -37,5 +41,7 @@ struct packet_mreq {
 #define PACKET_MR_MULTICAST	0
 #define PACKET_MR_PROMISC	1
 #define PACKET_MR_ALLMULTI	2
+
+__END_DECLS
 
 #endif

@@ -3,6 +3,8 @@
 
 #include <sys/cdefs.h>
 
+__BEGIN_DECLS
+
 #define PTRACE_TRACEME		   0
 #define PTRACE_PEEKTEXT		   1
 #define PTRACE_PEEKDATA		   2
@@ -842,5 +844,7 @@ struct switch_stack {
 #endif
 
 extern long int ptrace(int request, ...) __THROW;
+
+__END_DECLS
 
 #endif

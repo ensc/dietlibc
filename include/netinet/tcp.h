@@ -4,6 +4,8 @@
 #include <inttypes.h>
 #include <endian.h>
 
+__BEGIN_DECLS
+
 struct tcphdr {		/* size 20/0x14      40/0x28 with IP header */
   uint16_t source;	/* offset 0          20/0x14 */
   uint16_t dest;	/* offset 2          22/0x16 */
@@ -160,5 +162,7 @@ struct tcp_info {
   uint32_t tcpi_advmss;
   uint32_t tcpi_reordering;
 };
+
+__END_DECLS
 
 #endif
