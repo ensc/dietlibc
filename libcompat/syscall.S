@@ -33,14 +33,14 @@ syscall:
 	jbe .Lret
 	negl %eax
 #ifdef WANT_THREADSAFE
-	movl %eax, %ebx
+	movl %eax, %edx
 #ifdef __DYN_LIB
 	PIC_INIT
 	call __errno_location@PLT
 #else
 	call __errno_location
 #endif
-	movl %ebx, (%eax)
+	movl %edx, (%eax)
 	xorl %eax, %eax
 	decl %eax
 #else
