@@ -9,11 +9,7 @@
 extern int open(const char* file,int oflag,int mode);
 
 int __libc_open64(const char* file,int oflag,int mode) {
-#ifdef WANT_LARGEFILE_BACKCOMPAT
-  int res=open(file,oflag|O_LARGEFILE,mode);
-#else
   return open(file,oflag|O_LARGEFILE,mode);
-#endif
 }
 
 int open64(const char* file,int oflag,int mode) __attribute__((weak,alias("__libc_open64")));
