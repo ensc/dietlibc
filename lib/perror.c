@@ -3,9 +3,6 @@
 #include <unistd.h>
 #include <string.h>
 
-extern char *sys_errlist[];
-extern int sys_nerr;
-
 void perror(const char *s) {
   register const char *message="[unknown error]";
   write(2,s,strlen(s));

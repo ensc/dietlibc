@@ -529,6 +529,7 @@ extern int *__errno_location(void);
 #define __set_errno(x) errno=(x)
 
 extern const char *const sys_errlist[];
+extern int sys_nerr;
 
 #endif
 

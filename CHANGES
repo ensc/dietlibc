@@ -39,6 +39,7 @@
   implement getopt_long (ugh, the GNU people need professional help)
   fixed word delimiters in regex (they looked for space, i.e. "," did
     not work as delimiter)
+  errno.h now declares sys_errlist and sys_nerr.
 
 0.10:
   update getpagesize.
