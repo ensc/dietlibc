@@ -9,14 +9,14 @@ char *strcpy(char *dest, const char *src) __THROW;
 void *memccpy(void *dest, const void *src, int c, size_t n) __THROW;
 void *memmove(void *dest, const void *src, size_t n) __THROW;
 
-int memccmp(const void *s1, const void *s2, int c, size_t n) __THROW __pure__;
+int memccmp(const void *s1, const void *s2, int c, size_t n) __THROW __pure;
 
 /* gcc unfortunately has some internal prototypes that are not compliant
  * to the single unix specification and if we define the correct
  * prototypes here, gcc emits warnings. */
 #if __GNUC__ > 2 || defined(__mips__) || defined(__alpha__) || defined(__arm__) || defined(__x86_64__)
 void* memset(void *s, int c, size_t n) __THROW;
-int memcmp(const void *s1, const void *s2, size_t n) __THROW __pure__;
+int memcmp(const void *s1, const void *s2, size_t n) __THROW __pure;
 void* memcpy(void *dest, const void *src, size_t n) __THROW;
 #endif
 
@@ -25,20 +25,20 @@ void* memcpy(void *dest, const void *src, size_t n) __THROW;
  * differ from ours.  Unfortunately, gcc will complain whether we have
  * the correct prototypes or whether we don't have prototypes :-( */
 char *strncpy(char *dest, const char *src, size_t n) __THROW;
-int strncmp(const char *s1, const char *s2, size_t n) __THROW __pure__;
+int strncmp(const char *s1, const char *s2, size_t n) __THROW __pure;
 char *strncat(char *dest, const char *src, size_t n) __THROW;
 #endif
 
-int strcmp(const char *s1, const char *s2) __THROW __pure__;
+int strcmp(const char *s1, const char *s2) __THROW __pure;
 
-size_t strlen(const char *s) __THROW __pure__;
+size_t strlen(const char *s) __THROW __pure;
 
-char *strstr(const char *haystack, const char *needle) __THROW __pure__;
+char *strstr(const char *haystack, const char *needle) __THROW __pure;
 
 char *strdup(const char *s) __attribute_malloc__ __THROW;
 
-char *strchr(const char *s, int c) __THROW __pure__;
-char *strrchr(const char *s, int c) __THROW __pure__;
+char *strchr(const char *s, int c) __THROW __pure;
+char *strrchr(const char *s, int c) __THROW __pure;
 
 char *strcat(char *dest, const char *src) __THROW;
 
@@ -48,9 +48,9 @@ size_t strcspn(const char *s, const char *reject) __THROW;
 char *strpbrk(const char *s, const char *_accept) __THROW;
 char *strsep(char **stringp, const char *delim) __THROW;
 
-void* memchr(const void *s, int c, size_t n) __THROW __pure__;
+void* memchr(const void *s, int c, size_t n) __THROW __pure;
 #ifdef _GNU_SOURCE
-void* memrchr(const void *s, int c, size_t n) __THROW __pure__;
+void* memrchr(const void *s, int c, size_t n) __THROW __pure;
 #endif
 
 /* I would like to make this const, but Paul Jarc points out it has to

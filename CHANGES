@@ -19,6 +19,7 @@
   move flock+constants to unistd.h (the Linux man page is wrong on this)
   fix assert (Andreas Krennmair)
   add modf, libm fixes (Andreas Krennmair)
+  rename __pure__ to __pure (Laurent Bercot)
 
 0.22:
   fix i386 libm

@@ -8,7 +8,7 @@ extern int __isleap(int year);
 
 int nanosleep(const struct timespec *req, struct timespec *rem) __THROW;
 
-time_t mktime(struct tm *timeptr) __THROW __pure__;
+time_t mktime(struct tm *timeptr) __THROW __pure;
 
 char *asctime(const struct tm *timeptr) __THROW;
 char *asctime_r(const struct tm *timeptr, char *buf) __THROW;

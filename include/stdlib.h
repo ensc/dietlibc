@@ -12,7 +12,7 @@ void *malloc(size_t size) __attribute_malloc__ __THROW;
 void free(void *ptr) __THROW;
 void *realloc(void *ptr, size_t size) __attribute_malloc__ __THROW;
 
-char *getenv(const char *name) __THROW __pure__;
+char *getenv(const char *name) __THROW __pure;
 int putenv(const char *string) __THROW;
 int setenv(const char *name, const char *value, int overwrite) __THROW;
 void unsetenv(const char *name) __THROW;

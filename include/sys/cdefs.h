@@ -17,9 +17,9 @@
 #endif
 
 #if (__GNUC__ > 2) || ((__GNUC__ == 2) && (__GNUC_MINOR__ >= 96))
-#define __pure__ __attribute__ ((__pure__))
+#define __pure __attribute__ ((__pure__))
 #else
-#define __pure__
+#define __pure
 #endif
 
 #if (__GNUC__ == 2) && (__GNUC_MINOR__ < 95)
