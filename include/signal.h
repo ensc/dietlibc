@@ -497,6 +497,8 @@ int killpg(int pgrp, int sig) __THROW;
 /* 0 is OK ! kernel puts in MAX_THREAD_TIMEOUT :) */
 #define sigwaitinfo(m, i) sigtimedwait((m),(i),0)
 
+int sigwait(const sigset_t* set,int* sig) __THROW;
+
 extern const char *const sys_siglist[];
 
 #include <sys/ucontext.h>
