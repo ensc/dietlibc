@@ -1,3 +1,5 @@
+#define _GNU_SOURCE
+#include <math.h>
 /*
  * This is not standard, but often you only need such this function
  * which is much shorter than the generic pow() function.
