@@ -70,9 +70,13 @@ double atan2(double x, double y) __THROW __attribute__((__const__));
 double copysign(double value, double sign) __attribute__((__const__));
 
 #  define HUGE_VAL \
-  (__extension__                                                              \
-   ((union { unsigned __l __attribute__((__mode__(__DI__))); double __d; })   \
-    { __l: 0x000000007ff00000ULL }).__d)
+  (__extension__ \
+   ((union { unsigned long long __ll; double __d; }) \
+    { __ll: 0x7ff0000000000000ULL }).__d)
+#  define HUGE_VALF \
+  (__extension__ \
+   ((union { unsigned int __i; float __f; }) \
+    { __i: 0x7f800000UL }).__f)
 
 #ifdef _GNU_SOURCE
 void sincos(double x, double* sinx, double* cosx);

@@ -84,6 +84,10 @@ inn_printf:
 	++flag_long;
 	goto inn_printf;
 
+      case 'q':		/* BSD ... */
+	flag_long=2;
+	goto inn_printf;
+
       case '0':
 	padwith='0';
 	goto inn_printf;
@@ -140,7 +144,7 @@ inn_printf:
 #ifdef WANT_ERROR_PRINTF
       /* print an error message */
       case 'm':
-      	s=strerror(_errno);
+	s=strerror(_errno);
 	sz=strlen(s);
 	A_WRITE(fn,s,sz); len+=sz;
 	break;
@@ -156,30 +160,35 @@ inn_printf:
 	flag_dot^=flag_dot;
 
 print_out:
-	if (width && (!flag_left)) {
-#if 0
-	  if (flag_in_sign) {
-	    A_WRITE(fn,s,1); ++len;
-	    ++s; --sz;
-	    --width;
-	  }
-#endif
-	  if (flag_hash>0) {
-	    A_WRITE(fn,s,flag_hash); len+=flag_hash;
-	    s+=flag_hash; sz-=flag_hash;
-	    width-=flag_hash;
-	  }
-//	  len+=write_pad(fn,(signed int)width-(signed int)sz,padwith);
+	len+=sz;
+	if (width || preci) {
+	  int todo=0, padlen=0;
+	  if (flag_in_sign) ++todo;
+	  if (flag_hash>0) todo+=flag_hash;
 	  if (flag_dot) {
-	    len+=write_pad(fn,(signed int)width-(signed int)preci,padwith);
-	    len+=write_pad(fn,(signed int)preci-(signed int)sz,'0');
-	  } else
-	    len+=write_pad(fn,(signed int)width-(signed int)sz,padwith);
-	}
-	A_WRITE(fn,s,sz); len+=sz;
-	if (width && (flag_left)) {
-	  len+=write_pad(fn,(signed int)width-(signed int)sz,' ');
-	}
+	    if (todo) {
+	      sz-=todo; width-=todo; len+=todo;
+	    }
+	    if (flag_left) {
+	      if (todo) { A_WRITE(fn,s,todo); s+=todo; }
+	      len+=write_pad(fn,(signed int)preci-(signed int)sz,'0');
+	      padlen=(signed int)width-(signed int)preci;
+	    } else {
+	      len+=write_pad(fn,(signed int)width-(signed int)preci,padwith);
+	      if (todo) { A_WRITE(fn,s,todo); s+=todo; }
+	      padlen=(signed int)preci-(signed int)sz;
+	      padwith='0';
+	    }
+	  } else padlen=(signed int)width-(signed int)sz;
+
+	  if (flag_left) {
+	    A_WRITE(fn,s,sz);
+	    len+=write_pad(fn, padlen, padwith);
+	  } else {
+	    len+=write_pad(fn, padlen, padwith);
+	    A_WRITE(fn,s,sz);
+	  }
+	} else A_WRITE(fn,s,sz);
 	break;
 
       /* print an integer value */
@@ -196,7 +205,6 @@ print_out:
       case 'x':
 	base=16;
 	sz=0;
-	if (flag_dot) width=preci;
 	if (flag_hash) {
 	  buf[1]='0';
 	  buf[2]=ch;
@@ -272,12 +280,13 @@ num_printf:
 	{
 	  int g=(ch=='g');
 	  double d=va_arg(arg_ptr,double);
+	  s=buf+1;
 	  if (width==0) width=1;
 	  if (!flag_dot) preci=6;
-	  sz=__dtostr(d,buf,sizeof(buf),width,preci);
+	  sz=__dtostr(d,s,sizeof(buf)-1,width,preci);
 	  if (flag_dot) {
 	    char *tmp;
-	    if ((tmp=strchr(buf,'.'))) {
+	    if ((tmp=strchr(s,'.'))) {
 	      ++tmp;
 	      while (preci>0 && *++tmp) --preci;
 	      *tmp=0;
@@ -295,8 +304,11 @@ num_printf:
 	      if (tmp1) strcpy(tmp,tmp1);
 	    }
 	  }
-	  preci=strlen(buf);
-	  s=buf;
+	  if ((flag_sign || flag_space) && d>=0) {
+	    *(--s)=(flag_sign)?'+':' ';
+	    ++sz;
+	  }
+	  preci=strlen(s);
 
 	  goto print_out;
 	}

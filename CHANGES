@@ -19,6 +19,11 @@
   Olaf:
    - fixing strtok_r (rewrite)
    - making the %m support NON DEFAULT as it is NOT SUSv3 or SUSv2
+   - make the HUGE_VAL/HUGE_VALF macros arch (endian) independend
+   - changeing __dtostr so that it returns "inf" for an inf-value not "nan"
+   - fixing the strrchr bug (reported by Gernot Tenchio)
+   - fixing the strtoul/strtoull bug (reported by Gernot Tenchio)
+   - adding the patch to printf (Gernot Tenchio)
 
 0.23:
   update sys/soundcard.h

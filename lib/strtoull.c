@@ -3,11 +3,12 @@
 #include <errno.h>
 #include <limits.h>
 
-unsigned long long int strtoull(const char *nptr, char **endptr, int base)
+unsigned long long int strtoull(const char *ptr, char **endptr, int base)
 {
   int neg = 0, overflow = 0;
   long long int v=0;
   const char* orig;
+  const char* nptr=ptr;
 
   while(isspace(*nptr)) ++nptr;
 
@@ -28,10 +29,7 @@ unsigned long long int strtoull(const char *nptr, char **endptr, int base)
   while(__likely(*nptr)) {
     register unsigned char c=*nptr;
     c=(c>='a'?c-'a'+10:c>='A'?c-'A'+10:c-'0');
-    if (__unlikely(c>=base)) {
-      if (nptr==orig) { if (endptr) *endptr=(char*)nptr; errno=EINVAL; return ULLONG_MAX; }
-      break;
-    }
+    if (__unlikely(c>=base)) break;	/* out of base */
     {
       register unsigned long x=(v&0xff)*base+c;
       register unsigned long long w=(v>>8)*base+(x>>8);
@@ -39,6 +37,11 @@ unsigned long long int strtoull(const char *nptr, char **endptr, int base)
       v=(w<<8)+(x&0xff);
     }
     ++nptr;
+  }
+  if (__unlikely(nptr==orig)) {		/* no conversion done */
+    nptr=ptr;
+    errno=EINVAL;
+    v=0;
   }
   if (endptr) *endptr=(char *)nptr;
   if (overflow) {

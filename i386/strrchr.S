@@ -3,17 +3,17 @@
 .type strrchr,@function
 
 strrchr:
-	movl 0x4(%esp), %edx
-	movb 0x8(%esp), %cl
-	xorl %eax, %eax
-	decl %edx
+	movl	0x4(%esp), %edx
+	movb	0x8(%esp), %cl
+	xorl	%eax, %eax
 .Lloop:
-	incl %edx
-	cmpb $0x0,(%edx)
-	jz .Lret
-	cmpb %cl, (%edx)
-	jnz .Lloop
-	movl %edx, %eax
-	jmp .Lloop
+	cmpb	%cl, (%edx)
+	jnz	.Ltest0
+	movl	%edx, %eax
+.Ltest0:
+	cmpb	$0,(%edx)
+	jz	.Lret
+	incl	%edx
+	jmp	.Lloop
 .Lret:
 	ret

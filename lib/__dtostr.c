@@ -35,8 +35,8 @@ int __dtostr(double d,char *buf,unsigned int maxlen,unsigned int prec,unsigned i
   double tmp;
   char *oldbuf=buf;
 
-  if (isnan(d)) return copystring(buf,maxlen,"nan");
   if ((i=isinf(d))) return copystring(buf,maxlen,i>0?"inf":"-inf");
+  if (isnan(d)) return copystring(buf,maxlen,"nan");
   e10=1+(long)(e*0.30102999566398119802); /* log10(2) */
   /* Wir iterieren von Links bis wir bei 0 sind oder maxlen erreicht
    * ist.  Wenn maxlen erreicht ist, machen wir das nochmal in

@@ -14,6 +14,8 @@ __fflush_stdout:
 __fflush_stderr:
 .weak flockfile
 flockfile:
+.weak ftrylockfile
+ftrylockfile:
 .weak funlockfile
 funlockfile:
 .weak __nop
