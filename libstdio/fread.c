@@ -18,7 +18,7 @@ size_t fread_unlocked(void *ptr, size_t size, size_t nmemb, FILE *stream) {
     *(char*)ptr=stream->ungetbuf;
     ++i;
   }
-  if (!j) return 1;
+  if (j==1) return 1;
 
 #ifdef WANT_FREAD_OPTIMIZATION
   if ( !(stream->flags&FDPIPE) && (j>stream->buflen)) {
