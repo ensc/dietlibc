@@ -38,6 +38,9 @@
   Olaf muddled with the dynamic linker.  It's a clean-room
     implementation in the sense that it once worked for Olaf in a clean
     room ;)
+  add if_nameindex and if_freenameindex.
+  fixed arm unified syscalls to work with current binutils (; is no
+    longer a line separator but starts a comment, switched to .macro)
 
 0.11:
   fix major oops in DNS routines (only with WANT_FULL_RESOLV_CONF enabled).
