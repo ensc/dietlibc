@@ -45,6 +45,8 @@
     bytes, not the buffer)
   add realpath.
   fix vfprintf.
+  fix *scanf %s zero termination.
+  add abs, labs, llabs.
 
 0.9:
   fixed initgroups (oops)

@@ -51,10 +51,7 @@ extern double atof(const char *c);
 
 int main(int argc,char *argv[]) {
   char foo[10];
-  mktemp(foo);
-  printf("%d\n",clock());
-  sleep(1);
-  printf("%d\n",clock());
+  sscanf("abcdefghijklmn","%9s\n",foo);
 #if 0
   struct hostent * host;
   struct in_addr i;
