@@ -18,10 +18,10 @@ memccpy:
 	bl,a .Lret
 	sub %g0, %o4, %o0
 	ldub [%o1+%o4], %o5
-	cmp %o5, %o2
-	inc %o4
-	bne,a .Lloop
 	stb %o5, [%o0+%o4]
+	cmp %o5, %o2
+	bne .Lloop
+	inc %o4
 .Lret:
 	retl
 	add %o0, %o4, %o0
