@@ -7,6 +7,7 @@
 #define WANT_FLOATING_POINT_IN_SCANF
 #define WANT_CHARACTER_CLASSES_IN_SCANF
 #define WANT_NULL_PRINTF
+#define WANT_LONGLONG_PRINTF
 
 /* 128 or 2048 bytes buffer size? */
 /* #define WANT_SMALL_STDIO_BUFS */

@@ -33,7 +33,7 @@
 int foo;
 
 int main(int argc,char *argv[]) {
-  printf("%d\n",atoi("  23"));
+  printf("%lld %d\n",5ll,17);
 #if 0
   struct netent* n=getnetbyname("loopback");
   printf("%s %s\n",n->n_name,inet_ntoa(*(struct in_addr*)&n->n_net));

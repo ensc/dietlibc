@@ -16,6 +16,9 @@ int vsnprintf (char *str, size_t size, const char *format, va_list arg_ptr)
   char flag_in_sign,flag_upcase;
   char flag_hash,flag_zero,flag_left,flag_space,flag_sign,flag_dot,flag_long;
   long number,width,preci,buf_len,pad;
+#ifdef WANT_LONGLONG_PRINTF
+  long long llnumber;
+#endif
   char padwith;
 
   size--;
@@ -177,17 +180,36 @@ num_vsnprintf:
 	if (apos>=size) continue; /* ARGL !!! */
 
 	if (flag_long)
+#ifdef WANT_LONGLONG_PRINTF
+	{
+	  if (flag_long>1)
+	    llnumber=va_arg(arg_ptr,long long);
+	  else
+	    number=va_arg(arg_ptr,long);
+	}
+#else
 	  number=va_arg(arg_ptr,long);
+#endif
 	else
 	  number=va_arg(arg_ptr,int);
 
 	if (flag_in_sign && (number<0))
 	{
-	  number*=-1;
+#ifdef WANT_LONGLONG_PRINTF
+	  if (flag_long>1)
+	    llnumber=-llnumber;
+	  else
+#endif
+	  number=-number;
 	  flag_in_sign=2;
 	}
 
-	buf_len=__ltostr(buf+1,sizeof(buf)-1,(unsigned long) number,i,flag_upcase);
+#ifdef WANT_LONGLONG_PRINTF
+	if (flag_long>1)
+	  buf_len=__lltostr(buf+1,sizeof(buf)-1,(unsigned long long) llnumber,i,flag_upcase);
+	else
+#endif
+	  buf_len=__ltostr(buf+1,sizeof(buf)-1,(unsigned long) number,i,flag_upcase);
 	pb=buf+1;
 
 	if (flag_in_sign==2)
