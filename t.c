@@ -52,6 +52,7 @@ extern double atof(const char *c);
 
 int main(int argc,char *argv[]) {
   char foo[10];
+  printf("%d %d\n",abs(-3),abs(23));
   strcpy(foo,"foo");
   strncat(foo,"barbaz",3);
   foo[6]=0;

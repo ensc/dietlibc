@@ -47,6 +47,8 @@
   fix vfprintf.
   fix *scanf %s zero termination.
   add abs, labs, llabs.
+  add <sys/io.h>, ioperm syscall.
+  add flock to <sys/file.h>
 
 0.9:
   fixed initgroups (oops)
