@@ -19,3 +19,5 @@ fix %f and %g in printf.  They are more or less completely b0rken.
 gethost/netent -> parselib
 
 s390: shouldn't we zero the frame pointer for gdb?
+
+Look at qsort (make test suite exhibits the worst case)
