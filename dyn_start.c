@@ -23,6 +23,7 @@ __attribute__((section(".fini"))) void _fini(void)
   __do_global_dtors_aux();
 }
 
+#ifndef __DYN_LIB_SHARED
 /* pre main, post _start */
 int _dyn_start(int argc, char **argv, char **envp, structor dl_init);
 int _dyn_start(int argc, char **argv, char **envp, structor dl_init)
@@ -35,4 +36,5 @@ int _dyn_start(int argc, char **argv, char **envp, structor dl_init)
   atexit(_fini);
   return main(argc, argv, envp);
 }
+#endif
 #endif

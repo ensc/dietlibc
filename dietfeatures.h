@@ -18,7 +18,7 @@
 /* use errno_location instead of errno */
 #define WANT_THREAD_SAFE
 
-/* make the startcode, etc. dynamic aware */
+/* make the startcode, etc. dynamic aware ({con,de}structors) */
 /* #undef WANT_DYNAMIC */
 
 /* do you want smaller or faster string routines? */
@@ -75,8 +75,13 @@
 #endif
 
 #ifdef __DYN_LIB
+/* with sahred libraries you MUST have a dynamic aware startcode */
 #ifndef WANT_DYNAMIC
 #define WANT_DYNAMIC
+#endif
+/* saveguard crashes with shared objects ... */
+#ifdef WANT_SAFEGUARD
+#undef WANT_SAFEGUARD
 #endif
 #endif
 

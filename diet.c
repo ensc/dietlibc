@@ -158,14 +158,15 @@ pp:
       c=alloca(strlen(platform)+20);
 
       strcpy(a,"-I"); strcat(a,diethome); strcat(a,"/include");
-      strcpy(b,platform); strcat(b,"/start.o");
 #ifndef __DYN_LIB
+      strcpy(b,platform); strcat(b,"/start.o");
 #ifdef INSTALLVERSION
       strcpy(c,platform); strcat(c,"/libc.a");
 #else
       strcpy(c,platform); strcat(c,"/dietlibc.a");
 #endif
 #else
+      strcpy(b,platform); strcat(b,"/dstart.o");
 #ifdef INSTALLVERSION
       strcpy(c,"-lc");
 #else
@@ -176,8 +177,22 @@ pp:
 #ifdef WANT_DYNAMIC
       d=alloca(strlen(platform)+20);
       e=alloca(strlen(platform)+20);
+#ifdef __DYN_LIB
+      strcpy(d,platform);
+      if (shared)
+	strcat(d,"/dyn_so_start.o");
+#ifdef INSTALLVERSION
+      else
+	strcat(d,"/dyn_dstart.o");
+#else
+      else
+	strcat(d,"/dyn_start.o");
+#endif
+      strcpy(e,platform); strcat(e,"/dyn_stop.o");
+#else
       strcpy(d,platform); strcat(d,"/dyn_start.o");
       strcpy(e,platform); strcat(e,"/dyn_stop.o");
+#endif
 #endif
 
       dest=newargv;
