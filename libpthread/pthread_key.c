@@ -18,13 +18,13 @@ void __thread_start__key(_pthread_descr th) {
 }
 
 void __thread_exit__key(_pthread_descr th) {
-  int i,try;
+  int i;
   void (*dstr)(const void*);
 
   for (i=0;i<PTHREAD_KEYS_MAX;++i) {
     if ((__thread_keys[i].used)&&(dstr=__thread_keys[i].destructor)) {
-      for (try=0;th->tkd[i]&&(try<PTHREAD_DESTRUCTOR_ITERATIONS);++try)
-	dstr(th->tkd[i]);
+      const void*data=th->tkd[i];
+      if (data) dstr(data);
     }
   }
 }

@@ -60,6 +60,7 @@ struct _pthread_descr_struct {
   volatile unsigned char canceltype;	/* type of cancellation */
 
   /* thread flags */
+  volatile char dead;		/* thread has terminated */
   volatile char canceled;	/* thread canceled */
   char detached;		/* thread is detached */
   char stack_free;		/* stack is allocated by pthread_create */
@@ -118,7 +119,7 @@ struct _pthread_descr_struct*__thread_self(void);
 struct _pthread_descr_struct*__thread_find(pthread_t pid);
 
 int __thread_join(struct _pthread_descr_struct*td,void**return_value);
-int __thread_cleanup(struct _pthread_descr_struct*td);
+int __thread_join_cleanup(struct _pthread_descr_struct*td);
 
 void __thread_restart(struct _pthread_descr_struct*td);
 void __thread_suspend(struct _pthread_descr_struct*td,int cancel);

@@ -20,9 +20,7 @@ static void ph(unsigned long v) {
   const char foo[16]="0123456789abcdef";
   char buf[sizeof(long)<<1];
   int i;
-  for (i=sizeof(buf);i--;v>>=4) {
-    buf[i]=foo[v&15];
-  }
+  for (i=sizeof(buf);i--;v>>=4) { buf[i]=foo[v&15]; }
   write(1,buf,sizeof(buf));
 }
 #endif
@@ -170,18 +168,10 @@ void*thread(void*arg) {
 
 void test_thread() {
   pthread_t t;
-  pr("testing basic thread creation... ");
+  pr("testing basic thread creation and join... ");
   if ((pthread_create(&t,0,thread,0))!=0) _die_("failed...\n");
   if (kill(t,0)==-1) _die_("failed... no thread cloned");
-  sleep(2);
-  pr("OK.\n");
-}
-
-void test_thread_join() {
-  pthread_t t;
-  pr("testing join thread... ");
-  if ((pthread_create(&t,0,thread,0))!=0) _die_("failed...\n");
-  pthread_join(t,0);
+  if (pthread_join(t,0) != 0) _die_("failed... joining thread\n");
   pr("OK.\n");
 }
 
@@ -215,7 +205,6 @@ void test_thread_alt_stack() {
 void test2() {
   pr("\nTEST 2: thread creation & attributes:\n\n");
   test_thread();
-  test_thread_join();
   test_thread_join_detached();
   test_thread_alt_stack();
 }
@@ -295,6 +284,9 @@ void test_conditions_signal() {
   if (kill(t1,0)==0) _die_("failed... thread (nr. 1) ignored signal\n");
   if (kill(t2,0)==0) _die_("failed... thread (nr. 2) ignored signal\n");
   if (kill(t3,0)==0) _die_("failed... thread (nr. 3) ignored signal\n");
+  if (pthread_join(t1,0) != 0) _die_("failed... joining thread\n");
+  if (pthread_join(t2,0) != 0) _die_("failed... joining thread\n");
+  if (pthread_join(t3,0) != 0) _die_("failed... joining thread\n");
   pr("OK.\n");
 }
 
@@ -311,9 +303,12 @@ void test_conditions_broadcast() {
   pr("<broadcast> ");
   pthread_cond_broadcast(&test_cond);
   sleep(3);
-  if (pthread_join(t1,0)==0) _die_("failed... thread (nr. 1) ignored signal\n");
-  if (pthread_join(t2,0)==0) _die_("failed... thread (nr. 2) ignored signal\n");
-  if (pthread_join(t3,0)==0) _die_("failed... thread (nr. 3) ignored signal\n");
+  if (kill(t1,0)==0) _die_("failed... thread (nr. 1) ignored signal\n");
+  if (kill(t2,0)==0) _die_("failed... thread (nr. 2) ignored signal\n");
+  if (kill(t3,0)==0) _die_("failed... thread (nr. 3) ignored signal\n");
+  if (pthread_join(t1,0) != 0) _die_("failed... joining thread\n");
+  if (pthread_join(t2,0) != 0) _die_("failed... joining thread\n");
+  if (pthread_join(t3,0) != 0) _die_("failed... joining thread\n");
   alarm(0);
   pr("OK.\n");
 }
@@ -347,9 +342,12 @@ void test_conditions_mixed() {
   pthread_mutex_lock(&test_cond_exit_mutex);
   pthread_cond_broadcast(&test_cond);
   sleep(2);
-  if (pthread_join(t1,0)==0) _die_("failed... thread (nr. 1) ignored signal\n");
-  if (pthread_join(t2,0)==0) _die_("failed... thread (nr. 2) ignored signal\n");
-  if (pthread_join(t3,0)==0) _die_("failed... thread (nr. 3) ignored signal\n");
+  if (kill(t1,0)==0) _die_("failed... thread (nr. 1) ignored signal\n");
+  if (kill(t2,0)==0) _die_("failed... thread (nr. 2) ignored signal\n");
+  if (kill(t3,0)==0) _die_("failed... thread (nr. 3) ignored signal\n");
+  if (pthread_join(t1,0) != 0) _die_("failed... joining thread\n");
+  if (pthread_join(t2,0) != 0) _die_("failed... joining thread\n");
+  if (pthread_join(t3,0) != 0) _die_("failed... joining thread\n");
   alarm(0);
   pr("OK.\n");
 }
@@ -365,7 +363,6 @@ void test3() {
 
 /* (4) cancelation & cleanup tests */
 void*thread_exit() {
-  sleep(1);
   pthread_exit((void*)42);
   return 0;
 }
@@ -376,8 +373,8 @@ void test4_thread_exit() {
   pr("testing pthread_exit... ");
   if ((pthread_create(&t,0,thread_exit,0))!=0) _die_("failed... creating thread\n");
   if (pthread_join(t,&retval) != 0) _die_("failed... joining thread\n");
-  if (retval!=(void*)42) _die_("failed... join retval\n");
   if (kill(t,0)!=-1) _die_("failed... thread exit\n");
+  if (retval!=(void*)42) _die_("failed... join retval\n");
   pr("OK.\n");
 }
 
@@ -398,7 +395,7 @@ void test4_cleanup() {
   pthread_t t1;
   pr("testing the cleanup stack... ");
   if ((pthread_create(&t1,0,thread_cancel,(void*)0))!=0) _die_("failed... (creating a thread)\n");
-  pthread_join(t1,0);
+  if (pthread_join(t1,0) != 0) _die_("failed... joining thread\n");
   if (thread_cleanuptest_data==0) _die_("failed... no call to cleanup\n");
   pr("OK.\n");
 }
@@ -417,11 +414,11 @@ void test4_cancelation() {
   pr("testing cancelation and cleanup stack (takes 3-4 seconds)... ");
   if ((pthread_create(&t1,0,thread_cancel,(void*)1))!=0) _die_("failed... (creating a thread)\n");
   if ((pthread_create(&t2,0,thread_canceler,(void*)&t1))!=0) _die_("failed... (creating a thread)\n");
-  pthread_join(t1,0);
-  pthread_join(t2,0);
+  if (pthread_join(t1,0) != 0) _die_("failed... joining thread\n");
+  if (pthread_join(t2,0) != 0) _die_("failed... joining thread\n");
   if (thread_cleanuptest_data==0) _die_("failed... no call to cleanup\n");
-  sleep(1); /* give the kernel time to shred the zombie */
   if (kill(t1,0)!=-1) _die_("failed... thread cancelation\n");
+  if (kill(t2,0)!=-1) _die_("failed... thread cancelation\n");
   pr("OK.\n");
 }
 
@@ -443,11 +440,11 @@ void test4_asynccancel() {
   pr("testing async cancelation and cleanup stack (takes 5-6 seconds)... ");
   if ((pthread_create(&t1,0,thread_cancel_async,(void*)1))!=0) _die_("failed... (creating a thread)\n");
   if ((pthread_create(&t2,0,thread_canceler,(void*)&t1))!=0) _die_("failed... (creating a thread)\n");
-  pthread_join(t1,0);
-  pthread_join(t2,0);
+  if (pthread_join(t1,0) != 0) _die_("failed... joining thread\n");
+  if (pthread_join(t2,0) != 0) _die_("failed... joining thread\n");
   if (thread_cleanuptest_data==0) _die_("failed... no call to cleanup\n");
-  sleep(1); /* give the kernel time to shred the zombie */
   if (kill(t1,0)!=-1) _die_("failed... thread cancelation\n");
+  if (kill(t2,0)!=-1) _die_("failed... thread cancelation\n");
   pr("OK.\n");
 }
 
@@ -485,7 +482,7 @@ void test5_1() {
   test5_signaled=0;
   pr("IN A THREAD... ");
   if ((pthread_create(&t1,0,test5_0,0))!=0) _die_("failed... (creating a thread)\n");
-  pthread_join(t1,0);
+  if (pthread_join(t1,0) != 0) _die_("failed... joining thread\n");
 }
 
 void*test5_sig_send(void*arg) {
@@ -501,7 +498,7 @@ void test5_2() {
   pr("sending the main program a signal from a thread while joined... ");
   signal(SIGUSR1,test5_sighandler);
   if ((pthread_create(&t1,0,test5_sig_send,(void*)getpid()))!=0) _die_("failed... (creating a thread)\n");
-  pthread_join(t1,0);
+  if (pthread_join(t1,0) != 0) _die_("failed... joining thread\n");
   if (test5_signaled==0) _die_("failed to hold...\n");
   pr("OK.\n");
 }
@@ -525,14 +522,17 @@ void* test6_libc_exit() {
 }
 
 void test6() {
-  pthread_t t1;
+  pthread_t t1,t2,t3,t4;
   pr("\nTEST 6: thread calls 'exit(42)' :\n\n");
   pr("creating thread that will call exit: ");
   if ((pthread_create(&t1,0,thread_cancel_async,(void*)0))!=0) _die_("failed... (creating a thread)\n");
-  if ((pthread_create(&t1,0,thread_cancel_async,(void*)0))!=0) _die_("failed... (creating a thread)\n");
-  if ((pthread_create(&t1,0,thread_cancel_async,(void*)0))!=0) _die_("failed... (creating a thread)\n");
-  if ((pthread_create(&t1,0,test6_libc_exit,0))!=0) _die_("failed... (creating a thread)\n");
-  pthread_join(t1,0);
+  if ((pthread_create(&t2,0,thread_cancel_async,(void*)0))!=0) _die_("failed... (creating a thread)\n");
+  if ((pthread_create(&t3,0,thread_cancel_async,(void*)0))!=0) _die_("failed... (creating a thread)\n");
+  if ((pthread_create(&t4,0,test6_libc_exit,0))!=0) _die_("failed... (creating a thread)\n");
+  if (pthread_join(t1,0) != 0) _die_("failed... joining thread\n");
+  if (pthread_join(t2,0) != 0) _die_("failed... joining thread\n");
+  if (pthread_join(t3,0) != 0) _die_("failed... joining thread\n");
+  if (pthread_join(t4,0) != 0) _die_("failed... joining thread\n");
   for (t1=0;t1<4;++t1) {
     sleep(2);
     pr("still hanging....\n");
@@ -612,7 +612,7 @@ void test8_2() {
   pthread_t t1;
   pr("IN A THREAD... ");
   if ((pthread_create(&t1,0,test8_1,0))!=0) _die_("failed... (creating a thread)\n");
-  pthread_join(t1,0);
+  if (pthread_join(t1,0) != 0) _die_("failed... joining thread\n");
 }
 
 void test8() {
@@ -642,7 +642,7 @@ void test9_0() {
 void test9_1_0() {
   pthread_t t1;
   if ((pthread_create(&t1,0,test9_0_0,0))!=0) _die_("failed... (creating a thread)\n");
-  pthread_join(t1,0);
+  if (pthread_join(t1,0) != 0) _die_("failed... joining thread\n");
   pr("???\n");
 }
 

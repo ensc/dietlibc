@@ -30,8 +30,6 @@ static void __gen_thread(int nr) {
   }
   else {
     __gen_thread(nr+1);
-    pthread_cancel(t);
-//    usleep(10);
   }
 }
 
