@@ -5,6 +5,9 @@
 #ifdef WANT_TZFILE_PARSER
 extern void __maplocaltime(void);
 extern time_t __tzfile_map(time_t t, int *isdst);
+#else
+extern long int timezone;
+extern int daylight;
 #endif
 
 struct tm* localtime_r(const time_t* t, struct tm* r) {
@@ -15,7 +18,8 @@ struct tm* localtime_r(const time_t* t, struct tm* r) {
 #else
   struct timezone tz;
   gettimeofday(0, &tz);
-  tmp=*t-tz.tz_minuteswest*60L;
+  timezone=tz.tz_minuteswest*60L;
+  tmp=*t-timezone;
 #endif
   return gmtime_r(&tmp,r);
 }
