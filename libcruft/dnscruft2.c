@@ -9,17 +9,13 @@
 #include <unistd.h>
 #include <errno.h>
 #include <arpa/nameser.h>
+#include <resolv.h>
 #include "dietfeatures.h"
 
 extern int h_errno;
 
-static char dnspacket[]="\xfe\xfe\001\000\000\001\000\000\000\000\000\000";
-
 extern void __dns_make_fd(void);
 extern int __dns_fd;
-
-extern int __dns_servers;
-extern struct sockaddr __dns_server_ips[];
 
 extern void __dns_readstartfiles(void);
 
@@ -42,6 +38,7 @@ int __dns_gethostbyx_r(const char* name, struct hostent* result,
   unsigned char *cur;
   unsigned char *max;
   unsigned char packet[512];
+  int size;
   __dns_make_fd();
 
   if (lookfor==1) {
@@ -61,30 +58,8 @@ int __dns_gethostbyx_r(const char* name, struct hostent* result,
   max=buf+buflen;
   names=ips=0;
 
-  memmove(packet,dnspacket,12);
-  *(unsigned short*)packet=rand();
+  if ((size=res_mkquery(QUERY,name,C_IN,lookfor,0,0,0,packet,512))<0) return 1;
   {
-    unsigned char* x;
-    const char* y,* tmp;
-    x=packet+12; y=name;
-    while (*y) {
-      while (*y=='.') ++y;
-      for (tmp=y; *tmp && *tmp!='.'; ++tmp) ;
-      *x=tmp-y;
-      if (!(tmp-y)) break;
-      ++x;
-      if (x>=packet+510-(tmp-y)) { *h_errnop=ERANGE; return 1; }
-      memmove(x,y,tmp-y);
-      x+=tmp-y;
-      if (!*tmp) {
-	*x=0;
-	break;
-      }
-      y=tmp;
-    }
-    *++x= 0; *++x= lookfor;	/* A */
-    *++x= 0; *++x= 1;	/* IN */
-    ++x;
     {
       int i;	/* current server */
       int j;	/* timeout count down */
@@ -94,11 +69,12 @@ int __dns_gethostbyx_r(const char* name, struct hostent* result,
       duh.fd=__dns_fd;
       duh.events=POLLIN;
       for (j=30; j>0; --j) {
-	sendto(__dns_fd,packet,x-packet,0,(struct sockaddr*)&(__dns_server_ips[i]),sizeof(struct sockaddr));
-	if (++i > __dns_servers) i=0;
+	sendto(__dns_fd,packet,size,0,(struct sockaddr*)&(_res.nsaddr_list[i]),sizeof(struct sockaddr));
+	if (++i > _res.nscount) i=0;
 	if (poll(&duh,1,1) == 1) {
 	  /* read and parse answer */
 	  unsigned char inpkg[1500];
+	  char *tmp;
 	  /*int len=*/ read(__dns_fd,inpkg,1500);
 #if 0
 	  {

@@ -89,6 +89,42 @@ typedef enum __ns_class {
 	ns_c_max = 65536
 } ns_class;
 
+/*
+ * Currently defined opcodes.
+ */
+typedef enum __ns_opcode {
+	ns_o_query = 0,		/* Standard query. */
+	ns_o_iquery = 1,	/* Inverse query (deprecated/unsupported). */
+	ns_o_status = 2,	/* Name server status query (unsupported). */
+				/* Opcode 3 is undefined/reserved. */
+	ns_o_notify = 4,	/* Zone change notification. */
+	ns_o_update = 5,	/* Zone update message. */
+	ns_o_max = 6
+} ns_opcode;
+
+/*
+ * Currently defined response codes.
+ */
+typedef	enum __ns_rcode {
+	ns_r_noerror = 0,	/* No error occurred. */
+	ns_r_formerr = 1,	/* Format error. */
+	ns_r_servfail = 2,	/* Server failure. */
+	ns_r_nxdomain = 3,	/* Name error. */
+	ns_r_notimpl = 4,	/* Unimplemented. */
+	ns_r_refused = 5,	/* Operation refused. */
+	/* these are for BIND_UPDATE */
+	ns_r_yxdomain = 6,	/* Name exists */
+	ns_r_yxrrset = 7,	/* RRset exists */
+	ns_r_nxrrset = 8,	/* RRset does not exist */
+	ns_r_notauth = 9,	/* Not authoritative for zone */
+	ns_r_notzone = 10,	/* Zone of record different from zone section */
+	ns_r_max = 11,
+	/* The following are TSIG extended errors */
+	ns_r_badsig = 16,
+	ns_r_badkey = 17,
+	ns_r_badtime = 18
+} ns_rcode;
+
 typedef struct {
         unsigned        id :16;         /* query identification number */
 #if BYTE_ORDER == BIG_ENDIAN

@@ -13,7 +13,7 @@
 /*
  * Global defines and variables for resolver stub.
  */
-#define	MAXNS			3	/* max # name servers we'll track */
+#define	MAXNS			8	/* max # name servers we'll track */
 #define	MAXDFLSRCH		3	/* # default domain levels to try */
 #define	MAXDNSRCH		6	/* max # domains in search path */
 #define	LOCALDOMAINPARTS	2	/* min levels in name that is "local" */

@@ -16,6 +16,7 @@
 
 #ifndef __GNUC__
 #define __attribute__(xyz)
+#define __extension__
 #endif
 
 #define __pure__

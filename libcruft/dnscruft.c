@@ -7,6 +7,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdlib.h>
+#include <resolv.h>
 #include "dietfeatures.h"
 
 int __dns_fd=-1;
@@ -24,9 +25,6 @@ void __dns_make_fd(void) {
   __dns_fd=tmp;
 }
 
-int __dns_servers=0;
-struct sockaddr __dns_server_ips[8];
-
 #ifdef WANT_FULL_RESOLV_CONF
 int __dns_search;
 char *__dns_domains[8];
@@ -36,7 +34,7 @@ void __dns_readstartfiles(void) {
   int fd;
   char *buf=alloca(4096);
   int len;
-  if (__dns_servers>0) return;
+  if (_res.nscount>0) return;
   {
     struct sockaddr_in to;
     char *cacheip=getenv("DNSCACHEIP");
@@ -47,8 +45,8 @@ void __dns_readstartfiles(void) {
       to.sin_port=htons(53);
       to.sin_family=AF_INET;
       if (inet_aton(cacheip,&to.sin_addr)) {
-	memmove(__dns_server_ips,&to,sizeof(struct sockaddr));
-	++__dns_servers;
+	memmove(_res.nsaddr_list,&to,sizeof(struct sockaddr));
+	++_res.nscount;
       }
     }
   }
@@ -71,8 +69,8 @@ void __dns_readstartfiles(void) {
 	    if (inet_aton(tmp,&i.sin_addr)) {
 	      i.sin_family=AF_INET;
 	      i.sin_port=htons(53);
-	      memmove(&__dns_server_ips[__dns_servers],&i,sizeof(struct sockaddr));
-	      if (__dns_servers<8) ++__dns_servers;
+	      memmove(&_res.nsaddr_list[_res.nscount],&i,sizeof(struct sockaddr));
+	      if (_res.nscount<MAXNS) ++_res.nscount;
 	    }
 	  }
 	}
