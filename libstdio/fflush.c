@@ -58,7 +58,7 @@ int __fflush4(FILE *stream,int next) {
  * This is defined here because of the weak symbol ELF semantics */
 int __stdio_outs(const char *s,size_t len);
 int __stdio_outs(const char *s,size_t len) {
-  return fwrite(s,1,(size_t)len,stdout);
+  return fwrite(s,1,(size_t)len,stdout)==len?1:0;
 }
 
 link_warning("fflush","warning: your code uses stdio (7+k bloat).")

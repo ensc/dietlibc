@@ -45,6 +45,7 @@
     adding strndup (GNU Extension)
   fix glob strncpy (R.L. Horn)
   fix regfree (Uwe Ohse)
+  fix puts in full stdio mode (would omit \n)
 
 0.21:
   use gcc's size_t, ptrdiff_t and wchar_t types (Olaf)
