@@ -1,9 +1,10 @@
 #ifndef _UNISTD_H
 #define _UNISTD_H
 
-#include <dirent.h>
 #include <sys/cdefs.h>
+#include <dirent.h>
 #include <sys/types.h>
+#include <sys/time.h>
 #include <getopt.h>
 
 /* Values for the second argument to access.
@@ -114,12 +115,21 @@ uid_t getuid(void) __THROW;
 uid_t geteuid(void) __THROW;
 gid_t getgid(void) __THROW;
 gid_t getegid(void) __THROW;
+int setuid(uid_t uid) __THROW;
+/* int seteuid(uid_t uid) __THROW; */
+int setgid(gid_t gid) __THROW;
+/* int setegid(gid_t gid) __THROW; */
+int setregid(gid_t rgid, gid_t egid) __THROW;
 int setreuid(uid_t ruid, uid_t euid) __THROW;
+#define seteuid(euid) setreuid(-1,euid)
+#define setegid(egid) setregid(-1,egid)
 
 int rename(const char *oldpath, const char *newpath) __THROW;
 int ftruncate(int fd, off_t length) __THROW;
 
 int mkstemp(char *Template) __THROW;
+
+int select(int n, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct timeval *timeout) __THROW;
 
 extern char *__environ[];
 

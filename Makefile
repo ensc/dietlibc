@@ -5,6 +5,8 @@ ARCH=$(shell uname -m | sed 's/i[4-9]86/i386/')
 CFLAGS=-pipe
 CROSS=
 
+CC=gcc
+
 VPATH=lib:libstdio:libugly:libcruft:syscalls.c
 
 SYSCALLOBJ=$(patsubst syscalls.s/%.S,%.o,$(wildcard syscalls.s/*.S))
@@ -31,10 +33,10 @@ PWD=$(shell pwd)
 % :: %,v
 
 %.o: %.S
-	$(CROSS)gcc -I. -Iinclude $(CFLAGS) -c $<
+	$(CROSS)$(CC) -I. -Iinclude $(CFLAGS) -c $<
 
 %.o: %.c
-	$(CROSS)gcc -I. -Iinclude $(CFLAGS) -c $<
+	$(CROSS)$(CC) -I. -Iinclude $(CFLAGS) -c $<
 #	$(CROSS)strip -x -R .comment -R .note $@
 
 DIETLIBC_OBJ = $(SYSCALLOBJ) $(LIBOBJ) $(LIBSTDIOOBJ) $(LIBUGLYOBJ) \
@@ -49,7 +51,7 @@ libdietc.so: dietlibc.a
 $(SYSCALLOBJ): syscalls.h
 
 elftrunc: contrib/elftrunc.c start.o dietlibc.a
-	$(CROSS)gcc -Iinclude $(CFLAGS) -nostdlib -o $@ $^
+	$(CROSS)$(CC) -Iinclude $(CFLAGS) -nostdlib -o $@ $^
 
 djb: compile load
 
@@ -75,10 +77,10 @@ exports: dietlibc.a
 
 .PHONY: t t1
 t:
-	$(CROSS)gcc -g $(CFLAGS) -fno-builtin -nostdlib -Iinclude -o t t.c start.o dietlibc.a -lgcc -Wl,-Map,mapfile
+	$(CROSS)$(CC) -g $(CFLAGS) -fno-builtin -nostdlib -Iinclude -o t t.c start.o dietlibc.a -lgcc -Wl,-Map,mapfile
 
 t1:
-	$(CROSS)gcc -g -o t1 t.c
+	$(CROSS)$(CC) -g -o t1 t.c
 
 install:
 	cp start.o $(INSTALLPREFIX)$(prefix)/lib/dietstart.o

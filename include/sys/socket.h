@@ -34,4 +34,9 @@ int setsockopt(int s, int level, int optname, const void *optval, socklen_t optl
 
 int listen(int s, int backlog) __THROW;
 
+#define SHUT_RD 0
+#define SHUT_WR 1
+#define SHUT_RDWR 2
+int shutdown(int s, int how) __THROW;
+
 #endif

@@ -40,11 +40,14 @@ static int rand() {
 extern double atof(const char *c);
 
 int main(int argc,char *argv[]) {
+  shutdown(0,-1);
+#if 0
   char buf[128];
   strcpy(buf,"/tmp/foo.XXXXXXX");
   printf("%d\n",mkstemp(buf));
   printf("%s\n",buf);
   unlink(buf);
+#endif
 #if 0
   char buf[512]="foo";
   strncat(buf,"barbaz",3);
