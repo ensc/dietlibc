@@ -1198,8 +1198,9 @@ wsym: ; \
 .global sym; \
 .ent sym; \
 sym: \
-	la	$25,__unified_syscall; \
 	li	$2,__NR_##name; \
+	syscall; \
+	la	$25,__unified_syscall; \
 	jr	$25; \
 .end sym
 
@@ -1208,8 +1209,9 @@ sym: \
 .global sym; \
 .ent sym; \
 sym: \
-	la	$25,__unified_syscall; \
 	li	$2,__NR_##name; \
+	syscall; \
+	la	$25,__unified_syscall; \
 	jr	$25; \
 .end sym
 
