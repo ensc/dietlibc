@@ -58,20 +58,24 @@ int fnmatch(const char *pattern, const char *string, int flags) {
 	  if (!strncmp(pattern,"upper:]",7)) {
 	    if (flags&FNM_CASEFOLD?islower(c):isupper(c)) res=1; pattern+=7;
 	  } else
-	  if (!strncmp(pattern,"xdigit:]",8)) { if (isxdigit(c)) res=1; pattern+=8; } else
+	  if (!strncmp(pattern,"xdigit:]",8)) { if (isxdigit(c)) res=1; pattern+=8; } else {
 	    pattern-=2;
-	}
-	if (pattern[1]=='-') {
-	  if (*string>=*pattern && *string<=pattern[2]) res=1;
-	  if (flags&FNM_CASEFOLD) {
-	    if (tolower(*string)>=tolower(*pattern) && tolower(*string)<=tolower(pattern[2])) res=1;
+	    goto invalidclass;
 	  }
-	  pattern+=3;
 	} else {
-	  res=match(*pattern,*string,flags);
-	  ++pattern;
+invalidclass:
+	  if (pattern[1]=='-' && pattern[2]!=']') {
+	    if (*string>=*pattern && *string<=pattern[2]) res=1;
+	    if (flags&FNM_CASEFOLD) {
+	      if (tolower(*string)>=tolower(*pattern) && tolower(*string)<=tolower(pattern[2])) res=1;
+	    }
+	    pattern+=3;
+	  } else {
+	    res=match(*pattern,*string,flags);
+	    ++pattern;
+	  }
 	}
-	if (res ^ neg) {
+	if ((res&&!neg) || ((neg&&!res) && *pattern==']')) {
 	  while (*pattern && *pattern!=']') ++pattern;
 	  return fnmatch(pattern+1,string+1,flags);
 	}
