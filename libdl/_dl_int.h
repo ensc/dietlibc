@@ -56,13 +56,15 @@ int _dl_search(char *buf, int len, const char *filename);
 
 /* _dl_sym.c */
 void *_dl_sym(struct _dl_handle * h, int symbol);
+/* dlsym.c */
+void *_dlsym(void * h, char* symbol);
 
 /* _dl_relocate.c */
 int _dl_relocate(struct _dl_handle* dh, Elf32_Rel *rel, int num);
 
 /* dlerror.c */
 extern int   _dl_error;
-extern char* _dl_error_location;
-extern char* _dl_error_data;
+extern const char* _dl_error_location;
+extern const char* _dl_error_data;
 
 #endif

@@ -3,10 +3,10 @@
 #include "_dl_int.h"
 
 int _dl_error;
-char* _dl_error_location;
-char* _dl_error_data;
+const char* _dl_error_location;
+const char* _dl_error_data;
 
-struct _dl_err_msg {
+static struct _dl_err_msg {
   char *msg;
   int len;
 } _dl_error_msg[] = {
