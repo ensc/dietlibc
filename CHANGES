@@ -31,6 +31,7 @@
   Jeff Garzik contributed a spec file.  I put it in contrib and hope
     everbody knows what to do with it...
   Olaf checked in a ton of libpthread stuff.
+  added mkstemp using /dev/urandom (harder to guess than getpid()).
 
 0.7.2:
   added several prototypes to already implemented functions and
