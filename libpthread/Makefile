@@ -52,6 +52,14 @@ PTHREAD_OBJS = \
 	pthread_mutexattr_init.o \
 	pthread_mutexattr_setkind_np.o \
  \
+	pthread_condattr.o \
+	pthread_cond_broadcast.o \
+	pthread_cond_destroy.o \
+	pthread_cond_init.o \
+	pthread_cond_signal.o \
+	pthread_cond_timedwait.o \
+	pthread_cond_wait.o \
+ \
 	pthread_atfork.o \
 	pthread_sys_alloc.o \
 	pthread_sys_close.o \
@@ -112,7 +120,7 @@ exports: libpthread.a
 .PHONY: test.out
 
 test.out: test.o libpthread.a $(LIBS)
-	$(CROSS)$(CC) -g $(CFLAGS) -nostdlib ../start.o -o $@ $^ ../dietlibc.a -lgcc
+	$(CROSS)$(CC) -g $(CFLAGS) -nostdlib ../bin-$(ARCH)/start.o -o $@ $^ ../bin-$(ARCH)/dietlibc.a -lgcc
 
 
 .PHONY: sparc ppc mips arm alpha i386

@@ -17,6 +17,10 @@ struct _pthread_descr_struct {
   /* runtime handling */
   struct _pthread_descr_struct *joined; /* a joined thread or NULL */
 
+  /* conditional variables */
+  struct _pthread_descr_struct *waitnext; /* an other waiting thread or NULL */
+  int  waiting;			/* internal waiting "lock" */
+
   /* thread/process data */
   int  pid;			/* Process id */
 

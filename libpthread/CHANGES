@@ -1,20 +1,17 @@
 This is the pthread implementation of dietlibc.
 Written from scratch by Olaf Dreesen.
 
-Wed Mar 14 04:28:45 MET 2001
+Thu Apr 12 15:03:42 MEST 2001
 
-I have implemented the "Manager Thread" so that nested thread creation
-works. really ugly stuff... don't look at it unless you're sitting on solid
-ground.
+added conditional variables...
+except pthread_cond_timedwait all should work man-page like
+pthread_cond_timedwait dosen't handle cancel request according to man-page
 
-Mon Mar 12 16:16:00 CET 2001
+Fri Mar 30 18:47:37 MEST 2001
 
-first of all:
-  I strongly suggest NOT to use it yet, it's very, very, ... very
-  experimental. I guess you got the point. there is still much debug code,
-  incomplete functions and unusable states....
+uff found some logic errors and fixed them.
+pthread_create had a problem with user provided stacks.
 
-  I'm still working on the final alpha...
 
 Fri Mar 23 14:09:54 MET 2001
 
@@ -27,8 +24,20 @@ CONSISTENT)
 a public defined symbol on arch X have to be in Y to unless marked...
 that is mainly speaking SCHED.H ! arg....
 
-Fri Mar 30 18:47:37 MEST 2001
 
-uff found some logic errors and fixed them.
-pthread_create had a problem with user provided stacks.
+Wed Mar 14 04:28:45 MET 2001
+
+I have implemented the "Manager Thread" so that nested thread creation
+works. really ugly stuff... don't look at it unless you're sitting on solid
+ground.
+
+
+Mon Mar 12 16:16:00 CET 2001
+
+first of all:
+  I strongly suggest NOT to use it yet, it's very, very, ... very
+  experimental. I guess you got the point. there is still much debug code,
+  incomplete functions and unusable states....
+
+  I'm still working on the final alpha...
 

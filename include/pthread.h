@@ -65,6 +65,43 @@ int pthread_mutex_unlock(pthread_mutex_t *mutex);
 int pthread_mutex_trylock(pthread_mutex_t *mutex);
 int pthread_mutex_destroy(pthread_mutex_t *mutex);
 
+/* Conditions */
+typedef void* pthread_condattr_t;
+
+typedef struct {
+  struct _pthread_fastlock lock;
+  _pthread_descr wait_chain;
+} pthread_cond_t;
+
+#define PTHREAD_COND_INITIALIZER \
+{{0},0}
+
+int pthread_cond_init(pthread_cond_t *cond, pthread_condattr_t *cond_attr);
+int pthread_cond_destroy(pthread_cond_t *cond);
+int pthread_cond_signal(pthread_cond_t *cond);
+int pthread_cond_broadcast(pthread_cond_t *cond);
+int pthread_cond_timedwait(pthread_cond_t *cond, pthread_mutex_t *mutex,
+			   const struct timespec *abstime);
+int pthread_cond_wait(pthread_cond_t *cond, pthread_mutex_t *mutex);
+
+/* only for completeness (always return NULL) */
+int pthread_condattr_init(pthread_condattr_t *attr);
+int pthread_condattr_destroy(pthread_condattr_t *attr);
+int pthread_condattr_getpshared(const pthread_condattr_t *attr, int *pshared);
+int pthread_condattr_setpshared(pthread_condattr_t *attr, int pshared);
+
+/* thread specific variables */
+typedef struct __pthread_key_t {
+  struct __pthread_key_t *next;
+  void (*destructor)(void*);
+  void *thk[PTHREAD_THREADS_MAX];
+} pthread_key_t;
+
+int pthread_key_create(pthread_key_t *key, void (*destructor)(void*));
+int pthread_key_delete(pthread_key_t key);
+int pthread_setspecific(pthread_key_t key, const void *value);
+void *pthread_getspecific(pthread_key_t key);
+
 
 
 /* Attributes for threads.  */
