@@ -1,4 +1,5 @@
 #include "dietfeatures.h"
+#include "PIC.h"
 
 #ifdef __i386__
 .text
@@ -22,15 +23,8 @@ _start:
 	pushl	%eax
 	pushl	%esi
 	pushl	%ecx
-#ifdef __DYN_LIB
-	call	1f
-1:	popl	%ebx
-	addl	$_GLOBAL_OFFSET_TABLE_+[.-1b],%ebx
-	movl	environ@GOT(%ebx),%ecx
-	movl	%eax,(%ecx)
-#else
-	movl	%eax,environ
-#endif
+	PIC_INIT			/* non-PIC: this is an empty line */
+	PUT_VAR %eax, environ, %ecx	/* non-PIC: movl %eax,envrion */
 
 #ifdef WANT_DYNAMIC
 	call	_dyn_start

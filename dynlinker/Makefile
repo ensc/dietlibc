@@ -1,3 +1,4 @@
+CC=gcc
 #CFLAGS = -Wall -g
 CFLAGS = -Wall -Os # -fomit-frame-pointer
 

@@ -1,3 +1,5 @@
+#include "PIC.h"
+
 .text
 
 .global __write1
@@ -16,17 +18,20 @@ __write1:
 	incl	%ecx
 	incl	%ecx			# __write2: ecx=2, __write1: ecx=1
 	xorl	%edx,%edx
-	decl	%edx	
+	decl	%edx
 .Lnext:	incl	%edx
 	cmpb	%ch,(%edx,%eax)		# ch=0, da bei beiden Filedescriptoren Bits 15:8 0 sind
 	jnz	.Lnext			# Stringlänge in edx, ohne eax zerstört zu haben
+	PIC_SAVE		# non-PIC: empty line
+	PIC_INIT		# non-PIC: empty line
 	pushl	%edx
 	pushl	%eax
 	pushl	%ecx
 #ifdef __DYN_LIB
-	call 	write@PLT
+	call	write@PLT
 #else
-	call 	write			# alles ruf uf dn Stack und ab damit
+	call	write			# alles ruf uf dn Stack und ab damit
 #endif
 	addl	$12,%esp		# und das leidvolle Putzen
+	PIC_RESTORE		# non-PIC: empty line
 	ret

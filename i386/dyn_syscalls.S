@@ -8,6 +8,7 @@
 
 #include <dietfeatures.h>
 #include "syscalls.h"
+#include "PIC.h"
 
 /* ok now include all syscalls.s (*.S) and sysdep *.S */
 
@@ -84,9 +85,7 @@ __unified_syscall:
 
 	/* PIC-code Ohhhhh My. */
 	push	%eax
-	call	1f
-1:	popl	%ebx
-	addl	$_GLOBAL_OFFSET_TABLE_+[.-1b], %ebx
+	PIC_INIT
 	call	__errno_location@PLT
 	popl	%ebx
 	movl	%ebx,(%eax)

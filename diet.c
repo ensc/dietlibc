@@ -209,16 +209,18 @@ pp:
       e=alloca(strlen(platform)+20);
 #ifdef __DYN_LIB
       strcpy(d,platform);
+      strcpy(e,platform);
       if (shared)
 	strcat(d,"/dyn_so_start.o");
 #ifdef INSTALLVERSION
       else
 	strcat(d,"/dyn_dstart.o");
+      strcat(e,"/dyn_dstop.o");
 #else
       else
 	strcat(d,"/dyn_start.o");
+      strcat(e,"/dyn_stop.o");
 #endif
-      strcpy(e,platform); strcat(e,"/dyn_dstop.o");
 #else
       strcpy(d,platform); strcat(d,"/dyn_start.o");
       strcpy(e,platform); strcat(e,"/dyn_stop.o");
@@ -282,7 +284,7 @@ pp:
 	*dest++=f;
       }
 #else
-      if (_link) { *dest++="-Wl,-dynamic-linker=/lib/diet-linux.so"; }
+      if (_link) { *dest++="-Wl,-dynamic-linker=" DIETHOME "/diet-linux.so"; }
 #endif
 #endif
       *dest=0;

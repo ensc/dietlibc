@@ -15,7 +15,7 @@ static void __do_global_ctors_aux(void)
   for(cf=((__CTOR_END__)-1); (*cf) != (structor)-1; cf--) (*cf)();
 }
 
-__attribute__((section(".init"))) void _init();
+void _init() __attribute__((section(".init")));
 __attribute__((section(".init"))) void _init()
 {
   __do_global_ctors_aux();

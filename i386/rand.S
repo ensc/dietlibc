@@ -1,3 +1,5 @@
+#include "PIC.h"
+
 .data
 .align 4
 .type	seed,@object
@@ -15,9 +17,7 @@ rand:
 random:
 #ifdef __DYN_LIB
 	pushl	%ebx
-	call	1f
-1:	popl	%ebx
-	addl	$_GLOBAL_OFFSET_TABLE_+[.-1b],%ebx
+	PIC_INIT
 	imull	$1103515245,seed@GOTOFF(%ebx),%eax
 #else
 	imull	$1103515245,seed,%eax
@@ -43,9 +43,7 @@ srand:
 srandom:
 #ifdef __DYN_LIB
 	pushl	%ebx
-	call	1f
-1:	popl	%ebx
-	addl	$_GLOBAL_OFFSET_TABLE_+[.-1b],%ebx
+	PIC_INIT
 #endif
 	movl	4(%esp),%eax
 	jmp	.Lstore

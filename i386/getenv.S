@@ -1,3 +1,5 @@
+#include "PIC.h"
+
 .text
 .globl getenv
 getenv:
@@ -14,7 +16,7 @@ getenv:
 	pushl %ecx
 	movl (%edx), %ecx
 
-	movl environ, %esi
+	GET_1VAR environ, %esi		# non-PIC: movl environ, %esi
 	jmp .Lloop
 
 .Lprepare:

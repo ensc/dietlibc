@@ -19,7 +19,7 @@ void*_dl_sym_search(struct _dl_handle*dh,int symbol) {
 //    if (!tmp->flag_global) continue;
     DEBUG("_dl_sym_search: searching in %s\n",tmp->name);
     sym=_dlsym((void*)tmp,name);
-    if (sym) DEBUG("_dl_sym_search: found: %s @ %08lx\n",name,(long)sym);
+    if (sym) { DEBUG("_dl_sym_search: found: %s @ %08lx\n",name,(long)sym); }
   }
 //  if (sym) return sym;
 //  return &dummy; // sym;

@@ -30,9 +30,8 @@ thread_start:
 	br	%r1
 .L1:	.long	_exit-.L0
 
-
 .Lerror:
 	basr	%r1, %r0
 .L0:	al	%r1, [.L1-.L0](%r1)
-	al	%r1
+	br	%r1
 .L1:	.long	__error_unified_syscall-.L0
