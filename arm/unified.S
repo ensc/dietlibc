@@ -1,6 +1,17 @@
 #include <dietfeatures.h>
 
+#include "syscalls.h"
 .text
+.weak exit
+.type exit,function
+exit:
+.gloabl _exit
+.type _exit,function
+_exit:
+	mov	ip, sp
+	stmfd	sp!, {r4, r5, r6}
+	ldmia	ip,  {r4, r5, r6}
+	swi	$__NR_exit
 .global __unified_syscall
 __unified_syscall:
 	ldmfd	sp!, {r4, r5, r6}

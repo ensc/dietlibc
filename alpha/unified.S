@@ -1,5 +1,11 @@
 #include <dietfeatures.h>
+#include "syscalls.h"
 
+.weak exit
+exit:
+.global _exit
+_exit:
+	lda	$0, __NR_exit
 .global __unified_syscall
 __unified_syscall:
 	callsys

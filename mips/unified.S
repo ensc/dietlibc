@@ -1,7 +1,14 @@
 #include <dietfeatures.h>
+#include "syscalls.h"
 
 	.text
 	.align	2
+	.weak exit
+exit:
+	.global _exit
+	.ent _exit
+_exit:
+	li	$2,__NR_exit
 	.globl	__unified_syscall
 	.ent	__unified_syscall
 __unified_syscall:

@@ -1,6 +1,14 @@
 #include <dietfeatures.h>
+#include "syscalls.h"
 
 .text
+.type exit,@function
+.weak exit
+exit:
+.type _exit,@function
+.global _exit
+_exit:
+	li	0,__NR_exit
 .global __unified_syscall
 __unified_syscall:
 	sc
