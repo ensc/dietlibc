@@ -1,7 +1,11 @@
 #include "start.h"
+#include <asm/errno.h>
+#include <asm/unistd.h>
 
 .text
+.align 2
 .global __clone
+.ent	__clone
 .type __clone,@function
 __clone:
 	.set noreorder
@@ -12,7 +16,7 @@ __clone:
 
 	li	$0, EINVAL
 	beqz	$4, .Lerror
-	begz	$5, .Lerror
+	beqz	$5, .Lerror
 
 	subu	$5, 32		/* resterve some space */
 	sw	$4, 0($5)	/* save function pointer */
@@ -22,13 +26,16 @@ __clone:
 	li	$2, __NR_clone
 	syscall
 
-	bnez	$7, error
+	bnez	$7, .Lerror
 	beqz	$2, .Lstart
 
-	ret
+	jr	$31
+	.cprestore
+.end	__clone
 
 .Lerror:
-	j	error_unified_syscall
+	la	$25, error_unified_syscall
+	jr	$25
 
 .Lstart:
 	lw	$25, 0($29)
