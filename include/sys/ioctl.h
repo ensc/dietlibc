@@ -15,6 +15,8 @@
 #include <sys/mips-ioctl.h>
 #elif defined(__powerpc__)
 #include <sys/ppc-ioctl.h>
+#elif defined(__s390__)
+#include <sys/s390-ioctl.h>
 #endif
 
 int ioctl(int d, int request, ...) __THROW;

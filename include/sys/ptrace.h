@@ -73,6 +73,11 @@ struct pt_regs {
 /* options set using PTRACE_SETOPTIONS */
 #define PTRACE_O_TRACESYSGOOD     0x00000001
 
+#elif defined(__s390__)
+
+#warning I have no idea how I am supposed to support sys/ptrace.h on S390
+#include <s390/ptrace.h>
+
 #elif defined(__arm__)
 
 #warning I have no idea how I am supposed to support sys/ptrace.h on ARM

@@ -35,6 +35,11 @@
 
 #endif
 
+#ifdef __s390__
+
+#include "s390/syscalls.h"
+
+#endif
 
 #ifdef __alpha__
 

@@ -6,7 +6,9 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#if defined(__i386__)
+#define F_LINUX_SPECIFIC_BASE	1024
+
+#if defined(__i386__) || defined(__s390__)
 
 /* open/fcntl - O_SYNC is only implemented on blocks devices and on files
    located on an ext2 file system */
@@ -40,6 +42,10 @@
 #define F_GETOWN	9	/*  for sockets. */
 #define F_SETSIG	10	/*  for sockets. */
 #define F_GETSIG	11	/*  for sockets. */
+
+#define F_GETLK64	12	/*  using 'struct flock64' */
+#define F_SETLK64	13
+#define F_SETLKW64	14
 
 #define FD_CLOEXEC	1	/* actually anything with low bit set goes */
 

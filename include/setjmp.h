@@ -16,6 +16,27 @@ typedef int __jmp_buf[6];
 # define JB_SIZE 24
 #endif
 
+#ifdef __s390__
+#ifndef __ASSEMBLER__
+typedef struct {
+  long int gregs[10];
+  long fpregs[4];
+} __jmp_buf[1];
+#endif
+#define __JB_GPR6	0
+#define __JB_GPR7	1
+#define __JB_GPR8	2
+#define __JB_GPR9	3
+#define __JB_GPR10	4
+#define __JB_GPR11	5
+#define __JB_GPR12	6
+#define __JB_GPR13	7
+#define __JB_GPR14	8
+#define __JB_GPR15	9
+
+#define _JMPBUF_UNWINDS(jmpbuf, address) ((int) (address) < (jmpbuf)->gregs[__JB_GPR15])
+#endif
+
 #ifdef __alpha__
 #define JB_S0  0
 #define JB_S1  1
