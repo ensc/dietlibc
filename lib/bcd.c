@@ -21,16 +21,16 @@ static long double  powers [] = {
  *  Werte ab 1.
  */
 
-int  __decompose_floatp ( long double number,
+int  __decompose_floatp ( long double number, 
                           unsigned char* digits, unsigned int precision )
 {
     int     ret = 0;
     int     i;
     double  tmp;
-   
+    
     if ( number > 0.L ) {
-   
-        // Exponent abtrennen
+    
+    	// Exponent abtrennen
         if ( number >= 10.L )
             for ( i = sizeof(powers)/sizeof(*powers)-1; i >= 0; i--)
                 if ( number >= powers [i] ) {
@@ -44,13 +44,13 @@ int  __decompose_floatp ( long double number,
                    ret -= 1 << i;
                 }
 
-        // Runden (ohne Geradezahlregel => Bug)
+	// Runden (ohne Geradezahlregel => Bug)
         tmp = 5.;
         for ( i = 0; i < precision; i++ )
             tmp *= 0.1;
-       
+        
         number += tmp;
-               
+                
         // Dabei kann die Zahl in die nächste Dekade reinrutschen ...
         if ( number >= 10.L ) {
             number = 1.L;
@@ -64,7 +64,7 @@ int  __decompose_floatp ( long double number,
         number     = (number - i) * 10.L;
         *digits++  = '0' + i;
     }
-   
+    
     // Exponent zurück
     return ret;
 }
@@ -87,21 +87,21 @@ int  __decompose_floatp ( long double number,
  *  sollte man mittels memset() dieses vorher initialsieren.
  */
 
-char*  __decompose_fixp ( long double number,
-                          unsigned char* digits_int , unsigned int precision_int,
+char*  __decompose_fixp ( long double number, 
+                          unsigned char* digits_int , unsigned int precision_int, 
                           unsigned char* digits_frac, unsigned int precision_frac )
 {
     long long int  integer;
     double         tmp;
     int            i;
-   
+    
     // Runden (ohne Geradezahlregel => Bug)
     tmp = 0.5;
     for ( i = 0; i < precision_frac; i++ )
         tmp *= 0.1;
-   
+    
     number += tmp;
-   
+    
     integer = number;
     number -= integer;
 
@@ -110,20 +110,20 @@ char*  __decompose_fixp ( long double number,
         number  *= 10.L;
         i        = (int) number;
         number  -= i;
-        *digits_frac++ 
-                 = '0' + i;
+        *digits_frac++  
+	         = '0' + i;
     }
 
     // Vorkommastellen
     while ( precision_int ) {
         i        = (int) (integer % 10);
         integer /= 10;
-        digits_int [--precision_int]
+        digits_int [--precision_int] 
                  = '0' + i;
         if ( integer == 0 )
             break;
     }
-   
+    
     return digits_int + precision_int;
 }
 
@@ -133,7 +133,7 @@ char*  __decompose_fixp ( long double number,
 #include <stdio.h>
 #include <math.h>
 
-long double  test [] = {
+long double  test [] = { 
     1, M_PI, 123, 123456789, 12345678901234567, 1e300, 0.00123456789, 1.234567890123456e-300, 0
 };
 
@@ -146,26 +146,26 @@ int main ( void )
     char   buff2 [32];
     char*  retp;
     int    ret;
-   
+    
     for ( i = 0; i < sizeof(test)/sizeof(*test); i++ ) {
         printf ("\n*** %30.20Lf ***\n\n", test[i] );
-       
-        for ( j = 0; j <= 20; j++ ) {
-            memset ( buff1, 0, sizeof(buff1) );
-            ret = __decompose_floatp ( test[i], buff1, j );
-            printf ( "floatp(%2u) = <%sE%+d>\n", j, buff1, ret );
-        }
-        for ( j = 0; j <= 20; j++ ) {
-            for ( k = 0; k <= 20; k++ ) {
-                memset ( buff1, 0, sizeof(buff1) );
-                memset ( buff2, 0, sizeof(buff2) );
-                retp = __decompose_fixp ( test[i], buff1, j, buff2, k );
-                printf ( "fixp(%2u,%2u) = <%s.%s>\n", j, k, retp, buff2 );
-            }
-        }
-           
+        
+	for ( j = 0; j <= 20; j++ ) {
+	    memset ( buff1, 0, sizeof(buff1) );
+	    ret = __decompose_floatp ( test[i], buff1, j );
+	    printf ( "floatp(%2u) = <%sE%+d>\n", j, buff1, ret );
+	}
+	for ( j = 0; j <= 20; j++ ) {
+	    for ( k = 0; k <= 20; k++ ) {
+	        memset ( buff1, 0, sizeof(buff1) );
+	        memset ( buff2, 0, sizeof(buff2) );
+	        retp = __decompose_fixp ( test[i], buff1, j, buff2, k );
+ 	        printf ( "fixp(%2u,%2u) = <%s.%s>\n", j, k, retp, buff2 );
+ 	    }
+	}
+	    
     }
-   
+    
     return 0;
 }
 
