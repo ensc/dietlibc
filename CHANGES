@@ -34,6 +34,7 @@
   add nan and +-inf handling in __dtostr
   add _SC_NGROUPS_MAX support to sysconf (Felix J. Ogris)
   make assert() use expect(), slight optimization
+  add i386 vfork (Thomas Ogrisegg)
 
 0.21:
   use gcc's size_t, ptrdiff_t and wchar_t types (Olaf)
