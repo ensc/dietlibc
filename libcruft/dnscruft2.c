@@ -61,7 +61,7 @@ int __dns_gethostbyx_r(const char* name, struct hostent* result,
   max=buf+buflen;
   names=ips=0;
 
-  if ((size=res_query(name,C_IN,lookfor,inpkg,512))<0) return -1;
+  if ((size=res_query(name,C_IN,lookfor,inpkg,512))<0) { *h_errnop=HOST_NOT_FOUND; return -1; }
   {
     tmp=inpkg+12;
     {
