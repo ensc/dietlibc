@@ -32,4 +32,6 @@ typedef __sighandler_t sig_t;
 #define NSIG _NSIG
 #endif
 
+#define killpg(pgrp,sig) kill(-pgrp,sig)
+
 #endif

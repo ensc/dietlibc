@@ -52,6 +52,7 @@
   fixes to bsearch and the regular expressions.
   add fake herror.
   add scandir and alphasort.
+  add killpg
 
 0.9:
   fixed initgroups (oops)

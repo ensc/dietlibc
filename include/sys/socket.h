@@ -45,13 +45,30 @@ int listen(int s, int backlog) __THROW;
 #define SHUT_RDWR 2
 int shutdown(int s, int how) __THROW;
 
-#if 0
+/* currently not supported: */
+#define NI_NOFQDN 1
+
+#define NI_NUMERICHOST 2
+#define NI_NAMEREQD 4
+#define NI_NUMERICSERV 8
+#define NI_DGRAM 16
+
+struct addrinfo {
+  int     ai_flags;
+  int     ai_family;
+  int     ai_socktype;
+  int     ai_protocol;
+  size_t  ai_addrlen;
+  struct sockaddr *ai_addr;
+  char   *ai_canonname;
+  struct addrinfo *ai_next;
+};
+
 int getnameinfo(const struct sockaddr *sa, socklen_t salen, char *host,
 		size_t hostlen, char *serv, size_t servlen, int flags) __THROW;
 int getaddrinfo(const char *node, const char *service, const struct
 		addrinfo *hints, struct addrinfo **res) __THROW;
 void freeaddrinfo(struct addrinfo *res) __THROW;
 char *gai_strerror(int errcode) __THROW;
-#endif
 
 #endif
