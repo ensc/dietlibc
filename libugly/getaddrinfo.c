@@ -33,7 +33,7 @@ int getaddrinfo(const char *node, const char *service, const struct addrinfo *hi
 	h.h_name=0;
 	h.h_addr_list[0]=buf;
 	memset(buf,0,16);
-	if (hints && !(hints->ai_flags&AI_PASSIVE)) {
+	if (!hints || !(hints->ai_flags&AI_PASSIVE)) {
 	  if (family==AF_INET) {
 	    buf[0]=127; buf[3]=1;
 	  } else

@@ -87,11 +87,46 @@ void foo(int tmp,...) {
 extern int __lltostr(char *s, int size, unsigned long long i, int base, char UpCase);
 
 int main(int argc,char *argv[]) {
+  printf("foo\n");
+#if 0
+  char strport[10];
+  int i;
+  for (i=0; i<10; ++i) strport[i]=i+'0';
+  snprintf( strport, sizeof(strport), "%d", 80 );
+  puts(strport);
+#endif
+#if 0
+  struct addrinfo *ai;
+  struct addrinfo hints;
+  char buf[16];
+  memset(&hints,0,sizeof(hints));
+  hints.ai_family = AF_UNSPEC;
+  hints.ai_flags = AI_PASSIVE;
+  hints.ai_socktype = SOCK_STREAM;
+  printf("%d\n",getaddrinfo(0,"80",&hints,&ai));
+  while (ai) {
+    printf("found host %s, port %d, family %s, socktype %s\n",ai->ai_canonname,
+	   ntohs(ai->ai_family==AF_INET6?((struct sockaddr_in6*)ai->ai_addr)->sin6_port:
+				   ((struct sockaddr_in*)ai->ai_addr)->sin_port),
+	   ai->ai_family==AF_INET6?"PF_INET6":"PF_INET",
+	   ai->ai_socktype==SOCK_STREAM?"SOCK_STREAM":"SOCK_DGRAM");
+    {
+      char buf[100];
+      inet_ntop(ai->ai_family,ai->ai_family==AF_INET6?
+		(char*)&(((struct sockaddr_in6*)ai->ai_addr)->sin6_addr):
+		(char*)&(((struct sockaddr_in*)ai->ai_addr)->sin_addr),buf,100);
+      printf("  %s\n",buf);
+    }
+    ai=ai->ai_next;
+  }
+#endif
 #if 0
   char buf[101];
   __dtostr(M_PI,buf,100,6);
 #endif
+#if 0
   printf("%d\n",strcasecmp("foo","FOO"));
+#endif
 #if 0
   printf("%.24s", "Sun Jan  2 08:29:13 1994\n");
 #endif

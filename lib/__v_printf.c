@@ -15,7 +15,7 @@ static inline int skip_to(const unsigned char *format) {
   return nr;
 }
 
-#define A_WRITE(fn,buf,sz)	((fn)->put((void*)(buf),1,(sz),(fn)->data))
+#define A_WRITE(fn,buf,sz)	((fn)->put((void*)(buf),(sz),(fn)->data))
 
 static char* pad_line[16]= { "                ", "0000000000000000", };
 static inline int write_pad(struct arg_printf* fn, int len, char padwith) {

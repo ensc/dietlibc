@@ -74,7 +74,7 @@
     Thanks, Oden Eriksson
   Added a float.h so configure believes we have ANSI header files.
   Fix a lot more stdio bugs that Uwe Ohse pointed out.
-  Olaf: has added a new scanf and printf core that is sutable for all
+  Olaf: has added a new scanf and printf core that is suitable for all
     scanf and printf function implementations
   Imported a few more functions and optimizations from Frank Klemm (he
     also rewrote dtostr to have more precision)

@@ -350,7 +350,7 @@ const char *gai_strerror(int errcode) __THROW;
 #define SIOCGIFMTU	0x8921		/* get MTU size			*/
 #define SIOCSIFMTU	0x8922		/* set MTU size			*/
 #define SIOCSIFNAME	0x8923		/* set interface name */
-#define	SIOCSIFHWADDR	0x8924		/* set hardware address 	*/
+#define SIOCSIFHWADDR	0x8924		/* set hardware address 	*/
 #define SIOCGIFENCAP	0x8925		/* get/set encapsulations       */
 #define SIOCSIFENCAP	0x8926		
 #define SIOCGIFHWADDR	0x8927		/* Get hardware address		*/
@@ -363,7 +363,7 @@ const char *gai_strerror(int errcode) __THROW;
 #define SIOCSIFPFLAGS	0x8934		/* set/get extended flags set	*/
 #define SIOCGIFPFLAGS	0x8935
 #define SIOCDIFADDR	0x8936		/* delete PA address		*/
-#define	SIOCSIFHWBROADCAST	0x8937	/* set hardware broadcast addr	*/
+#define SIOCSIFHWBROADCAST	0x8937	/* set hardware broadcast addr	*/
 #define SIOCGIFCOUNT	0x8938		/* get number of devices */
 
 #define SIOCGIFBR	0x8940		/* Bridging support		*/
