@@ -11,6 +11,7 @@
     architectures)!
   Andreas Krennmair sent a patch to add the BSD regex interface to
     libcompat
+  add contrib/dprof.c, also from Andreas.
 
 0.16:
   "diet -v" or "diet -Os" segfaulted without further arguments.
