@@ -114,7 +114,7 @@
 #define SIGURG		29
 #define SIGPWR		30
 #define SIGUNUSED	31
-
+#define SIGRESERVE	SIGUNUSE
 #define SIGXCPU		33
 #define SIGXFSZ		34
 #define SIGSTKFLT	36
