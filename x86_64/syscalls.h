@@ -248,6 +248,16 @@
 #define __NR_tkill	200	/* 2.5 only */
 #define __NR_time		201
 #define __NR_futex		202 /* 2.5 only */
+#define __NR_sched_setaffinity    203
+#define __NR_sched_getaffinity     204
+#define __NR_set_thread_area	205
+#define __NR_io_setup	206
+#define __NR_io_destroy	207
+#define __NR_io_getevents	208
+#define __NR_io_submit	209
+#define __NR_io_cancel	210
+#define __NR_get_thread_area	211
+#define __NR_lookup_dcookie	212
 
 #define __NR_syscall_max __NR_futex
 

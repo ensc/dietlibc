@@ -230,6 +230,9 @@ __unified_syscall:
 #include "../syscalls.s/ptrace.S"
 #include "../syscalls.s/truncate64.S"
 #include "../syscalls.s/ftruncate64.S"
+#include "../syscalls.s/epoll_create.S"
+#include "../syscalls.s/epoll_ctl.S"
+#include "../syscalls.s/epoll_wait.S"
 
 #undef __PIC__
 #undef __socketcall

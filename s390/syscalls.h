@@ -220,7 +220,40 @@
 #define __NR_madvise		219
 #define __NR_madvise1		219	/* delete when C lib stub is removed */
 #define __NR_getdents64		220
-//#define __NR_fcntl64		221
+#define __NR_fcntl64		221
+#define __NR_readahead		222
+#define __NR_sendfile64		223
+#define __NR_setxattr		224
+#define __NR_lsetxattr		225
+#define __NR_fsetxattr		226
+#define __NR_getxattr		227
+#define __NR_lgetxattr		228
+#define __NR_fgetxattr		229
+#define __NR_listxattr		230
+#define __NR_llistxattr		231
+#define __NR_flistxattr		232
+#define __NR_removexattr	233
+#define __NR_lremovexattr	234
+#define __NR_fremovexattr	235
+#define __NR_gettid		236
+#define __NR_tkill		237
+#define __NR_futex		238
+#define __NR_sched_setaffinity	239
+#define __NR_sched_getaffinity	240
+#define __NR_security		241	/* syscall for security modules */
+/*
+ * Number 242 is reserved for tux
+ */
+#define __NR_io_setup		243
+#define __NR_io_destroy		244
+#define __NR_io_getevents	245
+#define __NR_io_submit		246
+#define __NR_io_cancel		247
+#define __NR_exit_group		248
+#define __NR_epoll_create	249
+#define __NR_epoll_ctl		250
+#define __NR_epoll_wait		251
+#define __NR_set_tid_address	252
 
 #define syscall_weak(name,wsym,sym) \
 .text; \

@@ -221,6 +221,42 @@
 #define __NR_madvise1		219	/* delete when C lib stub is removed */
 #define __NR_getdents64		220
 #define __NR_fcntl64		221
+#define __NR_security		223	/* syscall for security modules */
+#define __NR_gettid		224
+#define __NR_readahead		225
+#define __NR_setxattr		226
+#define __NR_lsetxattr		227
+#define __NR_fsetxattr		228
+#define __NR_getxattr		229
+#define __NR_lgetxattr		230
+#define __NR_fgetxattr		231
+#define __NR_listxattr		232
+#define __NR_llistxattr		233
+#define __NR_flistxattr		234
+#define __NR_removexattr	235
+#define __NR_lremovexattr	236
+#define __NR_fremovexattr	237
+#define __NR_tkill		238
+#define __NR_sendfile64		239
+#define __NR_futex		240
+#define __NR_sched_setaffinity	241
+#define __NR_sched_getaffinity	242
+#define __NR_set_thread_area	243
+#define __NR_get_thread_area	244
+#define __NR_io_setup		245
+#define __NR_io_destroy		246
+#define __NR_io_getevents	247
+#define __NR_io_submit		248
+#define __NR_io_cancel		249
+#define __NR_alloc_hugepages	250
+#define __NR_free_hugepages	251
+#define __NR_exit_group		252
+#define __NR_lookup_dcookie	253
+#define __NR_sys_epoll_create	254
+#define __NR_sys_epoll_ctl	255
+#define __NR_sys_epoll_wait	256
+#define __NR_remap_file_pages	257
+#define __NR_set_tid_address	258
 
 #define syscall_weak(name,wsym,sym) \
 .text; \

@@ -193,6 +193,35 @@
 #define __NR_getdents64			1214
 #define __NR_getunwind			1215
 #define __NR_readahead			1216
+#define __NR_setxattr			1217
+#define __NR_lsetxattr			1218
+#define __NR_fsetxattr			1219
+#define __NR_getxattr			1220
+#define __NR_lgetxattr			1221
+#define __NR_fgetxattr			1222
+#define __NR_listxattr			1223
+#define __NR_llistxattr			1224
+#define __NR_flistxattr			1225
+#define __NR_removexattr		1226
+#define __NR_lremovexattr		1227
+#define __NR_fremovexattr		1228
+#define __NR_tkill			1229
+#define __NR_futex			1230
+#define __NR_sched_setaffinity		1231
+#define __NR_sched_getaffinity		1232
+#define __NR_security			1233
+#define __NR_alloc_hugepages		1234
+#define __NR_free_hugepages		1235
+#define __NR_exit_group			1236
+#define __NR_lookup_dcookie		1237
+#define __NR_io_setup			1238
+#define __NR_io_destroy			1239
+#define __NR_io_getevents		1240
+#define __NR_io_submit			1241
+#define __NR_io_cancel			1242
+#define __NR_epoll_create		1243
+#define __NR_epoll_ctl			1244
+#define __NR_epoll_wait			1245
 
 #define syscall(name, sym) \
 .text; \

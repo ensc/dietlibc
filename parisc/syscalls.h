@@ -217,6 +217,12 @@
 #define __NR_ftruncate64        (__NR_Linux + 200)
 #define __NR_getdents64         (__NR_Linux + 201)
 #define __NR_fcntl64            (__NR_Linux + 202)
+#define __NR_attrctl            (__NR_Linux + 203)
+#define __NR_acl_get            (__NR_Linux + 204)
+#define __NR_acl_set            (__NR_Linux + 205)
+#define __NR_gettid             (__NR_Linux + 206)
+#define __NR_readahead          (__NR_Linux + 207)
+#define __NR_tkill		(__NR_Linux + 208)
 
 #define __NR_Linux_syscalls     202
 
