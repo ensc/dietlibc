@@ -1,3 +1,3 @@
 #include "syscalls.h"
 
-syscall(ptrace,ptrace)
+syscall(ptrace,__diet_ptrace)

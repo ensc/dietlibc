@@ -2,6 +2,8 @@
   "diet -v" or "diet -Os" segfaulted without further arguments.
   Andre found two very embarassing bugs in my four lines of md5 glue.
     I need to get more sleep.
+  Thanks Ogrisegg found that ptrace does not work as documented and
+    provided a wrapper that emulates the glibc behaviour.
 
 0.15:
   vfork sucks.  I reverted to the old behavior where vfork==fork.

@@ -12,9 +12,13 @@ __clone:
 	moveq	r0, #-EINVAL	/* if one is not available set errno value */
 	beq	.Lerror		/* if error jump */
 
+#if 0
 	sub	r1, r1, #8	/* reserve 2 words on child-stack */
 	str	r3, [r1, #4]	/* function parameter */
 	str	r0, [r1]	/* save function pointer */
+#else
+	stmdb   r1!,{ r0, r3 }	/* Dirk Engling said this is equivalent */
+#endif
 
 	mov	r0, r2		/* move flags to r0 */
 	swi	__NR_clone	/* syscall: clone */

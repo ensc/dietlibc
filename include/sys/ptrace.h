@@ -7,6 +7,7 @@
 #define PTRACE_PEEKTEXT		   1
 #define PTRACE_PEEKDATA		   2
 #define PTRACE_PEEKUSR		   3
+#define PTRACE_PEEKUSER		   PTRACE_PEEKUSR
 #define PTRACE_POKETEXT		   4
 #define PTRACE_POKEDATA		   5
 #define PTRACE_POKEUSR		   6
@@ -389,6 +390,6 @@ struct pt_regs {
 
 #endif
 
-extern long int ptrace (int request, ...) __THROW;
+extern long int ptrace(int request, ...) __THROW;
 
 #endif
