@@ -1,8 +1,6 @@
 #ifndef _PTHREAD_H
 #define _PTHREAD_H 1
 
-/* Most of this is taken from Linuxthreads */
-
 #include <sched.h>
 #include <signal.h>
 #include <setjmp.h>
@@ -12,28 +10,58 @@
 #define MAX_SPIN_COUNT		50
 #define SPIN_SLEEP_DURATION	2000001
 
+typedef struct _pthread_descr_struct *_pthread_descr;
+typedef unsigned long int pthread_t;
+
 /* Fast locks (not abstract because mutexes and conditions aren't abstract). */
 struct _pthread_fastlock {
   int __status;			/* "Free" or "taken" or head of waiting list */
   int __spinlock;		/* For compare-and-swap emulation */
 };
 
-typedef struct _pthread_descr_struct *_pthread_descr;
-
 /* Mutexes (not abstract because of PTHREAD_MUTEX_INITIALIZER).  */
 typedef struct {
   int reserved;			/* Reserved for future use */
-  int count;			/* Depth of recursive locking */
+  unsigned int count;		/* Depth of recursive locking */
   _pthread_descr owner;		/* Owner thread (if recursive or errcheck) */
   int kind;			/* Mutex kind: fast, recursive or errcheck */
   struct _pthread_fastlock lock;/* Underlying fast lock */
 } pthread_mutex_t;
 
-#define PTHREAD_MUTEX_INITIALIZER	{0, 0, 0, 0, {0, 0}}
+enum {
+  PTHREAD_MUTEX_FAST_NP,
+  PTHREAD_MUTEX_RECURSIVE_NP,
+  PTHREAD_MUTEX_ERRORCHECK_NP,
+};
+
+enum
+{
+  PTHREAD_PROCESS_PRIVATE,
+#define PTHREAD_PROCESS_PRIVATE PTHREAD_PROCESS_PRIVATE
+  PTHREAD_PROCESS_SHARED
+#define PTHREAD_PROCESS_SHARED  PTHREAD_PROCESS_SHARED
+};
+
+#define PTHREAD_MUTEX_INITIALIZER \
+{0, 0, 0, PTHREAD_MUTEX_FAST_NP, {0, 0}}
+
+#define PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP \
+{0, 0, 0, PTHREAD_MUTEX_RECURSIVE_NP, {0, 0}}
+
+#define PTHREAD_ERRORCHECK_MUTEX_INITIALIZER_NP \
+{0, 0, 0, PTHREAD_MUTEX_ERRORCHECK_NP, {0, 0}}
 
 typedef struct {
   int __mutexkind;
 } pthread_mutexattr_t;
+
+int pthread_mutex_init(pthread_mutex_t *mutex,
+		const pthread_mutexattr_t *mutexattr);
+int pthread_mutex_lock(pthread_mutex_t *mutex);
+int pthread_mutex_unlock(pthread_mutex_t *mutex);
+int pthread_mutex_trylock(pthread_mutex_t *mutex);
+int pthread_mutex_destroy(pthread_mutex_t *mutex);
+
 
 
 /* Attributes for threads.  */
@@ -50,7 +78,29 @@ typedef struct
   unsigned long __stacksize;
 } pthread_attr_t;
 
-typedef unsigned long int pthread_t;
+enum
+{
+  PTHREAD_CREATE_JOINABLE,
+#define PTHREAD_CREATE_JOINABLE PTHREAD_CREATE_JOINABLE
+  PTHREAD_CREATE_DETACHED
+#define PTHREAD_CREATE_DETACHED PTHREAD_CREATE_DETACHED
+};
+
+enum
+{
+  PTHREAD_INHERIT_SCHED,
+#define PTHREAD_INHERIT_SCHED PTHREAD_INHERIT_SCHED
+  PTHREAD_EXPLICIT_SCHED
+#define PTHREAD_EXPLICIT_SCHED PTHREAD_EXPLICIT_SCHED
+};
+
+enum	/* for completeness */
+{
+  PTHREAD_SCOPE_SYSTEM,
+#define PTHREAD_SCOPE_SYSTEM PTHREAD_SCOPE_SYSTEM
+  PTHREAD_SCOPE_PROCESS
+#define PTHREAD_SCOPE_PROCESS PTHREAD_SCOPE_PROCESS
+};
 
 /* ONCE */
 typedef int pthread_once_t;
@@ -99,13 +149,5 @@ int pthread_detach (pthread_t __th);
 
 pthread_t pthread_self (void);
 int pthread_equal (pthread_t __thread1, pthread_t __thread2);
-
-/* MUTEX */
-int pthread_mutex_init(pthread_mutex_t *mutex,
-		const pthread_mutexattr_t *mutexattr);
-int pthread_mutex_lock(pthread_mutex_t *mutex);
-int pthread_mutex_unlock(pthread_mutex_t *mutex);
-int pthread_mutex_trylock(pthread_mutex_t *mutex);
-int pthread_mutex_destroy(pthread_mutex_t *mutex);
 
 #endif
