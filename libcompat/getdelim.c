@@ -20,7 +20,7 @@ ssize_t getdelim(char **lineptr, size_t *n, int delim, FILE *stream) {
       if (!new) return -1;
       *lineptr=new; *n=tmp;
     }
-    if (x==EOF) { (*lineptr)[i]=0; return -1; }
+    if (x==EOF) { if (!i) return -1; (*lineptr)[i]=0; return i; }
     (*lineptr)[i]=x;
     ++i;
     if (x==delim) break;
