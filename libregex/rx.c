@@ -111,11 +111,13 @@ static int matchatom(void*__restrict__ x,const char*__restrict__ s,int ofs,struc
   case BRACKET:
 //    printf("matching BRACKET against \"%s\"\n",s);
     matchlen=1;
+    if (*s=='\n' && (preg->cflags&REG_NEWLINE)) break;
     if (*s && issetcc(a->u.b.cc,(preg->cflags&REG_ICASE?tolower(*s):*s)))
       goto match;
     break;
   case ANY:
 //    printf("matching ANY against \"%s\"\n",s);
+    if (*s=='\n' && (preg->cflags&REG_NEWLINE)) break;
     matchlen=1;
     if (*s) goto match;
     break;
@@ -127,7 +129,7 @@ static int matchatom(void*__restrict__ x,const char*__restrict__ s,int ofs,struc
     break;
   case LINEEND:
 //    printf("matching LINEEND against \"%s\"\n",s);
-    if (*s || (eflags&REG_NOTEOL)==0) break;
+    if ((*s && *s!='\n') || (eflags&REG_NOTEOL)==0) break;
     goto match;
   case WORDSTART:
     if ((ofs==0 || isspace(s[-1])) && !isspace(*s))
