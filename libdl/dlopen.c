@@ -4,8 +4,10 @@
 
 #include "_dl_int.h"
 
-void *dlopen(const char *filename, int flags)
-{
+#ifdef __DIET_LD_SO__
+static
+#endif
+void*_dlopen(const char *filename, int flags) {
   struct _dl_handle* ret;
   if (filename) {
     if ((ret=_dl_find_lib(filename))) {
@@ -17,3 +19,7 @@ void *dlopen(const char *filename, int flags)
   /* dietld.so has allocated the top for the dynamic program. */
   return _dl_root_handle;
 }
+
+
+void *dlopen(const char *filename, int flags)
+__attribute__((alias("_dlopen")));

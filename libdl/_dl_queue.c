@@ -7,11 +7,14 @@ static int _dl_queue_start=0;
 static int _dl_queue_stop=0;
 
 static struct {
-  const char* name;
+  const char*name;
   int flags;
 } _dl_queue[MAX_QUEUE];
 
-int _dl_queue_lib(const char* name, int flags) {
+#ifdef __DIET_LD_SO__
+static
+#endif
+int _dl_queue_lib(const char*name,int flags) {
   if (_dl_find_lib(name)==0) {
     register int tmp;
     if ((tmp=_dl_queue_stop+1)>=MAX_QUEUE) tmp=0;
@@ -23,11 +26,14 @@ int _dl_queue_lib(const char* name, int flags) {
   return 0;
 }
 
+#ifdef __DIET_LD_SO__
+static
+#endif
 int _dl_open_dep() {
   while (_dl_queue_start!=_dl_queue_stop) {
     register int tmp=_dl_queue_start;
     (++_dl_queue_start>=MAX_QUEUE)?_dl_queue_start=0:0;
-    if (!dlopen(_dl_queue[tmp].name,_dl_queue[tmp].flags)) return 1;
+    if (!_dlopen(_dl_queue[tmp].name,_dl_queue[tmp].flags)) return 1;
   }
   return 0;
 }

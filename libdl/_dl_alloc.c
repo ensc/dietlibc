@@ -4,13 +4,22 @@
 
 #include "_dl_int.h"
 
-struct _dl_handle * _dl_root_handle=(struct _dl_handle*)0;
-struct _dl_handle * _dl_top_handle=(struct _dl_handle*)0;
-struct _dl_handle * _dl_free_list=(struct _dl_handle*)0;
+#ifdef __DIET_LD_SO__
+static struct _dl_handle*_dl_root_handle=(struct _dl_handle*)0;
+static struct _dl_handle*_dl_top_handle=(struct _dl_handle*)0;
+static struct _dl_handle*_dl_free_list=(struct _dl_handle*)0;
+#else
+struct _dl_handle*_dl_root_handle=(struct _dl_handle*)0;
+struct _dl_handle*_dl_top_handle=(struct _dl_handle*)0;
+struct _dl_handle*_dl_free_list=(struct _dl_handle*)0;
+#endif
 
-void _dl_free_handle(struct _dl_handle* dh) {
-  if (_dl_root_handle == dh) _dl_root_handle = dh->next;
-  if (_dl_top_handle == dh)  _dl_top_handle  = dh->prev;
+#ifdef __DIET_LD_SO__
+static
+#endif
+void _dl_free_handle(struct _dl_handle*dh) {
+  if (_dl_root_handle==dh) _dl_root_handle=dh->next;
+  if (_dl_top_handle ==dh)  _dl_top_handle=dh->prev;
 
   if (dh->next) dh->next->prev=dh->prev;
   if (dh->prev) dh->prev->next=dh->next;
@@ -21,13 +30,16 @@ void _dl_free_handle(struct _dl_handle* dh) {
   _dl_free_list=dh;
 }
 
-struct _dl_handle* _dl_get_handle() {
-  struct _dl_handle* tmp;
+#ifdef __DIET_LD_SO__
+static
+#endif
+struct _dl_handle*_dl_get_handle() {
+  struct _dl_handle*tmp;
 
   if (_dl_free_list==0) {
     register int i,m;
     int ps=getpagesize();
-    tmp = (struct _dl_handle *)mmap(0, ps, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0);
+    tmp = (struct _dl_handle*)mmap(0,ps,PROT_READ|PROT_WRITE,MAP_PRIVATE|MAP_ANONYMOUS,-1,0);
     m=ps/sizeof(struct _dl_handle);
     for (i=m;i;) _dl_free_handle(tmp+(--i));
   }
@@ -47,10 +59,13 @@ struct _dl_handle* _dl_get_handle() {
   return tmp;
 }
 
-struct _dl_handle* _dl_find_lib(const char* name) {
+#ifdef __DIET_LD_SO__
+static
+#endif
+struct _dl_handle*_dl_find_lib(const char* name) {
   if (name) {
     if (_dl_root_handle) {
-      struct _dl_handle* tmp;
+      struct _dl_handle*tmp;
       for (tmp=_dl_root_handle;tmp;tmp=tmp->next) {
 	if (!tmp->name) continue;
 	if (!strcmp(tmp->name,name)) return tmp;

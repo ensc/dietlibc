@@ -5,11 +5,10 @@
 
 #include "_dl_int.h"
 
-void *_dl_open(const char *filename, int flags)
-{
+void*_dl_open(const char*filename,int flags) {
   int fd;
   char buf[PATH_MAX];
-  const char *p;
+  const char*p;
 
   _dl_error_location="dlopen";
   _dl_error_data=filename;

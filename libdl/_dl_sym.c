@@ -6,15 +6,16 @@ static void dummy(unsigned long t) {
 }
 #endif
 
-void *_dl_sym_search(struct _dl_handle * h, int symbol)
-{
+#ifdef __DIET_LD_SO__
+static
+#endif
+void*_dl_sym_search(struct _dl_handle*dh,int symbol) {
   void *sym=0;
-  struct _dl_handle * tmp;
-  char *name = h->dyn_str_tab+h->dyn_sym_tab[symbol].st_name;
+  struct _dl_handle*tmp;
+  char *name=dh->dyn_str_tab+dh->dyn_sym_tab[symbol].st_name;
   DEBUG("_dl_sym_search: search for: %s\n",name);
   for (tmp=_dl_root_handle;tmp && (!sym);tmp=tmp->next) {
-    DEBUG("_dl_sym_search: searching: %08lx %08lx\n",(long)tmp, (long)h);
-    if (tmp==h) continue;
+    if (tmp==dh) continue;
 //    if (!tmp->flag_global) continue;
     DEBUG("_dl_sym_search: searching in %s\n",tmp->name);
     sym=_dlsym((void*)tmp,name);
@@ -25,15 +26,17 @@ void *_dl_sym_search(struct _dl_handle * h, int symbol)
   return sym;
 }
 
-void *_dl_sym(struct _dl_handle * h, int symbol)
-{
-  void * ret=0;
-  if (ELF_ST_TYPE(h->dyn_sym_tab[symbol].st_shndx)!=0) {
-    ret = h->mem_base+h->dyn_sym_tab[symbol].st_value;
+#ifdef __DIET_LD_SO__
+static
+#endif
+void*_dl_sym(struct _dl_handle*dh,int symbol) {
+  void*sym=0;
+  if (ELF_ST_TYPE(dh->dyn_sym_tab[symbol].st_shndx)!=0) {
+    sym=dh->mem_base+dh->dyn_sym_tab[symbol].st_value;
   }
   else {
-    ret = _dl_sym_search(h,symbol);
+    sym=_dl_sym_search(dh,symbol);
   }
-  DEBUG("_dl_sym %d -> %08lx\n",symbol,(long)ret);
-  return ret;
+  DEBUG("_dl_sym %d -> %08lx\n",symbol,(long)sym);
+  return sym;
 }

@@ -17,14 +17,13 @@ void (*dyn_start)();
 void ldso_start(void);
 extern void (*fini_entry)(void);
 
-static void _fini_run(struct _dl_handle * tmp) {
-  if (tmp->fini) tmp->fini();
-  if (tmp->next) _fini_run(tmp->next);
-}
 static struct _dl_handle* dlh;
 static void tt_fini(void) {
+  struct _dl_handle*tmp;
   DEBUG("dyn fini\n");
-  _fini_run(dlh);
+  for(tmp=dlh;tmp;tmp=tmp->next) {
+    if (tmp->fini) tmp->fini();
+  }
 }
 
 int main(int argc, char**argv, char**envp)
