@@ -65,11 +65,20 @@ int gethostbyaddr_r(const char* addr, size_t length, int format,
     }
     strcpy(tmp,".ip6.int");
   } else return 1;
-  res= __dns_gethostbyx_r(tmpbuf,result,buf+4,buflen-4,RESULT,h_errnop,12);	/* 12 == ns_t_ptr */
+  if (buflen<sizeof(struct hostent)+16) {
+    errno=ENOMEM;
+    *h_errnop=NO_RECOVERY;
+    return 1;
+  }
+  res= __dns_gethostbyx_r(tmpbuf,result,buf+16,buflen-16,RESULT,h_errnop,12);	/* 12 == ns_t_ptr */
   if (res==0) {
+    if (format==AF_INET) {
+      result->h_length=4;
+      result->h_addrtype=format;
+    }
+    memcpy(buf,addr,result->h_length);
     result->h_addr_list[0]=buf;
     result->h_addr_list[1]=buf;
-    *(int*)buf=*(int*)addr;
   }
   return res;
 }
