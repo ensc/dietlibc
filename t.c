@@ -1,3 +1,4 @@
+#define _GNU_SOURCE
 #define _FILE_OFFSET_BITS 64
 #include <unistd.h>
 #include <endian.h>
@@ -21,6 +22,8 @@
 #include <ctype.h>
 #include <mntent.h>
 #include <regex.h>
+#include <sys/types.h>
+#include <sys/msg.h>
 
 #if 0
 int compint(const void *a,const void *b) {
@@ -46,13 +49,19 @@ static int rand() {
 extern double atof(const char *c);
 
 int main(int argc,char *argv[]) {
+  struct msgbuf bla;
+  bla.mtype=0;
+  bla.mtext[0]='x';
+  msgsnd(327680,&bla,5,IPC_NOWAIT);
 #if 0
   char buf[PATH_MAX];
   printf("%s\n",realpath("../../incoming/..///.zshrc",buf));
 #endif
+#if 0
   regex_t t;
   regcomp(&t,"foo",0);
   printf("%d\n",regexec(&t,"/* built-in 'exec' handler */",0,0,0));
+#endif
 #if 0
   float my_float = 9.2334;
   char buffer[100];

@@ -6,5 +6,5 @@
 extern int __ipc();
 
 int msgsnd (int msqid, const void *msgp, size_t msgsz, int msgflg) {
-  return __ipc(MSGRCV,msqid, msgsz, msgflg, msgp);
+  return __ipc(MSGSND,msqid, msgsz, msgflg, msgp);
 }
