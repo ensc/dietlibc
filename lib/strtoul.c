@@ -6,7 +6,7 @@
 
 unsigned long int strtoul(const char *nptr, char **endptr, int base)
 {
-  int neg = 0;
+  int neg = 0, overflow = 0;
   unsigned long int v=0;
   const char* orig;
 
@@ -26,23 +26,26 @@ skip0x:
       base=10;
   }
   orig=nptr;
-  while(*nptr) {
+  while(__likely(*nptr)) {
     register unsigned char c=*nptr;
     c=(c>='a'?c-'a'+10:c>='A'?c-'A'+10:c<='9'?c-'0':0xff);
-    if (c>=base) {
+    if (__unlikely(c>=base)) {
       if (nptr==orig) { if (endptr) *endptr=(char*)nptr; errno=EINVAL; return ULONG_MAX; }
       break;
     }
     {
-      register unsigned long int w=v*base;
-      if (w<v) {
-	errno=ERANGE;
-	return ULONG_MAX;
-      }
-      v=w+c;
+      register unsigned long x=(v&0xff)*base+c;
+      register unsigned long w=(v>>8)*base+(x>>8);
+      if (w>(ULONG_MAX>>8)) overflow=1;
+      v=(w<<8)+(x&0xff);
     }
     ++nptr;
   }
   if (endptr) *endptr=(char *)nptr;
+  if (overflow) {
+    errno=ERANGE;
+    return ULONG_MAX;
+  }
+  if (v==ULONG_MAX) errno=0;
   return (neg?-v:v);
 }

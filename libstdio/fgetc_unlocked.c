@@ -3,6 +3,7 @@
 
 int fgetc_unlocked(FILE *stream) {
   unsigned char c;
+  if (!(stream->flags&CANREAD)) goto kaputt;
   if (stream->ungotten) {
     stream->ungotten=0;
     return stream->ungetbuf;
@@ -16,6 +17,7 @@ int fgetc_unlocked(FILE *stream) {
       stream->flags|=EOFINDICATOR;
       return EOF;
     } else if (len<0) {
+kaputt:
       stream->flags|=ERRORINDICATOR;
       return EOF;
     }

@@ -1,5 +1,7 @@
 #include <ctype.h>
 #include <stdlib.h>
+#include <limits.h>
+#include <errno.h>
 
 long long int strtoll(const char *nptr, char **endptr, int base)
 {
@@ -10,5 +12,13 @@ long long int strtoll(const char *nptr, char **endptr, int base)
 
   if (*nptr == '-' && isdigit(nptr[1])) { neg=-1; nptr++; }
   v=strtoull(nptr,endptr,base);
+  if (v>LLONG_MAX) {
+    if (v==0x8000000000000000ull && neg) {
+      errno=0;
+      return v;
+    }
+    errno=ERANGE;
+    return (neg?LLONG_MIN:LLONG_MAX);
+  }
   return (neg?-v:v);
 }

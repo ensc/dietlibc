@@ -11,5 +11,5 @@ FILE *fopen (const char *path, const char *mode) {
   f=__stdio_parse_mode(mode);
   if ((fd=open(path,f,0666))<0)
     return 0;
-  return __stdio_init_file(fd,1);
+  return __stdio_init_file(fd,1,f);
 }

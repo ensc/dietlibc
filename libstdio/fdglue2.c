@@ -8,8 +8,8 @@
 
 extern int __stdio_atexit;
 
-FILE* __stdio_init_file_nothreads(int fd,int closeonerror);
-FILE* __stdio_init_file_nothreads(int fd,int closeonerror) {
+FILE* __stdio_init_file_nothreads(int fd,int closeonerror,int mode);
+FILE* __stdio_init_file_nothreads(int fd,int closeonerror,int mode) {
   FILE *tmp=(FILE*)malloc(sizeof(FILE));
   if (!tmp) goto err_out;
   tmp->buf=(char*)malloc(BUFSIZE);
@@ -29,6 +29,11 @@ err_out:
     fstat(fd,&st);
     tmp->flags=(S_ISFIFO(st.st_mode))?FDPIPE:0;
   }
+  switch (mode&3) {
+  case O_RDWR: tmp->flags|=CANWRITE;
+  case O_RDONLY: tmp->flags|=CANREAD; break;
+  case O_WRONLY: tmp->flags|=CANWRITE;
+  }
   tmp->popen_kludge=0;
   if (__stdio_atexit==0) {
     __stdio_atexit=1;
@@ -40,4 +45,4 @@ err_out:
   return tmp;
 }
 
-FILE* __stdio_init_file(int fd,int closeonerror) __attribute__((weak,alias("__stdio_init_file_nothreads")));
+FILE* __stdio_init_file(int fd,int closeonerror,int mode) __attribute__((weak,alias("__stdio_init_file_nothreads")));

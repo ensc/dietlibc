@@ -2,7 +2,7 @@
 
 static FILE __stderr = {
   .fd=2,
-  .flags=NOBUF,
+  .flags=NOBUF|CANWRITE,
   .bs=0, .bm=0,
   .buflen=0,
   .buf=0,

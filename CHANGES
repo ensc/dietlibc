@@ -1,6 +1,10 @@
 0.24:
   work around incompatible Linux select() modifying the timeout in
     librpc (Patch was sent from Mike Waychison from Sun)
+  the overflow checking in strtou?ll? was broken in some cases.
+    Unfortunately, correct overflow checking enlarged the routine by 20%.
+    (reported by Manuel Novoa III)
+  two stdio bug fixes (also reported by Manuel Novoa III)
 
 0.23:
   update sys/soundcard.h

@@ -3,7 +3,7 @@
 static char __stdout_buf[BUFSIZE];
 static FILE __stdout = {
   .fd=1,
-  .flags=BUFLINEWISE|STATICBUF,
+  .flags=BUFLINEWISE|STATICBUF|CANWRITE,
   .bs=0, .bm=0,
   .buflen=BUFSIZE,
   .buf=__stdout_buf,

@@ -3,7 +3,7 @@
 #include <endian.h>
 
 int fputc_unlocked(int c, FILE *stream) {
-  if (__fflush4(stream,0)) {
+  if (!(stream->flags&CANWRITE) || __fflush4(stream,0)) {
 kaputt:
     stream->flags|=ERRORINDICATOR;
     return EOF;

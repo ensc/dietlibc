@@ -9,5 +9,5 @@ FILE *fdopen(int filedes, const char *mode) {
 
   f=__stdio_parse_mode(mode);
   if (filedes<0) { errno=EBADF; return 0; }
-  return __stdio_init_file(filedes,0);
+  return __stdio_init_file(filedes,0,f);
 }
