@@ -26,4 +26,4 @@ void __libc_exit(int code) {
   }
   _exit(code);
 }
-void exit(int code) __attribute__((weak,alias("__libc_exit")));
+void exit(int code) __attribute__((alias("__libc_exit")));
