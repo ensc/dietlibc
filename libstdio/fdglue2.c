@@ -8,15 +8,14 @@
 
 extern int __stdio_atexit;
 
-FILE* __stdio_init_file_nothreads(int fd,int closeonerror,int mode);
-FILE* __stdio_init_file_nothreads(int fd,int closeonerror,int mode) {
+FILE*__stdio_init_file(int fd,int closeonerror,int mode) {
   FILE *tmp=(FILE*)malloc(sizeof(FILE));
   if (!tmp) goto err_out;
   tmp->buf=(char*)malloc(BUFSIZE);
   if (!tmp->buf) {
     free(tmp);
 err_out:
-    if (closeonerror) close(fd);
+    if (closeonerror) __libc_close(fd);
     errno=ENOMEM;
     return 0;
   }
@@ -44,5 +43,3 @@ err_out:
   tmp->ungotten=0;
   return tmp;
 }
-
-FILE* __stdio_init_file(int fd,int closeonerror,int mode) __attribute__((weak,alias("__stdio_init_file_nothreads")));
