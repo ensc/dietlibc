@@ -8,5 +8,5 @@ tan:
         fdivrp
         ret
 
-.ende:
-.size    tan,.ende-tan
+.Lende:
+.size    tan,.Lende-tan

@@ -1,7 +1,7 @@
 .text
 .global strcmp
 .type	strcmp,@function
-.weak	strcmp
+.weak	strcoll
 
 #ifdef HIGH_PERFORMANCE
 .align 	16
@@ -14,6 +14,7 @@
 					# (int) ((signed char)c - (signed char)d) != (int)(signed char) ((unsigned char)c - (unsigned char)d)
 					# c = 'ä', d = 'e': left expression: -129, right expression: 127
 
+strcoll:
 strcmp:
 	movl 	4(%esp), %ecx
 	movl 	8(%esp), %edx

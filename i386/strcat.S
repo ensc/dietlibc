@@ -17,11 +17,11 @@ strcat:
 	repne scasb
 	decl %edi
 	
-.loop:
+.Lloop:
 	lodsb
 	stosb
 	testb %al, %al
-	jnz .loop
+	jnz .Lloop
 	
 	popl %eax
 	popl %esi

@@ -17,6 +17,6 @@ usleep:
         addl    $16,%esp
         ret
 
-.ende:
-.size    usleep,.ende-usleep
+.Lende:
+.size    usleep,.Lende-usleep
 

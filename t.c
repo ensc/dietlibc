@@ -103,7 +103,9 @@ int traverse(const char* file, const struct stat* sb, int flag) {
 }
 
 int main(int argc,char *argv[]) {
+#if 0
   ftw("/tmp",traverse,10);
+#endif
 #if 0
   printf("%u\n",getuid32());
 #endif
@@ -125,7 +127,7 @@ int main(int argc,char *argv[]) {
 #if 0
   printf("%s\n",crypt("test","$1$"));
 #endif
-#if 0
+#if 1
   MD5_CTX x;
   unsigned char md5[16];
   MD5Init(&x);
