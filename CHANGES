@@ -1,6 +1,6 @@
 0.15:
   vfork sucks.  I reverted to the old behavior where vfork==fork.
-  fix bsearch.
+  fix bsearch (and remove i386 assembly bsearch, needs to be redone).
 
 0.14:
   fix brk again (missing __brk, trivial oversight)

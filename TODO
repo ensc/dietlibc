@@ -25,3 +25,5 @@ qmail-queue dumps core since we added vfork.  Editing fork.h to #define
   vfork to fork works.  What happens here?
 
 use TCP if buf[2]&2 is non-zero in DNS answers.
+
+bsearch returns pointers outside the array?!
