@@ -20,7 +20,7 @@ static inline void iswap(void *a,void *b,size_t size) {
 }
 
 static inline void swap(void *base,size_t size,size_t a,size_t b) {
-  iswap(base+a*size,base+b*size,size);
+  iswap((char*)base+a*size,(char*)base+b*size,size);
 }
 
 #if 0
@@ -32,7 +32,7 @@ void dumparray() {
 #endif
 
 void isort(void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *)) {
-  int i;
+  size_t i;
   while (expect(nmemb>1,1)) {
     char *min=base;
     char *tmp=min+size;
@@ -42,7 +42,7 @@ void isort(void *base, size_t nmemb, size_t size, int (*compar)(const void *, co
       tmp+=size;
     }
     iswap(min,base,size);
-    base+=size;
+    (char*)base+=size;
     nmemb-=1;
   }
 }
@@ -56,7 +56,7 @@ void qsort(void *base, size_t nmemb, size_t size, int (*compar)(const void *, co
   static int level=0;
   char* v;	/* pivot */
   char* mid, *max, *min;
-  int lmemb;
+  size_t lmemb;
 
 #if 0
   int left,right;
@@ -72,8 +72,8 @@ void qsort(void *base, size_t nmemb, size_t size, int (*compar)(const void *, co
     return isort(base,nmemb,size,compar);
   }
   {
-    mid=base+(nmemb/2)*size;
-    max=base+(nmemb-1)*size;
+    mid=(char*)base+(nmemb/2)*size;
+    max=(char*)base+(nmemb-1)*size;
 
     if (compar(base,max)<0)	/* a[left] < a[right] */
       if (compar(base,mid)<0)	/* a[left] < a[med] */

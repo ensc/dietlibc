@@ -3,7 +3,7 @@
 #include <sys/msg.h>
 #include <asm/ipc.h>
 
-extern int __ipc();
+extern int __ipc(int,int,size_t,int,void*);
 
 int msgrcv(int msqid, void *msgp, size_t msgsz, long int msgtyp, int msgflg) {
   struct ipc_kludge tmp;

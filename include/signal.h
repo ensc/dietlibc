@@ -32,6 +32,8 @@ int sigpending(sigset_t *set) __THROW;
 
 extern const char *const sys_siglist[];
 
+const char* strsignal(int sig) __THROW __attribute__((const));
+
 typedef __sighandler_t sig_t;
 
 #ifndef _NSIG

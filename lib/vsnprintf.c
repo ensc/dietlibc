@@ -59,7 +59,7 @@ inn_vsnprintf:
 	goto inn_vsnprintf;
 
       case 'h':
-	flag_long=-1;
+	--flag_long;
 	goto inn_vsnprintf;
       case 'l':
 	++flag_long;
@@ -120,11 +120,11 @@ inn_vsnprintf:
       case 's':
 	pb=va_arg(arg_ptr,char *);
 #ifdef WANT_NULL_PRINTF
-	if (!pb) pb="(null)";
+	if (!pb) pb=(char*)"(null)";
 #endif
 	buf_len=strlen(pb);
 	if (flag_dot && buf_len>preci) buf_len=preci;
-	if (buf_len>size-apos) buf_len=size-apos;
+	if ((unsigned long)buf_len>size-apos) buf_len=size-apos;
 
 print_out:
 	if (str) {
@@ -132,7 +132,7 @@ print_out:
 	  {
 	    for (pad=width-buf_len; pad>0; --pad) str[apos++]=padwith;
 	  }
-	  for(i=0;i<buf_len;++i) { str[apos++]=pb[i]; } /* strncpy */
+	  for(i=0;i<(unsigned long)buf_len;++i) { str[apos++]=pb[i]; } /* strncpy */
 	  if (width && (flag_left))
 	  { /* left pad ALLWAYS with blanks ... */
 	    for (pad=width-buf_len; pad>0; --pad) str[apos++]=' ';
@@ -141,7 +141,7 @@ print_out:
 	  if (width) {
 	    apos+=width>buf_len?width:buf_len;
 	  } else {
-	    apos+=size>buf_len?buf_len:size;
+	    apos+=size>(unsigned long)buf_len?buf_len:size;
 	  }
 	}
 
@@ -195,7 +195,6 @@ num_vsnprintf:
 #endif
 	else
 	  number=va_arg(arg_ptr,int);
-	if (flag_long<0) number&=0xffff;
 
 	if (flag_in_sign && (number<0))
 	{
@@ -207,7 +206,8 @@ num_vsnprintf:
 	  number=-number;
 	  flag_in_sign=2;
 	}
-
+	if (flag_long<0) number&=0xffff;
+	if (flag_long<-1) number&=0xff;
 #ifdef WANT_LONGLONG_PRINTF
 	if (flag_long>1)
 	  buf_len=__lltostr(buf+1,sizeof(buf)-1,(unsigned long long) llnumber,i,flag_upcase);

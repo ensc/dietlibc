@@ -3,7 +3,7 @@
 #include <sys/shm.h>
 #include <asm/ipc.h>
 
-extern void* __ipc();
+extern void* __ipc(int,int,int,void*,const void*);
 
 void* shmat(int shmid,const void* shmaddr,int shmflg) {
   void* raddr;

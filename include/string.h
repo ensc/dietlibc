@@ -31,10 +31,10 @@ char *strrchr(const char *s, int c) __THROW __pure__;
 char *strcat(char *dest, const char *src) __THROW;
 char *strncat(char *dest, const char *src, size_t n) __THROW;
 
-size_t strspn(const char *s, const char *accept) __THROW;
+size_t strspn(const char *s, const char *_accept) __THROW;
 size_t strcspn(const char *s, const char *reject) __THROW;
 
-char *strpbrk(const char *s, const char *accept) __THROW;
+char *strpbrk(const char *s, const char *_accept) __THROW;
 char *strsep(char **stringp, const char *delim) __THROW;
 
 void* memset(void *s, int c, size_t n) __THROW;
@@ -47,8 +47,8 @@ void* memchr(const void *s, int c, size_t n) __THROW;
 #define bcopy(src,dest,n) memmove(dest,src,n)
 #define bcmp(a,b,n) memcmp(a,b,n)
 
-char *strerror(int errnum) __THROW;
-char *strsignal(int signum) __THROW;
+const char *strerror(int errnum) __THROW;
+const char *strsignal(int signum) __THROW;
 
 char *strtok(char *s, const char *delim) __THROW;
 char *strtok_r(char *s, const char *delim, char **ptrptr) __THROW;

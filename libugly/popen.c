@@ -15,11 +15,11 @@ FILE *popen(const char *command, const char *type) {
     return 0;
   }
   if (!pid) {	/* child */
-    char *argv[]={"sh","-c",0,0};
+    const char *argv[]={"sh","-c",0,0};
     close(pfd[!fd0]); close(fd0);
     dup2(pfd[fd0],fd0); close(pfd[fd0]);
     argv[2]=(char*)command;
-    execve("/bin/sh",argv,environ);
+    execve("/bin/sh",(char*const*)argv,environ);
     _exit(255);
   }
   close(pfd[fd0]);

@@ -5,8 +5,6 @@
 #include <errno.h>
 #include "dietfeatures.h"
 
-extern int errno;
-
 int isatty(int fd)
 {
   int save;

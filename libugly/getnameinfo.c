@@ -10,7 +10,8 @@ int getnameinfo(const struct sockaddr *sa, socklen_t salen, char *host,
 		size_t hostlen, char *serv, size_t servlen, int flags) {
   sa_family_t f=((struct sockaddr_storage *)sa)->ss_family;
   if (host && hostlen>0) {	/* user wants me to resolve the host name */
-    register const char*addr=(f==AF_INET6)?(char*)&((struct sockaddr_in6*)sa)->sin6_addr:(char*)&((struct sockaddr_in*)sa)->sin_addr;
+    register const char*addr=(f==AF_INET6)?(char*)&((struct sockaddr_in6*)sa)->sin6_addr:
+					   (char*)&((struct sockaddr_in*)sa)->sin_addr;
     if (flags&NI_NUMERICHOST) {
       if (!inet_ntop(f,addr,host,hostlen))
 	return -1;

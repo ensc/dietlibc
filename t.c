@@ -35,7 +35,9 @@
 #include <fnmatch.h>
 
 int main(int argc,char *argv[]) {
-  printf("%hu %hu\n",5,1234567);
+#if 0
+  printf("%hd %hhd\n",-5,-1234567);
+#endif
 #if 0
   printf("%d\n",fnmatch("*.o", "x.o", FNM_PATHNAME));
   printf("%d\n",fnmatch("a/b/*", "a/b/c/d", FNM_PATHNAME));
@@ -258,7 +260,7 @@ int main(int argc,char *argv[]) {
   printf("%d\n",setenv("foo","bar",1));
   execlp("printenv","printenv","foo",0);
 #endif
-#if 0
+#if 1
   printf("%d\n",fnmatch("*c*","bin",0));
   if (!fnmatch("s*", "sub", 0))
     printf("s* sub\n");

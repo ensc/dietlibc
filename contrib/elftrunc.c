@@ -8,7 +8,7 @@
 
 #include <elf.h>
 
-void die (int v,char *s)
+void die (int v,const char *s)
 {
   write(1,s,strlen(s)); write(1,"\n",1);
   exit(v);
@@ -114,13 +114,13 @@ void trunc64(int fd)
 
   write(out,&eh64,n);
 
-  while(len && n)
+  while(len && n>0)
   {
-    if ((n=read(in,buf,sizeof(buf))))
+    if ((n=read(in,buf,sizeof(buf)))>0)
     {
       write(out,buf,(len<n)?len:n);
       len-=(len<n)?len:n;
-    }
+    } else die(2,"read error");
   }
 
   close(out);

@@ -7,7 +7,7 @@
 
 char *realpath(const char *path, char *resolved_path) {
   int fd=open(".",O_RDONLY);
-  char *tmp="";
+  char *tmp=(char*)"";
   if (chdir(path)) {
     if (errno==ENOTDIR)
     {

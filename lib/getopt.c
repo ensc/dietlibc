@@ -10,7 +10,7 @@ char *optarg;
 
 /* fsck, no GNU style permutation of argv this time. */
 
-static void getopterror() {
+static void getopterror(void) {
   static char error[]="Unknown option `-x'.\n";
   if (opterr) {
     error[17]=optopt;
@@ -22,7 +22,7 @@ int getopt(int argc,char*const argv[], const char* optstring) {
   static int lastidx=0,lastofs=0;
   char *tmp;
 again:
-  if (!argv[optind] || *argv[optind]!='-' || argv[optind][1]==0)
+  if (optind>argc || !argv[optind] || *argv[optind]!='-' || argv[optind][1]==0)
     return -1;
   if (argv[optind][1]=='-' && argv[optind][2]==0) {
     ++optind;

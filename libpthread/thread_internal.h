@@ -86,12 +86,12 @@ int __clone(void* (*fn)(void*), void* stack, int flags, void *arg);
 int __find_thread_id(int pid);
 _pthread_descr __get_thread_struct(int id);
 
-_pthread_descr __thread_get_free();
-_pthread_descr __thread_self();
+_pthread_descr __thread_get_free(void);
+_pthread_descr __thread_self(void);
 
 void __thread_cleanup(_pthread_descr th);
 
-void __thread_wait_some_time();
+void __thread_wait_some_time(void);
 
 #define __NO_ASYNC_CANCEL_BEGIN { int oldtype; pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED, &oldtype);
 #define __NO_ASYNC_CANCEL_END pthread_setcanceltype(oldtype,0); pthread_testcancel(); }
@@ -102,7 +102,7 @@ int signal_manager_thread(_pthread_descr td);
 
 /* init stuff */
 extern pthread_once_t __thread_inited;
-void __thread_init();
+void __thread_init(void);
 #define __THREAD_INIT() __pthread_once(&__thread_inited, __thread_init)
 #define __TEST_CANCEL() pthread_testcancel()
 

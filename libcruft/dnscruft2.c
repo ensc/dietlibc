@@ -15,15 +15,15 @@ extern int h_errno;
 
 static char dnspacket[]="\xfe\xfe\001\000\000\001\000\000\000\000\000\000";
 
-extern void __dns_make_fd();
+extern void __dns_make_fd(void);
 extern int __dns_fd;
 
 extern int __dns_servers;
 extern struct sockaddr __dns_server_ips[];
 
-extern void __dns_readstartfiles();
+extern void __dns_readstartfiles(void);
 
-extern int __dns_decodename(unsigned char *packet,int offset,unsigned char *dest,int maxlen);
+extern int __dns_decodename(unsigned char *packet,unsigned int offset,unsigned char *dest,unsigned int maxlen);
 
 /* Oh boy, this interface sucks so badly, there are no words for it.
  * Not one, not two, but _three_ error signalling methods!  (*h_errnop
@@ -113,7 +113,7 @@ int __dns_gethostbyx_r(const char* name, struct hostent* result,
 	  if ((inpkg[3]&0x0f) != 0) break;		/* error */
 	  tmp=inpkg+12;
 	  {
-	    char name[257];
+	    char Name[257];
 	    unsigned short q=((unsigned short)inpkg[4]<<8)+inpkg[5];
 	    while (q>0) {
 	      while (*tmp) tmp+=*tmp+1;
@@ -123,7 +123,7 @@ int __dns_gethostbyx_r(const char* name, struct hostent* result,
 	    q=((unsigned short)inpkg[6]<<8)+inpkg[7];
 	    if (q<1) break;
 	    while (q>0) {
-	      int decofs=__dns_decodename(inpkg,tmp-(char*)inpkg,name,256);
+	      int decofs=__dns_decodename(inpkg,tmp-(char*)inpkg,Name,256);
 	      if (decofs<0) break;
 	      tmp=inpkg+decofs;
 	      --q;
@@ -131,7 +131,7 @@ int __dns_gethostbyx_r(const char* name, struct hostent* result,
 	          tmp[2]!=0 || tmp[3]!=1) {		/* CLASS != IN */
 		if (tmp[1]==5) {	/* CNAME */
 		  tmp+=10;
-		  decofs=__dns_decodename(inpkg,tmp-(char*)inpkg,name,256);
+		  decofs=__dns_decodename(inpkg,tmp-(char*)inpkg,Name,256);
 		  if (decofs<0) break;
 		  tmp=inpkg+decofs;
 		} else
@@ -142,16 +142,16 @@ int __dns_gethostbyx_r(const char* name, struct hostent* result,
 	      {
 		int slen;
 		if (lookfor==1 || lookfor==28) /* A or AAAA*/ {
-		  slen=strlen(name);
+		  slen=strlen(Name);
 		  if (cur+slen+8+(lookfor==28?12:0)>=max) { *h_errnop=NO_RECOVERY; return 1; }
 		} else if (lookfor==12) /* PTR */ {
-		  decofs=__dns_decodename(inpkg,tmp-(char*)inpkg,name,256);
+		  decofs=__dns_decodename(inpkg,tmp-(char*)inpkg,Name,256);
 		  if (decofs<0) break;
 		  tmp=inpkg+decofs;
-		  slen=strlen(name);
+		  slen=strlen(Name);
 		} else
-		  slen=strlen(name);
-		strcpy(cur,name);
+		  slen=strlen(Name);
+		strcpy(cur,Name);
 		if (names==0)
 		  result->h_name=cur;
 		else
@@ -167,14 +167,14 @@ int __dns_gethostbyx_r(const char* name, struct hostent* result,
 		  result->h_addr_list[ips]=0;
 		} else if (lookfor==28) /* AAAA */ {
 		  {
-		    int i;
-		    for (i=0; i<16; ++i) cur[i]=tmp[i];
+		    int k;
+		    for (k=0; k<16; ++k) cur[k]=tmp[k];
 		  }
 		  cur+=16;
 		  result->h_addr_list[ips]=0;
 		}
 	      }
-/*	      puts(name); */
+/*	      puts(Name); */
 	    }
 	  }
 /*	  printf("%d answers\n",((unsigned short)inpkg[6]<<8)+inpkg[7]);

@@ -62,7 +62,7 @@ unsigned int fmt_ip6(char *s,const char ip[16])
 
 const char* inet_ntop(int AF, const void *CP, char *BUF, size_t LEN) {
   char buf[100];
-  int len;
+  size_t len;
   if (AF==AF_INET) {
     inet_ntoa_r(*(struct in_addr*)CP,buf);
     len=strlen(buf);

@@ -10,8 +10,8 @@ static unsigned int scan_ip6(const char *s,char ip[16])
   unsigned long u;
 
   char suffix[16];
-  int prefixlen=0;
-  int suffixlen=0;
+  unsigned int prefixlen=0;
+  unsigned int suffixlen=0;
 
   for (i=0; i<16; i++) ip[i]=0;
 

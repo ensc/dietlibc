@@ -69,7 +69,7 @@ int getnameinfo(const struct sockaddr *sa, socklen_t salen, char *host,
 int getaddrinfo(const char *node, const char *service, const struct
 		addrinfo *hints, struct addrinfo **res) __THROW;
 void freeaddrinfo(struct addrinfo *res) __THROW;
-char *gai_strerror(int errcode) __THROW;
+const char *gai_strerror(int errcode) __THROW;
 
 #define EAI_FAMILY -1
 #define EAI_SOCKTYPE -2

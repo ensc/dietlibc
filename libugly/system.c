@@ -10,7 +10,7 @@
 
 extern char **environ;
 
-int __libc_fork();
+int __libc_fork(void);
 int __libc_waitpid(int pid, int *status, int options);
 int execve(const char*filename, char *const argv[], char *const envp[]);
 int sigaction(int signum,  const  struct  sigaction  *act, struct sigaction *oldact);

@@ -6,8 +6,6 @@
 #include <errno.h>
 #include "dietfeatures.h"
 
-extern int errno;
-
 int tcsetattr(int fildes, int optional_actions, struct termios *termios_p)
 {
   switch (optional_actions) {

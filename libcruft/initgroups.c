@@ -3,9 +3,10 @@
 #include <string.h>
 
 int initgroups(const char *user, gid_t group) {
-  int n=0;
+  int n=1;
   gid_t grouplist[32];
   struct group *g;
+  grouplist[0]=group;
   setgrent();
   while ((g=getgrent())) {
     char **duh=g->gr_mem;

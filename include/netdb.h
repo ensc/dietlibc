@@ -38,13 +38,6 @@ struct hostent
 #define	h_addr	h_addr_list[0]	/* Address, for backward compatibility.  */
 };
 
-struct netent {
-  char    *n_name;          /* official network name */
-  char    **n_aliases;      /* alias list */
-  int     n_addrtype;       /* net address type */
-  unsigned long int n_net;  /* network number */
-};
-
 extern void endhostent (void) __THROW;
 extern struct hostent *gethostent (void) __THROW;
 extern struct hostent *gethostbyaddr (const void *__addr, socklen_t __len,
@@ -86,5 +79,18 @@ void endprotoent(void) __THROW;
 
 /* dummy */
 extern int h_errno;
+
+struct netent {
+  char    *n_name;          /* official network name */
+  char    **n_aliases;      /* alias list */
+  int     n_addrtype;       /* net address type */
+  unsigned long int n_net;  /* network number */
+};
+
+struct netent *getnetbyaddr(unsigned long net, int type) __THROW;
+void endnetent(void) __THROW;
+void setnetent(int stayopen) __THROW;
+struct netent *getnetbyname(const char *name) __THROW;
+struct netent *getnetent(void) __THROW;
 
 #endif

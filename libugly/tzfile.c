@@ -11,7 +11,7 @@
 static char *tzfile=0;
 static int tzlen=-1;
 
-void __maplocaltime() {
+void __maplocaltime(void) {
   int fd;
   unsigned int len;
   if (tzlen>=0) return;

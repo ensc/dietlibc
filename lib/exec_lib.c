@@ -9,12 +9,12 @@ int __exec_shell(const char *file, char *const argv[]) {
   for (i = 0; argv[i]; i++);
 
   {
-    char *shell_argv[i + 1];
+    const char *shell_argv[i + 1];
     shell_argv[0] = _PATH_BSHELL;
-    shell_argv[1] = (char *) file;
+    shell_argv[1] = file;
     for (; i > 1; i--)
       shell_argv[i] = argv[i - 1];
-    return execve(_PATH_BSHELL, shell_argv, environ);
+    return execve(_PATH_BSHELL, (char*const*)shell_argv, environ);
   }
 }
 

@@ -82,7 +82,7 @@ error:
   return 0;
 }
 
-struct netent *getnetbyaddr(long net, int type) {
+struct netent *getnetbyaddr(unsigned long net, int type) {
   struct netent *s;
   for (s=getnetent(); s; s=getnetent()) {
     if (net==s->n_net && type==s->n_addrtype)

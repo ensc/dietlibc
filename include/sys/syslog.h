@@ -92,7 +92,7 @@ void vsyslog (int priority, const char *format, va_list arg_ptr) __THROW;
 
 /* yuck yuck yuck, only needed for syslogd. */
 typedef struct _code {
-  char *c_name;
+  const char *const c_name;
   int c_val;
 } CODE;
 

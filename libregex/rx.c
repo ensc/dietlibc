@@ -213,7 +213,7 @@ static const char* parseatom(struct atom*__restrict__ a,const char*__restrict__ 
 static int matchpiece(void*__restrict__ x,const char*__restrict__ s,int ofs,struct __regex_t*__restrict__ preg,int plus,int eflags) {
   register struct piece* a=(struct piece*)x;
   int matchlen=0;
-  int tmp,num=0;
+  int tmp=0,num=0;
   unsigned int *offsets=alloca(sizeof(int)*a->max);
   offsets[0]=0;
 //  printf("allocating %d offsets...\n",a->max);

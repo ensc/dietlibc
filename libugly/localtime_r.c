@@ -3,7 +3,7 @@
 #include <sys/time.h>
 
 #ifdef WANT_TZFILE_PARSER
-extern void __maplocaltime();
+extern void __maplocaltime(void);
 extern time_t __tzfile_map(time_t t, int *isdst);
 #endif
 

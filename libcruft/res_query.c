@@ -16,15 +16,15 @@ extern int h_errno;
 
 static char dnspacket[]="\xfe\xfe\001\000\000\001\000\000\000\000\000\000";
 
-extern void __dns_make_fd();
+extern void __dns_make_fd(void);
 extern int __dns_fd;
 
 extern int __dns_servers;
 extern struct sockaddr __dns_server_ips[];
 
-extern void __dns_readstartfiles();
+extern void __dns_readstartfiles(void);
 
-extern int __dns_decodename(unsigned char *packet,int offset,unsigned char *dest,int maxlen);
+extern int __dns_decodename(unsigned char *packet,unsigned int offset,unsigned char *dest,unsigned int maxlen);
 
 int res_query(const char *dname, int class, int type, unsigned char *answer, int anslen) {
   unsigned char packet[512];

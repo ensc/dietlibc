@@ -3,7 +3,7 @@
 #ifdef WANT_BUFFERED_STDIO
 static FILE __stdin = { 0, BUFINPUT, 0, 0 };
 
-int __fflush_stdin() {
+int __fflush_stdin(void) {
   return fflush(stdin);
 }
 #else

@@ -61,7 +61,7 @@ int __dtostr(double d,char *buf,int maxlen,int prec) {
   /* step 5: loop through the digits, inserting the decimal point when
    * appropriate */
   if (d<1.0) {
-    double x=1.0;
+    double y=1.0;
     int first=1;
     do {
       if (--maxlen<0) return buf-oldbuf;
@@ -71,8 +71,8 @@ int __dtostr(double d,char *buf,int maxlen,int prec) {
 	*buf='.'; ++buf;
 	if (--maxlen<0) return buf-oldbuf;
       }
-      x/=10.0;
-    } while (x>d);
+      y/=10.0;
+    } while (y>d);
   }
   for (; prec>0; ) {
     double tmp2=d/tmp;

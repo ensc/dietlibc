@@ -2,10 +2,11 @@
 
 extern int socketcall(int callno,long* args);
 
-int bind(int a, void * b, int c) {
 #ifdef __i386__
+int bind(int a) {
   return socketcall(SYS_BIND, (long*)&a);
 #else
+int bind(int a, void * b, int c) {
   unsigned long args[] = { a, (long) b, c };
   return socketcall(SYS_BIND, args);
 #endif

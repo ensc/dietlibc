@@ -1,11 +1,11 @@
 #include <sys/types.h>
 #include <time.h>
 
-static char *sweekdays[]={"Sun","Mon","Tue","Wed","Thu","Fri","Sat"};
-static char *weekdays[]={"Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"};
-static char *smonths[]={"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
-static char *months[]={"January","February","March","April","May","June","July","August","September","October","November","December"};
-static char *ampm[]={"am","pm","AM","PM"};
+static const char *sweekdays[]={"Sun","Mon","Tue","Wed","Thu","Fri","Sat"};
+static const char *weekdays[]={"Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"};
+static const char *smonths[]={"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
+static const char *months[]={"January","February","March","April","May","June","July","August","September","October","November","December"};
+static const char *ampm[]={"am","pm","AM","PM"};
 
 static int i2a(char* dest,unsigned int x) {
   register unsigned int tmp=x;

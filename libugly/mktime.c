@@ -3,11 +3,11 @@
 /* seconds per day */
 #define SPD 24*60*60
 
-extern unsigned int __spm[];
+extern time_t __spm[];
 
 time_t mktime(struct tm *t) {
   time_t x=0;
-  unsigned int i;
+  time_t i;
   if (t->tm_year<70) return (time_t)(-1);
   for (i=70; i<t->tm_year; ++i) {
     x+=__isleap(i+1900)?366:365;

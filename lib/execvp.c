@@ -7,7 +7,7 @@
 #include "dietfeatures.h"
 
 int execvp(const char *file, char *const argv[]) {
-  char *path=getenv("PATH");
+  const char *path=getenv("PATH");
   char *cur,*next;
   char buf[PATH_MAX];
   if (strchr((char*)file,'/')) {
@@ -18,7 +18,7 @@ int execvp(const char *file, char *const argv[]) {
     }
   }
   if (!path) path=_PATH_DEFPATH;
-  for (cur=path; cur; cur=next) {
+  for (cur=(char*)path; cur; cur=next) {
     next=strchr(cur,':');
     if (!next)
       next=cur+strlen(cur);

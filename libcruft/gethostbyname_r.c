@@ -22,7 +22,7 @@ extern int __dns_gethostbyx_r(const char* name, struct hostent* result,
 int gethostbyname_r(const char* name, struct hostent* result,
 				char *buf, size_t buflen,
 				struct hostent **RESULT, int *h_errnop) {
-  int L=strlen(name);
+  size_t L=strlen(name);
   result->h_name=buf;
   if (buflen<L) { *h_errnop=ERANGE; return 1; }
   strcpy(buf,name);

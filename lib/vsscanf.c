@@ -15,7 +15,7 @@ extern double strtod(const char *s,char **f);
 
 int vsscanf(const char *str, const char *format, va_list arg_ptr)
 {
-  int n=0,div;
+  int n=0,_div;
   unsigned char ch;
 
   char flag_discard, flag_malloc, flag_half, flag_long, flag_longlong;
@@ -50,7 +50,7 @@ int vsscanf(const char *str, const char *format, va_list arg_ptr)
     switch (ch)
     {
     case '%':
-      div=0;
+      _div=0;
       flag_discard=0;
       flag_malloc=0;
       flag_half=0;
@@ -130,16 +130,16 @@ inn_vsscanf:
       case 'p':
       case 'X':
       case 'x':
-	div+=6;
+	_div+=6;
       case 'd':
-	div+=2;
+	_div+=2;
       case 'o':
-	div+=8;
+	_div+=8;
       case 'u':
       case 'i':
 	if (*(str=skip_ws(str)))
 	{
-	  l=strtol(str,&s,div);
+	  l=strtol(str,&s,_div);
 	  if (str!=s)
 	  {
 	    if (!flag_discard)

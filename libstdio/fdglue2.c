@@ -7,7 +7,7 @@
 
 #ifdef WANT_BUFFERED_STDIO
 extern int __stdio_atexit;
-extern void __stdio_flushall();
+extern void __stdio_flushall(void);
 #endif
 
 FILE* __stdio_init_file_nothreads(int fd) {

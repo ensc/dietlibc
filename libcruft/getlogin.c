@@ -1,5 +1,5 @@
 #include <stdlib.h>
 
-char* getlogin() {
+char* getlogin(void) {
   return getenv("LOGNAME");
 }

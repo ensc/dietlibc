@@ -11,7 +11,7 @@
 
 int __dns_fd=-1;
 
-void __dns_make_fd() {
+void __dns_make_fd(void) {
   int tmp;
   struct sockaddr_in si;
   if (__dns_fd>0) return;
@@ -32,7 +32,7 @@ int __dns_search;
 char *__dns_domains[8];
 #endif
 
-void __dns_readstartfiles() {
+void __dns_readstartfiles(void) {
   int fd;
   char *buf=alloca(4096);
   int len;
@@ -98,7 +98,7 @@ void __dns_readstartfiles() {
 }
 
 /* return length of decoded data or -1 */
-int __dns_decodename(unsigned char *packet,int offset,unsigned char *dest,int maxlen) {
+int __dns_decodename(unsigned char *packet,unsigned int offset,unsigned char *dest,unsigned int maxlen) {
   unsigned char *tmp;
   unsigned char *max=dest+maxlen;
   unsigned char *after=packet+offset;
@@ -106,7 +106,7 @@ int __dns_decodename(unsigned char *packet,int offset,unsigned char *dest,int ma
   for (tmp=after; maxlen>0&&*tmp; ) {
     if ((*tmp>>6)==3) {		/* goofy DNS decompression */
       unsigned int ofs=((unsigned int)(*tmp&0x3f)<<8)|*(tmp+1);
-      if (ofs>=offset) return -1;	/* RFC1035: "pointer to a _prior_ occurrance" */
+      if (ofs>=(unsigned int)offset) return -1;	/* RFC1035: "pointer to a _prior_ occurrance" */
       if (after<tmp+2) after=tmp+2;
       tmp=packet+ofs;
       ok=0;

@@ -9,7 +9,7 @@ strtol and friends need overflow handling.
 
 real regerror
 
-real DNS errors.
+real DNS errors (gai_strerror,hstrerror,...)
 
 Try to improve code size and quality with __restrict__.
 

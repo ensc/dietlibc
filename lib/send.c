@@ -2,10 +2,11 @@
 
 extern int socketcall(int callno,long* args);
 
-int __libc_send(int a, const void * b, size_t c, int flags) {
 #ifdef __i386__
+int __libc_send(int a) {
   return socketcall(SYS_SEND, (long*)&a);
 #else
+int __libc_send(int a, const void * b, size_t c, int flags) {
   unsigned long args[] = { a, (long) b, c, flags };
   return socketcall(SYS_SEND, args);
 #endif

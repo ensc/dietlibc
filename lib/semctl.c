@@ -3,7 +3,7 @@
 #include <sys/sem.h>
 #include <asm/ipc.h>
 
-extern int __ipc();
+extern int __ipc(int,int,int,int,void*);
 
 int semctl(int semid, int semnum, int cmd, union semun arg) {
   return __ipc(SEMCTL,semid,semnum,cmd,&arg);

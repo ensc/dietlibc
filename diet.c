@@ -23,12 +23,12 @@ void error(const char *message) {
 }
 
 int main(int argc,char *argv[]) {
-  int link=0;
+  int _link=0;
   int compile=0;
   char diethome[]=DIETHOME;
   char platform[1000]=DIETHOME "/bin-";
-  char *nostdlib="-nostdlib";
-  char *libgcc="-lgcc";
+  const char *nostdlib="-nostdlib";
+  const char *libgcc="-lgcc";
   char dashL[1000]="-L";
   int i;
 
@@ -81,11 +81,11 @@ int main(int argc,char *argv[]) {
 	if (!strcmp(argv[i],"-c") || !strcmp(argv[i],"-S") || !strcmp(argv[i],"-E"))
 	  compile=1;
 /* we need to add -nostdlib if we are not compiling*/
-      link=!compile;
+      _link=!compile;
 #if 0
       for (i=2; i<argc; ++i)
 	if (!strcmp(argv[i],"-o"))
-	  if (!compile) link=1;
+	  if (!compile) _link=1;
 #endif
       newargv=alloca(sizeof(char*)*(argc+8));
       a=alloca(strlen(diethome)+20);
@@ -105,17 +105,17 @@ int main(int argc,char *argv[]) {
 
       dest=newargv;
       *dest++=argv[1];
-      if (link) { *dest++=nostdlib; *dest++=dashL; }
-      if (compile || link) *dest++=a;
-      if (link) { *dest++=b; }
+      if (_link) { *dest++=(char*)nostdlib; *dest++=dashL; }
+      if (compile || _link) *dest++=a;
+      if (_link) { *dest++=b; }
 #ifdef WANT_DYNAMIC
-      if (link) { *dest++=d; }
+      if (_link) { *dest++=d; }
 #endif
       for (i=2; i<argc; ++i)
 	*dest++=argv[i];
-      if (link) { *dest++=c; *dest++=libgcc; }
+      if (_link) { *dest++=c; *dest++=(char*)libgcc; }
 #ifdef WANT_DYNAMIC
-      if (link) { *dest++=e; }
+      if (_link) { *dest++=e; }
 #endif
       *dest=0;
       execvp(newargv[0],newargv);

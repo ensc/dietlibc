@@ -222,7 +222,7 @@ void *realloc(void *ptr,size_t size)
 	}
 	return NULL;
       }
-      if (diff>=sizeof(alloc_head))
+      if (diff>=(long)sizeof(alloc_head))
       {
 	tmp->size=need;
 	tf=END_OF_BLOCK(tmp);

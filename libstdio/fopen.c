@@ -5,7 +5,7 @@
 #define SEEK_END 2
 
 extern int __stdio_atexit;
-extern void __stdio_flushall();
+extern void __stdio_flushall(void);
 
 extern int __stdio_parse_mode(const char *mode);
 extern FILE* __stdio_init_file(int fd);

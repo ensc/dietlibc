@@ -3,7 +3,7 @@
 #include <sys/shm.h>
 #include <asm/ipc.h>
 
-extern int __ipc();
+extern int __ipc(int,int,int,int,const void*);
 
 int shmdt(const void* shmaddr) {
   return __ipc(SHMDT,0,0,0,shmaddr);

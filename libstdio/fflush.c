@@ -8,13 +8,13 @@ FILE *__stdio_root;
 #ifdef WANT_BUFFERED_STDIO
 int __stdio_atexit=0;
 
-void __stdio_flushall() {
+void __stdio_flushall(void) {
   fflush(0);
 }
 
-extern int __fflush_stdin();
-extern int __fflush_stdout();
-extern int __fflush_stderr();
+extern int __fflush_stdin(void);
+extern int __fflush_stdout(void);
+extern int __fflush_stderr(void);
 
 int fflush(FILE *stream) {
   if (stream==0) {
@@ -32,7 +32,7 @@ int fflush(FILE *stream) {
     register int tmp;
     if ((tmp=stream->bm-stream->bs)) lseek(stream->fd,tmp,SEEK_CUR);
   } else
-    if (stream->bm && write(stream->fd,stream->buf,stream->bm)!=stream->bm) {
+    if (stream->bm && write(stream->fd,stream->buf,stream->bm)!=(int)stream->bm) {
       stream->flags|=ERRORINDICATOR;
       return -1;
     }

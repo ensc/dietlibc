@@ -21,6 +21,9 @@
   Fix memory leak in error case in gethostbyname(2|).  Thanks, Dietz Pröpper.
   Add %h to vsnprintf.
   Add FAQ.
+  Make %h work for signed numbers and add %hh to vsnprintf.
+  initgroups ignored the group argument :-(
+  remove printf references and nested functions from glob.
 
 0.10:
   update getpagesize.

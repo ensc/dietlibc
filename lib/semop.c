@@ -3,7 +3,7 @@
 #include <sys/sem.h>
 #include <asm/ipc.h>
 
-extern int __ipc();
+extern int __ipc(int,int,unsigned,int,void*);
 
 int semop(int semid,struct sembuf *sops,unsigned nsops) {
   return __ipc(SEMOP,semid,nsops,0,sops);
