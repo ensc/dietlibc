@@ -4,7 +4,7 @@
 diet \- mangle gcc command line arguments
 .SH SYNOPSIS
 .PP
-.B diet [-Os]
+.B diet [-v] [-Os]
 [\fInormal gcc command line\fP]
 .SH DESCRIPTION
 .PP
@@ -16,6 +16,9 @@ diet tries to be smart for cross compiling.  If the first argument is
 not gcc but sparc-linux-gcc, diet will guess that you want to cross
 compile for sparc and use bin-sparc/dietlibc.a instead of the dietlibc.a
 for your default architecture.
+
+The -v option will make diet print the modified gcc command line before
+executing it.
 
 When passed the -Os option before the gcc argument, diet will mangle the
 gcc options to include the best known for-size optimization settings for

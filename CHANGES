@@ -32,6 +32,7 @@
     (John K. Holm)
   allow short option grouping in getopt* (Ralf Wildenhues)
   make the DNS resolver IPv6 transport capable (WANT_IPV6_DNS)
+  mention -v in diet.1 (Bryan Henderson)
 
 0.17:
   fix several bugs in getservent_r
