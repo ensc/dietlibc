@@ -11,6 +11,9 @@ typedef struct {
 struct statfs {
 	long f_type;
 	long f_bsize;
+#ifdef __mips__
+	long f_frsize;
+#endif
 	long f_blocks;
 	long f_bfree;
 #ifndef __mips__
