@@ -228,7 +228,7 @@ int main(int argc,char *argv[]) {
   foo[6]=0;
   puts(foo);
 #endif
-#if 1
+#if 0
   struct hostent * host;
   struct in_addr i;
 
