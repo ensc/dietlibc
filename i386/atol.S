@@ -16,6 +16,7 @@
 .type atol,@function
 
 atoi:
+atol:
 	pushl %esi
 	movl 0x8(%esp), %esi
 	xorl %eax, %eax
