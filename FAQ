@@ -1,7 +1,7 @@
 diet libc FAQ.
 
 
-Q: How do I compile this beast?  I don't see a configure?
+Q: How do I compile this?  I don't see a configure?
 A: Just type make.
 
 
@@ -40,7 +40,7 @@ A: Yes.  Just type something like "make ARCH=arm CROSS=arm-linux- all".
 
    Programs using autoconf can be configured like this:
 
-     $ CC="diet sparc-linux-gcc -static" ./configure --disable-nls
+     $ CC="diet sparc-linux-gcc" ./configure --disable-nls
 
 
 Q: There are a few warnings about possibly uninitialized variables when
@@ -199,3 +199,11 @@ A: Compile: no.  Use: yes.
 
 Q: Can you please port the diet libc to FreeBSD/Solaris/Windows?
 A: No.
+
+
+Q: Why do you support non-embedded platforms like IA64 and x86_64?
+A: The diet libc is also useful for servers because it can improve
+   performance by an order of magnitude for certain programming models.
+   Please see http://www.fefe.de/fnord/ (in particular .../fnord/SPEED)
+   for an example and/or read http://www.fefe.de/talk.pdf for some
+   benchmarks.
