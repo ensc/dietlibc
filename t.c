@@ -339,7 +339,9 @@ int main(int argc,char *argv[]) {
 #if 1
   char buf[1024];
   struct hostent* r;
-  r=gethostbyname("cyberelk.net");
+  int i=0;
+  r=gethostbyname("cyberelks.net");
+again:
   if (!r) {
     printf("dns error: %s\n",hstrerror(h_errno));
   }
@@ -359,6 +361,11 @@ int main(int argc,char *argv[]) {
       }
       putchar('\n');
     }
+  }
+  if (!i) {
+    i=1;
+    r=gethostbyname("prdownloads.sourceforge.net");
+    goto again;
   }
 #endif
 #if 0

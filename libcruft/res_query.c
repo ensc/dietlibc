@@ -35,6 +35,7 @@ int res_query(const char *dname, int class, int type, unsigned char *answer, int
       i=0;
       duh.fd=__dns_fd;
       duh.events=POLLIN;
+      last.tv_sec=0;
       for (j=10; j>0; --j) {
 	gettimeofday(&now,0);
 	if (now.tv_sec-last.tv_sec>10) {

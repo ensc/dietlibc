@@ -3,6 +3,7 @@
   make diet not include the linker safeguard stuff when preprocessing.
   Olaf: port to s/390!
   me: fix vfork (it was put into dietlibc.a twice)
+  res_query did not initialize last
 
 0.12:
   more contributions from Frank Klemm.
