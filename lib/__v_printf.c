@@ -174,11 +174,11 @@ print_out:
 	flag_in_sign=1;
       case 'u':
 	base=10;
-	sz=1;
+	sz=0;
 	goto num_printf;
       case 'o':
 	base=8;
-	sz=0;
+	sz=1;
 	if (flag_hash) {
 	  buf[1]='0';
 	  ++sz;
