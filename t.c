@@ -86,7 +86,7 @@ void foo(int tmp,...) {
 }
 
 int main(int argc,char *argv[]) {
-  printf("%d\n",strncmp("fnord","fnops",4));
+  printf("%d\n",strncmp("aaaa","aaac",4));
 #if 0
   regex_t r;
 //  printf("regcomp %d\n",regcomp(&r,"^(re([\\[0-9\\]+])*|aw):[ \t]*",REG_EXTENDED));

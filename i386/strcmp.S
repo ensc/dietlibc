@@ -3,26 +3,19 @@
 .global strcmp
 .type	 strcmp,@function
 strcmp:
-	pushl %esi
-	pushl %edi
-
-	movl 12(%esp),%esi
-	movl 16(%esp),%edi
-	decl %edi
-	cld
-
+	movl 4(%esp),%ebx
+	movl 8(%esp),%edx
 .Lloop:
-	incl %edi
-	lodsb
+	movb (%ebx),%al
+	incl %edx
+	incl %ebx
+	movb %al,%ah
+	subb -1(%edx),%al
+	jnz .Lnotequal
+	testb %ah,%ah
+	jnz .Lloop
 
-	testb %al, %al
-	jz .Ldone
-
-	subb (%edi), %al
-	jz .Lloop
-
-.Ldone:
+	xorb %eax,%eax
+.Lnotequal:
 	movsx %al, %eax
-	popl %edi
-	popl %esi
 	ret
