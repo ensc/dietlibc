@@ -54,7 +54,13 @@ char *strlcpy2(char *dest, const char *src, size_t n)
 }
 
 int main(int argc,char *argv[]) {
+  char buf[128];
+  strcpy(buf,"/tmp/foo.XXXXXXX");
+  printf("%d\n",mkdtemp(buf));
+  printf("%s\n",buf);
+#if 0
   printf("%d\n",WEXITSTATUS(system("exit 17")));
+#endif
 #if 0
   fnord("fnord","foo\n","bar\n",0);
   assert(0);

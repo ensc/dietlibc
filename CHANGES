@@ -40,6 +40,7 @@
   fixed word delimiters in regex (they looked for space, i.e. "," did
     not work as delimiter)
   errno.h now declares sys_errlist and sys_nerr.
+  added mkdtemp.
   Uwe Ohse reported all of the following bugs:
     ttyname should return 0 if !isatty.
     realpath returns NULL if "." cannot be opened
