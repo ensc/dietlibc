@@ -1,5 +1,9 @@
 0.28:
   add tcgetsid (Yuri Kozlov)
+  add _udivdi3, _divdi3, _umoddi3, _moddi3 for MIPS
+    These are in libgcc, but libgcc is compiled PIC and we compile the
+    diet libc non-pic, and that is not compatible on MIPS so ld
+    complains.
 
 0.27:
   change DNS routines to look for ip6.arpa instead of ip6.int
