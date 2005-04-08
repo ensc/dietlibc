@@ -16,6 +16,7 @@
   syscall.h update for all architectures
   remove two ppc64 warnings
   fix s/390 syscalls > 255
+  add "diet -L gcc" option to print the lib path
 
 0.28:
   add tcgetsid (Yuri Kozlov)

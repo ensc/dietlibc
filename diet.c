@@ -81,6 +81,7 @@ int main(int argc,char *argv[]) {
   char dashstatic[]="-static";
   int i;
   int mangleopts=0;
+  int printpath=0;
   char manglebuf[1024];
 
   if (!(diethome = getenv("DIETHOME")))
@@ -108,9 +109,12 @@ int main(int argc,char *argv[]) {
     if (!strcmp(argv[1],"-v")) {
       ++argv; --argc;
       verbose=1;
-    } else if (argv[1] && !strcmp(argv[1],"-Os")) {
+    } else if (!strcmp(argv[1],"-Os")) {
       ++argv; --argc;
       mangleopts=1;
+    } else if (!strcmp(argv[1],"-L")) {
+      ++argv; --argc;
+      printpath=1;
     } else break;
   } while (1);
   {
@@ -187,6 +191,10 @@ int main(int argc,char *argv[]) {
       for (i=1; i<argc; ++i)
 	if (!strcmp(argv[i],"-EL"))
 	  strcpy(shortplatform,"mipsel");
+    }
+    if (printpath) {
+      write(1,platform,strlen(platform));
+      return 0;
     }
     strcat(dashL,platform);
     if (strcmp(tmp,"ld")) {
