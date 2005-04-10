@@ -6,7 +6,7 @@
 #include "dietstdio.h"
 
 struct str_data {
-  unsigned char* str;
+  char* str;
   size_t len;
   size_t size;
 };
@@ -26,7 +26,7 @@ static int swrite(void*ptr, size_t nmemb, struct str_data* sd) {
 }
 
 int vsnprintf(char* str, size_t size, const char *format, va_list arg_ptr) {
-  long n;
+  int n;
   struct str_data sd = { str, 0, size?size-1:0 };
   struct arg_printf ap = { &sd, (int(*)(void*,size_t,void*)) swrite };
   n=__v_printf(&ap,format,arg_ptr);

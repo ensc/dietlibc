@@ -117,7 +117,7 @@ static int matchatom(void*__restrict__ x,const unsigned char*__restrict__ s,int 
     printf("matching atom REGEX against \"%s\"\n",s);
     printf("a->bnum is %d\n",a->bnum);
 #endif
-    if ((matchlen=a->u.r.m(&a->u.r,s,ofs,preg,0,eflags))>=0) {
+    if ((matchlen=a->u.r.m(&a->u.r,(const char*)s,ofs,preg,0,eflags))>=0) {
       assert(a->bnum>=0);
       preg->l[a->bnum].rm_so=ofs;
       preg->l[a->bnum].rm_eo=ofs+matchlen;
@@ -180,7 +180,7 @@ static int matchatom(void*__restrict__ x,const unsigned char*__restrict__ s,int 
   return -1;
 match:
   if (a->next)
-    return ((struct atom*)(a->next))->m(a->next,s+matchlen,ofs+matchlen,preg,plus+matchlen,eflags);
+    return ((struct atom*)(a->next))->m(a->next,(const char*)s+matchlen,ofs+matchlen,preg,plus+matchlen,eflags);
   else
     return plus+matchlen;
 }

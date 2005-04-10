@@ -11,8 +11,8 @@ size_t iconv(iconv_t cd, char* * inbuf, size_t *
   enum charset from=ic_from(cd);
   enum charset to=ic_to(cd);
   if (!inbuf || !*inbuf) return 0;
-  in=(char*)(*inbuf);
-  out=(char*)(*outbuf);
+  in=(unsigned char*)(*inbuf);
+  out=(unsigned char*)(*outbuf);
   k=0;
   while (*inbytesleft) {
     unsigned int v;
@@ -170,6 +170,6 @@ bloat:
     in+=i; *inbytesleft-=i;
     out+=j; *outbytesleft-=j;
   }
-  *inbuf=in; *outbuf=out;
+  *inbuf=(char*)in; *outbuf=(char*)out;
   return result;
 }

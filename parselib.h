@@ -2,7 +2,7 @@
 
 /* a memory buffer. */
 struct state {
-  const unsigned char* buffirst;/* pointer to the buffer */
+  const char* buffirst;/* pointer to the buffer */
   size_t buflen;		/* length of the buffer */
   size_t cur;			/* already parsed bytes */
 };

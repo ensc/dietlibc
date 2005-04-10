@@ -14,7 +14,7 @@
 char* tzname[2]={"GMT","GMT"};
 
 #ifdef WANT_TZFILE_PARSER
-static char *tzfile;
+static unsigned char *tzfile;
 static int tzlen=-1;
 
 void __maplocaltime(void);
@@ -48,7 +48,7 @@ static int32_t __myntohl(const unsigned char* c) {
 time_t __tzfile_map(time_t t, int *isdst, int forward);
 time_t __tzfile_map(time_t t, int *isdst, int forward) {
   /* "TZif" plus 16 reserved bytes. */
-  char *tmp;
+  unsigned char *tmp;
   int i;
   int tzh_ttisgmtcnt, tzh_ttisstdcnt, tzh_leapcnt, tzh_timecnt, tzh_typecnt, tzh_charcnt;
   *isdst=0;
@@ -90,7 +90,7 @@ time_t __tzfile_map(time_t t, int *isdst, int forward) {
   if (forward) {
     for (i=0; i<tzh_timecnt; ++i) {
       if ((time_t)__myntohl(tmp+i*4) >= t) {
-	char* tz=tmp;
+	unsigned char* tz=tmp;
   /*      printf("match at %d\n",i); */
 	tmp+=tzh_timecnt*4;
 	i=tmp[i-1];
@@ -100,7 +100,7 @@ time_t __tzfile_map(time_t t, int *isdst, int forward) {
 	tmp+=i*6;
   /*      printf("(%lu,%d,%d)\n",ntohl(*(int*)tmp),tmp[4],tmp[5]); */
 	*isdst=tmp[4];
-	tzname[0]=tz+tmp[5];
+	tzname[0]=(char*)(tz+tmp[5]);
 	timezone=__myntohl(tmp);
 	return t+timezone;
       }

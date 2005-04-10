@@ -36,9 +36,9 @@ int __dns_gethostbyx_r(const char* name, struct hostent* result,
 			struct hostent **RESULT, int *h_errnop, int lookfor) {
 #endif
   int names,ips;
-  unsigned char *cur;
-  unsigned char *max;
-  unsigned char inpkg[1500];
+  char *cur;
+  char *max;
+  char inpkg[1500];
   char* tmp;
   int size;
 
@@ -57,7 +57,7 @@ int __dns_gethostbyx_r(const char* name, struct hostent* result,
   max=buf+buflen;
   names=ips=0;
 
-  if ((size=res_query(name,C_IN,lookfor,inpkg,512))<0) {
+  if ((size=res_query(name,C_IN,lookfor,(unsigned char*)inpkg,512))<0) {
 invalidpacket:
     *h_errnop=HOST_NOT_FOUND;
     return -1;
@@ -65,7 +65,7 @@ invalidpacket:
   {
     tmp=inpkg+12;
     {
-      char Name[257];
+      unsigned char Name[257];
       unsigned short q=((unsigned short)inpkg[4]<<8)+inpkg[5];
       while (q>0) {
 	if (tmp>(char*)inpkg+size) goto invalidpacket;
@@ -73,11 +73,11 @@ invalidpacket:
 	tmp+=5;
 	--q;
       }
-      if (tmp>(char*)inpkg+size) goto invalidpacket;
+      if (tmp>inpkg+size) goto invalidpacket;
       q=((unsigned short)inpkg[6]<<8)+inpkg[7];
       if (q<1) goto nodata;
       while (q>0) {
-	int decofs=__dns_decodename(inpkg,(size_t)(tmp-(char*)inpkg),Name,256,inpkg+size);
+	int decofs=__dns_decodename((unsigned char*)inpkg,(size_t)(tmp-(char*)inpkg),Name,256,(unsigned char*)inpkg+size);
 	if (decofs<0) break;
 	tmp=inpkg+decofs;
 	--q;
@@ -85,7 +85,7 @@ invalidpacket:
 	    tmp[2]!=0 || tmp[3]!=1) {		/* CLASS != IN */
 	  if (tmp[1]==5) {	/* CNAME */
 	    tmp+=10;
-	    decofs=__dns_decodename(inpkg,(size_t)(tmp-(char*)inpkg),Name,256,inpkg+size);
+	    decofs=__dns_decodename((unsigned char*)inpkg,(size_t)(tmp-(char*)inpkg),Name,256,(unsigned char*)inpkg+size);
 	    if (decofs<0) break;
 	    tmp=inpkg+decofs;
 	  } else
@@ -96,16 +96,17 @@ invalidpacket:
 	{
 	  int slen;
 	  if (lookfor==1 || lookfor==28) /* A or AAAA*/ {
-	    slen=strlen(Name);
+	    slen=strlen((char*)Name);
 	    if (cur+slen+8+(lookfor==28?12:0)>=max) { *h_errnop=NO_RECOVERY; return -1; }
-	  } else if (lookfor==12) /* PTR */ {
-	    decofs=__dns_decodename(inpkg,(size_t)(tmp-(char*)inpkg),Name,256,inpkg+size);
-	    if (decofs<0) break;
-	    tmp=inpkg+decofs;
-	    slen=strlen(Name);
-	  } else
-	    slen=strlen(Name);
-	  strcpy(cur,Name);
+	  } else {
+	    if (lookfor==12) /* PTR */ {
+	      decofs=__dns_decodename((unsigned char*)inpkg,(size_t)(tmp-(char*)inpkg),Name,256,(unsigned char*)inpkg+size);
+	      if (decofs<0) break;
+	      tmp=inpkg+decofs;
+	    }
+	    slen=strlen((char*)Name);
+	  }
+	  strcpy(cur,(char*)Name);
 	  if (names==0)
 	    result->h_name=cur;
 	  else

@@ -30,7 +30,7 @@ int res_query(const char *dname, int class, int type, unsigned char *answer, int
 #endif
 
   __dns_readstartfiles();
-  if ((size=res_mkquery(QUERY,dname,class,type,0,0,0,packet,512))<0) { h_errno=NO_RECOVERY; return -1; }
+  if ((size=res_mkquery(QUERY,dname,class,type,0,0,0,(char*)packet,512))<0) { h_errno=NO_RECOVERY; return -1; }
   {
     {
       int i;	/* current server */

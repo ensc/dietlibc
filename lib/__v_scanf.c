@@ -12,7 +12,7 @@
 #define A_GETC(fn)	(++consumed,(fn)->getch((fn)->data))
 #define A_PUTC(c,fn)	(--consumed,(fn)->putch((c),(fn)->data))
 
-int __v_scanf(struct arg_scanf* fn, const unsigned char *format, va_list arg_ptr)
+int __v_scanf(struct arg_scanf* fn, const char *format, va_list arg_ptr)
 {
   unsigned int ch;	/* format act. char */
   int n=0;

@@ -7,7 +7,7 @@
 #include "dietstdio.h"
 #include "dietwarning.h"
 
-static inline unsigned int skip_to(const unsigned char *format) {
+static inline unsigned int skip_to(const char *format) {
   unsigned int nr;
   for (nr=0; format[nr] && (format[nr]!='%'); ++nr);
   return nr;
@@ -27,7 +27,7 @@ static inline int write_pad(struct arg_printf* fn, int len, int padwith) {
   return nr;
 }
 
-int __v_printf(struct arg_printf* fn, const unsigned char *format, va_list arg_ptr)
+int __v_printf(struct arg_printf* fn, const char *format, va_list arg_ptr)
 {
   int len=0;
 #ifdef WANT_ERROR_PRINTF

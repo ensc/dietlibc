@@ -17,6 +17,7 @@
   remove two ppc64 warnings
   fix s/390 syscalls > 255
   add "diet -L gcc" option to print the lib path
+  remove new gcc4 signedness warnings
 
 0.28:
   add tcgetsid (Yuri Kozlov)

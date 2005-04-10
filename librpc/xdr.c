@@ -120,9 +120,9 @@ bool_t xdr_u_int(XDR* xdrs, unsigned int* up)
 	  switch (xdrs->x_op) {
 	  case XDR_ENCODE:
 		l = (unsigned long) *up;
-		return XDR_PUTLONG(xdrs, &l);
+		return XDR_PUTLONG(xdrs, (long*)&l);
 	  case XDR_DECODE:
-		if (!XDR_GETLONG(xdrs, &l))
+		if (!XDR_GETLONG(xdrs, (long*)&l))
 		  return FALSE;
 		*up = (unsigned int) l;
 	  case XDR_FREE:
@@ -221,10 +221,10 @@ bool_t xdr_u_short(XDR* xdrs, unsigned short* usp)
 
 	case XDR_ENCODE:
 		l = (unsigned long) * usp;
-		return (XDR_PUTLONG(xdrs, &l));
+		return (XDR_PUTLONG(xdrs, (long*)&l));
 
 	case XDR_DECODE:
-		if (!XDR_GETLONG(xdrs, &l)) {
+		if (!XDR_GETLONG(xdrs, (long*)&l)) {
 			return (FALSE);
 		}
 		*usp = (unsigned short) l;
