@@ -129,6 +129,11 @@
 #define ESTRPIPE	128	/* Streams pipe error */
 #define ENOMEDIUM	129	/* No medium found */
 #define EMEDIUMTYPE	130	/* Wrong medium type */
+#define	ECANCELED	131	/* Operation Cancelled */
+#define	ENOKEY		132	/* Required key not available */
+#define	EKEYEXPIRED	133	/* Key has expired */
+#define	EKEYREVOKED	134	/* Key has been revoked */
+#define	EKEYREJECTED	135	/* Key was rejected by service */
 
 #elif defined(__mips__)
 
@@ -259,6 +264,10 @@
 #define ECANCELED	158	/* AIO operation canceled */
 #define ENOMEDIUM	159	/* No medium found */
 #define EMEDIUMTYPE	160	/* Wrong medium type */
+#define	ENOKEY		161	/* Required key not available */
+#define	EKEYEXPIRED	162	/* Key has expired */
+#define	EKEYREVOKED	163	/* Key has been revoked */
+#define	EKEYREJECTED	164	/* Key was rejected by service */
 #define EDQUOT		1133	/* Quota exceeded */
 
 #elif defined(__sparc__)
@@ -390,6 +399,11 @@
 #define ELIBSCN		124	/* .lib section in a.out corrupted */
 #define ENOMEDIUM	125	/* No medium found */
 #define EMEDIUMTYPE	126	/* Wrong medium type */
+#define	ECANCELED	127	/* Operation Cancelled */
+#define	ENOKEY		128	/* Required key not available */
+#define	EKEYEXPIRED	129	/* Key has expired */
+#define	EKEYREVOKED	130	/* Key has been revoked */
+#define	EKEYREJECTED	131	/* Key was rejected by service */
 
 #elif defined(__hppa__)
 
@@ -491,6 +505,10 @@
 #define	EREMOTEIO	181	/* Remote I/O error */
 #define	ENOMEDIUM	182	/* No medium found */
 #define	EMEDIUMTYPE	183	/* Wrong medium type */
+#define	ENOKEY		184	/* Required key not available */
+#define	EKEYEXPIRED	185	/* Key has expired */
+#define	EKEYREVOKED	186	/* Key has been revoked */
+#define	EKEYREJECTED	187	/* Key was rejected by service */
 
 /* We now return you to your regularly scheduled HPUX. */
 
@@ -665,6 +683,11 @@
 #define EDQUOT		122	/* Quota exceeded */
 #define ENOMEDIUM	123	/* No medium found */
 #define EMEDIUMTYPE	124	/* Wrong medium type */
+#define	ECANCELED	125	/* Operation Canceled */
+#define	ENOKEY		126	/* Required key not available */
+#define	EKEYEXPIRED	127	/* Key has expired */
+#define	EKEYREVOKED	128	/* Key has been revoked */
+#define	EKEYREJECTED	129	/* Key was rejected by service */
 #endif
 
 #define __SYS_NERR  ((EMEDIUMTYPE) + 1)
