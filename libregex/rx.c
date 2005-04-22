@@ -406,6 +406,7 @@ static const char* parseregex(struct regex*__restrict__ r,const char*__restrict_
       r->b=tmp;
     }
 //    printf("%p (size %d)\n",r->b,r->num*sizeof(b));
+    b.next=0;
     r->b[r->num-1]=b;
 //    printf("assigned branch %d at %p\n",r->num-1,r->b);
     s=tmp; if (*s=='|') ++s;
