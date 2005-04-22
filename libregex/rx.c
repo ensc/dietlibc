@@ -395,6 +395,7 @@ static const char* parseregex(struct regex*__restrict__ r,const char*__restrict_
   r->m=matchregex;
   r->num=0; r->b=0; r->pieces=0;
   p->brackets=0;
+  b.next=0;
   for (;;) {
     tmp=parsebranch(&b,s,p,&r->pieces);
     if (tmp==s) return s;
@@ -406,7 +407,6 @@ static const char* parseregex(struct regex*__restrict__ r,const char*__restrict_
       r->b=tmp;
     }
 //    printf("%p (size %d)\n",r->b,r->num*sizeof(b));
-    b.next=0;
     r->b[r->num-1]=b;
 //    printf("assigned branch %d at %p\n",r->num-1,r->b);
     s=tmp; if (*s=='|') ++s;
