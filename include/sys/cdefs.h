@@ -63,10 +63,17 @@
 #define __deprecated__
 #endif
 
-#if (__GNUC_ > 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 3))
+#if (__GNUC__ > 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 3))
 # define __nonnull(params) __attribute__ ((__nonnull__ params))
 #else
 # define __nonnull(params)
+#endif
+
+#if (__GNUC__ >= 4)
+#define __needsNULL__(x) __sentinel__(x)
+#else
+#define __needsNULL__(x)
+#define __sentinel__
 #endif
 
 #endif
