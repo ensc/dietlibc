@@ -19,6 +19,7 @@
   add "diet -L gcc" option to print the lib path
   remove new gcc4 signedness warnings
   add link.h (probably only useful to compile an ia64 cross-gcc)
+  understand -m32 on x86_64 as meaning i386
 
 0.28:
   add tcgetsid (Yuri Kozlov)
