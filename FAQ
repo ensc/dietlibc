@@ -241,14 +241,25 @@ A: Some obsolete and/or questionable functions have been put into
 
 Q: Compiling software with "diet -Os gcc..." gives error messages about
    -malign-loops, -malign-jumps and -malign-functions being obsolete.
-A: diet -Os uses some platform dependant gcc options to create tighter
+A: UPDATE: the defaults have been changed as of 2005-04-23.
+   diet -Os uses some platform dependant gcc options to create tighter
    code.  Unfortunately, these options have been renamed on gcc 3.  You
    can fix this by creating a file ~/.diet/gcc containing this line:
 
-     -Os -fomit-frame-pointer -falign-jumps=1 -falign-loops=1 -mpreferred-stack-boundary=2
+     -Os -fomit-frame-pointer -falign-jumps=1 -falign-loops=1 -fpreferred-stack-boundary=2
 
    If you get this options not for diet -Os gcc but for diet -Os
    i386-linux-gcc, put this in ~/.diet/i386-linux-gcc instead.
+
+
+Q: Compiling software with "diet -Os gcc..." gives error messages about
+   -falign-loops, -falign-jumps and -falign-functions.
+A: See previous entry for an explanation.  You are using gcc 2; please
+   upgrade to gcc 3 or 4.  As a workaround, put
+
+     -Os -fomit-frame-pointer -malign-jumps=1 -malign-loops=1 -mpreferred-stack-boundary=2
+
+   into ~/.diet/gcc.
 
 
 Q: I see lots of uninitialized variables, like "static int foo;".  What gives?

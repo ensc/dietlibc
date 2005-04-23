@@ -20,6 +20,8 @@
   remove new gcc4 signedness warnings
   add link.h (probably only useful to compile an ia64 cross-gcc)
   understand -m32 on x86_64 as meaning i386
+  now that gcc 4 is out, finally switch -malign-functions to
+    -falign-functions in diet
 
 0.28:
   add tcgetsid (Yuri Kozlov)
