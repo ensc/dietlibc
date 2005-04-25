@@ -22,6 +22,7 @@
   understand -m32 on x86_64 as meaning i386
   now that gcc 4 is out, finally switch -malign-functions to
     -falign-functions in diet
+  MADV_* for hppa and ia64 (Enrico Scholz)
 
 0.28:
   add tcgetsid (Yuri Kozlov)
