@@ -24,4 +24,6 @@
 #define _PATH_MOUNTED	"/etc/mtab"
 #define	_PATH_DEV	"/dev/"
 
+#define _PATH_TMP	"/tmp/"
+
 #endif

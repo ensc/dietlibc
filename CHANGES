@@ -23,6 +23,7 @@
   now that gcc 4 is out, finally switch -malign-functions to
     -falign-functions in diet
   MADV_* for hppa and ia64 (Enrico Scholz)
+  add _PATH_TMP to paths.h
 
 0.28:
   add tcgetsid (Yuri Kozlov)
