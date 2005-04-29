@@ -37,15 +37,26 @@ static unsigned long at_egid;
 static unsigned long at_pagesize;
 
 /* this are the "local syscalls" */
+__attribute__((noreturn,visibility("hidden")))
 void _dl_sys_exit(int val);
+__attribute__((visibility("hidden")))
 int _dl_sys_read(int fd,char*buf,unsigned long len);
+__attribute__((visibility("hidden")))
 int _dl_sys_write(int fd,char*buf,unsigned long len);
+__attribute__((visibility("hidden")))
 int _dl_sys_open(const char*filename,int flags,int mode);
+__attribute__((visibility("hidden")))
 int _dl_sys_close(int fd);
+__attribute__((visibility("hidden")))
 void*_dl_sys_mmap(void*start,unsigned long length,int prot,int flags,int fd,unsigned long offset);
+__attribute__((visibility("hidden")))
 int _dl_sys_munmap(void*start,unsigned long length);
+__attribute__((visibility("hidden")))
 int _dl_sys_mprotect(const void*addr,unsigned long len,int prot);
+__attribute__((visibility("hidden")))
 int _dl_sys_fstat(int filedes, struct stat *buf);
+__attribute__((visibility("hidden")))
+void _dl_jump(void);
 
 extern char*strdup(const char*s);
 extern void free(void*p);
@@ -169,8 +180,6 @@ static inline unsigned long* get_got(void) {
 }
 
 static inline int work_on_pltgot(struct _dl_handle*dh) {
-  /* declare _dl_jump static otherwise we have a GOT access BEFOR we have the resolver */
-  static void _dl_jump(void);
   if ((dh->plt_rel)&&(!(dh->flags&RTLD_NOW))) {
     unsigned long*tmp=dh->pltgot;
     /* GOT */
@@ -289,8 +298,6 @@ static inline unsigned long* get_got(void) {
 }
 
 static inline int work_on_pltgot(struct _dl_handle*dh) {
-  /* declare _dl_jump static otherwise we have a GOT access BEFOR we have the resolver */
-  static void _dl_jump(void);
   if ((dh->plt_rel)&&(!(dh->flags&RTLD_NOW))) {
     unsigned long*tmp=dh->pltgot;
     /* GOT */
@@ -402,8 +409,6 @@ static inline unsigned long* get_got(void) {
 }
 
 static inline int work_on_pltgot(struct _dl_handle*dh) {
-  /* declare _dl_jump static otherwise we have a GOT access BEFOR we have the resolver */
-  static void _dl_jump(void);
   if ((dh->plt_rel)&&(!(dh->flags&RTLD_NOW))) {
     unsigned long*tmp=dh->pltgot;
     /* GOT */
@@ -416,12 +421,14 @@ static inline int work_on_pltgot(struct _dl_handle*dh) {
 
 #elif defined(__sparc__)
 
-#warning "sparc is not tested yet... AND HAS NO RESOLVER !!!"
+#warning "sparc is not working !!! AND HAS NO RESOLVER !!!"
 
 /* ARG... sparc has EVERY variable (even static) only addressable through the GOT */
 
 asm(".text \n"
 ".align 16 \n"
+".global _start \n"
+".hidden _start \n"
 ".type _start,@function \n"
 "_start: \n"
 /* save some later needed values */
@@ -450,7 +457,8 @@ asm(".text \n"
 "	sub	%o7, %o4, %o4 \n"
 /* get 'relocated' address of _DYNAMIC (%o3) // call the dynamic linker */
 "	ld	[ %l7 ], %o3 \n"
-"	call	_dl_main \n"
+//"	call	_dl_main \n"
+"	call	_pr_ping \n"
 "	add	%o4, %o3, %o3 \n"
 /* put entry point to the return register */
 "	mov	%o0, %o7 \n"
@@ -465,13 +473,14 @@ asm(".text \n"
 "_pr_ping: \n"
 "	save \n"
 "1:	call	1f \n"
-"	mov	_pr_ping_str-1b, %o1 \n"
-"1:	add	%o7, %o1, %o1 \n"
+"	mov	_pr_ping_str-1b, %i1 \n"
+"1:	add	%o7, %i1, %i1 \n"
 "	restore \n"
-"	mov	2, %o0 \n"
 "	mov	6, %o2 \n"
-"	b	_dl_sys_call3 \n"
-"	mov	4, %g1 \n"
+"	call	_dl_sys_write \n"
+"	mov	2, %o0 \n"
+"	call	_dl_sys_exit \n"
+"	mov	0, %o0 \n"
 
 
 ".type _dl_sys_exit,@function \n"
@@ -480,7 +489,8 @@ asm(".text \n"
 ".type _dl_sys_call3,@function \n"
 "_dl_sys_call3: \n"
 "	ta	0x10 \n"
-"	ret \n"
+"	retl \n"
+"	nop \n"
 ".type _dl_sys_read,@function \n"
 "_dl_sys_read: \n"
 "	b	_dl_sys_call3 \n"
@@ -525,8 +535,6 @@ static inline unsigned long* get_got(void) {
 }
 
 static inline int work_on_pltgot(struct _dl_handle*dh) {
-  /* declare _dl_jump static otherwise we have a GOT access BEFOR we have the resolver */
-  static void _dl_jump(void);
   if ((dh->plt_rel)&&(!(dh->flags&RTLD_NOW))) {
     unsigned long*tmp=dh->pltgot;
     /* GOT */
@@ -707,6 +715,7 @@ static void tt_fini(void) {
 }
 
 /* exit ! */
+__attribute__((noreturn))
 static void _DIE_() { _dl_sys_exit(213); }
 
 /* lazy function resolver */
@@ -902,7 +911,7 @@ static struct _dl_handle* _dl_dyn_scan(struct _dl_handle*dh,Elf_Dyn*_dynamic) {
 
       /* BASIC DYNAMIC STUFF */
     case DT_HASH:
-      dh->hash_tab = (unsigned long*)(dh->mem_base+_dynamic[i].d_un.d_ptr);
+      dh->hash_tab = (unsigned int*)(dh->mem_base+_dynamic[i].d_un.d_ptr);
 #ifdef DEBUG
       pf(__FUNCTION__); pf(": have hash @ "); ph((long)dh->hash_tab); pf("\n");
 #endif
