@@ -101,9 +101,6 @@ struct r_debug {
   } r_state;
   Elf_Addr r_ldbase;
 };
-#ifdef WANT_LD_SO_GDB_SUPPORT
-extern struct r_debug _r_debug;
-#endif
 
 #define HASH_BUCKET_LEN(p)	(*((p)))
 #define HASH_BUCKET(p)		((p)+2)
@@ -112,9 +109,11 @@ extern struct r_debug _r_debug;
 #define HASH_CHAIN(p)		((p)+2+HASH_BUCKET_LEN(p))
 
 /* _dl_alloc.c */
+#if 0
 extern struct _dl_handle* _dl_root_handle;
 extern struct _dl_handle* _dl_top_handle;
 extern struct _dl_handle* _dl_free_list;
+#endif
 #ifndef __DIET_LD_SO__
 void _dl_free_handle(struct _dl_handle* dh);
 struct _dl_handle* _dl_get_handle();

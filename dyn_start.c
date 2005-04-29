@@ -29,10 +29,11 @@ int stackgap(int argc,char* argv[],char* envp[]);
 
 #ifndef __DYN_LIB_SHARED
 /* pre main, post _start */
+static __attribute__((section(".init"))) void _init(void);
+
 int _dyn_start(int argc, char **argv, char **envp, structor dl_init);
 int _dyn_start(int argc, char **argv, char **envp, structor dl_init)
 {
-  static __attribute__((section(".init"))) void _init(void);
   int main(int argc, char **argv, char **envp);
 
   if (dl_init) atexit(dl_init);
