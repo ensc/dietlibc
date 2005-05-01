@@ -21,10 +21,11 @@ int gethostbyname_r(const char* name, struct hostent* result,
   size_t L=strlen(name);
   unsigned int offset;
   result->h_name=buf;
+  L=(L+sizeof(char*))&-(sizeof(char*));
   if (buflen<L) { *h_errnop=ERANGE; return 1; }
   strcpy(buf,name);
 #ifdef WANT_INET_ADDR_DNS
-  offset = (strlen(name)+sizeof(char*))&-(sizeof(char**));	/* align */
+  offset = (strlen(name)+sizeof(char*))&-(sizeof(char*));	/* align */
   result->h_addr_list=(char**)(buf+offset);
   result->h_addr_list[0]=(char*)&result->h_addr_list[2];
   if (inet_pton(AF_INET,name,result->h_addr_list[0])) {
