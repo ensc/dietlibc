@@ -125,20 +125,12 @@ syscall:
 	mov  %o4, %o3
 	mov  %o5, %o4
 	t  0x10
-	bcc  .Lret
-#ifdef WANT_THREAD_SAFE
-	.err	/* not implemented yet */
-#else
-	neg  %o0
-	sethi  %hi(errno), %g1
-	or  %g1, %lo(errno), %g2
-	st  %o0, [%g2]
-#endif
-	mov  -1, %o0
-.Lret:
-	retl 
+	bcs  __unified_syscall_error_handler
+	nop
+	retl
+	nop
 
 #else
-	.err	/* arch not implemented yet */
+		/* arch not implemented yet */
 #endif
 .size	syscall, . - syscall
