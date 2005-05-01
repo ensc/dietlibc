@@ -24,6 +24,8 @@
     -falign-functions in diet
   MADV_* for hppa and ia64 (Enrico Scholz)
   add _PATH_TMP to paths.h
+  support syscall on sparc and x86_64 (Herbert Poetzl)
+  change alignment code in gethostbyname_r (Herbert Poetzl)
 
 0.28:
   add tcgetsid (Yuri Kozlov)

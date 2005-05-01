@@ -77,5 +77,68 @@ syscall:
 	cmp.eq p6,p0=-1,r10
 (p6)	br __error_unified_syscall
 	br.ret.sptk.few rp
+
+#elif (defined(__x86_64__))
+	mov %rdi, %rax
+	mov %rsi, %rdi
+	mov %rdx, %rsi
+	mov %rcx, %rdx
+	mov %r8, %r10
+	mov %r9, %r8
+	mov 0x8(%rsp), %r9
+	syscall
+	cmpq	$-128, %rax
+	jbe	.Lnoerror
+	negl	%eax
+	pushq	%rax
+	call	__errno_location
+	popq	%rcx
+	movl	%ecx,(%rax)
+	orq	$-1, %rax
+.Lnoerror:
+	retq
+#elif (defined(__sparc__) && defined(__arch64__))
+	mov  %o0, %g1
+	mov  %o1, %o0
+	mov  %o2, %o1
+	mov  %o3, %o2
+	mov  %o4, %o3
+	mov  %o5, %o4
+	ta  0x6d
+	bcc  .Lret
+#ifdef WANT_THREAD_SAFE
+	.err	/* not implemented yet */
+#else
+	neg  %o0
+	sethi  %hi(errno), %g1
+	or  %g1, %lo(errno), %g2
+	st  %o0, [%g2]
+#endif
+	mov  -1, %o0
+.Lret:
+	retl 
+#elif (defined(__sparc__))
+	mov  %o0, %g1
+	mov  %o1, %o0
+	mov  %o2, %o1
+	mov  %o3, %o2
+	mov  %o4, %o3
+	mov  %o5, %o4
+	t  0x10
+	bcc  .Lret
+#ifdef WANT_THREAD_SAFE
+	.err	/* not implemented yet */
+#else
+	neg  %o0
+	sethi  %hi(errno), %g1
+	or  %g1, %lo(errno), %g2
+	st  %o0, [%g2]
+#endif
+	mov  -1, %o0
+.Lret:
+	retl 
+
+#else
+	.err	/* arch not implemented yet */
 #endif
 .size	syscall, . - syscall

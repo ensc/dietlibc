@@ -19,12 +19,13 @@ int gethostbyname_r(const char* name, struct hostent* result,
 				char *buf, size_t buflen,
 				struct hostent **RESULT, int *h_errnop) {
   size_t L=strlen(name);
+  unsigned int offset;
   result->h_name=buf;
   if (buflen<L) { *h_errnop=ERANGE; return 1; }
   strcpy(buf,name);
 #ifdef WANT_INET_ADDR_DNS
-  result->h_addr_list=(char**)(buf+strlen(name)+1);
-  result->h_addr_list+=sizeof(unsigned long)-((unsigned long)(result->h_addr_list)&(sizeof(unsigned long)-1));
+  offset = (strlen(name)+sizeof(char*))&-(sizeof(char**));	/* align */
+  result->h_addr_list=(char**)(buf+offset);
   result->h_addr_list[0]=(char*)&result->h_addr_list[2];
   if (inet_pton(AF_INET,name,result->h_addr_list[0])) {
     result->h_addrtype=AF_INET;
