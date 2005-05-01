@@ -26,6 +26,7 @@
   add _PATH_TMP to paths.h
   support syscall on sparc and x86_64 (Herbert Poetzl)
   change alignment code in gethostbyname_r (Herbert Poetzl)
+  avoid bus errors in DNS code
 
 0.28:
   add tcgetsid (Yuri Kozlov)
