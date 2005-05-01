@@ -3,4 +3,6 @@
 
 #include <asm/unistd.h>
 
+int syscall(int number, ...);
+
 #endif
