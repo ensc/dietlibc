@@ -78,14 +78,14 @@ int res_query(const char *dname, int class, int type, unsigned char *answer, int
 	  memset(&pnpsa6,0,sizeof(pnpsa6));
 	  pnpsa6.sin6_family=AF_INET6;
 	  if (pnpfd!=-1) bind(pnpfd,(struct sockaddr*)&pnpsa6,sizeof(pnpsa6));
-	  pnpsa6.sin6_port=htons(53);
+	  pnpsa6.sin6_port=htons(5353);
 	  memcpy(&pnpsa6.sin6_addr,"\xff\x02\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xfb",16);
 	} else {
 #endif
 	  memset(&pnpsa4,0,sizeof(pnpsa4));
 	  pnpsa4.sin_family=AF_INET;
 	  if (pnpfd!=-1) bind(pnpfd,(struct sockaddr*)&pnpsa4,sizeof(pnpsa4));
-	  pnpsa4.sin_port=htons(53);
+	  pnpsa4.sin_port=htons(5353);
 	  memcpy(&pnpsa4.sin_addr,"\xe0\x00\x00\xfb",4);  /* 224.0.0.251 */
 #ifdef WANT_IPV6_DNS
 	}

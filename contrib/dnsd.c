@@ -108,7 +108,7 @@ int main() {
   if (s6!=-1) {
     memset(&sa6,0,sizeof(sa6));
     sa6.sin6_family=PF_INET6;
-    sa6.sin6_port=htons(53);
+    sa6.sin6_port=htons(5353);
     if (bind(s6,(struct sockaddr*)&sa6,sizeof(struct sockaddr_in6))==-1) {
       perror("bind IPv6");
       close(s6);
@@ -118,7 +118,7 @@ int main() {
   if (s4!=-1) {
     memset(&sa4,0,sizeof(sa4));
     sa4.sin_family=PF_INET;
-    sa4.sin_port=htons(53);
+    sa4.sin_port=htons(5353);
     if (bind(s4,(struct sockaddr*)&sa4,sizeof(struct sockaddr_in))==-1) {
       if (errno!=EADDRINUSE || s6==-1)
 	perror("bind IPv4");
