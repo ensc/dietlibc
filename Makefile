@@ -89,7 +89,8 @@ WHAT=	$(OBJDIR) $(OBJDIR)/start.o $(OBJDIR)/dyn_start.o $(OBJDIR)/dyn_stop.o \
 	$(OBJDIR)/libcompat.a $(OBJDIR)/libm.a \
 	$(OBJDIR)/librpc.a $(OBJDIR)/libpthread.a \
 	$(OBJDIR)/libcrypt.a \
-	$(OBJDIR)/diet $(OBJDIR)/diet-i $(OBJDIR)/elftrunc
+	$(OBJDIR)/diet $(OBJDIR)/diet-i $(OBJDIR)/elftrunc \
+	$(OBJDIR)/dnsd
 
 all: $(WHAT)
 
@@ -271,6 +272,9 @@ $(SYSCALLOBJ): syscalls.h
 
 $(OBJDIR)/elftrunc: $(OBJDIR)/diet contrib/elftrunc.c
 	bin-$(MYARCH)/diet $(CROSS)$(CC) $(CFLAGS) -o $@ contrib/elftrunc.c
+
+$(OBJDIR)/dnsd: $(OBJDIR)/diet contrib/dnsd.c
+	bin-$(MYARCH)/diet $(CROSS)$(CC) $(CFLAGS) -o $@ contrib/dnsd.c
 
 VERSION=dietlibc-$(shell head -n 1 CHANGES|sed 's/://')
 CURNAME=$(notdir $(shell pwd))

@@ -19,7 +19,7 @@ struct sockaddr* peer;
 socklen_t sl;
 int s6,s4;
 
-void handle(int s,char* buf,int len,int interface) {
+static void handle(int s,char* buf,int len,int interface) {
   int q;
   char* obuf=buf;
   int olen=len;
@@ -81,13 +81,19 @@ struct pollfd pfd[2];
 struct msghdr mh;
 struct iovec iv;
 char abuf[100];
-struct cmsghdr* x;
 #define PKGSIZE 1500
 char buf[PKGSIZE+1];
 
+static int v4if() {
+  struct cmsghdr* x;
+  for (x=CMSG_FIRSTHDR(&mh); x; x=CMSG_NXTHDR(&mh,x))
+    if (x->cmsg_level==SOL_IP && x->cmsg_type==IP_PKTINFO)
+      return ((struct in_pktinfo*)(CMSG_DATA(x)))->ipi_ifindex;
+  return 0;
+}
 
-void recv4() {
-  int len,interface;
+static void recv4() {
+  int len;
 
   mh.msg_name=&sa4;
   mh.msg_namelen=sizeof(sa4);
@@ -98,17 +104,10 @@ void recv4() {
   peer=(struct sockaddr*)&sa4;
   sl=sizeof(sa4);
 
-  for (x=CMSG_FIRSTHDR(&mh); x; x=CMSG_NXTHDR(&mh,x))
-    if (x->cmsg_level==SOL_IP && x->cmsg_type==IP_PKTINFO) {
-      struct in_pktinfo* y=(struct in_pktinfo*)(CMSG_DATA(x));
-      interface=y->ipi_ifindex;
-      break;
-    }
-
-  handle(s4,buf,len,interface);
+  handle(s4,buf,len,v4if());
 }
 
-void recv6() {
+static void recv6() {
   int len,interface;
 
   mh.msg_name=&sa6;
@@ -120,14 +119,9 @@ void recv6() {
   peer=(struct sockaddr*)&sa6;
   sl=sizeof(sa6);
 
-  if (IN6_IS_ADDR_V4MAPPED(sa6.sin6_addr.s6_addr)) {
-    for (x=CMSG_FIRSTHDR(&mh); x; x=CMSG_NXTHDR(&mh,x))
-      if (x->cmsg_level==SOL_IP && x->cmsg_type==IP_PKTINFO) {
-	struct in_pktinfo* y=(struct in_pktinfo*)(CMSG_DATA(x));
-	interface=y->ipi_ifindex;
-	break;
-      }
-  } else
+  if (IN6_IS_ADDR_V4MAPPED(sa6.sin6_addr.s6_addr))
+    interface=v4if();
+  else
     interface=sa6.sin6_scope_id;
 
   handle(s6,buf,len,interface);
