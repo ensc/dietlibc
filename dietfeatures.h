@@ -81,7 +81,9 @@
  * against glibc fail?  This may fail with older binutils. */
 #define WANT_SAFEGUARD
 
-/* this enables zeroconf DNS aka Rendezvous aka Bounjour. */
+/* This enables zeroconf DNS aka Rendezvous aka Bonjour. */
+/* This code will try zeroconf DNS if you ask for host.local or if you
+ * ask for an unqualified hostname */
 #define WANT_PLUGPLAY_DNS
 
 /* do you want that malloc(0) return a pointer to a "zero-length" object
