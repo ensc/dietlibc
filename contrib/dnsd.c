@@ -11,6 +11,7 @@
 #include <strings.h>
 #include <net/if.h>
 #include <sys/ioctl.h>
+#include <stdlib.h>
 
 char myhostname[100];
 int namelen;
@@ -73,24 +74,72 @@ void handle(int s,char* buf,int len,int interface) {
   }
 }
 
-int main() {
-  struct sockaddr_in sa4;
-  struct sockaddr_in6 sa6;
-  struct pollfd pfd[2];
+struct sockaddr_in sa4;
+struct sockaddr_in6 sa6;
+struct pollfd pfd[2];
 
-  struct msghdr mh;
-  struct iovec iv;
-  char abuf[100];
-  struct cmsghdr* x;
+struct msghdr mh;
+struct iovec iv;
+char abuf[100];
+struct cmsghdr* x;
 #define PKGSIZE 1500
-  char buf[PKGSIZE+1];
+char buf[PKGSIZE+1];
 
+
+void recv4() {
+  int len,interface;
+
+  mh.msg_name=&sa4;
+  mh.msg_namelen=sizeof(sa4);
+  if ((len=recvmsg(s4,&mh,0))==-1) {
+    perror("recvmsg");
+    exit(3);
+  }
+  peer=(struct sockaddr*)&sa4;
+  sl=sizeof(sa4);
+
+  for (x=CMSG_FIRSTHDR(&mh); x; x=CMSG_NXTHDR(&mh,x))
+    if (x->cmsg_level==SOL_IP && x->cmsg_type==IP_PKTINFO) {
+      struct in_pktinfo* y=(struct in_pktinfo*)(CMSG_DATA(x));
+      interface=y->ipi_ifindex;
+      break;
+    }
+
+  handle(s4,buf,len,interface);
+}
+
+void recv6() {
+  int len,interface;
+
+  mh.msg_name=&sa6;
+  mh.msg_namelen=sizeof(sa6);
+  if ((len=recvmsg(s6,&mh,0))==-1) {
+    perror("recvmsg");
+    exit(3);
+  }
+  peer=(struct sockaddr*)&sa6;
+  sl=sizeof(sa6);
+
+  if (IN6_IS_ADDR_V4MAPPED(sa6.sin6_addr.s6_addr)) {
+    for (x=CMSG_FIRSTHDR(&mh); x; x=CMSG_NXTHDR(&mh,x))
+      if (x->cmsg_level==SOL_IP && x->cmsg_type==IP_PKTINFO) {
+	struct in_pktinfo* y=(struct in_pktinfo*)(CMSG_DATA(x));
+	interface=y->ipi_ifindex;
+	break;
+      }
+  } else
+    interface=sa6.sin6_scope_id;
+
+  handle(s6,buf,len,interface);
+}
+
+int main() {
   mh.msg_name=&sa4;
   mh.msg_namelen=sizeof(sa4);
   mh.msg_iov=&iv;
   mh.msg_iovlen=1;
   iv.iov_base=buf;
-  iv.iov_len=sizeof(PKGSIZE);
+  iv.iov_len=PKGSIZE;
   mh.msg_control=abuf;
   mh.msg_controllen=sizeof(abuf);
 
@@ -156,6 +205,8 @@ int main() {
     int interface=0;
     if (s4!=-1 && s6!=-1) {
       if (s4!=-1) {
+	recv4();
+#if 0
 	if ((len=recvmsg(s4,&mh,0))==-1) {
 	  perror("recvmsg");
 	  return 3;
@@ -171,7 +222,10 @@ int main() {
 	  }
 
 	handle(s4,buf,len,interface);
+#endif
       } else {
+	recv6();
+#if 0
 	sl=sizeof(sa6);
 	if ((len=recvfrom(s6,buf,PKGSIZE,0,(struct sockaddr*)&sa6,&sl))==-1) {
 	  perror("recvfrom");
@@ -180,6 +234,7 @@ int main() {
 	peer=(struct sockaddr*)&sa6;
 
 	handle(s6,buf,len,sa6.sin6_scope_id);
+#endif
       }
     } else {
       pfd[0].fd=s4; pfd[0].events=POLLIN;
@@ -192,6 +247,8 @@ int main() {
 	continue;
       }
       if (pfd[0].revents & POLLIN) {
+	recv4();
+#if 0
 	if ((len=recvmsg(s4,&mh,0))==-1) {
 	  perror("recvmsg");
 	  return 3;
@@ -207,8 +264,11 @@ int main() {
 	  }
 
 	handle(s4,buf,len,interface);
+#endif
       }
       if (pfd[1].revents & POLLIN) {
+	recv6();
+#if 0
 	sl=sizeof(sa6);
 	if ((len=recvfrom(s6,buf,sizeof(buf),0,(struct sockaddr*)&sa6,&sl))==-1) {
 	  perror("recvfrom");
@@ -216,6 +276,7 @@ int main() {
 	}
 	peer=(struct sockaddr*)&sa6;
 	handle(s6,buf,len,sa6.sin6_scope_id);
+#endif
       }
     }
   }
