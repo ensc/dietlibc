@@ -28,3 +28,5 @@ __unified_syscall:
 #include "dietuglyweaks.h"
 
 	ret
+.Lhere:
+	.size	 __unified_syscall,.Lhere-__unified_syscall
