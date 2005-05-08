@@ -197,10 +197,9 @@ static const char* parseatom(struct atom*__restrict__ a,const char*__restrict__ 
       return s+2;
     }
     a->type=REGEX;
-    if ((tmp=parseregex(&a->u.r,s+1,rx))!=s) {
-      if (*tmp==')')
-	return tmp+1;
-    }
+    tmp=parseregex(&a->u.r,s+1,rx);
+    if (*tmp==')')
+      return tmp+1;
   case 0:
   case '|':
   case ')':
@@ -340,14 +339,12 @@ static const char* parsebranch(struct branch*__restrict__ b,const char*__restric
   b->m=matchbranch;
   b->num=0; b->p=0;
   for (;;) {
-    if (*s=='|') {
-      if (b->num==0) {
-	tmp=s+1;
-	p.a.type=EMPTY;
-	p.a.m=matchempty;
-	p.min=p.max=1;
-	p.m=matchpiece;
-      }
+    if (*s=='|' && b->num==0) {
+      tmp=s+1;
+      p.a.type=EMPTY;
+      p.a.m=matchempty;
+      p.min=p.max=1;
+      p.m=matchpiece;
     } else {
       tmp=parsepiece(&p,s,rx);
       if (tmp==s) return s;
@@ -362,7 +359,7 @@ static const char* parsebranch(struct branch*__restrict__ b,const char*__restric
 //    printf("%p (size %d)\n",b->p,b->num*sizeof(p));
     b->p[b->num-1]=p;
 //    printf("assigned piece %d in branch %p\n",b->num-1,b->p);
-    if (*tmp=='|') { break; }
+    if (*tmp=='|') break;
     s=tmp;
   }
   *pieces+=b->num;
@@ -396,9 +393,13 @@ static const char* parseregex(struct regex*__restrict__ r,const char*__restrict_
   r->num=0; r->b=0; r->pieces=0;
   p->brackets=0;
   b.next=0;
+  if (*s==')' || !*s) {
+    r->m=matchempty;
+    return s;
+  }
   for (;;) {
     tmp=parsebranch(&b,s,p,&r->pieces);
-    if (tmp==s) return s;
+    if (tmp==s && *s!=')') return s;
 //    printf("r->b from %p to ",r->b);
     {
       struct branch* tmp;
@@ -408,6 +409,10 @@ static const char* parseregex(struct regex*__restrict__ r,const char*__restrict_
     }
 //    printf("%p (size %d)\n",r->b,r->num*sizeof(b));
     r->b[r->num-1]=b;
+    if (*s==')') {
+      r->b[r->num-1].m=matchempty;
+      return s;
+    }
 //    printf("assigned branch %d at %p\n",r->num-1,r->b);
     s=tmp; if (*s=='|') ++s;
   }
@@ -434,13 +439,15 @@ static void piece_putnext(struct piece*__restrict__ p,void*__restrict__ next) {
 
 static void branch_putnext(struct branch*__restrict__ b,void*__restrict__ next) {
   int i;
-  for (i=0; i<b->num-1; ++i) {
-    if (b->p[i+1].min==1 && b->p[i+1].max==1)
-      piece_putnext(&b->p[i],&b->p[i+1].a);
-    else
-      piece_putnext(&b->p[i],&b->p[i+1]);
+  if (b->m!=matchempty) {
+    for (i=0; i<b->num-1; ++i) {
+      if (b->p[i+1].min==1 && b->p[i+1].max==1)
+	piece_putnext(&b->p[i],&b->p[i+1].a);
+      else
+	piece_putnext(&b->p[i],&b->p[i+1]);
+    }
+    piece_putnext(&b->p[i],0);
   }
-  piece_putnext(&b->p[i],0);
   b->next=next;
 }
 
@@ -457,7 +464,7 @@ int regcomp(regex_t*__restrict__ preg, const char*__restrict__ regex, int cflags
   const char* t;
   preg->cflags=cflags;
   t=parseregex(&preg->r,regex,preg);
-  if (t==regex) return -1;
+  if (t==regex && *regex!=0) return -1;
   regex_putnext(&preg->r,0);
   return 0;
 }

@@ -31,6 +31,7 @@
   replace unfinished plug&play DNS hack with zeroconf,
     rename dietfeatures.h option to WANT_PLUGPLAY_DNS.
     A small dns daemon can be found in contrib/dnsd.c
+  fix bug regarding regular expressions like "(a|)b"
 
 0.28:
   add tcgetsid (Yuri Kozlov)

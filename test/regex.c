@@ -93,6 +93,11 @@ int main() {
   assert(matches[0].rm_so==1 && matches[0].rm_eo==3);
   regfree(&r);
 
+  assert(regcomp(&r,"(gilda|oskar|leitner(-[^@]+|))@home.fefe.de",REG_EXTENDED)==0);
+  assert(regexec(&r,"leitner@home.fefe.de",10,matches,0)==0);
+  regfree(&r);
+
+
 #if 0
   printf("regcomp %d\n",regcomp(&r,"\\.( ? ? ?\\.)*\\.",REG_EXTENDED|REG_NOSUB));
   printf("regexec %d\n",regexec(&r,buf,1,0,0));
