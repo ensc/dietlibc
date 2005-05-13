@@ -325,6 +325,7 @@ int main() {
       pfd[1].fd=s6; pfd[1].events=POLLIN;
       switch (poll(pfd,2,5*1000)) {
       case -1:
+	if (errno==EINTR) continue;
 	perror("poll");
 	return 1;
       case 0:
