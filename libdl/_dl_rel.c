@@ -6,7 +6,7 @@ static void exit_now(void) {
 #ifdef DEBUG
   pf(__func__": symbol not found\n");
 #endif
-  _exit(213);
+  _exit(212);
 }
 
 unsigned long do_rel(struct _dl_handle * tmp_dl, unsigned long off)
