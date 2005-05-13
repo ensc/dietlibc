@@ -148,9 +148,9 @@ static void getip(int interface) {
 	  mysa6.sin6_addr.s6_addr[i]=(a<<4)+b;
 	}
 	ok=1;
-	c+=32;
 	a=scan_fromhex(c[33]);
 	b=scan_fromhex(c[34]);
+	c+=32;
 	if (a<0 || b<0) goto kaputt;
 	if ((a<<4)+b == interface) {
 	  ok=1;
