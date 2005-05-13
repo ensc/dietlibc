@@ -22,6 +22,10 @@ extern int __dns_fd6;
 
 extern void __dns_readstartfiles(void);
 
+#ifdef WANT_PLUGPLAY_DNS
+int __dns_plugplay_interface;
+#endif
+
 int res_query(const char *dname, int class, int type, unsigned char *answer, int anslen) {
   unsigned char packet[512];
   int size;
@@ -67,10 +71,11 @@ int res_query(const char *dname, int class, int type, unsigned char *answer, int
 	  if (pnpfd>=0) {
 	    int one=1;
 	    fcntl(pnpfd,F_SETFD,FD_CLOEXEC);
-	    if (v4pnp)
-	      setsockopt(pnpfd,SOL_IP,IP_RECVTTL,&one,sizeof(one));
-	    else
-	      setsockopt(pnpfd,IPPROTO_IPV6,IPV6_HOPLIMIT,&one,sizeof(one));
+	    if (v4pnp) {
+	      setsockopt(pnpfd,SOL_IP,IP_RECVTTL,&one,sizeof one);
+	      setsockopt(pnpfd,SOL_IP,IP_PKTINFO,&one,sizeof one);
+	    } else
+	      setsockopt(pnpfd,IPPROTO_IPV6,IPV6_HOPLIMIT,&one,sizeof one);
 	  }
 	}
 #ifdef WANT_IPV6_DNS
@@ -161,21 +166,27 @@ int res_query(const char *dname, int class, int type, unsigned char *answer, int
 	  struct cmsghdr* x;
 	  int ttl=0;
 	  int fd;
-	  mh.msg_name=0;
+	  struct sockaddr_in6 tmpsa;
+	  mh.msg_name=&tmpsa;
+	  mh.msg_namelen=sizeof(tmpsa);
 	  mh.msg_iov=&iv;
 	  mh.msg_iovlen=1;
 	  iv.iov_base=inpkg;
 	  iv.iov_len=sizeof(inpkg);
 	  mh.msg_control=abuf;
 	  mh.msg_controllen=sizeof(abuf);
+	  __dns_plugplay_interface=0;
 	  len=recvmsg(fd=(duh[0].revents&POLLIN?duh[0].fd:duh[1].fd),&mh,MSG_DONTWAIT);
 	  if (fd==duh[1].fd) {
+	    if (tmpsa.sin6_family==AF_INET6)
+	      __dns_plugplay_interface=tmpsa.sin6_scope_id;
 	    for (x=CMSG_FIRSTHDR(&mh); x; x=CMSG_NXTHDR(&mh,x))
 	      if ((x->cmsg_level==SOL_IP && x->cmsg_type==IP_TTL) ||
 		  (x->cmsg_level==IPPROTO_IPV6 && x->cmsg_type==IPV6_HOPLIMIT)) {
 		ttl=*(int*)CMSG_DATA(x);
 		break;
-	      }
+	      } else if ((x->cmsg_level==SOL_IP && x->cmsg_type==IP_PKTINFO))
+		__dns_plugplay_interface=((struct in_pktinfo*)(CMSG_DATA(x)))->ipi_ifindex;
 	    if (ttl != 255) {
 	      /* as per standard, discard packets with TTL!=255 */
 	      continue;

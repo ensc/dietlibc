@@ -6,6 +6,11 @@
 #include <netdb.h>
 #include <net/if.h>
 #include <arpa/inet.h>
+#include "dietfeatures.h"
+
+#ifdef WANT_PLUGPLAY_DNS
+extern int __dns_plugplay_interface;
+#endif
 
 /* XXX TODO FIXME */
 
@@ -76,6 +81,10 @@ int getaddrinfo(const char *node, const char *service, const struct addrinfo *hi
 	  memmove(&foo->ip.ip4.sin_addr,h.h_addr_list[0],4);
 	}
 	foo->ip.ip6.sin6_family=foo->ai.ai_family=family;
+#ifdef WANT_PLUGPLAY_DNS
+	if (family==AF_INET6)
+	  foo->ip.ip6.sin6_scope_id=__dns_plugplay_interface;
+#endif
 	if (h.h_name) {
 	  foo->ai.ai_canonname=foo->name;
 	  memmove(foo->name,h.h_name,strlen(h.h_name)+1);
@@ -115,7 +124,7 @@ int getaddrinfo(const char *node, const char *service, const struct addrinfo *hi
 	    struct servent* se;
 	    if ((se=getservbyname(service,"udp"))) {	/* found a service. */
 	      port=se->s_port;
-  blah2:
+blah2:
 	      if (family==PF_INET6)
 		foo->ip.ip6.sin6_port=port;
 	      else

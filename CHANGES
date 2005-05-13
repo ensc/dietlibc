@@ -31,6 +31,8 @@
   replace unfinished plug&play DNS hack with zeroconf,
     rename dietfeatures.h option to WANT_PLUGPLAY_DNS.
     A small dns daemon can be found in contrib/dnsd.c
+    hack ugly non-thread-safe kludge to communicate proper scope_id
+      to getaddrinfo
   fix bug regarding regular expressions like "(a|)b"
   work around gcc 4 bug
 
