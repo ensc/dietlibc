@@ -8,6 +8,7 @@
 
 #include <limits.h>
 #include <stddef.h>
+#include <string.h>
 #include <elf.h>
 
 #if __WORDSIZE == 64
@@ -24,15 +25,33 @@ struct dl_phdr_info
     ElfW(Half) dlpi_phnum;
 };
 
+
+/* dl_support.c defines these and initializes them early on.  */
+extern ElfW(Phdr) *_dl_phdr;
+extern size_t _dl_phnum;
+
+
 int dl_iterate_phdr(int (*callback) (struct dl_phdr_info *info, size_t size, void *data),
                     void *data);
 int dl_iterate_phdr(int (*callback) (struct dl_phdr_info *info, size_t size, void *data),
                     void *data)
 {
-    if (!callback)
-        return -1;
-    (void)data;
-    return -1;
+    int ret;
+    struct dl_phdr_info info;
+
+    if (_dl_phnum != 0)
+    {
+        /* This entry describes this statically-linked program itself.  */
+        info.dlpi_addr = 0;
+        info.dlpi_name = "";
+        info.dlpi_phdr = _dl_phdr;
+        info.dlpi_phnum = _dl_phnum;
+        ret = (*callback) (&info, sizeof(info), data);
+        if (ret != 0)
+            return ret;
+    }
+
+    return 0;
 }
 
 

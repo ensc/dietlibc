@@ -1,3 +1,5 @@
+#include "dietfeatures.h"
+
 	.section ".text"
 	.align 4
 	.global _start
@@ -30,7 +32,7 @@ _start:
 
 /* Let libc do the rest of the initialization, and call main.  */
 #ifdef WANT_DYNAMIC
-	call	dyn_start
+	call	_dyn_start
 #else
 #ifdef WANT_STACKGAP
 	call	stackgap

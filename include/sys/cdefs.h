@@ -69,6 +69,12 @@
 # define __nonnull(params)
 #endif
 
+#if (__GNUC__ > 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 4))
+# define __attribute_used __attribute__ ((__used__))
+#else
+# define __attribute_used
+#endif
+
 #if (__GNUC__ >= 4)
 #define __needsNULL__(x) __sentinel__(x)
 #else

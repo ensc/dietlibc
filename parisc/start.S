@@ -11,6 +11,8 @@
     Implemenation of the _start startup function
 */
 
+#include "dietfeatures.h"
+
 .level 1.1
 
 .text
@@ -37,10 +39,15 @@ _start:
 
 	stw %r24, 0(%sr0, %r19)
 	ldil L%$global$, %dp
+#ifdef WANT_DYNAMIC
+/* FIXME: dl_init parameter ??? */
+	bl _dyn_start, %rp
+#else
 #ifdef WANT_STACKGAP
 	bl stackgap, %rp
 #else
 	bl main, %rp
+#endif
 #endif
 	ldo R%$global$(%dp), %dp
 	b _exit

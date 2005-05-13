@@ -12,8 +12,10 @@ __clone:
 	cror	eq,4*cr1+eq,eq	/* now if eq is set one is or both are zero */
 	beq	.Lclone_error
 
-	stwu	 1,-32(1)	/* alloc some space on the stack */
-	stmw	29, 16(1)	/* save r29,r30,r31 on stack */
+	stdu	 1,-64(1)	/* alloc some space on the stack */
+	std	29, 16(1)	/* save r29,r30,r31 on stack */
+	std	30, 24(1)
+	std	31, 32(1)
 
 	rlwinm	4,4,0,0,27	/* mask out lower 4 bits */
 
@@ -38,8 +40,10 @@ __clone:
 	b	_exit		/* exit thread */
 
 .Lclone_parent:
-	lmw	29,16(1)	/* restore saved registers */
-	addi	 1, 1,32	/* free stack */
+	ld	29,16(1)	/* restore saved registers */
+	ld	30,24(1)
+	ld	31,32(1)
+	addi	 1, 1,64	/* free stack */
 	bnslr+			/* had cloned a thread so return to parent */
 	b	error_unified_syscall
 

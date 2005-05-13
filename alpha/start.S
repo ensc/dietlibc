@@ -1,3 +1,5 @@
+#include "dietfeatures.h"
+
 .text
 .align 2
 	.set noreorder
@@ -25,7 +27,7 @@ _start:
 #ifdef WANT_DYNAMIC
 /* in v0 ($0) is the ld.so _fini pointer */
 	mov	 $0, $19	/* mov v0(dynload) to a3 */
-	jsr	$26, dyn_start
+	jsr	$26, _dyn_start
 #else
 #ifdef WANT_STACKGAP
 	jsr	$26, stackgap

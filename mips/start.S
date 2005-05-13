@@ -1,3 +1,5 @@
+#include "dietfeatures.h"
+
 #define zero 0
 #define ra 31
 #define sp 29
@@ -37,10 +39,15 @@ __start:
 
 	addu	$a2, $a0, 1	/* load envp */
 	sll	$a2, $a2, 2
+#ifdef WANT_DYNAMIC
+/* FIXME: dl_init parameter ??? */
+	la	$25, _dyn_start
+#else
 #ifdef WANT_STACKGAP
 	la	$25, stackgap
 #else
 	la	$25, main
+#endif
 #endif
 	add	$a2, $a2, $a1
 	sw	$a2, environ

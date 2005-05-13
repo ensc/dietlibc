@@ -26,7 +26,10 @@ error_unified_syscall:
 	mtlr	0
 	addi	1,1,128
 #else
-	lis	9,errno@ha
+	lis	9,errno@highesta
+	ori	9,9,errno@highera
+	sldi    9,9,32
+	oris	9,9,errno@ha
 	stw	3,errno@l(9)
 #endif
 	li	3,-1

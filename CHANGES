@@ -11,6 +11,9 @@
     libstdc++ compatibility
     ilp64 compatibility
     make diet libc compile with -Werror on 13 platforms
+    provide time() using gettimeofday for s390x
+    remove waitpid warnings on ia64, s390/x
+    provide C++ exception handling support
   ppc64 now compiles again
   typo in libcompat/syscall.S for WANT_THREAD_SAFE (Björn Döbel)
   syscall.h update for all architectures

@@ -11,6 +11,8 @@
     Implemenation of the _start startup function
 */
 
+#include "dietfeatures.h"
+
 .psr abi64
 .psr lsb
 .lsb
@@ -37,10 +39,16 @@ _start:
 	ld8  r14 = [r15]
 	;;
 	st8  [r14] = out2           /* store envp in environ */
+
+#ifdef WANT_DYNAMIC
+/* FIXME: dl_init parameter ??? */
+	br.call.sptk.few rp = _dyn_start
+#else
 #ifdef WANT_STACKGAP
 	br.call.sptk.few rp = stackgap
 #else
 	br.call.sptk.few rp = main  /* call main */
+#endif
 #endif
 	;;
 	mov r32 = r8                /* store return code */
