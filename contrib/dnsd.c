@@ -12,16 +12,22 @@
 #include <net/if.h>
 #include <sys/ioctl.h>
 #include <stdlib.h>
+#include <fcntl.h>
 
 char myhostname[100];
 int namelen;
 struct sockaddr* peer;
 socklen_t sl;
 int s6,s4;
+char ifname[10];
+
+struct sockaddr_in mysa4;
+struct sockaddr_in6 mysa6;
 
 static void handle(int s,char* buf,int len,int interface) {
   int q;
   char* obuf=buf;
+  char* after;
   int olen=len;
   if (len<8*2) return;			/* too short */
   buf[len]=0;
@@ -33,6 +39,8 @@ static void handle(int s,char* buf,int len,int interface) {
   if (buf[10] || buf[11]) return;	/* additional record count must be 0 */
   buf+=12; len-=12;
   if (buf[0]==namelen && !strncasecmp(buf+1,myhostname,namelen)) {
+    unsigned int type;
+    int slen;
     buf+=namelen+1;
     if (!*buf)
       ++buf;
@@ -42,15 +50,17 @@ static void handle(int s,char* buf,int len,int interface) {
       return;
 //    if (((unsigned long)buf)&1) ++buf;
     if (buf[0] || buf[2]) return;	/* all supported types and classes fit in 8 bit */
-    if (buf[1]!=1) return;		/* we only support IN queries */
-    if (buf[3]==1 || (unsigned char)buf[3]==255) {	/* A or ANY, we can do that */
+    if (buf[3]!=1) return;		/* we only support IN queries */
+    type=(unsigned char)buf[1];
+    slen=buf-obuf+4;
+    if (type==1 || type==255) {		/* A or ANY, we can do that */
       struct ifreq ifr;
       static int v4sock=-1;
       obuf[2]|=0x80; 	/* it's answer; we don't support recursion */
-      obuf[7]=1;			/* one answer */
-      memcpy(buf+4,"\xc0\x0c" /* goofy compression */
-	           "\x00\x01" /* IN */
-		   "\x00\x01" /* A */
+      ++obuf[7];			/* one answer */
+      memcpy(obuf+slen,"\xc0\x0c" /* goofy compression */
+	           "\x00\x01" /* A */
+		   "\x00\x01" /* IN */
 		   "\x00\x00\x02\x30" /* ttl; 0x230, about 9.3 minutes */
 		   "\x00\x04" /* 4 bytes payload */
 		   ,12);
@@ -68,9 +78,23 @@ static void handle(int s,char* buf,int len,int interface) {
       if (ioctl(v4sock,SIOCGIFNAME,&ifr)==-1) return;
       ifr.ifr_addr.sa_family=AF_INET;
       if (ioctl(v4sock,SIOCGIFADDR,&ifr)==-1) return;	/* can't happen */
-      memcpy(buf+4+12,&((struct sockaddr_in*)&ifr.ifr_addr)->sin_addr,4);
-      sendto(s,obuf,olen+4+12,0,peer,sl);
+      memcpy(obuf+slen+12,&((struct sockaddr_in*)&ifr.ifr_addr)->sin_addr,4);
+      slen+=4+12;
     }
+    if (type==28 || type==255) {	/* AAAA or ANY */
+      if (!IN6_IS_ADDR_UNSPECIFIED(mysa6.sin6_addr.s6_addr32)) {
+	memcpy(obuf+slen,"\xc0\x0c" /* goofy DNS compression */
+			"\x00\x1c" /* AAAA */
+			"\x00\x01" /* IN */
+			"\x00\x00\x02\x30" /* ttl */
+			"\x00\x10" /* 16 bytes payload */
+			,12);
+	memcpy(obuf+slen+12,&mysa6.sin6_addr,16);
+	slen+=28;
+	++obuf[7];
+      }
+    }
+    sendto(s,obuf,slen,0,peer,sl);
   }
 }
 
@@ -84,6 +108,63 @@ char abuf[100];
 #define PKGSIZE 1500
 char buf[PKGSIZE+1];
 
+static int scan_fromhex(unsigned char c) {
+  if (c>='0' && c<='9')
+    return c-'0';
+  else if (c>='A' && c<='F')
+    return c-'A'+10;
+  else if (c>='a' && c<='f')
+    return c-'a'+10;
+  return -1;
+}
+
+static void getip(int interface) {
+  int fd;
+  struct cmsghdr* x;
+  memset(&mysa4,0,sizeof(mysa4));
+  memset(&mysa6,0,sizeof(mysa6));
+  for (x=CMSG_FIRSTHDR(&mh); x; x=CMSG_NXTHDR(&mh,x))
+    if (x->cmsg_level==SOL_IP && x->cmsg_type==IP_PKTINFO)
+      mysa4.sin_addr=((struct in_pktinfo*)(CMSG_DATA(x)))->ipi_spec_dst;
+
+  fd=open("/proc/net/if_inet6",O_RDONLY);
+  if (fd!=-1) {
+    char buf[1024];	/* increase as necessary */
+    int i,j,len;
+    len=read(fd,buf,sizeof buf);
+    if (len>0) {
+      int ok;
+      char* c=buf;
+      char* max=buf+len;
+      ok=0;
+      /* "fec000000000000102c09ffffe53fc52 01 40 40 00     eth0" */
+      while (c<max) {
+	int a,b;
+	for (i=0; i<16; ++i) {
+	  a=scan_fromhex(c[i*2]);
+	  b=scan_fromhex(c[i*2+1]);
+	  if (a<0 || b<0) goto kaputt;
+	  mysa6.sin6_addr.s6_addr[i]=(a<<4)+b;
+	}
+	ok=1;
+	c+=32;
+	a=scan_fromhex(c[33]);
+	b=scan_fromhex(c[34]);
+	if (a<0 || b<0) goto kaputt;
+	if ((a<<4)+b == interface) {
+	  ok=1;
+	  goto kaputt;
+	}
+	while (c<max && *c!='\n') ++c;
+	++c;
+      }
+kaputt:
+      if (!ok) memset(&mysa6,0,sizeof(mysa6));
+    }
+    close(fd);
+  }
+}
+
 static int v4if() {
   struct cmsghdr* x;
   for (x=CMSG_FIRSTHDR(&mh); x; x=CMSG_NXTHDR(&mh,x))
@@ -94,6 +175,7 @@ static int v4if() {
 
 static void recv4() {
   int len;
+  int interface;
 
   mh.msg_name=&sa4;
   mh.msg_namelen=sizeof(sa4);
@@ -104,7 +186,10 @@ static void recv4() {
   peer=(struct sockaddr*)&sa4;
   sl=sizeof(sa4);
 
-  handle(s4,buf,len,v4if());
+  interface=v4if();
+  getip(interface);
+
+  handle(s4,buf,len,interface);
 }
 
 static void recv6() {
@@ -123,6 +208,8 @@ static void recv6() {
     interface=v4if();
   else
     interface=sa6.sin6_scope_id;
+
+  getip(interface);
 
   handle(s6,buf,len,interface);
 }
@@ -177,9 +264,11 @@ int main() {
     if (s6!=-1) {
       struct ipv6_mreq opt;
       setsockopt(s6,IPPROTO_IPV6,IPV6_UNICAST_HOPS,&val,sizeof(val));
+      setsockopt(s6,IPPROTO_IPV6,IPV6_MULTICAST_LOOP,&one,sizeof(one));
       memcpy(&opt.ipv6mr_multiaddr,"\xff\x02\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xfb",16);
       opt.ipv6mr_interface=0;
       setsockopt(s6,IPPROTO_IPV6,IPV6_ADD_MEMBERSHIP,&opt,sizeof opt);
+//      setsockopt(s6,IPPROTO_IPV6,IPV6_PKTINFO,&one,sizeof one);
     }
     {
       struct ip_mreq opt;
@@ -188,7 +277,7 @@ int main() {
       memcpy(&opt.imr_multiaddr.s_addr,"\xe0\x00\x00\xfb",4);
       opt.imr_interface.s_addr=0;
       setsockopt(s,IPPROTO_IP,IP_ADD_MEMBERSHIP,&opt,sizeof(opt));
-      setsockopt(s,SOL_IP,IP_PKTINFO,&one,sizeof(one));
+      setsockopt(s,SOL_IP,IP_PKTINFO,&one,sizeof one);
     }
   }
 
