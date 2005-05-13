@@ -53,10 +53,10 @@ static void handle(int s,char* buf,int len,int interface) {
     if (buf[3]!=1) return;		/* we only support IN queries */
     type=(unsigned char)buf[1];
     slen=buf-obuf+4;
+    obuf[2]|=0x80; 	/* it's answer; we don't support recursion */
     if (type==1 || type==255) {		/* A or ANY, we can do that */
       struct ifreq ifr;
       static int v4sock=-1;
-      obuf[2]|=0x80; 	/* it's answer; we don't support recursion */
       ++obuf[7];			/* one answer */
       memcpy(obuf+slen,"\xc0\x0c" /* goofy compression */
 	           "\x00\x01" /* A */
@@ -94,7 +94,8 @@ static void handle(int s,char* buf,int len,int interface) {
 	++obuf[7];
       }
     }
-    sendto(s,obuf,slen,0,peer,sl);
+    if (obuf[7])
+      sendto(s,obuf,slen,0,peer,sl);
   }
 }
 
