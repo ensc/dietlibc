@@ -29,7 +29,7 @@ void *_dlsym(void* handle,const char* symbol) {
 #ifdef DEBUG
 //      pf(__FUNCTION__); pf(": symbol(\""); pf(name+ptr); pf("\",\""); pf(symbol); pf("\")\n");
 #endif
-      if (strcmp(name+ptr,symbol)==0 && dh->dyn_sym_tab[ind].st_value!=0) {
+      if (_dl_lib_strcmp(name+ptr,symbol)==0 && dh->dyn_sym_tab[ind].st_value!=0) {
 	if (dh->dyn_sym_tab[ind].st_shndx!=SHN_UNDEF) {
 	  sym=(long*)(dh->mem_base+dh->dyn_sym_tab[ind].st_value);
 	  break;	/* ok found ... */

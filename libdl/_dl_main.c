@@ -553,7 +553,7 @@ static void*_dl_load(const char*fn,const char*pathname,int fd,int flags);
 /* here do the code includes */
 
 /* strncpy */
-static char*strncpy(register char*s,register const char*t,register unsigned long n) {
+static char*_dl_lib_strncpy(register char*s,register const char*t,register unsigned long n) {
   char *dest=s;
   for(;n;--n) {
     char ch=*t;
@@ -565,7 +565,7 @@ static char*strncpy(register char*s,register const char*t,register unsigned long
 }
 
 /* strlen.c */
-static unsigned long strlen(register const char*s) {
+static unsigned long _dl_lib_strlen(register const char*s) {
   register unsigned long i;
   if (!s) return 0;
   for (i=0; *s; ++s) ++i;
@@ -573,7 +573,7 @@ static unsigned long strlen(register const char*s) {
 }
 
 /* strcmp.c */
-static int strcmp(register const unsigned char*s,register const unsigned char*t) {
+static int _dl_lib_strcmp(register const unsigned char*s,register const unsigned char*t) {
   register char x;
   for (;;) {
     x = *s; if (x != *t) break; if (!x) break; ++s; ++t;
@@ -582,9 +582,9 @@ static int strcmp(register const unsigned char*s,register const unsigned char*t)
 }
 
 /* strcspn.c */
-static unsigned long strcspn(const char*s,const char*reject) {
+static unsigned long _dl_lib_strcspn(const char*s,const char*reject) {
   unsigned long l=0;
-  int a=1,i,al=strlen(reject);
+  int a=1,i,al=_dl_lib_strlen(reject);
   while((a)&&(*s)) {
     for(i=0;(a)&&(i<al);++i) if (*s==reject[i]) a=0;
     if (a) ++l;
@@ -617,7 +617,7 @@ static void*_dl_lib_memset(void*dst,int ch,unsigned long count) {
 }
 
 /* memcmp.c */
-static int memcmp(register const unsigned char*s,register const unsigned char*t,unsigned long count) {
+static int _dl_lib_memcmp(register const unsigned char*s,register const unsigned char*t,unsigned long count) {
   register int r;
   ++count;
   while(--count) {
@@ -630,16 +630,16 @@ static int memcmp(register const unsigned char*s,register const unsigned char*t,
 
 /* getenv.c */
 static char*getenv(const char*env) {
-  unsigned int i,len=strlen(env);
+  unsigned int i,len=_dl_lib_strlen(env);
   for (i=0;_dl_environ[i];++i) {
-    if ((memcmp(_dl_environ[i],env,len)==0) && (_dl_environ[i][len]=='='))
+    if ((_dl_lib_memcmp(_dl_environ[i],env,len)==0) && (_dl_environ[i][len]=='='))
       return _dl_environ[i]+len+1;
   }
   return 0;
 }
 
 /* basic debug output functions */
-static void pf(const char*s) { _dl_sys_write(2,(void*)s,strlen(s)); }
+static void pf(const char*s) { _dl_sys_write(2,(void*)s,_dl_lib_strlen(s)); }
 static void ph(unsigned long l) {
   const int max=(sizeof(unsigned long)<<1);
   unsigned char buf[16];
@@ -657,7 +657,7 @@ static unsigned long _dl_lib_strdup_len=0;
 static char*_dl_lib_strdup_str;
 static char*_dl_lib_strdup(const char*s) {
   char*ret=_dl_lib_strdup_str;
-  unsigned long l=strlen(s)+1;
+  unsigned long l=_dl_lib_strlen(s)+1;
   if (_dl_lib_strdup_len<l) {
     ret=(char*)_dl_sys_mmap(0,at_pagesize,PROT_READ|PROT_WRITE,MAP_PRIVATE|MAP_ANONYMOUS,-1,0);
     _dl_lib_strdup_len=at_pagesize;

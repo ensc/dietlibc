@@ -39,13 +39,13 @@ const char *dlerror(void) {
     return "HAE ?!?";
 
   if (_dl_error_location) {
-    l=strlen(_dl_error_location);
-    strncpy(p,_dl_error_location,len); len-=l; p+=l;
-    strncpy(p,": ",len); len-=2; p+=2;
+    l=_dl_lib_strlen(_dl_error_location);
+    _dl_lib_strncpy(p,_dl_error_location,len); len-=l; p+=l;
+    _dl_lib_strncpy(p,": ",len); len-=2; p+=2;
   }
   l=_dl_error_msg[_dl_error].len;
-  strncpy(p,_dl_error_msg[_dl_error].msg,len); len-=l; p+=l;
-  strncpy(p,_dl_error_data,len);
+  _dl_lib_strncpy(p,_dl_error_msg[_dl_error].msg,len); len-=l; p+=l;
+  _dl_lib_strncpy(p,_dl_error_data,len);
 
   _dl_error_location=0;
   _dl_error_data="";
