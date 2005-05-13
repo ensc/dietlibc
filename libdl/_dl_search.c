@@ -14,6 +14,7 @@ static const char *_dl_search_rpath=0;
 #include <string.h>
 void _dl_set_rpath(const char *path) { _dl_search_rpath=path; }
 const char* _dl_get_rpath() { return _dl_search_rpath; }
+#define _dl_lib_memcpy memcpy
 #endif
 
 /* search a colon (semicolon) seperated path for the libraray "filename" */
@@ -28,11 +29,11 @@ static int _dl_search_path(char*buf,int len,const char*path,const int pathlen,co
       i=strcspn(c,":;");
       if (i) {
 	if (i>ml) continue;	/* if len(path-entry)+len(filename)+2 is greater than the buffer ? SKIP */
-	memcpy(buf,c,i);
+	_dl_lib_memcpy(buf,c,i);
 	buf[i]='/';
 	l-=++i;
       }
-      memcpy(buf+i,filename,fl);
+      _dl_lib_memcpy(buf+i,filename,fl);
       buf[i+fl]=0;
 #ifdef DEBUG
 //      pf(__func__": "); pf(buf); pf("\n");

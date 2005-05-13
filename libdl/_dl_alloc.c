@@ -12,6 +12,7 @@ static struct _dl_handle*_dl_free_list=(struct _dl_handle*)0;
 struct _dl_handle*_dl_root_handle=(struct _dl_handle*)0;
 struct _dl_handle*_dl_top_handle=(struct _dl_handle*)0;
 struct _dl_handle*_dl_free_list=(struct _dl_handle*)0;
+#define _dl_lib_memset memset
 #endif
 
 #ifdef __DIET_LD_SO__
@@ -25,7 +26,7 @@ void _dl_free_handle(struct _dl_handle*dh) {
   if (dh->prev) dh->prev->next=dh->next;
 
   if ((dh->flags&RTLD_NOSONAME) && dh->name) free(dh->name);
-  memset(dh,0,sizeof(struct _dl_handle));
+  _dl_lib_memset(dh,0,sizeof(struct _dl_handle));
   dh->next=_dl_free_list;
   _dl_free_list=dh;
 }

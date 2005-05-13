@@ -53,7 +53,7 @@ static int _dl_apply_relocate(struct _dl_handle*dh,_dl_rel_t*rel) {
 #ifdef DEBUG
     pf(__FUNCTION__); pf(": R_386_COPY from "); ph((unsigned long)from); pf("\n");
 #endif
-    memcpy(loc,from,len);
+    _dl_lib_memcpy(loc,from,len);
   } else if (typ==R_386_GLOB_DAT) {	/* 6 */
     *loc=(unsigned long)_dl_sym(dh,ELF_R_SYM(rel->r_info));
   } else if (typ==R_386_JMP_SLOT) {	/* 7 */
@@ -73,7 +73,7 @@ static int _dl_apply_relocate(struct _dl_handle*dh,_dl_rel_t*rel) {
 #ifdef DEBUG
     pf(__FUNCTION__); pf(": R_ARM_COPY from "); ph((unsigned long)from); pf("\n");
 #endif
-    memcpy(loc,from,len);
+    _dl_lib_memcpy(loc,from,len);
   } else if (typ==R_ARM_GLOB_DAT) {	/* 21 */
     *loc=(unsigned long)_dl_sym(dh,ELF_R_SYM(rel->r_info));
   } else if (typ==R_ARM_JUMP_SLOT) {	/* 22 */
@@ -93,7 +93,7 @@ static int _dl_apply_relocate(struct _dl_handle*dh,_dl_rel_t*rel) {
 #ifdef DEBUG
     pf(__FUNCTION__); pf(": R_X86_64_COPY from "); ph((unsigned long)from); pf("\n");
 #endif
-    memcpy(loc,from,len);
+    _dl_lib_memcpy(loc,from,len);
   } else if (typ==R_X86_64_GLOB_DAT) {	/* 6 */
     *loc=(unsigned long)_dl_sym(dh,ELF_R_SYM(rel->r_info));
   } else if (typ==R_X86_64_JUMP_SLOT) {	/* 7 */

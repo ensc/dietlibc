@@ -594,7 +594,7 @@ static unsigned long strcspn(const char*s,const char*reject) {
 }
 
 /* memcpy.c */
-static void*memcpy(void*dst,const void*src,unsigned long count) {
+static void*_dl_lib_memcpy(void*dst,const void*src,unsigned long count) {
   register char *d=dst;
   register const char *s=src;
   ++count;
@@ -606,7 +606,7 @@ static void*memcpy(void*dst,const void*src,unsigned long count) {
 }
 
 /* memset.c */
-static void*memset(void*dst,int ch,unsigned long count) {
+static void*_dl_lib_memset(void*dst,int ch,unsigned long count) {
   register char *d=dst;
   ++count;
   while (--count) {
@@ -664,7 +664,7 @@ static char*_dl_lib_strdup(const char*s) {
   }
   _dl_lib_strdup_str=ret+l;
   _dl_lib_strdup_len-=l;
-  memcpy(ret,s,l);
+  _dl_lib_memcpy(ret,s,l);
   return ret;
 }
 
@@ -811,7 +811,7 @@ err_out_close:
     if (m==MAP_FAILED) goto err_out_free;
     /* zero pad bss */
     l=ld[0]->p_offset+ld[0]->p_filesz;
-    memset(m+l,0,length-l);
+    _dl_lib_memset(m+l,0,length-l);
 
     ret->mem_base=m;
     ret->mem_size=length;
@@ -854,7 +854,7 @@ err_out_free:
 
     /* zero pad bss */
     l=data_off+ld[1]->p_filesz;
-    memset(d+l,0,data_fsize-l);
+    _dl_lib_memset(d+l,0,data_fsize-l);
     /* more bss ? */
     if (data_size>data_fsize) {
       l=data_size-data_fsize;
@@ -1292,7 +1292,7 @@ unsigned long _dl_main(int argc,char*argv[],char*envp[],unsigned long _dynamic) 
     return (unsigned long)_DIE_;
   }
 
-  memset(&my_dh,0,sizeof(my_dh));
+  _dl_lib_memset(&my_dh,0,sizeof(my_dh));
   my_dh.mem_base=(char*)loadaddr;
   my_dh.mem_size=0;
   my_dh.lnk_count=1024;
@@ -1327,7 +1327,7 @@ unsigned long _dl_main(int argc,char*argv[],char*envp[],unsigned long _dynamic) 
   mydh=_dl_get_handle();
   {
     register struct _dl_handle*tmp=mydh->prev;
-    memcpy(mydh,&my_dh,sizeof(struct _dl_handle));
+    _dl_lib_memcpy(mydh,&my_dh,sizeof(struct _dl_handle));
     mydh->prev=tmp;
   }
   got[1]=(unsigned long)mydh;
