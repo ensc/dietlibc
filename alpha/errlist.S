@@ -140,6 +140,11 @@ sys_errlist:
 	.quad .LC128
 	.quad .LC129
 	.quad .LC130
+	.quad .LC131
+	.quad .LC132
+	.quad .LC133
+	.quad .LC134
+	.quad .LC135
 	.quad 0
 .size sys_errlist,.-sys_errlist
 
@@ -285,4 +290,9 @@ sys_nerr:
 .LC128: .string "Streams pipe error"
 .LC129: .string "No medium found"
 .LC130: .string "Wrong medium type"
+.LC131: .string "Operation canceled"
+.LC132: .string "Required key not available"
+.LC133: .string "Key has expired"
+.LC134: .string "Key has been revoked"
+.LC135: .string "Key was rejected by service"
 

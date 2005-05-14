@@ -135,6 +135,11 @@ sys_errlist:
 	.long .LC124
 	.long .LC125
 	.long .LC126
+	.long .LC127
+	.long .LC128
+	.long .LC129
+	.long .LC130
+	.long .LC131
 	.long 0
 .size sys_errlist,.-sys_errlist
 
@@ -276,5 +281,10 @@ sys_nerr:
 .LC124: .string ".lib section in a.out corrupted"
 .LC125: .string "No medium found"
 .LC126: .string "Wrong medium type"
+.LC127: .string "Operation Cancelled"
+.LC128: .string "Required key not available"
+.LC129: .string "Key has expired"
+.LC130: .string "Key has been revoked"
+.LC131: .string "Key was rejected by service"
 
 

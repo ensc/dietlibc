@@ -169,6 +169,10 @@ sys_errlist:
 	.long .LC158
 	.long .LC159
 	.long .LC160
+	.long .LC161
+	.long .LC162
+	.long .LC163
+	.long .LC164
 	.long 0
 .size sys_errlist,.-sys_errlist
 
@@ -325,6 +329,10 @@ sys_nerr:
 .LC158: .string "AIO operation canceled"
 .LC159: .string "No medium found"
 .LC160: .string "Wrong medium type"
+.LC161: .string "Required key not available"
+.LC162: .string "Key has expired"
+.LC163: .string "Key has been revoked"
+.LC164: .string "Key was rejected by service"
 /* handled in strerror.c
 .LC1133: .string "Quota exceeded"
 */

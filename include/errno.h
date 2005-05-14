@@ -135,6 +135,8 @@
 #define	EKEYREVOKED	134	/* Key has been revoked */
 #define	EKEYREJECTED	135	/* Key was rejected by service */
 
+#define __SYS_NERR  ((EKEYREJECTED) + 1)
+
 #elif defined(__mips__)
 
 #define EPERM		 1	/* Operation not permitted */
@@ -270,6 +272,8 @@
 #define	EKEYREJECTED	164	/* Key was rejected by service */
 #define EDQUOT		1133	/* Quota exceeded */
 
+#define __SYS_NERR  ((EKEYREJECTED) + 1)
+
 #elif defined(__sparc__)
 
 #define EPERM		 1	/* Operation not permitted */
@@ -404,6 +408,8 @@
 #define	EKEYEXPIRED	129	/* Key has expired */
 #define	EKEYREVOKED	130	/* Key has been revoked */
 #define	EKEYREJECTED	131	/* Key was rejected by service */
+
+#define __SYS_NERR  ((EKEYREJECTED) + 1)
 
 #elif defined(__hppa__)
 
@@ -553,6 +559,7 @@
 #define ENOTSUP		252	/* Function not implemented (POSIX.4 / HPUX) */
 #define ECANCELLED	253	/* aio request was canceled before complete (POSIX.4 / HPUX) */
 
+#define __SYS_NERR  ((ECANCELLED) + 1)
 
 #else
 
@@ -688,9 +695,8 @@
 #define	EKEYEXPIRED	127	/* Key has expired */
 #define	EKEYREVOKED	128	/* Key has been revoked */
 #define	EKEYREJECTED	129	/* Key was rejected by service */
+#define __SYS_NERR  ((EKEYREJECTED) + 1)
 #endif
-
-#define __SYS_NERR  ((EMEDIUMTYPE) + 1)
 
 #ifndef __ASSEMBLER__
 

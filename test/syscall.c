@@ -7,6 +7,7 @@ int main() {
   syscall(__NR_write,1,"foo\n",4);
   a=syscall(__NR_write,23,"bar\n",4);
   b=errno;
-  printf("%d %d\n",a,b);
+  assert(a==-1);
+  assert(b==EBADF);
   return 0;
 }

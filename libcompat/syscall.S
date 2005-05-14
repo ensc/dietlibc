@@ -91,7 +91,11 @@ syscall:
 	jbe	.Lnoerror
 	negl	%eax
 	pushq	%rax
+#ifdef __DYN_LIB
+	call	__errno_location@PLT
+#else
 	call	__errno_location
+#endif
 	popq	%rcx
 	movl	%ecx,(%rax)
 	orq	$-1, %rax

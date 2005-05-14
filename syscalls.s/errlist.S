@@ -152,6 +152,11 @@ sys_errlist:
 	deflong .LC122
 	deflong .LC123
 	deflong .LC124
+	deflong .LC125
+	deflong .LC126
+	deflong .LC127
+	deflong .LC128
+	deflong .LC129
 	deflong 0
 .size	sys_errlist,.-sys_errlist
 
@@ -291,3 +296,8 @@ sys_nerr:
 .LC122:	.asciz	"Quota exceeded"
 .LC123:	.asciz	"No medium found"
 .LC124:	.asciz	"Wrong medium type"
+.LC125:	.asciz	"Operation Canceled"
+.LC126:	.asciz	"Required key not available"
+.LC127:	.asciz	"Key has expired"
+.LC128:	.asciz	"Key has been revoked"
+.LC129:	.asciz	"Key was rejected by service"
