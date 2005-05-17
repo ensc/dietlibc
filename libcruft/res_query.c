@@ -32,6 +32,7 @@ int res_query(const char *dname, int class, int type, unsigned char *answer, int
 #ifndef WANT_IPV6_DNS
   __dns_make_fd();
 #endif
+  struct pollfd duh[2];
 
   __dns_readstartfiles();
   if ((size=res_mkquery(QUERY,dname,class,type,0,0,0,(char*)packet,512))<0) { h_errno=NO_RECOVERY; return -1; }
@@ -47,7 +48,6 @@ int res_query(const char *dname, int class, int type, unsigned char *answer, int
       static struct sockaddr_in6 pnpsa6;
 #endif
       static struct sockaddr_in pnpsa4;
-      struct pollfd duh[2];
       static int v4pnp=0;
       int islocal=0;
 
@@ -103,11 +103,10 @@ int res_query(const char *dname, int class, int type, unsigned char *answer, int
 	duh[1].revents=0;
       }
 
-#else
-      struct pollfd duh[1];
 #endif
       i=0;
       duh[0].events=POLLIN;
+      duh[0].fd=0;
       last.tv_sec=0;
 #ifdef WANT_PLUGPLAY_DNS
       if (duh[1].fd!=-1) {
@@ -225,6 +224,10 @@ nxdomain:
 /*kaputt:*/
       }
     }
+#ifdef WANT_PLUGPLAY_DNS
+    if (duh[1].fd==-1)
+      goto nxdomain;
+#endif
   }
   h_errno=TRY_AGAIN;
   return -1;
