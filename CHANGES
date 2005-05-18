@@ -38,6 +38,7 @@
       to getaddrinfo
   fix bug regarding regular expressions like "(a|)b"
   work around gcc 4 bug
+  make sure diet always leaves -V in front of the gcc command line
 
 0.28:
   add tcgetsid (Yuri Kozlov)

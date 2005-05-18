@@ -164,8 +164,13 @@ $(OBJDIR)/%.o: %.c
 	$(CROSS)$(CC) -I. -isystem include $(CFLAGS) -c $< -o $@
 	$(COMMENT) -$(CROSS)strip -x -R .comment -R .note $@
 
+ifeq ($(shell $(CC) -v 2>&1 | grep "gcc version"),gcc version 4.0.0)
 SAFE_CFLAGS=$(shell echo $(CFLAGS)|sed 's/-Os/-O2/')
 SAFER_CFLAGS=$(shell echo $(CFLAGS)|sed 's/-Os/-O/')
+else
+SAFE_CFLAGS=$(CFLAGS)
+SAFER_CFLAGS=$(CFLAGS)
+endif
 
 $(OBJDIR)/crypt.o: libcrypt/crypt.c
 	$(CROSS)$(CC) -I. -isystem include $(SAFER_CFLAGS) -c $< -o $@
