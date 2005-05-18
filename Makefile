@@ -164,6 +164,12 @@ $(OBJDIR)/%.o: %.c
 	$(CROSS)$(CC) -I. -isystem include $(CFLAGS) -c $< -o $@
 	$(COMMENT) -$(CROSS)strip -x -R .comment -R .note $@
 
+SAFE_CFLAGS=$(shell echo $(CFLAGS)|sed 's/-Os/-O2/')
+SAFER_CFLAGS=$(shell echo $(CFLAGS)|sed 's/-Os/-O/')
+
+$(OBJDIR)/crypt.o: libcrypt/crypt.c
+	$(CROSS)$(CC) -I. -isystem include $(SAFER_CFLAGS) -c $< -o $@
+
 DIETLIBC_OBJ = $(OBJDIR)/unified.o \
 $(SYSCALLOBJ) $(LIBOBJ) $(LIBSTDIOOBJ) $(LIBUGLYOBJ) \
 $(LIBCRUFTOBJ) $(LIBCRYPTOBJ) $(LIBSHELLOBJ) $(LIBREGEXOBJ) \
@@ -254,7 +260,6 @@ $(PICODIR)/libc.so: $(PICODIR) $(DYN_LIBC_OBJ)
 $(PICODIR)/libpthread.so: $(DYN_PTHREAD_OBJS) dietfeatures.h
 	$(LD_UNSET) $(CROSS)$(CC) -nostdlib -shared -o $@ $(CFLAGS) -fPIC $(DYN_PTHREAD_OBJS) -L$(PICODIR) -lc -Wl,-soname=libpthread.so
 
-SAFE_CFLAGS=$(shell echo $(CFLAGS)|sed 's/-Os/-O2/')
 $(PICODIR)/libdl.so: libdl/_dl_main.c dietfeatures.h
 	$(LD_UNSET) $(CROSS)$(CC) -D__OD_CLEAN_ROOM -DNODIETREF -fPIC -nostdlib -shared -Bsymbolic -Wl,-Bsymbolic \
 		-o $@ $(SAFE_CFLAGS) -I. -isystem include libdl/_dl_main.c -Wl,-soname=libdl.so

@@ -58,8 +58,7 @@ int res_query(const char *dname, int class, int type, unsigned char *answer, int
 	  if (!memcmp(x,".local",6))
 	    if (x[6]==0 || (x[6]=='.' && x[7]==0))
 	      islocal=1;
-	} else
-	  islocal=1;
+	}
       }
       if (islocal) {
 	if (pnpfd<0) {
