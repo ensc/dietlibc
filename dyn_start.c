@@ -22,9 +22,9 @@ __attribute__((section(".dtors")))
 __attribute_used
 static structor __DTOR_LIST__[1]={((structor)-1)};
 
-__attribute__((section (".eh_frame")))
+__attribute__((section(".eh_frame")))
 __attribute_used
-const char __EH_FRAME_BEGIN__[] = { };
+char __EH_FRAME_BEGIN__[] = { };
 
 
 static void __do_global_dtors_aux(void)

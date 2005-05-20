@@ -14,12 +14,12 @@ __attribute__((section(".dtors")))
 __attribute_used
 static structor __DTOR_END__[1]={((structor)0)};
 
-__attribute__((section (".eh_frame")))
+__attribute__((section(".eh_frame")))
 __attribute_used
 #if __WORDSIZE == 32
-const char __FRAME_END__[4] = { 0, 0, 0, 0 };
+char __FRAME_END__[4] = { 0, 0, 0, 0 };
 #else
-const char __FRAME_END__[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+char __FRAME_END__[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
 #endif
 
 static void __do_global_ctors_aux(void)
