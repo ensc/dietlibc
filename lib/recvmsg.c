@@ -5,7 +5,7 @@ extern int socketcall(int callno,long* args);
 
 int __libc_recvmsg(int a, struct msghdr* msg, int flags);
 int __libc_recvmsg(int a, struct msghdr* msg, int flags) {
-  unsigned long args[] = { a, (long) msg, flags };
+  long args[] = { a, (long) msg, flags };
   return socketcall(SYS_RECVMSG, args);
 }
 

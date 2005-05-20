@@ -5,7 +5,7 @@ extern int socketcall(int callno,long* args);
 
 int __libc_setsockopt(int a, int b, int c, void *d, void *e);
 int __libc_setsockopt(int a, int b, int c, void *d, void *e) {
-  unsigned long args[] = { a, b, c, (long)d, (long) e };
+  long args[] = { a, b, c, (long)d, (long) e };
   return socketcall(SYS_SETSOCKOPT, args);
 }
 

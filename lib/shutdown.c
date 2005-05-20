@@ -5,7 +5,7 @@ extern int socketcall(int callno,long* args);
 
 int __libc_shutdown(int s, int how);
 int __libc_shutdown(int s, int how) {
-  unsigned long args[] = { s, (long) how, 0 };
+  long args[] = { s, (long) how, 0 };
   return socketcall(SYS_SHUTDOWN, args);
 }
 

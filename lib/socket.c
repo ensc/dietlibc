@@ -4,7 +4,7 @@ extern int socketcall(int callno,long* args);
 
 int __libc_socket(int a, int b, int c);
 int __libc_socket(int a, int b, int c) {
-  unsigned long args[] = { a, b, c };
+  long args[] = { a, b, c };
   return socketcall(SYS_SOCKET, args);
 }
 

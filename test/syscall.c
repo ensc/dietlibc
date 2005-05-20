@@ -1,6 +1,7 @@
 #include <asm/unistd.h>
 #include <stdio.h>
 #include <errno.h>
+#include <assert.h>
 
 int main() {
   int a,b;

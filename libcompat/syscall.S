@@ -102,18 +102,19 @@ syscall:
 .Lnoerror:
 	retq
 #elif defined(__sparc__)
-	mov  %o0, %g1
-	mov  %o1, %o0
-	mov  %o2, %o1
-	mov  %o3, %o2
-	mov  %o4, %o3
-	mov  %o5, %o4
+	mov	%o0, %g1
+	mov	%o1, %o0
+	mov	%o2, %o1
+	mov	%o3, %o2
+	mov	%o4, %o3
+	mov	%o5, %o4
 #if defined(__arch64__)
-	ta  0x6d
+	ta	0x6d
+	bcs	%xcc, __unified_syscall_error_handler
 #else
-	t  0x10
+	ta	0x10
+	bcs	__unified_syscall_error_handler
 #endif
-	bcs %xcc,__unified_syscall_error_handler
 	nop
 	retl
 	nop

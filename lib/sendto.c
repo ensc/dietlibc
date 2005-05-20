@@ -5,7 +5,7 @@ extern int socketcall(int callno,long* args);
 
 int __libc_sendto(int a, const void * b, size_t c, int flags, void *to, int tolen);
 int __libc_sendto(int a, const void * b, size_t c, int flags, void *to, int tolen) {
-  unsigned long args[] = { a, (long) b, c, flags, (long) to, tolen };
+  long args[] = { a, (long) b, c, flags, (long) to, tolen };
   return socketcall(SYS_SENDTO, args);
 }
 

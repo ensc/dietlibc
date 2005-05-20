@@ -40,6 +40,7 @@
   work around gcc 4 bug
   make sure diet always leaves -V in front of the gcc command line
   sparc64 fixes (Martin)
+  fix warnings in socketcall functions
 
 0.28:
   add tcgetsid (Yuri Kozlov)

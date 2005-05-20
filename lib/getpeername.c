@@ -5,7 +5,7 @@ extern int socketcall(int callno,long* args);
 
 int __libc_getpeername(int a, void * b, int *c);
 int __libc_getpeername(int a, void * b, int *c) {
-  unsigned long args[] = { a, (long) b, (long) c };
+  long args[] = { a, (long) b, (long) c };
   return socketcall(SYS_GETPEERNAME, args);
 }
 

@@ -5,7 +5,7 @@ extern int socketcall(int callno,long* args);
 
 int __libc_listen(int a, int b);
 int __libc_listen(int a, int b) {
-  unsigned long args[] = { a, b, 0 };
+  long args[] = { a, b, 0 };
   return socketcall(SYS_LISTEN, args);
 }
 
