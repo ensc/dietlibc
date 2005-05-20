@@ -101,35 +101,19 @@ syscall:
 	orq	$-1, %rax
 .Lnoerror:
 	retq
-#elif (defined(__sparc__) && defined(__arch64__))
+#elif defined(__sparc__)
 	mov  %o0, %g1
 	mov  %o1, %o0
 	mov  %o2, %o1
 	mov  %o3, %o2
 	mov  %o4, %o3
 	mov  %o5, %o4
+#if defined(__arch64__)
 	ta  0x6d
-	bcc  .Lret
-#ifdef WANT_THREAD_SAFE
-	.err	/* not implemented yet */
 #else
-	neg  %o0
-	sethi  %hi(errno), %g1
-	or  %g1, %lo(errno), %g2
-	st  %o0, [%g2]
-#endif
-	mov  -1, %o0
-.Lret:
-	retl 
-#elif (defined(__sparc__))
-	mov  %o0, %g1
-	mov  %o1, %o0
-	mov  %o2, %o1
-	mov  %o3, %o2
-	mov  %o4, %o3
-	mov  %o5, %o4
 	t  0x10
-	bcs  __unified_syscall_error_handler
+#endif
+	bcs %xcc,__unified_syscall_error_handler
 	nop
 	retl
 	nop

@@ -4,7 +4,7 @@
 .section	.rodata
 #endif
 
-.align 4
+.align 8
 .global sys_errlist
 .type	sys_errlist,@object
 sys_errlist:
