@@ -1,4 +1,6 @@
-0.29
+0.30:
+
+0.29:
   oops, fix LD_RUN_PATH unsetting (Enrico Scholz)
   Markus Oberhumer sent the following diffs:
     dl_iterate_phdr for libgcc_eh
