@@ -22,9 +22,19 @@ __attribute__((section(".dtors")))
 __attribute_used
 static structor __DTOR_LIST__[1]={((structor)-1)};
 
+/* see gcc-3.4/gcc/crtstuff.c */
+#if !defined(EH_FRAME_SECTION_CONST)
+#if defined(__s390__) || defined(__x86_64__)
+# define EH_FRAME_SECTION_CONST const
+#endif
+#endif
+#if !defined(EH_FRAME_SECTION_CONST)
+# define EH_FRAME_SECTION_CONST
+#endif
+
 __attribute__((section(".eh_frame")))
 __attribute_used
-char __EH_FRAME_BEGIN__[] = { };
+EH_FRAME_SECTION_CONST char __EH_FRAME_BEGIN__[] = { };
 
 
 static void __do_global_dtors_aux(void)

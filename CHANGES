@@ -1,4 +1,7 @@
 0.30:
+  put exception handling frames in read-only section on AMD64 and S/390
+  make sys/stat.h ILP64 compatible
+    (both Markus Oberhumer)
 
 0.29:
   oops, fix LD_RUN_PATH unsetting (Enrico Scholz)

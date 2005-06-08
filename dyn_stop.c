@@ -14,12 +14,22 @@ __attribute__((section(".dtors")))
 __attribute_used
 static structor __DTOR_END__[1]={((structor)0)};
 
+/* see gcc-3.4/gcc/crtstuff.c */
+#if !defined(EH_FRAME_SECTION_CONST)
+#if defined(__s390__) || defined(__x86_64__)
+# define EH_FRAME_SECTION_CONST const
+#endif
+#endif
+#if !defined(EH_FRAME_SECTION_CONST)
+# define EH_FRAME_SECTION_CONST
+#endif
+
 __attribute__((section(".eh_frame")))
 __attribute_used
 #if __WORDSIZE == 32
-char __FRAME_END__[4] = { 0, 0, 0, 0 };
+EH_FRAME_SECTION_CONST char __FRAME_END__[4] = { 0, 0, 0, 0 };
 #else
-char __FRAME_END__[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+EH_FRAME_SECTION_CONST char __FRAME_END__[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
 #endif
 
 static void __do_global_ctors_aux(void)
