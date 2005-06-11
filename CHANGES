@@ -2,6 +2,8 @@
   put exception handling frames in read-only section on AMD64 and S/390
   make sys/stat.h ILP64 compatible
     (both Markus Oberhumer)
+  whoops, strptime was completely broken, and noone noticed :-)
+  fix DNS resolver to only use shorter timeout for .local queries
 
 0.29:
   oops, fix LD_RUN_PATH unsetting (Enrico Scholz)

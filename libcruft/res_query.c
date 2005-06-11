@@ -147,7 +147,7 @@ int res_query(const char *dname, int class, int type, unsigned char *answer, int
 	}
 	if (++i >= _res.nscount) i=0;
 #ifdef WANT_PLUGPLAY_DNS
-	if (now.tv_sec>first.tv_sec) goto nxdomain;
+	if (now.tv_sec>first.tv_sec && duh[0].fd==-1) goto nxdomain;
 	if (duh[0].fd==-1 && duh[1].fd==-1) goto nxdomain;
 	duh[0].revents=0;
 	if (poll(duh[0].fd==-1?duh+1:duh,duh[0].fd==-1?1:2,1000) > 0) {
