@@ -64,8 +64,8 @@ long jrand48(randbuf buf) __THROW;
 long nrand48(randbuf buf) __THROW;
 double erand48(randbuf buf) __THROW;
 
-void qsort(void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *)) __THROW;
-void *bsearch(const void *key, const void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *)) __THROW;
+void qsort(void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *));
+void *bsearch(const void *key, const void *base, size_t nmemb, size_t size, int (*compar)(const void *, const void *));
 
 extern char **environ;
 

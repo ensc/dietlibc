@@ -42,10 +42,10 @@ long int telldir (DIR *__dirp) __THROW;
 
 int scandir(const char *dir, struct dirent ***namelist,
       int (*selection)(const struct dirent *),
-      int (*compar)(const struct dirent **, const struct dirent **)) __THROW;
+      int (*compar)(const struct dirent **, const struct dirent **));
 int scandir64(const char *dir, struct dirent64 ***namelist,
       int (*selection)(const struct dirent64 *),
-      int (*compar)(const struct dirent64 **, const struct dirent64 **)) __THROW;
+      int (*compar)(const struct dirent64 **, const struct dirent64 **));
 
 int alphasort(const struct dirent **a, const struct dirent **b) __THROW __attribute__((const));
 int alphasort64(const struct dirent64 **a, const struct dirent64 **b) __THROW __attribute__((const));

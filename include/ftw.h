@@ -11,11 +11,11 @@ struct FTW {
   int level;
 };
 
-int ftw(const char *dir, int (*fn)(const char *file, const struct stat *sb, int flag), int depth) __THROW;
-int nftw(const char *dir, int (*fn)(const char *file, const struct stat *sb, int flag, struct FTW *s), int depth, int flags) __THROW;
+int ftw(const char *dir, int (*fn)(const char *file, const struct stat *sb, int flag), int depth);
+int nftw(const char *dir, int (*fn)(const char *file, const struct stat *sb, int flag, struct FTW *s), int depth, int flags);
 
 #ifndef __NO_STAT64
-int ftw64(const char *dir, int (*fn)(const char *file, const struct stat64 *sb, int flag), int depth) __THROW;
+int ftw64(const char *dir, int (*fn)(const char *file, const struct stat64 *sb, int flag), int depth);
 
 #if defined _FILE_OFFSET_BITS && _FILE_OFFSET_BITS == 64
 #define ftw(dir,fn,depth) ftw64(dir,fn,depth)
@@ -42,19 +42,19 @@ enum
 };
 
 typedef int (*__ftw_func_t) (const char *__filename,
-			     const struct stat *__status, int __flag) __THROW;
+			     const struct stat *__status, int __flag);
 
 typedef int (*__nftw_func_t) (const char *__filename,
 			      const struct stat *__status, int __flag,
-			      struct FTW *__info) __THROW;
+			      struct FTW *__info);
 
 #ifndef __NO_STAT64
 typedef int (*__ftw64_func_t) (const char *__filename,
-			       const struct stat64 *__status, int __flag) __THROW;
+			       const struct stat64 *__status, int __flag);
 
 typedef int (*__nftw64_func_t) (const char *__filename,
 				const struct stat64 *__status,
-				int __flag, struct FTW *__info) __THROW;
+				int __flag, struct FTW *__info);
 #endif
 
 __END_DECLS
