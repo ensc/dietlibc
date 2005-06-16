@@ -6,6 +6,7 @@
   fix DNS resolver to only use shorter timeout for .local queries
   remove throw() statements for functions taking function pointer
     arguments (qsort, besearch, ftw)
+  fix embarassing bug in pclose (Juergen Sawinski, René Rebe)
 
 0.29:
   oops, fix LD_RUN_PATH unsetting (Enrico Scholz)

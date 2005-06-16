@@ -4,8 +4,9 @@
 
 int pclose(FILE *f) {
   int status;
+  pid_t pid=f->popen_kludge;
   fclose(f);
-  if (waitpid(f->popen_kludge,&status,0)>=0)
+  if (waitpid(pid,&status,0)>=0)
     return status;
   return -1;
 }
