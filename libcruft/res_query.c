@@ -116,7 +116,7 @@ int res_query(const char *dname, int class, int type, unsigned char *answer, int
       }
       /* if it doesn't work, we don't care */
 #endif
-      for (j=120; j>0; --j) {
+      for (j=20; j>0; --j) {
 	gettimeofday(&now,0);
 	if (now.tv_sec-last.tv_sec>10) {
 #ifdef WANT_IPV6_DNS
@@ -133,8 +133,10 @@ int res_query(const char *dname, int class, int type, unsigned char *answer, int
 	  if (duh[0].fd!=-1) {
 #endif
 	  duh[0].fd=tmpfd;
-	  if (sendto(tmpfd,packet,size,0,s,sizeof(struct sockaddr_in6))==0)
+	  if (sendto(tmpfd,packet,size,0,s,sizeof(struct sockaddr_in6))!=-1)
 	    gettimeofday(&last,0);
+	  else
+	    goto nxdomain;
 #ifdef WANT_PLUGPLAY_DNS
 	  }
 #endif
