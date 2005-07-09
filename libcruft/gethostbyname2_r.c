@@ -29,11 +29,13 @@ int gethostbyname2_r(const char* name, int AF, struct hostent* result,
   if (buflen<L) { *h_errnop=ERANGE; return 1; }
 #ifdef WANT_ETC_HOSTS
   {
+    int foundsomething=0;
     struct hostent* r;
     while ((r=gethostent_r(buf,buflen))) {
-      if (r->h_addrtype==AF) {
-	int i;
-	if (!strcasecmp(r->h_name,name)) {	/* found it! */
+      int i;
+      if (!strcasecmp(r->h_name,name)) {
+	foundsomething=1;
+        if (r->h_addrtype==AF) {	/* found it! */
 found:
 	  memmove(result,r,sizeof(struct hostent));
 	  *RESULT=result;
@@ -41,14 +43,22 @@ found:
 	  endhostent();
 	  return 0;
 	}
-	for (i=0; i<16; ++i) {
-	  if (r->h_aliases[i]) {
-	    if (!strcasecmp(r->h_aliases[i],name)) goto found;
-	  } else break;
-	}
+      }
+      for (i=0; i<16; ++i) {
+	if (r->h_aliases[i]) {
+	  if (!strcasecmp(r->h_aliases[i],name)) {
+	    foundsomething=1;
+	    if (r->h_addrtype==AF)
+	      goto found;
+	  }
+	} else break;
       }
     }
     endhostent();
+    if (foundsomething) {
+      *h_errnop=NO_DATA;
+      return -1;
+    }
   }
 #endif
   strcpy(buf,name);

@@ -7,6 +7,11 @@
   remove throw() statements for functions taking function pointer
     arguments (qsort, besearch, ftw)
   fix embarassing bug in pclose (Juergen Sawinski, René Rebe)
+  when asking for an IPv6 address and there is an IPv4 address in
+    /etc/hosts but not an IPv6 address, return NO_DATA without
+    querying DNS.  This is how glibc does it, and it means you can use
+    e.g. elinks to browse http://localhost/ without being connected to
+    the internet / a DNS server.
 
 0.29:
   oops, fix LD_RUN_PATH unsetting (Enrico Scholz)
