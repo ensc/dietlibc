@@ -185,7 +185,8 @@ static const char P[] = {
 };
 
 /* The current block, divided into 2 halves. */
-static char L[32], R[32];
+static char L[64];
+#define R (L+32)
 static char tempL[32];
 static char f[32];
 
