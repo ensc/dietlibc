@@ -14,6 +14,7 @@
     the internet / a DNS server.
   make libcrypt/crypt.c to work when compiled with gcc 4
   provide toascii and ustat (Reynir Stefansson)
+  change size of struct sigaction.sa_flags from long to int on alpha.
 
 0.29:
   oops, fix LD_RUN_PATH unsetting (Enrico Scholz)
