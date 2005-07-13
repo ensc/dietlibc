@@ -13,6 +13,7 @@
     e.g. elinks to browse http://localhost/ without being connected to
     the internet / a DNS server.
   make libcrypt/crypt.c to work when compiled with gcc 4
+  provide toascii and ustat (Reynir Stefansson)
 
 0.29:
   oops, fix LD_RUN_PATH unsetting (Enrico Scholz)

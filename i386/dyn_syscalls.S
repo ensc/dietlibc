@@ -69,6 +69,7 @@ __vsyscall:
 #include "../syscalls.s/wait4.S"
 #include "../syscalls.s/writev.S"
 #include "../syscalls.s/__getpagesize.S"
+#include "../syscalls.s/ustat.S"
 
 /* OK this is basicaly unified.S */
 .text

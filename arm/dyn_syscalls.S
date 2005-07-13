@@ -203,6 +203,7 @@ __unified_syscall:
 #include "../syscalls.s/ptrace.S"
 #include "../syscalls.s/ftruncate64.S"
 #include "../syscalls.s/truncate64.S"
+#include "../syscalls.s/ustat.S"
 
 /* other asm-files w.o. changes ... */
 __exit:

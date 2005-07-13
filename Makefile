@@ -475,7 +475,7 @@ $(OBJDIR)/fgetc_unlocked.o $(OBJDIR)/fread.o $(OBJDIR)/ungetc.o: dietstdio.h
 
 # these depend on dietfeatures.h for WANT_LINKER_WARNINGS
 $(OBJDIR)/setlinebuf.o $(OBJDIR)/bzero.o $(OBJDIR)/setegid.o \
-$(OBJDIR)/seteuid.o: dietfeatures.h
+$(OBJDIR)/seteuid.o $(OBJDIR)/toascii.o: dietfeatures.h
 
 # these depend on dietfeatures.h for WANT_FULL_POSIX_COMPAT
 $(OBJDIR)/strncpy.o: dietfeatures.h

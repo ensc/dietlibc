@@ -15,6 +15,7 @@ extern int isspace (int c) __THROW __attribute__ ((__const__));
 extern int isupper (int c) __THROW __attribute__ ((__const__));
 extern int islower (int c) __THROW __attribute__ ((__const__));
 
+extern int toascii(int c) __THROW __attribute__ ((__const__));
 extern int tolower(int c) __THROW __attribute__ ((__const__));
 extern int toupper(int c) __THROW __attribute__ ((__const__));
 

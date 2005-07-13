@@ -107,7 +107,6 @@ _unified_syscall:
 #include "../syscalls.s/getrlimit.S"
 #include "../syscalls.s/getrusage.S"
 #include "../syscalls.s/getsid.S"
-#include "../syscalls.s/gettimeofday.S"
 #include "../syscalls.s/getuid.S"
 #include "../syscalls.s/getuid32.S"
 #include "../syscalls.s/init_module.S"
@@ -229,6 +228,7 @@ _unified_syscall:
 #include "../syscalls.s/waitpid.S"
 #include "../syscalls.s/write.S"
 #include "../syscalls.s/writev.S"
+#include "../syscalls.s/ustat.S"
 
 #define _exit __exit
 #include "clone.S"
