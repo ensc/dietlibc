@@ -236,3 +236,6 @@ _unified_syscall:
 
 #include "__longjmp.S"
 #include "setjmp.S"
+
+#define __errno_location __errno_location@PLT
+#include "x86_64/gettimeofday.S"
