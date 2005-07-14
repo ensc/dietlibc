@@ -443,8 +443,8 @@ struct sigaction {
     sighandler_t _sa_handler;
     void (*_sa_sigaction)(int, siginfo_t*, void*);
   } _u;
-  sigset_t sa_mask;
   unsigned int sa_flags;
+  sigset_t sa_mask;
 #elif defined(__ia64__) || defined(__hppa__)
   union {
     sighandler_t _sa_handler;
