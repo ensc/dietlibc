@@ -69,11 +69,6 @@ void *bsearch(const void *key, const void *base, size_t nmemb, size_t size, int 
 
 extern char **environ;
 
-/* now this function is the greatest bullshit I have ever seen.
- * The ISO people must be out of their minds. */
-typedef struct { int quot,rem; } div_t;
-div_t div(int numer, int denom) __THROW __attribute__((__const__));
-
 char *realpath(const char *path, char *resolved_path) __THROW;
 
 int mkstemp(char *_template);
@@ -99,6 +94,20 @@ char *ptsname (int fd) __THROW;
 #define RAND_MAX 	((1<<31) -2)
 
 #define MB_CUR_MAX 1
+
+/* now these functions are the greatest bullshit I have ever seen.
+ * The ISO people must be out of their minds. */
+
+typedef struct { int quot,rem; } div_t;
+typedef struct { long quot,rem; } ldiv_t;
+
+div_t div(int numerator, int denominator);
+ldiv_t ldiv(long numerator, long denominator);
+
+#ifdef _GNU_SOURCE
+typedef struct { long long quot,rem; } lldiv_t;
+lldiv_t lldiv(long long numerator, long long denominator);
+#endif
 
 __END_DECLS
 
