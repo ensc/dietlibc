@@ -1,3 +1,4 @@
+#define _GNU_SOURCE
 #include <stdlib.h>
 
 lldiv_t lldiv(long long numerator, long long denominator) {
