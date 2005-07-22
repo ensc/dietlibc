@@ -16,6 +16,7 @@
   provide toascii and ustat (Reynir Stefansson)
   change size of struct sigaction.sa_flags from long to int on alpha.
   beginnings of wide char string routines
+  fix regex match bug ("@(a|b)" would also match "x@z")
 
 0.29:
   oops, fix LD_RUN_PATH unsetting (Enrico Scholz)
