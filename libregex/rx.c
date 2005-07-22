@@ -414,7 +414,9 @@ static const char* parseregex(struct regex*__restrict__ r,const char*__restrict_
       return s;
     }
 //    printf("assigned branch %d at %p\n",r->num-1,r->b);
-    s=tmp; if (*s=='|') ++s;
+    s=tmp;
+    if (*s==')') return s;
+    if (*s=='|') ++s;
   }
   return tmp;
 }

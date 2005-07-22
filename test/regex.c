@@ -23,6 +23,10 @@ int main() {
   assert(regexec(&r,"abuse@fefe.de",0,0,0)==0);
   regfree(&r);
 
+  assert(regcomp(&r,"@(ioctl.codeblau.de|fcntl.codeblau.de|knuth.codeblau.de|codeblau.de|lists.codeblau.de|code-blau.de|codeblau.com|code-blau.com|ccc.fefe.de|wegwerfdomain.de|fefes.wegwerfdomain.de|bewaff.net|rc23.rx|fnord.st|ist.schwervernetzt.de|kesim.(org|net|com)|tinydns.net|spiral-dynamics.org|hinke.org|2.0.1.0.8.5.6.0.1.0.0.2.ip6.int|eckner.org|mindbase.de|codeblau.walledcity.de)",REG_EXTENDED)==0);
+  assert(regexec(&r,"abuse@fefe.de",0,0,0)==REG_NOMATCH);
+  regfree(&r);
+
   assert(regcomp(&r,"^$",REG_EXTENDED)==0);
   assert(regexec(&r,"",0,0,0)==0);
   assert(matches[0].rm_so==0 && matches[0].rm_eo==0);
