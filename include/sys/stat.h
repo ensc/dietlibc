@@ -363,8 +363,13 @@ struct stat64 {
 __extension__	long long	st_size;
 	unsigned long	st_blksize;
 
+#ifdef __ARMEB__
+	unsigned long	__pad4;		/* future possible st_blocks high bits */
+	unsigned long	st_blocks;	/* Number 512-byte blocks allocated. */
+#else
 	unsigned long	st_blocks;	/* Number 512-byte blocks allocated. */
 	unsigned long	__pad4;		/* future possible st_blocks high bits */
+#endif
 
 	  signed long	st_atime;
 	unsigned long	__pad5;

@@ -1,3 +1,4 @@
+#include "dietfeatures.h"
 
 	.text
 	.align	2
@@ -11,6 +12,7 @@ strlen:
 	moveq	pc, lr			@ if so, return 0
 #endif
 
+#ifndef WANT_SMALL_STRING_ROUTINES
 	ands	a3, a1, #3
 	ldr	ip, .Lmagic
 	mov	a2, a1
@@ -49,11 +51,22 @@ strlen:
 	addeq	a1, a1, #1
 #endif
 	sub	a1, a1, a2
+#else
+	ldrb	a3, [a1], #1
+	mov	a2, a1
+.Lloop:
+	tst	a3, #255
+	ldrneb	a3, [a1], #1
+	bne	.Lloop
+	sub	a1, a1, a2
+#endif
 
 	mov	pc, lr
 
+#ifndef WANT_SMALL_STRING_ROUTINES
 .Lmagic:
 	.word	0x01010101
+#endif
 
 .Lstrlen:
 	.size	strlen,.Lstrlen-strlen
