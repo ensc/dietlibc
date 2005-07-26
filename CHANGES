@@ -18,6 +18,7 @@
   beginnings of wide char string routines
   fix regex match bug ("@(a|b)" would also match "x@z")
   ARM big-endian support (Paul Clifford)
+  support %s in strftime, so date in embutils does :-)
 
 0.29:
   oops, fix LD_RUN_PATH unsetting (Enrico Scholz)

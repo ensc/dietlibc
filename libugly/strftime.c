@@ -21,20 +21,19 @@ static const char   ampm [4] [3] = {
     "AM", "PM"
 };
 
-static int  i2a ( char* dest,unsigned int x ) 
+static void i2a ( char* dest,unsigned long x ) 
 {
     int  div = 10;
     *dest++ = x/div + '0';
     *dest++ = x%div + '0';
     *dest++ = '\0';
-    return 2;
 }
 
 size_t  strftime ( char* dst, size_t max, const char* format, const struct tm* tm ) 
 {
     char*         p = dst;
     const char*   src;
-    unsigned int  no;
+    unsigned long no;
     char          buf [5];
   
   
@@ -80,6 +79,19 @@ again:
             case 'w': no  = tm->tm_wday;              		 goto _no;
 	    case 'U': no  = (tm->tm_yday - tm->tm_wday + 7) / 7; goto _no;
 	    case 'W': no  = (tm->tm_yday - (tm->tm_wday - 1 + 7) % 7 + 7) / 7; goto _no;
+	    case 's': {
+			time_t t = mktime((struct tm*)tm);
+			char buf[101];
+			char* c;
+			buf[100]=0;
+			for (c=buf+99; c>buf; --c) {
+			  *c=(t%10)+'0';
+			  t/=10;
+			  if (!t) break;
+			}
+			src=c;
+			goto _str;
+		      }
 	    case 'Z':
 #ifdef WANT_TZFILE_PARSER
 		      tzset(); src = tzname[0];
