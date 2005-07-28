@@ -285,15 +285,17 @@ pp:
 
       dest=newargv;
       *dest++=argv[1];
-      if (!strcmp(argv[2],"-V")) {
-	*dest++=argv[2];
-	*dest++=argv[3];
-	argv+=2;
-	argc-=2;
-      } else if (!memcmp(argv[2],"-V",2)) {
-	*dest++=argv[2];
-	++argv;
-	--argc;
+      if (argv[2]) {
+	if (!strcmp(argv[2],"-V")) {
+	  *dest++=argv[2];
+	  *dest++=argv[3];
+	  argv+=2;
+	  argc-=2;
+	} else if (!memcmp(argv[2],"-V",2)) {
+	  *dest++=argv[2];
+	  ++argv;
+	  --argc;
+	}
       }
 #ifndef __DYN_LIB
       if (_link) { *dest++=(char*)nostdlib; *dest++=dashstatic; *dest++=dashL; }
