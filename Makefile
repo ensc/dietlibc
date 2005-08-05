@@ -495,3 +495,6 @@ $(OBJDIR)/strsignal.o: include/signal.h
 $(LIBPTHREAD_OBJS): include/pthread.h
 
 # CFLAGS+=-W -Wshadow -Wid-clash-31 -Wpointer-arith -Wcast-align -Wstrict-prototypes -Wwrite-strings
+
+# WANT_LARGEFILE_BACKCOMPAT
+$(OBJDIR)/fcntl64.o: dietfeatures.h

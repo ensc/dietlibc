@@ -51,7 +51,9 @@ static char sccsid[] =
 /*
  * Unix longhand authenticator
  */
-static enum auth_stat _svcauth_unix(rqst, msg)
+enum auth_stat _svcauth_unix(struct svc_req* rqst, struct rpc_msg* msg);
+
+enum auth_stat _svcauth_unix(rqst, msg)
 register struct svc_req *rqst;
 register struct rpc_msg *msg;
 {

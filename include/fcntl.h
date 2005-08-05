@@ -5,6 +5,7 @@
 
 #include <sys/types.h>
 #include <unistd.h>
+#include <sys/stat.h>
 
 __BEGIN_DECLS
 
@@ -592,6 +593,12 @@ struct flock64
 #endif
 
 extern int fcntl (int __fd, int __cmd, ...) __THROW;
+#ifndef __NO_STAT64
+extern int fcntl64 (int __fd, int __cmd, ...) __THROW;
+#if defined _FILE_OFFSET_BITS && _FILE_OFFSET_BITS == 64
+#define fcntl fcntl64
+#endif
+#endif
 
 #if !defined(O_ASYNC) && defined(FASYNC)
 #define O_ASYNC FASYNC
