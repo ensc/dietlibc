@@ -33,6 +33,7 @@ int getaddrinfo(const char *node, const char *service, const struct addrinfo *hi
       h.h_addr_list=(char**)buf+16;
       if (node) {
 	if ((interface=strchr(node,'%'))) ++interface;
+	if (family==PF_INET6 && inet_pton(AF_INET,node,buf)) continue;
 	if (inet_pton(family,node,buf)>0) {
 	  h.h_name=(char*)node;
 	  h.h_addr_list[0]=buf;
@@ -97,7 +98,7 @@ int getaddrinfo(const char *node, const char *service, const struct addrinfo *hi
 	    struct servent* se;
 	    if ((se=getservbyname(service,"tcp"))) {	/* found a service. */
 	      port=se->s_port;
-  blah1:
+blah1:
 	      if (family==PF_INET6)
 		foo->ip.ip6.sin6_port=port;
 	      else
