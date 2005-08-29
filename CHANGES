@@ -20,6 +20,7 @@
   ARM big-endian support (Paul Clifford)
   support %s in strftime, so date in embutils does :-)
   fix two strptime bugs (Gernot Tenchio)
+  add strnlen (for udev)
 
 0.29:
   oops, fix LD_RUN_PATH unsetting (Enrico Scholz)

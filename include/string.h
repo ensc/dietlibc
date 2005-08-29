@@ -24,6 +24,9 @@ char *strncat(char *dest, const char *src, size_t n) __THROW;
 int strcmp(const char *s1, const char *s2) __THROW __pure;
 
 size_t strlen(const char *s) __THROW __pure;
+#ifdef _GNU_SOURCE
+size_t strnlen(const char *s,size_t maxlen) __THROW __pure;
+#endif
 
 char *strstr(const char *haystack, const char *needle) __THROW __pure;
 
