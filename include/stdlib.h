@@ -107,6 +107,8 @@ ldiv_t ldiv(long numerator, long denominator);
 #ifdef _GNU_SOURCE
 typedef struct { long long quot,rem; } lldiv_t;
 lldiv_t lldiv(long long numerator, long long denominator);
+
+int clearenv(void);
 #endif
 
 __END_DECLS
