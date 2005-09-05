@@ -86,4 +86,8 @@
 #define _POSIX_PATH_MAX PATH_MAX
 #define MB_LEN_MAX 16
 
+#ifdef _XOPEN_SOURCE
+#define IOV_MAX 1024
+#endif
+
 #endif
