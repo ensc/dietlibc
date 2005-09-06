@@ -108,7 +108,7 @@ time_t __tzfile_map(time_t t, int *isdst, int forward) {
   } else {	/* reverse map, for mktime */
     time_t nexttz=0,lastval=0;
 //    printf("tzh_timecnt: %d\n",tzh_timecnt);
-    for (i=0; i<tzh_timecnt-1; ++i) {
+    for (i=1; i<tzh_timecnt-1; ++i) {
       unsigned char* x, j;
       long k=0;
 //      printf("ab %ld: ",__myntohl(tmp+i*4));
