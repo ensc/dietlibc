@@ -91,7 +91,7 @@ char *ptsname (int fd) __THROW;
 #define EXIT_FAILURE 1
 #define EXIT_SUCCESS 0
 
-#define RAND_MAX 	((1<<31) -2)
+#define RAND_MAX 	0x7ffffffe
 
 #define MB_CUR_MAX 1
 

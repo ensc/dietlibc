@@ -281,6 +281,16 @@
 #define __NR_mq_getsetattr		(__NR_SYSCALL_BASE+279)
 #define __NR_waitid			(__NR_SYSCALL_BASE+280)
 
+#define __NR_add_key			(__NR_SYSCALL_BASE+309)
+#define __NR_request_key		(__NR_SYSCALL_BASE+310)
+#define __NR_keyctl			(__NR_SYSCALL_BASE+311)
+#define __NR_vserver			(__NR_SYSCALL_BASE+313)
+#define __NR_ioprio_set			(__NR_SYSCALL_BASE+314)
+#define __NR_ioprio_get			(__NR_SYSCALL_BASE+315)
+#define __NR_inotify_init		(__NR_SYSCALL_BASE+316)
+#define __NR_inotify_add_watch		(__NR_SYSCALL_BASE+317)
+#define __NR_inotify_rm_watch		(__NR_SYSCALL_BASE+318)
+
 
 /* ok the next few values are for the optimization of the unified syscalls
  * on arm.
@@ -573,6 +583,17 @@
 #define __ARGS_mq_notify		0
 #define __ARGS_mq_getsetattr		0
 #define __ARGS_waitid			0
+
+#define __ARGS_add_key			5
+#define __ARGS_request_key		4
+#define __ARGS_keyctl			3
+#define __ARGS_vserver			3
+#define __ARGS_ioprio_set		3
+#define __ARGS_ioprio_get		2
+#define __ARGS_inotify_init		0
+#define __ARGS_inotify_add_watch	3
+#define __ARGS_inotify_rm_watch		2
+
 
 #ifdef __ASSEMBLER__
 #define syscall_weak(name,wsym,sym) __syscall_weak $__NR_##name, wsym, sym, __ARGS_##name

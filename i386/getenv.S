@@ -15,13 +15,13 @@ getenv:
 	not %ecx
 	dec %ecx
 	pushl %ecx
-	movl (%edx), %ecx
+	movzbl (%edx), %ecx
 
 	GET_1VAR environ, %esi		# non-PIC: movl environ, %esi
 	jmp .Lloop
 
 .Lprepare:
-	movl (%edx), %ecx
+	movzbl (%edx), %ecx
 	movl %eax, %esi
 .Lloop:
 	lodsl

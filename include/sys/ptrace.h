@@ -2,6 +2,7 @@
 #define _SYS_PTRACE_H
 
 #include <sys/cdefs.h>
+#include <inttypes.h>
 
 __BEGIN_DECLS
 
@@ -71,14 +72,14 @@ struct pt_regs {
   long edi;
   long ebp;
   long eax;
-  int  xds;
-  int  xes;
+  int32_t xds;
+  int32_t xes;
   long orig_eax;
   long eip;
-  int  xcs;
+  int32_t xcs;
   long eflags;
   long esp;
-  int  xss;
+  int32_t xss;
 };
 
 /* Arbitrarily choose the same ptrace numbers as used by the Sparc code. */
@@ -184,8 +185,6 @@ struct pt_regs {
 
 #define STACK_FRAME_OVERHEAD	96	/* size of minimum stack frame */
 
-#include <inttypes.h>
-
 /* this typedef defines how a Program Status Word looks like */
 typedef struct {
         uint32_t   mask;
@@ -245,20 +244,20 @@ typedef uint32_t addr_t;
 
 typedef	struct
 {
-	unsigned em_branching          : 1;
-	unsigned em_instruction_fetch  : 1;
+	uint32_t em_branching          : 1;
+	uint32_t em_instruction_fetch  : 1;
 	/*
 	 * Switching on storage alteration automatically fixes
 	 * the storage alteration event bit in the users std.
 	 */
-	unsigned em_storage_alteration : 1;
-	unsigned em_gpr_alt_unused     : 1;
-	unsigned em_store_real_address : 1;
-	unsigned                       : 3;
-	unsigned branch_addr_ctl       : 1;
-	unsigned                       : 1;
-	unsigned storage_alt_space_ctl : 1;
-	unsigned                       : 21;
+	uint32_t em_storage_alteration : 1;
+	uint32_t em_gpr_alt_unused     : 1;
+	uint32_t em_store_real_address : 1;
+	uint32_t                       : 3;
+	uint32_t branch_addr_ctl       : 1;
+	uint32_t                       : 1;
+	uint32_t storage_alt_space_ctl : 1;
+	uint32_t                       : 21;
 	addr_t   starting_addr;
 	addr_t   ending_addr;
 } per_cr_bits  __attribute__((__packed__));
@@ -272,21 +271,21 @@ typedef struct
 
 typedef struct
 {
-	unsigned perc_branching          : 1; /* 0x096 */
-	unsigned perc_instruction_fetch  : 1;
-	unsigned perc_storage_alteration : 1;
-	unsigned perc_gpr_alt_unused     : 1;
-	unsigned perc_store_real_address : 1;
-	unsigned                         : 4;
-	unsigned atmid_validity_bit      : 1;
-	unsigned atmid_psw_bit_32        : 1;
-	unsigned atmid_psw_bit_5         : 1;
-	unsigned atmid_psw_bit_16        : 1;
-	unsigned atmid_psw_bit_17        : 1;
-	unsigned si                      : 2;
+	uint32_t perc_branching          : 1; /* 0x096 */
+	uint32_t perc_instruction_fetch  : 1;
+	uint32_t perc_storage_alteration : 1;
+	uint32_t perc_gpr_alt_unused     : 1;
+	uint32_t perc_store_real_address : 1;
+	uint32_t                         : 4;
+	uint32_t atmid_validity_bit      : 1;
+	uint32_t atmid_psw_bit_32        : 1;
+	uint32_t atmid_psw_bit_5         : 1;
+	uint32_t atmid_psw_bit_16        : 1;
+	uint32_t atmid_psw_bit_17        : 1;
+	uint32_t si                      : 2;
 	addr_t   address;                     /* 0x098 */
-	unsigned                         : 4; /* 0x0a1 */
-	unsigned access_id               : 4;
+	uint32_t                         : 4; /* 0x0a1 */
+	uint32_t access_id               : 4;
 } per_lowcore_bits __attribute__((__packed__));
 
 typedef struct
@@ -300,9 +299,9 @@ typedef struct
 	 * directly they are used so that single stepping can be
 	 * switched on & off while not affecting other tracing
 	 */
-	unsigned  single_step       : 1;
-	unsigned  instruction_fetch : 1;
-	unsigned                    : 30;
+	uint32_t  single_step       : 1;
+	uint32_t  instruction_fetch : 1;
+	uint32_t                    : 30;
 	/*
 	 * These addresses are copied into cr10 & cr11 if single
 	 * stepping is switched off

@@ -15,10 +15,12 @@ extern void __deregister_frame_info (const void *) __attribute__((weak));
 typedef void(*structor)(void);
 
 __attribute__((section(".ctors")))
+__attribute__((aligned(sizeof(structor))))
 __attribute_used
 static structor __CTOR_LIST__[1]={((structor)-1)};
 
 __attribute__((section(".dtors")))
+__attribute__((aligned(sizeof(structor))))
 __attribute_used
 static structor __DTOR_LIST__[1]={((structor)-1)};
 
@@ -33,6 +35,7 @@ static structor __DTOR_LIST__[1]={((structor)-1)};
 #endif
 
 __attribute__((section(".eh_frame")))
+__attribute__((aligned(sizeof(structor))))
 __attribute_used
 EH_FRAME_SECTION_CONST char __EH_FRAME_BEGIN__[] = { };
 

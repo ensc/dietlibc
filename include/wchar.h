@@ -2,19 +2,26 @@
 #define _WCHAR_H
 
 #include <sys/cdefs.h>
-
-__BEGIN_DECLS
-
 #include <stddef.h>
 #include <stdarg.h>
 #include <stdio.h>
 
+__BEGIN_DECLS
+
+#if defined(__WINT_TYPE__)
+typedef __WINT_TYPE__ wint_t;
+#else
 typedef unsigned int wint_t;
+#endif
 typedef unsigned long int wctype_t;
 
-#define WCHAR_MIN (-2147483647l - 1l)
-#define WCHAR_MAX (2147483647l)
-#define WEOF 0xfffffffful
+#ifndef WCHAR_MIN
+#define WCHAR_MIN (-2147483647 - 1)
+#define WCHAR_MAX (2147483647)
+#endif
+#ifndef WEOF
+#define WEOF 0xffffffffu
+#endif
 
 struct tm;
 

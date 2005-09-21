@@ -2,16 +2,17 @@
 #define _SYS_TIMEX_H
 
 #include <sys/cdefs.h>
+#include <sys/types.h>
 
 __BEGIN_DECLS
 
 struct timex {
-  unsigned int modes;	/* mode selector */
+  uint32_t modes;	/* mode selector */
   long int offset;	/* time offset (usec) */
   long int freq;	/* frequency offset (scaled ppm) */
   long int maxerror;	/* maximum error (usec) */
   long int esterror;	/* estimated error (usec) */
-  int status;		/* clock command/status */
+  int32_t status;	/* clock command/status */
   long int constant;	/* pll time constant */
   long int precision;	/* clock precision (usec) (read only) */
   long int tolerance;	/* clock frequency tolerance (ppm) (read only) */
@@ -20,7 +21,7 @@ struct timex {
 
   long int ppsfreq;	/* pps frequency (scaled ppm) (ro) */
   long int jitter;	/* pps jitter (us) (ro) */
-  int shift;		/* interval duration (s) (shift) (ro) */
+  int32_t shift;	/* interval duration (s) (shift) (ro) */
   long int stabil;	/* pps stability (scaled ppm) (ro) */
   long int jitcnt;	/* jitter limit exceeded (ro) */
   long int calcnt;	/* calibration intervals (ro) */
@@ -28,9 +29,9 @@ struct timex {
   long int stbcnt;	/* stability limit exceeded (ro) */
 
   /* ??? */
-  int  :32; int  :32; int  :32; int  :32;
-  int  :32; int  :32; int  :32; int  :32;
-  int  :32; int  :32; int  :32; int  :32;
+  int32_t  :32; int32_t  :32; int32_t  :32; int32_t  :32;
+  int32_t  :32; int32_t  :32; int32_t  :32; int32_t  :32;
+  int32_t  :32; int32_t  :32; int32_t  :32; int32_t  :32;
 };
 
 #define ADJ_OFFSET            0x0001 /* time offset */

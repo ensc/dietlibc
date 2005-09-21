@@ -7,7 +7,7 @@
 __BEGIN_DECLS
 
 /* Identifier for conversion method from one codeset to another.  */
-typedef unsigned int iconv_t;
+typedef uint32_t iconv_t;
 
 /* Allocate descriptor for code conversion from codeset FROMCODE to
    codeset TOCODE.  */

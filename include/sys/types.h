@@ -50,29 +50,29 @@ typedef unsigned long int clock_t;	/* Used for system times in
     typedef uint32_t nlink_t;		/* Used for link counts. */
     typedef uint32_t uid_t;		/* Used for user IDs. */
 #elif defined(__arm__) || defined(__i386__) || defined(__sparc__) || defined(__s390__) /* make sure __s390x__ hits before __s390__ */
-    typedef unsigned short dev_t;
-    typedef unsigned short gid_t;
-    typedef unsigned short mode_t;
-    typedef unsigned short nlink_t;
-    typedef unsigned short uid_t;
+    typedef uint16_t dev_t;
+    typedef uint16_t gid_t;
+    typedef uint16_t mode_t;
+    typedef uint16_t nlink_t;
+    typedef uint16_t uid_t;
 #elif defined(__hppa__)
-    typedef unsigned int dev_t;
-    typedef unsigned int gid_t;
-    typedef unsigned short mode_t;
-    typedef unsigned short nlink_t;
-    typedef unsigned int uid_t;
+    typedef uint32_t dev_t;
+    typedef uint32_t gid_t;
+    typedef uint16_t mode_t;
+    typedef uint16_t nlink_t;
+    typedef uint32_t uid_t;
 #elif defined(__mips__)
-    typedef unsigned int dev_t;
-    typedef int gid_t;
-    typedef unsigned int mode_t;
-    typedef int nlink_t;
-    typedef int uid_t;
+    typedef uint32_t dev_t;
+    typedef int32_t gid_t;
+    typedef uint32_t mode_t;
+    typedef int32_t nlink_t;
+    typedef int32_t uid_t;
 #elif defined(__powerpc__) && !defined(__powerpc64__)
-    typedef unsigned int dev_t;
-    typedef unsigned int gid_t;
-    typedef unsigned int mode_t;
-    typedef unsigned short nlink_t;
-    typedef unsigned int uid_t;
+    typedef uint32_t dev_t;
+    typedef uint32_t gid_t;
+    typedef uint32_t mode_t;
+    typedef uint16_t nlink_t;
+    typedef uint32_t uid_t;
 #elif defined(__powerpc64__) || defined(__x86_64__)
     typedef unsigned long dev_t;
     typedef uint32_t gid_t;

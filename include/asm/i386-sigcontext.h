@@ -1,13 +1,14 @@
+#include <asm/types.h>
 
 struct _fpreg {
-	unsigned short significand[4];
-	unsigned short exponent;
+	__u16          significand[4];
+	__u16          exponent;
 };
 
 struct _fpxreg {
-	unsigned short significand[4];
-	unsigned short exponent;
-	unsigned short padding[3];
+	__u16          significand[4];
+	__u16          exponent;
+	__u16          padding[3];
 };
 
 struct _xmmreg {
@@ -24,8 +25,8 @@ struct _fpstate {
 	unsigned long	dataoff;
 	unsigned long	datasel;
 	struct _fpreg	_st[8];
-	unsigned short	status;
-	unsigned short	magic;		/* 0xffff = regular FPU data only */
+	__u16         	status;
+	__u16         	magic;		/* 0xffff = regular FPU data only */
 
 	/* FXSR FPU environment */
 	unsigned long	_fxsr_env[6];	/* FXSR FPU env is ignored */
@@ -40,10 +41,10 @@ struct _fpstate {
 #define PC(ctx) (ctx.eip)
 
 struct sigcontext {
-	unsigned short gs, __gsh;
-	unsigned short fs, __fsh;
-	unsigned short es, __esh;
-	unsigned short ds, __dsh;
+	__u16         gs, __gsh;
+	__u16         fs, __fsh;
+	__u16         es, __esh;
+	__u16         ds, __dsh;
 	unsigned long edi;
 	unsigned long esi;
 	unsigned long ebp;
@@ -55,10 +56,10 @@ struct sigcontext {
 	unsigned long trapno;
 	unsigned long err;
 	unsigned long eip;
-	unsigned short cs, __csh;
+	__u16         cs, __csh;
 	unsigned long eflags;
 	unsigned long esp_at_signal;
-	unsigned short ss, __ssh;
+	__u16         ss, __ssh;
 	struct _fpstate * fpstate;
 	unsigned long oldmask;
 	unsigned long cr2;

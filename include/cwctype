@@ -2,10 +2,9 @@
 #define __DIETLIBC_CWCTYPE_INCLUDED
 
 #include <endian.h>
+#include <wctype.h>
 #include <cstddef>
-#include <ctype.h>
-
-typedef unsigned long int wctype_t;
+#include <cwchar>
 
 #if __BYTE_ORDER == __BIG_ENDIAN
 #  define _ISbit(bit)	(1 << (bit))
@@ -31,7 +30,27 @@ enum
 
 namespace std {
     using ::wctype_t;
+    using ::wctrans_t;
     using ::wint_t;
+
+    using ::iswalnum;
+    using ::iswalpha;
+    using ::iswblank;
+    using ::iswcntrl;
+    using ::iswctype;
+    using ::iswdigit;
+    using ::iswgraph;
+    using ::iswlower;
+    using ::iswprint;
+    using ::iswpunct;
+    using ::iswspace;
+    using ::iswupper;
+    using ::iswxdigit;
+    using ::towctrans;
+    using ::towlower;
+    using ::towupper;
+    using ::wctrans;
+    using ::wctype;
 }
 
 #endif

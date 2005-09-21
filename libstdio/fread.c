@@ -23,14 +23,14 @@ size_t fread_unlocked(void *ptr, size_t size, size_t nmemb, FILE *stream) {
 #ifdef WANT_FREAD_OPTIMIZATION
   if ( !(stream->flags&FDPIPE) && (j>stream->buflen)) {
     size_t tmp=j-i;
-    int res;
+    ssize_t res;
     size_t inbuf=stream->bs-stream->bm;
     memcpy(ptr+i,stream->buf+stream->bm,inbuf);
     stream->bm=stream->bs=0;
     tmp-=inbuf;
     i+=inbuf;
     if (fflush_unlocked(stream)) return 0;
-    while ((res=__libc_read(stream->fd,ptr+i,tmp))<(int)tmp) {
+    while ((res=__libc_read(stream->fd,ptr+i,tmp))<(ssize_t)tmp) {
       if (res==-1) {
 	stream->flags|=ERRORINDICATOR;
 	goto exit;

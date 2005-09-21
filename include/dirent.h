@@ -10,7 +10,7 @@ __BEGIN_DECLS
 struct dirent {
   long		d_ino;
   off_t		d_off;
-  unsigned short	d_reclen;
+  uint16_t	d_reclen;
   char		d_name[256]; /* We must not include limits.h! */
 };
 
@@ -18,7 +18,7 @@ struct dirent {
 struct dirent64 {
   uint64_t	d_ino;
   int64_t	d_off;
-  unsigned short	d_reclen;
+  uint16_t	d_reclen;
   unsigned char	d_type;
   char		d_name[256];
 };

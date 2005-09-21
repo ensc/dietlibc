@@ -23,6 +23,19 @@
   add strnlen and clearenv (for udev)
   #define IOV_MAX in limits.h behind _XOPEN_SOURCE (for opennntpd)
   tzfile fix (Nikola Vladov)
+  lots of fixes from Markus FX Oberhumer:
+    * better signal handling error detection
+    * setjmp.S on i386
+    * getenv on i386
+    * sys/stat.h -malign-double fix
+    * update fcntl.h for MIPS to 2.6.13 version
+    * jmp_buf is 40*8 instead of 58*8 on ppc64.
+    * This patch fixes the section of the TOC entries on ppc64
+    * libstdc++ updates for gcc 4
+    * remove cstddef and cwchar (no longer needed)
+    * int -> ssize_t for read and write
+    * sigjmp.c: __mask_was_saved was not set in all cases!
+    * another round of ILP64 cleanups
 
 0.29:
   oops, fix LD_RUN_PATH unsetting (Enrico Scholz)

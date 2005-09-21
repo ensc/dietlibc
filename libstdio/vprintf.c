@@ -4,7 +4,7 @@
 
 int __stdio_outs(const char *s,size_t len) __attribute__((weak));
 int __stdio_outs(const char *s,size_t len) {
-  return (write(1,s,len)==(int)len)?1:0;
+  return (write(1,s,len)==(ssize_t)len)?1:0;
 }
 
 int vprintf(const char *format, va_list ap)

@@ -232,9 +232,9 @@ typedef sighandler_t sig_t;
 typedef sighandler_t __sighandler_t;	/* shoot the glibc people! */
 #endif
 
-#define SIG_DFL ((sighandler_t)0)	/* default signal handling */
-#define SIG_IGN ((sighandler_t)1)	/* ignore signal */
-#define SIG_ERR ((sighandler_t)-1)	/* error return from signal */
+#define SIG_DFL ((sighandler_t)0L)	/* default signal handling */
+#define SIG_IGN ((sighandler_t)1L)	/* ignore signal */
+#define SIG_ERR ((sighandler_t)-1L)	/* error return from signal */
 
 typedef union sigval {
   int sival_int;
@@ -249,7 +249,7 @@ typedef union sigval {
 #endif
 
 #ifdef __sparc_v9__
-typedef int __band_t;
+typedef int32_t __band_t;
 #else
 typedef long __band_t;
 #endif
@@ -267,8 +267,8 @@ typedef struct siginfo {
     } _kill;
     /* POSIX.1b timers */
     struct {
-      unsigned int _timer1;
-      unsigned int _timer2;
+      uint32_t _timer1;
+      uint32_t _timer2;
     } _timer;
     /* POSIX.1b signals */
     struct {
@@ -280,7 +280,7 @@ typedef struct siginfo {
     struct {
       pid_t _pid;		/* which child */
       uid_t _uid;		/* sender's uid */
-      int _status;		/* exit code */
+      int32_t _status;		/* exit code */
       clock_t _utime;
       clock_t _stime;
     } _sigchld;
@@ -291,7 +291,7 @@ typedef struct siginfo {
     /* SIGPOLL */
     struct {
       __band_t _band;	/* POLL_IN, POLL_OUT, POLL_MSG */
-      int _fd;
+      int32_t _fd;
     } _sigpoll;
   } _sifields;
 } siginfo_t;
@@ -453,7 +453,7 @@ struct sigaction {
   } _u;
   sigset_t sa_mask;
   void (*sa_restorer)(void);
-  int sa_resv[1];
+  int32_t sa_resv[1];
 #else	/* arm, i386, ppc, s390, sparc, saprc64, x86_64 */
   union {
     sighandler_t _sa_handler;
@@ -476,16 +476,16 @@ struct sigaction {
 
 #define SIGEV_MAX_SIZE  64
 #ifndef SIGEV_PAD_SIZE
-#define SIGEV_PAD_SIZE  ((SIGEV_MAX_SIZE/sizeof(int)) - 3)
+#define SIGEV_PAD_SIZE  ((SIGEV_MAX_SIZE/sizeof(int32_t)) - 3)
 #endif
 
 typedef struct sigevent {
   sigval_t sigev_value;
-  int sigev_signo;
-  int sigev_notify;
+  int32_t sigev_signo;
+  int32_t sigev_notify;
   union {
-    int _pad[SIGEV_PAD_SIZE];
-    int _tid;
+    int32_t _pad[SIGEV_PAD_SIZE];
+    int32_t _tid;
 
     struct {
       void(*_function)(sigval_t);
@@ -502,10 +502,10 @@ typedef struct sigaltstack {
 #if defined(__mips__)
   void *ss_sp;
   size_t ss_size;
-  int ss_flags;
+  int32_t ss_flags;
 #else
   void *ss_sp;
-  int ss_flags;
+  int32_t ss_flags;
   size_t ss_size;
 #endif
 } stack_t;
@@ -537,7 +537,7 @@ int sigaction(int signum, const struct sigaction *act, struct sigaction *oldact)
 #include <sys/time.h>
 
 int sigtimedwait(const sigset_t *mask, siginfo_t *info, const struct timespec *ts) __THROW;
-int sigqueueinfo(int pid, int sig, siginfo_t *info) __THROW;
+int sigqueueinfo(pid_t pid, int sig, siginfo_t *info) __THROW;
 int siginterrupt(int sig, int flag) __THROW;
 
 int killpg(pid_t pgrp, int sig) __THROW;

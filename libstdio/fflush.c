@@ -33,7 +33,7 @@ int fflush_unlocked(FILE *stream) {
     }
     stream->bs=stream->bm=0;
   } else {
-    if (stream->bm && write(stream->fd,stream->buf,stream->bm)!=(int)stream->bm) {
+    if (stream->bm && write(stream->fd,stream->buf,stream->bm)!=(ssize_t)stream->bm) {
       stream->flags|=ERRORINDICATOR;
       return -1;
     }

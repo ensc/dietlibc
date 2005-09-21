@@ -10,7 +10,7 @@ typedef struct {
   pthread_mutex_t lock;
   pthread_cond_t cond;
   int value;
-  unsigned int magic;
+  uint32_t magic;
 } sem_t;
 
 #define SEM_FAILED	((sem_t*)0)

@@ -45,7 +45,7 @@ struct ipc_perm {
   uid_t	cuid;
   gid_t	cgid;
   mode_t	mode; 
-  unsigned short	seq;
+  uint16_t	seq;
 };
 
 /* this is so bad, we moved it to -lcompat */

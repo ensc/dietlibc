@@ -47,7 +47,7 @@ void endutent() {
 
 struct utmp *getutent(void) {
   static struct utmp getutent_tmp;
-  int ret;
+  ssize_t ret;
 
   if (fd<0) {
     setutent();
@@ -96,7 +96,7 @@ void pututline(struct utmp *ut) {
   else {
     lseek(fd, 0, SEEK_END);
     if (lock_record(F_WRLCK)) return;
-    write(fd, ut, (off_t)sizeof(struct utmp));
+    write(fd, ut, sizeof(struct utmp));
   }
   unlock_record();
 }

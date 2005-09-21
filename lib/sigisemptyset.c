@@ -10,5 +10,5 @@ int sigisemptyset(const sigset_t*set)
     ret|=set->sig[2];
     ret|=set->sig[3];
   }
-  return ret;
+  return ret != 0;
 }

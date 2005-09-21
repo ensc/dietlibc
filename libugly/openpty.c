@@ -5,8 +5,7 @@
 #include <sys/ioctl.h>
 #include <errno.h>
 #include <string.h>
-
-extern int __ltostr(char *s, int size, unsigned long i, int base, char UpCase);
+#include <stdlib.h>
 
 int openpty(int *amaster, int *aslave, char *name, struct termios
 	    *termp, struct winsize *winp) {

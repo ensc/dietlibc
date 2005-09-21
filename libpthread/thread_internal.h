@@ -30,7 +30,7 @@ struct _pthread_descr_struct {
   struct _pthread_descr_struct**prev;
 
   /* thread/process data */
-  int pid;			/* Process id */
+  pid_t pid;			/* Process id */
 
   /* "stack handling" / find thread */
   void*stack_begin;		/* begin of stack / lowest address (to free) */
@@ -183,11 +183,11 @@ int __libc_msync(void*addr,size_t len,int flags);
 int __libc_nanosleep(const struct timespec *req,struct timespec*rem);
 int __libc_open(const char*pathname,int flags,mode_t mode);
 int __libc_pause(void);
-int __libc_read(int fd,void*buf,size_t count);
+ssize_t __libc_read(int fd,void*buf,size_t count);
 int __libc_sigsuspend(const sigset_t*mask);
 int __libc_tcdrain(int fd);
 pid_t __libc_waitpid(pid_t pid,int*status,int options);
-int __libc_write(int fd,const void*buf,size_t count);
+ssize_t __libc_write(int fd,const void*buf,size_t count);
 
 int __libc_execve(const char*filename,char*const argv[],char*const envp[]);
 int __libc_sigaction(int signum,const struct sigaction*act,struct sigaction*oldact);

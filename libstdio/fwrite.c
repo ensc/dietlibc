@@ -4,7 +4,7 @@
 #include <errno.h>
 
 size_t fwrite_unlocked(const void *ptr, size_t size, size_t nmemb, FILE *stream) {
-  int res;
+  ssize_t res;
   unsigned long len=size*nmemb;
   long i;
   if (!(stream->flags&CANWRITE)) {

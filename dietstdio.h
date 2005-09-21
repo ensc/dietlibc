@@ -17,9 +17,9 @@
 struct __stdio_file {
   int fd;
   int flags;
-  unsigned int bs;	/* read: bytes in buffer */
-  unsigned int bm;	/* position in buffer */
-  unsigned int buflen;	/* length of buf */
+  uint32_t bs;	/* read: bytes in buffer */
+  uint32_t bm;	/* position in buffer */
+  uint32_t buflen;	/* length of buf */
   char *buf;
   struct __stdio_file *next;	/* for fflush */
   pid_t popen_kludge;
@@ -81,8 +81,8 @@ void __stdio_flushall(void);
 #ifndef __THREAD_INTERNAL_H__
 int __libc_close(int fd);
 int __libc_open(const char*fn,int flags,...);
-int __libc_read(int fd,void*buf,int len);
-int __libc_write(int fd,const void*buf,int len);
+ssize_t __libc_read(int fd,void*buf,size_t len);
+ssize_t __libc_write(int fd,const void*buf,size_t len);
 #endif
 
 FILE *fopen_unlocked(const char *path, const char *mode) __THROW;

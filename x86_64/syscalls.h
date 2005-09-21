@@ -296,8 +296,11 @@
 #define __NR_add_key		248
 #define __NR_request_key	249
 #define __NR_keyctl		250
-
-#define __NR_syscall_max __NR_exit_group
+#define __NR_ioprio_set		251
+#define __NR_ioprio_get		252
+#define __NR_inotify_init	253
+#define __NR_inotify_add_watch	254
+#define __NR_inotify_rm_watch	255
 
 #ifdef __PIC__
 #define syscall_weak(name,wsym,sym) \

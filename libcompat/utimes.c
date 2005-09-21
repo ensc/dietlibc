@@ -7,7 +7,7 @@
 #include <utime.h>
 #include <sys/types.h>
 
-int utimes(char *filename, struct timeval *tvp) {
+int utimes(const char *filename, struct timeval *tvp) {
   struct utimbuf b;
   if (!tvp) {
     return utime(filename,NULL);

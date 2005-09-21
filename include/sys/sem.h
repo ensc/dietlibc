@@ -29,14 +29,14 @@ struct semid_ds {
   struct sem_queue	*sem_pending;		/* pending operations to be processed */
   struct sem_queue	**sem_pending_last;	/* last pending operation */
   struct sem_undo	*undo;			/* undo requests on this array */
-  unsigned short	sem_nsems;		/* no. of semaphores in array */
+  uint16_t		sem_nsems;		/* no. of semaphores in array */
 };
 
 /* semop system calls takes an array of these. */
 struct sembuf {
-  unsigned short  sem_num;	/* semaphore index in array */
-  short		sem_op;		/* semaphore operation */
-  short		sem_flg;	/* operation flags */
+  uint16_t		sem_num;	/* semaphore index in array */
+  int16_t		sem_op;		/* semaphore operation */
+  int16_t		sem_flg;	/* operation flags */
 };
 
 /* please complain to the glibc goons for the following misbehaviour */
@@ -53,16 +53,16 @@ union semun {
 #define _SEM_SEMUN_UNDEFINED
 
 struct  seminfo {
-  int semmap;
-  int semmni;
-  int semmns;
-  int semmnu;
-  int semmsl;
-  int semopm;
-  int semume;
-  int semusz;
-  int semvmx;
-  int semaem;
+  int32_t semmap;
+  int32_t semmni;
+  int32_t semmns;
+  int32_t semmnu;
+  int32_t semmsl;
+  int32_t semopm;
+  int32_t semume;
+  int32_t semusz;
+  int32_t semvmx;
+  int32_t semaem;
 };
 
 #define SEMMNI  128		/* <= IPCMNI  max # of semaphore identifiers */

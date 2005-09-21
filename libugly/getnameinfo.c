@@ -3,8 +3,7 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 #include <string.h>
-
-extern int __ltostr(char *s, int size, unsigned long i, int base, char UpCase);
+#include <stdlib.h>
 
 int getnameinfo(const struct sockaddr *sa, socklen_t salen, char *host,
 		size_t hostlen, char *serv, size_t servlen, int flags) {

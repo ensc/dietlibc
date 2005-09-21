@@ -1,3 +1,5 @@
+#include <asm/types.h>
+
 #ifndef ASM_PPC_SIGCONTEXT_H
 
 struct pt_regs {
@@ -70,7 +72,7 @@ struct pt_regs {
 #define sigcontext_struct sigcontext
 struct sigcontext {
 	unsigned long	_unused[4];
-	int		signal;
+	__s32		signal;
 	unsigned long	handler;
 	unsigned long	oldmask;
 	struct pt_regs 	*regs;

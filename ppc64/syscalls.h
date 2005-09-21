@@ -270,39 +270,48 @@
 #define __NR_add_key		269
 #define __NR_request_key	270
 #define __NR_keyctl		271
+#define __NR_waitid		272
+#define __NR_ioprio_set		273
+#define __NR_ioprio_get		274
+#define __NR_inotify_init	275
+#define __NR_inotify_add_watch	276
+#define __NR_inotify_rm_watch	277
 
 
-#define diet_proto_weak(wsym) \
-wsym: \
-	.quad	.wsym,.TOC.@tocbase,0;\
-	.previous;\
-	.size	wsym,24;\
-	.type	.wsym,@function;\
-	.globl	.wsym;\
-	.weak	wsym;\
+
+#define __diet_proto_common(sym) \
+	.section ".opd","aw"; \
+	.align	3; \
+sym: \
+	.quad	.sym,.TOC.@tocbase,0; \
+	.previous; \
+	.size	sym,24; \
+	.type	.sym,@function
+
+#define diet_proto_weak(sym) \
+	.weak	sym; \
+	.weak	.sym; \
+	__diet_proto_common(sym)
 
 #define diet_proto(sym) \
-sym:\
-	.quad	.sym,.TOC.@tocbase,0;\
-	.previous;\
-	.size	sym,24;\
-	.type	.sym,@function;\
-	.globl	.sym;\
+	.globl	sym; \
+	.globl	.sym; \
+	__diet_proto_common(sym)
+
 
 #define syscall_weak(name,wsym,sym) \
 .text; \
 diet_proto_weak(wsym); \
 diet_proto(sym); \
-.wsym:\
-	.weak	.wsym;\
+.wsym: \
 .sym: \
 	li	0,__NR_##name; \
-	b __unified_syscall
+	b	__unified_syscall
 
 #define syscall(name,sym) \
 .text; \
 diet_proto(sym); \
 .sym: \
 	li	0,__NR_##name; \
-	b __unified_syscall
+	b	__unified_syscall
 

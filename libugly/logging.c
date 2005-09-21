@@ -20,7 +20,7 @@
 
 /* declare internal functions */
 int __libc_open(const char*name,int flags, ...);
-int __libc_write(int fd,void*buf,int len);
+ssize_t __libc_write(int fd,void*buf,size_t len);
 int __libc_fcntl(int fd,int op,...);
 int __libc_close(int fd);
 
@@ -140,13 +140,13 @@ void __libc_vsyslog(int priority, const char *format, va_list arg_ptr)
   strftime(time_buf, 20, "%h %e %T", localtime_r (&now, &now_tm));
 
   if (LogStat & LOG_PID)
-    headerlen = snprintf(buffer, 130, "<%d>%s %s[%d]: ", priority, time_buf, LogTag, pid);
+    headerlen = snprintf(buffer, 130, "<%d>%s %s[%ld]: ", priority, time_buf, LogTag, (long) pid);
   else
     headerlen = snprintf(buffer, 130, "<%d>%s %s: ", priority, time_buf, LogTag);
 
   if (!LogTag[0]) {
     if ((LogStat & LOG_PID) != LOG_PID)
-      headerlen = snprintf(buffer, 130, "<%d>%s (unknown)[%d]: ", priority, time_buf, pid);
+      headerlen = snprintf(buffer, 130, "<%d>%s (unknown)[%ld]: ", priority, time_buf, (long) pid);
     strcat(buffer+headerlen, "syslog without openlog w/ ident, please check code!");
     buflen = 41;
   }

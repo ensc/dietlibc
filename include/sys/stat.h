@@ -47,7 +47,7 @@ struct stat64 {
 	uint16_t	st_rdev;
 	unsigned char	__pad3[10];
 
-__extension__	long long	st_size;
+__extension__	long long	st_size __attribute__((__packed__));
 	unsigned long	st_blksize;
 
 	unsigned long	st_blocks;	/* Number 512-byte blocks allocated. */
@@ -62,7 +62,7 @@ __extension__	long long	st_size;
 	unsigned long	st_ctime;
 	unsigned long	__pad7;		/* will be high 32 bits of ctime someday */
 
-__extension__	unsigned long long	st_ino;
+__extension__	unsigned long long	st_ino __attribute__((__packed__));
 };
 #elif defined(__sparc__) && defined(__arch64__)
 

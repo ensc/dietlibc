@@ -78,16 +78,16 @@ __BEGIN_DECLS
 #define LOCK_RW		192	/* ... Which allows concurrent read & write ops */
 
 struct flock {
-  short l_type;
-  short l_whence;
+  int16_t l_type;
+  int16_t l_whence;
   off_t l_start;
   off_t l_len;
   pid_t l_pid;
 };
 
 struct flock64 {
-  short  l_type;
-  short  l_whence;
+  int16_t l_type;
+  int16_t l_whence;
   loff_t l_start;
   loff_t l_len;
   pid_t  l_pid;
@@ -157,8 +157,8 @@ struct flock64 {
 #define LOCK_RW        192     /* ... Which allows concurrent read & write ops */
 
 struct flock {
-  short l_type;
-  short l_whence;
+  int16_t l_type;
+  int16_t l_whence;
   off_t l_start;
   off_t l_len;
   pid_t l_pid;
@@ -235,15 +235,33 @@ struct flock {
 #define LOCK_WRITE	128	/* ... Which allows concurrent write operations */
 #define LOCK_RW		192	/* ... Which allows concurrent read & write ops */
 
-typedef struct flock {
-  short l_type;
-  short l_whence;
+#ifndef __mips64__
+struct flock {
+  int16_t l_type;
+  int16_t l_whence;
   off_t l_start;
   off_t l_len;
   long  l_sysid;			/* XXXXXXXXXXXXXXXXXXXXXXXXX */
   pid_t l_pid;
   long  pad[4];			/* ZZZZZZZZZZZZZZZZZZZZZZZZZZ */
-} flock_t;
+};
+struct flock64 {
+  int16_t l_type;
+  int16_t l_whence;
+  loff_t l_start;
+  loff_t l_len;
+  pid_t l_pid;
+};
+#else
+struct flock {
+  int16_t l_type;
+  int16_t l_whence;
+  off_t l_start;
+  off_t l_len;
+  pid_t l_pid;
+};
+#define flock64 flock
+#endif
 
 #elif defined(__sparc__)
 
@@ -313,24 +331,24 @@ typedef struct flock {
 #define LOCK_RW		192	/* ... Which allows concurrent read & write ops */
 
 struct flock {
-  short l_type;
-  short l_whence;
+  int16_t l_type;
+  int16_t l_whence;
   off_t l_start;
   off_t l_len;
   pid_t l_pid;
-  short __unused;
+  int16_t __unused;
 };
 
 #ifdef __arch64__
 #define flock64 flock
 #else
 struct flock64 {
-  short l_type;
-  short l_whence;
+  int16_t l_type;
+  int16_t l_whence;
   loff_t l_start;
   loff_t l_len;
   pid_t l_pid;
-  short __unused;
+  int16_t __unused;
 };
 #endif
 
@@ -403,16 +421,16 @@ struct flock64 {
 #define LOCK_RW		192	/* ... Which allows concurrent read & write ops */
 
 struct flock {
-  short l_type;
-  short l_whence;
+  int16_t l_type;
+  int16_t l_whence;
   off_t l_start;
   off_t l_len;
   pid_t l_pid;
 };
 
 struct flock64 {
-  short  l_type;
-  short  l_whence;
+  int16_t l_type;
+  int16_t l_whence;
   loff_t l_start;
   loff_t l_len;
   pid_t  l_pid;
@@ -487,16 +505,16 @@ struct flock64 {
 #define LOCK_RW		192	/* ... Which allows concurrent read & write ops */
 
 struct flock {
-  short l_type;
-  short l_whence;
+  int16_t l_type;
+  int16_t l_whence;
   off_t l_start;
   off_t l_len;
   pid_t l_pid;
 };
 
 struct flock64 {
-  short  l_type;
-  short  l_whence;
+  int16_t l_type;
+  int16_t l_whence;
   loff_t l_start;
   loff_t l_len;
   pid_t  l_pid;
@@ -574,8 +592,8 @@ struct flock64 {
 
 struct flock
 {
-    short int l_type;   /* Type of lock: F_RDLCK, F_WRLCK, or F_UNLCK.  */
-    short int l_whence; /* Where `l_start' is relative to (like `lseek').  */
+    int16_t l_type;   /* Type of lock: F_RDLCK, F_WRLCK, or F_UNLCK.  */
+    int16_t l_whence; /* Where `l_start' is relative to (like `lseek').  */
     off_t l_start;    /* Offset where the lock begins.  */
     off_t l_len;  /* Size of the locked area; zero means until EOF.  */
     pid_t l_pid;  /* Process holding the lock.  */
@@ -583,8 +601,8 @@ struct flock
 
 struct flock64
 {
-    short int l_type;   /* Type of lock: F_RDLCK, F_WRLCK, or F_UNLCK.  */
-    short int l_whence; /* Where `l_start' is relative to (like `lseek').  */
+    int16_t l_type;   /* Type of lock: F_RDLCK, F_WRLCK, or F_UNLCK.  */
+    int16_t l_whence; /* Where `l_start' is relative to (like `lseek').  */
     off64_t l_start;  /* Offset where the lock begins.  */
     off64_t l_len;    /* Size of the locked area; zero means until EOF.  */
     pid_t l_pid;  /* Process holding the lock.  */

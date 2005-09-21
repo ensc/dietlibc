@@ -12,7 +12,7 @@ int fgetc_unlocked(FILE *stream) {
     return EOF;
   if (__fflush4(stream,BUFINPUT)) return EOF;
   if (stream->bm>=stream->bs) {
-    int len=__libc_read(stream->fd,stream->buf,stream->buflen);
+    ssize_t len=__libc_read(stream->fd,stream->buf,stream->buflen);
     if (len==0) {
       stream->flags|=EOFINDICATOR;
       return EOF;

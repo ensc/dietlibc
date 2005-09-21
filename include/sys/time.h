@@ -75,7 +75,7 @@ struct tm {
 #define timersub(a,b,x) do { (x)->tv_sec=(a)->tv_sec-(b)->tv_sec; if (((x)->tv_usec=(a)->tv_usec-(b)->tv_usec)<0) { --(x)->tv_sec; (x)->tv_usec+=1000000; } } while (0)
 #define timerisset(x) ((x)->tv_sec || (x)->tv_usec)
 
-int utimes(char * filename, struct timeval * tvp);
+int utimes(const char * filename, struct timeval * tvp);
 #endif
 
 __END_DECLS

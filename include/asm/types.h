@@ -6,9 +6,9 @@
 __BEGIN_DECLS
 
 #ifdef __alpha__
-typedef unsigned int umode_t;
+typedef uint32_t umode_t;
 #else
-typedef unsigned short umode_t;
+typedef uint16_t umode_t;
 #endif
 
 typedef uint8_t __u8;
@@ -28,7 +28,7 @@ typedef int64_t __s64;
 #if defined(__alpha__)
 typedef unsigned long __kernel_size_t;
 #else
-typedef unsigned int __kernel_size_t;
+typedef uint32_t __kernel_size_t;
 #endif
 
 #define __force

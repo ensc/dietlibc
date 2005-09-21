@@ -36,10 +36,10 @@ struct sigcontext {
 	unsigned long rsp;
 	unsigned long rip;
 	unsigned long eflags;		/* RFLAGS */
-	unsigned short cs;
-	unsigned short gs;
-	unsigned short fs;
-	unsigned short __pad0; 
+	__u16         cs;
+	__u16         gs;
+	__u16         fs;
+	__u16         __pad0;
 	unsigned long err;
 	unsigned long trapno;
 	unsigned long oldmask;
