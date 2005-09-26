@@ -60,6 +60,9 @@ const char *strsignal(int signum) __THROW;
 void *memmem(const void *haystack, size_t haystacklen, const void *needle, size_t needlelen) __THROW;
 
 char *strndup(const char *s,size_t n) __THROW __attribute_malloc__ ;
+
+#define strdupa(s) ({ const char* tmp=s; size_t l=strlen(tmp)+1; char* x=alloca(l); memcpy(x,tmp,l); })
+#define strndupa(s,n) ({ const char* tmp=s; const char* y=memchr(tmp,0,(n)); size_t l=y?y-tmp:n; char* x=alloca(l+1); x[l]=0; memcpy(x,tmp,l); })
 #endif
 
 char *strtok(char *s, const char *delim) __THROW;

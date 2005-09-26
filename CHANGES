@@ -37,6 +37,7 @@
     * sigjmp.c: __mask_was_saved was not set in all cases!
     * another round of ILP64 cleanups
   add ngettext, dngettext (for glib)
+  add strdupa and strndupa (for directfb)
 
 0.29:
   oops, fix LD_RUN_PATH unsetting (Enrico Scholz)
