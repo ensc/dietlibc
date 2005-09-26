@@ -10,8 +10,11 @@ __BEGIN_DECLS
 char* gettext(const char* msgid) __THROW;
 char* dgettext(const char* domainname, const char* msgid) __THROW;
 char* dcgettext(const char *domainname, const char *msgid, int category) __THROW;
-char* dcngettext(const char *domainname,
-		 const char *msgid1, const char *msgid2,
+
+char* ngettext (const char* msgid, const char* msgid_plural, unsigned long int n) __THROW;
+char* dngettext (const char* domainname, const char* msgid, const char* msgid_plural, unsigned long int n) __THROW;
+char* dcngettext(const char* domainname,
+		 const char* msgid1, const char* msgid2,
 		 unsigned long int n, int __category) __THROW;
 
 char* textdomain(const char *domainname) __THROW;
