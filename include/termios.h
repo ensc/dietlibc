@@ -90,7 +90,7 @@ struct termios {
   cc_t c_line;			/* line discipline */
   cc_t c_cc[NCCS];		/* control characters */
 };
-#elif defined(__mips__) || defined(__mips64__)
+#elif defined(__mips__)
 #define NCCS	23
 struct termios {
 	tcflag_t c_iflag;		/* input mode flags */

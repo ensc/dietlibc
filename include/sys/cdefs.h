@@ -27,6 +27,7 @@
 #endif
 
 #ifndef __STRICT_ANSI__
+#define restrict __restrict__
 #if __GNUC__ < 3
 #define __builtin_expect(foo,bar) (foo)
 #define __expect(foo,bar) (foo)

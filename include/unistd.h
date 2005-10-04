@@ -68,7 +68,8 @@ int execvp(const char *file, char *const argv[]) __THROW;
 int execl(const char *path, ...) __THROW;
 int execle(const char *path, ...) __THROW;
 
-pid_t getpid(void) __THROW;
+pid_t getpid(void) __THROW __pure;
+
 pid_t getppid(void) __THROW;
 
 int setpgid (pid_t pid,pid_t pgid) __THROW;
@@ -260,6 +261,12 @@ long init_module(void *module, unsigned long len, const char *options) __THROW;
 /* flags can be O_EXCL | O_NONBLOCK | O_TRUNC (forced unloading)
  * O_EXCL is there so the kernel can spot old rmmod versions */
 long delete_module(const char* name,unsigned int flags) __THROW;
+pid_t gettid(void) __THROW __pure;
+int tkill(pid_t tid, int sig) __THROW;
+int tgkill(pid_t tgid, pid_t tid, int sig) __THROW;
+/* see linux/fadvise.h */
+long fadvise64(int fd,off64_t offset,size_t len,int advice);
+long fadvise64_64(int fd,off64_t offset,off64_t len,int advice);
 #endif
 
 __END_DECLS

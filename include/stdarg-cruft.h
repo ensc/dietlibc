@@ -1,3 +1,5 @@
+#include <endian.h>
+
 #if defined(__sparc__) || defined(__alpha__) || defined(__mips__)
 enum {
   __no_type_class = -1,
@@ -60,14 +62,14 @@ __extension__							\
 
 typedef char * va_list;
 
-#ifdef __mips64
+#ifdef __mips64__
 #define __va_rounded_size(__TYPE)  \
   (((sizeof (__TYPE) + 8 - 1) / 8) * 8)
 #else
 #define __va_rounded_size(__TYPE)  \
   (((sizeof (__TYPE) + sizeof (int) - 1) / sizeof (int)) * sizeof (int))
 #endif
-#ifdef __mips64
+#ifdef __mips64__
 #define __va_reg_size 8
 #else
 #define __va_reg_size 4
@@ -76,7 +78,7 @@ typedef char * va_list;
 #define va_start(__AP, __LASTARG) \
   (__AP = (va_list) __builtin_next_arg (__LASTARG))
 
-#ifdef __mips64
+#ifdef __mips64__
 #ifdef __MIPSEB__
 #define va_arg(__AP, __type)                                    \
   ((__type *) (void *) (__AP = (char *)                         \

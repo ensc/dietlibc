@@ -279,6 +279,7 @@ __unified_syscall:
 #include "../syscalls.s/sysfs.S"
 #include "../syscalls.s/capget.S"
 #include "../syscalls.s/capset.S"
+#include "../syscalls.s/fcntl64.S"
 
 #include "../syscalls.s/timer_create.S"
 #include "../syscalls.s/timer_settime.S"

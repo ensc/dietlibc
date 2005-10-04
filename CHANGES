@@ -38,6 +38,7 @@
     * another round of ILP64 cleanups
   add ngettext, dngettext (for glib)
   add strdupa and strndupa (for directfb)
+  add extended attribute, thread, and misc syscalls
 
 0.29:
   oops, fix LD_RUN_PATH unsetting (Enrico Scholz)

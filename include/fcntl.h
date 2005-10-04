@@ -3,6 +3,7 @@
 
 #include <sys/cdefs.h>
 
+#include <endian.h>
 #include <sys/types.h>
 #include <unistd.h>
 #include <sys/stat.h>
@@ -622,7 +623,7 @@ extern int fcntl64 (int __fd, int __cmd, ...) __THROW;
 #define O_ASYNC FASYNC
 #endif
 
-#ifdef _GNU_SOURCE
+#if defined(_LINUX_SOURCE) || defined(_GNU_SOURCE)
 ssize_t readahead(int fd, off64_t *offset, size_t count);
 #endif
 
