@@ -106,7 +106,7 @@ int _dl_search(char*buf,int len,const char*filename) {
 
   /* default path search */
   {
-    const char def_path[]="/usr/lib:/lib";
+    const char*def_path="/usr/lib:/lib";
     return _dl_search_path(buf,len,def_path,_dl_lib_strlen(def_path),filename);
   }
 }

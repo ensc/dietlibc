@@ -74,7 +74,7 @@ struct _dl_handle*_dl_find_lib(const char* name) {
       struct _dl_handle*tmp;
       for (tmp=_dl_root_handle;tmp;tmp=tmp->next) {
 	if (!tmp->name) continue;
-	if (!_dl_lib_strcmp(tmp->name,name)) return tmp;
+	if (!_dl_lib_strcmp((const unsigned char*)tmp->name,(const unsigned char*)name)) return tmp;
       }
     }
   }

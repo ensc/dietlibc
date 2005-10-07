@@ -33,8 +33,8 @@ static
 #endif
 int _dl_open_dep() {
   while (_dl_queue_start!=_dl_queue_stop) {
-    register int tmp=_dl_queue_start;
-    (++_dl_queue_start>=MAX_QUEUE)?_dl_queue_start=0:0;
+    int tmp=_dl_queue_start;
+    if (++_dl_queue_start>=MAX_QUEUE) _dl_queue_start=0;
     if (!_dlopen(_dl_queue[tmp].name,_dl_queue[tmp].flags)) return 1;
   }
   return 0;

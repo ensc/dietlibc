@@ -40,9 +40,9 @@ static unsigned long at_pagesize;
 __attribute__((noreturn,visibility("hidden")))
 void _dl_sys_exit(int val);
 __attribute__((visibility("hidden")))
-int _dl_sys_read(int fd,char*buf,unsigned long len);
+int _dl_sys_read(int fd,void*buf,unsigned long len);
 __attribute__((visibility("hidden")))
-int _dl_sys_write(int fd,char*buf,unsigned long len);
+int _dl_sys_write(int fd,void*buf,unsigned long len);
 __attribute__((visibility("hidden")))
 int _dl_sys_open(const char*filename,int flags,int mode);
 __attribute__((visibility("hidden")))
@@ -632,7 +632,7 @@ static int _dl_lib_memcmp(register const unsigned char*s,register const unsigned
 static char*getenv(const char*env) {
   unsigned int i,len=_dl_lib_strlen(env);
   for (i=0;_dl_environ[i];++i) {
-    if ((_dl_lib_memcmp(_dl_environ[i],env,len)==0) && (_dl_environ[i][len]=='='))
+    if ((_dl_lib_memcmp((const unsigned char*)_dl_environ[i],(const unsigned char*)env,len)==0) && (_dl_environ[i][len]=='='))
       return _dl_environ[i]+len+1;
   }
   return 0;
@@ -669,8 +669,12 @@ static char*_dl_lib_strdup(const char*s) {
 }
 
 #ifdef WANT_LD_SO_GDB_SUPPORT
+/* gdb debug init stuff */
+static struct r_debug _r_debug;
+
 /* gdb debug break point */
-static volatile void _dl_debug_state(void) {
+__attribute__((used,noinline))
+static void _dl_debug_state(void) {
 #ifdef DEBUG
   struct _dl_handle*tmp;
   pf(__FUNCTION__); pf(": r_state "); ph(_r_debug.r_state); pf("\n");
@@ -682,9 +686,6 @@ static volatile void _dl_debug_state(void) {
   }
 #endif
 }
-
-/* gdb debug init stuff */
-static struct r_debug _r_debug;
 #endif
 
 /* now reuse some unchanged sources */
@@ -771,8 +772,10 @@ static struct _dl_handle*_dl_map_lib(const char*fn,const char*pathname,int fd,in
   Elf_Phdr*eph;
 
   int ld_nr=0;
-  Elf_Phdr*ld[4]={0,0,0,0};
+  Elf_Phdr*ld[4];
   Elf_Phdr*dyn=0;
+
+  _dl_lib_memset(ld,0,sizeof(ld));
 
   if (fd==-1) return 0;
 

@@ -5,7 +5,7 @@
 #ifdef __DIET_LD_SO__
 static
 #endif
-void *_dlsym(void* handle,const char* symbol) {
+void *_dlsym(void* handle,const unsigned char* symbol) {
   unsigned long*sym=0;
   if (handle) {
     struct _dl_handle*dh=(struct _dl_handle*)handle;
@@ -13,7 +13,7 @@ void *_dlsym(void* handle,const char* symbol) {
     unsigned int bhash=hash%HASH_BUCKET_LEN(dh->hash_tab);
     unsigned int*chain=HASH_CHAIN(dh->hash_tab);
     unsigned int ind;
-    char *name=dh->dyn_str_tab;
+    unsigned char*name=(unsigned char*)dh->dyn_str_tab;
 
 #ifdef DEBUG
 //    pf(__FUNCTION__); pf(": bucket("); ph(bhash); pf(",\""); pf(symbol); pf("\")\n");
@@ -31,7 +31,7 @@ void *_dlsym(void* handle,const char* symbol) {
 #endif
       if (_dl_lib_strcmp(name+ptr,symbol)==0 && dh->dyn_sym_tab[ind].st_value!=0) {
 	if (dh->dyn_sym_tab[ind].st_shndx!=SHN_UNDEF) {
-	  sym=(long*)(dh->mem_base+dh->dyn_sym_tab[ind].st_value);
+	  sym=(unsigned long*)(dh->mem_base+dh->dyn_sym_tab[ind].st_value);
 	  break;	/* ok found ... */
 	}
       }
@@ -47,7 +47,7 @@ void *_dlsym(void* handle,const char* symbol) {
 #ifdef __DIET_LD_SO__
 static
 #endif
-void*_dl_sym_search_str(struct _dl_handle*dh_begin,const char*name) {
+void*_dl_sym_search_str(struct _dl_handle*dh_begin,const unsigned char*name) {
   void *sym=0;
   struct _dl_handle*tmp;
 #ifdef DEBUG
@@ -71,7 +71,7 @@ static
 #endif
 void*_dl_sym(struct _dl_handle*dh,int symbol) {
   char *name=dh->dyn_str_tab+dh->dyn_sym_tab[symbol].st_name;
-  void*sym=_dl_sym_search_str(_dl_root_handle,name);
+  void*sym=_dl_sym_search_str(_dl_root_handle,(const unsigned char*)name);
 #ifdef DEBUG
   pf(__FUNCTION__); pf(": "); ph(symbol); pf(" -> "); ph((long)sym); pf("\n");
 #endif
@@ -83,7 +83,7 @@ static
 #endif
 void*_dl_sym_next(struct _dl_handle*dh,int symbol) {
   char *name=dh->dyn_str_tab+dh->dyn_sym_tab[symbol].st_name;
-  void*sym=_dl_sym_search_str(dh->next,name);
+  void*sym=_dl_sym_search_str(dh->next,(const unsigned char*)name);
 #ifdef DEBUG
   pf(__FUNCTION__); pf(": "); ph(symbol); pf(" -> "); ph((long)sym); pf("\n");
 #endif
@@ -93,8 +93,8 @@ void*_dl_sym_next(struct _dl_handle*dh,int symbol) {
 void* dlsym(void* handle,const char* symbol) {
   void*h;
   if (handle==RTLD_DEFAULT || !handle /* RTLD_DEFAULT is NULL on glibc */ )
-    h=_dl_sym_search_str(0,symbol);
-  else h=_dlsym(handle,symbol);
+    h=_dl_sym_search_str(0,(const unsigned char*)symbol);
+  else h=_dlsym(handle,(const unsigned char*)symbol);
   if (h==0) {
     _dl_error_location="dlsym";
     _dl_error_data=symbol;
