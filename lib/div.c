@@ -1,3 +1,4 @@
+#include "dietwarning.h"
 #include <stdlib.h>
 
 div_t div(int numerator, int denominator) {
