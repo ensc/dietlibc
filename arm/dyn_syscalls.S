@@ -29,6 +29,7 @@ __unified_syscall:
 
 /* ok now include all syscalls.s (*.S) and sysdep *.S */
 #include "mmap.S"
+#include "waitpid.S"
 
 #include "../syscalls.s/__getpagesize.S"
 #include "../syscalls.s/__pread.S"
@@ -176,7 +177,6 @@ __unified_syscall:
 #include "../syscalls.s/utime.S"
 #include "../syscalls.s/vhangup.S"
 #include "../syscalls.s/wait4.S"
-#include "../syscalls.s/waitpid.S"
 #include "../syscalls.s/write.S"
 #include "../syscalls.s/writev.S"
 #include "../syscalls.s/msync.S"
@@ -207,10 +207,6 @@ __unified_syscall:
 #include "../syscalls.s/epoll_create.S"
 #include "../syscalls.s/epoll_ctl.S"
 #include "../syscalls.s/epoll_wait.S"
-#include "../syscalls.s/sendfile64.S"
-#include "../syscalls.s/sysfs.S"
-#include "../syscalls.s/capget.S"
-#include "../syscalls.s/capset.S"
 #include "../syscalls.s/fcntl64.S"
 
 #include "../syscalls.s/timer_create.S"

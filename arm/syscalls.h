@@ -572,6 +572,7 @@
 #define __ARGS_tgkill			0
 #define __ARGS_utimes			0
 
+#define __ARGS_fadvise64		0
 #define __ARGS_fadvise64_64		0
 #define __ARGS_pciconfig_iobase		0
 #define __ARGS_pciconfig_read		1
