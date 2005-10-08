@@ -106,9 +106,16 @@ extern char* strcpy2(char*a,char*b);
      __asm__ __volatile__ ("rdtsc" : "=a" (low) : : "edx")
 
 int main(int argc,char *argv[]) {
+  struct stat s;
+  time_t t=time(0);
+  struct tm* T;
+  stat("/tmp/nyt.html",&s);
+  T=gmtime(&s.st_mtime);
+#if 0
   static struct mq_attr x;
   mqd_t a=mq_open("fnord",O_WRONLY|O_CREAT,0600,&x);
   mqd_t b=mq_open("fnord",O_RDONLY);
+#endif
 #if 0
   struct statfs s;
   if (statfs("/tmp",&s)!=-1) {
