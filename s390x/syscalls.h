@@ -251,7 +251,7 @@
 #define __NR_fadvise64_64	264
 #define __NR_statfs64		265
 #define __NR_fstatfs64		266
-/* Number 267 is reserved for new sys_remap_file_pages */
+#define __NR_remap_file_pages	267
 /* Number 268 is reserved for new sys_mbind */
 /* Number 269 is reserved for new sys_get_mempolicy */
 /* Number 270 is reserved for new sys_set_mempolicy */
