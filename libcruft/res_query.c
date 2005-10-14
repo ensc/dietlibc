@@ -29,10 +29,10 @@ int __dns_plugplay_interface;
 int res_query(const char *dname, int class, int type, unsigned char *answer, int anslen) {
   unsigned char packet[512];
   int size;
+  struct pollfd duh[2];
 #ifndef WANT_IPV6_DNS
   __dns_make_fd();
 #endif
-  struct pollfd duh[2];
 
   __dns_readstartfiles();
   if ((size=res_mkquery(QUERY,dname,class,type,0,0,0,(char*)packet,512))<0) { h_errno=NO_RECOVERY; return -1; }
