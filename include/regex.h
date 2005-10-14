@@ -23,7 +23,7 @@ typedef struct {
 
 #define REG_NOMATCH -1
 
-#define RE_DUP_MAX 255
+#define RE_DUP_MAX 8192
 
 struct __regex_t;
 
