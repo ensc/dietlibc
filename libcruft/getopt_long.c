@@ -21,7 +21,12 @@ int getopt_long(int argc, char * const argv[], const char *optstring,
   char *tmp;
   if (optind==0) { optind=1; lastidx=0; }	/* whoever started setting optind to 0 should be shot */
 again:
-  if (optind>argc || !argv[optind] || *argv[optind]!='-' || argv[optind][1]==0)
+  if (*optstring == '-' && optind<argc && *argv[optind]!='-') {
+    optarg=argv[optind];
+    ++optind;
+    return 1;
+  }
+  if (optind>=argc || !argv[optind] || *argv[optind]!='-' || argv[optind][1]==0)
     return -1;
   if (argv[optind][1]=='-' && argv[optind][2]==0) {
     ++optind;

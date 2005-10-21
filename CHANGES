@@ -40,6 +40,7 @@
   add strdupa and strndupa (for directfb)
   add extended attribute, thread, and misc syscalls
   Olaf: fixed my libdl code to run with gcc-4.0.x
+  support optstring starting with '-' extension in getopt_long (Jens Låås)
 
 0.29:
   oops, fix LD_RUN_PATH unsetting (Enrico Scholz)
