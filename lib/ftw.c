@@ -5,6 +5,7 @@
 #include <dirent.h>
 #include <string.h>
 #include <stdlib.h>
+#include <fcntl.h>
 #include "dietdirent.h"
 
 int ftw(const char*dir,int(*f)(const char*file,const struct stat*sb,int flag),int dpth){
@@ -16,6 +17,7 @@ int ftw(const char*dir,int(*f)(const char*file,const struct stat*sb,int flag),in
   int r;
   unsigned int oldlen=0;
   char* filename = NULL;
+  int previous=open(".",O_RDONLY|O_DIRECTORY);
   if(chdir(dir))return-1;
   cd=alloca(PATH_MAX+1);
   if(!getcwd(cd,PATH_MAX))return-1;
@@ -43,5 +45,6 @@ int ftw(const char*dir,int(*f)(const char*file,const struct stat*sb,int flag),in
       if (r){closedir(d);return r;}
     }
   }
+  fchdir(previous);
   return closedir(d);
 }
