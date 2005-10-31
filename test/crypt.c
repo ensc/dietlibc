@@ -22,6 +22,8 @@ int main(int argc,char* argv[]) {
   salt[0]=charset[l%i];
   salt[1]=charset[(l/i)%i];
   close(fd);
-  for (l=1; argv[l]; ++l)
+  for (l=1; argv[l]; ++l) {
     printf("password %s with salt %c%c -> %s\n",argv[l],salt[0],salt[1],crypt(argv[l],salt));
+    printf("md5password %s -> %s\n",argv[l],crypt(argv[l],"$1$"));
+  }
 }
