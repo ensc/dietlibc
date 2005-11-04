@@ -252,7 +252,7 @@ static int matchpiece(void*__restrict__ x,const char*__restrict__ s,int ofs,stru
   /* first, try to match the atom as often as possible, up to a->max times */
   if (a->max == 1 && a->min == 1)
     return a->a.m(&a->a,s+matchlen,ofs+matchlen,preg,0,eflags);
-  while (num<a->max) {
+  while ((unsigned int)num<a->max) {
     void* save=a->a.next;
     a->a.next=0;
     if ((tmp=a->a.m(&a->a,s+matchlen,ofs+matchlen,preg,0,eflags))>=0) {
@@ -266,7 +266,7 @@ static int matchpiece(void*__restrict__ x,const char*__restrict__ s,int ofs,stru
       break;
     }
   }
-  if (num<a->min) return -1;		/* already at minimum matches; signal mismatch */
+  if ((unsigned int)num<a->min) return -1;		/* already at minimum matches; signal mismatch */
   /* then, while the rest does not match, back off */
   for (;num>=0;) {
     if (a->next)
@@ -475,7 +475,7 @@ int regexec(const regex_t*__restrict__ preg, const char*__restrict__ string, siz
   int matched;
   const char *orig=string;
   assert(preg->brackets+1>0 && preg->brackets<1000);
-  for (matched=0; matched<nmatch; ++matched)
+  for (matched=0; (unsigned int)matched<nmatch; ++matched)
     pmatch[matched].rm_so=-1;
 #ifdef DEBUG
   printf("alloca(%d)\n",sizeof(regmatch_t)*(preg->brackets+3));
