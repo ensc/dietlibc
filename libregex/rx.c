@@ -475,6 +475,8 @@ int regexec(const regex_t*__restrict__ preg, const char*__restrict__ string, siz
   int matched;
   const char *orig=string;
   assert(preg->brackets+1>0 && preg->brackets<1000);
+  for (matched=0; matched<nmatch; ++matched)
+    pmatch[matched].rm_so=-1;
 #ifdef DEBUG
   printf("alloca(%d)\n",sizeof(regmatch_t)*(preg->brackets+3));
 #endif
