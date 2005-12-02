@@ -42,6 +42,7 @@
   Olaf: fixed my libdl code to run with gcc-4.0.x
   support optstring starting with '-' extension in getopt_long (Jens Låås)
   make sure ftw returns in the directory it was called from
+  Olaf: fixing a bug in timegm (an off by ONE array access)...
 
 0.29:
   oops, fix LD_RUN_PATH unsetting (Enrico Scholz)
