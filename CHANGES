@@ -45,6 +45,7 @@
   Olaf: fixing a bug in timegm (an off by ONE array access)...
   tzfile fix for recent gcc
   make resolv.conf more glibcish so openssh 4.3p1 compiles
+  add linux/* glue to make openssh compile with tun/tap support
 
 0.29:
   oops, fix LD_RUN_PATH unsetting (Enrico Scholz)
