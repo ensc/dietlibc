@@ -24,7 +24,7 @@ __BEGIN_DECLS
 #define	MAXRESOLVSORT		10	/* number of net to sort on */
 #define	RES_MAXNDOTS		15	/* should reflect bit field size */
 
-struct res_state {
+typedef struct __res_state {
   int	retrans;	 	/* retransmission time interval */
   int	retry;			/* number of times to retransmit */
   unsigned long	options;		/* option flags - see below. */
@@ -44,7 +44,7 @@ struct res_state {
     uint32_t	mask;
   } sort_list[MAXRESOLVSORT];
   char	pad[72];		/* on an i386 this means 512b total */
-};
+} * res_state;
 
 /*
  * Resolver options (keep these in synch with res_debug.c, please)
@@ -92,7 +92,7 @@ struct res_sym {
 	char *	humanname;	/* Its fun name, like "mail exchanger" */
 };
 
-extern struct res_state _res;
+extern struct __res_state _res;
 extern const struct res_sym __p_class_syms[];
 extern const struct res_sym __p_type_syms[];
 

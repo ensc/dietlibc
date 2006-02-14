@@ -1,3 +1,3 @@
 #include <resolv.h>
 
-struct res_state _res; /* don't ask. */
+struct __res_state _res; /* don't ask. */
