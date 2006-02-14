@@ -29,11 +29,12 @@ int putenv(const char *string) {
     ++envc;
   }
   if (tmp) {
-    newenv = (char**) realloc(environ==origenv?0:origenv,
+    newenv = (char**) realloc(environ==origenv?0:environ,
 			      (envc+2)*sizeof(char*));
     if (!newenv) return -1;
-    newenv[0]=(char*)string;
-    memcpy(newenv+1,environ,(envc+1)*sizeof(char*));
+    if (environ==origenv) memcpy(newenv,origenv,envc*sizeof(char*));
+    newenv[envc]=(char*)string;
+    newenv[envc+1]=0;
     environ=newenv;
   }
   return 0;
