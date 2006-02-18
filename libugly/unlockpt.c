@@ -4,7 +4,7 @@
 #include <stdlib.h>
 
 int unlockpt (int fd) {
-  int foo;
+  int foo=0;
   /* hehe, that one is easy */
   return (ioctl (fd, TIOCSPTLCK, &foo));
 }
