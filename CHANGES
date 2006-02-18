@@ -47,6 +47,7 @@
   make resolv.conf more glibcish so openssh 4.3p1 compiles
   add linux/* glue to make openssh compile with tun/tap support
   fix putenv (René Rebe, Thomas Ogrisegg)
+  limit search/domain entries in /etc/resolv.conf (Gernot Tenchio)
 
 0.29:
   oops, fix LD_RUN_PATH unsetting (Enrico Scholz)
