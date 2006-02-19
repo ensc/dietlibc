@@ -49,6 +49,8 @@
   fix putenv (René Rebe, Thomas Ogrisegg)
   limit search/domain entries in /etc/resolv.conf (Gernot Tenchio)
   fix unlockpt (Gernot Tenchio)
+  Olaf: fixing putenv for the situation that environ is NULL
+    (situation after a clearenv)
 
 0.29:
   oops, fix LD_RUN_PATH unsetting (Enrico Scholz)

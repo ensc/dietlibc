@@ -16,7 +16,7 @@ int putenv(const char *string) {
     remove=1;
   } else
     len=tmp-string+1;
-  for (envc=0, ep=(const char**)environ; *ep; ++ep) {
+  for (envc=0, ep=(const char**)environ; (ep && *ep); ++ep) {
     if (*string == **ep && !memcmp(string,*ep,len)) {
       if (remove) {
 	for (; ep[1]; ++ep) ep[0]=ep[1];
@@ -32,7 +32,9 @@ int putenv(const char *string) {
     newenv = (char**) realloc(environ==origenv?0:environ,
 			      (envc+2)*sizeof(char*));
     if (!newenv) return -1;
-    if (environ==origenv) memcpy(newenv,origenv,envc*sizeof(char*));
+    if (envc && (environ==origenv)) {
+      memcpy(newenv,origenv,envc*sizeof(char*));
+    }
     newenv[envc]=(char*)string;
     newenv[envc+1]=0;
     environ=newenv;
