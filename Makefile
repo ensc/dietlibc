@@ -60,7 +60,11 @@ else
 ifeq ($(MYARCH),ia64)
 ARCH=ia64
 else
+ifeq ($(MYARCH),armeb)
+ARCH=arm
+else
 $(error unknown architecture, please fix Makefile)
+endif
 endif
 endif
 endif
