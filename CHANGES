@@ -56,6 +56,8 @@
   make __kernel_size_t more like the real thing (Rene Rebe)
   fix __exec_shell (execv and execvp) (Gernot Tenchio)
   fix mmap and provide mmap64 on S/390 (Bastian Blank)
+  fix telldir, seekdir (Gernot Tenchio)
+  also add -lc after -lgcc for gcc 4.1 on arm (Enrico Scholz)
 
 0.29:
   oops, fix LD_RUN_PATH unsetting (Enrico Scholz)

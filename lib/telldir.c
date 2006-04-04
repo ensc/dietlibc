@@ -3,5 +3,8 @@
 #include <dirent.h>
 
 off_t telldir(DIR *d) {
-  return lseek(d->fd,0,SEEK_CUR)-d->num+d->cur;
+  off_t result = 0;
+  if (lseek(d->fd,0,SEEK_CUR))
+    result=((struct dirent*)(d->buf+d->cur))->d_off;
+  return result;
 }

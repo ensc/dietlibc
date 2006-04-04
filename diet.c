@@ -383,7 +383,9 @@ incorporated:
       if (_link) {
 	if (profile) *dest++="-lgmon";
 	*dest++=c; *dest++=(char*)libgcc;
-	if (!strcmp(shortplatform,"sparc") || !strcmp(shortplatform,"sparc64")) {
+	if (!strcmp(shortplatform,"sparc") ||
+	    !strcmp(shortplatform,"sparc64") ||
+	    !strncmp(shortplatform,"arm",3)) {
 	  *dest++=c;
 	}
       }
