@@ -1,3 +1,3 @@
 #include "syscalls.h"
 
-syscall(sendto, sendto);
+syscall6(sendto, sendto);

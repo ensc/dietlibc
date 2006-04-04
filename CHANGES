@@ -51,6 +51,7 @@
   fix unlockpt (Gernot Tenchio)
   Olaf: fixing putenv for the situation that environ is NULL
     (situation after a clearenv)
+  HP-PA fixes (Micah Anderson, Hubert Poetzl)
 
 0.29:
   oops, fix LD_RUN_PATH unsetting (Enrico Scholz)

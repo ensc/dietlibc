@@ -153,7 +153,7 @@
 #define __NR_afs_syscall        (__NR_Linux + 137) /* Syscall for Andrew File System */
 #define __NR_setfsuid           (__NR_Linux + 138)
 #define __NR_setfsgid           (__NR_Linux + 139)
-#define __NR__llseek            (__NR_Linux + 140)
+#define __NR_llseek             (__NR_Linux + 140)
 #define __NR_getdents           (__NR_Linux + 141)
 #define __NR_select		(__NR_Linux + 142)
 #define __NR__newselect         (__NR_Linux + 142)
@@ -293,11 +293,16 @@ sym:					\
 	b __unified_syscall!		\
 	ldi __NR_##name, %r20!		\
 
-#define syscall(name, sym)  		\
+#define __syscall(name, sym, imp)  	\
 .text!					\
 .type sym,@function!			\
 .globl sym!				\
 .export sym!				\
 sym:					\
-	b __unified_syscall!		\
+	b imp!				\
 	ldi __NR_##name, %r20!
+
+#define syscall(name, sym)	__syscall(name, sym, __unified_syscall)
+#define syscall5(name, sym)	__syscall(name, sym, __unified_syscall5)
+#define syscall6(name, sym)	__syscall(name, sym, __unified_syscall6)
+

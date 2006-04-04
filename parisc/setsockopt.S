@@ -1,3 +1,3 @@
 #include "syscalls.h"
 
-syscall(setsockopt, setsockopt);
+syscall5(setsockopt, setsockopt);

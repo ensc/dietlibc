@@ -1,3 +1,3 @@
 #include "syscalls.h"
 
-syscall(getsockopt, getsockopt);
+syscall5(getsockopt, getsockopt);

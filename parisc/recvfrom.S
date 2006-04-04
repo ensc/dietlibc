@@ -1,3 +1,3 @@
 #include "syscalls.h"
 
-syscall(recvfrom, recvfrom);
+syscall6(recvfrom, recvfrom);
