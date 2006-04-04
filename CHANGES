@@ -52,6 +52,10 @@
   Olaf: fixing putenv for the situation that environ is NULL
     (situation after a clearenv)
   HP-PA fixes (Micah Anderson, Hubert Poetzl)
+  syscall() for ppc/64
+  make __kernel_size_t more like the real thing (Rene Rebe)
+  fix __exec_shell (execv and execvp) (Gernot Tenchio)
+  fix mmap and provide mmap64 on S/390 (Bastian Blank)
 
 0.29:
   oops, fix LD_RUN_PATH unsetting (Enrico Scholz)

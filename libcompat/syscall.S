@@ -119,6 +119,16 @@ syscall:
 	retl
 	nop
 
+#elif defined(__powerpc__)
+	mr   %r0,%r3
+	mr   %r3,%r4
+	mr   %r4,%r5
+	mr   %r5,%r6
+	mr   %r6,%r7
+	mr   %r7,%r8
+	mr   %r8,%r9
+	b    __unified_syscall
+
 #else
 		/* arch not implemented yet */
 #endif

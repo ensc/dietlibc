@@ -2,6 +2,7 @@
 #define _ASM_TYPES_H
 
 #include <sys/types.h>
+#include <endian.h>
 
 __BEGIN_DECLS
 
@@ -25,7 +26,7 @@ typedef int32_t __s32;
 typedef int64_t __s64;
 #endif
 
-#if defined(__alpha__)
+#if defined(__s390__) || (__WORDSIZE==64)
 typedef unsigned long __kernel_size_t;
 #else
 typedef uint32_t __kernel_size_t;
