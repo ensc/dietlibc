@@ -38,11 +38,7 @@ _start:
 #ifdef WANT_DYNAMIC
 	call	_dyn_start
 #else
-#ifdef WANT_STACKGAP
-	call	stackgap
-#else
-	call	main
-#endif
+	call	CALL_IN_STARTCODE
 #endif
 
 #ifdef PROFILING

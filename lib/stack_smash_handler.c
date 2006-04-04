@@ -1,6 +1,8 @@
 #include <write12.h>
 #include <unistd.h>
 
+/* this is only used with ProPolice in gcc 3.x */
+
 void __stack_smash_handler(char* func,unsigned int damaged);
 void __stack_smash_handler(char* func,unsigned int damaged) {
   char buf[sizeof(char*)*2+1];
@@ -17,5 +19,7 @@ void __stack_smash_handler(char* func,unsigned int damaged) {
   __write2(" (value 0x");
   __write2(buf);
   __write2(")\n");
-  _exit(0);
+  _exit(127);
 }
+
+

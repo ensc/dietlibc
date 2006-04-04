@@ -46,11 +46,7 @@ _start:
 #ifdef WANT_DYNAMIC
 	.long	_dyn_start
 #else
-#ifdef WANT_STACKGAP
-	.long	stackgap
-#else
-	.long	main
-#endif
+	.long	CALL_IN_STARTCODE
 #endif
 	.long	exit
 	.long	environ

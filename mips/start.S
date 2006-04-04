@@ -43,11 +43,7 @@ __start:
 /* FIXME: dl_init parameter ??? */
 	la	$25, _dyn_start
 #else
-#ifdef WANT_STACKGAP
-	la	$25, stackgap
-#else
-	la	$25, main
-#endif
+	la	$25, CALL_IN_STARTCODE
 #endif
 	add	$a2, $a2, $a1
 	sw	$a2, environ

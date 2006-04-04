@@ -43,11 +43,7 @@ _start:
 /* FIXME: dl_init parameter ??? */
 	bl _dyn_start, %rp
 #else
-#ifdef WANT_STACKGAP
-	bl stackgap, %rp
-#else
-	bl main, %rp
-#endif
+	bl CALL_IN_STARTCODE, %rp
 #endif
 	ldo R%$global$(%dp), %dp
 	b _exit

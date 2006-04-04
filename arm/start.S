@@ -39,11 +39,7 @@ _start:
 #ifdef WANT_DYNAMIC
 	bl	_dyn_start
 #else
-#ifdef WANT_STACKGAP
-	bl	stackgap
-#else
-	bl	main
-#endif
+	bl	CALL_IN_STARTCODE
 #endif
 
 @

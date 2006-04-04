@@ -44,11 +44,7 @@ _start:
 /* FIXME: dl_init parameter ??? */
 	br.call.sptk.few rp = _dyn_start
 #else
-#ifdef WANT_STACKGAP
-	br.call.sptk.few rp = stackgap
-#else
-	br.call.sptk.few rp = main  /* call main */
-#endif
+	br.call.sptk.few rp = CALL_IN_STARTCODE
 #endif
 	;;
 	mov r32 = r8                /* store return code */

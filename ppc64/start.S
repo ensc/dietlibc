@@ -64,11 +64,8 @@ _start:
 	bl	._dyn_start
 #else
 /* #warning static */
-#ifdef WANT_STACKGAP
-	bl	.stackgap
-#else
-	bl	.main
-#endif
+#define DOTIFY(name) .##name
+	bl	DOTIFY(CALL_IN_STARTCODE)
 #endif
 	b	.exit
 

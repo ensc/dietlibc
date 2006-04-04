@@ -502,3 +502,6 @@ $(LIBPTHREAD_OBJS): include/pthread.h
 
 # WANT_LARGEFILE_BACKCOMPAT
 $(OBJDIR)/fcntl64.o: dietfeatures.h
+
+# WANT_SSP
+$(OBJDIR)/stackgap.o: dietfeatures.h
