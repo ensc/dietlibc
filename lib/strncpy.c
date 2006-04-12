@@ -12,7 +12,7 @@ char *strncpy(char *dest, const char *src, size_t n) {
 #endif
   memccpy(dest,src,0,n);
 #ifdef WANT_NON_COMPLIANT_STRNCAT
-  dest[n-1]=0;
+  if (n) dest[n-1]=0;	/* maybe we should rather abort() if n is 0? */
 #endif
   return dest;
 }
