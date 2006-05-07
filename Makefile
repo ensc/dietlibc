@@ -388,11 +388,18 @@ uninstall:
 .PHONY: sparc ppc mips arm alpha i386 parisc mipsel powerpc s390 sparc64
 .PHONY: x86_64 ia64 ppc64 s390x
 
-arm sparc ppc alpha mips parisc s390 sparc64 x86_64 ia64 ppc64 s390x:
+arm sparc alpha mips parisc s390 sparc64 x86_64 ia64 ppc64 s390x:
 	$(MAKE) ARCH=$@ CROSS=$@-linux- all
 
 i386:
 ifeq ($(MYARCH),x86_64)
+	$(MAKE) ARCH=$@ CC="$(CC) -m32" all
+else
+	$(MAKE) ARCH=$@ CROSS=$@-linux- all
+endif
+
+ppc:
+ifeq ($(MYARCH),ppc64)
 	$(MAKE) ARCH=$@ CC="$(CC) -m32" all
 else
 	$(MAKE) ARCH=$@ CROSS=$@-linux- all
