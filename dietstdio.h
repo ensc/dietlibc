@@ -89,3 +89,5 @@ FILE *fopen_unlocked(const char *path, const char *mode) __THROW;
 FILE *fdopen_unlocked(int fildes, const char *mode) __THROW;
 FILE *freopen_unlocked(const char *path, const char *mode, FILE *stream) __THROW;
 
+int __stdout_is_tty(void);
+int __stdin_is_tty(void);

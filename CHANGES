@@ -61,6 +61,8 @@
   update SSP (ProPolice) support (with help from Eduardo Tongson)
   fix buffer underflow in strncpy if n==0 and WANT_FULL_POSIX_COMPAT
     is defined (it's normally not) (Ilja van Sprundel)
+  reading from stdin used to flush stdout.  Now it only does that
+    if stdin is a tty.
 
 0.29:
   oops, fix LD_RUN_PATH unsetting (Enrico Scholz)

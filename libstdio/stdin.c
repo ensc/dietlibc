@@ -16,6 +16,12 @@ static FILE __stdin = {
 #endif
 };
 
+int __stdin_is_tty() {
+  static int iknow;
+  if (!iknow) iknow=isatty(0)+1;
+  return (iknow-1);
+}
+
 FILE *stdin=&__stdin;
 
 int __fflush_stdin(void) {

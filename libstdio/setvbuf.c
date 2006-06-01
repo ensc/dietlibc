@@ -27,6 +27,7 @@ int setvbuf_unlocked(FILE *stream, char *buf, int flags, size_t size) {
     if (!(tmp=malloc(size))) return -1;
     if (!(stream->flags&STATICBUF)) free(stream->buf);
     stream->buf=tmp;
+    stream->flags &= ~STATICBUF;
   }
   stream->buflen=size;
   stream->bm=stream->bs=0;

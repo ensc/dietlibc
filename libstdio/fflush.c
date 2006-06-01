@@ -52,7 +52,7 @@ int __fflush4(FILE *stream,int next) {
     stream->flags=(stream->flags&~BUFINPUT)|next;
     return res;
   }
-  if (stream->fd==0) __fflush_stdout();
+  if (stream->fd==0 && __stdin_is_tty()) __fflush_stdout();
   return 0;
 }
 
