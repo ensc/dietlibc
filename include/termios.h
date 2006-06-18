@@ -202,8 +202,8 @@ struct termios {
 #define VDISCARD 13
 #define VWERASE 14
 #define VLNEXT	15
-#define VMIN	16
-#define VTIME	17
+#define VMIN	VEOF
+#define VTIME	VEOL
 #else			/* arm, i386, parisc, s390, x86_64 */
 #define VINTR	0
 #define VQUIT	1
@@ -325,6 +325,23 @@ struct termios {
 #define CRTSCTS	  020000000000		/* flow control */
 
 /* c_lflag bits */
+#if defined (__powerpc__) || defined (__alpha__)
+#define ISIG    0x00000080
+#define ICANON  0x00000100
+#define XCASE   0x00004000
+#define ECHO    0x00000008
+#define ECHOE   0x00000002
+#define ECHOK   0x00000004
+#define ECHONL  0x00000010
+#define NOFLSH  0x80000000
+#define TOSTOP  0x00400000
+#define ECHOCTL 0x00000040
+#define ECHOPRT 0x00000020
+#define ECHOKE  0x00000001
+#define FLUSHO  0x00800000
+#define IEXTEN  0x00000400
+#define PENDIN  0x20000000
+#else
 #define ISIG	0000001
 #define ICANON	0000002
 #define XCASE	0000004
@@ -336,6 +353,8 @@ struct termios {
 #define ECHOCTL	0001000
 #define ECHOPRT	0002000
 #define ECHOKE	0004000
+#endif
+
 #ifdef __mips__
 #define IEXTEN	0000400
 #define FLUSHO	0020000

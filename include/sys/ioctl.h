@@ -29,7 +29,7 @@ __BEGIN_DECLS
 #define EP_FREE		_IO('P', 3)
 #define EP_ISPOLLED	_IOWR('P', 4, struct pollfd)
 
-int ioctl(int d, int request, ...) __THROW;
+int ioctl(int d, long int request, ...) __THROW;
 
 __END_DECLS
 

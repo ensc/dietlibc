@@ -79,7 +79,7 @@ static int parsesockaddr(const char* c,void* x) {
 }
 
 #ifdef WANT_FULL_RESOLV_CONF
-int __dns_search;
+unsigned int __dns_search;
 char *__dns_domains[8];
 #endif
 

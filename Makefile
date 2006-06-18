@@ -174,7 +174,7 @@ $(OBJDIR)/pthread_%.o: libpthread/pthread_%.c
 	$(COMMENT) -$(CROSS)strip -x -R .comment -R .note $@
 
 $(OBJDIR)/%.o: %.c
-	$(CROSS)$(CC) $(INC) $(CFLAGS) -c $< -o $@
+	$(CROSS)$(CC) $(INC) $(CFLAGS) -c $< -o $@ -D__dietlibc__
 	$(COMMENT) -$(CROSS)strip -x -R .comment -R .note $@
 endif
 

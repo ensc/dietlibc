@@ -63,6 +63,7 @@
     is defined (it's normally not) (Ilja van Sprundel)
   reading from stdin used to flush stdout.  Now it only does that
     if stdin is a tty.
+  sparc64 fixes for ioctls, includes and sigaction (Rene Rebe)
 
 0.29:
   oops, fix LD_RUN_PATH unsetting (Enrico Scholz)
