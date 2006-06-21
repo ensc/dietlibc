@@ -40,7 +40,5 @@ __error_unified_syscall:
 
 	br.ret.sptk.few rp
 
-/* .endp __unified_syscall
-.endp __error_unified_syscall */
 .size __unified_syscall, __error_unified_syscall - __unified_syscall
 .size __error_unified_syscall, . - __error_unified_syscall
