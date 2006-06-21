@@ -7,7 +7,7 @@
 # -EB because we also have a mipsel cross compiler target that is meant
 # to generate little endian code.  Confusing, eh?
 ifeq ($(CROSS),mips-linux-)
-ENDIAN=-EB
+ENDIAN=-meb
 endif
 CFLAGS+=$(ENDIAN) -Os -G 0 -fstrict-aliasing -fno-pic -mno-abicalls
 VPATH:=mips:syscalls.s:$(VPATH)
