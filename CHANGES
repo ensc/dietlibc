@@ -53,7 +53,7 @@
   fix unlockpt (Gernot Tenchio)
   Olaf: fixing putenv for the situation that environ is NULL
     (situation after a clearenv)
-  HP-PA fixes (Micah Anderson, Hubert Poetzl)
+  HP-PA fixes (Micah Anderson, Herbert Poetzl)
   syscall() for ppc/64
   make __kernel_size_t more like the real thing (Rene Rebe)
   fix __exec_shell (execv and execvp) (Gernot Tenchio)
