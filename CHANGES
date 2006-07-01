@@ -1,4 +1,5 @@
 0.31:
+  getopt_long and getopt_long_only now refuse ambiguous abbreviations
 
 0.30:
   put exception handling frames in read-only section on AMD64 and S/390

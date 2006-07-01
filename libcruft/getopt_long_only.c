@@ -34,33 +34,49 @@ again:
   {
     char* max=strchr(arg,'=');
     const struct option* o;
+    const struct option* match=0;
     if (!max) max=arg+strlen(arg);
     for (o=longopts; o->name; ++o) {
       if (!strncmp(o->name,arg,(size_t)(max-arg))) {	/* match */
-	if (longindex) *longindex=o-longopts;
-	if (o->has_arg>0) {
-	  if (*max=='=')
-	    optarg=max+1;
-	  else {
-	    optarg=argv[optind+1];
-	    if (!optarg && o->has_arg==1) {	/* no argument there */
-	      if (*optstring==':') return ':';
-	      write(2,"argument required: `",20);
-	      write(2,arg,(size_t)(max-arg));
-	      write(2,"'.\n",3);
-	      ++optind;
-	      return '?';
-	    }
-	    ++optind;
+	if (!match) {
+	  if (strlen(o->name)==max-arg)
+	    break;	/* perfect match */
+	  match=o;
+	} else {
+	  /* Another match.  Use it if it is perfect, otherwise abort. */
+	  if (strlen(o->name)==max-arg) {
+	    match=o;
+	    break;
 	  }
+	  match=0;
+	  break;
 	}
-	++optind;
-	if (o->flag)
-	  *(o->flag)=o->val;
-	else
-	  return o->val;
-	return 0;
       }
+    }
+    if (o=match) {
+      if (longindex) *longindex=o-longopts;
+      if (o->has_arg>0) {
+	if (*max=='=')
+	  optarg=max+1;
+	else {
+	  optarg=argv[optind+1];
+	  if (!optarg && o->has_arg==1) {	/* no argument there */
+	    if (*optstring==':') return ':';
+	    write(2,"argument required: `",20);
+	    write(2,arg,(size_t)(max-arg));
+	    write(2,"'.\n",3);
+	    ++optind;
+	    return '?';
+	  }
+	  ++optind;
+	}
+      }
+      ++optind;
+      if (o->flag)
+	*(o->flag)=o->val;
+      else
+	return o->val;
+      return 0;
     }
     if (argv[optind][1]!='-') goto shortopt;
     if (*optstring==':') return ':';
