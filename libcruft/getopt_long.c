@@ -39,23 +39,20 @@ again:
     const struct option* match=0;
     if (!max) max=arg+strlen(arg);
     for (o=longopts; o->name; ++o) {
-      if (!strncmp(o->name,arg,(size_t)(max-arg))) {	/* match */
-	if (!match) {
-	  if (strlen(o->name)==max-arg)
-	    break;	/* perfect match */
-	  match=o;
-	} else {
-	  /* Another match.  Use it if it is perfect, otherwise abort. */
-	  if (strlen(o->name)==max-arg) {
-	    match=o;
-	    break;
-	  }
-	  match=0;
+      size_t tlen=max-arg;
+      if (!strncmp(o->name,arg,tlen)) {	/* match */
+	if (strlen(o->name)==tlen) {
+	  match=o;	/* perfect match, not just prefix */
 	  break;
 	}
+	if (!match)
+	  match=o;
+	else
+	  /* Another imperfect match. */
+	  match=(struct option*)-1;
       }
     }
-    if (o=match) {
+    if (match!=(struct option*)-1 && (o=match)) {
       if (longindex) *longindex=o-longopts;
       if (o->has_arg>0) {
 	if (*max=='=')
