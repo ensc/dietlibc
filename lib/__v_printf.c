@@ -264,8 +264,11 @@ num_printf:
 #endif
 	    number=va_arg(arg_ptr,long);
 	}
-	else
+	else {
 	  number=va_arg(arg_ptr,int);
+	  if (sizeof(int) != sizeof(long) && !flag_in_sign)
+	    number&=((1l<<(sizeof(int)*8))-1);
+	}
 
 	if (flag_in_sign) {
 #ifdef WANT_LONGLONG_PRINTF
