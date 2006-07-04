@@ -11,7 +11,7 @@ static int copystring(char* buf,int maxlen, const char* s) {
   return i;
 }
 
-int __dtostr(double d,char *buf,unsigned int maxlen,unsigned int prec,unsigned int prec2) {
+int __dtostr(double d,char *buf,unsigned int maxlen,unsigned int prec,unsigned int prec2,int g) {
 #if 1
   union {
     unsigned long long l;
@@ -85,7 +85,7 @@ int __dtostr(double d,char *buf,unsigned int maxlen,unsigned int prec,unsigned i
 	*buf=digit+'0'; ++buf;
 	if (!maxlen) {
 	  /* use scientific notation */
-	  int len=__dtostr(backup/tmp,oldbuf,maxlen,prec,prec2);
+	  int len=__dtostr(backup/tmp,oldbuf,maxlen,prec,prec2,0);
 	  int initial=1;
 	  if (len==0) return 0;
 	  maxlen-=len; buf+=len;
@@ -126,8 +126,13 @@ int __dtostr(double d,char *buf,unsigned int maxlen,unsigned int prec,unsigned i
   if (prec2 || prec>(unsigned int)(buf-oldbuf)+1) {	/* more digits wanted */
     if (!maxlen) return 0; --maxlen;
     *buf='.'; ++buf;
-    prec-=buf-oldbuf-1;
-    if (prec2) prec=prec2;
+    if (g) {
+      if (prec2) prec=prec2;
+      prec-=buf-oldbuf-1;
+    } else {
+      prec-=buf-oldbuf-1;
+      if (prec2) prec=prec2;
+    }
     if (prec>maxlen) return 0;
     while (prec>0) {
       char digit;

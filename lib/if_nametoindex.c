@@ -10,6 +10,7 @@
 unsigned int if_nametoindex(const char* blub) {
   struct ifreq ifr;
   int fd;
+  int ret=0;
   char *tmp;
   int len=sizeof(ifr.ifr_name);
   fd=socket(AF_INET6,SOCK_DGRAM,0);
@@ -17,10 +18,8 @@ unsigned int if_nametoindex(const char* blub) {
   for (tmp=ifr.ifr_name; len>0; --len) {
     if ((*tmp++=*blub++)==0) break;
   }
-  if (ioctl(fd,SIOCGIFINDEX,&ifr)==0) {
-    close(fd);
-    return ifr.ifr_ifindex;
-  }
+  if (ioctl(fd,SIOCGIFINDEX,&ifr)==0)
+    ret=ifr.ifr_ifindex;
   close(fd);
-  return 0;
+  return ret;
 }

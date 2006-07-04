@@ -8,17 +8,13 @@
 struct if_nameindex* if_nameindex(void) {
   struct ifconf ic;
   int fd,len,i;
-  struct if_nameindex* x,* y;
+  struct if_nameindex* x=0,* y;
   char *dest;
   fd=socket(AF_INET6,SOCK_DGRAM,0);
   if (fd<0) fd=socket(AF_INET,SOCK_DGRAM,0);
   ic.ifc_buf=0;
   ic.ifc_len=0;
-  if (ioctl(fd,SIOCGIFCONF,&ic)<0) {
-b0rken:
-    close(fd);
-    return 0;
-  }
+  if (ioctl(fd,SIOCGIFCONF,&ic)<0) goto b0rken;
   ic.ifc_buf=alloca((size_t)ic.ifc_len);
   if (ioctl(fd,SIOCGIFCONF,&ic)<0) goto b0rken;
   len=(ic.ifc_len/sizeof(struct ifreq));
@@ -36,5 +32,7 @@ b0rken:
     ++y;
   }
   y->if_name=0; y->if_index=0;
+b0rken:
+  close(fd);
   return x;
 }

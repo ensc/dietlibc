@@ -29,7 +29,7 @@ long int strtol(const char *nptr, char **endptr, int base) __THROW;
 unsigned long int strtoul(const char *nptr, char **endptr, int base) __THROW;
 
 extern int __ltostr(char *s, unsigned int size, unsigned long i, unsigned int base, int UpCase) __THROW;
-extern int __dtostr(double d,char *buf,unsigned int maxlen,unsigned int prec,unsigned int prec2) __THROW;
+extern int __dtostr(double d,char *buf,unsigned int maxlen,unsigned int prec,unsigned int prec2,int g) __THROW;
 
 #if !defined(__STRICT_ANSI__) || __STDC_VERSION__ + 0 >= 199900L
 __extension__ long long int strtoll(const char *nptr, char **endptr, int base) __THROW;

@@ -320,9 +320,9 @@ num_printf:
 	  if (width==0) width=1;
 	  if (!flag_dot) preci=6;
 	  if (flag_sign || d < +0.0) flag_in_sign=1;
-	  
-	  sz=__dtostr(d,s,sizeof(buf)-1,width,preci);
-	  
+
+	  sz=__dtostr(d,s,sizeof(buf)-1,width,preci,g);
+
 	  if (flag_dot) {
 	    char *tmp;
 	    if ((tmp=strchr(s,'.'))) {
