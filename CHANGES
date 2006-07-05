@@ -3,6 +3,8 @@
   fix printf %u/%x on 64-bit platforms
   fix fd leak in if_nameindex (Florian Westphal)
   fix printf %g (well, get closer)
+  fix sparc64 longjmp (Rene Rebe)
+  add dn_skipname
 
 0.30:
   put exception handling frames in read-only section on AMD64 and S/390

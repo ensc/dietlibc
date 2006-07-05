@@ -125,6 +125,8 @@ int dn_expand(unsigned char *msg, unsigned char *eomorig,
 
 void res_close(void) __THROW __attribute_dontuse__;
 
+int dn_skipname(const unsigned char* cur,const unsigned char* eom) __THROW;
+
 __END_DECLS
 
 #endif

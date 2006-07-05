@@ -7,8 +7,8 @@
 #include "dietstdio.h"
 #include "dietwarning.h"
 
-static inline unsigned int skip_to(const char *format) {
-  unsigned int nr;
+static inline unsigned long skip_to(const char *format) {
+  unsigned long nr;
   for (nr=0; format[nr] && (format[nr]!='%'); ++nr);
   return nr;
 }
@@ -35,7 +35,7 @@ int __v_printf(struct arg_printf* fn, const char *format, va_list arg_ptr)
 #endif
 
   while (*format) {
-    unsigned int sz = skip_to(format);
+    unsigned long sz = skip_to(format);
     if (sz) {
       A_WRITE(fn,format,sz); len+=sz;
       format+=sz;
@@ -267,7 +267,7 @@ num_printf:
 	else {
 	  number=va_arg(arg_ptr,int);
 	  if (sizeof(int) != sizeof(long) && !flag_in_sign)
-	    number&=((1l<<(sizeof(int)*8))-1);
+	    number&=((unsigned int)-1);
 	}
 
 	if (flag_in_sign) {
