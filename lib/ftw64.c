@@ -6,7 +6,15 @@
 #include <dirent.h>
 #include <string.h>
 #include <stdlib.h>
+#include <fcntl.h>
+
+#ifdef __dietlibc__
 #include "dietdirent.h"
+#endif
+
+#ifndef O_DIRECTORY
+#define O_DIRECTORY 0
+#endif
 
 #ifdef __NO_STAT64
 int ftw64(const char*dir,int(*f)(const char*file,const struct stat* sb,int flag),int dpth) __THROW;
@@ -21,12 +29,20 @@ int ftw64(const char*dir,int(*f)(const char*file,const struct stat* sb,int flag)
   int r;
   unsigned int oldlen=0;
   char* filename = NULL;
-  if(chdir(dir))return-1;
+  int previous=open(".",O_RDONLY|O_DIRECTORY);
+#if !defined(__dietlibc__) && !defined(__MINGW32__)
+  int thisdir;
+#endif
+  if (chdir(dir)) return-1;
   cd=alloca(PATH_MAX+1);
-  if(!getcwd(cd,PATH_MAX))return-1;
+  if (!getcwd(cd,PATH_MAX) || !(d=opendir("."))) return -1;
   cd[PATH_MAX]='\0';
   cdl=strlen(cd);
-  if(!(d=opendir(".")))return-1;
+#if !defined(__dietlibc__) && !defined(__MINGW32__)
+  if ((thisdir=open(".",O_RDONLY|O_DIRECTORY))==-1) {
+    closedir(d); return;
+  }
+#endif
   while((de=readdir(d))){
     int flg;
     size_t nl;
@@ -41,12 +57,34 @@ int ftw64(const char*dir,int(*f)(const char*file,const struct stat* sb,int flag)
       if(S_ISLNK(sb.st_mode))flg=FTW_SL;else if(S_ISDIR(sb.st_mode))flg=FTW_D;else flg=FTW_F;
     }else flg=FTW_NS;
     r=f(filename,&sb,flg);
-    if(r){closedir(d);return r;}
+    if(r){
+err:
+#if !defined(__dietlibc__) && !defined(__MINGW32__)
+      close(thisdir);
+#endif
+      closedir(d);
+      fchdir(previous);
+      close(previous);
+      return r;
+    }
     if(flg==FTW_D&&dpth){
       r=ftw(filename,f,dpth-1);
+#ifndef __dietlibc__
+#ifdef __MINGW32__
+      chdir("..");
+#else
+      fchdir(thisdir);
+#endif
+#else
       fchdir(d->fd);
-      if (r){closedir(d);return r;}
+#endif
+      if (r) goto err;
     }
   }
+  fchdir(previous);
+  close(previous);
+#if !defined(__dietlibc__) && !defined(__MINGW32__)
+  close(thisdir);
+#endif
   return closedir(d);
 }

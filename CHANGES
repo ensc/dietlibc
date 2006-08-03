@@ -5,6 +5,9 @@
   fix printf %g (well, get closer)
   fix sparc64 longjmp (Rene Rebe)
   add dn_skipname
+  add pthread prototypes that are needed to compile libgcc when
+    compiling a cross compiler gcc
+  fix ftw64
 
 0.30:
   put exception handling frames in read-only section on AMD64 and S/390

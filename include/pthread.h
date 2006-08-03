@@ -252,6 +252,10 @@ int pthread_equal(pthread_t __thread1,pthread_t __thread2);
 
 int pthread_sigmask(int how,const sigset_t*newset,sigset_t*oldset);
 
+/* these two aren't actually supported right now */
+int pthread_mutexattr_gettype(const pthread_mutexattr_t *restrict attr, int *restrict type);
+int pthread_mutexattr_settype(pthread_mutexattr_t *attr, int type);
+
 __END_DECLS
 
 #endif

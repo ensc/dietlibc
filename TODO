@@ -29,3 +29,6 @@
 implement AI_V4MAPPED in getaddrinfo (not in man page, only susv3)
 
 Also: AF_UNSPEC, AI_ADDRCONFIG
+set_thread_area -> set up TLD, for stack guard
+
+lsearch, lfind, hsearch, tsearch
