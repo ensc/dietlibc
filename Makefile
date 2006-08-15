@@ -512,3 +512,6 @@ $(OBJDIR)/fcntl64.o: dietfeatures.h
 
 # WANT_SSP
 $(OBJDIR)/stackgap.o: dietfeatures.h
+
+# WANT_MALLOC_ZERO
+$(OBJDIR)/strndup.o: dietfeatures.h
