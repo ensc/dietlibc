@@ -64,15 +64,20 @@ int callrpc (const char *host, const unsigned long prognum,
 	enum clnt_stat clnt_stat;
 	struct hostent *hp;
 	struct timeval timeout, tottimeout;
+	void* freeme=0;
 
 	if (crp == 0) {
 		crp = (struct callrpc_private *) calloc(1, sizeof(*crp));
 		if (crp == 0)
 			return (0);
-		callrpc_private = crp;
+		freeme = callrpc_private = crp;
 	}
 	if (crp->oldhost == NULL) {
 		crp->oldhost = malloc(256);
+		if (!crp->oldhost) {
+		  free(freeme);
+		  return 0;
+		}
 		crp->oldhost[0] = 0;
 		crp->socket = RPC_ANYSOCK;
 	}

@@ -3,7 +3,7 @@
 #include <signal.h>
 
 const char* strsignal(int sig) {
-  if (sig<=SIGRTMAX)
+  if ((unsigned int)sig<=SIGRTMAX)
     return sys_siglist[sig];
   else
     return "(unknown signal)";

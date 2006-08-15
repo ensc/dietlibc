@@ -36,6 +36,7 @@ size_t  strftime ( char* dst, size_t max, const char* format, const struct tm* t
     unsigned long no;
     char          buf [5];
 
+    if (!max) return 0;
     for ( ; *format != '\0'; format++ ) {
 	if (*format == '%') {
 	    if (*++format == '%') {

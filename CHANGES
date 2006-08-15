@@ -8,6 +8,11 @@
   add pthread prototypes that are needed to compile libgcc when
     compiling a cross compiler gcc
   fix ftw64
+  fixes for some corner cases from Ilja van Sprundel:
+    - tempnam
+    - strsignal
+    - strftime
+    - sunrpc code
 
 0.30:
   put exception handling frames in read-only section on AMD64 and S/390

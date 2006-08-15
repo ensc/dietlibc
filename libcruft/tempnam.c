@@ -19,6 +19,7 @@ char* tempnam(char* dir,char* template) {
   else
     strncpy(buf,"/tmp/",len);
   len=(sizeof(buf)-1)-strlen(buf);
+  if (len<1) return 0;
   if (template)
     strncat(buf,template, --len);
   else

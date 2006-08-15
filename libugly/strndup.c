@@ -4,6 +4,8 @@
 #include <stdlib.h>
 
 char *strndup(const char *s,size_t n) {
+  /* This relies on the fact that our malloc(0) returns NULL.
+   * Otherwise this would be an exploitable integer overflow! */
   char *tmp=(char *)malloc(n+1);
   if (!tmp) return 0;
   strncpy(tmp,s,n);
