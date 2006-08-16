@@ -13,6 +13,7 @@
     - strsignal
     - strftime
     - sunrpc code
+  faster qsort
 
 0.30:
   put exception handling frames in read-only section on AMD64 and S/390
