@@ -81,9 +81,15 @@ inn_printf:
       case 'h':
 	--flag_long;
 	goto inn_printf;
+#if __WORDSIZE != 64
+      case 'j':
+#endif
       case 'q':		/* BSD ... */
       case 'L':
 	++flag_long; /* fall through */
+#if __WORDSIZE == 64
+      case 'j':
+#endif
       case 'l':
 	++flag_long;
 	goto inn_printf;
