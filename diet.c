@@ -28,7 +28,7 @@ static const char* Os[] = {
   "i386","-Os","-mpreferred-stack-boundary=2",
 	 "-falign-functions=1","-falign-jumps=1",
 	 "-falign-loops=1","-fomit-frame-pointer",0,
-  "x86_64","-Os","-fno-omit-frame-pointer",0,
+  "x86_64","-Os",0,
   "sparc","-Os","-mcpu=supersparc",0,
   "sparc64","-Os","-m64","-mhard-quad-float",0,
   "alpha","-Os","-fomit-frame-pointer",0,
