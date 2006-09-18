@@ -290,7 +290,19 @@
 #define __NR_inotify_init		(__NR_SYSCALL_BASE+316)
 #define __NR_inotify_add_watch		(__NR_SYSCALL_BASE+317)
 #define __NR_inotify_rm_watch		(__NR_SYSCALL_BASE+318)
+#define __NR_mbind			(__NR_SYSCALL_BASE+319)
+#define __NR_get_mempolicy		(__NR_SYSCALL_BASE+320)
+#define __NR_set_mempolicy		(__NR_SYSCALL_BASE+321)
 
+/*
+ * The following SWIs are ARM private.
+ */
+#define __ARM_NR_BASE			(__NR_SYSCALL_BASE+0x0f0000)
+#define __ARM_NR_breakpoint		(__ARM_NR_BASE+1)
+#define __ARM_NR_cacheflush		(__ARM_NR_BASE+2)
+#define __ARM_NR_usr26			(__ARM_NR_BASE+3)
+#define __ARM_NR_usr32			(__ARM_NR_BASE+4)
+#define __ARM_NR_set_tls		(__ARM_NR_BASE+5)
 
 /* ok the next few values are for the optimization of the unified syscalls
  * on arm.

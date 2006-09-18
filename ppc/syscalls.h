@@ -276,6 +276,29 @@
 #define __NR_inotify_init	275
 #define __NR_inotify_add_watch	276
 #define __NR_inotify_rm_watch	277
+#define __NR_spu_run		278
+#define __NR_spu_create		279
+#define __NR_pselect6		280
+#define __NR_ppoll		281
+#define __NR_unshare		282
+#define __NR_splice		283
+#define __NR_tee		284
+#define __NR_vmsplice		285
+#define __NR_openat		286
+#define __NR_mkdirat		287
+#define __NR_mknodat		288
+#define __NR_fchownat		289
+#define __NR_futimesat		290
+#define __NR_fstatat64		291
+#define __NR_unlinkat		292
+#define __NR_renameat		293
+#define __NR_linkat		294
+#define __NR_symlinkat		295
+#define __NR_readlinkat		296
+#define __NR_fchmodat		297
+#define __NR_faccessat		298
+#define __NR_get_robust_list	299
+#define __NR_set_robust_list	300
 
 
 #define syscall_weak(name,wsym,sym) \

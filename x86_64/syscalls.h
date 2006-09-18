@@ -301,6 +301,30 @@
 #define __NR_inotify_init	253
 #define __NR_inotify_add_watch	254
 #define __NR_inotify_rm_watch	255
+#define __NR_migrate_pages	256
+#define __NR_openat		257
+#define __NR_mkdirat		258
+#define __NR_mknodat		259
+#define __NR_fchownat		260
+#define __NR_futimesat		261
+#define __NR_newfstatat		262
+#define __NR_unlinkat		263
+#define __NR_renameat		264
+#define __NR_linkat		265
+#define __NR_symlinkat		266
+#define __NR_readlinkat		267
+#define __NR_fchmodat		268
+#define __NR_faccessat		269
+#define __NR_pselect6		270
+#define __NR_ppoll		271
+#define __NR_unshare		272
+#define __NR_set_robust_list	273
+#define __NR_get_robust_list	274
+#define __NR_splice		275
+#define __NR_tee		276
+#define __NR_sync_file_range	277
+#define __NR_vmsplice		278
+#define __NR_move_pages		279
 
 #ifdef __PIC__
 #define syscall_weak(name,wsym,sym) \

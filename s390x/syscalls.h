@@ -271,6 +271,28 @@
 #define __NR_inotify_init	284
 #define __NR_inotify_add_watch	285
 #define __NR_inotify_rm_watch	286
+/* Number 287 is reserved for new sys_migrate_pages */
+#define __NR_openat		288
+#define __NR_mkdirat		289
+#define __NR_mknodat		290
+#define __NR_fchownat		291
+#define __NR_futimesat		292
+#define __NR_unlinkat		294
+#define __NR_renameat		295
+#define __NR_linkat		296
+#define __NR_symlinkat		297
+#define __NR_readlinkat		298
+#define __NR_fchmodat		299
+#define __NR_faccessat		300
+#define __NR_pselect6		301
+#define __NR_ppoll		302
+#define __NR_unshare		303
+#define __NR_set_robust_list	304
+#define __NR_get_robust_list	305
+#define __NR_splice		306
+#define __NR_sync_file_range	307
+#define __NR_tee		308
+#define __NR_vmsplice		309
 
 
 /* 
@@ -334,6 +356,7 @@
 #undef  __NR_fcntl64
 #undef  __NR_sendfile64
 #undef  __NR_fadvise64_64
+#undef  __NR_fstatat64
 
 #define __NR_select		142
 #define __NR_getrlimit		191	/* SuS compliant getrlimit */
@@ -356,6 +379,7 @@
 #define __NR_setgid  		214
 #define __NR_setfsuid  		215
 #define __NR_setfsgid  		216
+#define __NR_newfstatat		293
 
 #endif
 
