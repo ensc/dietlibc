@@ -8,6 +8,7 @@ int pthread_cond_timedwait(pthread_cond_t*cond,pthread_mutex_t*mutex,
 		      const struct timespec*abstime) {
   _pthread_descr this=__thread_self();
   _pthread_descr*tmp;
+  int retval;
 
   if (mutex->owner!=this) return EINVAL;
 
@@ -25,7 +26,7 @@ int pthread_cond_timedwait(pthread_cond_t*cond,pthread_mutex_t*mutex,
   /* Aeh yeah / wait till condition-signal or timout (or cancel) */
   pthread_mutex_unlock(mutex);
 
-  __thread_suspend_till(this,1,abstime);
+  retval = __thread_suspend_till(this,1,abstime);
 
   pthread_mutex_lock(mutex);
 
@@ -40,7 +41,7 @@ int pthread_cond_timedwait(pthread_cond_t*cond,pthread_mutex_t*mutex,
 
   __NO_ASYNC_CANCEL_END_(this);
 
-  return 0;
+  return retval;
 }
 
 

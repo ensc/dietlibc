@@ -204,10 +204,11 @@ static int __thread_cleanup(_pthread_descr td) {
 }
 
 /* suspend till timeout or restart signal / in NO_ASYNC_CANCEL */
-void __thread_suspend_till(_pthread_descr this,int cancel,const struct timespec*abstime) {
+int __thread_suspend_till(_pthread_descr this,int cancel,const struct timespec*abstime) {
   sigset_t newmask,oldmask;
   struct timeval tv;
   struct timespec reg;
+  int retval = 0;
 
   gettimeofday(&tv,0);
   reg.tv_nsec=abstime->tv_nsec-tv.tv_usec*1000;
@@ -225,9 +226,13 @@ void __thread_suspend_till(_pthread_descr this,int cancel,const struct timespec*
 
   while(this->p_sig!=PTHREAD_SIG_RESTART) {
     if (cancel && (this->cancelstate==PTHREAD_CANCEL_ENABLE) && this->canceled) break;
-    if (reg.tv_sec<0||__libc_nanosleep(&reg,&reg)==0) break;
+    if (reg.tv_sec<0||__libc_nanosleep(&reg,&reg)==0) {
+      retval = ETIMEDOUT;
+      break;
+    }
   }
   sigprocmask(SIG_SETMASK,&oldmask,0);
+  return retval;
 }
 
 /* suspend till restart signal */

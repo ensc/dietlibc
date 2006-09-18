@@ -16,6 +16,7 @@
   faster qsort
   support %j in printf (Gernot Tenchio)
   do omit the frame pointer on x86_64
+  fix pthread_cond_timedwait (Gernot Tenchio)
 
 0.30:
   put exception handling frames in read-only section on AMD64 and S/390

@@ -126,7 +126,7 @@ int __thread_join_cleanup(struct _pthread_descr_struct*td);
 
 void __thread_restart(struct _pthread_descr_struct*td);
 void __thread_suspend(struct _pthread_descr_struct*td,int cancel);
-void __thread_suspend_till(struct _pthread_descr_struct*td,int cancel,const struct timespec*abstime);
+int __thread_suspend_till(struct _pthread_descr_struct*td,int cancel,const struct timespec*abstime);
 
 void __thread_testcancel(struct _pthread_descr_struct*td);
 int __thread_setcanceltype(int type,int*oldtype,struct _pthread_descr_struct*td);
