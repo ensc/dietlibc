@@ -26,7 +26,7 @@ char *dirname(char *path)
       continue;
     }
     if ( c!=path )
-      while ( *c==SLASH ) *c--=EOL; /* slashes in the middle */
+      while ( *c==SLASH && c>=path) *c--=EOL; /* slashes in the middle */
     else
       path[1]=EOL;                  /* slash is first symbol */
     return path;

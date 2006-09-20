@@ -35,7 +35,10 @@ int ftw64(const char*dir,int(*f)(const char*file,const struct stat* sb,int flag)
 #endif
   if (chdir(dir)) return-1;
   cd=alloca(PATH_MAX+1);
-  if (!getcwd(cd,PATH_MAX) || !(d=opendir("."))) return -1;
+  if (!getcwd(cd,PATH_MAX) || !(d=opendir("."))) {
+    close(previous);
+    return -1;
+  }
   cd[PATH_MAX]='\0';
   cdl=strlen(cd);
 #if !defined(__dietlibc__) && !defined(__MINGW32__)

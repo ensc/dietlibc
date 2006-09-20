@@ -17,6 +17,8 @@
   support %j in printf (Gernot Tenchio)
   do omit the frame pointer on x86_64
   fix pthread_cond_timedwait (Gernot Tenchio)
+  fix getcwd, ftw, ftw64, dirname (Ilja van Sprundel)
+    Some fd leaks in error conditions.
 
 0.30:
   put exception handling frames in read-only section on AMD64 and S/390
