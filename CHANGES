@@ -23,6 +23,9 @@
     corruption, which in most cases caused DNS lookups to fail on 64-bit
     platforms)
   fix dynamic build
+  do the magic required for -fstack-protector in gcc 4.1.1 to actually
+    work (which includes setting up thread local storage), so far on
+    i386 and amd64
 
 0.30:
   put exception handling frames in read-only section on AMD64 and S/390
