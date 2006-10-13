@@ -19,6 +19,9 @@
   fix pthread_cond_timedwait (Gernot Tenchio)
   fix getcwd, ftw, ftw64, dirname (Ilja van Sprundel)
     Some fd leaks in error conditions.
+  fix stackguard to be .quad instead of .long (cause subtle memory
+    corruption, which in most cases caused DNS lookups to fail on 64-bit
+    platforms)
 
 0.30:
   put exception handling frames in read-only section on AMD64 and S/390

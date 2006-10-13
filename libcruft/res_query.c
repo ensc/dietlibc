@@ -99,7 +99,7 @@ int res_query(const char *dname, int class, int type, unsigned char *answer, int
 	duh[1].fd=pnpfd;
       } else {
 	duh[1].fd=-1;
-	duh[1].revents=0;
+	duh[1].events=0;
       }
 
 #endif

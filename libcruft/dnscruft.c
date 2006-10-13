@@ -45,9 +45,8 @@ void __dns_make_fd6(void) {
   tmp=socket(PF_INET6,SOCK_DGRAM,IPPROTO_UDP);
   if (tmp<0) return;
   fcntl(tmp,F_SETFD,FD_CLOEXEC);
+  memset(&si,0,sizeof(si));
   si.sin6_family=AF_INET6;
-  si.sin6_port=0;
-  memset(&si.sin6_addr,0,16);
   if (bind(tmp,(struct sockaddr*)&si,sizeof(si))) return;
   __dns_fd6=tmp;
 }
