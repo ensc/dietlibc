@@ -388,3 +388,5 @@ __unified_syscall:
 
 #include "__longjmp.S"
 #include "setjmp.S"
+
+#include "syscalls.s/__guard.S"

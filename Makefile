@@ -227,9 +227,6 @@ $(OBJDIR)/libm.a: $(LIBMATHOBJ)
 
 LD_UNSET = env -u LD_RUN_PATH
 
-$(OBJDIR)/libdietc.so: $(OBJDIR)/dietlibc.a
-	$(LD_UNSET) $(CROSS)ld -whole-archive -shared -o $@ $^
-
 dyn: dyn_lib
 
 # added dynamic linker

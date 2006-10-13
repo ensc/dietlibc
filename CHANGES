@@ -22,6 +22,7 @@
   fix stackguard to be .quad instead of .long (cause subtle memory
     corruption, which in most cases caused DNS lookups to fail on 64-bit
     platforms)
+  fix dynamic build
 
 0.30:
   put exception handling frames in read-only section on AMD64 and S/390

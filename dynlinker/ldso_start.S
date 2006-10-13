@@ -1,3 +1,5 @@
+#include <endian.h>
+
 .text
 .globl ldso_start
 ldso_start:
@@ -68,7 +70,21 @@ errno:
 environ:
 .global __environ
 __environ:
+#if __WORDSIZE == 64
+	.quad 0
+#else
 	.long 0
+#endif
+
+.global environ
+environ:
+.global __environ
+__environ:
+#if __WORDSIZE == 64
+	.quad 0
+#else
+	.long 0
+#endif
 
 .global fini_entry
 fini_entry:
