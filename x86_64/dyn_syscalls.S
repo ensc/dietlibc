@@ -297,3 +297,5 @@ _unified_syscall:
 
 #define __errno_location __errno_location@PLT
 #include "x86_64/gettimeofday.S"
+
+#include "syscalls.s/__guard.S"
