@@ -38,6 +38,7 @@ char *asctime(const struct tm *timeptr) __THROW;
 char *asctime_r(const struct tm *timeptr, char *buf) __THROW;
 
 char *ctime(const time_t *timep) __THROW;
+char *ctime_r(const time_t *timep, char* buf) __THROW;
 
 size_t strftime(char *s, size_t max, const char *format, const struct tm *tm) __THROW __attribute__((__format__(__strftime__,3,0)));
 time_t time(time_t *t) __THROW;
