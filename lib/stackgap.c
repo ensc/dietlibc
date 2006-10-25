@@ -7,7 +7,7 @@
 
 extern int main(int argc,char* argv[],char* envp[]);
 
-#ifdef WANT_SSP
+#if defined(WANT_SSP)
 extern unsigned long __guard;
 #endif
 
@@ -19,7 +19,9 @@ static void setup_tls(void) {
 
   mainthread.tcb=&mainthread;
   mainthread.self=&mainthread;
+#if defined(WANT_SSP)
   mainthread.stack_guard=__guard;
+#endif
   arch_prctl(ARCH_SET_FS, &mainthread);
 
 #elif defined(__i386__)
@@ -27,7 +29,9 @@ static void setup_tls(void) {
   static unsigned int sd[4];
   mainthread.tcb=&mainthread;
   mainthread.self=&mainthread;
+#if defined(WANT_SSP)
   mainthread.stack_guard=__guard;
+#endif
   sd[0]=-1;
   sd[1]=(unsigned long int)&mainthread;
   sd[2]=0xfffff; /* 4 GB limit */
