@@ -46,7 +46,14 @@ static int _dl_apply_relocate(struct _dl_handle*dh,_dl_rel_t*rel) {
 
 #ifdef __i386__
   if (typ==R_386_32) {			/* 1 */
-    *loc=(unsigned long)(dh->mem_base+dh->dyn_sym_tab[ELF_R_SYM(rel->r_info)].st_value);
+    unsigned long value=(unsigned long)(dh->dyn_sym_tab[ELF_R_SYM(rel->r_info)].st_value);
+#ifdef DEBUG
+    pf(__func__); pf(" value "); ph(value); pf("\n");
+#endif
+    if (value)
+      *loc=(unsigned long)(dh->mem_base+value);
+    else
+      *loc=(unsigned long)_dl_sym(dh,ELF_R_SYM(rel->r_info));
   } else if (typ==R_386_COPY)  {	/* 5 */
     unsigned long len=dh->dyn_sym_tab[ELF_R_SYM(rel->r_info)].st_size;
     void*from=_dl_sym_next(dh,ELF_R_SYM(rel->r_info));
@@ -66,7 +73,11 @@ static int _dl_apply_relocate(struct _dl_handle*dh,_dl_rel_t*rel) {
 #endif
 #ifdef __arm__
   if (typ==R_ARM_ABS32) {		/*  2 */
-    *loc=(unsigned long)(dh->mem_base+dh->dyn_sym_tab[ELF_R_SYM(rel->r_info)].st_value);
+    unsigned long value=(unsigned long)(dh->dyn_sym_tab[ELF_R_SYM(rel->r_info)].st_value);
+    if (value)
+      *loc=(unsigned long)(dh->mem_base+value);
+    else
+      *loc=(unsigned long)_dl_sym(dh,ELF_R_SYM(rel->r_info));
   } else if (typ==R_ARM_COPY)  {	/* 20 */
     unsigned long len=dh->dyn_sym_tab[ELF_R_SYM(rel->r_info)].st_size;
     void*from=_dl_sym_next(dh,ELF_R_SYM(rel->r_info));
@@ -86,7 +97,11 @@ static int _dl_apply_relocate(struct _dl_handle*dh,_dl_rel_t*rel) {
 #endif
 #ifdef __x86_64__
   if (typ==R_X86_64_64) {			/* 1 */
-    *loc=(unsigned long)(dh->mem_base+dh->dyn_sym_tab[ELF_R_SYM(rel->r_info)].st_value);
+    unsigned long value=(unsigned long)(dh->dyn_sym_tab[ELF_R_SYM(rel->r_info)].st_value);
+    if (value)
+      *loc=(unsigned long)(dh->mem_base+value);
+    else
+      *loc=(unsigned long)_dl_sym(dh,ELF_R_SYM(rel->r_info));
   } else if (typ==R_X86_64_COPY)  {	/* 5 */
     unsigned long len=dh->dyn_sym_tab[ELF_R_SYM(rel->r_info)].st_size;
     void*from=_dl_sym_next(dh,ELF_R_SYM(rel->r_info));
