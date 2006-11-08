@@ -315,3 +315,19 @@ A: You will have to edit the "specs" file from gcc then.  John K. Hohm
    %{shared:dyn_so_start.o%s}%{!shared:%{static:start.o%s dyn_start.o%s}%{!static:dstart.o%s dyn_dstart.o%s}}
 
 
+Q: Dynamically linked binaries don't work on Fedora 6!
+A: Fedora 6 ships with binutils that can create non-standard ELF
+   binaries, and they hacked their gcc to generate them by default.  You
+   can see whether your gcc also does this with
+
+     gcc -dumpspecs|grep "hash-style=gnu"
+
+   and you can see if a shared library was build with this flag with
+
+     readelf -S libname.so|grep GNU_HASH
+
+   You can override this behavior like this:
+
+     diet-dyn gcc -Wl,--hash-style=sysv -shared -o libx.so x.c
+                  ^^^^^^^^^^^^^^^^^^^^^
+
