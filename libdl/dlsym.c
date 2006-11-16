@@ -1,47 +1,88 @@
 #include "_dl_int.h"
 
 #include "elf_hash.h"
+#include "gnu_hash.h"
+
+static void*_dlsym_elfhash(struct _dl_handle*dh,const unsigned char*symbol) {
+  unsigned long*sym=0;
+  unsigned int hash =elf_hash(symbol);
+  unsigned int bhash=hash%HASH_BUCKET_LEN(dh->hash_tab);
+  unsigned int*chain=HASH_CHAIN(dh->hash_tab);
+  unsigned char*name=(unsigned char*)dh->dyn_str_tab;
+  unsigned int ind=HASH_BUCKET(dh->hash_tab)[bhash];
+
+#ifdef DEBUG
+//  pf(__FUNCTION__); pf(": bucket("); ph(bhash); pf(",\""); pf(symbol); pf("\")\n");
+//  pf(__FUNCTION__); pf(": chain ("); ph(ind); pf(",\""); pf(symbol); pf("\")\n");
+#endif
+
+  while(ind) {
+    int ptr=dh->dyn_sym_tab[ind].st_name;
+#ifdef DEBUG
+//    pf(__FUNCTION__); pf(": symbol(\""); pf(name+ptr); pf("\",\""); pf(symbol); pf("\")\n");
+#endif
+    if (_dl_lib_strcmp(name+ptr,symbol)==0 && dh->dyn_sym_tab[ind].st_value!=0) {
+      if (dh->dyn_sym_tab[ind].st_shndx!=SHN_UNDEF) {
+	sym=(unsigned long*)(dh->mem_base+dh->dyn_sym_tab[ind].st_value);
+	break;	/* ok found ... */
+      }
+    }
+    ind=chain[ind];
+  }
+#ifdef DEBUG
+  pf(__FUNCTION__); pf(": symbol \""); pf(symbol); pf("\" @ "); ph((long)sym); pf("\n");
+#endif
+  return sym;
+}
+static void*_dlsym_gnuhash(struct _dl_handle*dh,const unsigned char*symbol) {
+  unsigned long*sym=0;
+  unsigned char*name=(unsigned char*)dh->dyn_str_tab;
+  unsigned int hash =gnu_hash(symbol);
+  unsigned int bhash=hash%GNU_HASH_BUCKET_LEN(dh->gnu_hash_tab);
+  unsigned int ind  =GNU_HASH_BUCKET(dh->gnu_hash_tab,bhash);
+#ifdef DEBUG
+  //pf(__FUNCTION__); pf(": bucket("); ph(bhash); pf(",\""); pf(symbol); pf("\")\n");
+  //pf(__FUNCTION__); pf(": chain ("); ph(ind); pf(",\""); pf(symbol); pf("\")\n");
+#endif
+  if (ind!=0xffffffff) {
+    unsigned int*chain=GNU_HASH_CHAIN(dh->gnu_hash_tab,ind);
+    unsigned int idx=chain[0];
+    unsigned int i,nr=chain[1];
+    chain+=2;
+    for (i=0;i<nr;++i) {
+      if (chain[i]==hash) {
+	unsigned int ptr=dh->dyn_sym_tab[idx+i].st_name;
+#ifdef DEBUG
+	//pf(__FUNCTION__); pf(": symbol(\""); pf(name+ptr); pf("\",\""); pf(symbol); pf("\")\n");
+#endif
+	if (_dl_lib_strcmp(name+ptr,symbol)==0 && dh->dyn_sym_tab[idx+i].st_value!=0) {
+	  if (dh->dyn_sym_tab[ind].st_shndx!=SHN_UNDEF) {
+	    sym=(unsigned long*)(dh->mem_base+dh->dyn_sym_tab[idx+i].st_value);
+	    break;
+	  }
+	}
+      }
+    }
+  }
+#ifdef DEBUG
+  pf(__FUNCTION__); pf(": symbol \""); pf(symbol); pf("\" @ "); ph((long)sym); pf("\n");
+#endif
+  return sym;
+}
 
 #ifdef __DIET_LD_SO__
 static
 #endif
 void *_dlsym(void* handle,const unsigned char* symbol) {
-  unsigned long*sym=0;
   if (handle) {
     struct _dl_handle*dh=(struct _dl_handle*)handle;
-    unsigned int hash =elf_hash(symbol);
-    unsigned int bhash=hash%HASH_BUCKET_LEN(dh->hash_tab);
-    unsigned int*chain=HASH_CHAIN(dh->hash_tab);
-    unsigned int ind;
-    unsigned char*name=(unsigned char*)dh->dyn_str_tab;
-
-#ifdef DEBUG
-//    pf(__FUNCTION__); pf(": bucket("); ph(bhash); pf(",\""); pf(symbol); pf("\")\n");
-#endif
-
-    ind=HASH_BUCKET(dh->hash_tab)[bhash];
-#ifdef DEBUG
-//    pf(__FUNCTION__); pf(": chain ("); ph(ind); pf(",\""); pf(symbol); pf("\")\n");
-#endif
-
-    while(ind) {
-      int ptr=dh->dyn_sym_tab[ind].st_name;
-#ifdef DEBUG
-//      pf(__FUNCTION__); pf(": symbol(\""); pf(name+ptr); pf("\",\""); pf(symbol); pf("\")\n");
-#endif
-      if (_dl_lib_strcmp(name+ptr,symbol)==0 && dh->dyn_sym_tab[ind].st_value!=0) {
-	if (dh->dyn_sym_tab[ind].st_shndx!=SHN_UNDEF) {
-	  sym=(unsigned long*)(dh->mem_base+dh->dyn_sym_tab[ind].st_value);
-	  break;	/* ok found ... */
-	}
-      }
-      ind=chain[ind];
-    }
-#ifdef DEBUG
-    pf(__FUNCTION__); pf(": symbol \""); pf(symbol); pf("\" @ "); ph((long)sym); pf("\n");
-#endif
+    // if the GNU hash-table is present... use it.
+    if (dh->gnu_hash_tab)
+      return _dlsym_gnuhash(dh,symbol);
+    else
+      return _dlsym_elfhash(dh,symbol);
   }
-  return sym;
+  return 0;
 }
 
 #ifdef __DIET_LD_SO__

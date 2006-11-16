@@ -83,6 +83,7 @@ struct _dl_handle {
   char *	dyn_str_tab;	/* dyn_name table */
   Elf_Sym *	dyn_sym_tab;	/* dynamic symbol table */
   _dl_rel_t*	plt_rel;	/* PLT relocation table */
+  unsigned int*gnu_hash_tab;	/* GNU hash table */
 
   /* INIT / FINI */
   void (*init)(void);
@@ -107,6 +108,10 @@ struct r_debug {
 
 #define HASH_CHAIN_LEN(p)	(*((p)+1))
 #define HASH_CHAIN(p)		((p)+2+HASH_BUCKET_LEN(p))
+
+#define GNU_HASH_BUCKET_LEN(p)	(*((p)))
+#define GNU_HASH_BUCKET(p,n)	((p)[(n)+1])
+#define GNU_HASH_CHAIN(p,n)	((p)+(1+GNU_HASH_BUCKET_LEN(p)+(n)))
 
 /* _dl_alloc.c */
 #if 0

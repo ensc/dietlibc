@@ -931,6 +931,12 @@ static struct _dl_handle* _dl_dyn_scan(struct _dl_handle*dh,Elf_Dyn*_dynamic) {
       pf(__FUNCTION__); pf(": have dyn_str_tab @ "); ph((long)dh->dyn_str_tab); pf("\n");
 #endif
       break;
+    case DT_GNU_HASH:
+      dh->gnu_hash_tab = (unsigned int*)(dh->mem_base+_dynamic[i].d_un.d_ptr);
+#ifdef DEBUG
+      pf(__FUNCTION__); pf(": have GNU-hash @ "); ph((long)dh->gnu_hash_tab); pf("\n");
+#endif
+      break;
 
       /* DYNAMIC INIT/FINI (constructors/destructors) */
     case DT_FINI:

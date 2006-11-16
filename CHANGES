@@ -29,6 +29,7 @@
   add ctime_r (for c-icap, Gernot Tenchio)
   fix strptime return value (Gernot Tenchio)
   fix R_386_32, R_ARM_ABS32, R_X86_64_64 in libdl (Gernot Tenchio)
+  Olaf: Added DT_GNU_HASH symbol resolver.
 
 0.30:
   put exception handling frames in read-only section on AMD64 and S/390
