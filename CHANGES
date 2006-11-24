@@ -30,6 +30,11 @@
   fix strptime return value (Gernot Tenchio)
   fix R_386_32, R_ARM_ABS32, R_X86_64_64 in libdl (Gernot Tenchio)
   Olaf: Added DT_GNU_HASH symbol resolver.
+  fix security bug in librpc.  You know, librpc, that stinking Sun code
+    full of problems?  Just adding that code was a bad mistake, I think.
+    I tried auditing it, but I nearly got a brain tumor when I opened
+    those files.  Thanks to Ilja van Sprundel for finding this bug (with
+    Google codesearch, no less! :-) )
 
 0.30:
   put exception handling frames in read-only section on AMD64 and S/390

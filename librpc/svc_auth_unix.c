@@ -67,8 +67,8 @@ register struct rpc_msg *msg;
 		gid_t area_gids[NGRPS];
 	} *area;
 	unsigned int auth_len;
-	int str_len, gid_len;
-	register int i;
+	unsigned int str_len, gid_len;
+	register unsigned int i;
 
 	area = (struct area *) rqst->rq_clntcred;
 	aup = &area->area_aup;
