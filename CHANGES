@@ -35,6 +35,7 @@
     I tried auditing it, but I nearly got a brain tumor when I opened
     those files.  Thanks to Ilja van Sprundel for finding this bug (with
     Google codesearch, no less! :-) )
+  work around stupid avahi bug
 
 0.30:
   put exception handling frames in read-only section on AMD64 and S/390

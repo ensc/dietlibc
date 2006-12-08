@@ -70,11 +70,10 @@ int res_query(const char *dname, int class, int type, unsigned char *answer, int
 	  if (pnpfd>=0) {
 	    int one=1;
 	    fcntl(pnpfd,F_SETFD,FD_CLOEXEC);
-	    if (v4pnp) {
-	      setsockopt(pnpfd,SOL_IP,IP_RECVTTL,&one,sizeof one);
-	      setsockopt(pnpfd,SOL_IP,IP_PKTINFO,&one,sizeof one);
-	    } else
+	    if (!v4pnp)
 	      setsockopt(pnpfd,IPPROTO_IPV6,IPV6_HOPLIMIT,&one,sizeof one);
+	    setsockopt(pnpfd,SOL_IP,IP_RECVTTL,&one,sizeof one);
+	    setsockopt(pnpfd,SOL_IP,IP_PKTINFO,&one,sizeof one);
 	  }
 	}
 #ifdef WANT_IPV6_DNS
@@ -84,16 +83,13 @@ int res_query(const char *dname, int class, int type, unsigned char *answer, int
 	  if (pnpfd!=-1) bind(pnpfd,(struct sockaddr*)&pnpsa6,sizeof(pnpsa6));
 	  pnpsa6.sin6_port=htons(5353);
 	  memcpy(&pnpsa6.sin6_addr,"\xff\x02\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xfb",16);
-	} else {
-#endif
-	  memset(&pnpsa4,0,sizeof(pnpsa4));
-	  pnpsa4.sin_family=AF_INET;
-	  if (pnpfd!=-1) bind(pnpfd,(struct sockaddr*)&pnpsa4,sizeof(pnpsa4));
-	  pnpsa4.sin_port=htons(5353);
-	  memcpy(&pnpsa4.sin_addr,"\xe0\x00\x00\xfb",4);  /* 224.0.0.251 */
-#ifdef WANT_IPV6_DNS
 	}
 #endif
+	memset(&pnpsa4,0,sizeof(pnpsa4));
+	pnpsa4.sin_family=AF_INET;
+	if (pnpfd!=-1) bind(pnpfd,(struct sockaddr*)&pnpsa4,sizeof(pnpsa4));
+	pnpsa4.sin_port=htons(5353);
+	memcpy(&pnpsa4.sin_addr,"\xe0\x00\x00\xfb",4);  /* 224.0.0.251 */
 
 	duh[1].events=POLLIN;
 	duh[1].fd=pnpfd;
@@ -109,9 +105,8 @@ int res_query(const char *dname, int class, int type, unsigned char *answer, int
       last.tv_sec=0;
 #ifdef WANT_PLUGPLAY_DNS
       if (duh[1].fd!=-1) {
-	if (v4pnp)
-	  sendto(pnpfd,packet,size,0,(struct sockaddr*)(&pnpsa4),sizeof(pnpsa4));
-	else
+	sendto(pnpfd,packet,size,0,(struct sockaddr*)(&pnpsa4),sizeof(pnpsa4));
+	if (!v4pnp)
 	  sendto(pnpfd,packet,size,0,(struct sockaddr*)(&pnpsa6),sizeof(pnpsa6));
       }
       /* if it doesn't work, we don't care */
@@ -191,6 +186,8 @@ int res_query(const char *dname, int class, int type, unsigned char *answer, int
 	      /* as per standard, discard packets with TTL!=255 */
 	      continue;
 	    }
+	    /* work around stupid avahi bug */
+	    inpkg[2]=(inpkg[2]&~0x1) | (packet[2]&0x1);
 	  }
 #else
 	  int len=read(duh[0].fd,inpkg,sizeof(inpkg));
