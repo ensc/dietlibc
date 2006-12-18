@@ -35,7 +35,9 @@
     I tried auditing it, but I nearly got a brain tumor when I opened
     those files.  Thanks to Ilja van Sprundel for finding this bug (with
     Google codesearch, no less! :-) )
-  work around stupid avahi bug
+  accept mDNS packets with set recursion desired bit
+  add const to cfgetispeed and cfgetospeed arguments
+  fix off-by-one in getdelim (reported by Ilja van Sprundel)
 
 0.30:
   put exception handling frames in read-only section on AMD64 and S/390

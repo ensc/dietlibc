@@ -390,9 +390,9 @@ struct termios {
 
 int tcgetattr(int fd, struct termios *termios_p) __THROW;
 int tcsetattr(int fd, int optional_actions, struct termios *termios_p) __THROW;
-speed_t cfgetospeed(struct termios *termios_p) __THROW;
+speed_t cfgetospeed(const struct termios *termios_p) __THROW;
 int cfsetospeed(struct termios *termios_p, speed_t speed) __THROW;
-speed_t cfgetispeed(struct termios *termios_p) __THROW;
+speed_t cfgetispeed(const struct termios *termios_p) __THROW;
 int cfsetispeed(struct termios *termios_p, speed_t speed) __THROW;
 void cfmakeraw(struct termios *t) __THROW;
 
