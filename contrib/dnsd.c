@@ -288,38 +288,10 @@ int main() {
     int len;
     int interface=0;
     if (s4!=-1 && s6!=-1) {
-      if (s4!=-1) {
+      if (s4!=-1)
 	recv4();
-#if 0
-	if ((len=recvmsg(s4,&mh,0))==-1) {
-	  perror("recvmsg");
-	  return 3;
-	}
-	peer=(struct sockaddr*)&sa4;
-	sl=sizeof(sa4);
-
-	for (x=CMSG_FIRSTHDR(&mh); x; x=CMSG_NXTHDR(&mh,x))
-	  if (x->cmsg_level==SOL_IP && x->cmsg_type==IP_PKTINFO) {
-	    struct in_pktinfo* y=(struct in_pktinfo*)(CMSG_DATA(x));
-	    interface=y->ipi_ifindex;
-	    break;
-	  }
-
-	handle(s4,buf,len,interface);
-#endif
-      } else {
+      else
 	recv6();
-#if 0
-	sl=sizeof(sa6);
-	if ((len=recvfrom(s6,buf,PKGSIZE,0,(struct sockaddr*)&sa6,&sl))==-1) {
-	  perror("recvfrom");
-	  return 3;
-	}
-	peer=(struct sockaddr*)&sa6;
-
-	handle(s6,buf,len,sa6.sin6_scope_id);
-#endif
-      }
     } else {
       pfd[0].fd=s4; pfd[0].events=POLLIN;
       pfd[1].fd=s6; pfd[1].events=POLLIN;
@@ -331,38 +303,10 @@ int main() {
       case 0:
 	continue;
       }
-      if (pfd[0].revents & POLLIN) {
+      if (pfd[0].revents & POLLIN)
 	recv4();
-#if 0
-	if ((len=recvmsg(s4,&mh,0))==-1) {
-	  perror("recvmsg");
-	  return 3;
-	}
-	peer=(struct sockaddr*)&sa4;
-	sl=sizeof(sa4);
-
-	for (x=CMSG_FIRSTHDR(&mh); x; x=CMSG_NXTHDR(&mh,x))
-	  if (x->cmsg_level==SOL_IP && x->cmsg_type==IP_PKTINFO) {
-	    struct in_pktinfo* y=(struct in_pktinfo*)(CMSG_DATA(x));
-	    interface=y->ipi_ifindex;
-	    break;
-	  }
-
-	handle(s4,buf,len,interface);
-#endif
-      }
-      if (pfd[1].revents & POLLIN) {
+      if (pfd[1].revents & POLLIN)
 	recv6();
-#if 0
-	sl=sizeof(sa6);
-	if ((len=recvfrom(s6,buf,sizeof(buf),0,(struct sockaddr*)&sa6,&sl))==-1) {
-	  perror("recvfrom");
-	  return 3;
-	}
-	peer=(struct sockaddr*)&sa6;
-	handle(s6,buf,len,sa6.sin6_scope_id);
-#endif
-      }
     }
   }
   return 0;
