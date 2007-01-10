@@ -7,6 +7,8 @@
 #include "dietstdio.h"
 #include "dietwarning.h"
 
+#define MAX_WIDTH 10*1024
+
 static inline unsigned long skip_to(const char *format) {
   unsigned long nr;
   for (nr=0; format[nr] && (format[nr]!='%'); ++nr);
@@ -14,17 +16,20 @@ static inline unsigned long skip_to(const char *format) {
 }
 
 #define A_WRITE(fn,buf,sz)	((fn)->put((void*)(buf),(sz),(fn)->data))
+#define B_WRITE(fn,buf,sz)	{ if ((unsigned long)(sz) > (((unsigned long)(int)(-1))>>1) || len+(int)(sz)<len) return -1; A_WRITE(fn,buf,sz); } while (0)
 
 static const char pad_line[2][16]= { "                ", "0000000000000000", };
-static inline int write_pad(struct arg_printf* fn, int len, int padwith) {
+static int write_pad(int* dlen,struct arg_printf* fn, int len, int padwith) {
   int nr=0;
+  if (len<0 || *dlen+len<len) return -1;
   for (;len>15;len-=16,nr+=16) {
     A_WRITE(fn,pad_line[(padwith=='0')?1:0],16);
   }
   if (len>0) {
     A_WRITE(fn,pad_line[(padwith=='0')?1:0],(unsigned int)len); nr+=len;
   }
-  return nr;
+  *dlen += nr;
+  return 0;
 }
 
 int __v_printf(struct arg_printf* fn, const char *format, va_list arg_ptr)
@@ -37,7 +42,7 @@ int __v_printf(struct arg_printf* fn, const char *format, va_list arg_ptr)
   while (*format) {
     unsigned long sz = skip_to(format);
     if (sz) {
-      A_WRITE(fn,format,sz); len+=sz;
+      B_WRITE(fn,format,sz); len+=sz;
       format+=sz;
     }
     if (*format=='%') {
@@ -118,12 +123,14 @@ inn_printf:
       case '9':
 	if(flag_dot) return -1;
 	width=strtoul(format-1,(char**)&s,10);
+	if (width>MAX_WIDTH) return -1;
 	if (ch=='0' && !flag_left) padwith='0';
 	format=s;
 	goto inn_printf;
 
       case '*':
 	width=va_arg(arg_ptr,int);
+	if (width>MAX_WIDTH) return -1; /* width is unsiged, so this catches <0, too */
 	goto inn_printf;
 
       case '.':
@@ -137,13 +144,14 @@ inn_printf:
 	  preci=tmp<0?0:tmp;
 	  format=s;
 	}
+	if (preci>MAX_WIDTH) return -1;
 	goto inn_printf;
 
       /* print a char or % */
       case 'c':
 	ch=(char)va_arg(arg_ptr,int);
       case '%':
-	A_WRITE(fn,&ch,1); ++len;
+	B_WRITE(fn,&ch,1); ++len;
 	break;
 
 #ifdef WANT_ERROR_PRINTF
@@ -151,7 +159,7 @@ inn_printf:
       case 'm':
 	s=strerror(_errno);
 	sz=strlen(s);
-	A_WRITE(fn,s,sz); len+=sz;
+	B_WRITE(fn,s,sz); len+=sz;
 	break;
 #endif
       /* print a string */
@@ -173,7 +181,7 @@ print_out:
 	int vs;
 	
 	if (! (width||preci) ) {
-	  A_WRITE(fn,s,sz); len+=sz;
+	  B_WRITE(fn,s,sz); len+=sz;
 	  break;
 	}
 	
@@ -188,35 +196,41 @@ print_out:
 	if (!flag_left) {
 	  if (flag_dot) {
 	    vs=preci>sz?preci:sz;
-	    len+=write_pad(fn,(signed int)width-(signed int)vs,' ');
+	    if (write_pad(&len,fn,(signed int)width-(signed int)vs,' '))
+	      return -1;
 	    if (todo) {
-	      A_WRITE(fn,sign,todo);
+	      B_WRITE(fn,sign,todo);
 	      len+=todo;
 	    }
-	    len+=write_pad(fn,(signed int)preci-(signed int)sz,'0');
+	    if (write_pad(&len,fn,(signed int)preci-(signed int)sz,'0'))
+	      return -1;
 	  } else {
 	    if (todo && padwith=='0') {
-	      A_WRITE(fn,sign,todo);
+	      B_WRITE(fn,sign,todo);
 	      len+=todo; todo=0;
 	    }
-	    len+=write_pad(fn,(signed int)width-(signed int)sz, padwith);
+	    if (write_pad(&len,fn,(signed int)width-(signed int)sz, padwith))
+	      return -1;
 	    if (todo) {
-	      A_WRITE(fn,sign,todo);
+	      B_WRITE(fn,sign,todo);
 	      len+=todo;
 	    }
 	  }
-	  A_WRITE(fn,s,sz); len+=sz;
+	  B_WRITE(fn,s,sz); len+=sz;
 	} else if (flag_left) {
 	  if (todo) {
-	    A_WRITE(fn,sign,todo);
+	    B_WRITE(fn,sign,todo);
 	    len+=todo;
 	  }
-	  len+=write_pad(fn,(signed int)preci-(signed int)sz, '0');
-	  A_WRITE(fn,s,sz); len+=sz;
+	  if (write_pad(&len,fn,(signed int)preci-(signed int)sz, '0'))
+	    return -1;
+	  B_WRITE(fn,s,sz); len+=sz;
 	  vs=preci>sz?preci:sz;
-	  len+=write_pad(fn,(signed int)width-(signed int)vs, ' ');
+	  if ((signed int)width-(signed int)vs<0) return -1;
+	  if (write_pad(&len,fn,(signed int)width-(signed int)vs, ' '))
+	    return -1;
 	} else {
-	  A_WRITE(fn,s,sz); len+=sz;
+	  B_WRITE(fn,s,sz); len+=sz;
 	}
 	break;
       }
@@ -375,4 +389,3 @@ num_printf:
 }
 
 link_warning("__v_printf","warning: the printf functions add several kilobytes of bloat.")
-

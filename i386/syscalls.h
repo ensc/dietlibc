@@ -317,6 +317,7 @@
 #define __NR_vmsplice		316
 #define __NR_move_pages		317
 #define __NR_getcpu		318
+#define __NR_epoll_pwait	319
 
 
 #define syscall_weak(name,wsym,sym) \

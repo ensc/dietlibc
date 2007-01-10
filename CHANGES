@@ -38,6 +38,7 @@
   accept mDNS packets with set recursion desired bit
   add const to cfgetispeed and cfgetospeed arguments
   fix off-by-one in getdelim (reported by Ilja van Sprundel)
+  prevent integer overflows in printf (return -1, like Solaris)
 
 0.30:
   put exception handling frames in read-only section on AMD64 and S/390
