@@ -18,20 +18,23 @@ char myhostname[100];
 int namelen;
 struct sockaddr* peer;
 socklen_t sl;
+/* zeroconf/bonjour */
 int s6,s4;
+/* llmnr */
+int ls6,ls4;
 char ifname[10];
 
 struct sockaddr_in mysa4;
 struct sockaddr_in6 mysa6;
 
-static void handle(int s,char* buf,int len,int interface) {
+static void handle(int s,char* buf,int len,int interface,int llmnr) {
   int q;
   char* obuf=buf;
   char* after;
   int olen=len;
   if (len<8*2) return;			/* too short */
   buf[len]=0;
-  if ((buf[2]&0xf8) != 0) return;		/* not query */
+  if ((buf[2]&(llmnr?0xfd:0xf8)) != 0) return;		/* not query */
   q=(((unsigned int)(buf[4])) << 8) | buf[5];
   if (q!=1) return;			/* cannot handle more than 1 query */
   if (buf[6] || buf[7]) return;		/* answer count must be 0 */
@@ -101,7 +104,7 @@ static void handle(int s,char* buf,int len,int interface) {
 
 struct sockaddr_in sa4;
 struct sockaddr_in6 sa6;
-struct pollfd pfd[2];
+struct pollfd pfd[4];
 
 struct msghdr mh;
 struct iovec iv;
@@ -174,13 +177,13 @@ static int v4if() {
   return 0;
 }
 
-static void recv4() {
+static void recv4(int s) {
   int len;
   int interface;
 
   mh.msg_name=&sa4;
   mh.msg_namelen=sizeof(sa4);
-  if ((len=recvmsg(s4,&mh,0))==-1) {
+  if ((len=recvmsg(s,&mh,0))==-1) {
     perror("recvmsg");
     exit(3);
   }
@@ -190,15 +193,15 @@ static void recv4() {
   interface=v4if();
   getip(interface);
 
-  handle(s4,buf,len,interface);
+  handle(s,buf,len,interface,s==ls4);
 }
 
-static void recv6() {
+static void recv6(int s) {
   int len,interface;
 
   mh.msg_name=&sa6;
   mh.msg_namelen=sizeof(sa6);
-  if ((len=recvmsg(s6,&mh,0))==-1) {
+  if ((len=recvmsg(s,&mh,0))==-1) {
     perror("recvmsg");
     exit(3);
   }
@@ -212,10 +215,70 @@ static void recv6() {
 
   getip(interface);
 
-  handle(s6,buf,len,interface);
+  handle(s,buf,len,interface,s==ls6);
+}
+
+static void init_sockets(int* sock6,int* sock4,int port,char* v6ip,char* v4ip) {
+  int s4,s6;
+  *sock6=-1; *sock4=-1;
+  s6=socket(PF_INET6,SOCK_DGRAM,IPPROTO_UDP);
+  s4=socket(PF_INET,SOCK_DGRAM,IPPROTO_UDP);
+  if (s4==-1 && s6==-1) {
+    perror("socket");
+    return;
+  }
+  if (s6!=-1) {
+    memset(&sa6,0,sizeof(sa6));
+    sa6.sin6_family=PF_INET6;
+    sa6.sin6_port=htons(port);
+    if (bind(s6,(struct sockaddr*)&sa6,sizeof(struct sockaddr_in6))==-1) {
+      perror("bind IPv6");
+      close(s6);
+      s6=-1;
+    }
+  }
+  if (s4!=-1) {
+    memset(&sa4,0,sizeof(sa4));
+    sa4.sin_family=PF_INET;
+    sa4.sin_port=htons(port);
+    if (bind(s4,(struct sockaddr*)&sa4,sizeof(struct sockaddr_in))==-1) {
+      if (errno!=EADDRINUSE || s6==-1)
+	perror("bind IPv4");
+      close(s4);
+      s4=-1;
+    }
+  }
+  if (s4==-1 && s6==-1) return;
+
+  {
+    int val=255;
+    int one=1;
+    if (s6!=-1) {
+      struct ipv6_mreq opt;
+      setsockopt(s6,IPPROTO_IPV6,IPV6_UNICAST_HOPS,&val,sizeof(val));
+      setsockopt(s6,IPPROTO_IPV6,IPV6_MULTICAST_LOOP,&one,sizeof(one));
+      memcpy(&opt.ipv6mr_multiaddr,v6ip,16);
+      opt.ipv6mr_interface=0;
+      setsockopt(s6,IPPROTO_IPV6,IPV6_ADD_MEMBERSHIP,&opt,sizeof opt);
+//      setsockopt(s6,IPPROTO_IPV6,IPV6_PKTINFO,&one,sizeof one);
+    }
+    {
+      struct ip_mreq opt;
+      int s=(s4==-1?s6:s4);
+      setsockopt(s,SOL_IP,IP_TTL,&val,sizeof(val));
+      memcpy(&opt.imr_multiaddr.s_addr,v4ip,4);
+      opt.imr_interface.s_addr=0;
+      setsockopt(s,IPPROTO_IP,IP_ADD_MEMBERSHIP,&opt,sizeof(opt));
+      setsockopt(s,SOL_IP,IP_PKTINFO,&one,sizeof one);
+    }
+  }
+
+  *sock4=s4;
+  *sock6=s6;
 }
 
 int main() {
+  int n=-1;
   mh.msg_name=&sa4;
   mh.msg_namelen=sizeof(sa4);
   mh.msg_iov=&iv;
@@ -230,84 +293,34 @@ int main() {
     return 1;
   }
   namelen=strlen(myhostname);
-  s6=socket(PF_INET6,SOCK_DGRAM,IPPROTO_UDP);
-  s4=socket(PF_INET,SOCK_DGRAM,IPPROTO_UDP);
-  if (s4==-1 && s6==-1) {
-    perror("socket");
+
+  init_sockets(&s6,&s4,5353,"\xff\x02\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xfb","\xe0\x00\x00\xfb");
+  init_sockets(&ls6,&ls4,5355,"\xff\x02\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x03","\xe0\x00\x00\xfc");
+
+  pfd[0].events=pfd[1].events=pfd[2].events=pfd[3].events=POLLIN;
+  if (s6!=-1) pfd[++n].fd=s6;
+  if (s4!=-1) pfd[++n].fd=s4;
+  if (ls6!=-1) pfd[++n].fd=ls6;
+  if (ls4!=-1) pfd[++n].fd=ls4;
+  if (!++n)
     return 2;
-  }
-  if (s6!=-1) {
-    memset(&sa6,0,sizeof(sa6));
-    sa6.sin6_family=PF_INET6;
-    sa6.sin6_port=htons(5353);
-    if (bind(s6,(struct sockaddr*)&sa6,sizeof(struct sockaddr_in6))==-1) {
-      perror("bind IPv6");
-      close(s6);
-      s6=-1;
-    }
-  }
-  if (s4!=-1) {
-    memset(&sa4,0,sizeof(sa4));
-    sa4.sin_family=PF_INET;
-    sa4.sin_port=htons(5353);
-    if (bind(s4,(struct sockaddr*)&sa4,sizeof(struct sockaddr_in))==-1) {
-      if (errno!=EADDRINUSE || s6==-1)
-	perror("bind IPv4");
-      close(s4);
-      s4=-1;
-    }
-  }
-  if (s4==-1 && s6==-1) return 2;
-
-  {
-    int val=255;
-    int one=1;
-    if (s6!=-1) {
-      struct ipv6_mreq opt;
-      setsockopt(s6,IPPROTO_IPV6,IPV6_UNICAST_HOPS,&val,sizeof(val));
-      setsockopt(s6,IPPROTO_IPV6,IPV6_MULTICAST_LOOP,&one,sizeof(one));
-      memcpy(&opt.ipv6mr_multiaddr,"\xff\x02\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xfb",16);
-      opt.ipv6mr_interface=0;
-      setsockopt(s6,IPPROTO_IPV6,IPV6_ADD_MEMBERSHIP,&opt,sizeof opt);
-//      setsockopt(s6,IPPROTO_IPV6,IPV6_PKTINFO,&one,sizeof one);
-    }
-    {
-      struct ip_mreq opt;
-      int s=(s4==-1?s6:s4);
-      setsockopt(s,SOL_IP,IP_TTL,&val,sizeof(val));
-      memcpy(&opt.imr_multiaddr.s_addr,"\xe0\x00\x00\xfb",4);
-      opt.imr_interface.s_addr=0;
-      setsockopt(s,IPPROTO_IP,IP_ADD_MEMBERSHIP,&opt,sizeof(opt));
-      setsockopt(s,SOL_IP,IP_PKTINFO,&one,sizeof one);
-    }
-  }
-
   for (;;) {
-    /* 1500 is the MTU for UDP, I figure we won't longer packets */
-    /* add 1 to be able to add \0 */
-    int len;
-    int interface=0;
-    if (s4!=-1 && s6!=-1) {
-      if (s4!=-1)
-	recv4();
-      else
-	recv6();
-    } else {
-      pfd[0].fd=s4; pfd[0].events=POLLIN;
-      pfd[1].fd=s6; pfd[1].events=POLLIN;
-      switch (poll(pfd,2,5*1000)) {
-      case -1:
-	if (errno==EINTR) continue;
-	perror("poll");
-	return 1;
-      case 0:
-	continue;
-      }
-      if (pfd[0].revents & POLLIN)
-	recv4();
-      if (pfd[1].revents & POLLIN)
-	recv6();
+    int i;
+    switch (poll(pfd,n,5*1000)) {
+    case -1:
+      if (errno==EINTR) continue;
+      perror("poll");
+      return 1;
+    case 0:
+      continue;
     }
+    for (i=0; i<n; ++i)
+      if (pfd[i].revents & POLLIN) {
+	if (pfd[i].fd==s6 || pfd[i].fd==ls6)
+	  recv6(pfd[i].fd);
+	else
+	  recv4(pfd[i].fd);
+      }
   }
   return 0;
 }

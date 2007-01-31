@@ -40,6 +40,9 @@
   fix off-by-one in getdelim (reported by Ilja van Sprundel)
   prevent integer overflows in printf (return -1, like Solaris)
   fix putenv (Nikola Vladov)
+  use time_t in struct stat for the time values
+  support LLMNR in dnsd (no idea if it works, apparently only Vista
+    supports it)
 
 0.30:
   put exception handling frames in read-only section on AMD64 and S/390

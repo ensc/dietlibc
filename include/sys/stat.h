@@ -21,11 +21,11 @@ struct stat {
 	unsigned long	st_size;
 	unsigned long	st_blksize;
 	unsigned long	st_blocks;
-	  signed long	st_atime;
+	time_t		st_atime;
 	unsigned long	__unused1;
-	  signed long	st_mtime;
+	time_t		st_mtime;
 	unsigned long	__unused2;
-	  signed long	st_ctime;
+	time_t		st_ctime;
 	unsigned long	__unused3;
 	unsigned long	__unused4;
 	unsigned long	__unused5;
@@ -53,13 +53,13 @@ __extension__	long long	st_size __attribute__((__packed__));
 	unsigned long	st_blocks;	/* Number 512-byte blocks allocated. */
 	unsigned long	__pad4;		/* future possible st_blocks high bits */
 
-	unsigned long	st_atime;
+	time_t		st_atime;
 	unsigned long	__pad5;
 
-	  signed long	st_mtime;
+	time_t		st_mtime;
 	unsigned long	__pad6;
 
-	unsigned long	st_ctime;
+	time_t		st_ctime;
 	unsigned long	__pad7;		/* will be high 32 bits of ctime someday */
 
 __extension__	unsigned long long	st_ino __attribute__((__packed__));
@@ -104,13 +104,13 @@ struct stat64 {
 	unsigned char	__pad4[8];
 	uint32_t	st_blocks;
 
-	uint32_t	st_atime;
+	time_t		st_atime;
 	uint32_t	st_atime_nsec;
 
-	uint32_t	st_mtime;
+	time_t		st_mtime;
 	uint32_t	st_mtime_nsec;
 
-	uint32_t	st_ctime;
+	time_t		st_ctime;
 	uint32_t	st_ctime_nsec;
 
 	uint32_t	__unused4;
@@ -118,6 +118,7 @@ struct stat64 {
 };
 
 #elif defined(__sparc__)
+
 struct stat {
 	uint16_t	st_dev;
 	unsigned long	st_ino;
@@ -127,11 +128,11 @@ struct stat {
 	uint16_t	st_gid;
 	uint16_t	st_rdev;
 	long		st_size;
-	long		st_atime;
+	time_t		st_atime;
 	unsigned long	__unused1;
-	long		st_mtime;
+	time_t		st_mtime;
 	unsigned long	__unused2;
-	long		st_ctime;
+	time_t		st_ctime;
 	unsigned long	__unused3;
 	long		st_blksize;
 	long		st_blocks;
@@ -161,19 +162,21 @@ __extension__	long long	st_size;
 	unsigned char	__pad4[8];
 	uint32_t	st_blocks;
 
-	 int32_t	st_atime;
+	time_t		st_atime;
 	uint32_t	__unused1;
 
-	 int32_t	st_mtime;
+	time_t		st_mtime;
 	uint32_t	__unused2;
 
-	 int32_t	st_ctime;
+	time_t		st_ctime;
 	uint32_t	__unused3;
 
 	uint32_t	__unused4;
 	uint32_t	__unused5;
 };
+
 #elif defined(__alpha__)
+
 struct stat {
 	uint32_t	st_dev;
 	uint32_t	st_ino;
@@ -183,15 +186,17 @@ struct stat {
 	uint32_t	st_gid;
 	uint32_t	st_rdev;
 	signed long	st_size;
-	signed long	st_atime;
-	signed long	st_mtime;
-	signed long	st_ctime;
+	time_t		st_atime;
+	time_t		st_mtime;
+	time_t		st_ctime;
 	uint32_t	st_blksize;
 	int32_t		st_blocks;
 	uint32_t	st_flags;
 	uint32_t	st_gen;
 };
+
 #elif defined(__mips__)
+
 struct stat {
 	uint32_t	st_dev;
 	long		st_pad1[3];		/* Reserved for network id */
@@ -249,6 +254,7 @@ __extension__ long long	st_size;
 __extension__ long long	st_blocks;
 };
 #elif defined(__powerpc__) || defined(__powerpc64__)
+
 #if defined(__powerpc__) && !defined(__powerpc64__)
 struct stat {
 	dev_t		st_dev;
@@ -261,11 +267,11 @@ struct stat {
 	off_t		st_size;
 	unsigned long	st_blksize;
 	unsigned long	st_blocks;
-	  signed long	st_atime;
+	time_t		st_atime;
 	unsigned long	__unused1;
-	  signed long	st_mtime;
+	time_t		st_mtime;
 	unsigned long	__unused2;
-	  signed long	st_ctime;
+	time_t		st_ctime;
 	unsigned long	__unused3;
 	unsigned long	__unused4;
 	unsigned long	__unused5;
@@ -282,11 +288,11 @@ struct stat {
 	off_t		st_size;
 	unsigned long	st_blksize;
 	unsigned long	st_blocks;
-	unsigned long	st_atime;
+	time_t		st_atime;
 	unsigned long	st_atime_nsec;
-	unsigned long	st_mtime;
+	time_t		st_mtime;
 	unsigned long	st_mtime_nsec;
-	unsigned long	st_ctime;
+	time_t		st_ctime;
 	unsigned long	st_ctime_nsec;
 	unsigned long	__unused4;
 	unsigned long	__unused5;
@@ -309,11 +315,11 @@ __extension__	long long st_size;		/* Size of file, in bytes.  */
 	long st_blksize;		/* Optimal block size for I/O.  */
 
 __extension__	long long st_blocks;		/* Number 512-byte blocks allocated. */
-	long st_atime;			/* Time of last access.  */
+	time_t st_atime;			/* Time of last access.  */
 	unsigned long int __unused1;
-	long st_mtime;			/* Time of last modification.  */
+	time_t st_mtime;			/* Time of last modification.  */
 	unsigned long int __unused2;
-	long st_ctime;			/* Time of last status change.  */
+	time_t st_ctime;			/* Time of last status change.  */
 	unsigned long int __unused3;
 	unsigned long int __unused4;
 	unsigned long int __unused5;
@@ -332,11 +338,11 @@ struct stat {
 	unsigned long	st_size;
 	unsigned long	st_blksize;
 	unsigned long	st_blocks;
-	  signed long	st_atime;
+	time_t		st_atime;
 	unsigned long	__unused1;
-	  signed long	st_mtime;
+	time_t		st_mtime;
 	unsigned long	__unused2;
-	  signed long	st_ctime;
+	time_t		st_ctime;
 	unsigned long	__unused3;
 	unsigned long	__unused4;
 	unsigned long	__unused5;
@@ -371,13 +377,13 @@ __extension__	long long	st_size;
 	unsigned long	__pad4;		/* future possible st_blocks high bits */
 #endif
 
-	  signed long	st_atime;
+	time_t		st_atime;
 	unsigned long	__pad5;
 
-	  signed long	st_mtime;
+	time_t		st_mtime;
 	unsigned long	__pad6;
 
-	  signed long	st_ctime;
+	time_t		st_ctime;
 	unsigned long	__pad7;		/* will be high 32 bits of ctime someday */
 
 __extension__	unsigned long long	st_ino;
@@ -394,11 +400,11 @@ struct stat {
         uint32_t	__pad1;
         unsigned long	st_rdev;
         unsigned long	st_size;
-        unsigned long	st_atime;
+        time_t		st_atime;
         unsigned long	__reserved0;    /* reserved for atime.nanoseconds */
-        unsigned long	st_mtime;
+        time_t		st_mtime;
         unsigned long	__reserved1;    /* reserved for mtime.nanoseconds */
-        unsigned long	st_ctime;
+        time_t		st_ctime;
         unsigned long	__reserved2;    /* reserved for ctime.nanoseconds */
         unsigned long	st_blksize;
         long		st_blocks;
@@ -418,11 +424,11 @@ struct stat {
 	unsigned long	st_size;
 	unsigned long	st_blksize;
 	unsigned long	st_blocks;
-	unsigned long	st_atime;
+	time_t		st_atime;
 	unsigned long	__unused1;
-	unsigned long	st_mtime;
+	time_t		st_mtime;
 	unsigned long	__unused2;
-	unsigned long	st_ctime;
+	time_t		st_ctime;
 	unsigned long	__unused3;
 	unsigned long	__unused4;
 	unsigned long	__unused5;
@@ -446,11 +452,11 @@ __extension__	long long	st_size;
 	unsigned char	__pad4[4];
 	unsigned long	__pad5; 	/* future possible st_blocks high bits */
 	unsigned long	st_blocks;	/* Number 512-byte blocks allocated. */
-	unsigned long	st_atime;
+	time_t		st_atime;
 	unsigned long	__pad6;
-	unsigned long	st_mtime;
+	time_t		st_mtime;
 	unsigned long	__pad7;
-	unsigned long	st_ctime;
+	time_t		st_ctime;
 	unsigned long	__pad8; 	/* will be high 32 bits of ctime someday */
 __extension__	unsigned long long	st_ino;
 };
@@ -466,11 +472,11 @@ struct stat {
        uint16_t		st_reserved2;   /* old st_gid */
        unsigned long	st_rdev;
        unsigned long	st_size;
-       unsigned long	st_atime;
+       time_t		st_atime;
        unsigned long	st_spare1;
-       unsigned long	st_mtime;
+       time_t		st_mtime;
        unsigned long	st_spare2;
-       unsigned long	st_ctime;
+       time_t		st_ctime;
        unsigned long	st_spare3;
        long		st_blksize;
        long		st_blocks;
@@ -503,16 +509,17 @@ struct stat64 {
 	unsigned long	st_blksize;
 
 	unsigned long long st_blocks;
- 	unsigned long	st_atime;
+ 	time_t		st_atime;
 	unsigned long	__unused1;
-	unsigned long	st_mtime;
+	time_t		st_mtime;
 	unsigned long	__unused2;
-	unsigned long	st_ctime;
+	time_t		st_ctime;
 	unsigned long	__unused3;
 	unsigned long long st_ino;
 };
 
 #elif defined(__x86_64__)
+
 struct stat {
 	unsigned long	st_dev;
 	unsigned long	st_ino;
@@ -525,11 +532,11 @@ struct stat {
 	unsigned long	st_size;
 	unsigned long	st_blksize;
 	unsigned long	st_blocks;
-	unsigned long	st_atime;
+	time_t		st_atime;
 	unsigned long	__reserved0;
-	unsigned long	st_mtime;
+	time_t		st_mtime;
 	unsigned long	__reserved1;
-	unsigned long	st_ctime;
+	time_t		st_ctime;
 	unsigned long	__reserved2;
 	long		__unused[3];
 };
@@ -546,11 +553,11 @@ struct stat {
 	uint32_t	__pad;
 	unsigned long	st_rdev;
 	unsigned long	st_size;
-	unsigned long	st_atime;
+	time_t		st_atime;
 	unsigned long	reserved;
-	unsigned long	st_mtime;
+	time_t		st_mtime;
 	unsigned long	reserved2;
-	unsigned long	st_ctime;
+	time_t		st_ctime;
 	unsigned long	reserved3;
 	unsigned long	st_blksize;
 	long		st_blocks;
