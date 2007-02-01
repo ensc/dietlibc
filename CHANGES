@@ -44,6 +44,7 @@
   support LLMNR in dnsd (no idea if it works, apparently only Vista
     supports it)
   fix ftell (Jens Laas)
+  fix getaddrinfo (return more than just the first IP) (Gernot Tenchio)
 
 0.30:
   put exception handling frames in read-only section on AMD64 and S/390

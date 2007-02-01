@@ -13,7 +13,7 @@ int main() {
   memset(&hints,0,sizeof(hints));
   hints.ai_family=AF_UNSPEC;
   hints.ai_flags=0;
-  hints.ai_socktype=SOCK_STREAM;
+  hints.ai_socktype=0;
   if ((gaierr = getaddrinfo(NULL,"6010",&hints,&aitop)) != 0) {
     printf("error: %.100s\n",gai_strerror(gaierr));
     exit(0);

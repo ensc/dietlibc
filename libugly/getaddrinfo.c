@@ -28,9 +28,10 @@ int getaddrinfo(const char *node, const char *service, const struct addrinfo *hi
       struct hostent *H;
       int herrno=0;
       char buf[4096];
-      int lookupok=0;
+      int lookupok=0, i;
       char* interface;
       h.h_addr_list=(char**)buf+16;
+      h.h_addr_list[1]=0;
       if (node) {
 	if ((interface=strchr(node,'%'))) ++interface;
 	if (family==PF_INET6 && inet_pton(AF_INET,node,buf)) continue;
@@ -57,7 +58,9 @@ int getaddrinfo(const char *node, const char *service, const struct addrinfo *hi
 	}
 	lookupok=1;
       }
-      if (lookupok) {
+      if (!lookupok) continue;
+
+      for (i=0; h.h_addr_list[i]; ++i) {
 	struct ai_v6 {
 	  struct addrinfo ai;
 	  union {
@@ -67,19 +70,20 @@ int getaddrinfo(const char *node, const char *service, const struct addrinfo *hi
 	  char name[1];
 	} *foo;
 	unsigned short port;
-	int len=sizeof(struct ai_v6)+(h.h_name?strlen(h.h_name):0);
+	int len;
+
+	len=sizeof(struct ai_v6)+(h.h_name?strlen(h.h_name):0);
+
 	if (!(foo=malloc(len))) goto error;
 	foo->ai.ai_next=0;
-	foo->ai.ai_socktype=SOCK_STREAM;
-	foo->ai.ai_protocol=IPPROTO_TCP;
 	foo->ai.ai_addrlen=family==PF_INET6?sizeof(struct sockaddr_in6):sizeof(struct sockaddr_in);
 	foo->ai.ai_addr=(struct sockaddr*)&foo->ip;
 	if (family==PF_INET6) {
 	  memset(&foo->ip,0,sizeof(foo->ip));
-	  memmove(&foo->ip.ip6.sin6_addr,h.h_addr_list[0],16);
+	  memmove(&foo->ip.ip6.sin6_addr,h.h_addr_list[i],16);
 	  if (interface) foo->ip.ip6.sin6_scope_id=if_nametoindex(interface);
 	} else {
-	  memmove(&foo->ip.ip4.sin_addr,h.h_addr_list[0],4);
+	  memmove(&foo->ip.ip4.sin_addr,h.h_addr_list[i],4);
 	}
 	foo->ip.ip6.sin6_family=foo->ai.ai_family=family;
 #ifdef WANT_PLUGPLAY_DNS
@@ -94,56 +98,40 @@ int getaddrinfo(const char *node, const char *service, const struct addrinfo *hi
 	  memmove(foo->name,h.h_name,strlen(h.h_name)+1);
 	} else
 	  foo->ai.ai_canonname=0;
-	if (!hints || hints->ai_socktype!=SOCK_DGRAM) {	/* TCP is OK */
-	  char *x;
+
+	for (foo->ai.ai_socktype=SOCK_STREAM; ; foo->ai.ai_socktype=SOCK_DGRAM) {
+	  char* type,* x;
+	  if (foo->ai.ai_socktype==SOCK_STREAM) {	/* TCP */
+	    if (hints->ai_socktype==SOCK_DGRAM) continue;
+	    foo->ai.ai_protocol=IPPROTO_TCP;
+	    type="tcp";
+	  } else {	/* UDP */
+	    if (hints->ai_socktype==SOCK_STREAM) break;
+	    foo->ai.ai_protocol=IPPROTO_UDP;
+	    type="udp";
+	  }
 	  port=htons(strtol(service?service:"0",&x,0));
 	  if (*x) {	/* service is not numeric :-( */
 	    struct servent* se;
-	    if ((se=getservbyname(service,"tcp"))) {	/* found a service. */
+	    if ((se=getservbyname(service,type)))
 	      port=se->s_port;
-blah1:
-	      if (family==PF_INET6)
-		foo->ip.ip6.sin6_port=port;
-	      else
-		foo->ip.ip4.sin_port=port;
-	      if (!*tmp) *tmp=&(foo->ai); else (*tmp)->ai_next=&(foo->ai);
-	      if (!(foo=malloc(len))) goto error;
-	      memmove(foo,*tmp,len);
-	      tmp=&(*tmp)->ai_next;
-	      foo->ai.ai_addr=(struct sockaddr*)&foo->ip;
-	      if (foo->ai.ai_canonname)
-		foo->ai.ai_canonname=foo->name;
-	    } else {
+	    else {
 	      freeaddrinfo(*res);
 	      return EAI_SERVICE;
 	    }
-	  } else goto blah1;
-	}
-	foo->ai.ai_socktype=SOCK_DGRAM;
-	foo->ai.ai_protocol=IPPROTO_UDP;
-	if (!hints || hints->ai_socktype!=SOCK_STREAM) {	/* UDP is OK */
-	  char *x;
-	  port=htons(strtol(service?service:"0",&x,0));
-	  if (*x) {	/* service is not numeric :-( */
-	    struct servent* se;
-	    if ((se=getservbyname(service,"udp"))) {	/* found a service. */
-	      port=se->s_port;
-blah2:
-	      if (family==PF_INET6)
-		foo->ip.ip6.sin6_port=port;
-	      else
-		foo->ip.ip4.sin_port=port;
-	      if (!*tmp) *tmp=&(foo->ai); else (*tmp)->ai_next=&(foo->ai);
-	      if (!(foo=malloc(len))) goto error;
-	      memmove(foo,*tmp,len);
-	      tmp=&(*tmp)->ai_next;
-	      foo->ai.ai_addr=(struct sockaddr*)&foo->ip;
-	      foo->ai.ai_canonname=foo->name;
-	    } else {
-	      freeaddrinfo(*res);
-	      return EAI_SERVICE;
-	    }
-	  } else goto blah2;
+	  }
+	  if (family==PF_INET6)
+	    foo->ip.ip6.sin6_port=port;
+	  else
+	    foo->ip.ip4.sin_port=port;
+	  if (!*tmp) *tmp=&(foo->ai); else (*tmp)->ai_next=&(foo->ai);
+	  if (!(foo=malloc(len))) goto error;
+	  memmove(foo,*tmp,len);
+	  tmp=&(*tmp)->ai_next;
+	  foo->ai.ai_addr=(struct sockaddr*)&foo->ip;
+	  if (foo->ai.ai_canonname)
+	    foo->ai.ai_canonname=foo->name;
+	  if (foo->ai.ai_socktype==SOCK_DGRAM) break;
 	}
 	free(foo);
       }
