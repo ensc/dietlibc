@@ -85,7 +85,7 @@ int getaddrinfo(const char *node, const char *service, const struct addrinfo *hi
 #ifdef WANT_PLUGPLAY_DNS
 	if (family==AF_INET6 && node) {
 	  int l=strlen(node);
-	  if (!strcmp(node-6,".local"))
+	  if (l>6 && !strcmp(node+l-6,".local"))
 	    foo->ip.ip6.sin6_scope_id=__dns_plugplay_interface;
 	}
 #endif
