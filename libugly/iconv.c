@@ -91,7 +91,6 @@ utf16le:
       if (*outbytesleft<1) goto bloat;
       if (v>0xff) ++result;
       *out=(unsigned char)v;
-      ++j;
       break;
     case UCS_2:
       if (*outbytesleft<2) goto bloat;
