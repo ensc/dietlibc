@@ -45,6 +45,11 @@
     supports it)
   fix ftell (Jens Laas)
   fix getaddrinfo (return more than just the first IP) (Gernot Tenchio)
+  make sure to declare __dietlibc__ during compilation of the lib
+    itself, so we can have more portable code in the libc code behind
+    #ifndef __dietlibc__ (see ftw64 for an example)
+  fix off-by-one in iconv
+  add missing brackets in dn_skipname
 
 0.30:
   put exception handling frames in read-only section on AMD64 and S/390

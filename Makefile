@@ -186,6 +186,8 @@ SAFE_CFLAGS=$(CFLAGS)
 SAFER_CFLAGS=$(CFLAGS)
 endif
 
+CC+=-D__dietlibc__
+
 $(OBJDIR)/crypt.o: libcrypt/crypt.c
 	$(CROSS)$(CC) $(INC) $(SAFER_CFLAGS) -c $< -o $@
 
