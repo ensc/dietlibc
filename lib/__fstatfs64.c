@@ -17,7 +17,7 @@ int fstatfs64(int fd, struct statfs64 *__buf) {
   }
   return 0;
 #else
-  return __dietlibc_fstatfs64(fd,sizeof(*__buf),buf);
+  return __dietlibc_fstatfs64(fd,sizeof(*__buf),__buf);
 #endif
 }
 #endif

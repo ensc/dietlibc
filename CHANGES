@@ -50,6 +50,11 @@
     #ifndef __dietlibc__ (see ftw64 for an example)
   fix off-by-one in iconv
   add missing brackets in dn_skipname
+  strptime also fills in tm_wday and tm_yday (Gernot Tenchio)
+  x86-64 getpriority has bias 20 (Rene Rebe)
+  fix typo in fstatfs64 (Gernot Tenchio)
+  fix infinite loop in getaddrinfo (Nikola Vladov)
+  don't include sys/stat.h in stdio.h and unistd.h (Gernot Tenchio)
 
 0.30:
   put exception handling frames in read-only section on AMD64 and S/390

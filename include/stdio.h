@@ -3,8 +3,8 @@
 
 #include <sys/cdefs.h>
 #include <sys/types.h>
-#include <sys/stat.h>
 #include <stdarg.h>
+#include <endian.h>
 
 __BEGIN_DECLS
 
@@ -89,7 +89,7 @@ int fseeko_unlocked(FILE *stream, off_t offset, int whence) __THROW;
 off_t ftello(FILE *stream) __THROW;
 off_t ftello_unlocked(FILE *stream) __THROW;
 
-#ifndef __NO_STAT64
+#if __WORDSIZE == 32
 int fseeko64(FILE *stream, loff_t offset, int whence) __THROW;
 int fseeko64_unlocked(FILE *stream, loff_t offset, int whence) __THROW;
 loff_t ftello64(FILE *stream) __THROW;

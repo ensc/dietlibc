@@ -3,7 +3,7 @@
 
 #include <sys/cdefs.h>
 #include <sys/types.h>
-#include <sys/stat.h>
+#include <endian.h>
 #include <sys/fsuid.h>
 #include <sys/select.h>
 
@@ -34,7 +34,7 @@ int access (const char *__name, int __type) __THROW;
 #define STDERR_FILENO  2
 
 off_t lseek(int fildes, off_t offset, int whence) __THROW;
-#ifndef __NO_STAT64
+#if __WORDSIZE == 32
 loff_t lseek64(int fildes, loff_t offset, int whence) __THROW;
 #if defined _FILE_OFFSET_BITS && _FILE_OFFSET_BITS == 64
 #define lseek(fildes,offset,whence) lseek64(fildes,offset,whence)
@@ -145,7 +145,7 @@ int setreuid(uid_t ruid, uid_t euid) __THROW;
 
 int truncate(const char *path, off_t length) __THROW;
 int ftruncate(int fd, off_t length) __THROW;
-#ifndef __NO_STAT64
+#if __WORDSIZE == 32
 int truncate64(const char *path, loff_t length) __THROW;
 int ftruncate64(int fd, loff_t length) __THROW;
 #endif
@@ -243,7 +243,7 @@ int vhangup(void) __THROW;
 
 extern char **__environ;
 
-#ifndef __NO_STAT64
+#if __WORDSIZE == 32
 #if defined _FILE_OFFSET_BITS && _FILE_OFFSET_BITS == 64
 #define open open64
 #define creat creat64

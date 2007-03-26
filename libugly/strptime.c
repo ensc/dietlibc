@@ -3,6 +3,8 @@
 #include <string.h>
 #include <strings.h>
 
+extern const short  __spm [];
+
 static const char*  months [12] = { 
     "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
@@ -22,6 +24,7 @@ static int getint(const char** s,int max) {
 
 char* strptime(const char* s,const char* format, struct tm* tm) {
   int i,j;
+  register time_t  day;
   while (*format) {
     switch (*format) {
     case ' ': case '\t':
@@ -140,5 +143,10 @@ char* strptime(const char* s,const char* format, struct tm* tm) {
       break;
     }
   }
+ 
+  day  = (tm->tm_year - 70) * 365 + (tm->tm_year - 69) / 4;
+  day += tm->tm_yday = __spm [tm->tm_mon] + tm->tm_mday-1 + (__isleap (tm->tm_year+1900) & (tm->tm_mon > 1));
+  tm->tm_wday = (day + 4) % 7;
+
   return (char*)s;
 }
