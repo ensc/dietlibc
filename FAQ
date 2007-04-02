@@ -300,7 +300,7 @@ A: Use size(1) to find the real size, like this:
 
 
 Q: I get an error message at link time, that "main" can not be found.
-A: Disable WANT_STACKGAP in dietfeautres.h or try upgrading your binutils.
+A: Disable WANT_STACKGAP in dietfeatures.h or try upgrading your binutils.
 
 
 Q: I want to have a gcc that uses the diet libc by default.
