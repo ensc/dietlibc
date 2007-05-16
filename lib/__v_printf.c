@@ -19,9 +19,9 @@ static inline unsigned long skip_to(const char *format) {
 #define B_WRITE(fn,buf,sz)	{ if ((unsigned long)(sz) > (((unsigned long)(int)(-1))>>1) || len+(int)(sz)<len) return -1; A_WRITE(fn,buf,sz); } while (0)
 
 static const char pad_line[2][16]= { "                ", "0000000000000000", };
-static int write_pad(int* dlen,struct arg_printf* fn, int len, int padwith) {
+static int write_pad(unsigned int* dlen,struct arg_printf* fn, unsigned int len, int padwith) {
   int nr=0;
-  if (len<0 || *dlen+len<len) return -1;
+  if ((int)len<0 || *dlen+len<len) return -1;
   for (;len>15;len-=16,nr+=16) {
     A_WRITE(fn,pad_line[(padwith=='0')?1:0],16);
   }
@@ -34,7 +34,7 @@ static int write_pad(int* dlen,struct arg_printf* fn, int len, int padwith) {
 
 int __v_printf(struct arg_printf* fn, const char *format, va_list arg_ptr)
 {
-  int len=0;
+  unsigned int len=0;
 #ifdef WANT_ERROR_PRINTF
   int _errno = errno;
 #endif
