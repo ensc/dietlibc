@@ -56,6 +56,7 @@
   fix infinite loop in getaddrinfo (Nikola Vladov)
   don't include sys/stat.h in stdio.h and unistd.h (Gernot Tenchio)
   work around gcc optimizing away our int overflow check in printf
+  some work on printf
 
 0.30:
   put exception handling frames in read-only section on AMD64 and S/390

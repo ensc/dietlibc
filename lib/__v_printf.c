@@ -51,7 +51,7 @@ int __v_printf(struct arg_printf* fn, const char *format, va_list arg_ptr)
 #define s u_str.s
 
       int retval;
-      unsigned char ch, padwith=' ';
+      unsigned char ch, padwith=' ', precpadwith=' ';
 
       char flag_in_sign=0;
       char flag_upcase=0;
@@ -172,7 +172,7 @@ inn_printf:
 	if (flag_dot && sz>preci) sz=preci;
 	preci=0;
 	flag_dot^=flag_dot;
-	padwith=' ';
+	padwith=precpadwith=' ';
 
 print_out:
       {
@@ -192,46 +192,46 @@ print_out:
 	  sz-=todo;
 	  width-=todo;
 	}
-	
-	if (!flag_left) {
-	  if (flag_dot) {
-	    vs=preci>sz?preci:sz;
-	    if (write_pad(&len,fn,(signed int)width-(signed int)vs,' '))
-	      return -1;
-	    if (todo) {
-	      B_WRITE(fn,sign,todo);
-	      len+=todo;
-	    }
-	    if (write_pad(&len,fn,(signed int)preci-(signed int)sz,'0'))
-	      return -1;
-	  } else {
-	    if (todo && padwith=='0') {
-	      B_WRITE(fn,sign,todo);
-	      len+=todo; todo=0;
-	    }
-	    if (write_pad(&len,fn,(signed int)width-(signed int)sz, padwith))
-	      return -1;
-	    if (todo) {
-	      B_WRITE(fn,sign,todo);
-	      len+=todo;
-	    }
-	  }
-	  B_WRITE(fn,s,sz); len+=sz;
-	} else if (flag_left) {
-	  if (todo) {
-	    B_WRITE(fn,sign,todo);
-	    len+=todo;
-	  }
-	  if (write_pad(&len,fn,(signed int)preci-(signed int)sz, '0'))
+
+	/* These are the cases for 1234 or "1234" respectively:
+	      %.6u -> "001234"
+	      %6u  -> "  1234"
+	      %06u -> "001234"
+	      %-6u -> "1234  "
+	      %.6s -> "1234"
+	      %6s  -> "  1234"
+	      %06s -> "  1234"
+	      %-6s -> "1234  "
+	      %6.5u -> " 01234"
+	      %6.5s -> "  1234"
+           In this code, for %6.5s, 6 is width, 5 is preci.
+	   flag_dot means there was a '.' and preci is set.
+	   flag_left means there was a '-'.
+	   sz is 4 (strlen("1234")).
+	   padwith will be '0' for %06u, ' ' otherwise.
+	   precpadwith is '0' for %u, ' ' for %s.
+	 */
+
+	if (flag_dot && width==0) width=preci;
+	if (!flag_dot) preci=sz;
+	if (!flag_left) { /* do left-side padding */
+	  if (write_pad(&len,fn,width-preci,padwith))
 	    return -1;
-	  B_WRITE(fn,s,sz); len+=sz;
-	  vs=preci>sz?preci:sz;
-	  if ((signed int)width-(signed int)vs<0) return -1;
-	  if (write_pad(&len,fn,(signed int)width-(signed int)vs, ' '))
-	    return -1;
-	} else {
-	  B_WRITE(fn,s,sz); len+=sz;
 	}
+	if (todo) {
+	  B_WRITE(fn,sign,todo);
+	  len+=todo;
+	}
+	/* do preci padding */
+	if (write_pad(&len,fn,preci-sz,precpadwith))
+	  return -1;
+	/* write actual string */
+	B_WRITE(fn,s,sz); len+=sz;
+	if (flag_left) {
+	  if (write_pad(&len,fn,width-preci,padwith))
+	    return -1;
+	}
+	
 	break;
       }
 
@@ -327,6 +327,8 @@ num_printf:
 	  ++sz;
 	} else flag_in_sign=0;
 
+	precpadwith='0';
+
 	goto print_out;
 
 #ifdef WANT_FLOATING_POINT_IN_PRINTF
@@ -374,6 +376,8 @@ num_printf:
 	  }
 	  
 	  sz=strlen(s);
+	  if (width<sz) width=sz;
+	  padwith='0';
 	  flag_dot=0;
 	  flag_hash=0;
 	  goto print_out;
