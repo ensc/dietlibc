@@ -2,7 +2,7 @@
 
 void swab(const void *src, void *dest, ssize_t nbytes)
 {
-  int i;
+  ssize_t i;
   const char *s=src;
   char *d=dest;
   nbytes&=~1;

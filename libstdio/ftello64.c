@@ -1,5 +1,6 @@
 #include <dietstdio.h>
 #include <unistd.h>
+#include <sys/stat.h>
 
 #ifndef __NO_STAT64
 off64_t ftello64_unlocked(FILE *stream) {

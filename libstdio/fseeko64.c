@@ -1,5 +1,6 @@
 #include <dietstdio.h>
 #include <unistd.h>
+#include <sys/stat.h>
 
 #ifndef __NO_STAT64
 int fseeko64_unlocked(FILE *stream, off64_t offset, int whence) {

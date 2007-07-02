@@ -621,9 +621,9 @@ extern int lstat64(const char *__file, struct stat64 *__buf) __THROW;
 #endif
 #endif
 
-#define major(dev) (((dev)>>8) & 0xff)
-#define minor(dev) ((dev) & 0xff)
-#define makedev(major, minor) ((((uint32_t) (major)) << 8) | ((uint32_t) (minor)))
+#define major(dev) ({ unsigned long long l=(dev); ((l>>8) & 0xfff) | (l >> 32) & 0xfffff000; })
+#define minor(dev) ({ unsigned long long l=(dev); (l & 0xff) | ((l>>12)&0xffffff00); })
+#define makedev(maj,min) ({ unsigned long long a=(maj), i=(min); ((a&0xfff)<<8) | (i&0xff) | ((a&~0xfff)<<32) | ((i&0xfffff00)<<12); })
 
 extern int chmod (const char *__file, mode_t __mode) __THROW;
 extern int fchmod (int __fd, mode_t __mode) __THROW;

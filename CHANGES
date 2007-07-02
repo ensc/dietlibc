@@ -57,6 +57,8 @@
   don't include sys/stat.h in stdio.h and unistd.h (Gernot Tenchio)
   work around gcc optimizing away our int overflow check in printf
   some work on printf
+  fix some compiler warnings
+  support long device major and minor
 
 0.30:
   put exception handling frames in read-only section on AMD64 and S/390
