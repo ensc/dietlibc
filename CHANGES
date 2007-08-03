@@ -59,6 +59,7 @@
   some work on printf
   fix some compiler warnings
   support long device major and minor
+  add WANT_FREE_OVERWRITE in dietfeatures.h (see comment there)
 
 0.30:
   put exception handling frames in read-only section on AMD64 and S/390

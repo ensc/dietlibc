@@ -92,6 +92,13 @@
  * WARNING: this violates C99 */
 /* #define WANT_MALLOC_ZERO */
 
+/* do you want free to overwrite freed data immediately, in the hope of
+ * catching people accessing pointers after they were freed?  This does
+ * a memset with 0x55 as a value. which is not NULL and not -1.  Please
+ * note that this is the shotgun method for debugging, what you really
+ * want is valgrind. */
+/* #define WANT_FREE_OVERWRITE */
+
 /* This enables a stack gap.  Basically, the start code does not run
  * main but stackgap, which then does alloca(random()) and calls main.
  * The effect is that buffer overflow exploits will no longer be able to

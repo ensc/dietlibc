@@ -130,7 +130,7 @@ char* strptime(const char* s,const char* format, struct tm* tm) {
 	tm->tm_year=(i<69)?i+100:i;
 	break;
       case 'Y':
-	i=getint(&s,5);
+	i=getint(&s,4);
 	if (i==-1) return 0;
 	tm->tm_year=i-1900;
 	break;

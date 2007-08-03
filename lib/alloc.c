@@ -85,7 +85,11 @@ static void REGPARM(2) __small_free(void*_ptr,size_t _size) {
   size_t size=_size;
   size_t idx=get_index(size);
 
+#ifdef WANT_FREE_OVERWRITE
+  memset(ptr,0x55,size);	/* allways zero out small mem */
+#else
   memset(ptr,0,size);	/* allways zero out small mem */
+#endif
 
   ptr->next=__small_mem[idx];
   __small_mem[idx]=ptr;
@@ -180,6 +184,13 @@ void* __libc_calloc(size_t nmemb, size_t _size) {
     (*__errno_location())=ENOMEM;
     return 0;
   }
+#ifdef WANT_FREE_OVERWRITE
+  if (size<__MAX_SMALL_SIZE) {
+    void* x=malloc(size);
+    memset(x,0,size);
+    return x;
+  } else
+#endif
   return malloc(size);
 }
 void* calloc(size_t nmemb, size_t _size) __attribute__((weak,alias("__libc_calloc")));
