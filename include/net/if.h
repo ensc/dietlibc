@@ -23,11 +23,15 @@ __BEGIN_DECLS
 
 #define IFF_MULTICAST	0x1000		/* Supports multicast		*/
 
-#define IFF_VOLATILE	(IFF_LOOPBACK|IFF_POINTOPOINT|IFF_BROADCAST|IFF_MASTER|IFF_SLAVE|IFF_RUNNING)
-
 #define IFF_PORTSEL	0x2000          /* can set media type		*/
 #define IFF_AUTOMEDIA	0x4000		/* auto media select active	*/
 #define IFF_DYNAMIC	0x8000		/* dialup device with changing addresses*/
+
+#define IFF_LOWER_UP	0x10000		/* driver signals L1 up		*/
+#define IFF_DORMANT	0x20000		/* driver signals dormant	*/
+
+#define IFF_VOLATILE	(IFF_LOOPBACK|IFF_POINTOPOINT|IFF_BROADCAST|\
+		IFF_MASTER|IFF_SLAVE|IFF_RUNNING|IFF_LOWER_UP|IFF_DORMANT)
 
 struct ifmap {
   unsigned long mem_start;

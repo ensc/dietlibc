@@ -40,6 +40,9 @@ typedef uint32_t __be32;
 typedef uint64_t __le64;
 typedef uint64_t __be64;
 
+typedef uint16_t __sum16;
+typedef uint32_t __wsum;
+
 __END_DECLS
 
 #endif
