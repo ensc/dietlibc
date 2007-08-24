@@ -21,7 +21,7 @@ static void quicksort(char* base,size_t size,ssize_t l,ssize_t r,
   char* v=base+r*size;
   if (r<=l) return;
   for (;;) {
-    while (compar(base+(++i)*size,v)<0) ;
+    while (++i != r && compar(base+i*size,v)<0) ;
     while (compar(v,base+(--j)*size)<0) if (j == l) break;
     if (i >= j) break;
     exch(base,size,i,j);
@@ -46,5 +46,6 @@ void qsort(void* base,size_t nmemb,size_t size,int (*compar)(const void*,const v
     if (size*nmemb/nmemb != size) return;
   }
 #endif
-  quicksort(base,size,0,nmemb-1,compar);
+  if (nmemb>1)
+    quicksort(base,size,0,nmemb-1,compar);
 }

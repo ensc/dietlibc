@@ -15,23 +15,19 @@ extern unsigned long __guard;
 static tcbhead_t mainthread;
 
 static void setup_tls(void) {
-#if defined(__x86_64__)
-
   mainthread.tcb=&mainthread;
   mainthread.self=&mainthread;
 #if defined(WANT_SSP)
   mainthread.stack_guard=__guard;
 #endif
+
+#if defined(__x86_64__)
+
   arch_prctl(ARCH_SET_FS, &mainthread);
 
 #elif defined(__i386__)
 
   static unsigned int sd[4];
-  mainthread.tcb=&mainthread;
-  mainthread.self=&mainthread;
-#if defined(WANT_SSP)
-  mainthread.stack_guard=__guard;
-#endif
   sd[0]=-1;
   sd[1]=(unsigned long int)&mainthread;
   sd[2]=0xfffff; /* 4 GB limit */
@@ -40,6 +36,14 @@ static void setup_tls(void) {
     asm volatile ("movw %w0, %%gs" :: "q" (sd[0]*8+3));
   }
 
+#elif defined(__alpha__) || defined(__s390__)
+  __builtin_set_thread_pointer(&mainthread);
+#elif defined(__ia64__) || defined(__powerpc__)
+  register tcbhead_t* __thread_self __asm__("r13");
+  __thread_self=&mainthread;
+#elif defined(__sparc__)
+  register tcbhead_t* __thread_self __asm("%g7");
+  __thread_self=&mainthread;
 #else
 #warning "no idea how to enable TLS on this platform, edit lib/stackgap.c"
 #endif

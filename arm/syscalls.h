@@ -597,15 +597,18 @@
 #define __ARGS_mq_getsetattr		0
 #define __ARGS_waitid			0
 
-#define __ARGS_add_key			5
-#define __ARGS_request_key		4
-#define __ARGS_keyctl			3
-#define __ARGS_vserver			3
-#define __ARGS_ioprio_set		3
-#define __ARGS_ioprio_get		2
+#define __ARGS_add_key			1
+#define __ARGS_request_key		1
+#define __ARGS_keyctl			0
+#define __ARGS_vserver			0
+#define __ARGS_ioprio_set		0
+#define __ARGS_ioprio_get		0
 #define __ARGS_inotify_init		0
-#define __ARGS_inotify_add_watch	3
-#define __ARGS_inotify_rm_watch		2
+#define __ARGS_inotify_add_watch	0
+#define __ARGS_inotify_rm_watch		0
+#define __ARGS_mbind			1
+#define __ARGS_get_mempolicy		1
+#define __ARGS_set_mempolicy		1
 
 
 #ifdef __ASSEMBLER__
