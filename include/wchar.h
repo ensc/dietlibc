@@ -27,7 +27,7 @@ struct tm;
 
 typedef struct {
   int count;
-  unsigned long sofar;
+  wchar_t sofar;
 } mbstate_t;
 
 wint_t btowc(int);
