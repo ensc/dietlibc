@@ -94,6 +94,10 @@ wchar_t *wmemset(wchar_t *, wchar_t, size_t);
 int wprintf(const wchar_t *__restrict__, ...);
 int wscanf(const wchar_t *__restrict__, ...);
 
+#ifdef _XOPEN_SOURCE
+int wcwidth(wchar_t c);
+#endif
+
 __END_DECLS
 
 #endif
