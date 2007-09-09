@@ -13,7 +13,7 @@ typedef __WINT_TYPE__ wint_t;
 #else
 typedef unsigned int wint_t;
 #endif
-typedef unsigned long int wctype_t;
+typedef int (*wctype_t)(wint_t) __THROW __attribute__((__const__));
 
 #ifndef WCHAR_MIN
 #define WCHAR_MIN (-2147483647 - 1)

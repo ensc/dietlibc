@@ -1,3 +1,4 @@
+#define _XOPEN_SOURCE
 #include <wchar.h>
 
 int wcwidth(wchar_t c) {

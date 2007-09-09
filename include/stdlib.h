@@ -113,6 +113,7 @@ int clearenv(void);
 
 int mbtowc(wchar_t *pwc, const char *s, size_t n) __THROW;
 int wctomb(char *s, wchar_t wc) __THROW;
+size_t mbstowcs(wchar_t *dest, const char *src, size_t n) __THROW;
 
 __END_DECLS
 
