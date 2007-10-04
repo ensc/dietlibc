@@ -28,4 +28,20 @@ int main() {
   assert(wmemcmp(buf,L"ffnod",5)==0);
   assert(wmemmove(buf,buf+1,3)==buf);
   assert(wmemcmp(buf,L"fnood",5)==0);
+
+  /* check wcsncpy */
+  assert(wcsncpy(buf,L"fnord",8)==buf);
+  assert(wmemcmp(buf,L"fnord\0\0\0",8)==0);
+  buf[5]=L'x';
+  assert(wcsncpy(buf,L"test_",5)==buf);
+  assert(wmemcmp(buf,L"test_x\0\0",8)==0);
+
+  /* check wcsncat */
+  wmemset(buf,L'x',10);
+  wcscpy(buf,L"ab");
+  assert(wcsncat(buf,L"cd",5)==buf);	// normal case
+  assert(wmemcmp(buf,L"abcd\0xxxxx",10)==0);
+  assert(wcsncat(buf,L"efgh",2)==buf);	// truncation case
+  assert(wmemcmp(buf,L"abcdef\0xxx",10)==0);
+
 }
