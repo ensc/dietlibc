@@ -26,6 +26,7 @@ __BEGIN_DECLS
 #define MAP_DENYWRITE	0x2000		/* ETXTBSY */
 #define MAP_EXECUTABLE	0x4000		/* mark it as an executable */
 #define MAP_LOCKED	0x8000		/* pages are locked */
+#define MAP_POPULATE	0x10000
 #define MS_ASYNC	0x0001		/* sync memory asynchronously */
 #define MS_INVALIDATE	0x0002		/* invalidate mappings & caches */
 #define MS_SYNC		0x0004		/* synchronous memory sync */
@@ -44,6 +45,7 @@ __BEGIN_DECLS
 #define MAP_EXECUTABLE	0x4000		/* mark it as an executable */
 #define MAP_LOCKED	0x8000		/* lock the mapping */
 #define MAP_NORESERVE	0x10000		/* don't check for reservations */
+#define MAP_POPULATE	0x20000
 #define MS_ASYNC	1		/* sync memory asynchronously */
 #define MS_SYNC		2		/* synchronous memory sync */
 #define MS_INVALIDATE	4		/* invalidate the caches */
@@ -63,6 +65,7 @@ __BEGIN_DECLS
 #define MAP_EXECUTABLE	0x1000		/* mark it as an executable */
 #define MAP_LOCKED	0x2000		/* pages are locked */
 #define MAP_NORESERVE	0x4000		/* don't check for reservations */
+#define MAP_POPULATE	0x8000
 #define MS_ASYNC	1		/* sync memory asynchronously */
 #define MS_INVALIDATE	2		/* invalidate the caches */
 #define MS_SYNC		4		/* synchronous memory sync */
@@ -84,6 +87,7 @@ __BEGIN_DECLS
 #define MAP_GROWSDOWN	0x0100		/* stack-like segment */
 #define MAP_DENYWRITE	0x0800		/* ETXTBSY */
 #define MAP_EXECUTABLE	0x1000		/* mark it as an executable */
+#define MAP_POPULATE	0x8000
 #define MS_ASYNC	1		/* sync memory asynchronously */
 #define MS_INVALIDATE	2		/* invalidate the caches */
 #define MS_SYNC		4		/* synchronous memory sync */
@@ -103,6 +107,7 @@ __BEGIN_DECLS
 #define MAP_EXECUTABLE	0x1000		/* mark it as an executable */
 #define MAP_LOCKED	0x2000		/* pages are locked */
 #define MAP_NORESERVE	0x4000		/* don't check for reservations */
+#define MAP_POPULATE	0x8000
 #define MS_ASYNC	1		/* sync memory asynchronously */
 #define MS_INVALIDATE	2		/* invalidate the caches */
 #define MS_SYNC		4		/* synchronous memory sync */
@@ -124,6 +129,7 @@ __BEGIN_DECLS
 #define MAP_LOCKED	0x2000	/* pages are locked */
 #define MAP_NORESERVE	0x4000	/* don't check for reservations */
 #define MAP_GROWSDOWN	0x8000	/* stack-like segment */
+#define MAP_POPULATE	0x10000
 
 #define MS_SYNC 	1	/* synchronous memory sync */
 #define MS_ASYNC	2	/* sync memory asynchronously */
@@ -160,6 +166,7 @@ __BEGIN_DECLS
 #define MAP_EXECUTABLE	0x1000	/* mark it as an executable */
 #define MAP_LOCKED	0x2000	/* pages are locked */
 #define MAP_NORESERVE	0x4000	/* don't check for reservations */
+#define MAP_POPULATE	0x8000
 #define MAP_WRITECOMBINED 0x10000	/* write-combine the area */
 #define MAP_NONCACHED	0x20000	/* don't cache the memory */
 

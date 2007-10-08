@@ -32,7 +32,7 @@
 #define WANT_LD_SO_GDB_SUPPORT
 
 /* do you want smaller or faster string routines? */
-/* #define WANT_FASTER_STRING_ROUTINES */
+#define WANT_FASTER_STRING_ROUTINES
 
 /* define this to have strncpy zero-fill and not just zero-terminate the
  * string */
