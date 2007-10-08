@@ -44,4 +44,9 @@ int main() {
   assert(wcsncat(buf,L"efgh",2)==buf);	// truncation case
   assert(wmemcmp(buf,L"abcdef\0xxx",10)==0);
 
+  /* wcsstr */
+  wcscpy(buf,L"abracadabra");
+  assert(wcsstr(buf,L"abr")==buf);
+  assert(wcsstr(buf+1,L"abr")==buf+7);
+  assert(wcsstr(buf+8,L"abr")==0);
 }
