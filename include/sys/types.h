@@ -12,13 +12,10 @@ typedef unsigned long int clock_t;	/* Used for system times in
 					   clock ticks or CLOCKS_PER_SEC
 					   (see <time.h>). */
 
+typedef uint64_t fsblkcnt_t;
+typedef uint64_t fsfilcnt_t;
+
 /* TODO:
-     clockid_t
-             Used for clock ID type in the clock and timer functions.
-     fsblkcnt_t
-             Used for file system block counts
-     fsfilcnt_t
-             Used for file system file counts
      pthread_attr_t
              Used to identify a thread attribute object.
      pthread_cond_t
@@ -39,8 +36,6 @@ typedef unsigned long int clock_t;	/* Used for system times in
              Used for read-write lock attributes.
      pthread_t
              Used to identify a thread.
-     timer_t
-             Used for timer ID returned by timer_create().
 */
 
 #if defined(__alpha__) || defined(__ia64__) || defined(__sparc64__) || defined(__s390x__)
