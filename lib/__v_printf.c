@@ -80,8 +80,6 @@ inn_printf:
       /* FLAGS */
       case '#':
 	flag_hash=-1;
-      case 'z':
-	goto inn_printf;
 
       case 'h':
 	--flag_long;
@@ -95,6 +93,7 @@ inn_printf:
 #if __WORDSIZE == 64
       case 'j':
 #endif
+      case 'z':
       case 'l':
 	++flag_long;
 	goto inn_printf;
