@@ -3,6 +3,8 @@
   add btowc, wctype, iswctype
   add some wide char routines
   add statvfs, fstatvfs
+  add some amd64 asm string routines
+  add some constants for inotify
 
 0.31:
   getopt_long and getopt_long_only now refuse ambiguous abbreviations
