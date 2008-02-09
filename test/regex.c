@@ -101,6 +101,9 @@ int main() {
   assert(regexec(&r,"leitner@home.fefe.de",10,matches,0)==0);
   regfree(&r);
 
+  assert(regcomp(&r,"^chello[0-9]*.chello.[a-z][a-z]$",REG_EXTENDED)==0);
+  assert(regexec(&r,"chello089078194199.chello.pl",10,matches,0)==0);
+  regfree(&r);
 
 #if 0
   printf("regcomp %d\n",regcomp(&r,"\\.( ? ? ?\\.)*\\.",REG_EXTENDED|REG_NOSUB));
