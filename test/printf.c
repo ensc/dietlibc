@@ -38,7 +38,8 @@
 #define TEST_SNPRINTF(EXP,SZ, ...)			\
   {							\
     volatile char * args[] = { EXP, #SZ };		\
-    int	test_sz=MIN((SZ),sizeof(EXP))-1;		\
+    ssize_t	test_sz=MIN((SZ),sizeof(EXP))-1;	\
+    (void)args;						\
     TEST_INIT(EXP);					\
     rc=snprintf(buf+ALGN,(SZ),__VA_ARGS__);		\
     TEST_CHECK(EXP, test_sz);				\
@@ -80,6 +81,7 @@ int main()
 
   TEST("foobar",  "%s",     "foobar");
   TEST("01.23",   "%05.2f", 1.23);
+  TEST("001.2",   "%05.2g", 1.23);
 
   TEST("42",      "%i",     42);
   TEST("",        "%.0i",   0);
@@ -110,6 +112,24 @@ int main()
   TEST("+001",     "%+04i", 1);
 
   TEST("0x1",      "%#x",   1);
+
+  TEST("abcX",     "%2sX",  "abc");
+  TEST("abcX",     "%-2sX", "abc");
+
+  TEST("001234",   "%.6u",  1234);
+  TEST("-001234",  "%.6i",  -1234);
+  TEST("  1234",   "%6u",   1234);
+  TEST(" -1234",   "%6i",   -1234);
+  TEST("001234",   "%06u",  1234);
+  TEST("-01234",   "%06i",  -1234);
+  TEST("1234  ",   "%-6u",  1234);
+  TEST("-1234 ",   "%-6i",  -1234);
+  TEST("1234",     "%.6s",  "1234");
+  TEST("  1234",   "%6s",   "1234");
+  TEST("1234  ",   "%-6s",  "1234");
+  TEST(" 01234",   "%6.5u", 1234);
+  TEST("-01234",   "%6.5i", -1234);
+  TEST("  1234",   "%6.5s", "1234");
 
 #ifdef XSI_TESTS
   setlocale(LC_ALL, "de_DE");

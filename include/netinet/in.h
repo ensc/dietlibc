@@ -350,6 +350,7 @@ struct ipv6hdr {
 /* fnord */
 
 #define IPPORT_RESERVED 1024
+#define INET_ADDRSTRLEN 16
 #define INET6_ADDRSTRLEN 46
 
 #undef htonl

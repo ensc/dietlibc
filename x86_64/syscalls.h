@@ -325,6 +325,13 @@
 #define __NR_sync_file_range	277
 #define __NR_vmsplice		278
 #define __NR_move_pages		279
+#define __NR_utimensat		280
+#define __IGNORE_getcpu		/* implemented as a vsyscall */
+#define __NR_epoll_pwait	281
+#define __NR_signalfd		282
+#define __NR_timerfd		283
+#define __NR_eventfd		284
+#define __NR_fallocate		285
 
 #ifdef __PIC__
 #define syscall_weak(name,wsym,sym) \

@@ -1,6 +1,7 @@
 #include <endian.h>
 #include "dietfeatures.h"
 #include <string.h>
+#include <stdint.h>
 
 #ifdef WANT_SMALL_STRING_ROUTINES
 size_t strlen(const char *s) {
@@ -10,38 +11,88 @@ size_t strlen(const char *s) {
   return i;
 }
 #else
-static const unsigned long magic = 0x01010101;
+
+#if __WORDSIZE == 64
+typedef uint64_t	word_t;
+#elif __WORDSIZE == 32
+typedef uint32_t	word_t;
+#else
+#error unsupported __WORDSIZE
+#endif
+
+static word_t const	magic = (word_t)(0x0101010101010101ull);
 
 size_t strlen(const char *s)
 {
   const char *t = s;
-  unsigned long word;
+  word_t	word;
+  word_t	mask;
 
-  if (!s) return 0;
+  if (__unlikely(!s)) return 0;
 
   /* Byte compare up until word boundary */
-  for (; ((unsigned long) t & 3); t++)
+  for (; ((unsigned long) t & (sizeof(magic)-1)); t++)
     if (!*t) return t - s;
 
   /* Word compare */
   do {
-    word = *((unsigned long *) t); t += 4;
+    word = *((word_t const *) t); t += sizeof word;
     word = (word - magic) &~ word;
     word &= (magic << 7);
   } while (__likely(word == 0));
 
-#if BYTE_ORDER == LITTLE_ENDIAN
-  /* word & 0x80808080 == word */
-  word = (word - 1) & (magic << 10);
-  word += (word << 8) + (word << 16);
-  t += word >> 26;
-#else
-  if ((word & 0x80800000) == 0) {
-    word <<= 16;
-    t += 2;
+#if __BYTE_ORDER == __LITTLE_ENDIAN
+  (void)mask;
+  switch (sizeof(word)) {
+  case 8:
+    /* word & 0x8080808080808080 == word */
+    word = (word - 1) & (magic << 8);
+    word += (word << 32);
+    word += (word << 16);
+    word += (word << 8);
+    t += word >> 56;
+    break;
+
+  case 4:
+    /* word & 0x80808080 == word */
+    word = (word - 1) & (magic << 10);
+    word += (word << 8) + (word << 16);
+    t += word >> 26;
+    break;
+
+  default: { char exc[sizeof(word)==8]; (void)exc; }
   }
-  if ((word & 0x80000000) == 0) t += 1;
+#else
+  mask = (magic << 7);
+
+  switch (sizeof(word)) {
+  case 8:
+    mask <<= 4*8;
+    if ((word & mask) == 0) {
+      t     += 4;
+      word <<= 4*8;
+    }
+    /* fallthrough */
+
+  case 4:
+    mask <<= 2*8;
+    if ((word & mask) == 0) {
+      t     += 2;
+      word <<= 2*8;
+    }
+    /* fallthrough */
+
+  case 2:
+    mask <<= 1*8;
+    if ((word & mask) == 0) {
+      t     += 1;
+      word <<= 1*8;
+    }
+    break;
+
+  default: { char exc[sizeof(word)==8]; (void)exc; }
+  }
 #endif
-  return ((const char *) t) - 4 - s;
+  return t - sizeof(word) - s;
 }
 #endif

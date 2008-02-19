@@ -1,6 +1,6 @@
 #!/bin/sh
 
-TESTPROGRAMS="memccpy memchr memcmp memcpy memrchr strcasecmp strcmp strlen strncat strncpy strrchr strstr"
+TESTPROGRAMS="memccpy memchr memcmp memcpy memrchr strcasecmp strcmp strlen strncat strncpy strrchr strstr strspn strcspn strpbrk"
 
 for p in $TESTPROGRAMS; do
 echo "---";echo testing $p;echo "---"

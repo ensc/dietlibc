@@ -4,6 +4,7 @@
 #include <sys/cdefs.h>
 #include <sys/types.h>
 #include <sys/poll.h>
+#include <signal.h>
 
 __BEGIN_DECLS
 
@@ -65,6 +66,8 @@ int epoll_create(int size) __THROW;
 int epoll_ctl(int epfd, int op, int fd, struct epoll_event* event) __THROW;
 int epoll_wait(int epfd, struct epoll_event *events, int maxevents,
 	       int timeout) __THROW;
+int epoll_pwait(int epfd, struct epoll_event *events, int maxevents,
+	       int timeout, const sigset_t* sigmask) __THROW;
 
 __END_DECLS
 

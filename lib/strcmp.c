@@ -31,16 +31,16 @@ strcmp (const char *s1, const char *s2)
     while (1) {
         l1 = *lx1++;
         l2 = *lx2++;
-        if ((((l1 - MKW(0x1)) & ~l1) & MKW(0x80)) ||
-            ((((l2 - MKW(0x1)) & ~l2) & MKW(0x80))) || l1 != l2) {
+        if ((((l1 - MKW(0x1ul)) & ~l1) & MKW(0x80ul)) ||
+            ((((l2 - MKW(0x1ul)) & ~l2) & MKW(0x80ul))) || l1 != l2) {
             unsigned char c1, c2;
             while (1) {
-                c1 = l1 & 0xff;
-                c2 = l2 & 0xff;
+		c1 = GFC(l1);
+                c2 = GFC(l2);
                 if (!c1 || c1 != c2)
                     return (c1 - c2);
-                l1 >>= 8;
-                l2 >>= 8;
+                INCSTR(l1);
+                INCSTR(l2);
             }
         }
     }

@@ -293,6 +293,15 @@
 #define __NR_sync_file_range	307
 #define __NR_tee		308
 #define __NR_vmsplice		309
+/* Number 310 is reserved for new sys_move_pages */
+#define __NR_getcpu		311
+#define __NR_epoll_pwait	312
+#define __NR_utimes		313
+#define __NR_fallocate		314
+#define __NR_utimensat		315
+#define __NR_signalfd		316
+#define __NR_timerfd		317
+#define __NR_eventfd		318
 
 
 /* 

@@ -299,6 +299,19 @@
 #define __NR_unshare		299
 #define __NR_set_robust_list	300
 #define __NR_get_robust_list	301
+#define __NR_migrate_pages	302
+#define __NR_mbind		303
+#define __NR_get_mempolicy	304
+#define __NR_set_mempolicy	305
+#define __NR_kexec_load		306
+#define __NR_move_pages		307
+#define __NR_getcpu		308
+#define __NR_epoll_pwait	309
+#define __NR_utimensat		310
+#define __NR_signalfd		311
+#define __NR_timerfd		312
+#define __NR_eventfd		313
+#define __NR_fallocate		314
 
 #define syscall_weak(name,wsym,sym) \
 .text; \

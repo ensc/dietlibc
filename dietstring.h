@@ -11,6 +11,16 @@
 # define STRALIGN(x) (((unsigned long)x&3)?4-((unsigned long)x&3):0)
 #endif
 
+/* GFC(x)    - returns first character */
+/* INCSTR(x) - moves to next character */
+#if __BYTE_ORDER == __LITTLE_ENDIAN
+# define GFC(x) ((x)&0xff)
+# define INCSTR(x) do { x >>= 8; } while (0)
+#else
+# define GFC(x) (((x)>>(sizeof(x)*8-8))&0xff)
+# define INCSTR(x) do { x <<= 8; } while (0)
+#endif
+
 #define UNALIGNED(x,y) (((unsigned long)x & (sizeof (unsigned long)-1)) ^ ((unsigned long)y & (sizeof (unsigned long)-1)))
 
 #endif /* _DIET_STRING_H_ */

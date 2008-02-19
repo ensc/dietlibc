@@ -222,13 +222,17 @@ print_out:
 
 	if (flag_dot && width==0) width=preci;
 	if (!flag_dot) preci=sz;
-	if (!flag_left) { /* do left-side padding */
+	if (!flag_left && padwith==' ') { /* do left-side padding with spaces */
 	  if (write_pad(&len,fn,width-preci,padwith))
 	    return -1;
 	}
 	if (todo) {
 	  B_WRITE(fn,sign,todo);
 	  len+=todo;
+	}
+	if (!flag_left && padwith!=' ') { /* do left-side padding with '0' */
+	  if (write_pad(&len,fn,width-preci,padwith))
+	    return -1;
 	}
 	/* do preci padding */
 	if (write_pad(&len,fn,preci-sz,precpadwith))
@@ -385,7 +389,7 @@ num_printf:
 	  
 	  sz=strlen(s);
 	  if (width<sz) width=sz;
-	  padwith='0';
+	  precpadwith='0';
 	  flag_dot=0;
 	  flag_hash=0;
 	  goto print_out;

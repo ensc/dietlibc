@@ -25,9 +25,8 @@ strcpy (char *s1, const char *s2)
 
     while (1) {
 	l = *(const unsigned long *) s2;
-	if (((l - MKW(0x1)) & ~l) & MKW(0x80)) {
-	    unsigned char c;
-	    while ((*s1++ = (l & 0xff))) l>>=8;
+	if (((l - MKW(0x1ul)) & ~l) & MKW(0x80ul)) {
+	    while ((*s1++ = GFC(l))) INCSTR(l);
 	    return (res);
 	}
 	*(unsigned long *) s1 = l;

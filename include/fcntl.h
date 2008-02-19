@@ -624,8 +624,50 @@ extern int fcntl64 (int __fd, int __cmd, ...) __THROW;
 #endif
 
 #if defined(_LINUX_SOURCE) || defined(_GNU_SOURCE)
-ssize_t readahead(int fd, off64_t *offset, size_t count);
+ssize_t readahead(int fd, off64_t *offset, size_t count) __THROW;
 #endif
+
+#ifdef _GNU_SOURCE
+#define SPLICE_F_MOVE	(0x01)	/* move pages instead of copying */
+#define SPLICE_F_NONBLOCK (0x02) /* don't block on the pipe splicing (but */
+				 /* we may still block on the fd we splice */
+				 /* from/to, of course */
+#define SPLICE_F_MORE	(0x04)	/* expect more data */
+#define SPLICE_F_GIFT	(0x08)	/* pages passed in are a gift */
+
+long tee(int fd_in, int fd_out, size_t len, unsigned int flags) __THROW;
+
+#include <sys/uio.h>
+
+long vmsplice(int fd, const struct iovec *iov, unsigned long nr_segs, unsigned int flags) __THROW;
+long splice(int fd_in, loff_t *off_in, int fd_out, loff_t *off_out, size_t len, unsigned int flags) __THROW;
+
+int sync_file_range(int fd, off64_t offset, off64_t nbytes, unsigned int flags) __THROW;
+#endif
+
+#ifdef _ATFILE_SOURCE
+#define AT_FDCWD		-100    /* Special value used to indicate openat should use the current working directory. */
+#define AT_SYMLINK_NOFOLLOW	0x100   /* Do not follow symbolic links.  */
+#define AT_REMOVEDIR		0x200   /* Remove directory instead of unlinking file.  */
+#define AT_SYMLINK_FOLLOW	0x400   /* Follow symbolic links.  */
+
+int openat(int dirfd, const char *pathname, int flags, ...);
+int faccessat(int dirfd, const char *pathname, int mode, int flags);
+int fchmodat(int dirfd, const char *pathname, mode_t mode, int flags);
+int fchownat(int dirfd, const char *pathname, uid_t owner, gid_t group, int flags);
+int fstatat(int dirfd, const char *pathname, struct stat *buf, int flags);
+int futimesat(int dirfd, const char *pathname, const struct timeval times[2]);
+int linkat(int olddirfd, const char *oldpath, int newdirfd, const char *newpath, int flags);
+int mkdirat(int dirfd, const char *pathname, mode_t mode);
+int mknodat(int dirfd, const char *pathname, mode_t mode, dev_t dev);
+int readlinkat(int dirfd, const char *pathname, char *buf, size_t bufsiz);
+int renameat(int olddirfd, const char *oldpath, int newdirfd, const char *newpath);
+int symlinkat(const char *oldpath, int newdirfd, const char *newpath);
+int unlinkat(int dirfd, const char *pathname, int flags);
+int mkfifoat(int dirfd, const char *pathname, mode_t mode);
+int utimensat(int dirfd, const char *pathname, struct timespec* t);
+#endif
+
 
 __END_DECLS
 

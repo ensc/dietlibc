@@ -4,7 +4,7 @@
 char *strstr(const char *haystack, const char *needle) {
   size_t nl=strlen(needle);
   size_t hl=strlen(haystack);
-  int i;
+  size_t i;
   if (!nl) goto found;
   if (nl>hl) return 0;
   for (i=hl-nl+1; __likely(i); --i) {

@@ -5,6 +5,10 @@
   add statvfs, fstatvfs
   add some amd64 asm string routines
   add some constants for inotify
+  several fixes from Enrico Scholz (printf, string routines on big endian)
+  add some more syscalls
+  some minor cleanups
+  shrink some string functions (Kris Katterjohn)
 
 0.31:
   getopt_long and getopt_long_only now refuse ambiguous abbreviations

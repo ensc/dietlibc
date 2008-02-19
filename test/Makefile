@@ -13,7 +13,7 @@ gethostbyname_r getmntent getopt getpass getpwnam getservbyname getservbyport ge
 glob grent hasmntopt hello iconv if_nameindex ltostr malloc-debugger md5_testharness \
 memccpy memchr memcmp memcpy memrchr memusage mktime mmap_test pipe printf printftest \
 protoent prototypes putenv pwent rand48 read1 readdir regex select sendfile servent siglist \
-speed spent sprintf sscanf stdarg strcasecmp strcmp strlen strncat strncpy strptime strrchr \
+speed spent sprintf sscanf stdarg strcasecmp strcmp strncat strncpy strptime strrchr \
 strstr strtol sysenter ungetc waitpid
 
 test: $(TESTPROGRAMS)

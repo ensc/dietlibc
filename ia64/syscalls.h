@@ -279,7 +279,13 @@
 #define __NR_sync_file_range		1300
 #define __NR_tee			1301
 #define __NR_vmsplice			1302
-
+#define __NR_fallocate			1303
+#define __NR_getcpu			1304
+#define __NR_epoll_pwait		1305
+#define __NR_utimensat			1306
+#define __NR_signalfd			1307
+#define __NR_timerfd			1308
+#define __NR_eventfd			1309
 
 #define syscall(name, sym) \
 .text; \

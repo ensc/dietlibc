@@ -312,6 +312,18 @@
 #define __NR_tee			(__NR_Linux + 306)
 #define __NR_vmsplice			(__NR_Linux + 307)
 #define __NR_move_pages			(__NR_Linux + 308)
+#define __NR_set_robust_list		(__NR_Linux + 272)
+#define __NR_get_robust_list		(__NR_Linux + 273)
+#define __NR_kexec_load			(__NR_Linux + 274)
+#define __NR_getcpu			(__NR_Linux + 275)
+#define __NR_epoll_pwait		(__NR_Linux + 276)
+#define __NR_ioprio_set			(__NR_Linux + 277)
+#define __NR_ioprio_get			(__NR_Linux + 278)
+#define __NR_utimensat			(__NR_Linux + 279)
+#define __NR_signalfd			(__NR_Linux + 280)
+#define __NR_timerfd			(__NR_Linux + 281)
+#define __NR_eventfd			(__NR_Linux + 282)
+#define __NR_fallocate			(__NR_Linux + 283)
 
 #define syscall_weak(name,wsym,sym) \
 .text; \

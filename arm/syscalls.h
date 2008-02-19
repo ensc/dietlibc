@@ -293,6 +293,38 @@
 #define __NR_mbind			(__NR_SYSCALL_BASE+319)
 #define __NR_get_mempolicy		(__NR_SYSCALL_BASE+320)
 #define __NR_set_mempolicy		(__NR_SYSCALL_BASE+321)
+#define __NR_openat			(__NR_SYSCALL_BASE+322)
+#define __NR_mkdirat			(__NR_SYSCALL_BASE+323)
+#define __NR_mknodat			(__NR_SYSCALL_BASE+324)
+#define __NR_fchownat			(__NR_SYSCALL_BASE+325)
+#define __NR_futimesat			(__NR_SYSCALL_BASE+326)
+#define __NR_fstatat64			(__NR_SYSCALL_BASE+327)
+#define __NR_unlinkat			(__NR_SYSCALL_BASE+328)
+#define __NR_renameat			(__NR_SYSCALL_BASE+329)
+#define __NR_linkat			(__NR_SYSCALL_BASE+330)
+#define __NR_symlinkat			(__NR_SYSCALL_BASE+331)
+#define __NR_readlinkat			(__NR_SYSCALL_BASE+332)
+#define __NR_fchmodat			(__NR_SYSCALL_BASE+333)
+#define __NR_faccessat			(__NR_SYSCALL_BASE+334)
+					/* 335 for pselect6 */
+					/* 336 for ppoll */
+#define __NR_unshare			(__NR_SYSCALL_BASE+337)
+#define __NR_set_robust_list		(__NR_SYSCALL_BASE+338)
+#define __NR_get_robust_list		(__NR_SYSCALL_BASE+339)
+#define __NR_splice			(__NR_SYSCALL_BASE+340)
+#define __NR_arm_sync_file_range	(__NR_SYSCALL_BASE+341)
+#define __NR_sync_file_range2		__NR_arm_sync_file_range
+#define __NR_tee			(__NR_SYSCALL_BASE+342)
+#define __NR_vmsplice			(__NR_SYSCALL_BASE+343)
+#define __NR_move_pages			(__NR_SYSCALL_BASE+344)
+#define __NR_getcpu			(__NR_SYSCALL_BASE+345)
+					/* 346 for epoll_pwait */
+#define __NR_kexec_load			(__NR_SYSCALL_BASE+347)
+#define __NR_utimensat			(__NR_SYSCALL_BASE+348)
+#define __NR_signalfd			(__NR_SYSCALL_BASE+349)
+#define __NR_timerfd			(__NR_SYSCALL_BASE+350)
+#define __NR_eventfd			(__NR_SYSCALL_BASE+351)
+#define __NR_fallocate			(__NR_SYSCALL_BASE+352)
 
 /*
  * The following SWIs are ARM private.
@@ -609,6 +641,39 @@
 #define __ARGS_mbind			1
 #define __ARGS_get_mempolicy		1
 #define __ARGS_set_mempolicy		1
+
+#define __ARGS_openat			0
+#define __ARGS_mkdirat			0
+#define __ARGS_mknodat			0
+#define __ARGS_fchownat			1
+#define __ARGS_futimesat		0
+#define __ARGS_fstatat64		0
+#define __ARGS_unlinkat			0
+#define __ARGS_renameat			0
+#define __ARGS_linkat			1
+#define __ARGS_symlinkat		0
+#define __ARGS_readlinkat		0
+#define __ARGS_fchmodat			0
+#define __ARGS_faccessat		0
+					/* 335 for pselect6 */
+					/* 336 for ppoll */
+#define __ARGS_unshare			0
+#define __ARGS_set_robust_list		0
+#define __ARGS_get_robust_list		0
+#define __ARGS_splice			1
+#define __ARGS_arm_sync_file_range	0
+#define __ARGS_sync_file_range2		0
+#define __ARGS_tee			0
+#define __ARGS_vmsplice			0
+#define __ARGS_move_pages		1
+#define __ARGS_getcpu			0
+					/* 346 for epoll_pwait */
+#define __ARGS_kexec_load		0
+#define __ARGS_utimensat		0
+#define __ARGS_signalfd			0
+#define __ARGS_timerfd			0
+#define __ARGS_eventfd			0
+#define __ARGS_fallocate		0
 
 
 #ifdef __ASSEMBLER__

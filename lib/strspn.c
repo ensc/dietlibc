@@ -3,15 +3,17 @@
 
 size_t strspn(const char *s, const char *accept)
 {
-  size_t l=0;
-  int a=1,i,al=strlen(accept);
+  size_t l = 0;
+  const char *a;
 
-  while((a)&&(*s))
-  {
-    for(a=i=0;(!a)&&(i<al);i++)
-      if (*s==accept[i]) a=1;
-    if (a) l++;
-    s++;
+  for (; *s; s++) {
+    for (a = accept; *a && *s != *a; a++);
+
+    if (!*a)
+      break;
+    else
+     l++;
   }
+
   return l;
 }

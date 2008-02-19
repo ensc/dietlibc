@@ -1,10 +1,11 @@
 #DIET=diet
 CC=gcc
-CFLAGS=-Wall
+CFLAGS=-Wall -fno-builtin
 
 all: stringtest
 
-TESTPROGRAMS=memccpy memchr memcmp memcpy memrchr strcasecmp strcmp strlen strncat strncpy strrchr strstr
+TESTPROGRAMS=memccpy memchr memcmp memcpy memrchr strcasecmp strcmp strlen strncat strncpy strrchr strstr \
+strspn strcspn strpbrk
 
 stringtest: $(TESTPROGRAMS)
 
