@@ -9,6 +9,7 @@
   add some more syscalls
   some minor cleanups
   shrink some string functions (Kris Katterjohn)
+  prepare x86_64 for syscall numbers > 255
 
 0.31:
   getopt_long and getopt_long_only now refuse ambiguous abbreviations
