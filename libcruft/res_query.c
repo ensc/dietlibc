@@ -6,7 +6,7 @@
 #include <netdb.h>
 #include <stdlib.h>
 #include <arpa/inet.h>
-#include <sys/poll.h>
+#include <poll.h>
 #include <unistd.h>
 #include <errno.h>
 #include <arpa/nameser.h>

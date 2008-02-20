@@ -6,7 +6,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <errno.h>
-#include <sys/poll.h>
+#include <poll.h>
 #include <stdio.h>
 #include <strings.h>
 #include <net/if.h>

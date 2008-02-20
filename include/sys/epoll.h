@@ -3,7 +3,7 @@
 
 #include <sys/cdefs.h>
 #include <sys/types.h>
-#include <sys/poll.h>
+#include <poll.h>
 #include <signal.h>
 
 __BEGIN_DECLS

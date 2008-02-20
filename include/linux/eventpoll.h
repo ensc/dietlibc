@@ -3,7 +3,7 @@
 
 #include <sys/cdefs.h>
 #include <sys/ioctl.h>
-#include <sys/poll.h>
+#include <poll.h>
 #include <sys/shm.h>
 
 __BEGIN_DECLS
