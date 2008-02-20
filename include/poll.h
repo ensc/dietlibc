@@ -44,7 +44,9 @@ struct pollfd {
   short revents;
 };
 
-extern int poll(struct pollfd *ufds, unsigned int nfds, int timeout) __THROW;
+typedef unsigned int nfds_t;
+
+extern int poll(struct pollfd *ufds, nfds_t nfds, int timeout) __THROW;
 
 #ifdef _GNU_SOURCE
 #include <signal.h>
