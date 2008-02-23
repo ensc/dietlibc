@@ -28,6 +28,8 @@ memcpy (void *dst, const void *src, size_t n)
 		*c1++ = *c2++;
 	    if (n == (size_t) - 1)
 		return (res);
+	    dst = c1;
+	    src = c2;
 	}
 
 	lx1 = (unsigned long *) dst;
