@@ -26,4 +26,14 @@
 
 #define _PATH_TMP	"/tmp/"
 
+#define _PATH_UTMP	"/var/run/utmp"
+#define _PATH_WTMP	"/var/log/wtmp"
+#ifdef _BSD_SOURCE
+/* die, BSD, die!!! */
+#define UTMP_FILE	_PATH_UTMP
+#define WTMP_FILE	_PATH_WTMP
+#endif
+#define _PATH_UTMPX	_PATH_UTMP
+#define _PATH_WTMPX	_PATH_WTMP
+
 #endif

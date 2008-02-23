@@ -12,6 +12,7 @@
   prepare x86_64 for syscall numbers > 255
   fix unaligned memcpy if WANT_SMALL_STRING_ROUTINES is not defined
     (Enrico Scholz)
+  fix utmp, add utmpx support (R.L. Horn)
 
 0.31:
   getopt_long and getopt_long_only now refuse ambiguous abbreviations

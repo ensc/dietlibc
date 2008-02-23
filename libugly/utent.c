@@ -5,6 +5,7 @@
 
 static const char *utmp_file_name = _PATH_UTMP;
 static int fd = -1;
+static off_t utmp_current = 0;
 
 static int lock_record(int type) {
   struct flock fl;
@@ -37,12 +38,13 @@ void setutent() {
   if (fd<0) fd = open(utmp_file_name,O_RDWR);
   if (fd<0) fd = open(utmp_file_name,O_RDONLY);
   fcntl (fd, F_SETFD, FD_CLOEXEC);
-  lseek(fd,0,SEEK_SET);
+  utmp_current = lseek(fd,0,SEEK_SET);
 }
 
 void endutent() {
   if (fd<0) return;
   close(fd); fd=-1;
+  utmp_current = 0;
 }
 
 struct utmp *getutent(void) {
@@ -53,6 +55,7 @@ struct utmp *getutent(void) {
     setutent();
     if (fd<0) return 0;
   }
+  utmp_current = lseek (fd, 0, SEEK_CUR);
   if (lock_record(F_RDLCK)) return 0;
   ret=read(fd, &getutent_tmp, sizeof(struct utmp));
   unlock_record();
@@ -88,13 +91,16 @@ struct utmp *getutline(struct utmp *ut) {
 void pututline(struct utmp *ut) {
   struct utmp *tmp;
 
+  /* Seek to the current record before searching. */
+  lseek (fd, utmp_current, SEEK_SET);
   if ((tmp = getutid(ut))) {
     lseek(fd, - (off_t)sizeof(struct utmp), SEEK_CUR);
     if (lock_record(F_WRLCK)) return;
     write(fd, ut, sizeof(struct utmp));
+    utmp_current += sizeof(struct utmp);
   }
   else {
-    lseek(fd, 0, SEEK_END);
+    utmp_current = lseek(fd, 0, SEEK_END);
     if (lock_record(F_WRLCK)) return;
     write(fd, ut, sizeof(struct utmp));
   }
