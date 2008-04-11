@@ -371,20 +371,20 @@ asm(".text \n"
 "_dl_sys_mmap: \n"
 "	stmdb	sp!,{r0,r1,r2,r3} \n"
 "	mov	r0, sp \n"
-"	swi	#0x900090		@ mmap \n"
+"	swi	#0x90005a		@ mmap \n"
 "	add	sp, sp, #16 \n"
 "	mov	pc, lr \n"
 ".type	_dl_sys_munmap,function \n"
 "_dl_sys_munmap: \n"
-"	swi	#0x900091		@ munmap \n"
+"	swi	#0x90005b		@ munmap \n"
 "	mov	pc, lr \n"
 ".type	_dl_sys_fstat,function \n"
 "_dl_sys_fstat: \n"
-"	swi	#0x900108		@ fstat \n"
+"	swi	#0x90006c		@ fstat \n"
 "	mov	pc, lr \n"
 ".type	_dl_sys_mprotect,function \n"
 "_dl_sys_mprotect: \n"
-"	swi	#0x900125		@ mprotect \n"
+"	swi	#0x90007d		@ mprotect \n"
 "	mov	pc, lr \n"
 
 ".type	_dl_jump,function \n"
@@ -689,6 +689,15 @@ static void _dl_debug_state(void) {
 #endif
 
 /* now reuse some unchanged sources */
+#ifdef __arm__
+#include "_dl_math.c"
+#define MOD(a,b) _dl_mod(a,b)
+#define DIV(a,b) _dl_div(a,b,NULL)
+#else
+#define MOD(a,b) (a % b)
+#define DIV(a,b) (a / b)
+#endif
+
 #include "dlerror.c"
 #include "_dl_alloc.c"
 
@@ -1092,7 +1101,7 @@ static struct _dl_handle* _dl_dyn_scan(struct _dl_handle*dh,Elf_Dyn*_dynamic) {
 #ifdef DEBUG
     pf(__FUNCTION__); pf(": try to relocate some values\n");
 #endif
-    if (_dl_relocate(dh,rel,relsize/relent)) return 0;
+    if (_dl_relocate(dh,rel,DIV(relsize,relent))) return 0;
   }
 
   /* do PTL / GOT relocation */

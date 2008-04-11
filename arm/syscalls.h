@@ -1,3 +1,6 @@
+#ifndef _ARM_SYSCALL_H
+#define _ARM_SYSCALL_H 1
+
 #define __NR_SYSCALL_BASE	0x900000
 
 #define __NR_exit			(__NR_SYSCALL_BASE+  1)
@@ -718,4 +721,5 @@
 .endif
 .endm
 
+#endif
 #endif

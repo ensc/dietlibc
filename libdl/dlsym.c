@@ -6,7 +6,7 @@
 static void*_dlsym_elfhash(struct _dl_handle*dh,const unsigned char*symbol) {
   unsigned long*sym=0;
   unsigned int hash =elf_hash(symbol);
-  unsigned int bhash=hash%HASH_BUCKET_LEN(dh->hash_tab);
+  unsigned int bhash=MOD(hash, HASH_BUCKET_LEN(dh->hash_tab));
   unsigned int*chain=HASH_CHAIN(dh->hash_tab);
   unsigned char*name=(unsigned char*)dh->dyn_str_tab;
   unsigned int ind=HASH_BUCKET(dh->hash_tab)[bhash];
@@ -38,7 +38,7 @@ static void*_dlsym_gnuhash(struct _dl_handle*dh,const unsigned char*symbol) {
   unsigned long*sym=0;
   unsigned char*name=(unsigned char*)dh->dyn_str_tab;
   unsigned int hash =gnu_hash(symbol);
-  unsigned int bhash=hash%GNU_HASH_BUCKET_LEN(dh->gnu_hash_tab);
+  unsigned int bhash=MOD(hash, GNU_HASH_BUCKET_LEN(dh->hash_tab));
   unsigned int ind  =GNU_HASH_BUCKET(dh->gnu_hash_tab,bhash);
 #ifdef DEBUG
   //pf(__FUNCTION__); pf(": bucket("); ph(bhash); pf(",\""); pf(symbol); pf("\")\n");

@@ -35,7 +35,7 @@ const char *dlerror(void) {
   buf[len]=0;
   --_dl_error;
 
-  if (_dl_error>=(sizeof(_dl_error_msg)/sizeof(struct _dl_err_msg)))
+  if (_dl_error>=DIV(sizeof(_dl_error_msg),sizeof(struct _dl_err_msg)))
     return "HAE ?!?";
 
   if (_dl_error_location) {

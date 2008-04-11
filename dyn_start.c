@@ -67,8 +67,11 @@ int _dyn_start(int argc, char **argv, char **envp, structor dl_init)
 {
   int main(int argc, char **argv, char **envp);
 
+#ifndef __arm__
+  /* GT: segfaults on arm, don't know why (for now) */
   void _dl_aux_init_from_envp(char **envp);
   _dl_aux_init_from_envp(envp);
+#endif
 
   if (dl_init) atexit(dl_init);
   _init();

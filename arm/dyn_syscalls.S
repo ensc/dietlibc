@@ -289,3 +289,4 @@ __exit:
 
 #include "__longjmp.S"
 #include "setjmp.S"
+#include "__guard.S"

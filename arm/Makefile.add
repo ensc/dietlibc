@@ -1,5 +1,5 @@
 
-LIBOBJ+=$(OBJDIR)/md5asm.o
-CFLAGS+=-Os -fomit-frame-pointer -fstrict-aliasing -mhard-float
+LIBOBJ+=$(OBJDIR)/md5asm.o $(OBJDIR)/__aeabi_unwind_cpp.o
+CFLAGS+=-Os -fomit-frame-pointer -fstrict-aliasing
 VPATH:=arm:syscalls.s:$(VPATH)
 LIBGMON_OBJS+=$(OBJDIR)/mcount.o
