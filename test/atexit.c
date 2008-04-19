@@ -2,7 +2,7 @@
 #include <unistd.h>
 
 void blah(void) {
-  write(2,"atexit\n",7);
+  write(1,"atexit\n",7);
 }
 
 int main() {

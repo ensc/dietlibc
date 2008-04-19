@@ -4,7 +4,7 @@
 int main() {
   char* c=malloc(13);
   char* tmp;
-  fprintf(stderr,"got %p\n",c);
+  fprintf(stdout,"got %p\n",c);
   c[0]=14;
 //  c[15]=0;
   tmp=realloc(c,12345);
