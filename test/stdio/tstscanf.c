@@ -338,14 +338,14 @@ main (int argc, char **argv)
     int res;
 
     res = sscanf ("-InF", "%f", &value);
-    if (res != 1 || isinf (value) != -1)
+    if (res != 1 || !isinf (value) || !(value<0))
       {
 	fputs ("test failed!\n", stdout);
 	result = 1;
       }
 
     res = sscanf ("+InfiNiTY", "%f", &value);
-    if (res != 1 || isinf (value) != 1)
+    if (res != 1 || !isinf (value) || !(value>0))
       {
 	fputs ("test failed!\n", stdout);
 	result = 1;

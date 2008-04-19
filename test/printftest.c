@@ -101,8 +101,8 @@ int main()
   printf("#%i#\n",18);
   printf("#%d#\n",18);
   printf("#%u#\n",18);
-  printf("#%lu#\n",18);
-  printf("#%li#\n",18);
+  printf("#%lu#\n",18l);
+  printf("#%li#\n",18l);
   printf("#%-+#06d#\n", -123);
   printf("#%-+#6d#\n", -123);
   printf("#%+#06d#\n", -123);
@@ -142,7 +142,7 @@ int main()
 	    buf);
     memset(buf2,0,sizeof(buf));
     i=snprintf(buf2, 256, "%.9999u", 10);
-    printf("%i %i\n",i,strlen(buf2));
+    printf("%i %li\n",i,strlen(buf2));
     
     printf ("snprintf (\"%%.999999u\", 10) == %d\n",
     	    snprintf(buf2, sizeof(buf2), "%.999999u", 10));

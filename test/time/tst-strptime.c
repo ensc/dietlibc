@@ -41,10 +41,12 @@ static const struct
   { "C", "03/03/00", "%D", 5, 62, 2, 3 },
   { "C", "9/9/99", "%x", 4, 251, 8, 9 },
   { "C", "19990502123412", "%Y%m%d%H%M%S", 0, 121, 4, 2 },
+#if 0		/* dietlibc does not support %U/%W/%j and non-POSIX locales */
   { "C", "2001 20 Mon", "%Y %U %a", 1, 140, 4, 21 },
   { "C", "2001 21 Mon", "%Y %W %a", 1, 140, 4, 21 },
   { "ja_JP.EUC-JP", "2001 20 \xb7\xee", "%Y %U %a", 1, 140, 4, 21 },
   { "ja_JP.EUC-JP", "2001 21 \xb7\xee", "%Y %W %a", 1, 140, 4, 21 },
+#endif
 };
 
 
@@ -72,9 +74,16 @@ test_tm (void)
 
   for (i = 0; i < sizeof (tm_tests) / sizeof (tm_tests[0]); ++i)
     {
+      char *pres;
       memset (&tm, '\0', sizeof (tm));
-      
-      if (strptime (tm_tests[i].input, tm_tests[i].format, &tm) != '\0')
+
+      pres = strptime (tm_tests[i].input, tm_tests[i].format, &tm);
+      if (!pres)
+	{
+	  fprintf(stderr, "failed to parse '%s'\n", day_tests[i].input);
+	  result = 1;
+	}
+      else if (*pres != '\0')
 	{
 	  printf ("not all of `%s' read\n", tm_tests[i].input);
 	  result = 1;
@@ -118,6 +127,7 @@ int main (void) {
 
   for (i = 0; i < sizeof (day_tests) / sizeof (day_tests[0]); ++i)
     {
+      char *pres;
       memset (&tm, '\0', sizeof (tm));
 
       if (setlocale (LC_ALL, day_tests[i].locale) == NULL)
@@ -125,7 +135,14 @@ int main (void) {
 	  printf ("cannot set locale %s: %m\n", day_tests[i].locale);
 	}
 
-      if (*strptime (day_tests[i].input, day_tests[i].format, &tm) != '\0')
+      pres = strptime (day_tests[i].input, day_tests[i].format, &tm);
+      if (!pres)
+	{
+	  fprintf(stderr, "failed to parse '%s' for locale '%s'\n",
+		  day_tests[i].input, day_tests[i].locale);
+	  result = 1;
+	}
+      else if (*pres != '\0')
 	{
 	  printf ("not all of `%s' read\n", day_tests[i].input);
 	  result = 1;
