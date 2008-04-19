@@ -21,13 +21,15 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "../../dietfeatures.h"
+
 static int errors = 0;
 
 static void
 merror (const char *msg)
 {
   ++errors;
-  printf ("Error: %s\n", msg);
+  fprintf (stderr, "Error: %s\n", msg);
 }
 
 int
@@ -56,9 +58,11 @@ main (void)
   if (p != NULL)
     merror ("realloc (p, 0) failed.");
 
+#ifdef WANT_MALLOC_ZERO
   p = malloc (0);
   if (p == NULL)
     merror ("malloc (0) failed.");
+#endif
 
   p = realloc (p, 0);
   if (p != NULL)

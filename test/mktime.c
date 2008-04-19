@@ -9,15 +9,15 @@ int main() {
   t.tm_mday=29;
   t.tm_mon=2;
   t.tm_year=100;
-  printf("%d\n",mktime(&t));
+  printf("%ld\n",(long)mktime(&t));
   t.tm_mday=1;
   t.tm_mon=3;
   t.tm_year=102;
-  printf("%d\n",mktime(&t));
+  printf("%ld\n",(long)mktime(&t));
   t.tm_mday=1;
   t.tm_mon=6;
   t.tm_year=102;
-  printf("%d\n",mktime(&t));
+  printf("%ld\n",(long)mktime(&t));
   return 0;
 }
 

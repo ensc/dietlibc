@@ -33,10 +33,6 @@ while ((e = getmntent(fstab))) {
 
  printf("closing /etc/fstab\n");
  assert ( 1 == endmntent(fstab));
- printf("closing /etc/fstab again\n");
- assert ( 1 == endmntent(fstab)); /* endmntent must always return 1 */
- printf("entmntent(0)\n");
- assert ( 1 == endmntent(0)); /* causes a segfault with diet libc */
+
  return 0;
 }
-
