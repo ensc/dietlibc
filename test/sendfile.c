@@ -11,5 +11,5 @@ int main() {
 
   printf("sendfile returned %d\n",ret);
 
-return 0;    
+  return ret<0 ? 1 : 0;
 }

@@ -11,7 +11,7 @@ int main() {
     perror("fork");
     _exit(1);
   case 0:
-    fprintf(stderr,"child, my pid is %u\n",getpid());
+    fprintf(stdout,"child, my pid is %u\n",getpid());
     sleep(1);
     _exit(23);
   }
