@@ -16,6 +16,7 @@
 #include <elf.h>
 #include <stdlib.h>
 #include "dietfeatures.h"
+#include "dietelfinfo.h"
 
 #ifdef IN_LDSO
 #undef WANT_TLS
@@ -60,6 +61,7 @@ static void findtlsdata(long* auxvec) {
   Elf32_Phdr const * x=0;
 #endif
   size_t i,n=0;
+#ifndef WANT_ELFINFO
   while (*auxvec) {
     if (auxvec[0]==3) {	/* AT_PHDR */
       x=(void*)auxvec[1];
@@ -70,6 +72,18 @@ static void findtlsdata(long* auxvec) {
     }
     auxvec+=2;
   } /* if we don't find the entry, the kernel let us down */
+#else
+  {
+    __diet_elf_addr_t const	*x_addr = __get_elf_aux_value(AT_PHDR);
+    __diet_elf_addr_t const	*n_addr = __get_elf_aux_value(AT_PHNUM);
+
+    (void)auxvec;
+    if (x_addr)
+      x = (__typeof__(x)) *x_addr;
+    if (n_addr)
+      n = *n_addr;
+  }
+#endif
   if (!x || !n) return;	/* a kernel this old does not support thread local storage anyway */
   for (i=0; i<n; ++i)
     if (x[i].p_type==PT_TLS) {
@@ -133,21 +147,29 @@ void __setup_tls(tcbhead_t* mainthread) {
 #endif
 
 static void const * find_in_auxvec(long* x,long what) {
+#ifndef WANT_ELFINFO
   while (*x) {
     if (*x==what)
       return (void*)x[1];
     x+=2;
   }
   return NULL;
+#else
+  __diet_elf_addr_t const	*a = __get_elf_aux_value(what);
+  (void)x;
+  return a ? (void *)*a : NULL;
+#endif
 }
 
 int stackgap(int argc,char* argv[],char* envp[]);
 int stackgap(int argc,char* argv[],char* envp[]) {
-  long* auxvec=(long*)envp;
 #if defined(WANT_STACKGAP) || defined(WANT_SSP) || defined(WANT_TLS)
   char const * rand;
   char* tlsdata;
+  long* auxvec=(long*)envp;
+#ifndef WANT_ELFINFO
   while (*auxvec) ++auxvec; ++auxvec;	/* skip envp to get to auxvec */
+#endif
 #ifdef WANT_STACKGAP
   unsigned short s;
   volatile char* gap;

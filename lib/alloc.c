@@ -18,8 +18,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <sys/shm.h>	/* for PAGE_SIZE */
-
+#include "../dietpagesize.h"
 
 /* -- HELPER CODE --------------------------------------------------------- */
 
@@ -39,7 +38,7 @@ typedef struct {
 #define BLOCK_START(b)	(((void*)(b))-sizeof(__alloc_t))
 #define BLOCK_RET(b)	(((void*)(b))+sizeof(__alloc_t))
 
-#define MEM_BLOCK_SIZE	PAGE_SIZE
+#define MEM_BLOCK_SIZE	__DIET_PAGE_SIZE
 #define PAGE_ALIGN(s)	(((s)+MEM_BLOCK_SIZE-1)&(unsigned long)(~(MEM_BLOCK_SIZE-1)))
 
 /* a simple mmap :) */
@@ -66,7 +65,9 @@ static __alloc_t* __small_mem[8];
 
 #define FIRST_SMALL(p)		(((unsigned long)(p))&(~(MEM_BLOCK_SIZE-1)))
 
-static inline int __ind_shift() { return (MEM_BLOCK_SIZE==4096)?4:5; }
+static inline int __ind_shift() {
+	return __DIET_PAGE_SHIFT - sizeof(__small_mem)/sizeof(__small_mem[0]);
+}
 
 static size_t REGPARM(1) get_index(size_t _size) {
   register size_t idx=0;

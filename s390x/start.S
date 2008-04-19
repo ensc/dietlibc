@@ -26,6 +26,16 @@ _start:
 	larl	%r13,environ
 	stg	%r4,0(%r13)
 
+#ifdef WANT_ELFINFO
+1:	aghi	%r4, 8		# increment envp
+	lg	%r12, -8(0,%r4)	# load envp[-1] into %r12
+	ogr	%r12, %r12	# test %r12 for NULL
+	jne	1b
+
+	aghi	%r13, 8
+	stg	%r4,0(%r13)
+#endif
+
 /* call main or _dyn_start */
 #ifdef WANT_DYNAMIC
 	brasl	%r14,_dyn_start

@@ -14,7 +14,7 @@ glob grent hasmntopt hello iconv if_nameindex ltostr malloc-debugger md5_testhar
 memccpy memchr memcmp memrchr memusage mktime mmap_test pipe printf printftest \
 protoent prototypes putenv pwent rand48 read1 readdir readdir64 regex select sendfile servent setjmp siglist \
 sigsetjmp speed spent sprintf sscanf stdarg strcasecmp strcmp strncat strncpy strptime strrchr \
-strstr strtol sysenter ungetc utime waitpid
+strstr strtol sysconf sysenter ungetc utime waitpid
 
 test: $(TESTPROGRAMS)
 

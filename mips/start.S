@@ -47,6 +47,15 @@ __start:
 #endif
 	add	$a2, $a2, $a1
 	sw	$a2, environ
+#ifdef WANT_ELFINFO
+#  warning "MAKE ME MIPS CODE!"
+1:	addu	$a2, $a2, 4	/* increment envp */
+	lw	$4, -4($a2)     /* load envp[-1]; TODO: is $4 a proper
+				   temporary register? */
+	bnz	1b		/* ... until envp[-1]==NULL
+				   TODO: use proper 'bnz' operation */
+	sw	$a2, __elfinfo
+#endif
 	jalr	$25
 	la	$25, exit
 	move	$4,$2

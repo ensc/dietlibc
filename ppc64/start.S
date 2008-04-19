@@ -58,6 +58,15 @@ _start:
 	oris	14,14,environ@ha
 	std	5,environ@l(14)
 
+#ifdef WANT_ELFINFO
+1:	ldu	15,0(5)
+	addi	5, 5, 8
+	cmpdi	15,0
+	bne	1b
+
+	std	5,__elfinfo@l(14)
+#endif
+
 #ifdef WANT_DYNAMIC
 /* #warning dynamic */
 	mr	6,7
