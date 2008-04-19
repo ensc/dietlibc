@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <netdb.h>
+#include <arpa/inet.h>
 
 int main(int argc,char *argv[]) {
   struct servent* se;
