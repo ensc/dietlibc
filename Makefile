@@ -208,6 +208,7 @@ $(OBJDIR)/%.o: %.S $(ARCH)/syscalls.h | $(OBJDIR)
 $(OBJDIR)/pthread_%.o: libpthread/pthread_%.c | $(OBJDIR)
 	$(CCC) $(INC) $(CCFLAGS) $(EXTRACFLAGS) -c $< -o $@
 	-$(STRIP) -x -R .comment -R .note $@
+$(OBJDIR)/stack_smash_handler2.o:	EXTRACFLAGS:=-fno-omit-frame-pointer
 
 $(OBJDIR)/%.o: %.c | $(OBJDIR)
 	$(CCC) $(INC) $(CCFLAGS) $(EXTRACFLAGS) -c $< -o $@ -D__dietlibc__
