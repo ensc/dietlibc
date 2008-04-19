@@ -3,6 +3,9 @@
 #include <limits.h>
 #include <sys/resource.h>
 
+#include "dietelfinfo.h"
+#include "dietpagesize.h"
+
 extern int __sc_nr_cpus();
 
 long sysconf(int name)
@@ -16,6 +19,14 @@ long sysconf(int name)
       return limit.rlim_cur;
     }
   case _SC_CLK_TCK:
+#ifdef WANT_ELFINFO
+    {
+      __diet_elf_addr_t	*v = __get_elf_aux_value(AT_CLKTCK);
+      if (v)
+	return *v;
+    }
+#endif
+
 #ifdef __alpha__
     return 1024;
 #else
@@ -23,11 +34,7 @@ long sysconf(int name)
 #endif
 
   case _SC_PAGESIZE:
-#if ( defined(__alpha__) || defined(__sparc__) )
-    return 8192;
-#else
-    return 4096;
-#endif
+    return __libc_getpagesize();
 
   case _SC_ARG_MAX:
     return ARG_MAX;
