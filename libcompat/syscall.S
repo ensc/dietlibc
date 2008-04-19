@@ -130,6 +130,13 @@ syscall:
 	b    __unified_syscall
 
 #else
-		/* arch not implemented yet */
+#include <endian.h>
+	.section	.comment
+#if (__WORDSIZE == 64)
+	.quad		__syscall_2_not_implemented_for_this_arch
+#else
+	.long		__syscall_2_not_implemented_for_this_arch
+#endif
+	.section	.text
 #endif
 .size	syscall, . - syscall
