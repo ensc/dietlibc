@@ -33,19 +33,19 @@ Return value    gamma returns a value in range (-0.1208, +oo). For a input
 #include <stdlib.h>
 #include <math.h>
 
-#define B0      +            1.0l/   6/ 1/ 2
-#define B1      -            1.0l/  30/ 3/ 4
-#define B2      +            1.0l/  42/ 5/ 6
-#define B3      -            1.0l/  30/ 7/ 8
-#define B4      +            5.0l/  66/ 9/10
-#define B5      -          691.0l/2730/11/12
-#define B6      +            7.0l/   6/13/14
-#define B7      -         3617.0l/ 510/15/16
-#define B8      +        43867.0l/ 798/17/18
-#define B9      -       174611.0l/ 330/19/20
-#define B10     +       854513.0l/ 138/21/22
-#define B11     -    236364091.0l/2730/23/24
-#define B12     +      8553103.0l/   6/25/26
+#define B0      +            1.0/   6/ 1/ 2
+#define B1      -            1.0/  30/ 3/ 4
+#define B2      +            1.0/  42/ 5/ 6
+#define B3      -            1.0/  30/ 7/ 8
+#define B4      +            5.0/  66/ 9/10
+#define B5      -          691.0/2730/11/12
+#define B6      +            7.0/   6/13/14
+#define B7      -         3617.0/ 510/15/16
+#define B8      +        43867.0/ 798/17/18
+#define B9      -       174611.0/ 330/19/20
+#define B10     +       854513.0/ 138/21/22
+#define B11     -    236364091.0/2730/23/24
+#define B12     +      8553103.0/   6/25/26
 
 static const double  coeff[] = { B0, B1, B2, B3, B4, B5, B6, B7, B8, B9, B10 };
 int                  signgam;
