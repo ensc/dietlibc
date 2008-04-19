@@ -47,7 +47,7 @@ double atof(const char *nptr) __THROW;
 __extension__ long long int atoll(const char *nptr);
 
 void exit(int status) __THROW __attribute__((__noreturn__));
-void abort(void) __THROW;
+void abort(void) __THROW __attribute__((__noreturn__));
 
 extern int rand(void) __THROW;
 extern int rand_r(unsigned int *seed) __THROW;
