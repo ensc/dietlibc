@@ -13,7 +13,8 @@
   dst = (((uint64_t)h) << 32) | l;                             \
 } while (0)
 #else
-#error "Unimplemented rdtsc"
+#warning "Unimplemented rdtsc"
+#define RDTSC(dst) dst = 0
 #endif
 
 extern char **environ;
@@ -24,7 +25,7 @@ int main(int argc,char* argv[]) {
   if (!fork()) { execve(argv[1],argv+1,environ); exit(1); }
   wait(0);
   RDTSC(b);
-  printf("%llu cycles\n",b-a);
+  printf("%llu cycles\n",(unsigned long long)(b-a));
 
   return 0;
 }
