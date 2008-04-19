@@ -61,6 +61,14 @@ __start:
 	PTR_LA	$25, CALL_IN_STARTCODE
 	PTR_ADD	$a2, $a2, $a1
 	PTR_SW	$a2, environ
+#ifdef WANT_ELFINFO
+1:	addu	$a2, $a2, 4	/* increment envp */
+	lw	$4, -4($a2)     /* load envp[-1]; TODO: is $4 a proper
+				   temporary register? */
+	bne	$4, $0, 1b	/* ... until envp[-1]==NULL
+				   TODO: use proper 'bnz' operation */
+	sw	$a2, __elfinfo
+#endif
 	jalr	$25
 	PTR_LA	$25, exit
 	move	$4,$2

@@ -1,11 +1,13 @@
 #include <sys/shm.h>
 
+#include "dietpagesize.h"
+
 struct __dirstream {
-  char buf[PAGE_SIZE-(sizeof (int)*3)];
   int fd;
   unsigned int num;
   unsigned int cur;
   unsigned char is_64;
+  char buf[] __attribute__((__aligned__(8)));
 };				/* stream data from opendir() */
 
 struct linux_dirent {
@@ -22,3 +24,5 @@ struct linux_dirent64 {
   unsigned char   d_type;
   char            d_name[0];
 };
+
+#define __DIRSTREAM_BUF_SIZE	(__DIET_PAGE_SIZE - offsetof(struct __dirstream, buf))

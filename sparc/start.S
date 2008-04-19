@@ -25,6 +25,17 @@ _start:
 	or	%o3, %lo(environ), %o3
 	st	%o2, [%o3]
 
+#ifdef WANT_ELFINFO
+#  warning "VERIFY ME!"
+1:	add	%o2, %o2, 4
+	ld	[%o2-4], %o4
+	orcc	%o4, %o4, %o4
+	bne	1b
+
+	add	%o3, %o3, 4
+	st	%o2, [%o3]
+#endif
+
 /* When starting a binary via the dynamic linker, %g1 contains the
    address of the shared library termination function, which will be
    registered with atexit(). If we are statically linked, this will

@@ -69,6 +69,7 @@
 /spent
 /sprintf
 /sscanf
+/startup-test
 /stdarg
 /strcasecmp
 /strcmp

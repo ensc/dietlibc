@@ -30,6 +30,17 @@ _start:
 	l	%r1,8(%r13)
 	st	%r4,0(%r1)
 
+#ifdef WANT_ELFINFO
+	lhi	%r6, -4
+1:	ahi	%r4, 4		# increment envp
+	l	%r12, 0(%r6,%r4)	# load envp[-1] into %r12
+	or	%r12, %r12	# test %r12 for NULL
+	jne	1b
+
+	ahi	%r1, 4
+	st	%r4,0(%r1)
+#endif
+
 /* call main or _dyn_start */
 	l	%r1,0(%r13)
 	basr	%r14,%r1

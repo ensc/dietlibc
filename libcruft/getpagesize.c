@@ -1,27 +1,24 @@
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>
-/* for environ: */
-#include <stdlib.h>
 
-#ifndef PAGE_SIZE
-#define PAGE_SIZE 4096
-#endif
+#include "../dietelfinfo.h"
+#include "../dietpagesize.h"
 
 int __libc_getpagesize(void);
 int __libc_getpagesize(void) {
-  long* x=(long*)environ;
-  int fd;
-  while (*x) ++x;	/* skip envp to get to auxvec */
-  ++x;
+#ifdef WANT_DYN_PAGESIZE
+  static size_t	pgsz;
 
-  while (*x) {
-    if (*x==6)
-      return x[1];
-    x+=2;
+  if (__unlikely(pgsz==0)) {
+    __diet_elf_addr_t const	*v = __get_elf_aux_value(AT_PAGESZ);
+    pgsz = *v;	/* causes segfault when 'v==NULL' */
   }
-  return PAGE_SIZE;
+
+  return pgsz;
+#else
+  return __DIET_PAGE_SIZE_PREDEF;
+#endif
 }
 
 int getpagesize(void)       __attribute__((weak,alias("__libc_getpagesize")));
-

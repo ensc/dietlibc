@@ -20,12 +20,18 @@ _start:
 	PIC_INIT			/* non-PIC: this is an empty line */
 	PUT_VAR %esi, environ, %ecx	/* non-PIC: movl %esi,environ */
 
-#ifdef WANT_SYSENTER
+#if defined(WANT_ELFINFO) || defined(WANT_SYSENTER)
 /* skip environment, scan for NULL */
 1:
 	lodsl
 	testl	%eax,%eax
 	jnz	1b
+#  ifdef WANT_ELFINFO
+	PUT_VAR %esi, __elfinfo, %ecx
+#  endif
+#endif
+
+#ifdef WANT_SYSENTER
 /* The ELF auxvec follows the environment, consists of key/value pairs.
    We are looking for key 32, which stands for the vsyscall page */
 1:

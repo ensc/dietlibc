@@ -15,7 +15,7 @@
 struct dirent64* readdir64(DIR *d) {
   struct linux_dirent64 *ld = d->num ? (struct linux_dirent64*)(d->buf+d->cur) : NULL;
   if (!d->num || (d->cur += ld->d_reclen)>=d->num) {
-    int res=getdents64(d->fd,(struct linux_dirent64*)d->buf, sizeof (d->buf)-1);
+    int res=getdents64(d->fd,(struct linux_dirent64*)d->buf, __DIRSTREAM_BUF_SIZE-1);
     if (res<=0) return 0;
     d->num=res; d->cur=0; d->is_64=1;
   }
@@ -34,7 +34,7 @@ again:
 #endif
     struct linux_dirent *ld = d->num ? (struct linux_dirent*)(d->buf+d->cur) : NULL;
     if (!d->num || (d->cur += ld->d_reclen)>=d->num) {
-      int res=getdents(d->fd,(struct linux_dirent*)d->buf, sizeof (d->buf)-1);
+      int res=getdents(d->fd,(struct linux_dirent*)d->buf, __DIRSTREAM_BUF_SIZE-1);
       if (res<=0) return 0;
       d->num=res; d->cur=0;d->is_64=0;
       ld=(struct linux_dirent*)(d->buf+d->cur);
@@ -50,7 +50,7 @@ again:
   {
   struct linux_dirent64 *ld = d->num ? (struct linux_dirent64*)(d->buf+d->cur) : NULL;
   if (!d->num || (d->cur += ld->d_reclen)>=d->num) {
-    int res=getdents64(d->fd,(struct linux_dirent64*)d->buf,sizeof (d->buf));
+    int res=getdents64(d->fd,(struct linux_dirent64*)d->buf,__DIRSTREAM_BUF_SIZE);
     if (res<=0) {
       if (errno==ENOSYS) {
 	trygetdents64=0;
