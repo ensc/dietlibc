@@ -2,6 +2,7 @@
 #include <write12.h>
 
 void __stack_chk_fail(void);
+void __stack_chk_fail_local(void) __attribute__((__alias__("__stack_chk_fail")));
 
 /* earlier versions of ProPolice actually gave the address and function
  * name as arguments to the handler, so it could print some useful
