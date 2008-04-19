@@ -55,6 +55,7 @@ again:
 	    case 'x': src = "%b %a %d";   			 goto _strf;
 	    case 'X': src = "%k:%M:%S";   			 goto _strf;
 	    case 'D': src = "%m/%d/%y";   			 goto _strf;
+	    case 'F': src = "%Y-%m-%d";				 goto _strf;
 	    case 'T': src = "%H:%M:%S";
 	       _strf: p  += strftime (p, (size_t)(dst+max-p), src, tm); 	 break;
 	    case 'a': src = sweekdays [tm->tm_wday]; 		 goto _str;
