@@ -8,5 +8,13 @@ void __stack_chk_fail(void);
  * diagnostics.  No more. :-( */
 void __stack_chk_fail(void) {
   __write2("smashed stack detected, program terminated.\n");
-  _exit(127);
+
+  /* trigger a segfault which can be inspected within a debugger (inclusive
+   * stack-trace). 'abort(3)' at this place would be too heavy weighted.
+   *
+   * TODO: limit this to systems which are known to have an MMU (resp. is
+   * dietlibc with stack-protector used on systems without an MMU?)
+   */
+  while (1)
+	  *(char *)0 = 0;
 }
