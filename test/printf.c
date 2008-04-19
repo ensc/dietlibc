@@ -2,10 +2,25 @@
 #include <string.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <math.h>
+#include <float.h>
 #include <sys/param.h>
 #include <locale.h>
 
 #define ALGN		5
+
+#ifndef INFINITY
+#  if (__GNUC__ > 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 3))
+#    define INFINITY	(__builtin_inf())
+#  endif
+#endif
+
+#ifndef NAN
+#  if (__GNUC__ > 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 3))
+#    define NAN		(__builtin_nan(""))
+#  endif
+#endif
+
 
 // https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=112986
 #if 0
@@ -60,7 +75,7 @@
   TEST_SNPRINTF(EXP,  0,                __VA_ARGS__);		\
   TEST_SNPRINTF(EXP,  sizeof(EXP)+ALGN, __VA_ARGS__);		\
   TEST_SNPRINTF_NULL(EXP, __VA_ARGS__)
-  
+
 
 int main()
 {
@@ -101,7 +116,7 @@ int main()
   TEST("42.23",   "%5.2f",  42.23);
   TEST("42.23",   "%5.4g",  42.23);
   TEST(" 42.2",   "%5.3g",  42.23);
-  
+
   TEST("   1",     "%*i",   4, 1);
   TEST("   1",     "%4i",   1);
   TEST("1   ",     "%-4i",  1);
@@ -131,13 +146,32 @@ int main()
   TEST("-01234",   "%6.5i", -1234);
   TEST("  1234",   "%6.5s", "1234");
 
+#ifdef INFINITY
+  TEST("inf",	"%f", INFINITY);
+  TEST("-inf",	"%f", -INFINITY);
+  TEST("INF",	"%F", INFINITY);
+  TEST("-INF",	"%F", -INFINITY);
+
+  TEST("inf",	"%g", INFINITY);
+  TEST("-inf",	"%g", -INFINITY);
+  TEST("INF",	"%G", INFINITY);
+  TEST("-INF",	"%G", -INFINITY);
+#endif
+
+#ifdef NAN
+  TEST("nan",	"%f", NAN);
+  TEST("NAN",	"%F", NAN);
+  TEST("nan",	"%g", NAN);
+  TEST("NAN",	"%G", NAN);
+#endif
+
 #ifdef XSI_TESTS
   setlocale(LC_ALL, "de_DE");
-  
+
   TEST("1.234",    "%'u", 1234);
   TEST("2 1",      "%2$u %1$u",  1, 2);
 #endif
-  
-  
+
+
   return EXIT_SUCCESS;
 }

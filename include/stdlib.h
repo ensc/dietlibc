@@ -31,6 +31,10 @@ long double strtold(const char *nptr, char **endptr) __THROW;
 long int strtol(const char *nptr, char **endptr, int base) __THROW;
 unsigned long int strtoul(const char *nptr, char **endptr, int base) __THROW;
 
+/* HACK: used flags in __dtostr
+     0x01 ... 'g'
+     0x02 ... uppercase
+   Define some constants somewhere... */
 extern int __ltostr(char *s, unsigned int size, unsigned long i, unsigned int base, int UpCase) __THROW;
 extern int __dtostr(double d,char *buf,unsigned int maxlen,unsigned int prec,unsigned int prec2,int flags) __THROW;
 
