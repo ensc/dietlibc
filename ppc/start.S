@@ -31,6 +31,15 @@ _start:
 	lis	14,environ@ha
 	stw	5,environ@l(14)
 
+#ifdef WANT_ELFINFO
+1:	lwzu	15,0(5)
+	addi	5, 5, 4
+	cmpwi	15,0
+	bne	1b
+
+	stw	5,__elfinfo@l(14)
+#endif
+
 #ifdef WANT_DYNAMIC
 	mr	6,7
 	bl	_dyn_start

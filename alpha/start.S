@@ -24,6 +24,15 @@ _start:
 
 	stq	$18, environ
 
+#ifdef WANT_ELFINFO
+#  warning "MAKE ME alpha ASSEMBLER!"
+1:	ldq	$19, $18	; load *envp into $19
+	addq	$18,  1,  $18	; increment *envp
+	orr	$19, $19, $19
+	jne	1b
+	stq	$18, __elfinfo
+#endif
+
 #ifdef WANT_DYNAMIC
 /* in v0 ($0) is the ld.so _fini pointer */
 	mov	 $0, $19	/* mov v0(dynload) to a3 */

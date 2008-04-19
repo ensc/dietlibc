@@ -12,11 +12,27 @@ _start:
 	
 	leaq	8(%rsi,%rdi,8),%rdx	/* %rdx = envp = (8*rdi)+%rsi+8 */
 
+
+#ifdef WANT_ELFINFO
+#ifdef __DYN_LIB
+	movq	environ@GOTPCREL(%rip), %rax
+#else
+	leaq	environ(%rip), %rax
+#endif
+	movq	%rdx, (%rax)	/* environ */
+
+1:	add	$8, %rdx	/* increment envp */
+	cmpq	$0, -8(%rdx)	/* load envp[-1] */
+	jne	1b		/* ... until envp[-1]==NULL */
+
+	movq	%rdx, 8(%rax)	/* __elfinfo */
+#else
 #ifdef __DYN_LIB
 	movq	environ@GOTPCREL(%rip), %rax
 	movq	%rdx, (%rax)
 #else
 	movq	%rdx, environ(%rip)
+#endif
 #endif
 
 #ifdef PROFILING

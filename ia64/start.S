@@ -40,6 +40,16 @@ _start:
 	;;
 	st8  [r14] = out2           /* store envp in environ */
 
+#ifdef WANT_ELFINFO
+#  warning "MAKE ME IE64 CODE!"
+1:	ld8	r9 = [out2], 8	    /* load *envp and increment it */
+	orr	r9 = r9, r9	    /* test for NULL */
+	bne	1b
+
+	adds r14 = 8, r14	    /* __elfinfo = environ + 8 */
+	st8  [r14] = out2           /* store envp in __elfinfo */
+#endif
+
 #ifdef WANT_DYNAMIC
 /* FIXME: dl_init parameter ??? */
 	br.call.sptk.few rp = _dyn_start
