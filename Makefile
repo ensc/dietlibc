@@ -172,9 +172,10 @@ $(OBJDIR)/%.o: %.S $(ARCH)/syscalls.h
 $(OBJDIR)/pthread_%.o: libpthread/pthread_%.c
 	$(CROSS)$(CC) $(INC) $(CFLAGS) -c $< -o $@
 	$(COMMENT) -$(CROSS)strip -x -R .comment -R .note $@
+$(OBJDIR)/stack_smash_handler2.o:	XCFLAGS:=-fno-omit-frame-pointer
 
 $(OBJDIR)/%.o: %.c
-	$(CROSS)$(CC) $(INC) $(CFLAGS) -c $< -o $@ -D__dietlibc__
+	$(CROSS)$(CC) $(INC) $(CFLAGS) $(XCFLAGS) -c $< -o $@ -D__dietlibc__
 	$(COMMENT) -$(CROSS)strip -x -R .comment -R .note $@
 endif
 
