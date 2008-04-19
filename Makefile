@@ -685,3 +685,9 @@ include/errno_definition.h: dietfeatures.h
 
 ldso: ldso.c
 	gcc -nostdlib -shared -g -DIN_LDSO -Iinclude.ldso -I. -isystem include x86_64/start.S -o ldso ldso.c -fPIC x86_64/dyn_syscalls.S lib/errno_location.c -D__thread=
+
+GIT_CVSIMPORT=git cvsimport
+CVS_EXTRA_bigo.ensc.de=;proxy=www-cache;proxyport=3128
+CVS_EXTRA=$(CVS_EXTRA_$(shell hostname -d))
+cvsimport:
+	$(GIT_CVSIMPORT) -k -p '--cvs-direct' -d ':pserver$(CVS_EXTRA):cvs@cvs.fefe.de:/cvs' dietlibc
