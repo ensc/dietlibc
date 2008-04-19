@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
+#include <math.h>
 #include "dietstdio.h"
 #include "dietwarning.h"
 
@@ -346,45 +347,49 @@ num_printf:
 #ifdef WANT_FLOATING_POINT_IN_PRINTF
       /* print a floating point value */
       case 'f':
+      case 'F':
       case 'g':
+      case 'G':
 	{
-	  int g=(ch=='g');
+	  int flags=(((ch&0x5f)=='G') ? 0x01 : 0x00) | ((ch&0x20) ? 0x00 : 0x02);
 	  double d=va_arg(arg_ptr,double);
 	  s=buf+1;
 	  if (width==0) width=1;
 	  if (!flag_dot) preci=6;
 	  if (flag_sign || d < +0.0) flag_in_sign=1;
 
-	  sz=__dtostr(d,s,sizeof(buf)-1,width,preci,g);
+	  sz=__dtostr(d,s,sizeof(buf)-1,width,preci,flags);
 
-	  if (flag_dot) {
-	    char *tmp;
-	    if ((tmp=strchr(s,'.'))) {
-	      if (preci || flag_hash) ++tmp;
-	      while (preci>0 && *++tmp) --preci;
-	      *tmp=0;
-	    } else if (flag_hash) {
-	      s[sz]='.';
-	      s[++sz]='\0';
+	  if (!isnan(d) && !isinf(d)) {		/* skip NaN + INF values */
+	    if (flag_dot) {
+	      char *tmp;
+	      if ((tmp=strchr(s,'.'))) {
+		if (preci || flag_hash) ++tmp;
+		while (preci>0 && *++tmp) --preci;
+		*tmp=0;
+	      } else if (flag_hash) {
+		s[sz]='.';
+		s[++sz]='\0';
+	      }
 	    }
-	  }
 
-	  if (g) {
-	    char *tmp,*tmp1;	/* boy, is _this_ ugly! */
-	    if ((tmp=strchr(s,'.'))) {
-	      tmp1=strchr(tmp,'e');
-	      while (*tmp) ++tmp;
-	      if (tmp1) tmp=tmp1;
-	      while (*--tmp=='0') ;
-	      if (*tmp!='.') ++tmp;
-	      *tmp=0;
-	      if (tmp1) strcpy(tmp,tmp1);
+	    if ((flags&0x01)) {
+	      char *tmp,*tmp1;	/* boy, is _this_ ugly! */
+	      if ((tmp=strchr(s,'.'))) {
+		tmp1=strchr(tmp,'e');
+		while (*tmp) ++tmp;
+		if (tmp1) tmp=tmp1;
+		while (*--tmp=='0') ;
+		if (*tmp!='.') ++tmp;
+		*tmp=0;
+		if (tmp1) strcpy(tmp,tmp1);
+	      }
 	    }
-	  }
 	  
-	  if ((flag_sign || flag_space) && d>=0) {
-	    *(--s)=(flag_sign)?'+':' ';
-	    ++sz;
+	    if ((flag_sign || flag_space) && d>=0) {
+	      *(--s)=(flag_sign)?'+':' ';
+	      ++sz;
+	    }
 	  }
 	  
 	  sz=strlen(s);
