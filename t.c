@@ -105,12 +105,19 @@ extern char* strcpy2(char*a,char*b);
 #define rdtscl(low) \
      __asm__ __volatile__ ("rdtsc" : "=a" (low) : : "edx")
 
+#define malloc(x) ({typeof(x) y=x; (y<0 || (size_t)(y)!=y ? 0 : malloc(y));})
+
 int main(int argc,char *argv[]) {
+  char* a=malloc(-3);
+  char* b=malloc(0xffffffffull+1);
+  printf("%p %p\n",a,b);
+#if 0
   struct stat s;
   time_t t=time(0);
   struct tm* T;
   stat("/tmp/nyt.html",&s);
   T=gmtime(&s.st_mtime);
+#endif
 #if 0
   static struct mq_attr x;
   mqd_t a=mq_open("fnord",O_WRONLY|O_CREAT,0600,&x);

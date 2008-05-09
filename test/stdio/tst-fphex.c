@@ -37,7 +37,7 @@ int main (int argc, char **argv) {
       int n = snprintf (buf, sizeof buf, t->fmt, t->value);
       if (n != strlen (t->expect) || strcmp (buf, t->expect) != 0)
 	{
-	  printf ("%s\tExpected \"%s\" (%u)\n\tGot      \"%s\" (%d, %u)\n",
+	  printf ("%s\tExpected \"%s\" (%zu)\n\tGot      \"%s\" (%d, %zu)\n",
 		  t->fmt, t->expect, strlen (t->expect), buf, n, strlen (buf));
 	  result = 1;
 	}

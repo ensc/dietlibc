@@ -31,6 +31,7 @@
 #if __GNUC__ < 3
 #define __builtin_expect(foo,bar) (foo)
 #define __expect(foo,bar) (foo)
+#define __malloc__
 #else
 #define __expect(foo,bar) __builtin_expect((long)(foo),bar)
 #define __attribute_malloc__ __attribute__((__malloc__))
@@ -74,6 +75,7 @@
 # define __attribute_used __attribute__ ((__used__))
 #else
 # define __attribute_used
+# define __warn_unused_result__
 #endif
 
 #if (__GNUC__ >= 4)
@@ -82,5 +84,11 @@
 #define __needsNULL__(x)
 #define __sentinel__
 #endif
+
+#if (__GNUC__ < 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ < 3))
+# define __cold__
+# define __hot__
+#endif
+
 
 #endif

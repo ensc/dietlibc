@@ -18,6 +18,7 @@
    Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
    02111-1307 USA.  */
 
+#define _FILE_OFFSET_BITS 64
 #define _GNU_SOURCE
 #include <errno.h>
 #include <stdio.h>
@@ -38,8 +39,8 @@ main (void)
   const char outstr[] = "hello world!\n";
   char strbuf[sizeof outstr];
   char buf[200];
-  struct stat64 st1;
-  struct stat64 st2;
+  struct stat st1;
+  struct stat st2;
   int result = 0;
 
   tmpdir = getenv ("TMPDIR");
@@ -315,9 +316,9 @@ main (void)
     }
 
   /* Check the access time.  */
-  if (fstat64 (fd, &st1) < 0)
+  if (fstat (fd, &st1) < 0)
     {
-      printf ("%d: fstat64() before fseeko() failed\n\n", __LINE__);
+      printf ("%d: fstat() before fseeko() failed\n\n", __LINE__);
       result = 1;
     }
   else
@@ -338,9 +339,9 @@ main (void)
 	  sleep (1);
 	  t = time (NULL);
 
-	  if (fstat64 (fd, &st2) < 0)
+	  if (fstat (fd, &st2) < 0)
 	    {
-	      printf ("%d: fstat64() after fseeko() failed\n\n", __LINE__);
+	      printf ("%d: fstat() after fseeko() failed\n\n", __LINE__);
 	      result = 1;
 	    }
 	  if (st1.st_ctime >= t)
@@ -424,9 +425,9 @@ main (void)
       printf ("%d: fopen() failed\n\n", __LINE__);
       result = 1;
     }
-  else if (fstat64 (fileno (fp), &st1) < 0)
+  else if (fstat (fileno (fp), &st1) < 0)
     {
-      printf ("%d: fstat64() before fseeko() failed\n\n", __LINE__);
+      printf ("%d: fstat() before fseeko() failed\n\n", __LINE__);
       result = 1;
     }
   else if (fseeko (fp, 0, SEEK_END) != 0)
@@ -436,7 +437,7 @@ main (void)
     }
   else if (ftello (fp) != st1.st_size)
     {
-      printf ("%d: fstat64 st_size %zd ftello %zd\n", __LINE__,
+      printf ("%d: fstat st_size %zd ftello %zd\n", __LINE__,
 	      (size_t) st1.st_size, (size_t) ftello (fp));
       result = 1;
     }
@@ -451,9 +452,9 @@ main (void)
       printf ("%d: fopen() failed\n\n", __LINE__);
       result = 1;
     }
-  else if (fstat64 (fileno (fp), &st1) < 0)
+  else if (fstat (fileno (fp), &st1) < 0)
     {
-      printf ("%d: fstat64() before fgetc() failed\n\n", __LINE__);
+      printf ("%d: fstat() before fgetc() failed\n\n", __LINE__);
       result = 1;
     }
   else if (fgetc (fp) == EOF)
@@ -468,7 +469,7 @@ main (void)
     }
   else if (ftello (fp) != st1.st_size)
     {
-      printf ("%d: fstat64 st_size %zd ftello %zd\n", __LINE__,
+      printf ("%d: fstat st_size %zd ftello %zd\n", __LINE__,
 	      (size_t) st1.st_size, (size_t) ftello (fp));
       result = 1;
     }

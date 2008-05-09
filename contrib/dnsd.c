@@ -26,91 +26,7 @@ char ifname[10];
 
 struct sockaddr_in mysa4;
 struct sockaddr_in6 mysa6;
-
-static void handle(int s,char* buf,int len,int interface,int llmnr) {
-  int q;
-  char* obuf=buf;
-  char* after;
-  int olen=len;
-  if (len<8*2) return;			/* too short */
-  buf[len]=0;
-  if ((buf[2]&(llmnr?0xfd:0xf8)) != 0) return;		/* not query */
-  q=(((unsigned int)(buf[4])) << 8) | buf[5];
-  if (q!=1) return;			/* cannot handle more than 1 query */
-  if (buf[6] || buf[7]) return;		/* answer count must be 0 */
-  if (buf[8] || buf[9]) return;		/* name server count must be 0 */
-  if (buf[10] || buf[11]) return;	/* additional record count must be 0 */
-  buf+=12; len-=12;
-  if (buf[0]==namelen && !strncasecmp(buf+1,myhostname,namelen)) {
-    unsigned int type;
-    int slen;
-    buf+=namelen+1;
-    if (!*buf)
-      ++buf;
-    else if (!strcmp(buf,"\x05local"))
-      buf+=7;
-    else
-      return;
-//    if (((unsigned long)buf)&1) ++buf;
-    if (buf[0] || buf[2]) return;	/* all supported types and classes fit in 8 bit */
-    if (buf[3]!=1) return;		/* we only support IN queries */
-    type=(unsigned char)buf[1];
-    slen=buf-obuf+4;
-    obuf[2]|=0x80; 	/* it's answer; we don't support recursion */
-    if (type==1 || type==255) {		/* A or ANY, we can do that */
-      struct ifreq ifr;
-      static int v4sock=-1;
-      ++obuf[7];			/* one answer */
-      memcpy(obuf+slen,"\xc0\x0c" /* goofy compression */
-	           "\x00\x01" /* A */
-		   "\x00\x01" /* IN */
-		   "\x00\x00\x02\x30" /* ttl; 0x230, about 9.3 minutes */
-		   "\x00\x04" /* 4 bytes payload */
-		   ,12);
-      /* now put in our address */
-      /* OK, so we know the interface.  Time to find out our IP on that
-       * interface.  That is done via
-       *   ioctl(somesock,SIOCGIFADDR,struct ifreq)
-       * Unfortunately, we need to put the interface _name_ in that
-       * struct, not the index.  So we must first call
-       *   ioctl(somesock,SIOCGIFINDEX,struct ifreq) */
-      if (v4sock==-1) v4sock=s4;
-      if (v4sock==-1) v4sock=socket(AF_INET,SOCK_DGRAM,0);
-      if (v4sock==-1) return;
-      ifr.ifr_ifindex=interface;
-      if (ioctl(v4sock,SIOCGIFNAME,&ifr)==-1) return;
-      ifr.ifr_addr.sa_family=AF_INET;
-      if (ioctl(v4sock,SIOCGIFADDR,&ifr)==-1) return;	/* can't happen */
-      memcpy(obuf+slen+12,&((struct sockaddr_in*)&ifr.ifr_addr)->sin_addr,4);
-      slen+=4+12;
-    }
-    if (type==28 || type==255) {	/* AAAA or ANY */
-      if (!IN6_IS_ADDR_UNSPECIFIED(mysa6.sin6_addr.s6_addr32)) {
-	memcpy(obuf+slen,"\xc0\x0c" /* goofy DNS compression */
-			"\x00\x1c" /* AAAA */
-			"\x00\x01" /* IN */
-			"\x00\x00\x02\x30" /* ttl */
-			"\x00\x10" /* 16 bytes payload */
-			,12);
-	memcpy(obuf+slen+12,&mysa6.sin6_addr,16);
-	slen+=28;
-	++obuf[7];
-      }
-    }
-    if (obuf[7])
-      sendto(s,obuf,slen,0,peer,sl);
-  }
-}
-
-struct sockaddr_in sa4;
-struct sockaddr_in6 sa6;
-struct pollfd pfd[4];
-
 struct msghdr mh;
-struct iovec iv;
-char abuf[100];
-#define PKGSIZE 1500
-char buf[PKGSIZE+1];
 
 static int scan_fromhex(unsigned char c) {
   c-='0';
@@ -129,7 +45,6 @@ static int scan_fromhex(unsigned char c) {
   return -1;
 */
 }
-
 
 static void getip(int interface) {
   int fd;
@@ -178,6 +93,98 @@ kaputt:
   }
 }
 
+static void handle(int s,char* buf,int len,int interface,int llmnr) {
+  int q;
+  char* obuf=buf;
+  char* after;
+  int olen=len;
+#ifdef DEBUG
+  if (interface==0)
+    printf("called with interface==0!\n");
+#endif
+  if (len<8*2) return;			/* too short */
+  buf[len]=0;
+  if ((buf[2]&(llmnr?0xfd:0xf8)) != 0) return;		/* not query */
+  q=(((unsigned int)(buf[4])) << 8) | buf[5];
+  if (q!=1) return;			/* cannot handle more than 1 query */
+  if (buf[6] || buf[7]) return;		/* answer count must be 0 */
+  if (buf[8] || buf[9]) return;		/* name server count must be 0 */
+  if (buf[10] || buf[11]) return;	/* additional record count must be 0 */
+  buf+=12; len-=12;
+#ifdef DEBUG
+  printf("got %s request for \"%.*s\"",llmnr?"LLMNR":"zeroconf mDNS",(int)(unsigned char)buf[0],buf+1);
+#endif
+  if (buf[0]==namelen && !strncasecmp(buf+1,myhostname,namelen)) {
+    unsigned int type;
+    int slen;
+    buf+=namelen+1;
+    if (!*buf)
+      ++buf;
+    else if (!strcmp(buf,"\x05local"))
+      buf+=7;
+    else
+      return;
+//    if (((unsigned long)buf)&1) ++buf;
+    if (buf[0] || buf[2]) return;	/* all supported types and classes fit in 8 bit */
+    if (buf[3]!=1) return;		/* we only support IN queries */
+    type=(unsigned char)buf[1];
+    slen=buf-obuf+4;
+    obuf[2]|=0x80; 	/* it's answer; we don't support recursion */
+    if (type==1 || type==255) {		/* A or ANY, we can do that */
+      struct ifreq ifr;
+      static int v4sock=-1;
+      getip(interface);
+      ++obuf[7];			/* one answer */
+      memcpy(obuf+slen,"\xc0\x0c" /* goofy compression */
+	           "\x00\x01" /* A */
+		   "\x00\x01" /* IN */
+		   "\x00\x00\x02\x30" /* ttl; 0x230, about 9.3 minutes */
+		   "\x00\x04" /* 4 bytes payload */
+		   ,12);
+      /* now put in our address */
+      /* OK, so we know the interface.  Time to find out our IP on that
+       * interface.  That is done via
+       *   ioctl(somesock,SIOCGIFADDR,struct ifreq)
+       * Unfortunately, we need to put the interface _name_ in that
+       * struct, not the index.  So we must first call
+       *   ioctl(somesock,SIOCGIFINDEX,struct ifreq) */
+      if (v4sock==-1) v4sock=s4;
+      if (v4sock==-1) v4sock=socket(AF_INET,SOCK_DGRAM,0);
+      if (v4sock==-1) return;
+      ifr.ifr_ifindex=interface;
+      if (ioctl(v4sock,SIOCGIFNAME,&ifr)==-1) return;
+      ifr.ifr_addr.sa_family=AF_INET;
+      if (ioctl(v4sock,SIOCGIFADDR,&ifr)==-1) return;	/* can't happen */
+      memcpy(obuf+slen+12,&((struct sockaddr_in*)&ifr.ifr_addr)->sin_addr,4);
+      slen+=4+12;
+    }
+    if (type==28 || type==255) {	/* AAAA or ANY */
+      if (!IN6_IS_ADDR_UNSPECIFIED(mysa6.sin6_addr.s6_addr32)) {
+	memcpy(obuf+slen,"\xc0\x0c" /* goofy DNS compression */
+			"\x00\x1c" /* AAAA */
+			"\x00\x01" /* IN */
+			"\x00\x00\x02\x30" /* ttl */
+			"\x00\x10" /* 16 bytes payload */
+			,12);
+	memcpy(obuf+slen+12,&mysa6.sin6_addr,16);
+	slen+=28;
+	++obuf[7];
+      }
+    }
+    if (obuf[7])
+      sendto(s,obuf,slen,0,peer,sl);
+  }
+}
+
+struct sockaddr_in sa4;
+struct sockaddr_in6 sa6;
+struct pollfd pfd[4];
+
+struct iovec iv;
+char abuf[100];
+#define PKGSIZE 1500
+char buf[PKGSIZE+1];
+
 static int v4if() {
   struct cmsghdr* x;
   for (x=CMSG_FIRSTHDR(&mh); x; x=CMSG_NXTHDR(&mh,x))
@@ -188,7 +195,6 @@ static int v4if() {
 
 static void recv4(int s) {
   int len;
-  int interface;
 
   mh.msg_name=&sa4;
   mh.msg_namelen=sizeof(sa4);
@@ -199,17 +205,26 @@ static void recv4(int s) {
   peer=(struct sockaddr*)&sa4;
   sl=sizeof(sa4);
 
-  interface=v4if();
-  getip(interface);
+#ifdef DEBUG
+  printf("v4: ");
+#endif
 
-  handle(s,buf,len,interface,s==ls4);
+  handle(s,buf,len,v4if(),s==ls4);
 }
 
 static void recv6(int s) {
   int len,interface;
+#ifdef DEBUG
+  char addrbuf[INET6_ADDRSTRLEN];
+  char ifbuf[IFNAMSIZ];
+#endif
 
   mh.msg_name=&sa6;
   mh.msg_namelen=sizeof(sa6);
+
+  mh.msg_control=abuf;
+  mh.msg_controllen=sizeof(abuf);
+
   if ((len=recvmsg(s,&mh,0))==-1) {
     perror("recvmsg");
     exit(3);
@@ -217,14 +232,26 @@ static void recv6(int s) {
   peer=(struct sockaddr*)&sa6;
   sl=sizeof(sa6);
 
-  if (IN6_IS_ADDR_V4MAPPED(sa6.sin6_addr.s6_addr))
+  if (IN6_IS_ADDR_V4MAPPED(sa6.sin6_addr.s6_addr)) {
     interface=v4if();
-  else
+#ifdef DEBUG
+    inet_ntop(AF_INET,(char*)(sa6.sin6_addr.s6_addr)+12,addrbuf,sizeof addrbuf);
+    if_indextoname(interface,ifbuf);
+    printf("v4: %s: ",ifbuf);
+#endif
+  } else {
     interface=sa6.sin6_scope_id;
-
-  getip(interface);
+#ifdef DEBUG
+    inet_ntop(AF_INET6,sa6.sin6_addr.s6_addr,addrbuf,sizeof addrbuf);
+    if_indextoname(interface,ifbuf);
+    printf("v6: %s: ",ifbuf);
+#endif
+  }
 
   handle(s,buf,len,interface,s==ls6);
+#ifdef DEBUG
+  printf(" from %s\n",addrbuf);
+#endif
 }
 
 static void init_sockets(int* sock6,int* sock4,int port,char* v6ip,char* v4ip) {

@@ -15,7 +15,7 @@
  - look at mktime: "Falls tm_isdst == -1 gesetzt, so sollte mktime
    versuchen herauszufinden, ob Sommerzeit eingestellt ist (und laut linux
    manpage auch tzname setzen), ansonsten die angegebene DST
-   berücksichtigen."
+   berÃ¼cksichtigen."
  - better rand()?
  - try to make zebra compile.
  - printf %e
@@ -32,3 +32,4 @@ Also: AF_UNSPEC, AI_ADDRCONFIG
 set_thread_area -> set up TLD, for stack guard
 
 lsearch, lfind, hsearch, tsearch
+

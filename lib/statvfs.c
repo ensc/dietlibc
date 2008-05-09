@@ -2,7 +2,7 @@
 #include <sys/statvfs.h>
 #include <sys/statfs.h>
 
-extern void __statvfs_cvt(struct statfs64* from,struct statvfs* to);
+extern void __statvfs_cvt(struct statfs* from,struct statvfs* to);
 
 int statvfs(const char *path, struct statvfs *sv) {
   struct statfs ss;
@@ -10,3 +10,4 @@ int statvfs(const char *path, struct statvfs *sv) {
   __statvfs_cvt(&ss,sv);
   return 0;
 }
+
