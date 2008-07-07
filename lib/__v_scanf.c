@@ -280,6 +280,7 @@ scan_hex:
 	      }
 	    }
 exp_out:
+	    if (neg) d = -d;
 	    if (!flag_discard) {
 	      if (flag_long) {
 		pd=(double *)va_arg(arg_ptr,double*);
