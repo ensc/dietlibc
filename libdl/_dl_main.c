@@ -318,6 +318,7 @@ asm(".text \n"
 "	mov	fp, #0			@ start new stack frame \n"
 "	ldr	a1, [sp], #4		@ argc \n"
 "	mov	a2, sp			@ argv \n"
+"	mov	sp, r4			@ restore stack pointer \n"
 "	add	a3, a2, a1, lsl #2	@ envp \n"
 "	add	a3, a3, #4 \n"
 /* PIC code startup */
@@ -332,8 +333,6 @@ asm(".text \n"
 "	add	a4, a4, sl \n"
 /* call _dl_main */
 "	bl	_dl_main \n"
-/* restore stack pointer */
-"	mov	sp, r4 \n"
 /* save program entry point */
 "	mov	lr, a1 \n"
 /* abi: agrument 1: global fini entry */
