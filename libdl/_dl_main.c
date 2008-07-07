@@ -333,8 +333,6 @@ asm(".text \n"
 "	add	a4, a4, sl \n"
 /* call _dl_main */
 "	bl	_dl_main \n"
-/* restore stack pointer */
-"	mov	sp, r4 \n"
 /* save program entry point */
 "	mov	lr, a1 \n"
 /* abi: agrument 1: global fini entry */
