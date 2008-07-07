@@ -30,6 +30,7 @@ __unified_syscall:
 /* ok now include all syscalls.s (*.S) and sysdep *.S */
 #include "mmap.S"
 #include "waitpid.S"
+#include "select.S"
 
 #include "../syscalls.s/__getpagesize.S"
 #include "../syscalls.s/__pread.S"
@@ -132,7 +133,6 @@ __unified_syscall:
 #include "../syscalls.s/sched_setparam.S"
 #include "../syscalls.s/sched_setscheduler.S"
 #include "../syscalls.s/sched_yield.S"
-#include "../syscalls.s/select.S"
 #include "../syscalls.s/sendfile.S"
 #include "../syscalls.s/sendfile64.S"
 #include "../syscalls.s/setdomainname.S"
