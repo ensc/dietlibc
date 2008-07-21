@@ -33,7 +33,7 @@ kaputt:
 	if (ps->count-1 > 4) goto kaputt;
       } else {
 	ps->sofar=*s;
-	break;
+	n=0;
       }
     }
     ++s;
