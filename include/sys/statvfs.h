@@ -3,6 +3,7 @@
 
 #include <sys/cdefs.h>
 #include <sys/types.h>
+#include <sys/mount.h>
 
 __BEGIN_DECLS
 
