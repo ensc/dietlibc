@@ -331,3 +331,14 @@ A: Fedora 6 ships with binutils that can create non-standard ELF
      diet-dyn gcc -Wl,--hash-style=sysv -shared -o libx.so x.c
                   ^^^^^^^^^^^^^^^^^^^^^
 
+
+Q: How do I compile OpenSSL with dietlibc?
+A: Here's how I do it:
+
+  ./config --prefix=/opt/diet no-dso
+  make libssl.pc openssl.pc
+  for i in libssl.pc openssl.pc Makefile; do (echo ",s/ *-ldl//g"; echo w) | ed $i; done
+  make CC="diet -Os gcc -pipe -nostdinc"
+
+Then the libraries go to /opt/diet/lib, so you still need a symlink to
+lib-i386 or whatever your architecture is.
