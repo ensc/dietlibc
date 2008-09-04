@@ -68,7 +68,6 @@ struct tm {
 
 #ifdef _BSD_SOURCE
 /* another wonderful BSD invention... :( */
-/* note how subtly broken it is (doesn't work with <= or >=) */
 #define timercmp(a,b,CMP) (((a)->tv_sec == (b)->tv_sec) ? ((a)->tv_usec CMP (b)->tv_usec) : ((a)->tv_sec CMP (b)->tv_sec))
 #define timerclear(x) ((x)->tv_sec=(x)->tv_usec=0)
 #define timeradd(a,b,x) do { (x)->tv_sec=(a)->tv_sec+(b)->tv_sec; if (((x)->tv_usec=(a)->tv_usec+(b)->tv_usec)>=1000000) { ++(x)->tv_sec; (x)->tv_usec-=1000000; } } while (0)
