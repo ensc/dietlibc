@@ -12,6 +12,6 @@ sigsetjmp:
 	sfm	f4, 4, [r0], #48
 #endif
 	stmia	r0, {r4-r11, sp, lr}
-	sub	r0, r0, #30
+	sub	r0, r0, #48
 	b	__sigjmp_save
 

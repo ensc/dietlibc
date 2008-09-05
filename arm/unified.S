@@ -2,11 +2,35 @@
 #include <dietfeatures.h>
 
 	.text
+#ifdef __ARM_EABI__
+	.align 4
+#else
 	.align 2
-	
+#endif 	
 	.global __unified_syscall
 	.global __unified_syscall4
 
+
+#ifdef __ARM_EABI__
+
+__unified_syscall4:
+__unified_syscall:
+	
+        cmn     r0, #4096
+        rsbcs   r2, r0, #0
+        ldrcs   r3, 1f
+        mvncs   r0, #0
+        strcs   r2, [r3]
+        ldmfd   sp!,{r4,r5,r7,pc}
+	.balign 4
+1:
+        .word   errno
+	
+/* here we go and "reuse" the return for weak-void functions */
+#include "dietuglyweaks.h"
+
+#else	
+	
 __unified_syscall4:
 	ldmia	sp!, {r4, r5, r6}
 __unified_syscall:
@@ -31,4 +55,6 @@ __unified_syscall:
 
 #ifndef WANT_THREAD_SAFE
 .L0:	.long 	errno
+#endif
+
 #endif

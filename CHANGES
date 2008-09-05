@@ -14,6 +14,7 @@
     (Enrico Scholz)
   fix utmp, add utmpx support (R.L. Horn)
   fix the dynamic library for the ARM architecture (Gernot Tenchio)
+  get ARM port to work with EABI (Tristan Newby)
   fix of scanf with negative floats (Andre Oliveira)
 
 0.31:

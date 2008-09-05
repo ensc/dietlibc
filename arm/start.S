@@ -3,12 +3,48 @@
 #include "syscalls.h"
 
 	.text
+#ifdef __ARM_EABI__
+	.align 4
+#else
 	.align 2
-
+#endif
+	
 	.global _start
 	.weak 	exit
 	.global _exit
 
+
+#ifdef __ARM_EABI__
+
+_start:
+
+	mov	fp, #0			@ clear the frame pointer
+	ldr	a1, [sp], #4		@ argc
+	mov	a2, sp			@ argv
+	ldr	ip, .L3
+	add	a3, a2, a1, lsl #2	@ &argv[argc]
+	add	a3, a3, #4		@ envp	
+	str	a3, [ip, #0]		@ environ = envp
+	bl	main
+		
+@
+@ The exit status from main() is already in r0.
+@ We need to branch to 'exit' in case we have linked with 'atexit'.
+@
+	bl	exit
+
+exit:
+_exit:
+
+	mov	r7, #__NR_exit		
+	swi	0			@ never returns.
+
+.L3:	.word 	environ
+
+	
+#else	
+
+	
 _start:
 
 #ifdef WANT_DYNAMIC
@@ -72,4 +108,4 @@ _exit:
 #endif
 
 
-
+#endif

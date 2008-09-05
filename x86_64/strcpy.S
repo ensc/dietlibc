@@ -7,8 +7,8 @@ strcpy:
 
 .Lloop:
 	lodsb
+	test %al, %al
 	stosb
-	or %al, %al
 	jnz .Lloop
 
 	mov %rdx,%rax
