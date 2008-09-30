@@ -21,8 +21,8 @@ size_t mbrtowc(wchar_t *pwc, const char *s, size_t n, mbstate_t *ps) {
     unsigned char c=s[i];
     switch (lc_ctype) {
     case CT_8BIT:
-      if (pwc) *pwc=c;
-      return 1;
+      if (pwc) { *pwc=c; ++pwc; }
+      return (!!c);
     case CT_UTF8:
       if (ps->count) {
 	/* we have an unfinished multibyte sequence */
@@ -36,7 +36,7 @@ kaputt:
 	ps->sofar=(ps->sofar << 6) + (c & 0x3f);
 	if (!--ps->count) {
 complete:
-	  if (pwc) *pwc=ps->sofar;
+	  if (pwc) { *pwc=ps->sofar; ++pwc; }
 	  if (ps->sofar) {
 	    ps->sofar=0;
 	    return i+1;

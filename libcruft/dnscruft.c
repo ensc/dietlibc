@@ -20,8 +20,8 @@ int __dns_fd6=-1;
 void __dns_make_fd(void);
 void __dns_make_fd6(void);
 void __dns_readstartfiles(void);
-int __dns_decodename(unsigned char *packet,unsigned int offset,unsigned char *dest,
-		     unsigned int maxlen,unsigned char* behindpacket);
+int __dns_decodename(const unsigned char *packet,unsigned int offset,unsigned char *dest,
+		     unsigned int maxlen,const unsigned char* behindpacket);
 
 void __dns_make_fd(void) {
   int tmp;
@@ -148,11 +148,11 @@ void __dns_readstartfiles(void) {
 }
 
 /* return length of decoded data or -1 */
-int __dns_decodename(unsigned char *packet,unsigned int offset,unsigned char *dest,
-		     unsigned int maxlen,unsigned char* behindpacket) {
-  unsigned char *tmp;
-  unsigned char *max=dest+maxlen;
-  unsigned char *after=packet+offset;
+int __dns_decodename(const unsigned char *packet,unsigned int offset,unsigned char *dest,
+		     unsigned int maxlen,const unsigned char* behindpacket) {
+  const unsigned char *tmp;
+  const unsigned char *max=dest+maxlen;
+  const unsigned char *after=packet+offset;
   int ok=0;
   for (tmp=after; maxlen>0&&*tmp; ) {
     if (tmp>=behindpacket) return -1;

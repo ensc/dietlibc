@@ -13,4 +13,6 @@ main() {
   /* does it accept a multibyte sequence in two parts? */
   printf("%d\n",mbrlen("\xc2\xa9",1,&ps));
   printf("%d\n",mbrlen("\xa9""fnord",6,&ps));
+  /* does it parse non-sequence stuff right? */
+  assert(mbrlen("f",1,&ps)==1);
 }

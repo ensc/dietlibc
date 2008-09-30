@@ -256,6 +256,7 @@ static void recv6(int s) {
 
 static void init_sockets(int* sock6,int* sock4,int port,char* v6ip,char* v4ip) {
   int s4,s6;
+  int one=1;
   *sock6=-1; *sock4=-1;
   s6=socket(PF_INET6,SOCK_DGRAM,IPPROTO_UDP);
   s4=socket(PF_INET,SOCK_DGRAM,IPPROTO_UDP);
@@ -264,6 +265,7 @@ static void init_sockets(int* sock6,int* sock4,int port,char* v6ip,char* v4ip) {
     return;
   }
   if (s6!=-1) {
+    setsockopt(s6,SOL_SOCKET,SO_REUSEADDR,&one,sizeof(one));
     memset(&sa6,0,sizeof(sa6));
     sa6.sin6_family=PF_INET6;
     sa6.sin6_port=htons(port);
@@ -274,6 +276,7 @@ static void init_sockets(int* sock6,int* sock4,int port,char* v6ip,char* v4ip) {
     }
   }
   if (s4!=-1) {
+    setsockopt(s4,SOL_SOCKET,SO_REUSEADDR,&one,sizeof(one));
     memset(&sa4,0,sizeof(sa4));
     sa4.sin_family=PF_INET;
     sa4.sin_port=htons(port);

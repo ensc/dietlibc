@@ -332,6 +332,8 @@
 #define __NR_timerfd		283
 #define __NR_eventfd		284
 #define __NR_fallocate		285
+#define __NR_timerfd_settime	286
+#define __NR_timerfd_gettime	287
 
 #ifdef __PIC__
 #define syscall_weak(name,wsym,sym) \

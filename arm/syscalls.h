@@ -357,6 +357,14 @@
 #define __NR_move_pages			(__NR_SYSCALL_BASE+344)
 #define __NR_getcpu			(__NR_SYSCALL_BASE+345)
 					/* 346 for epoll_pwait */
+#define __NR_kexec_load			(__NR_SYSCALL_BASE+347)
+#define __NR_utimensat			(__NR_SYSCALL_BASE+348)
+#define __NR_signalfd			(__NR_SYSCALL_BASE+349)
+#define __NR_timerfd			(__NR_SYSCALL_BASE+350)
+#define __NR_eventfd			(__NR_SYSCALL_BASE+351)
+#define __NR_fallocate			(__NR_SYSCALL_BASE+352)
+#define __NR_timerfd_settime		(__NR_SYSCALL_BASE+353)
+#define __NR_timerfd_gettime		(__NR_SYSCALL_BASE+354)
 
 /*
  * The following SWIs are ARM private.
@@ -748,6 +756,14 @@
 #define __ARGS_move_pages		1
 #define __ARGS_getcpu			0
 					/* 346 for epoll_pwait */
+#define __ARGS_kexec_load		0
+#define __ARGS_utimensat		0
+#define __ARGS_signalfd			0
+#define __ARGS_timerfd			0
+#define __ARGS_eventfd			0
+#define __ARGS_fallocate		0
+#define __ARGS_timerfd_settime		0
+#define __ARGS_timerfd_gettime		0
 
 
 #ifdef __ASSEMBLER__

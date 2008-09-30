@@ -119,8 +119,8 @@ int dn_comp(unsigned char *msg, unsigned char *comp_dn,
       int length, unsigned char **dnptrs, unsigned char *exp_dn,
       unsigned char **lastdnptr) __THROW;
 
-int dn_expand(unsigned char *msg, unsigned char *eomorig,
-      unsigned char *comp_dn, unsigned char *exp_dn,
+int dn_expand(const unsigned char *msg, const unsigned char *eomorig,
+      const unsigned char *comp_dn, unsigned char *exp_dn,
       int length) __THROW;
 
 void res_close(void) __THROW __attribute_dontuse__;
