@@ -27,7 +27,7 @@ _start:
 	stg	%r4,0(%r13)
 
 #ifdef WANT_ELFINFO
-#  error "VERIFY ME!"
+#  warning "VERIFY ME!"
 1:	aghi	%r4, 8		# increment envp
 	lg	%r12, -8(0,%r4)	# load envp[-1] into %r12
 	ogr	%r12, %r12	# test %r12 for NULL

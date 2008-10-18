@@ -26,7 +26,7 @@ _start:
 	stx	%o2, [%o3]
 
 #ifdef WANT_ELFINFO
-#  error "VERIFY ME!"
+#  warning "VERIFY ME!"
 1:	add	%o2, %o2, 8
 	ldx	[%o2-8], %o4
 	orcc	%o4, %o4, %o4
