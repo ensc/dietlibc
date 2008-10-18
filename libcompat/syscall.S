@@ -131,7 +131,7 @@ syscall:
 
 #else
 #include <endian.h>
-	.section	.note
+	.section	.comment
 #if (__WORDSIZE == 64)	
 	.quad		__syscall_2_not_implemented_for_this_arch
 #else	
