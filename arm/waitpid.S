@@ -1,5 +1,9 @@
 .text
+#ifdef __ARM_EABI__
+.align	4
+#else	
 .align	2
+#endif
 .weak	waitpid
 .type	waitpid, %function
 waitpid:

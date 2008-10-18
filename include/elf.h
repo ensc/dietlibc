@@ -2078,6 +2078,7 @@ typedef Elf32_Addr Elf32_Conflict;
 #define EF_ARM_EABI_UNKNOWN  0x00000000
 #define EF_ARM_EABI_VER1     0x01000000
 #define EF_ARM_EABI_VER2     0x02000000
+#define EF_ARM_EABI_VER4     0x04000000
 
 /* Additional symbol types for Thumb */
 #define STT_ARM_TFUNC      0xd

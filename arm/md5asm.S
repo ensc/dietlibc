@@ -57,8 +57,12 @@
    .global MD5Update
 
    .text
+#ifdef __ARM_EABI__
+   .align  4
+#else		
    .align  2
-
+#endif
+	
     @ --
     @ void MD5Init (MD5_CTX* context);
     @ --

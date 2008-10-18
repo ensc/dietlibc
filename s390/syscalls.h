@@ -302,6 +302,9 @@
 #define __NR_signalfd		316
 #define __NR_timerfd		317
 #define __NR_eventfd		318
+#define __NR_timerfd_create	319
+#define __NR_timerfd_settime	320
+#define __NR_timerfd_gettime	321
 
 
 #define syscall_weak(name,wsym,sym) \

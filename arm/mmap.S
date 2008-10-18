@@ -15,6 +15,18 @@
 
 .global mmap
 
+#ifdef __ARM_EABI__
+
+mmap:
+	mov	ip, r7
+	mov	r7, #__NR_mmap2
+	svc	0x00000000
+	mov	r7, ip
+	cmn	r0, #4096
+	mov	pc, lr			@ return
+
+#else	
+		
 mmap:
 	stmdb	sp!, {r0, r1, r2, r3}
 	mov	r0, sp
@@ -22,3 +34,4 @@ mmap:
 	add	sp, sp, #16
 	b	__unified_syscall
 
+#endif

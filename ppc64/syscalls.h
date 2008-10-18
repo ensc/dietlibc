@@ -308,6 +308,9 @@
 #define __NR_eventfd		307
 #define __NR_sync_file_range2	308
 #define __NR_fallocate		309
+#define __NR_subpage_prot	310
+#define __NR_timerfd_settime	311
+#define __NR_timerfd_gettime	312
 
 
 #define __diet_proto_common(sym) \
