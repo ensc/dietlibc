@@ -134,6 +134,11 @@ char* strptime(const char* s,const char* format, struct tm* tm) {
 	if (i==-1) return 0;
 	tm->tm_year=i-1900;
 	break;
+      case 'Z':
+	/* time zone.  Not sure what I'm expected to do here. We'll just
+	 * skip to the next whitespace */
+	while (*s!=' ' && *s!='\t') ++s;
+	break;
       }
       ++format;
       break;
