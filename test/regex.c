@@ -105,6 +105,14 @@ int main() {
   assert(regexec(&r,"chello089078194199.chello.pl",10,matches,0)==0);
   regfree(&r);
 
+  assert(regcomp(&r,"(satel.com|kievnet.com|dn|merlin.net|inetcom.com|zdn.gov|terabit.com|od|odessa|elencom.net|uz|syndicate.org|tvcom.net|dn|qt.net|b-net.com).ua",REG_EXTENDED|REG_ICASE|REG_NOSUB)==0);
+  assert(regexec(&r,"mail.b-net.com.ua",0,NULL,0)==0);
+  regfree(&r);
+
+  assert(regcomp(&r,"(foo)bar\\1",0)==0);
+  assert(regexec(&r,"foobarfoo",10,matches,0)==0);
+  regfree(&r);
+
 #if 0
   printf("regcomp %d\n",regcomp(&r,"\\.( ? ? ?\\.)*\\.",REG_EXTENDED|REG_NOSUB));
   printf("regexec %d\n",regexec(&r,buf,1,0,0));

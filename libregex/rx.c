@@ -43,7 +43,7 @@ struct regex {
 struct atom {
   matcher m;
   void* next;
-  enum { ILLEGAL, EMPTY, REGEX, BRACKET, ANY, LINESTART, LINEEND, WORDSTART, WORDEND, CHAR, } type;
+  enum { ILLEGAL, EMPTY, REGEX, BRACKET, ANY, LINESTART, LINEEND, WORDSTART, WORDEND, CHAR, BACKREF, } type;
   int bnum;
   union {
     struct regex r;
@@ -176,6 +176,13 @@ static int matchatom(void*__restrict__ x,const unsigned char*__restrict__ s,int 
     matchlen=1;
     if (((preg->cflags&REG_ICASE)?tolower(*s):*s)==a->u.c) goto match;
     break;
+  case BACKREF:
+    matchlen=preg->l[a->u.c].rm_eo-preg->l[a->u.c].rm_so;
+#ifdef DEBUG
+    printf("matching atom BACKREF %d (\"%.*s\") against \"%.20s\"\n",a->u.c,matchlen,s-ofs+preg->l[a->u.c].rm_so,s);
+#endif
+    if (memcmp(s-ofs+preg->l[a->u.c].rm_so,s,matchlen)==0) goto match;
+    break;
   }
   return -1;
 match:
@@ -226,7 +233,12 @@ static const char* parseatom(struct atom*__restrict__ a,const char*__restrict__ 
     } else if (*s=='>') {
       a->type=WORDEND;
       break;
+    } else if (*s>='1' && *s<=(rx->brackets+'1') && ((rx->cflags&REG_EXTENDED)==0)) {
+      a->type=BACKREF;
+      a->u.c=*s-'0';
+      break;
     }
+    /* fall through */
   default:
     a->type=CHAR;
     a->u.c=rx->cflags&REG_ICASE?tolower(*s):*s;
