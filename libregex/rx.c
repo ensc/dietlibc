@@ -216,7 +216,7 @@ static int matchatom(void*__restrict__ x,const unsigned char*__restrict__ s,int 
     printf("matching atom STRING \"%.*s\" against \"%.20s\"\n",a->u.s.len,a->u.s.s,s);
 #endif
     {
-      size_t i;
+      int i;
       if (preg->cflags&REG_ICASE) {
 	for (i=0; i<matchlen; ++i)
 	  if (tolower(s[i]) != a->u.s.s[i]) return -1;
@@ -228,11 +228,11 @@ static int matchatom(void*__restrict__ x,const unsigned char*__restrict__ s,int 
     goto match;
     break;
   case BACKREF:
-    matchlen=preg->l[a->u.c].rm_eo-preg->l[a->u.c].rm_so;
+    matchlen=preg->l[(unsigned char)(a->u.c)].rm_eo-preg->l[(unsigned char)(a->u.c)].rm_so;
 #ifdef DEBUG
     printf("matching atom BACKREF %d (\"%.*s\") against \"%.20s\"\n",a->u.c,matchlen,s-ofs+preg->l[a->u.c].rm_so,s);
 #endif
-    if (memcmp(s-ofs+preg->l[a->u.c].rm_so,s,matchlen)==0) goto match;
+    if (memcmp(s-ofs+preg->l[(unsigned char)(a->u.c)].rm_so,s,matchlen)==0) goto match;
     break;
   }
   return -1;
