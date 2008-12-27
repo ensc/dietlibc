@@ -288,6 +288,9 @@ _unified_syscall:
 #include "../syscalls.s/lgetxattr.S"
 #include "../syscalls.s/fgetxattr.S"
 
+#include "../syscalls.s/timerfd.S"
+#include "../syscalls.s/__signalfd.S"
+
 #define _exit __exit
 #include "clone.S"
 #undef _exit

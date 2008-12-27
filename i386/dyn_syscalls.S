@@ -349,6 +349,9 @@ __unified_syscall:
 #include "../syscalls.s/lgetxattr.S"
 #include "../syscalls.s/fgetxattr.S"
 
+#include "../syscalls.s/timerfd.S"
+#include "../syscalls.s/__signalfd.S"
+
 #undef __PIC__
 #undef __socketcall
 /* oh what a kludge! */
