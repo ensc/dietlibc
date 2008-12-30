@@ -16,6 +16,9 @@
   fix the dynamic library for the ARM architecture (Gernot Tenchio)
   get ARM port to work with EABI (Tristan Newby)
   fix of scanf with negative floats (Andre Oliveira)
+  use vsyscall to do time(2) on x86-64
+  implement back references in basic regexes
+  make regex faster (coalesce n CHAR matches to one STRING match)
 
 0.31:
   getopt_long and getopt_long_only now refuse ambiguous abbreviations

@@ -7,6 +7,10 @@
 #include <string.h>
 #include <assert.h>
 
+#if !defined(__x86_64__)
+#undef WANT_REGEX_JIT
+#endif
+
 /* this is ugly.
  * the idea is to build a parse tree, then do some poor man's OOP with a
  * generic matcher function call that is always that the start of each
@@ -40,15 +44,21 @@ struct regex {
   struct branch *b;
 }; */
 
+struct string {
+  char* s;
+  size_t len;
+};
+
 struct atom {
   matcher m;
   void* next;
-  enum { ILLEGAL, EMPTY, REGEX, BRACKET, ANY, LINESTART, LINEEND, WORDSTART, WORDEND, CHAR, } type;
+  enum { ILLEGAL, EMPTY, REGEX, BRACKET, ANY, LINESTART, LINEEND, WORDSTART, WORDEND, CHAR, STRING, BACKREF, } type;
   int bnum;
   union {
     struct regex r;
     struct bracketed b;
     char c;
+    struct string s;
   } u;
 };
 
@@ -99,6 +109,30 @@ static const char* parsebracketed(struct bracketed*__restrict__ b,const char*__r
 }
 
 static const char* parseregex(struct regex* r,const char* s,regex_t* rx);
+
+static int matchatom_CHAR(void*__restrict__ x,const unsigned char*__restrict__ s,int ofs,struct __regex_t*__restrict__ preg,int plus,int eflags) {
+  register struct atom* a=(struct atom*)x;
+#ifdef DEBUG
+    printf("matching atom CHAR %c against \"%.20s\"\n",a->u.c,s);
+#endif
+  if (*s!=a->u.c) return -1;
+  if (a->next)
+    return ((struct atom*)(a->next))->m(a->next,(const char*)s+1,ofs+1,preg,plus+1,eflags);
+  else
+    return plus+1;
+}
+
+static int matchatom_CHAR_ICASE(void*__restrict__ x,const unsigned char*__restrict__ s,int ofs,struct __regex_t*__restrict__ preg,int plus,int eflags) {
+  register struct atom* a=(struct atom*)x;
+#ifdef DEBUG
+    printf("matching atom CHAR_ICASE %c against \"%.20s\"\n",a->u.c,s);
+#endif
+  if (tolower(*s)!=a->u.c) return -1;
+  if (a->next)
+    return ((struct atom*)(a->next))->m(a->next,(const char*)s+1,ofs+1,preg,plus+1,eflags);
+  else
+    return plus+1;
+}
 
 static int matchatom(void*__restrict__ x,const unsigned char*__restrict__ s,int ofs,struct __regex_t*__restrict__ preg,int plus,int eflags) {
   register struct atom* a=(struct atom*)x;
@@ -176,6 +210,30 @@ static int matchatom(void*__restrict__ x,const unsigned char*__restrict__ s,int 
     matchlen=1;
     if (((preg->cflags&REG_ICASE)?tolower(*s):*s)==a->u.c) goto match;
     break;
+  case STRING:
+    matchlen=a->u.s.len;
+#ifdef DEBUG
+    printf("matching atom STRING \"%.*s\" against \"%.20s\"\n",a->u.s.len,a->u.s.s,s);
+#endif
+    {
+      int i;
+      if (preg->cflags&REG_ICASE) {
+	for (i=0; i<matchlen; ++i)
+	  if (tolower(s[i]) != a->u.s.s[i]) return -1;
+      } else {
+	for (i=0; i<matchlen; ++i)
+	  if (s[i] != a->u.s.s[i]) return -1;
+      }
+    }
+    goto match;
+    break;
+  case BACKREF:
+    matchlen=preg->l[(unsigned char)(a->u.c)].rm_eo-preg->l[(unsigned char)(a->u.c)].rm_so;
+#ifdef DEBUG
+    printf("matching atom BACKREF %d (\"%.*s\") against \"%.20s\"\n",a->u.c,matchlen,s-ofs+preg->l[a->u.c].rm_so,s);
+#endif
+    if (memcmp(s-ofs+preg->l[(unsigned char)(a->u.c)].rm_so,s,matchlen)==0) goto match;
+    break;
   }
   return -1;
 match:
@@ -226,10 +284,36 @@ static const char* parseatom(struct atom*__restrict__ a,const char*__restrict__ 
     } else if (*s=='>') {
       a->type=WORDEND;
       break;
+    } else if (*s>='1' && *s<=(rx->brackets+'1') && ((rx->cflags&REG_EXTENDED)==0)) {
+      a->type=BACKREF;
+      a->u.c=*s-'0';
+      break;
     }
+    /* fall through */
   default:
     a->type=CHAR;
-    a->u.c=rx->cflags&REG_ICASE?tolower(*s):*s;
+    if (rx->cflags&REG_ICASE) {
+      a->u.c=tolower(*s);
+      a->m=(matcher)matchatom_CHAR_ICASE;
+    } else {
+      a->u.c=*s;
+      a->m=(matcher)matchatom_CHAR;
+    }
+    /* optimization: if we have a run of CHAR, make it into a STRING */
+    {
+      size_t i;
+      for (i=1; s[i] && !strchr("(|)[.^$\\*+?{",s[i]); ++i) ;
+      if (!strchr("*+?{",s[i])) --i;
+      if (i>2) {
+	a->m=(matcher)matchatom;
+	a->type=STRING;
+	a->u.s.len=i;
+	if (!(a->u.s.s=malloc(i+1))) return s;
+	memcpy(a->u.s.s,s,i);
+	a->u.s.s[i]=0;
+	return s+i;
+      }
+    }
     break;
   }
   return s+1;
@@ -444,6 +528,7 @@ static void branch_putnext(struct branch*__restrict__ b,void*__restrict__ next) 
   if (b->m!=matchempty) {
     for (i=0; i<b->num-1; ++i) {
       if (b->p[i+1].min==1 && b->p[i+1].max==1)
+/* shortcut: link directly to next atom if it's a piece with min=max=1 */
 	piece_putnext(&b->p[i],&b->p[i+1].a);
       else
 	piece_putnext(&b->p[i],&b->p[i+1]);
@@ -502,8 +587,10 @@ static void __regfree(struct regex* r) {
     int j,k;
     k=r->b[i].num;
     for (j=0; j<k; ++j)
-    if (r->b[i].p[j].a.type==REGEX)
-      __regfree(&r->b[i].p[j].a.u.r);
+      if (r->b[i].p[j].a.type==REGEX)
+	__regfree(&r->b[i].p[j].a.u.r);
+      else if (r->b[i].p[j].a.type==STRING)
+	free(r->b[i].p[j].a.u.s.s);
     free(r->b[i].p);
   }
   free(r->b);
