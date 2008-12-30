@@ -19,7 +19,7 @@ _start:
 #else
 	leaq	environ(%rip), %rax
 #endif
-  	movq	%rdx, (%rax)	/* environ */
+	movq	%rdx, (%rax)	/* environ */
 
 1:	add	$8, %rdx	/* increment envp */
 	cmpq	$0, -8(%rdx)	/* load envp[-1] */

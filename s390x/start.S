@@ -35,7 +35,7 @@ _start:
 
 	aghi	%r13, 8
 	stg	%r4,0(%r13)
-#endif	
+#endif
 
 /* call main or _dyn_start */
 #ifdef WANT_DYNAMIC

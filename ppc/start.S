@@ -36,7 +36,7 @@ _start:
 	addi	5, 5, 4
 	cmpwi	15,0
 	bne	1b
-	
+
 	stw	5,__elfinfo@l(14)
 #endif
 

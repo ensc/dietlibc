@@ -36,7 +36,7 @@ _start:
 	l	%r12, -4(0,%r4)	# load envp[-1] into %r12
 	or	%r12, %r12	# test %r12 for NULL
 	brc	1, 1b
-  
+
 	ahi	%r1, 4
 	st	%r4,0(%r1)
 #endif

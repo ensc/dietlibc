@@ -86,7 +86,7 @@ __environ:
 	.long 0
 #endif
 
-/* __elfinfo must follow __environ immediately */	
+/* __elfinfo must follow __environ immediately */
 .global __elfinfo
 __elfinfo:
 #if __WORDSIZE == 64
