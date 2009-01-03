@@ -191,7 +191,6 @@ __unified_syscall:
 #include "../syscalls.s/n_sigpending.S"
 #include "../syscalls.s/n_sigprocmask.S"
 #include "../syscalls.s/n_sigsuspend.S"
-#include "../syscalls.s/nice.S"
 #include "../syscalls.s/pause.S"
 #include "../syscalls.s/personality.S"
 #include "../syscalls.s/query_module.S"
