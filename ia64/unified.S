@@ -16,9 +16,7 @@
 .text
 
 .globl __unified_syscall
-.proc  __unified_syscall
 .globl __error_unified_syscall
-.proc  __error_unified_syscall
 .globl _exit
 .proc  _exit
 
@@ -27,11 +25,18 @@ _exit:
 .endp _exit
 .size _exit, . - _exit
 
+.proc  __unified_syscall
+
 __unified_syscall:
 	break.i 0x100000
 	movl r2=errno
 	cmp.eq p6,p0=-1,r10
 	;;
+.endp __unified_syscall
+.size __unified_syscall, . - __unified_syscall
+
+.proc  __error_unified_syscall
+
 __error_unified_syscall:
 (p6)    st4 [r2]=r8
 (p6)    mov r8=-1
@@ -40,5 +45,5 @@ __error_unified_syscall:
 
 	br.ret.sptk.few rp
 
-.size __unified_syscall, __error_unified_syscall - __unified_syscall
+.endp __error_unified_syscall
 .size __error_unified_syscall, . - __error_unified_syscall
