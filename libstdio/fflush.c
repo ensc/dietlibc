@@ -17,7 +17,6 @@ int fflush_unlocked(FILE *stream) {
   if (stream==0) {
     int res;
     FILE *f;
-    __fflush_stdin();
     __fflush_stdout();
     __fflush_stderr();
     for (res=0, f=__stdio_root; f; f=f->next)
