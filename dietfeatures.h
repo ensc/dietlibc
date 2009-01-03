@@ -2,12 +2,11 @@
 #define _DIETFEATURES_H
 
 /* feel free to comment some of these out to reduce code size */
-
 #define WANT_FLOATING_POINT_IN_PRINTF
 #define WANT_FLOATING_POINT_IN_SCANF
 #define WANT_CHARACTER_CLASSES_IN_SCANF
 #define WANT_NULL_PRINTF
-/* #define WANT_ERROR_PRINTF */
+#define WANT_ERROR_PRINTF
 #define WANT_LONGLONG_PRINTF
 #define WANT_LONGLONG_SCANF
 
@@ -39,18 +38,19 @@
 
 /* define this to have strncpy zero-fill and not just zero-terminate the
  * string */
-/* #define WANT_FULL_POSIX_COMPAT */
+#define WANT_FULL_POSIX_COMPAT
 
 /* on i386, Linux has an alternate syscall method since 2002/12/16 */
 /* on my Athlon XP, it is twice as fast, but it's only in kernel 2.5 */
 /* 20040118: enabling this breaks User Mode Linux!  It's their fault. */
 #define WANT_SYSENTER
 
+/* define this if you want to get linker warnings */
 #define WANT_LINKER_WARNINGS
 
 /* you need to define this if you want to run your programs with large
  * file support on kernel 2.2 or 2.0 */
-#define WANT_LARGEFILE_BACKCOMPAT
+/* #define WANT_LARGEFILE_BACKCOMPAT */
 
 /* do you want localtime(3) to read /etc/localtime?
  * Needed for daylight saving time etc. */
