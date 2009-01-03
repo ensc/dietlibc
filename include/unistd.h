@@ -39,6 +39,8 @@ loff_t lseek64(int fildes, loff_t offset, int whence) __THROW;
 #if defined _FILE_OFFSET_BITS && _FILE_OFFSET_BITS == 64
 #define lseek(fildes,offset,whence) lseek64(fildes,offset,whence)
 #endif
+#else
+#define lseek64(fildes,offset,whence) lseek(fildes,offset,whence)
 #endif
 
 int chdir(const char *path) __THROW;
