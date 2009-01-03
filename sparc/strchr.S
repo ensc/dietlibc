@@ -11,6 +11,8 @@
 
 .text
 .globl strchr
+.weak index
+index:
 strchr:
 	ldub [%o0], %o2
 	cmp %o2, %o1
