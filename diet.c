@@ -81,6 +81,7 @@ int main(int argc,char *argv[]) {
 #endif
   const char *nostdlib="-nostdlib";
   const char *libgcc="-lgcc";
+  char *libpthread="-lpthread";
   char dashL[1000];
   char dashstatic[]="-static";
   int i;
@@ -245,6 +246,12 @@ pp:
 	if (!strcmp(argv[i],"-o"))
 	  if (!compile) _link=1;
 #endif
+
+      /* now, if we are linking, replace -pthread with -lpthread */
+      for (i=2; i<argc; ++i)
+	if (!strcmp(argv[i],"-pthread"))
+	  argv[i]=libpthread;
+
       newargv=alloca(sizeof(char*)*(argc+100));
       a=alloca(strlen(diethome)+20);
       b=alloca(strlen(platform)+20);
