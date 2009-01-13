@@ -3,12 +3,12 @@
 #include <endian.h>
 
 int fputc_unlocked(int c, FILE *stream) {
-  if (!(stream->flags&CANWRITE) || __fflush4(stream,0)) {
+  if (!__likely(stream->flags&CANWRITE) || __fflush4(stream,0)) {
 kaputt:
     stream->flags|=ERRORINDICATOR;
     return EOF;
   }
-  if (stream->bm>=stream->buflen-1)
+  if (__unlikely(stream->bm>=stream->buflen-1))
     if (fflush_unlocked(stream)) goto kaputt;
   if (stream->flags&NOBUF) {
 #if __BYTE_ORDER == __LITTLE_ENDIAN

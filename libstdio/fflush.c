@@ -43,11 +43,11 @@ int fflush_unlocked(FILE *stream) {
 }
 
 int __fflush4(FILE *stream,int next) {
-  if (!__stdio_atexit) {
+  if (__unlikely(!__stdio_atexit)) {
     __stdio_atexit=1;
     atexit(__stdio_flushall);
   }
-  if ((stream->flags&BUFINPUT)!=next) {
+  if (__unlikely((stream->flags&BUFINPUT)!=next)) {
     int res=fflush_unlocked(stream);
     stream->flags=(stream->flags&~BUFINPUT)|next;
     return res;
