@@ -11,7 +11,7 @@ int fgetc_unlocked(FILE *stream) {
 
   /* common case first */
   if (__likely(stream->bm<stream->bs))
-    return stream->buf[stream->bm++];
+    return ((unsigned char*)(stream->buf))[stream->bm++];
 
   if (__unlikely(feof_unlocked(stream)))
     return EOF;
