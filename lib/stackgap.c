@@ -3,6 +3,8 @@
 #include <alloca.h>
 #include <sys/time.h>
 #include <sys/tls.h>
+#include <endian.h>
+#include <elf.h>
 #include "dietfeatures.h"
 
 extern int main(int argc,char* argv[],char* envp[]);
@@ -11,25 +13,63 @@ extern int main(int argc,char* argv[],char* envp[]);
 extern unsigned long __guard;
 #endif
 
-#if defined(WANT_SSP) || defined(WANT_THREAD_SAFE)
+#ifdef WANT_TLS
+/* __tdatasize is the size of the initialized thread local data section
+ * __tmemsize is the size of the complete thread local data section
+ *   (including uninitialized data)
+ * __tdataptr is a pointer to the initialized thread local data section
+ * __tmemsize is already rounded up to meet alignment
+ * the final memory layout is [tdata] [tbss (zero)] [tcb] */
+size_t __tdatasize, __tmemsize;
+void* __tdataptr;
+
+static void findtlsdata(long* auxvec) {
+#if (__WORDSIZE == 64)
+  Elf64_Phdr* x=0;
+#else
+  Elf32_Phdr* x=0;
+#endif
+  size_t i,n;
+  while (*auxvec) {
+    if (auxvec[0]==3) {
+      x=(void*)auxvec[1];
+      break;
+    }
+    auxvec+=2;
+  } /* if we don't find the entry, the kernel let us down */
+  if (!x) return;	/* a kernel this old does not support thread local storage anyway */
+  n=x->p_memsz/sizeof(*x);
+  for (i=1; i<n; ++i)
+    if (x[i].p_type==PT_TLS) {
+      __tdataptr=(void*)x[i].p_vaddr;
+      __tdatasize=x[i].p_filesz;
+      __tmemsize=x[i].p_memsz;
+      break;
+    }
+  /* if there is no PT_TLS section, there is no thread-local data, and
+   * we just leave the __t* variables zero */
+}
+#endif
+
+#if defined(WANT_SSP) || defined(WANT_TLS)
 static tcbhead_t mainthread;
 
-static void setup_tls(void) {
-  mainthread.tcb=&mainthread;
-  mainthread.self=&mainthread;
+static void setup_tls(tcbhead_t* mainthread) {
+  mainthread->tcb=&mainthread;
+  mainthread->self=&mainthread;
 #if defined(WANT_SSP)
-  mainthread.stack_guard=__guard;
+  mainthread->stack_guard=__guard;
 #endif
 
 #if defined(__x86_64__)
 
-  arch_prctl(ARCH_SET_FS, &mainthread);
+  arch_prctl(ARCH_SET_FS, mainthread);
 
 #elif defined(__i386__)
 
   static unsigned int sd[4];
   sd[0]=-1;
-  sd[1]=(unsigned long int)&mainthread;
+  sd[1]=(unsigned long int)mainthread;
   sd[2]=0xfffff; /* 4 GB limit */
   sd[3]=0x51; /* bitfield, see struct user_desc in asm-i386/ldt.h */
   if (set_thread_area((struct user_desc*)(void*)&sd)==0) {
@@ -37,46 +77,54 @@ static void setup_tls(void) {
   }
 
 #elif defined(__alpha__) || defined(__s390__)
-  __builtin_set_thread_pointer(&mainthread);
+  __builtin_set_thread_pointer(mainthread);
 #elif defined(__ia64__) || defined(__powerpc__)
   register tcbhead_t* __thread_self __asm__("r13");
-  __thread_self=&mainthread;
+  __thread_self=mainthread;
 #elif defined(__sparc__)
   register tcbhead_t* __thread_self __asm("%g7");
-  __thread_self=&mainthread;
+  __thread_self=mainthread;
 #else
 #warning "no idea how to enable TLS on this platform, edit lib/stackgap.c"
 #endif
 }
 #endif
 
+static void* find_rand(long* x) {
+  while (*x) {
+    if (*x==25)
+      break;
+    x+=2;
+  }
+  return (void*)x[1];	/* the kernel always passes this. we don't provide a fallback for when it doesn't */
+}
+
 int stackgap(int argc,char* argv[],char* envp[]);
 int stackgap(int argc,char* argv[],char* envp[]) {
-#ifdef WANT_SSP_XOR
-  struct timeval tv;
-#endif
-#if defined(WANT_STACKGAP) || defined(WANT_SSP_URANDOM)
-  int fd=open("/dev/urandom",O_RDONLY);
+#if defined(WANT_STACKGAP) || defined(WANT_SSP) || defined(WANT_TLS)
+  long* auxvec=(long*)envp;
+  while (*auxvec) ++auxvec; ++auxvec;	/* skip envp to get to auxvec */
+  char* rand=find_rand(auxvec);
+  char* tlsdata;
 #ifdef WANT_STACKGAP
   unsigned short s;
   volatile char* gap;
-  read(fd,&s,2);
+  s=*(unsigned short*)(rand+8);
 #endif
 #ifdef WANT_SSP
-  read(fd,&__guard,sizeof(__guard));
+  __guard=*(unsigned long*)rand;
 #endif
-  close(fd);
 #ifdef WANT_STACKGAP
   gap=alloca(s);
 #endif
 #endif
-#ifdef WANT_SSP_XOR
-  gettimeofday (&tv, NULL);
-  __guard ^= tv.tv_usec ^ tv.tv_sec ^ getpid();
-#endif
 
-#if defined(WANT_SSP) || defined(WANT_THREAD_SAFE)
-  setup_tls();
+#if defined(WANT_SSP) || defined(WANT_TLS)
+  findtlsdata(auxvec);
+  tlsdata=alloca(__tmemsize+sizeof(tcbhead_t));
+  memcpy(tlsdata,__tdataptr,__tdatasize);
+  memset(tlsdata+__tdatasize,0,__tmemsize-__tdatasize);
+  setup_tls((tcbhead_t*)(tlsdata+__tmemsize));
 #endif
   return main(argc,argv,envp);
 }

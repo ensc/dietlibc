@@ -25,6 +25,9 @@
 /* use errno_location instead of errno */
 #define WANT_THREAD_SAFE
 
+/* support __thread */
+#define WANT_TLS
+
 /* make the startcode, etc. dynamic aware ({con,de}structors) */
 /* #define WANT_DYNAMIC */
 
@@ -111,20 +114,10 @@
 /* Include support for ProPolice/SSP, calls guard_setup */
 /* ProPolice is part of gcc 4.1 and up, there were patches for earlier
  * versions.  To make use of this, compile your application with
- * -fstack-protector.  On i386, enabling this option with
- * WANT_SSP_URANDOM and then not using -fstack-protector enlarges a
- * binary by 152 bytes. */
+ * -fstack-protector. */
 #if (__GNUC__>4) || ((__GNUC__==4) && (__GNUC_MINOR__>=1))
 #define WANT_SSP
 #endif
-/* Choose which canary seeder you want you can choose
- * both but it will check urandom first and use xor as
- * a fallback. xor is lighter but weaker */
-#define WANT_SSP_URANDOM
-/* The XOR seeder is completely predictable and should not be used
- * unless you don't have a /dev/urandom, and even then it's a bad idea. */
-/* #define WANT_SSP_XOR */
-
 
 
 

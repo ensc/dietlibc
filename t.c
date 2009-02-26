@@ -108,9 +108,12 @@ extern char* strcpy2(char*a,char*b);
 #define malloc(x) ({typeof(x) y=x; (y<0 || (size_t)(y)!=y ? 0 : malloc(y));})
 
 int main(int argc,char *argv[]) {
+#if 0
   char* a=malloc(-3);
   char* b=malloc(0xffffffffull+1);
   printf("%p %p\n",a,b);
+#endif
+  printf("%u\n",getpagesize());
 #if 0
   struct stat s;
   time_t t=time(0);
