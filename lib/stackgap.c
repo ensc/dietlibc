@@ -93,22 +93,34 @@ static void setup_tls(tcbhead_t* mainthread) {
 static void* find_rand(long* x) {
   while (*x) {
     if (*x==25)
-      break;
+      return (void*)x[1];
     x+=2;
   }
-  return (void*)x[1];	/* the kernel always passes this. we don't provide a fallback for when it doesn't */
+  return NULL;
 }
 
 int stackgap(int argc,char* argv[],char* envp[]);
 int stackgap(int argc,char* argv[],char* envp[]) {
 #if defined(WANT_STACKGAP) || defined(WANT_SSP) || defined(WANT_TLS)
   long* auxvec=(long*)envp;
-  while (*auxvec) ++auxvec; ++auxvec;	/* skip envp to get to auxvec */
-  char* rand=find_rand(auxvec);
+  char* rand;
   char* tlsdata;
+  while (*auxvec) ++auxvec; ++auxvec;	/* skip envp to get to auxvec */
 #ifdef WANT_STACKGAP
   unsigned short s;
+#endif
+#if defined(WANT_STACKGAP) || defined(WANT_SSP)
   volatile char* gap;
+  rand=find_rand(auxvec);
+  if (!rand) {
+    char myrand[10];
+    int fd=open("/dev/urandom",O_RDONLY);
+    read(fd,myrand,10);
+    close(fd);
+    rand=myrand;
+  }
+#endif
+#ifdef WANT_STACKGAP
   s=*(unsigned short*)(rand+8);
 #endif
 #ifdef WANT_SSP
