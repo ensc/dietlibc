@@ -150,6 +150,8 @@ LIBPTHREAD_OBJS=$(patsubst libpthread/%.c,$(OBJDIR)/%.o,$(sort $(shell ./threads
 
 LIBGMON_OBJS=$(OBJDIR)/__mcount.o $(OBJDIR)/monitor.o $(OBJDIR)/profil.o
 
+NO_STACK_PROTECTOR=stackgap.o stackgap-pie.o stackgap-g.o __get_elf_aux_value.o
+
 include $(ARCH)/Makefile.add
 
 LIBMATHOBJ=$(patsubst %,$(OBJDIR)/%,$(LIBMATH))
@@ -210,6 +212,9 @@ $(OBJDIR)/pthread_%.o: libpthread/pthread_%.c | $(OBJDIR)
 $(OBJDIR)/%.o: %.c | $(OBJDIR)
 	$(CCC) $(INC) $(CCFLAGS) $(EXTRACFLAGS) -c $< -o $@ -D__dietlibc__
 	-$(STRIP) -x -R .comment -R .note $@
+
+$(addprefix $(OBJDIR)/,$(NO_STACK_PROTECTOR)) \
+$(addprefix $(PICODIR)/,$(NO_STACKPROTECTOR)):	EXTRACFLAGS+=-fno-stack-protector
 endif
 
 
@@ -596,13 +601,10 @@ $(LIBPTHREAD_OBJS): include/pthread.h
 # WANT_LARGEFILE_BACKCOMPAT
 $(OBJDIR)/fcntl64.o: dietfeatures.h
 
-# WANT_SSP
-# This facepalm brought to you by: Ubuntu!
-$(PICODIR)/stackgap.o: EXTRACFLAGS:=-fno-stack-protector
-$(OBJDIR)/stackgap.o: EXTRACFLAGS:=-fno-stack-protector -DNDEBUG #-fno-pie 
-$(OBJDIR)/stackgap-pie.o: EXTRACFLAGS:=-fno-stack-protector -Dstackgap=stackgap_pie -fpie
+$(OBJDIR)/stackgap.o: EXTRACFLAGS:= -DNDEBUG	# -fno-pie
+$(OBJDIR)/stackgap-pie.o: EXTRACFLAGS:=-Dstackgap=stackgap_pie -fpie
 
-$(OBJDIR)/stackgap-g.o: EXTRACFLAGS:=-fno-stack-protector -fno-pie
+$(OBJDIR)/stackgap-g.o: EXTRACFLAGS:=-fno-pie
 
 $(OBJDIR)/stackgap.o $(OBJDIR)/stackgap-pie.o $(OBJDIR)/stackgap-g.o $(PICODIR)/stackgap.o: lib/stackgap-common.h
 
