@@ -17,12 +17,8 @@ environ:
 .size environ,.-environ
 .size __environ,.-__environ
 
-/* __elfinfo will be a copy of __environ after startup.  Later, it will be
-   updated by __get_elf_aux_value() to point to the terminating NULL of the
-   environment.
-
-   Startup code assumes that __elfinfo is located immediately after
-   __environ. */
+/* __elfinfo will be initialized in start.S to point to the
+   terminating NULL of the environment. */
 
 #ifdef WANT_ELFINFO
 .type __elfinfo,object
