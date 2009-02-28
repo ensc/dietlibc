@@ -6,6 +6,7 @@
 #include <endian.h>
 #include <elf.h>
 #include "dietfeatures.h"
+#include "dietelfinfo.h"
 
 extern int main(int argc,char* argv[],char* envp[]);
 
@@ -30,6 +31,7 @@ static void findtlsdata(long* auxvec) {
   Elf32_Phdr* x=0;
 #endif
   size_t i,n;
+#ifndef WANT_ELFINFO
   while (*auxvec) {
     if (auxvec[0]==3) {
       x=(void*)auxvec[1];
@@ -37,6 +39,10 @@ static void findtlsdata(long* auxvec) {
     }
     auxvec+=2;
   } /* if we don't find the entry, the kernel let us down */
+#else
+  (void)auxvec;
+  x = __get_elf_aux_value(AT_PHDR);
+#endif
   if (!x) return;	/* a kernel this old does not support thread local storage anyway */
   n=x->p_memsz/sizeof(*x);
   for (i=1; i<n; ++i)
@@ -90,6 +96,7 @@ static void setup_tls(tcbhead_t* mainthread) {
 }
 #endif
 
+#ifndef WANT_ELFINFO
 static void* find_rand(long* x) {
   while (*x) {
     if (*x==25)
@@ -98,20 +105,27 @@ static void* find_rand(long* x) {
   }
   return NULL;
 }
+#endif
 
 int stackgap(int argc,char* argv[],char* envp[]);
 int stackgap(int argc,char* argv[],char* envp[]) {
 #if defined(WANT_STACKGAP) || defined(WANT_SSP) || defined(WANT_TLS)
-  long* auxvec=(long*)envp;
   char* rand;
   char* tlsdata;
+#ifndef WANT_ELFINFO
+  long* auxvec=(long*)envp;
   while (*auxvec) ++auxvec; ++auxvec;	/* skip envp to get to auxvec */
+#endif
 #ifdef WANT_STACKGAP
   unsigned short s;
 #endif
 #if defined(WANT_STACKGAP) || defined(WANT_SSP)
   volatile char* gap;
+#ifndef WANT_ELFINFO
   rand=find_rand(auxvec);
+#else
+  rand = __get_elf_aux_value(25);
+#endif
   if (!rand) {
     char myrand[10];
     int fd=open("/dev/urandom",O_RDONLY);
@@ -132,7 +146,11 @@ int stackgap(int argc,char* argv[],char* envp[]) {
 #endif
 
 #if defined(WANT_SSP) || defined(WANT_TLS)
+#ifndef WANT_ELFINFO
   findtlsdata(auxvec);
+#else
+  findtlsdata(NULL);
+#endif
   tlsdata=alloca(__tmemsize+sizeof(tcbhead_t));
   memcpy(tlsdata,__tdataptr,__tdatasize);
   memset(tlsdata+__tdatasize,0,__tmemsize-__tdatasize);
