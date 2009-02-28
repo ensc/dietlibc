@@ -3,15 +3,20 @@
 
 int fgetc_unlocked(FILE *stream) {
   unsigned char c;
-  if (!(stream->flags&CANREAD)) goto kaputt;
-  if (stream->ungotten) {
+  if (__unlikely(!(stream->flags&CANREAD))) goto kaputt;
+  if (__unlikely(stream->ungotten)) {
     stream->ungotten=0;
     return stream->ungetbuf;
   }
-  if (feof_unlocked(stream))
+
+  /* common case first */
+  if (__likely(stream->bm<stream->bs))
+    return (unsigned char)stream->buf[stream->bm++];
+
+  if (__unlikely(feof_unlocked(stream)))
     return EOF;
   if (__fflush4(stream,BUFINPUT)) return EOF;
-  if (stream->bm>=stream->bs) {
+  if (__unlikely(stream->bm>=stream->bs)) {
     ssize_t len=__libc_read(stream->fd,stream->buf,stream->buflen);
     if (len==0) {
       stream->flags|=EOFINDICATOR;

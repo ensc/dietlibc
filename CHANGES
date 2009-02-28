@@ -19,6 +19,11 @@
   use vsyscall to do time(2) on x86-64
   implement back references in basic regexes
   make regex faster (coalesce n CHAR matches to one STRING match)
+  stdio speedup
+  use randomness passed in ELF auxvec instead of /dev/urandom in startup
+    (strace looks cleaner now)
+  use ELF auxvec to implement getpagesize
+  support thread local storage (w00t!!!!)
 
 0.31:
   getopt_long and getopt_long_only now refuse ambiguous abbreviations
