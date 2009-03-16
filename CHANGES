@@ -25,6 +25,7 @@
   use ELF auxvec to implement getpagesize
   support thread local storage (w00t!!!!)
   don't crash in getaddrinfo if hints is NULL (Gernot Tenchio)
+  add -D_REENTRANT for -pthread in diet
 
 0.31:
   getopt_long and getopt_long_only now refuse ambiguous abbreviations
