@@ -24,6 +24,9 @@
     (strace looks cleaner now)
   use ELF auxvec to implement getpagesize
   support thread local storage (w00t!!!!)
+  don't crash in getaddrinfo if hints is NULL (Gernot Tenchio)
+  add -D_REENTRANT for -pthread in diet
+  don't segfault in setlocale if locale is NULL (Nikola Vladov)
 
 0.31:
   getopt_long and getopt_long_only now refuse ambiguous abbreviations
@@ -96,7 +99,7 @@
   fix DNS resolver to only use shorter timeout for .local queries
   remove throw() statements for functions taking function pointer
     arguments (qsort, besearch, ftw)
-  fix embarassing bug in pclose (Juergen Sawinski, René Rebe)
+  fix embarassing bug in pclose (Juergen Sawinski, Ren? Rebe)
   when asking for an IPv6 address and there is an IPv4 address in
     /etc/hosts but not an IPv6 address, return NO_DATA without
     querying DNS.  This is how glibc does it, and it means you can use
@@ -130,13 +133,13 @@
   add strdupa and strndupa (for directfb)
   add extended attribute, thread, and misc syscalls
   Olaf: fixed my libdl code to run with gcc-4.0.x
-  support optstring starting with '-' extension in getopt_long (Jens Låås)
+  support optstring starting with '-' extension in getopt_long (Jens L??s)
   make sure ftw returns in the directory it was called from
   Olaf: fixing a bug in timegm (an off by ONE array access)...
   tzfile fix for recent gcc
   make resolv.conf more glibcish so openssh 4.3p1 compiles
   add linux/* glue to make openssh compile with tun/tap support
-  fix putenv (René Rebe, Thomas Ogrisegg)
+  fix putenv (Ren? Rebe, Thomas Ogrisegg)
   limit search/domain entries in /etc/resolv.conf (Gernot Tenchio)
   fix unlockpt (Gernot Tenchio)
   Olaf: fixing putenv for the situation that environ is NULL
@@ -172,7 +175,7 @@
     remove waitpid warnings on ia64, s390/x
     provide C++ exception handling support
   ppc64 now compiles again
-  typo in libcompat/syscall.S for WANT_THREAD_SAFE (Björn Döbel)
+  typo in libcompat/syscall.S for WANT_THREAD_SAFE (Bj?rn D?bel)
   syscall.h update for all architectures
   remove two ppc64 warnings
   fix s/390 syscalls > 255
@@ -280,7 +283,7 @@
 0.25:
   fix sprintf
   head -1  ->  head -n 1
-  handle negative precision and -0 (Jens Låås)
+  handle negative precision and -0 (Jens L??s)
   susv3 renamed IFNAMSIZ to IF_NAMESIZE
   make diet accept "gcc-3.3.2" and "diet -v -Os gcc" (Yuri Kozlov)
   make libcompat syscall position independent (Peter S. Mazinger)
@@ -307,7 +310,7 @@
   add pause for Alpha (Kurt Garloff)
   ptrace fix (Dallachiesa Michele)
   ptread.h cleanups (Martin Pohlack)
-  fix execvp and execlp (Younès)
+  fix execvp and execlp (Youn?s)
   fix time() for sparc64
 
 0.24:
@@ -484,7 +487,7 @@
 0.21:
   use gcc's size_t, ptrdiff_t and wchar_t types (Olaf)
   use -G 8 on MIPS to reduce code size (Johannes Stezenbach)
-  add munlock (Jens Låås)
+  add munlock (Jens L??s)
   argh, atexit fell victim to bit rot (or maybe Olaf)
   add WANT_INET_ADDR_DNS to make gethostbyname not look up IP numbers
     but use them to fill in the struct hostent directly.
@@ -548,7 +551,7 @@
   make signal() into a sigaction wrapper function
   add memrchr (Emil)
   remove __attribute__((const)) from getpid() (Yuri Kozlov)
-  make getserv* also work if proto is NULL (Jens Låås)
+  make getserv* also work if proto is NULL (Jens L??s)
   now clone on parisc works (Thomas Ogrisegg)
   getopt* fix from Thomas Walpuski
   add syscall() to libcompat (Thomas Ogrisegg)
@@ -802,7 +805,7 @@
     POSIX regular expressions.
   Fix fnmatch (a/b/* matched a/b/c/d even if FNM_PATHNAME was set)
   Fix regular expression match for x* when there is no x at all.
-  Fix memory leak in error case in gethostbyname(2|).  Thanks, Dietz Pröpper.
+  Fix memory leak in error case in gethostbyname(2|).  Thanks, Dietz Pr?pper.
   Add %h to vsnprintf.
   Add FAQ.
   Make %h work for signed numbers and add %hh to vsnprintf.
@@ -990,7 +993,7 @@
     overwrite the default is* functions.
   added liblatin1.a
   added tzfile implementation (does it work for anyone else?)
-  added syslog(3) (thanks to Rene Müller!)
+  added syslog(3) (thanks to Rene M?ller!)
   Jeff Garzik contributed getgr*, getpw* and getsp* in one tiny package.
     Thanks!
   merged duplicate code in execv and execvp into exec_lib.o
@@ -1039,7 +1042,7 @@
   added getpriority and setpriority (also by Abraham)
   oops, I broke strtoul in a recent optimization attempt.
   oi, setjmp and longjmp were broken on other platforms, too!
-    Thanks to Sébastien Côté for reporting this.
+    Thanks to S?bastien C?t? for reporting this.
 
 0.7:
   clone support for i386,alpha,arm and sparc by Olaf.
@@ -1187,14 +1190,14 @@
   Paul also contributed a smaller ARM startup code.
 
 0.6:
-  strcat returned the wrong result.  Thanks, Dietz Pröpper.
+  strcat returned the wrong result.  Thanks, Dietz Pr?pper.
   strtod now understands a negative exponent (oops, thanks Bertram Barth)
   Port to arm-linux-gnu, but on the Netwinder I use for testing the
     __dtostr does not work (I have no idea why!)
   The MIPS port now uses (much smaller) non-PIC code.  That means that
     the applications you link against diet libc also have to be compiled
     non-PIC.  I suggest copying the CFLAGS from the diet libc Makefile.
-    Thanks to Ralf Bächle for helping me with this!
+    Thanks to Ralf B?chle for helping me with this!
   I made subdirectories for the architectures and use VPATH to override
     VPATH so that make finds the source file automatically.  That should
     simplify the sources greatly.

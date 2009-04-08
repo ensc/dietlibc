@@ -44,6 +44,8 @@ static void findtlsdata(long* auxvec) {
   x = __get_elf_aux_value(AT_PHDR);
 #endif
   if (!x) return;	/* a kernel this old does not support thread local storage anyway */
+  if (x->p_type!=PT_PHDR) return;	/* should start with PT_PHDR */
+  /* if it doesn't, assume there is no thread local storage */
   n=x->p_memsz/sizeof(*x);
   for (i=1; i<n; ++i)
     if (x[i].p_type==PT_TLS) {

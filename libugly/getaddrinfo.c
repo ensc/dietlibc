@@ -102,11 +102,11 @@ int getaddrinfo(const char *node, const char *service, const struct addrinfo *hi
 	  for (foo->ai.ai_socktype=SOCK_STREAM; ; foo->ai.ai_socktype=SOCK_DGRAM) {
 	    char* type,* x;
 	    if (foo->ai.ai_socktype==SOCK_STREAM) {	/* TCP */
-	      if (hints->ai_socktype==SOCK_DGRAM) continue;
+	      if (hints && hints->ai_socktype==SOCK_DGRAM) continue;
 	      foo->ai.ai_protocol=IPPROTO_TCP;
 	      type="tcp";
 	    } else {	/* UDP */
-	      if (hints->ai_socktype==SOCK_STREAM) break;
+	      if (hints && hints->ai_socktype==SOCK_STREAM) break;
 	      foo->ai.ai_protocol=IPPROTO_UDP;
 	      type="udp";
 	    }

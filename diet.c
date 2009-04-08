@@ -230,7 +230,7 @@ int main(int argc,char *argv[]) {
 pp:
 	  preprocess=compile=1;
       }
-/* we need to add -nostdlib if we are not compiling*/
+/* we need to add -nostdlib if we are not compiling */
       _link=!compile;
 #ifdef __DYN_LIB
       if (_link) {
@@ -246,11 +246,6 @@ pp:
 	if (!strcmp(argv[i],"-o"))
 	  if (!compile) _link=1;
 #endif
-
-      /* now, if we are linking, replace -pthread with -lpthread */
-      for (i=2; i<argc; ++i)
-	if (!strcmp(argv[i],"-pthread"))
-	  argv[i]=libpthread;
 
       newargv=alloca(sizeof(char*)*(argc+100));
       a=alloca(strlen(diethome)+20);
@@ -326,6 +321,11 @@ pp:
       if (_link) { *dest++=d; }
 #endif
       for (i=2; i<argc; ++i) {
+	if (!strcmp(argv[i],"-pthread")) {
+	  *dest++="-D_REENTRANT";
+	  if (_link) *dest++="-lpthread";
+	  continue;
+	}
 	if (mangleopts)
 	  if (argv[i][0]=='-' && (argv[i][1]=='O' || argv[i][1]=='f' ||
 				  (argv[i][1]=='m' && argv[i][2]!='3' && argv[i][2]!='6'))) {

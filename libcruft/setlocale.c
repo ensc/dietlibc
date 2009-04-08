@@ -14,7 +14,9 @@ char *setlocale (int category, const char *locale) {
       locale=x;
     }
   }
-  if (strstr(locale,".UTF-8") || strstr(locale,".UTF8")) lc_ctype=CT_UTF8;
-  if (locale && (locale[0]!='C' || locale[1])) return 0;
+  if (locale) {
+    if (strstr(locale,".UTF-8") || strstr(locale,".UTF8")) lc_ctype=CT_UTF8;
+    if (locale[0]!='C' || locale[1]) return 0;
+  }
   return "C";
 }
