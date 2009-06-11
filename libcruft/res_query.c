@@ -207,8 +207,8 @@ int res_query(const char *dname, int class, int type, unsigned char *answer, int
 	    } else
 	      continue;
 /* ignore NXDOMAIN from the multicast socket */
-nxdomain:
 #endif
+nxdomain:
 	    h_errno=HOST_NOT_FOUND;
 	    return -1;
 	  }		/* error */
