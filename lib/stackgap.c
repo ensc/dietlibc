@@ -56,7 +56,9 @@ static void findtlsdata(long* auxvec) {
 #if defined(WANT_SSP) || defined(WANT_TLS)
 static tcbhead_t mainthread;
 
-static void setup_tls(tcbhead_t* mainthread) {
+void __setup_tls(tcbhead_t*);
+
+void __setup_tls(tcbhead_t* mainthread) {
   mainthread->tcb=&mainthread;
   mainthread->self=&mainthread;
 #if defined(WANT_SSP)
@@ -133,12 +135,19 @@ int stackgap(int argc,char* argv[],char* envp[]) {
 #endif
 #endif
 
-#if defined(WANT_SSP) || defined(WANT_TLS)
+#ifdef WANT_TLS
   findtlsdata(auxvec);
+  if (__unlikely(__tmemsize+sizeof(tcbhead_t)<sizeof(tcbhead_t)) ||
+      __unlikely(__tmemsize>512*1024*1024) ||
+      __unlikely(__tmemsize<__tdatasize))
+    return 111;
   tlsdata=alloca(__tmemsize+sizeof(tcbhead_t));
   memcpy(tlsdata,__tdataptr,__tdatasize);
   memset(tlsdata+__tdatasize,0,__tmemsize-__tdatasize);
-  setup_tls((tcbhead_t*)(tlsdata+__tmemsize));
+  __setup_tls((tcbhead_t*)(tlsdata+__tmemsize));
+#elif defined(WANT_SSP)
+  tlsdata=alloca(sizeof(tcbhead_t));
+  __setup_tls((tcbhead_t*)(tlsdata));
 #endif
   return main(argc,argv,envp);
 }

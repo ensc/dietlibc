@@ -37,4 +37,4 @@ __clone:
 	bl	_exit,%r2		/* exit thread */
 	copy	%r28,%r26		/* return -> arg0 */
 
-	iitlbp	%r0,(%r0)		/* DIE ! DIE ! */
+/*	iitlbp	%r0,(%r0) */		/* DIE ! DIE ! */
