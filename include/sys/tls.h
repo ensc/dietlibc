@@ -28,6 +28,8 @@ typedef struct
   uintptr_t pointer_guard;
 } tcbhead_t;
 
+tcbhead_t* __get_cur_tcb(void) __THROW;
+
 #if defined(__i386__)
 
 struct user_desc {

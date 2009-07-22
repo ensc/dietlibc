@@ -29,19 +29,19 @@ static void findtlsdata(long* auxvec) {
 #else
   Elf32_Phdr* x=0;
 #endif
-  size_t i,n;
+  size_t i,n=0;
   while (*auxvec) {
-    if (auxvec[0]==3) {
+    if (auxvec[0]==3) {	/* AT_PHDR */
       x=(void*)auxvec[1];
-      break;
+      if (n) break;
+    } else if (auxvec[0]==5) { /* AT_PHNUM */
+      n=auxvec[1];
+      if (x) break;
     }
     auxvec+=2;
   } /* if we don't find the entry, the kernel let us down */
-  if (!x) return;	/* a kernel this old does not support thread local storage anyway */
-  if (x->p_type!=PT_PHDR) return;	/* should start with PT_PHDR */
-  /* if it doesn't, assume there is no thread local storage */
-  n=x->p_memsz/sizeof(*x);
-  for (i=1; i<n; ++i)
+  if (!x || !n) return;	/* a kernel this old does not support thread local storage anyway */
+  for (i=0; i<n; ++i)
     if (x[i].p_type==PT_TLS) {
       __tdataptr=(void*)x[i].p_vaddr;
       __tdatasize=x[i].p_filesz;
@@ -54,13 +54,15 @@ static void findtlsdata(long* auxvec) {
 #endif
 
 #if defined(WANT_SSP) || defined(WANT_TLS)
-static tcbhead_t mainthread;
+tcbhead_t* __tcb_mainthread;
 
 void __setup_tls(tcbhead_t*);
 
 void __setup_tls(tcbhead_t* mainthread) {
   mainthread->tcb=&mainthread;
-  mainthread->self=&mainthread;
+  mainthread->dtv=0;
+  mainthread->self=0;
+  mainthread->multiple_threads=0;
 #if defined(WANT_SSP)
   mainthread->stack_guard=__guard;
 #endif
@@ -144,10 +146,10 @@ int stackgap(int argc,char* argv[],char* envp[]) {
   tlsdata=alloca(__tmemsize+sizeof(tcbhead_t));
   memcpy(tlsdata,__tdataptr,__tdatasize);
   memset(tlsdata+__tdatasize,0,__tmemsize-__tdatasize);
-  __setup_tls((tcbhead_t*)(tlsdata+__tmemsize));
+  __setup_tls(__tcb_mainthread=(tcbhead_t*)(tlsdata+__tmemsize));
 #elif defined(WANT_SSP)
   tlsdata=alloca(sizeof(tcbhead_t));
-  __setup_tls((tcbhead_t*)(tlsdata));
+  __setup_tls(__tcb_mainthread=(tcbhead_t*)(tlsdata));
 #endif
   return main(argc,argv,envp);
 }
