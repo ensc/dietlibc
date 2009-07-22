@@ -13,6 +13,10 @@ extern int main(int argc,char* argv[],char* envp[]);
 extern unsigned long __guard;
 #endif
 
+#ifdef __i386__
+int __modern_linux;
+#endif
+
 #ifdef WANT_TLS
 /* __tdatasize is the size of the initialized thread local data section
  * __tmemsize is the size of the complete thread local data section
@@ -59,7 +63,7 @@ tcbhead_t* __tcb_mainthread;
 void __setup_tls(tcbhead_t*);
 
 void __setup_tls(tcbhead_t* mainthread) {
-  mainthread->tcb=&mainthread;
+  mainthread->tcb=mainthread;
   mainthread->dtv=0;
   mainthread->self=0;
   mainthread->multiple_threads=0;
@@ -73,14 +77,17 @@ void __setup_tls(tcbhead_t* mainthread) {
 
 #elif defined(__i386__)
 
-  static unsigned int sd[4];
+  unsigned int sd[4];
   sd[0]=-1;
   sd[1]=(unsigned long int)mainthread;
   sd[2]=0xfffff; /* 4 GB limit */
   sd[3]=0x51; /* bitfield, see struct user_desc in asm-i386/ldt.h */
-  if (set_thread_area((struct user_desc*)(void*)&sd)==0) {
-    asm volatile ("movw %w0, %%gs" :: "q" (sd[0]*8+3));
-  }
+  if (__modern_linux>=0)
+    if (set_thread_area((struct user_desc*)(void*)&sd)==0) {
+      asm volatile ("movw %w0, %%gs" :: "q" (sd[0]*8+3));
+      __modern_linux=1;
+    } else
+      __modern_linux=-1;
 
 #elif defined(__alpha__) || defined(__s390__)
   __builtin_set_thread_pointer(mainthread);

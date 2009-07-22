@@ -123,6 +123,14 @@ _pthread_descr __thread_self(void) {
   asm("mov %0 = r13" : "=r"(cur) );	/* r13 (tp) is used as thread pointer */
 #elif defined(__x86_64__)
   asm("mov %%fs:(16),%0" : "=r"(cur));
+#elif defined(__i386__)
+  if (__likely(__modern_linux==1))
+    asm("mov %%gs:(8),%0" : "=r"(cur));
+  else {
+    /* old cruft O(n*) */
+    cur=__thread_find_(getpid());
+    if (cur) UNLOCK(cur);
+  }
 #else	/* other */
   /* all other archs:
    * search the thread depending on the PID O(n*) */
