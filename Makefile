@@ -320,7 +320,7 @@ DYN_LIBCOMPAT_OBJS = $(patsubst $(OBJDIR)/%.o,$(PICODIR)/%.o,$(LIBCOMPATOBJ))
 
 DYN_LIBMATH_OBJS = $(patsubst $(OBJDIR)/%.o,$(PICODIR)/%.o,$(LIBMATHOBJ))
 
-$(PICODIR)/libc.so: $(PICODIR) $(DYN_LIBC_OBJ)
+$(PICODIR)/libc.so: $(DYN_LIBC_OBJ)
 	$(LD_UNSET) $(CCC) -nostdlib -shared -o $@ $(CCFLAGS) -fPIC $(DYN_LIBC_OBJ) -lgcc -Wl,-soname=libc.so
 
 $(PICODIR)/libpthread.so: $(DYN_PTHREAD_OBJS) dietfeatures.h $(PICODIR)/libc.so
