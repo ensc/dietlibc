@@ -49,9 +49,9 @@ void* __tdataptr;
 
 static void findtlsdata(long* auxvec) {
 #if (__WORDSIZE == 64)
-  Elf64_Phdr* x=0;
+  Elf64_Phdr const * x=0;
 #else
-  Elf32_Phdr* x=0;
+  Elf32_Phdr const * x=0;
 #endif
   size_t i,n=0;
 #ifndef WANT_ELFINFO
@@ -158,9 +158,9 @@ int stackgap(int argc,char* argv[],char* envp[]) {
 #endif
 #ifdef WANT_STACKGAP
   unsigned short s;
+  volatile char* gap;
 #endif
 #if defined(WANT_STACKGAP) || defined(WANT_SSP)
-  volatile char* gap;
 #ifndef WANT_ELFINFO
   rand=find_rand(auxvec);
 #else
