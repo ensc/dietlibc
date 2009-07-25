@@ -10,7 +10,7 @@ size_t __libc_getpagesize(void) {
   static size_t	pgsz;
 
   if (__unlikely(pgsz==0)) {
-    __diet_elf_addr_t	*v = __get_elf_aux_value(AT_PAGESZ);
+    __diet_elf_addr_t const	*v = __get_elf_aux_value(AT_PAGESZ);
     pgsz = *v;	/* causes segfault when 'v==NULL' */
   }
 

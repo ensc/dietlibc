@@ -45,7 +45,7 @@ long sysconf(int name)
   case _SC_CLK_TCK:
 #ifdef WANT_ELFINFO
     {
-      __diet_elf_addr_t	*v = __get_elf_aux_value(AT_CLKTCK);
+      __diet_elf_addr_t const	*v = __get_elf_aux_value(AT_CLKTCK);
       if (v)
 	return *v;
     }
