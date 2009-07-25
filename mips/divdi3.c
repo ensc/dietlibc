@@ -23,21 +23,6 @@
 
 #if __WORDSIZE == 32
 
-typedef unsigned int UQItype	__attribute__ ((mode (QI)));
-typedef          int SItype	__attribute__ ((mode (SI)));
-typedef unsigned int USItype	__attribute__ ((mode (SI)));
-typedef          int DItype	__attribute__ ((mode (DI)));
-typedef unsigned int UDItype	__attribute__ ((mode (DI)));
-#define Wtype SItype
-#define HWtype SItype
-#define DWtype DItype
-#define UWtype USItype
-#define UHWtype USItype
-#define UDWtype UDItype
-#define W_TYPE_SIZE 32
-
-#include "longlong.h"
-
 const
 unsigned char __clz_tab[] =
 {
@@ -50,6 +35,21 @@ unsigned char __clz_tab[] =
   8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,
   8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,
 };
+
+#include "mips/longlong.h"
+
+typedef unsigned int UQItype	__attribute__ ((mode (QI)));
+typedef          int SItype	__attribute__ ((mode (SI)));
+typedef unsigned int USItype	__attribute__ ((mode (SI)));
+typedef          int DItype	__attribute__ ((mode (DI)));
+typedef unsigned int UDItype	__attribute__ ((mode (DI)));
+#define Wtype SItype
+#define HWtype SItype
+#define DWtype DItype
+#define UWtype USItype
+#define UHWtype USItype
+#define UDWtype UDItype
+#define W_TYPE_SIZE 32
 
 #if __BYTE_ORDER == __BIG_ENDIAN
 struct DWstruct { Wtype high, low;};
@@ -318,7 +318,7 @@ __moddi3 (DWtype u, DWtype v)
     }
   if (v < 0)
     v = -v;
-  __udivmoddi4 (u, v, &w);
+  __udivmoddi4 (u, v, (UDWtype *) &w);
   if (c)
     w = -w;
   return w;

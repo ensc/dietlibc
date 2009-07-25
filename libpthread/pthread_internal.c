@@ -10,6 +10,8 @@
 #include <sched.h>
 #include <sys/resource.h>
 
+#include <stdlib.h>
+
 #include <pthread.h>
 #include "thread_internal.h"
 
@@ -17,6 +19,10 @@
 
 #ifdef DEBUG
 #include <stdio.h>
+#endif
+
+#ifdef WANT_TLS
+#include <sys/tls.h>
 #endif
 
 #define INTR_RETRY(e) ({ long ret; do ret=(long)(e); while ((ret==-1)&&(_errno_==EINTR)); ret; })
@@ -115,6 +121,16 @@ _pthread_descr __thread_self(void) {
   asm("ear %0,%%a0" : "=d"(cur) );	/* a0 (access register 0) is used as thread pointer */
 #elif defined(__ia64__)
   asm("mov %0 = r13" : "=r"(cur) );	/* r13 (tp) is used as thread pointer */
+#elif defined(__x86_64__)
+  asm("mov %%fs:(16),%0" : "=r"(cur));
+#elif defined(__i386__)
+  if (__likely(__modern_linux==1))
+    asm("mov %%gs:(8),%0" : "=r"(cur));
+  else {
+    /* old cruft O(n*) */
+    cur=__thread_find_(getpid());
+    if (cur) UNLOCK(cur);
+  }
 #else	/* other */
   /* all other archs:
    * search the thread depending on the PID O(n*) */
@@ -336,6 +352,21 @@ static inline _pthread_descr __thread_set_register(void*arg) {
 #endif
   return (_pthread_descr)arg;
 }
+
+#ifdef WANT_TLS
+extern size_t __tdatasize, __tmemsize;
+extern void* __tdataptr;
+extern void __setup_tls(tcbhead_t* thread);
+#endif
+
+#ifdef WANT_SSP
+extern unsigned long __guard;
+#endif
+
+#if defined(WANT_TLS) || defined(WANT_SSP)
+extern tcbhead_t* __tcb_mainthread;
+#endif
+
 /* thread start helper */
 static void* __managed_start(void*arg) {
 #if defined(__sparc__)
@@ -345,7 +376,33 @@ static void* __managed_start(void*arg) {
 #else
   _pthread_descr td;
 #endif
+#if defined(WANT_TLS) || defined(WANT_SSP)
+  __tcb_mainthread->multiple_threads=1;
+  tcbhead_t* me=alloca(sizeof(tcbhead_t)
+#ifdef WANT_TLS
+		                        +__tmemsize);
+/*  printf("allocating %lu bytes (%lu + %lu)\n",sizeof(tcbhead_t)+__tmemsize,sizeof(tcbhead_t),__tmemsize); */
+  memcpy(me,__tdataptr,__tdatasize);
+  memset(((char*)me)+__tdatasize,0,__tmemsize-__tdatasize);
+  me=(tcbhead_t*)(((char*)me) + __tmemsize);
+#endif
+  __setup_tls(me);
+  me->multiple_threads=1;
+
+#ifdef WANT_SSP
+  me->pointer_guard=__guard ^ (uintptr_t)me;
+#endif
+  me->self=arg;
+  td=arg;
+  __thread_set_register(me);
+
+#else
   td=__thread_set_register(arg);
+#endif
+
+#ifdef WANT_TLS
+#endif
+
   td->pid=getpid();
 #ifdef DEBUG
   printf("__managed_start: %d pre suspend\n",td->pid);

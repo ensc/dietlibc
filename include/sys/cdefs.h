@@ -90,5 +90,24 @@
 # define __hot__
 #endif
 
+#if (__GNUC__ < 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ < 3))
+#define __attribute_alloc__(x)
+#define __attribute_alloc2__(x,y)
+#else
+#define __attribute_alloc__(x) __attribute__((alloc_size(x))
+#define __attribute_alloc2__(x,y) __attribute__((alloc_size(x,y))
+#endif
+
+#if (__GNUC__ < 2) || ((__GNUC__ == 2) && (__GNUC_MINOR__ < 5))
+#define __attribute_const__
+#else
+#define __attribute_const__ __attribute__((const))
+#endif
+
+#if (__GNUC__ < 2) || ((__GNUC__ == 2) && (__GNUC_MINOR__ < 8))
+#define __attribute_formatarg__(x)
+#else
+#define __attribute_formatarg__(x) __attribute__((format_arg(x)))
+#endif
 
 #endif

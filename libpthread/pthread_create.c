@@ -6,6 +6,12 @@
 #include <pthread.h>
 #include "thread_internal.h"
 
+#ifdef WANT_TLS
+#include <sys/tls.h>
+
+extern size_t __tmemsize;
+#endif
+
 int pthread_attr_init(pthread_attr_t*attr) {
   memset(attr,0,sizeof(pthread_attr_t));
   attr->__stacksize=PTHREAD_STACK_SIZE;
@@ -22,11 +28,22 @@ int pthread_attr_destroy(pthread_attr_t *attr) __attribute__((alias("pthread_att
 
 int pthread_create(pthread_t*thread,const pthread_attr_t*d_attr,
 		void*(*start_routine)(void*),void*arg) {
+#if 0
+  /* first try the linux 2.6 way */
+  if (__likely(__modern_linux>=0)) {
+    /* try new way; if it fails, assume old kernel */
+  }
+#endif
   struct __thread_descr request;
   pthread_attr_t attr;
-  _pthread_descr td,this=__thread_self();
+  _pthread_descr td,this;
+  this=__thread_self();
   char*stack;
   int ret;
+#ifdef WANT_TLS
+  size_t origsize;
+  size_t additional;
+#endif
 
   if (thread==0) kill(getpid(),SIGSEGV);
   if (start_routine==0) return EINVAL;
@@ -38,6 +55,19 @@ int pthread_create(pthread_t*thread,const pthread_attr_t*d_attr,
   else
     pthread_attr_init(&attr);
 
+#ifdef WANT_TLS
+  origsize=attr.__stacksize;
+  additional=__tmemsize+sizeof(tcbhead_t);
+  additional=(additional+15)&-16;
+  if (additional < sizeof(tcbhead_t) ||
+      origsize < sizeof(struct _pthread_descr_struct) ||
+      origsize+additional < origsize) {
+    ret=EINVAL;
+    goto func_out;
+  }
+  attr.__stacksize=origsize+additional;
+#endif
+
   {
     register char*stb,*st=0;
     if ((stack=attr.__stackaddr)==0) {
@@ -48,6 +78,7 @@ int pthread_create(pthread_t*thread,const pthread_attr_t*d_attr,
 	goto func_out;
       }
     }
+
     stb=stack;
 #ifdef __parisc__
     td=(_pthread_descr)stack;

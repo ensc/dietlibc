@@ -24,5 +24,6 @@ To port the diet libc to a new architecture, you need to:
   - edit diet.c to make it recognize the architecture and add proper
     CFLAGS
   - edit libcompat/syscall.S
+  - edit include/fenv.h
 
 (I may have missed a few)

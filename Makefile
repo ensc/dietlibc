@@ -157,6 +157,8 @@ $(OBJDIR) $(PICODIR):
 
 % :: %,v
 
+$(OBJDIR)/%.o: $(OBJDIR)
+
 ifeq ($(CC),tcc)
 $(OBJDIR)/%.o: %.S $(ARCH)/syscalls.h
 	$(CROSS)cpp $(INC) $< | $(CROSS)as -o $@
@@ -286,6 +288,9 @@ $(PICODIR)/libpthread.so: $(DYN_PTHREAD_OBJS) dietfeatures.h
 $(PICODIR)/libdl.so: libdl/_dl_main.c dietfeatures.h
 	$(LD_UNSET) $(CROSS)$(CC) -D__OD_CLEAN_ROOM -DNODIETREF -fPIC -nostdlib -shared -Bsymbolic -Wl,-Bsymbolic \
 		-o $@ $(SAFE_CFLAGS) $(INC) libdl/_dl_main.c -Wl,-soname=libdl.so
+
+$(OBJDIR)/pthread_create.o $(PICODIR)/pthread_create.o: dietfeatures.h
+$(OBJDIR)/pthread_internal.o $(PICODIR)/pthread_internal.o: dietfeatures.h
 
 #$(PICODIR)/libdl.so: $(DYN_LIBDL_OBJS) dietfeatures.h
 #	$(CROSS)$(CC) -nostdlib -shared -o $@ $(CFLAGS) -fPIC $(DYN_LIBDL_OBJS) -L$(PICODIR) -ldietc -Wl,-soname=libdl.so

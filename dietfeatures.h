@@ -22,10 +22,10 @@
 /* this is only for meaningful for ttyname and sysconf_cpus so far */
 #define SLASH_PROC_OK
 
-/* use errno_location instead of errno */
+/* use errno_location instead of errno; NEEDED FOR MULTI-THREADING! */
 #define WANT_THREAD_SAFE
 
-/* support __thread */
+/* support __thread; NEEDED FOR MULTI-THREADING! */
 #define WANT_TLS
 
 /* make the startcode, etc. dynamic aware ({con,de}structors) */
