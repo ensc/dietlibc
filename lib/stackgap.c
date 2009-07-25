@@ -47,9 +47,16 @@ static void findtlsdata(long* auxvec) {
     auxvec+=2;
   } /* if we don't find the entry, the kernel let us down */
 #else
-  (void)auxvec;
-  x = __get_elf_aux_value(AT_PHDR);
-  n = __get_elf_aux_value(AT_PHNUM);
+  {
+    __diet_elf_addr_t const	*x_addr = __get_elf_aux_value(AT_PHDR);
+    __diet_elf_addr_t const	*n_addr = __get_elf_aux_value(AT_PHNUM);
+
+    (void)auxvec;
+    if (x_addr)
+      x = (__typeof__(x)) *x_addr;
+    if (n_addr)
+      n = *n_addr;
+  }
 #endif
   if (!x || !n) return;	/* a kernel this old does not support thread local storage anyway */
   for (i=0; i<n; ++i)
@@ -138,7 +145,10 @@ int stackgap(int argc,char* argv[],char* envp[]) {
 #ifndef WANT_ELFINFO
   rand=find_rand(auxvec);
 #else
-  rand = __get_elf_aux_value(25);
+  {
+    __diet_elf_addr_t const	*rand_addr = __get_elf_aux_value(25);
+    rand = rand_addr ? (void *)*rand_addr : NULL;
+  }
 #endif
   if (!rand) {
     char myrand[10];
