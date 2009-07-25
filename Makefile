@@ -535,6 +535,6 @@ $(OBJDIR)/stackgap.o: dietfeatures.h
 $(OBJDIR)/strndup.o: dietfeatures.h
 
 
-GIT_CVSIMPORT=git-cvsimport
+GIT_CVSIMPORT=git cvsimport
 cvsimport:
 	$(GIT_CVSIMPORT) -k -p '--cvs-direct' -d :pserver:cvs@cvs.fefe.de:/cvs dietlibc
