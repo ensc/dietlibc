@@ -88,7 +88,7 @@ ILIBDIR=$(LIBDIR)-$(ARCH)
 
 HOME=$(shell pwd)
 
-WHAT=	$(OBJDIR) $(OBJDIR)/start.o $(OBJDIR)/dyn_start.o $(OBJDIR)/dyn_stop.o \
+WHAT=	$(OBJDIR)/start.o $(OBJDIR)/dyn_start.o $(OBJDIR)/dyn_stop.o \
 	$(OBJDIR)/dietlibc.a $(OBJDIR)/liblatin1.a \
 	$(OBJDIR)/libcompat.a $(OBJDIR)/libm.a \
 	$(OBJDIR)/librpc.a $(OBJDIR)/libpthread.a \
@@ -150,32 +150,31 @@ PWD=$(shell pwd)
 # added real dynamic dietlibc.so
 PICODIR = pic-$(ARCH)
 
-$(OBJDIR) $(PICODIR):
-	mkdir $@
-
 % :: %,v
 
-$(OBJDIR)/%.o: $(OBJDIR)
+%/.dirstamp:
+	mkdir $*
+	@touch $@
 
 ifeq ($(CC),tcc)
-$(OBJDIR)/%.o: %.S $(ARCH)/syscalls.h
+$(OBJDIR)/%.o: %.S $(ARCH)/syscalls.h $(OBJDIR)/.dirstamp
 	$(CROSS)cpp $(INC) $< | $(CROSS)as -o $@
 
-$(OBJDIR)/%.o: %.c
+$(OBJDIR)/%.o: %.c $(OBJDIR)/.dirstamp
 	tcc -I. -Iinclude -c $< -o $@
 	$(COMMENT) -$(CROSS)strip -x -R .comment -R .note $@
 else
-$(OBJDIR)/pstart.o: start.S
+$(OBJDIR)/pstart.o: start.S $(OBJDIR)/.dirstamp
 	$(CROSS)$(CC) $(INC) $(CFLAGS) -DPROFILING -c $< -o $@
 
-$(OBJDIR)/%.o: %.S $(ARCH)/syscalls.h
+$(OBJDIR)/%.o: %.S $(ARCH)/syscalls.h $(OBJDIR)/.dirstamp
 	$(CROSS)$(CC) $(INC) $(CFLAGS) -c $< -o $@
 
-$(OBJDIR)/pthread_%.o: libpthread/pthread_%.c
+$(OBJDIR)/pthread_%.o: libpthread/pthread_%.c $(OBJDIR)/.dirstamp
 	$(CROSS)$(CC) $(INC) $(CFLAGS) -c $< -o $@
 	$(COMMENT) -$(CROSS)strip -x -R .comment -R .note $@
 
-$(OBJDIR)/%.o: %.c
+$(OBJDIR)/%.o: %.c $(OBJDIR)/.dirstamp
 	$(CROSS)$(CC) $(INC) $(CFLAGS) -c $< -o $@ -D__dietlibc__
 	$(COMMENT) -$(CROSS)strip -x -R .comment -R .note $@
 endif
@@ -190,7 +189,7 @@ endif
 
 CC+=-D__dietlibc__
 
-$(OBJDIR)/crypt.o: libcrypt/crypt.c
+$(OBJDIR)/crypt.o: libcrypt/crypt.c $(OBJDIR)/.dirstamp
 	$(CROSS)$(CC) $(INC) $(SAFER_CFLAGS) -c $< -o $@
 
 DIETLIBC_OBJ = $(OBJDIR)/unified.o \
@@ -205,7 +204,7 @@ $(OBJDIR)/dietlibc.a: $(DIETLIBC_OBJ) $(OBJDIR)/start.o
 $(OBJDIR)/librpc.a: $(LIBRPCOBJ)
 	$(CROSS)ar cru $@ $(LIBRPCOBJ)
 
-$(OBJDIR)/libcrypt.a:
+$(OBJDIR)/libcrypt.a: $(OBJDIR)/.dirstamp
 	touch dummy.c
 	$(CROSS)$(CC) -c dummy.c
 	$(CROSS)ar cru $@ dummy.o
@@ -237,26 +236,26 @@ dyn: dyn_lib
 $(OBJDIR)/libdl.a: $(LIBDLOBJ)
 	$(CROSS)ar cru $@ $(LIBDLOBJ)
 
-dyn_lib: $(PICODIR) $(PICODIR)/libc.so $(PICODIR)/dstart.o \
+dyn_lib: $(PICODIR)/libc.so $(PICODIR)/dstart.o \
 	$(PICODIR)/dyn_so_start.o $(PICODIR)/dyn_start.o $(PICODIR)/dyn_stop.o \
 	$(PICODIR)/libpthread.so $(PICODIR)/libdl.so $(PICODIR)/libcompat.so \
 	$(PICODIR)/libm.so $(PICODIR)/diet-dyn $(PICODIR)/diet-dyn-i
 
-$(PICODIR)/%.o: %.S $(ARCH)/syscalls.h
+$(PICODIR)/%.o: %.S $(ARCH)/syscalls.h $(PICODIR)/.dirstamp
 	$(CROSS)$(CC) $(INC) $(CFLAGS) -fPIC -D__DYN_LIB -c $< -o $@
 
-$(PICODIR)/pthread_%.o: libpthread/pthread_%.c
-	$(CROSS)$(CC) $(INC) $(CFLAGS) -fPIC -D__DYN_LIB -c $< -o $@
-	$(COMMENT) $(CROSS)strip -x -R .comment -R .note $@
-
-$(PICODIR)/%.o: %.c
+$(PICODIR)/pthread_%.o: libpthread/pthread_%.c $(PICODIR)/.dirstamp
 	$(CROSS)$(CC) $(INC) $(CFLAGS) -fPIC -D__DYN_LIB -c $< -o $@
 	$(COMMENT) $(CROSS)strip -x -R .comment -R .note $@
 
-$(PICODIR)/dstart.o: start.S
+$(PICODIR)/%.o: %.c $(PICODIR)/.dirstamp
+	$(CROSS)$(CC) $(INC) $(CFLAGS) -fPIC -D__DYN_LIB -c $< -o $@
+	$(COMMENT) $(CROSS)strip -x -R .comment -R .note $@
+
+$(PICODIR)/dstart.o: start.S $(PICODIR)/.dirstamp
 	$(CROSS)$(CC) $(INC) $(CFLAGS) -fPIC -D__DYN_LIB -c $< -o $@
 
-$(PICODIR)/dyn_so_start.o: dyn_start.c
+$(PICODIR)/dyn_so_start.o: dyn_start.c $(PICODIR)/.dirstamp
 	$(CROSS)$(CC) $(INC) $(CFLAGS) -fPIC -D__DYN_LIB -D__DYN_LIB_SHARED -c $< -o $@
 	$(COMMENT) $(CROSS)strip -x -R .comment -R .note $@
 
@@ -274,13 +273,13 @@ DYN_LIBCOMPAT_OBJS = $(patsubst $(OBJDIR)/%.o,$(PICODIR)/%.o,$(LIBCOMPATOBJ))
 
 DYN_LIBMATH_OBJS = $(patsubst $(OBJDIR)/%.o,$(PICODIR)/%.o,$(LIBMATHOBJ))
 
-$(PICODIR)/libc.so: $(PICODIR) $(DYN_LIBC_OBJ)
+$(PICODIR)/libc.so: $(DYN_LIBC_OBJ)
 	$(LD_UNSET) $(CROSS)$(CC) -nostdlib -shared -o $@ $(CFLAGS) -fPIC $(DYN_LIBC_OBJ) -lgcc -Wl,-soname=libc.so
 
 $(PICODIR)/libpthread.so: $(DYN_PTHREAD_OBJS) dietfeatures.h
 	$(LD_UNSET) $(CROSS)$(CC) -nostdlib -shared -o $@ $(CFLAGS) -fPIC $(DYN_PTHREAD_OBJS) -L$(PICODIR) -lc -Wl,-soname=libpthread.so
 
-$(PICODIR)/libdl.so: libdl/_dl_main.c dietfeatures.h
+$(PICODIR)/libdl.so: libdl/_dl_main.c dietfeatures.h $(PICODIR)/.dirstamp
 	$(LD_UNSET) $(CROSS)$(CC) -D__OD_CLEAN_ROOM -DNODIETREF -fPIC -nostdlib -shared -Bsymbolic -Wl,-Bsymbolic \
 		-o $@ $(SAFE_CFLAGS) $(INC) libdl/_dl_main.c -Wl,-soname=libdl.so
 
@@ -335,7 +334,7 @@ $(OBJDIR)/load:
 	chmod 755 $@
 
 clean:
-	rm -f *.o *.a t t1 compile load elftrunc exports mapfile libdietc.so
+	rm -f *.o *.a t t1 compile load elftrunc exports mapfile libdietc.so .dirstamp
 	rm -rf bin-* pic-*
 	$(MAKE) -C examples clean
 	$(MAKE) -C dynlinker clean
