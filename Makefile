@@ -105,6 +105,7 @@ CROSS=
 
 CC=gcc
 INC=-I. -isystem include
+STRIP=$(CROSS)strip
 
 VPATH=lib:libstdio:libugly:libcruft:libcrypt:libshell:liblatin1:libcompat:libdl:librpc:libregex:libm:profiling
 
@@ -162,7 +163,7 @@ $(OBJDIR)/%.o: %.S $(ARCH)/syscalls.h $(OBJDIR)/.dirstamp
 
 $(OBJDIR)/%.o: %.c $(OBJDIR)/.dirstamp
 	tcc -I. -Iinclude -c $< -o $@
-	$(COMMENT) -$(CROSS)strip -x -R .comment -R .note $@
+	$(COMMENT) -$(STRIP) -x -R .comment -R .note $@
 else
 $(OBJDIR)/pstart.o: start.S $(OBJDIR)/.dirstamp
 	$(CROSS)$(CC) $(INC) $(CFLAGS) -DPROFILING -c $< -o $@
@@ -172,11 +173,11 @@ $(OBJDIR)/%.o: %.S $(ARCH)/syscalls.h $(OBJDIR)/.dirstamp
 
 $(OBJDIR)/pthread_%.o: libpthread/pthread_%.c $(OBJDIR)/.dirstamp
 	$(CROSS)$(CC) $(INC) $(CFLAGS) -c $< -o $@
-	$(COMMENT) -$(CROSS)strip -x -R .comment -R .note $@
+	$(COMMENT) -$(STRIP) -x -R .comment -R .note $@
 
 $(OBJDIR)/%.o: %.c $(OBJDIR)/.dirstamp
 	$(CROSS)$(CC) $(INC) $(CFLAGS) -c $< -o $@ -D__dietlibc__
-	$(COMMENT) -$(CROSS)strip -x -R .comment -R .note $@
+	$(COMMENT) -$(STRIP) -x -R .comment -R .note $@
 endif
 
 ifeq ($(shell $(CC) -v 2>&1 | grep "gcc version"),gcc version 4.0.0)
@@ -246,18 +247,18 @@ $(PICODIR)/%.o: %.S $(ARCH)/syscalls.h $(PICODIR)/.dirstamp
 
 $(PICODIR)/pthread_%.o: libpthread/pthread_%.c $(PICODIR)/.dirstamp
 	$(CROSS)$(CC) $(INC) $(CFLAGS) -fPIC -D__DYN_LIB -c $< -o $@
-	$(COMMENT) $(CROSS)strip -x -R .comment -R .note $@
+	$(COMMENT) $(STRIP) -x -R .comment -R .note $@
 
 $(PICODIR)/%.o: %.c $(PICODIR)/.dirstamp
 	$(CROSS)$(CC) $(INC) $(CFLAGS) -fPIC -D__DYN_LIB -c $< -o $@
-	$(COMMENT) $(CROSS)strip -x -R .comment -R .note $@
+	$(COMMENT) $(STRIP) -x -R .comment -R .note $@
 
 $(PICODIR)/dstart.o: start.S $(PICODIR)/.dirstamp
 	$(CROSS)$(CC) $(INC) $(CFLAGS) -fPIC -D__DYN_LIB -c $< -o $@
 
 $(PICODIR)/dyn_so_start.o: dyn_start.c $(PICODIR)/.dirstamp
 	$(CROSS)$(CC) $(INC) $(CFLAGS) -fPIC -D__DYN_LIB -D__DYN_LIB_SHARED -c $< -o $@
-	$(COMMENT) $(CROSS)strip -x -R .comment -R .note $@
+	$(COMMENT) $(STRIP) -x -R .comment -R .note $@
 
 DYN_LIBC_PIC = $(LIBOBJ) $(LIBSTDIOOBJ) $(LIBUGLYOBJ) \
 $(LIBCRUFTOBJ) $(LIBCRYPTOBJ) $(LIBSHELLOBJ) $(LIBREGEXOBJ)
@@ -309,19 +310,19 @@ CURNAME=$(notdir $(shell pwd))
 
 $(OBJDIR)/diet: $(OBJDIR)/start.o $(OBJDIR)/dyn_start.o diet.c $(OBJDIR)/dietlibc.a $(OBJDIR)/dyn_stop.o
 	$(CROSS)$(CC) -isystem include $(CFLAGS) -nostdlib -o $@ $^ -DDIETHOME=\"$(HOME)\" -DVERSION=\"$(VERSION)\" -lgcc
-	$(CROSS)strip -R .comment -R .note $@
+	$(STRIP) -R .comment -R .note $@
 
 $(OBJDIR)/diet-i: $(OBJDIR)/start.o $(OBJDIR)/dyn_start.o diet.c $(OBJDIR)/dietlibc.a $(OBJDIR)/dyn_stop.o
 	$(CROSS)$(CC) -isystem include $(CFLAGS) -nostdlib -o $@ $^ -DDIETHOME=\"$(prefix)\" -DVERSION=\"$(VERSION)\" -DINSTALLVERSION -lgcc
-	$(CROSS)strip -R .comment -R .note $@
+	$(STRIP) -R .comment -R .note $@
 
 $(PICODIR)/diet-dyn: $(PICODIR)/start.o $(PICODIR)/dyn_start.o diet.c
 	$(LD_UNSET) $(CROSS)$(CC) -isystem include $(CFLAGS) -fPIC -nostdlib -o $@ $^ -DDIETHOME=\"$(HOME)\" -D__DYN_LIB -DVERSION=\"$(VERSION)\" -L$(PICODIR) -lc -lgcc $(PICODIR)/dyn_stop.o -Wl,-dynamic-linker=$(HOME)/$(PICODIR)/libdl.so
-	$(CROSS)strip -R .command -R .note $@
+	$(STRIP) -R .command -R .note $@
 
 $(PICODIR)/diet-dyn-i: $(PICODIR)/start.o $(PICODIR)/dyn_start.o diet.c
 	$(LD_UNSET) $(CROSS)$(CC) -isystem include $(CFLAGS) -fPIC -nostdlib -o $@ $^ -DDIETHOME=\"$(prefix)\" -D__DYN_LIB -DVERSION=\"$(VERSION)\" -L$(PICODIR) -lc -lgcc $(PICODIR)/dyn_stop.o -Wl,-dynamic-linker=$(ILIBDIR)/libdl.so -DINSTALLVERSION
-	$(CROSS)strip -R .command -R .note $@
+	$(STRIP) -R .command -R .note $@
 
 $(OBJDIR)/djb: $(OBJDIR)/compile $(OBJDIR)/load
 
