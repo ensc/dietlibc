@@ -150,9 +150,9 @@ int stackgap(int argc,char* argv[],char* envp[]) {
   while (*auxvec) ++auxvec; ++auxvec;	/* skip envp to get to auxvec */
 #ifdef WANT_STACKGAP
   unsigned short s;
+  volatile char* gap;
 #endif
 #if defined(WANT_STACKGAP) || defined(WANT_SSP)
-  volatile char* gap;
   rand=find_in_auxvec(auxvec,25);
   if (!rand) {
     char myrand[10];
