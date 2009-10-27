@@ -103,7 +103,7 @@ int compint(const void *a, const void *b) {
 extern char* strcpy2(char*a,char*b);
 
 #define rdtscl(low) \
-     __asm__ __volatile__ ("rdtsc" : "=a" (low) : : "edx")
+     __asm__ __volatile__ ("rdtscp" : "=a" (low) : : "ecx","edx")
 
 #define malloc(x) ({typeof(x) y=x; (y<0 || (size_t)(y)!=y ? 0 : malloc(y));})
 

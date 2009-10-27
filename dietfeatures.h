@@ -115,6 +115,9 @@
 /* ProPolice is part of gcc 4.1 and up, there were patches for earlier
  * versions.  To make use of this, compile your application with
  * -fstack-protector. */
+/* If you compile dietlibc without WANT_SSP and then try to link code
+ * compiled with -fstack-protector against it, the binary will segfault
+ * when calling that code. */
 #if (__GNUC__>4) || ((__GNUC__==4) && (__GNUC_MINOR__>=1))
 #define WANT_SSP
 #endif
