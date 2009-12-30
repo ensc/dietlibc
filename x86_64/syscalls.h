@@ -334,6 +334,17 @@
 #define __NR_fallocate		285
 #define __NR_timerfd_settime	286
 #define __NR_timerfd_gettime	287
+#define __NR_accept4		288
+#define __NR_signalfd4		289
+#define __NR_eventfd2		290
+#define __NR_epoll_create1	291
+#define __NR_dup3		292
+#define __NR_pipe2		293
+#define __NR_inotify_init1	294
+#define __NR_preadv		295
+#define __NR_pwritev		296
+#define __NR_rt_tgsigqueueinfo	297
+#define __NR_perf_event_open	298
 
 #ifdef __PIC__
 #define syscall_weak(name,wsym,sym) \

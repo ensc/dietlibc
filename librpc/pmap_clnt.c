@@ -52,11 +52,7 @@ static struct timeval tottimeout = { 60, 0 };
  * Set a mapping between program,version and port.
  * Calls the pmap service remotely to do the mapping.
  */
-bool_t pmap_set(program, version, protocol, port)
-unsigned long program;
-unsigned long version;
-int protocol;
-unsigned short port;
+bool_t pmap_set(const unsigned long program, const unsigned long version, int protocol, unsigned short port)
 {
 	struct sockaddr_in myaddress;
 	int socket = -1;

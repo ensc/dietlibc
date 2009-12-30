@@ -136,7 +136,7 @@ int main(int argc,char *argv[]) {
     char *tmp=strchr(cc,0)-2;
     char *tmp2,*tmp3;
     if (tmp<cc) goto donttouch;
-    if (!strstr(cc,"cc")) goto donttouch;
+    if (!strstr(cc,"cc") && !strstr(cc,"clang")) goto donttouch;
     if ((tmp2=strstr(cc,"linux-"))) {	/* cross compiling? */
       int len=strlen(platform);
       --tmp2;
