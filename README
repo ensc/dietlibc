@@ -37,13 +37,10 @@ appropriate location, too:
 	# cp diet.1 /usr/local/man/man1
 
 After you compiled the diet libc successfully, I invite you to check out
-the embedded utils (http://www.fefe.de/embutils/) and the diet libc
-binary repository (ftp://foobar.math.fu-berlin.de/pub/dietlibc/), too.
-The embedded utils are small replacements for common utilities like mv,
-chown, ls, and even a small tar that can extract tar files.  The binary
-repository contains a few utilities I linked against the diet libc, for
-example gzip, bzip2 and fdisk.
+the embedded utils (http://www.fefe.de/embutils/).  The embedded utils
+are small replacements for common utilities like mv, chown, ls, and even
+a small tar that can extract tar files.
 
 
 The license for the diet libc is the GNU General Public License, version
-2 (as included in the file COPYING).
+2 (as included in the file COPYING) or later.
