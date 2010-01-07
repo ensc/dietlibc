@@ -109,7 +109,7 @@ int main() {
   assert(regexec(&r,"mail.b-net.com.ua",0,NULL,0)==0);
   regfree(&r);
 
-  assert(regcomp(&r,"(foo)bar\\1",0)==0);
+  assert(regcomp(&r,"\\(foo\\)bar\\1",0)==0);
   assert(regexec(&r,"foobarfoo",10,matches,0)==0);
   regfree(&r);
 
