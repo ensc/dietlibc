@@ -646,7 +646,7 @@ int sync_file_range(int fd, off64_t offset, off64_t nbytes, unsigned int flags) 
 
 #define FALLOC_FL_KEEP_SIZE 1
 
-int fallocate(int fd, int mode, off64_t offset, off64_t len) __THROW;
+int fallocate(int fd, int mode, loff_t offset, loff_t len) __THROW;
 #endif
 
 #ifdef _ATFILE_SOURCE
