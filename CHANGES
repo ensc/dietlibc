@@ -1,6 +1,7 @@
 0.33:
   first stab at getting TLS to work in actual threads
   use fs: to find current thread on x86_64
+  add fallocate, posix_fallocate
 
 0.32:
   add mbsinit, mbrlen, mbtowc, wctomb, mbrtowc, wcrtomb, wcwidth
