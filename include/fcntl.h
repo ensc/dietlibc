@@ -643,6 +643,10 @@ long vmsplice(int fd, const struct iovec *iov, unsigned long nr_segs, unsigned i
 long splice(int fd_in, loff_t *off_in, int fd_out, loff_t *off_out, size_t len, unsigned int flags) __THROW;
 
 int sync_file_range(int fd, off64_t offset, off64_t nbytes, unsigned int flags) __THROW;
+
+#define FALLOC_FL_KEEP_SIZE 1
+
+int fallocate(int fd, int mode, off64_t offset, off64_t len) __THROW;
 #endif
 
 #ifdef _ATFILE_SOURCE
@@ -668,6 +672,9 @@ int mkfifoat(int dirfd, const char *pathname, mode_t mode);
 int utimensat(int dirfd, const char *pathname, struct timespec* t);
 #endif
 
+#if defined(_XOPEN_SOURCE) && _XOPEN_SOURCE >= 600
+int posix_fallocate(int fd, off64_t offset, off64_t len) __THROW;
+#endif
 
 __END_DECLS
 
