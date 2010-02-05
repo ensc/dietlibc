@@ -2,6 +2,10 @@
   first stab at getting TLS to work in actual threads
   use fs: to find current thread on x86_64
   add fallocate, posix_fallocate
+  work around Ubuntu who added -fstack-protector to their gcc, which
+    added stack protector code to the function from the dietlibc startup
+    code that sets up the registers and segments used by the stack
+    protector mechanism.
 
 0.32:
   add mbsinit, mbrlen, mbtowc, wctomb, mbrtowc, wcrtomb, wcwidth
