@@ -1,3 +1,12 @@
+/* Warning: this code sets up the machine registers and segments needed
+ * for -fstack-protector to work.  If you compile this function with
+ * -fstack-protector, it will reference those registers before they are
+ * set up properly, causing a segmentation fault.  Ubuntu adds
+ * -fstack-protector to their gcc default options, so this breaks.  I
+ * added a workaround to the Makefile to make sure this code is always
+ * compiled with -fno-stack-protector for this reason.  Or, as a friend
+ * put it: yo dawg. I herd u liek stack protektion. :-)
+ */
 #include <unistd.h>
 #include <fcntl.h>
 #include <alloca.h>
