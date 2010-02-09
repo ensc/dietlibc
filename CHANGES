@@ -6,6 +6,7 @@
     added stack protector code to the function from the dietlibc startup
     code that sets up the registers and segments used by the stack
     protector mechanism.
+  fix sys/personality.h (Mathias Krause)
 
 0.32:
   add mbsinit, mbrlen, mbtowc, wctomb, mbrtowc, wcrtomb, wcwidth
