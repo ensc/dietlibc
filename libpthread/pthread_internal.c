@@ -40,7 +40,7 @@ static pthread_once_t __thread_started=PTHREAD_ONCE_INIT;
 
 static unsigned long __thread_pagesize;
 
-static int __manager_pipe[2];
+static int __manager_pipe[2]={-1,-1};
 #define mgr_recv_fd __manager_pipe[0]
 #define mgr_send_fd __manager_pipe[1]
 
@@ -476,8 +476,8 @@ int pthread_getschedparam(pthread_t th,int*policy,struct sched_param*param) {
 
 void __thread_manager_close(void) {
   __thread_started=PTHREAD_ONCE_INIT;
-  close(mgr_recv_fd);
-  close(mgr_send_fd);
+  if (mgr_recv_fd>=0) close(mgr_recv_fd);
+  if (mgr_send_fd>=0) close(mgr_send_fd);
   /* FIXME: missing: resource deallocation (free of unused thread stacks) */
   /* reinit of main thread struct */
   memset(_thread_hash_tid,0,sizeof(_thread_hash_tid));

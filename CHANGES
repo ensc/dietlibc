@@ -7,7 +7,8 @@
     code that sets up the registers and segments used by the stack
     protector mechanism.
   fix sys/personality.h (Mathias Krause)
-  update sys/ptrace.h
+  update sys/ptrace.h (Nikola Vladov)
+  fix fork+pthread closing fd 0 (Tim München)
 
 0.32:
   add mbsinit, mbrlen, mbtowc, wctomb, mbrtowc, wcrtomb, wcwidth
