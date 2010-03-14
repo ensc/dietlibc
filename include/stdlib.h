@@ -93,7 +93,7 @@ char *ptsname (int fd) __THROW;
 
 #define RAND_MAX 	0x7ffffffe
 
-#define MB_CUR_MAX 1
+#define MB_CUR_MAX 5
 
 /* now these functions are the greatest bullshit I have ever seen.
  * The ISO people must be out of their minds. */
