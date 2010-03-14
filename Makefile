@@ -529,7 +529,10 @@ $(LIBPTHREAD_OBJS): include/pthread.h
 $(OBJDIR)/fcntl64.o: dietfeatures.h
 
 # WANT_SSP
+# This facepalm brought to you by: Ubuntu!
 $(OBJDIR)/stackgap.o: dietfeatures.h
+	$(CROSS)$(CC) $(INC) $(CFLAGS) -c lib/stackgap.c -o $@ -D__dietlibc__ -fno-stack-protector
+	$(COMMENT) -$(CROSS)strip -x -R .comment -R .note $@
 
 # WANT_MALLOC_ZERO
 $(OBJDIR)/strndup.o: dietfeatures.h

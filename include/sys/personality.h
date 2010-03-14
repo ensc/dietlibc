@@ -1,16 +1,7 @@
 #ifndef _PERSONALITY_H
 #define _PERSONALITY_H
 
-/*
- * Handling of different ABIs (personalities).
- */
-
-struct exec_domain;
-struct pt_regs;
-
-extern int		register_exec_domain(struct exec_domain *);
-extern int		unregister_exec_domain(struct exec_domain *);
-extern int		__set_personality(unsigned long);
+#include <sys/cdefs.h>
 
 /*
  * Flags for bug emulation.
@@ -31,12 +22,6 @@ enum {
 	STICKY_TIMEOUTS	=	0x4000000,
 	ADDR_LIMIT_3GB = 	0x8000000,
 };
-
-/*
- * Security-relevant compatibility flags that must be
- * cleared upon setuid or setgid exec:
- */
-#define PER_CLEAR_ON_SETID (READ_IMPLIES_EXEC|ADDR_NO_RANDOMIZE)
 
 /*
  * Personality types.
@@ -71,44 +56,11 @@ enum {
 	PER_MASK =		0x00ff,
 };
 
+__BEGIN_DECLS
 
-/*
- * Description of an execution domain.
- * 
- * The first two members are refernced from assembly source
- * and should stay where they are unless explicitly needed.
- */
-typedef void (*handler_t)(int, struct pt_regs *);
+/* Set different ABIs (personalities).  */
+extern int personality (unsigned long int __persona) __THROW;
 
-struct exec_domain {
-	const char		*name;		/* name of the execdomain */
-	handler_t		handler;	/* handler for syscalls */
-	unsigned char		pers_low;	/* lowest personality */
-	unsigned char		pers_high;	/* highest personality */
-	unsigned long		*signal_map;	/* signal mapping */
-	unsigned long		*signal_invmap;	/* reverse signal mapping */
-	struct map_segment	*err_map;	/* error mapping */
-	struct map_segment	*socktype_map;	/* socket type mapping */
-	struct map_segment	*sockopt_map;	/* socket option mapping */
-	struct map_segment	*af_map;	/* address family mapping */
-	struct module		*module;	/* module context of the ed. */
-	struct exec_domain	*next;		/* linked list (internal) */
-};
-
-/*
- * Return the base personality without flags.
- */
-#define personality(pers)	(pers & PER_MASK)
-
-/*
- * Personality of the currently running process.
- */
-#define get_personality		(current->personality)
-
-/*
- * Change personality of the currently running process.
- */
-#define set_personality(pers) \
-	((current->personality == pers) ? 0 : __set_personality(pers))
+__END_DECLS
 
 #endif /* _PERSONALITY_H */

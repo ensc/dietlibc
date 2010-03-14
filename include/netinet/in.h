@@ -41,6 +41,10 @@ enum {
 #define IPPROTO_AH IPPROTO_AH
   IPPROTO_COMP   = 108,                /* Compression Header protocol */
 #define IPPROTO_COMP IPPROTO_COMP
+    IPPROTO_SCTP = 132,	   /* Stream Control Transmission Protocol.  */
+#define IPPROTO_SCTP		IPPROTO_SCTP
+    IPPROTO_UDPLITE = 136, /* UDP-Lite protocol.  */
+#define IPPROTO_UDPLITE		IPPROTO_UDPLITE
   IPPROTO_RAW	 = 255,		/* Raw IP packets			*/
 #define IPPROTO_RAW IPPROTO_RAW
   IPPROTO_MAX

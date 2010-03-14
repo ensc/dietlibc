@@ -33,3 +33,5 @@ set_thread_area -> set up TLD, for stack guard
 
 lsearch, lfind, hsearch, tsearch
 
+add option to detect valgrind (strstr for "valgrind" in getenv("LD_PRELOAD")),
+  then set a flag and disable optimizations that trigger warnings

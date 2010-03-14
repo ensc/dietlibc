@@ -243,12 +243,21 @@ match:
     return plus+matchlen;
 }
 
+static int closebracket(const char* s,const regex_t* r) {
+  if (r->cflags&REG_EXTENDED)
+    return *s==')';
+  else
+    return (*s=='\\' && s[1]==')');
+}
+
 static const char* parseatom(struct atom*__restrict__ a,const char*__restrict__ s,regex_t*__restrict__ rx) {
   const char *tmp;
   a->m=(matcher)matchatom;
   a->bnum=-1;
   switch (*s) {
   case '(':
+    if ((rx->cflags&REG_EXTENDED)==0) goto handle_char;
+openbracket:
     a->bnum=++rx->brackets;
     if (s[1]==')') {
       a->type=EMPTY;
@@ -256,11 +265,13 @@ static const char* parseatom(struct atom*__restrict__ a,const char*__restrict__ 
     }
     a->type=REGEX;
     tmp=parseregex(&a->u.r,s+1,rx);
-    if (*tmp==')')
-      return tmp+1;
+    if (closebracket(tmp,rx))
+      return tmp+1+((rx->cflags&REG_EXTENDED)==0);
+  case ')':
+    if ((rx->cflags&REG_EXTENDED)==0) goto handle_char;
+    /* fall through */
   case 0:
   case '|':
-  case ')':
     return s;
   case '[':
     a->type=BRACKET;
@@ -288,9 +299,13 @@ static const char* parseatom(struct atom*__restrict__ a,const char*__restrict__ 
       a->type=BACKREF;
       a->u.c=*s-'0';
       break;
+    } else if ((rx->cflags&REG_EXTENDED)==0) {
+      if (*s=='(') goto openbracket; else
+      if (*s==')') return s-1;
     }
     /* fall through */
   default:
+handle_char:
     a->type=CHAR;
     if (rx->cflags&REG_ICASE) {
       a->u.c=tolower(*s);
@@ -483,7 +498,7 @@ static const char* parseregex(struct regex*__restrict__ r,const char*__restrict_
   }
   for (;;) {
     tmp=parsebranch(&b,s,p,&r->pieces);
-    if (tmp==s && *s!=')') return s;
+    if (tmp==s && !closebracket(s,p)) return s;
 //    printf("r->b from %p to ",r->b);
     {
       struct branch* tmp;
@@ -493,13 +508,13 @@ static const char* parseregex(struct regex*__restrict__ r,const char*__restrict_
     }
 //    printf("%p (size %d)\n",r->b,r->num*sizeof(b));
     r->b[r->num-1]=b;
-    if (*s==')') {
+    if (closebracket(s,p)) {
       r->b[r->num-1].m=matchempty;
       return s;
     }
 //    printf("assigned branch %d at %p\n",r->num-1,r->b);
     s=tmp;
-    if (*s==')') return s;
+    if (closebracket(s,p)) return s;
     if (*s=='|') ++s;
   }
   return tmp;
