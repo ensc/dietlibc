@@ -48,13 +48,15 @@ int __dns_gethostbyx_r(const char* name, struct hostent* result,
     result->h_addrtype=AF_INET6;
     result->h_length=16;
   }
-  result->h_aliases=(char**)(buf+8*sizeof(char*));
+  result->h_aliases=(char**)(buf+9*sizeof(char*));
   result->h_addr_list=(char**)buf;
   result->h_aliases[0]=0;
 
-  cur=buf+16*sizeof(char*);
+  cur=buf+18*sizeof(char*);
   max=buf+buflen;
   names=ips=0;
+
+  if (buflen<128) goto invalidpacket;
 
   if ((size=res_query(name,C_IN,lookfor,(unsigned char*)inpkg,512))<0) {
 invalidpacket:
@@ -75,6 +77,7 @@ invalidpacket:
       if (tmp>inpkg+size) goto invalidpacket;
       q=((unsigned short)inpkg[6]<<8)+inpkg[7];
       if (q<1) goto nodata;
+      if (q>8) q=8;
       while (q>0) {
 	int decofs=__dns_decodename((unsigned char*)inpkg,(size_t)(tmp-(char*)inpkg),Name,256,(unsigned char*)inpkg+size);
 	if (decofs<0) break;
@@ -110,10 +113,11 @@ invalidpacket:
 	    result->h_name=cur;
 	  else
 	    result->h_aliases[names-1]=cur;
-	  result->h_aliases[names]=0;
-	  if (names<8) ++names;
-/*		cur+=slen+1; */
-	  cur+=(slen|3)+1;
+	  if (!names || strcmp(cur,result->h_name)) {
+	    cur+=(slen|3)+1;
+	    ++names;
+	  }
+	  result->h_aliases[names-1]=0;
 	  result->h_addr_list[ips++] = cur;
 	  if (lookfor==1) /* A */ {
 	    memcpy(cur,tmp,4);
