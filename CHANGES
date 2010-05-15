@@ -9,6 +9,7 @@
   fix sys/personality.h (Mathias Krause)
   update sys/ptrace.h (Nikola Vladov)
   fix fork+pthread closing fd 0 (Tim München)
+  finally add stdout tty detection and turn off linewise buffering if !tty
 
 0.32:
   add mbsinit, mbrlen, mbtowc, wctomb, mbrtowc, wcrtomb, wcwidth
