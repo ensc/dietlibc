@@ -14,12 +14,17 @@
 #include <sys/tls.h>
 #include <endian.h>
 #include <elf.h>
+#include <stdlib.h>
 #include "dietfeatures.h"
 
 extern int main(int argc,char* argv[],char* envp[]);
 
 #if defined(WANT_SSP)
 extern unsigned long __guard;
+#endif
+
+#if defined(WANT_VALGRIND_SUPPORT)
+int __valgrind=1;
 #endif
 
 #ifdef __i386__
@@ -166,6 +171,12 @@ int stackgap(int argc,char* argv[],char* envp[]) {
 #elif defined(WANT_SSP)
   tlsdata=alloca(sizeof(tcbhead_t));
   __setup_tls(__tcb_mainthread=(tcbhead_t*)(tlsdata));
+#endif
+#if defined(WANT_VALGRIND_SUPPORT)
+  {
+    const char* v=getenv("LD_PRELOAD");
+    __valgrind=(v && strstr(v,"valgrind"));
+  }
 #endif
   return main(argc,argv,envp);
 }

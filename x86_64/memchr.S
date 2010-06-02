@@ -1,7 +1,13 @@
+#include "dietfeatures.h"
 .text
 .global memchr
 .type memchr,@function
 memchr:	/* rdi=ptr, esi=ch, rdx=len */
+#ifdef WANT_VALGRIND_SUPPORT
+  xor %eax,%eax
+  or (__valgrind),%eax
+  jnz .Lvalgrind
+#endif
   and $0xff,%esi
   test %rdx,%rdx
   jz .Lnull		/* if (!len) return 0 */
@@ -36,5 +42,22 @@ memchr:	/* rdi=ptr, esi=ch, rdx=len */
 .Lnull:
   xor %eax,%eax
   ret
+
+#ifdef WANT_VALGRIND_SUPPORT
+/* rdi=ptr, esi=ch, rdx=len */
+.Lvalgrind:
+.Lloop:
+  test %rdx,%rdx
+  jz .Lnull
+  movzbl (%rdi),%eax
+  cmp %esi,%eax
+  jz .Lfound2
+  inc %rdi
+  dec %rdx
+  jmp .Lloop
+.Lfound2:
+  mov %rdi,%rax
+  ret
+#endif
 .Lhere:
 .size memchr,.Lhere-memchr

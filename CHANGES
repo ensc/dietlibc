@@ -8,10 +8,14 @@
     protector mechanism.
   fix sys/personality.h (Mathias Krause)
   update sys/ptrace.h (Nikola Vladov)
-  fix fork+pthread closing fd 0 (Tim München)
+  fix fork+pthread closing fd 0 (Tim MÃ¼nchen)
   finally add stdout tty detection and turn off linewise buffering if !tty
   enlarge dev_t to 32-bit on i386, arm, sparc, s390 (Pascal Terjan)
   update sys/stat.h to include nsec and enlarge dev_t
+  add WANT_VALGRIND_SUPPORT in dietfeatures.h.  When #defined, the
+    startup code will check if the program is running under valgrind,
+    and if it is, the SIMD optimized string routines will switch back to
+    a slower version that does not generate valgrind false positives.
 
 0.32:
   add mbsinit, mbrlen, mbtowc, wctomb, mbrtowc, wcrtomb, wcwidth
