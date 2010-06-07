@@ -318,7 +318,7 @@ handle_char:
     {
       size_t i;
       for (i=1; s[i] && !strchr("(|)[.^$\\*+?{",s[i]); ++i) ;
-      if (!strchr("*+?{",s[i])) --i;
+      if (strchr("*+?{",s[i])) --i;
       if (i>2) {
 	a->m=(matcher)matchatom;
 	a->type=STRING;
@@ -585,6 +585,7 @@ int regexec(const regex_t*__restrict__ preg, const char*__restrict__ string, siz
     matched=preg->r.m((void*)&preg->r,string,string-orig,(regex_t*)preg,0,eflags);
 //    printf("ebp on stack = %x\n",stack[1]);
     if (matched>=0) {
+      matched=preg->r.m((void*)&preg->r,string,string-orig,(regex_t*)preg,0,eflags);
       preg->l[0].rm_so=string-orig;
       preg->l[0].rm_eo=string-orig+matched;
       if ((preg->cflags&REG_NOSUB)==0) memcpy(pmatch,preg->l,nmatch*sizeof(regmatch_t));
