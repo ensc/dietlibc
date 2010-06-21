@@ -127,15 +127,20 @@ static void handle(int s,char* buf,int len,int interface,int llmnr) {
     else
       return;
 //    if (((unsigned long)buf)&1) ++buf;
+    if (!llmnr && buf[2]==(char)0x80) buf[2]=0;	/* we ignore the bit and always answer unicast */
     if (buf[0] || buf[2]) return;	/* all supported types and classes fit in 8 bit */
     if (buf[3]!=1) return;		/* we only support IN queries */
     type=(unsigned char)buf[1];
     slen=buf-obuf+4;
     obuf[2]|=0x80; 	/* it's answer; we don't support recursion */
+    if (type!=1 && type!=28 && type!=255)
+      return;
+
+    getip(interface);
+
     if (type==1 || type==255) {		/* A or ANY, we can do that */
       struct ifreq ifr;
       static int v4sock=-1;
-      getip(interface);
       ++obuf[7];			/* one answer */
       memcpy(obuf+slen,"\xc0\x0c" /* goofy compression */
 	           "\x00\x01" /* A */
