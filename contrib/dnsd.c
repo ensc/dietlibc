@@ -52,8 +52,10 @@ static void getip(int interface) {
   memset(&mysa4,0,sizeof(mysa4));
   memset(&mysa6,0,sizeof(mysa6));
   for (x=CMSG_FIRSTHDR(&mh); x; x=CMSG_NXTHDR(&mh,x))
-    if (x->cmsg_level==SOL_IP && x->cmsg_type==IP_PKTINFO)
+    if (x->cmsg_level==SOL_IP && x->cmsg_type==IP_PKTINFO) {
       mysa4.sin_addr=((struct in_pktinfo*)(CMSG_DATA(x)))->ipi_spec_dst;
+      printf("found IP %x\n",mysa4.sin_addr.s_addr);
+    }
 
   fd=open("/proc/net/if_inet6",O_RDONLY);
   if (fd!=-1) {
@@ -112,7 +114,7 @@ static void handle(int s,char* buf,int len,int interface,int llmnr) {
   if (buf[10] || buf[11]) return;	/* additional record count must be 0 */
   buf+=12; len-=12;
 #ifdef DEBUG
-  printf("got %s request for \"%.*s\"",llmnr?"LLMNR":"zeroconf mDNS",(int)(unsigned char)buf[0],buf+1);
+  printf("got %s request for \"%.*s\"!\n",llmnr?"LLMNR":"zeroconf mDNS",(int)(unsigned char)buf[0],buf+1);
 #endif
   if (buf[0]==namelen && !strncasecmp(buf+1,myhostname,namelen)) {
     unsigned int type;

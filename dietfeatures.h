@@ -89,6 +89,10 @@
  * ask for an unqualified hostname */
 #define WANT_PLUGPLAY_DNS
 
+/* This enables LLMNR, the MS variant of zeroconf DNS.  This only works
+ * if you also enabled WANT_PLUGPLAY_DNS */
+#define WANT_LLMNR
+
 /* Do you want valgrind support?  If enabled, the startup code will
  * check for valgrind, and if detected, turn off optimized SIMD string
  * routines that cause false positives in valgrind.  This enlarges and

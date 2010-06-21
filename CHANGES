@@ -16,6 +16,10 @@
     startup code will check if the program is running under valgrind,
     and if it is, the SIMD optimized string routines will switch back to
     a slower version that does not generate valgrind false positives.
+  add WANT_LLMNR in dietfeatures.h.  Now you can do "ping windowsbox"
+    and it works if that box runs win7 and trusts the LAN; the down side
+    is that LLMNR does not like the .local prefix, so DNS does zeroconf
+    lookup for unqualified names now, too.
 
 0.32:
   add mbsinit, mbrlen, mbtowc, wctomb, mbrtowc, wcrtomb, wcwidth
