@@ -80,7 +80,11 @@ struct rlimit {
 #define RLIMIT_RTTIME		15	/* timeout for RT tasks in us */
 #define RLIM_NLIMITS		16
 
+#if defined(__alpha__) || defined(__mips__) || defined(__sparc__)
 #define RLIM_INFINITY ((long)(~0UL>>1))
+#else
+#define RLIM_INFINITY (~0UL)
+#endif
 
 int getpriority(int which, int who) __THROW;
 int setpriority(int which, int who, int prio) __THROW;
