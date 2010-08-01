@@ -121,6 +121,12 @@
  * `main' can not be found. */
 /* #define WANT_STACKGAP */
 
+/* #define this if you want GNU bloat like program_invocation_short_name
+ * and program_invocation_name to be there.  This functionality is not
+ * portable and adds useless bloat to libc.  Help stomp out code
+ * depending on this!  util-linux, I'm looking at you here! */
+#define WANT_GNU_STARTUP_BLOAT
+
 /* Include support for ProPolice/SSP, calls guard_setup */
 /* ProPolice is part of gcc 4.1 and up, there were patches for earlier
  * versions.  To make use of this, compile your application with

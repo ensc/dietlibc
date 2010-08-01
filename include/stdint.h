@@ -2,6 +2,7 @@
 #define _STDINT_H
 
 #include <inttypes.h>
+#include <stddef.h>
 
 __BEGIN_DECLS
 
@@ -43,6 +44,39 @@ typedef uint64_t uint_fast64_t;
      WCHAR_MIN, WCHAR_MAX
      WINT_MIN, WINT_MAX
 */
+
+#define INT8_MIN (-0x80)
+#define INT16_MIN (-0x7fff-1)
+#define INT32_MIN (-0x7fffffffl-1)
+#define INT64_MIN (-0x7fffffffffffffffll-1)
+
+#define INT8_MAX 0x7f
+#define INT16_MAX 0x7fff
+#define INT32_MAX 0x7fffffffl
+#define INT32_MAX 0x7fffffffffffffffll
+
+#define UINT8_MAX 0xff
+#define UINT16_MAX 0xffff
+#define UINT32_MAX 0xfffffffful
+#define UINT64_MAX 0xffffffffffffffffull
+
+#if __WORDSIZE == 64
+#define INTPTR_MIN INT64_MIN
+#define INTPTR_MAX INT64_MAX
+#define UINTPTR_MAX UINT64_MAX
+#else
+#define INTPTR_MIN INT32_MIN
+#define INTPTR_MAX INT32_MAX
+#define UINTPTR_MAX UINT32_MAX
+#endif
+
+#define SIZE_MAX UINTPTR_MAX
+#define PTRDIFF_MIN INTPTR_MIN
+#define PTRDIFF_MAX INTPTR_MAX
+
+#define INTMAX_MIN INT64_MIN
+#define INTMAX_MAX INT64_MAX
+#define UINTMAX_MAX UINT64_MAX
 
 #endif	/* C++ && limit macros */
 

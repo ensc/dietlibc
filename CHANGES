@@ -20,6 +20,10 @@
     and it works if that box runs win7 and trusts the LAN; the down side
     is that LLMNR does not like the .local prefix, so DNS does zeroconf
     lookup for unqualified names now, too.
+  add WANT_GNU_STARTUP_BLOAT in dietfeatures.h to support
+    program_invocation_short_name and program_invocation_name
+  add INT*_MIN, INT*_MAX, UINT*_MAX, etc to stdint.h
+  remove const from stdsignal prototype to agree with standard
 
 0.32:
   add mbsinit, mbrlen, mbtowc, wctomb, mbrtowc, wcrtomb, wcwidth

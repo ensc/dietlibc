@@ -17,6 +17,11 @@
 #include <stdlib.h>
 #include "dietfeatures.h"
 
+#ifdef WANT_GNU_STARTUP_BLOAT
+char* program_invocation_name;
+char* program_invocation_short_name;
+#endif
+
 extern int main(int argc,char* argv[],char* envp[]);
 
 #if defined(WANT_SSP)
@@ -176,6 +181,14 @@ int stackgap(int argc,char* argv[],char* envp[]) {
   {
     const char* v=getenv("LD_PRELOAD");
     __valgrind=(v && strstr(v,"valgrind"));
+  }
+#endif
+#ifdef WANT_GNU_STARTUP_BLOAT
+  program_invocation_name=argv[0];
+  {
+    char* c;
+    for (c=program_invocation_short_name=program_invocation_name; *c; ++c)
+      if (*c=='/') program_invocation_short_name=c+1;
   }
 #endif
   return main(argc,argv,envp);
