@@ -32,19 +32,6 @@ typedef uint64_t uint_fast64_t;
    should only be defined if explicitly requested.  */
 #if !defined __cplusplus || defined __STDC_LIMIT_MACROS
 
-/* FIXME: missing are
-     INTx_MIN, INTx_MAX, UINTx_MAX
-     INT_LEASTx_MIN, INT_LEASTx_MAX, UINT_LEASTx_MAX
-     INT_FASTx_MIN, INT_FASTx_MAX, UINT_FASTx_MAX
-     INTMAX_MIN, INTMAX_MAX, UINTMAX_MAX
-     INTPTR_MIN, INTPTR_MAX, UINTPTR_MAX
-     PTRDIFF_MIN, PTRDIFF_MAX
-     SIG_ATOMIC_MIN, SIG_ATOMIC_MAX
-     SIZE_MAX
-     WCHAR_MIN, WCHAR_MAX
-     WINT_MIN, WINT_MAX
-*/
-
 #define INT8_MIN (-0x80)
 #define INT16_MIN (-0x7fff-1)
 #define INT32_MIN (-0x7fffffffl-1)
@@ -53,7 +40,7 @@ typedef uint64_t uint_fast64_t;
 #define INT8_MAX 0x7f
 #define INT16_MAX 0x7fff
 #define INT32_MAX 0x7fffffffl
-#define INT32_MAX 0x7fffffffffffffffll
+#define INT64_MAX 0x7fffffffffffffffll
 
 #define INT_LEAST8_MAX INT8_MAX
 #define INT_LEAST8_MIN INT8_MIN
@@ -70,13 +57,9 @@ typedef uint64_t uint_fast64_t;
 #define UINT64_MAX 0xffffffffffffffffull
 
 #define UINT_LEAST8_MAX UINT8_MAX
-#define UINT_LEAST8_MIN UINT8_MIN
 #define UINT_LEAST16_MAX UINT16_MAX
-#define UINT_LEAST16_MIN UINT16_MIN
 #define UINT_LEAST32_MAX UINT32_MAX
-#define UINT_LEAST32_MIN UINT32_MIN
 #define UINT_LEAST64_MAX UINT64_MAX
-#define UINT_LEAST64_MIN UINT64_MIN
 
 #if __WORDSIZE == 64
 #define INTPTR_MIN INT64_MIN
@@ -95,6 +78,33 @@ typedef uint64_t uint_fast64_t;
 #define INTMAX_MIN INT64_MIN
 #define INTMAX_MAX INT64_MAX
 #define UINTMAX_MAX UINT64_MAX
+
+#define INT_FAST8_MIN INT8_MIN
+#define INT_FAST8_MAX INT8_MAX
+#define INT_FAST64_MIN INT64_MIN
+#define INT_FAST64_MAX INT64_MAX
+
+#define UINT_FAST8_MAX UINT8_MAX
+#define UINT_FAST64_MAX UINT64_MAX
+
+#define INT_FAST16_MIN INTPTR_MIN
+#define INT_FAST16_MAX INTPTR_MAX
+#define UINT_FAST16_MAX UINTPTR_MAX
+
+#define INT_FAST32_MIN INTPTR_MIN
+#define INT_FAST32_MAX INTPTR_MAX
+#define UINT_FAST32_MAX UINTPTR_MAX
+
+#define SIG_ATOMIC_MAX INT_MAX
+#define SIG_ATOMIC_MIN INT_MIN
+
+#ifndef WCHAR_MIN
+#define WCHAR_MIN ((int)(~0u << sizeof(int)*8-1))
+#define WCHAR_MAX ((int)((~0u << sizeof(int)*8-1)-1))
+#endif
+
+#define WINT_MIN 0
+#define WINT_MAX (~(wint_t)0)
 
 #endif	/* C++ && limit macros */
 
@@ -115,8 +125,8 @@ typedef uint64_t uint_fast64_t;
 # endif
 
 /* Unsigned.  */
-# define UINT8_C(c)	c ## U
-# define UINT16_C(c)	c ## U
+# define UINT8_C(c)	c
+# define UINT16_C(c)	c
 # define UINT32_C(c)	c ## U
 # if __WORDSIZE == 64
 #  define UINT64_C(c)	c ## UL
@@ -134,6 +144,12 @@ typedef uint64_t uint_fast64_t;
 # endif
 
 #endif	/* C++ && constant macros */
+
+#if defined(__WINT_TYPE__)
+typedef __WINT_TYPE__ wint_t;
+#else
+typedef unsigned int wint_t;
+#endif
 
 __END_DECLS
 
