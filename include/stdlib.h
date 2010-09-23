@@ -104,10 +104,10 @@ typedef struct { long quot,rem; } ldiv_t;
 div_t div(int numerator, int denominator);
 ldiv_t ldiv(long numerator, long denominator);
 
-#ifdef _GNU_SOURCE
 typedef struct { long long quot,rem; } lldiv_t;
 lldiv_t lldiv(long long numerator, long long denominator);
 
+#ifdef _GNU_SOURCE
 int clearenv(void);
 #endif
 

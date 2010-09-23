@@ -32,15 +32,15 @@ typedef uint64_t uint_fast64_t;
    should only be defined if explicitly requested.  */
 #if !defined __cplusplus || defined __STDC_LIMIT_MACROS
 
-#define INT8_MIN (-0x80)
-#define INT16_MIN (-0x7fff-1)
-#define INT32_MIN (-0x7fffffffl-1)
-#define INT64_MIN (-0x7fffffffffffffffll-1)
+#define INT8_MAX (127)
+#define INT16_MAX (32767)
+#define INT32_MAX (2147483647)
+#define INT64_MAX (9223372036854775807ll)
 
-#define INT8_MAX 0x7f
-#define INT16_MAX 0x7fff
-#define INT32_MAX 0x7fffffffl
-#define INT64_MAX 0x7fffffffffffffffll
+#define INT8_MIN (-1 - INT8_MAX)
+#define INT16_MIN (-1 - INT16_MAX)
+#define INT32_MIN (-1 - INT32_MAX)
+#define INT64_MIN (-1 - INT64_MAX)
 
 #define INT_LEAST8_MAX INT8_MAX
 #define INT_LEAST8_MIN INT8_MIN
@@ -95,8 +95,8 @@ typedef uint64_t uint_fast64_t;
 #define INT_FAST32_MAX INTPTR_MAX
 #define UINT_FAST32_MAX UINTPTR_MAX
 
-#define SIG_ATOMIC_MAX INT_MAX
-#define SIG_ATOMIC_MIN INT_MIN
+#define SIG_ATOMIC_MAX ((int)(~0u << sizeof(int)*8-1))
+#define SIG_ATOMIC_MIN ((int)((~0u << sizeof(int)*8-1)-1))
 
 #ifndef WCHAR_MIN
 #define WCHAR_MIN ((int)(~0u << sizeof(int)*8-1))

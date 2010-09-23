@@ -33,5 +33,19 @@ set_thread_area -> set up TLD, for stack guard
 
 lsearch, lfind, hsearch, tsearch
 
-add option to detect valgrind (strstr for "valgrind" in getenv("LD_PRELOAD")),
-  then set a flag and disable optimizations that trigger warnings
+getopt configure check fails:
+
+  {
+    char *argv[3] = { "program", "-ab", NULL };
+    optind = OPTIND_MIN;
+    opterr = 0;
+    if (getopt (2, argv, "ab:") != 'a')
+      return 13;
+    if (getopt (2, argv, "ab:") != '?')
+      return 14;	/* fails here */
+    if (optopt != 'b')
+      return 15;
+    if (optind != 2)
+      return 16;
+  }
+
