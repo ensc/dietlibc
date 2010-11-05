@@ -24,6 +24,8 @@
     program_invocation_short_name and program_invocation_name
   add INT*_MIN, INT*_MAX, UINT*_MAX, etc to stdint.h
   remove const from stdsignal prototype to agree with standard
+  only count %[] conversions in *scanf if they matched at least one char
+    (Indan Zupancic)
 
 0.32:
   add mbsinit, mbrlen, mbtowc, wctomb, mbrtowc, wcrtomb, wcwidth
