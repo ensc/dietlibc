@@ -26,6 +26,8 @@
   remove const from stdsignal prototype to agree with standard
   only count %[] conversions in *scanf if they matched at least one char
     (Indan Zupancic)
+  make sure __sc_nr_cpus does not dump core if /proc/cpuinfo is larger
+    than 2048 bytes (Bela Lubkin)
 
 0.32:
   add mbsinit, mbrlen, mbtowc, wctomb, mbrtowc, wcrtomb, wcwidth
