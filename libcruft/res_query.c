@@ -58,7 +58,8 @@ int res_query(const char *dname, int class, int type, unsigned char *answer, int
 	  if (!memcmp(x,".local",6))
 	    if (x[6]==0 || (x[6]=='.' && x[7]==0))
 	      islocal=1;
-	}
+	} else
+	  islocal=1;
       }
       if (islocal) {
 	if (pnpfd<0) {
@@ -105,9 +106,24 @@ int res_query(const char *dname, int class, int type, unsigned char *answer, int
       last.tv_sec=0;
 #ifdef WANT_PLUGPLAY_DNS
       if (duh[1].fd!=-1) {
+	packet[2]=0;
+
+	packet[size-2]=0x80;
 	sendto(pnpfd,packet,size,0,(struct sockaddr*)(&pnpsa4),sizeof(pnpsa4));
 	if (!v4pnp)
 	  sendto(pnpfd,packet,size,0,(struct sockaddr*)(&pnpsa6),sizeof(pnpsa6));
+	packet[size-2]=0;
+
+#ifdef WANT_LLMNR
+	pnpsa4.sin_port=htons(5355);
+	memcpy(&pnpsa4.sin_addr,"\xe0\x00\x00\xfc",4);  /* 224.0.0.252 */
+	pnpsa6.sin6_port=htons(5355);
+	memcpy(&pnpsa6.sin6_addr,"\xff\x02\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x03",16);
+	sendto(pnpfd,packet,size,0,(struct sockaddr*)(&pnpsa4),sizeof(pnpsa4));
+	if (!v4pnp)
+	  sendto(pnpfd,packet,size,0,(struct sockaddr*)(&pnpsa6),sizeof(pnpsa6));
+#endif
+	packet[2]=1;
       }
       /* if it doesn't work, we don't care */
 #endif
@@ -173,8 +189,13 @@ int res_query(const char *dname, int class, int type, unsigned char *answer, int
 	  __dns_plugplay_interface=0;
 	  len=recvmsg(fd=(duh[0].revents&POLLIN?duh[0].fd:duh[1].fd),&mh,MSG_DONTWAIT);
 	  if (fd==duh[1].fd) {
-	    if (tmpsa.sin6_family==AF_INET6)
+	    unsigned short peerport;
+	    if (tmpsa.sin6_family==AF_INET6) {
 	      __dns_plugplay_interface=tmpsa.sin6_scope_id;
+	      peerport=tmpsa.sin6_port;
+	    } else {
+	      peerport=((struct sockaddr_in*)&tmpsa)->sin_port;
+	    }
 	    for (x=CMSG_FIRSTHDR(&mh); x; x=CMSG_NXTHDR(&mh,x))
 	      if ((x->cmsg_level==SOL_IP && x->cmsg_type==IP_TTL) ||
 		  (x->cmsg_level==IPPROTO_IPV6 && x->cmsg_type==IPV6_HOPLIMIT)) {
@@ -182,10 +203,13 @@ int res_query(const char *dname, int class, int type, unsigned char *answer, int
 		break;
 	      } else if ((x->cmsg_level==SOL_IP && x->cmsg_type==IP_PKTINFO))
 		__dns_plugplay_interface=((struct in_pktinfo*)(CMSG_DATA(x)))->ipi_ifindex;
-	    if (ttl != 255) {
+#ifdef WANT_LLMNR
+	    if ((peerport==5353 && ttl != 255) || (peerport==5355 && ttl != 1))
+#else
+	    if (ttl != 255)
+#endif
 	      /* as per standard, discard packets with TTL!=255 */
 	      continue;
-	    }
 	    /* work around stupid avahi bug */
 	    inpkg[2]=(inpkg[2]&~0x1) | (packet[2]&0x1);
 	  }

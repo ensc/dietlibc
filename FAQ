@@ -107,9 +107,9 @@ A: The humble beginnings are in the "test" directory, but it can't be
 
 Q: GPL sucks!  Now I can't compile my BSD programs with the diet libc!
 A: Wrong.  You can compile them, and you can use them.  You just can't
-   redistribute the binaries.  If you are a distribution vendor and want
-   to use the diet libc to make BSD licensed binaries for the install
-   or rescue floppy which you sell commercially, please talk to me.
+   redistribute the binaries.  That said: I will not be sueing anybody
+   for distributing binaries of BSD programs linked against dietlibc, as
+   long as the source code is available somewhere publicly.
 
 
 Q: Where are the shared libaries?  make install didn't install them!

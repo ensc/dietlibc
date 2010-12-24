@@ -1,7 +1,13 @@
+#include "dietfeatures.h"
 .text
 .global strlen
 .type strlen,@function
 strlen:
+#ifdef WANT_VALGRIND_SUPPORT
+	xor %eax,%eax
+	or (__valgrind),%eax
+	jnz .Lvalgrind
+#endif
         mov %rdi,%rax
         mov %edi,%ecx
         pxor %xmm0,%xmm0
@@ -26,6 +32,18 @@ strlen:
         bsf %edx,%eax
         sub %rdi,%rax
         ret
+#ifdef WANT_VALGRIND_SUPPORT
+.Lvalgrind:
+	mov %rdi,%rax
+.L3:
+	cmpb $0,(%rax)
+	jz .L4
+	inc %rax
+	jmp .L3
+.L4:
+	sub %rdi,%rax
+	ret
+#endif
 
 .Lhere:
         .size    strlen,.Lhere-strlen

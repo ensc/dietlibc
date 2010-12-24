@@ -14,19 +14,19 @@ int scandir(const char *dir, struct dirent ***namelist,
   while ((D=readdir(d))) {
     if (select==0 ||  select(D)) {
       struct dirent **tmp;
-      ++num;
 /*      printf("realloc %p,%d -> ",*namelist,num*sizeof(struct dirent**)); */
-      if (!(tmp=realloc(*namelist,num*sizeof(struct dirent**))) ||
-	  !(tmp[num-1]=malloc(sizeof(struct dirent)))) {
+      if (!(tmp=realloc(*namelist,(num+1)*sizeof(struct dirent**))) ||
+	  !(tmp[num]=malloc(sizeof(struct dirent)))) {
 	int i;
-	for (i=0; i<num-1; ++i) free(tmp[i]);
+	for (i=0; i<num; ++i) free((*namelist)[i]);
 	free(*namelist);
 	closedir(d);
 	return -1;
       }
-      memccpy(tmp[num-1]->d_name,D->d_name,0,NAME_MAX);
-      tmp[num-1]->d_off=D->d_off;
-      tmp[num-1]->d_reclen=D->d_reclen;
+      memccpy(tmp[num]->d_name,D->d_name,0,NAME_MAX);
+      tmp[num]->d_off=D->d_off;
+      tmp[num]->d_reclen=D->d_reclen;
+      ++num;
       *namelist=tmp;
 /*      printf("%p; tmp[num-1(%d)]=%p\n",*namelist,num-1,tmp[num-1]); */
     }

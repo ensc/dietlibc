@@ -50,7 +50,7 @@ int __sc_nr_cpus() {
 	  i+=9;
 	}
 #endif
-	while(buf[i++]!='\n');	/* skip rest of line */
+	while(i<n && buf[i++]!='\n');	/* skip rest of line */
       }
     }
     close(fd);

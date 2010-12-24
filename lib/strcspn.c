@@ -4,7 +4,7 @@
 size_t strcspn(const char *s, const char *reject)
 {
   size_t l=0;
-  int i,al=strlen(reject);
+  int i;
 
   for (; *s; ++s) {
     for (i=0; reject[i]; ++i)

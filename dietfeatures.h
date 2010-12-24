@@ -89,6 +89,16 @@
  * ask for an unqualified hostname */
 #define WANT_PLUGPLAY_DNS
 
+/* This enables LLMNR, the MS variant of zeroconf DNS.  This only works
+ * if you also enabled WANT_PLUGPLAY_DNS */
+#define WANT_LLMNR
+
+/* Do you want valgrind support?  If enabled, the startup code will
+ * check for valgrind, and if detected, turn off optimized SIMD string
+ * routines that cause false positives in valgrind.  This enlarges and
+ * slightly slows down your code! */
+#define WANT_VALGRIND_SUPPORT
+
 /* do you want that malloc(0) return a pointer to a "zero-length" object
  * that is realloc-able; means realloc(..,size) gives a NEW object (like a
  * call to malloc(size)).
@@ -110,6 +120,12 @@
  * for me with binutils 2.15.  The symptom is an error message that
  * `main' can not be found. */
 /* #define WANT_STACKGAP */
+
+/* #define this if you want GNU bloat like program_invocation_short_name
+ * and program_invocation_name to be there.  This functionality is not
+ * portable and adds useless bloat to libc.  Help stomp out code
+ * depending on this!  util-linux, I'm looking at you here! */
+#define WANT_GNU_STARTUP_BLOAT
 
 /* Include support for ProPolice/SSP, calls guard_setup */
 /* ProPolice is part of gcc 4.1 and up, there were patches for earlier

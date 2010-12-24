@@ -39,6 +39,7 @@ struct __stdio_file {
 #define FDPIPE 64
 #define CANREAD 128
 #define CANWRITE 256
+#define CHECKLINEWISE 512
 
 #define _IONBF 0
 #define _IOLBF 1

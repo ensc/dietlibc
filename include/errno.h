@@ -720,6 +720,11 @@ extern const char *const sys_errlist[] __attribute_dontuse__;
 extern int sys_nerr __attribute_dontuse__;
 #endif
 
+#ifdef _GNU_SOURCE
+extern char* program_invocation_name __attribute_dontuse__;
+extern char* program_invocation_short_name __attribute_dontuse__;
+#endif
+
 __END_DECLS
 
 #endif

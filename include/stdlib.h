@@ -97,7 +97,7 @@ char *ptsname (int fd) __THROW;
 
 #define RAND_MAX 	0x7ffffffe
 
-#define MB_CUR_MAX 1
+#define MB_CUR_MAX 5
 
 /* now these functions are the greatest bullshit I have ever seen.
  * The ISO people must be out of their minds. */
@@ -108,10 +108,10 @@ typedef struct { long quot,rem; } ldiv_t;
 div_t div(int numerator, int denominator);
 ldiv_t ldiv(long numerator, long denominator);
 
-#ifdef _GNU_SOURCE
 typedef struct { long long quot,rem; } lldiv_t;
 lldiv_t lldiv(long long numerator, long long denominator);
 
+#ifdef _GNU_SOURCE
 int clearenv(void);
 #endif
 

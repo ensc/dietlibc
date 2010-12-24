@@ -11,6 +11,10 @@ int main() {
   memset(buf,'a',sizeof buf);
   strcpy(buf+sizeof(buf)-100," foo . .. bar\n");
 
+  assert(regcomp(&r,"a\\|b",0)==0);
+  assert(regexec(&r,"a|b",10,matches,0)==0);
+  regfree(&r);
+
   assert(regcomp(&r,"(|-.*)@fefe.de",REG_EXTENDED)==0);
   assert(regexec(&r,"@fefe.de",0,0,0)==0);
   regfree(&r);
@@ -28,7 +32,7 @@ int main() {
   regfree(&r);
 
   assert(regcomp(&r,"^$",REG_EXTENDED)==0);
-  assert(regexec(&r,"",0,0,0)==0);
+  assert(regexec(&r,"",10,matches,0)==0);
   assert(matches[0].rm_so==0 && matches[0].rm_eo==0);
   regfree(&r);
 

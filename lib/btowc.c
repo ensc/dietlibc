@@ -2,6 +2,7 @@
 #include "dietlocale.h"
 
 wint_t btowc(int c) {
+  if (c==0) return 0;
   if (c==EOF) return WEOF;
   switch (lc_ctype) {
   case CT_8BIT:

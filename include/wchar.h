@@ -96,6 +96,7 @@ int wscanf(const wchar_t *__restrict__, ...);
 
 #ifdef _XOPEN_SOURCE
 int wcwidth(wchar_t c);
+int wcswidth(const wchar_t *s, size_t n);
 #endif
 
 __END_DECLS

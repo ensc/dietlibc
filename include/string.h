@@ -56,7 +56,7 @@ char *strerror(int errnum) __THROW __attribute_const__;
 int strerror_r(int errnum,char* buf,size_t n) __THROW __attribute_dontuse__;
 
 #ifdef _GNU_SOURCE
-const char *strsignal(int signum) __THROW __attribute_const__;
+char *strsignal(int signum) __THROW __attribute_const__;
 void *memmem(const void *haystack, size_t haystacklen, const void *needle, size_t needlelen) __THROW __nonnull((1,3));
 
 void* mempcpy(void* __restrict__ dest,const void* __restrict__ src,size_t n) __THROW __nonnull((1,2));

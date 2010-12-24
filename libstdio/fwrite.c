@@ -25,12 +25,23 @@ kaputt:
 
     if (todo) {
       if (stream->flags&BUFLINEWISE) {
+	if (__unlikely((stream->flags&CHECKLINEWISE)!=0)) {
+	  stream->flags&=~CHECKLINEWISE;
+	  /* stdout is set to BUFLINEWISE|CHECKLINEWISE by default. */
+	  /* that means we should check whether it is connected to a
+	   * tty on first flush, and if not so, reset BUFLINEWISE */
+	  if (!isatty(stream->fd)) {
+	    stream->flags&=~BUFLINEWISE;
+	    goto notlinewise;
+	  }
+	}
 	for (i=0; i<todo; ++i) {
 	  if ((stream->buf[stream->bm++]=((char*)ptr)[i])=='\n') {
 	    if (fflush_unlocked(stream)) goto kaputt;
 	  }
 	}
       } else {
+notlinewise:
 	memcpy(stream->buf+stream->bm,ptr,todo);
 	stream->bm+=todo;
       }
