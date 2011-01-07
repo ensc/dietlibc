@@ -33,7 +33,7 @@ static const char* Os[] = {
   "sparc64","-Os","-m64","-mhard-quad-float",0,
   "alpha","-Os","-fomit-frame-pointer",0,
 #ifdef __ARM_EABI__
-  "arm","-Os","-fomit-frame-pointer","-mfloat-abi=soft","-meabi=4",0,
+  "arm","-Os","-fomit-frame-pointer",0,
 #else
   "arm","-Os","-fomit-frame-pointer",0,
 #endif 
