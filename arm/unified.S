@@ -28,6 +28,7 @@ __unified_syscall:
 	
 /* here we go and "reuse" the return for weak-void functions */
 #include "dietuglyweaks.h"
+	RET
 
 #else	
 	
