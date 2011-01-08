@@ -14,6 +14,9 @@
 @ call the syscall.
 @
 
+@ TODO: check whether pgoffset is really in 4096 bytes or in PAGESIZE
+@	units.
+
 .global mmap
 .type mmap,function
 
@@ -26,8 +29,8 @@ mmap:
 	ldrd	r4, [sp,#16]
 # endif
 	ldr	r7, =__NR_mmap2
-	tst	r5, #0x0ff
-	tsteq	r5, #0xf00
+	tst	r5, #0x0ff	@ check whether r5 % 4096 == 0
+	tsteq	r5, #0xf00	@ holds
 	movne	r0, #-EINVAL
 	bne	__unified_syscall
 	lsr	r5, r5, #12	@ div-by 4096
