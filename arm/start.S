@@ -36,6 +36,7 @@ _start:
 	str	r6, [ip, #4]		@ __elfinfo = envp
 #endif
 
+	bic	sp, #7
 	bl	main
 		
 @
