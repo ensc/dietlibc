@@ -19,8 +19,8 @@
 _start:
 
 	mov	fp, #0			@ clear the frame pointer
-	ldr	a1, [sp], #4		@ argc
-	mov	a2, sp			@ argv
+	ldr	a1, [sp]		@ argc
+	add	a2, sp, #4		@ argv
 	ldr	ip, .L3
 	add	a3, a2, a1, lsl #2	@ &argv[argc]
 	add	a3, a3, #4		@ envp	
@@ -36,7 +36,6 @@ _start:
 	str	r6, [ip, #4]		@ __elfinfo = envp
 #endif
 
-	bic	sp, #7
 	bl	main
 		
 @
