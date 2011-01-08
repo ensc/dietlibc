@@ -25,6 +25,8 @@ __unified_syscall:
 	.balign 4
 1:
         .word   errno
+	.size	__unified_syscall,  . - __unified_syscall
+	.size	__unified_syscall4, . - __unified_syscall4
 	
 /* here we go and "reuse" the return for weak-void functions */
 #include "dietuglyweaks.h"
@@ -53,6 +55,8 @@ __unified_syscall:
 #include "dietuglyweaks.h"
 
 	mov	pc, lr			@ return
+	.size	__unified_syscall,  . - __unified_syscall
+	.size	__unified_syscall4, . - __unified_syscall4
 
 #ifndef WANT_THREAD_SAFE
 .L0:	.long 	errno

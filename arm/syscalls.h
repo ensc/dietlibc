@@ -785,6 +785,8 @@
         ldr     r7, =\name
 	swi	0
 	b	__unified_syscall
+
+.size	\sym, . - \sym
 .endm
 
 
@@ -800,6 +802,8 @@
         ldr     r7, =\name
 	swi	0
 	b	__unified_syscall
+
+.size	\sym, . - \sym
 .endm
 
 #else
@@ -824,6 +828,8 @@
 .else
 	b	__unified_syscall
 .endif
+
+.size	\sym, . - \sym
 .endm
 
 #define syscall(name,sym) __syscall $__NR_##name, sym, __ARGS_##name
@@ -843,6 +849,8 @@
 .else
 	b	__unified_syscall
 .endif
+
+.size	\sym, . - \sym
 .endm
 
 #endif

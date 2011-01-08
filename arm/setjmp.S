@@ -15,3 +15,4 @@ sigsetjmp:
 	sub	r0, r0, #48
 	b	__sigjmp_save
 
+.size	__sigsetjmp, . - __sigsetjmp
