@@ -1,3 +1,5 @@
+#ifdef __ARM_EABI__
+
 #include <errno.h>
 #include "syscalls.h"
 
@@ -13,30 +15,27 @@
 @
 
 .global mmap
-
-#ifdef __ARM_EABI__
+.type mmap,function
 
 mmap:
-	str     r5, [sp, #-4]!
-	ldr     r5, [sp, #8]
-	str     r4, [sp, #-4]!
-	ldr     r4, [sp, #8]
-	mov	ip, r7
-	mov	r7, #__NR_mmap2
-	svc	0x00000000
-	mov	r7, ip
-	ldr     r4, [sp], #4
-	ldr     r5, [sp], #4
-	cmn	r0, #4096
-	mov	pc, lr			@ return
-
-#else	
-		
-mmap:
-	stmdb	sp!, {r0, r1, r2, r3}
-	mov	r0, sp
-	swi	__NR_mmap
-	add	sp, sp, #16
+        stmfd	sp!,{r4,r5,r7,lr}
+# if defined(__ARM_ARCH_4__) || defined(__ARM_ARCH_4T__) || defined(__ARM_ARCH_5T__)
+	ldr	r4, [sp,#16]
+	ldr	r5, [sp,#20]
+# else
+	ldrd	r4, [sp,#16]
+# endif
+	ldr	r7, =__NR_mmap2
+	tst	r5, #0x0ff
+	tsteq	r5, #0xf00
+	movne	r0, #-EINVAL
+	bne	__unified_syscall
+	lsr	r5, r5, #12	@ div-by 4096
+	swi	0
 	b	__unified_syscall
 
+.size	mmap, . - mmap
+
+#else
+# include "../syscalls.s/mmap.S"
 #endif
