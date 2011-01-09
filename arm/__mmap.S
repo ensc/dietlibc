@@ -1,4 +1,4 @@
-#ifdef __ARM_EABI__
+#ifndef __NR_mmap
 
 #include <errno.h>
 #include "syscalls.h"
@@ -39,6 +39,4 @@ mmap:
 
 .size	mmap, . - mmap
 
-#else
-# include "../syscalls.s/mmap.S"
 #endif
