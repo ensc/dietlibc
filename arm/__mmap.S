@@ -32,10 +32,10 @@ mmap:
 	tst	r5, #0x0ff	@ check whether r5 % 4096 == 0
 	tsteq	r5, #0xf00	@ holds
 	movne	r0, #-EINVAL
-	bne	__unified_syscall
+	bne	__unified_syscall4
 	lsr	r5, r5, #12	@ div-by 4096
 	swi	0
-	b	__unified_syscall
+	b	__unified_syscall4
 
 .size	mmap, . - mmap
 
