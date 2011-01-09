@@ -13,7 +13,8 @@
   dst = (((uint64_t)h) << 32) | l;                             \
 } while (0)
 #else
-#error "Unimplemented rdtsc"
+#warning "Unimplemented rdtsc"
+#define RDTSC(dst) dst = 0
 #endif
 
 extern char **environ;
