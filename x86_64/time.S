@@ -1,1 +1,1 @@
-	.text	@ avoid empty source file
+	.text	/* avoid empty source file */
