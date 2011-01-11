@@ -7,7 +7,7 @@ CFLAGS=-nostdinc -Wall
 
 LCOMPAT=-lcompat
 
-TESTPROGRAMS=adjtime argv asprintf atexit bsearch byteswap calloc confstr cycles empty flush fnmatch \
+TESTPROGRAMS=adjtime alarm argv asprintf atexit bsearch byteswap calloc confstr cycles empty flush fnmatch \
 fputc ftw fwrite getaddrinfo getenv getgrnam gethostbyaddr gethostbyname \
 gethostbyname_r getmntent getopt getpass getpwnam getservbyname getservbyport getusershell \
 glob grent hasmntopt hello iconv if_nameindex ltostr malloc-debugger md5_testharness \
