@@ -1,6 +1,8 @@
 #include <unistd.h>
 #include <sys/time.h>
+#include <syscalls.h>
 
+#ifndef __NR_alarm
 unsigned int alarm(unsigned int seconds) {
   struct itimerval old, new;
   unsigned int ret;
@@ -11,3 +13,4 @@ unsigned int alarm(unsigned int seconds) {
   if (setitimer(ITIMER_REAL,&new,&old)==-1) return 0;
   return old.it_value.tv_sec+(old.it_value.tv_usec?1:0);
 }
+#endif
