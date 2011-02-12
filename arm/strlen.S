@@ -56,7 +56,7 @@ FUNC_START	strlen
 	sub	a1, a1, a2
 #endif
 
-	mov	pc, lr
+	RET
 
 #ifndef WANT_SMALL_STRING_ROUTINES
 .Lmagic:

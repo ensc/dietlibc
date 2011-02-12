@@ -65,7 +65,7 @@ FUNC_START	MD5Init
     mov     r1, #0
     str     r1, [r0, #0x10]                 @ initial count[0] = 0
     str     r1, [r0, #0x14]                 @ initial count[1] = 0
-    mov     pc, lr                          @ return
+    RET
 
 1: .word    0x67452301                      @ initial MD5 context->state[0]
    .word    0xefcdab89                      @ initial MD5 context->state[1]
