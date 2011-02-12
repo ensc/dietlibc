@@ -5,6 +5,9 @@ int
 main (void)
 {
 	int fd[2];
+	close(3);
+	close(4);
+
 	assert (!pipe (fd));
 	/* if for some reason the parent process has fd3 or fd4
 	   already open, then this will fail although there is
