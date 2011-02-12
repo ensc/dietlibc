@@ -2,8 +2,7 @@
 
 #include <errno.h>
 #include "syscalls.h"
-
-.text
+#include "arm-features.h"
 
 @
 @ mmap takes 6 parameters - ie more than can be passed in registers via the
@@ -17,10 +16,7 @@
 @ TODO: check whether pgoffset is really in 4096 bytes or in PAGESIZE
 @	units.
 
-.global mmap
-.type mmap,function
-
-mmap:
+FUNC_START	mmap
         stmfd	sp!,{r4,r5,r7,lr}
 # if defined(__ARM_ARCH_4__) || defined(__ARM_ARCH_4T__) || defined(__ARM_ARCH_5T__)
 	ldr	r4, [sp,#16]
@@ -35,8 +31,6 @@ mmap:
 	bne	__unified_syscall4
 	lsr	r5, r5, #12	@ div-by 4096
 	swi	0
-	b	__unified_syscall4
-
-.size	mmap, . - mmap
+FUNC_END	mmap
 
 #endif

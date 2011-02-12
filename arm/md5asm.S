@@ -50,25 +50,15 @@
 *****************************************************************************/
 
 #include <endian.h>
+#include "arm-features.h"
 
 #if (__BYTE_ORDER == __LITTLE_ENDIAN)
 
-   .global MD5Init
-   .global MD5Update
-
-   .text
-#ifdef __ARM_EABI__
-   .align  4
-#else		
-   .align  2
-#endif
-	
     @ --
     @ void MD5Init (MD5_CTX* context);
     @ --
 
-MD5Init:
-
+FUNC_START	MD5Init
     adr     r1, 1f                          @ r1 = base address of MD5InitData array
     ldmia   r1, { r1 - r3, r12 }            @ load 4 elements from MD5InitData array
     stmia   r0, { r1 - r3, r12 }            @ store into MD5 context->state[0..3]
@@ -81,14 +71,13 @@ MD5Init:
    .word    0xefcdab89                      @ initial MD5 context->state[1]
    .word    0x98badcfe                      @ initial MD5 context->state[2]
    .word    0x10325476                      @ initial MD5 context->state[3]
-
+FUNC_END	MD5Init
 
     @ --
     @ void MD5Update (MD5_CTX* context, const uint8_t* buf, signed int len);
     @ --
 
-MD5Update:
-
+FUNC_START	MD5Update
     stmdb   sp!, { r4 - r8, lr }
     add     r4, r0, #(6 * 4)                @ r4 = &context->buffer[0]
     ldmdb   r4, { r0, r3 }                  @ r0 = count[0], r3 = count[1]
@@ -122,7 +111,7 @@ MD5Update:
     sub     r2, r8, r2
 2:  ldmia   sp!, { r4 - r8, lr }
     b       memcpy                          @ classic tail-call optimisation...
-
+FUNC_END	MD5Update
 
     @ --
     @ static void __MD5Transform (uint32_t *buf, const uint32_t *in, int repeat);
