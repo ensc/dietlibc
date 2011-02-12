@@ -778,7 +778,9 @@ FUNC_START_WEAK	\wsym
 FUNC_START	\sym
         stmfd	sp!,{r4,r5,r7,lr}
         ldr     r7, =\name
+.ifgt \typ
 	LOAD_ARG4_5
+.endif
 	b	__unified_syscall_swi
 FUNC_END	\sym
 FUNC_END	\wsym
@@ -790,7 +792,9 @@ FUNC_END	\wsym
 FUNC_START	\sym
         stmfd	sp!,{r4,r5,r7,lr}
         ldr     r7, =\name
+.ifgt \typ
 	LOAD_ARG4_5
+.endif
 	b	__unified_syscall_swi
 FUNC_END	\sym
 .endm
