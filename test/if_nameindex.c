@@ -1,8 +1,12 @@
 #include <stdio.h>
+#include <assert.h>
 #include <net/if.h>
 
 int main() {
   struct if_nameindex* t=if_nameindex();
+
+  assert(t != NULL);
+
   if (t) {
     struct if_nameindex* t1=t;
     while (t->if_index) {
