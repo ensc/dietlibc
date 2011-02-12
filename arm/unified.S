@@ -27,7 +27,7 @@ FUNC_END	__unified_syscall_swi
 	RET
 
 #else	
-	
+
 FUNC_START	__unified_syscall4
 	ldmia	sp!, {r4, r5, r6}
 
