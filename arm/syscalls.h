@@ -780,8 +780,7 @@ FUNC_START	\sym
 	ldr	r4, [sp,#16]
 	ldr	r5, [sp,#20]
         ldr     r7, =\name
-	swi	0
-	b	__unified_syscall
+	b	__unified_syscall_swi
 FUNC_END	\sym
 FUNC_END	\wsym
 .endm
@@ -794,8 +793,7 @@ FUNC_START	\sym
 	ldr	r4, [sp,#16]
 	ldr	r5, [sp,#20]
         ldr     r7, =\name
-	swi	0
-	b	__unified_syscall
+	b	__unified_syscall_swi
 FUNC_END	\sym
 .endm
 

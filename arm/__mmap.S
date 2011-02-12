@@ -30,7 +30,11 @@ FUNC_START	mmap
 	movne	r0, #-EINVAL
 	bne	__unified_syscall4
 	lsr	r5, r5, #12	@ div-by 4096
+#ifdef __ARM_EABI__
+	b	__unified_syscall_swi
+#else
 	swi	0
 FUNC_END	mmap
+#endif
 
 #endif
