@@ -1,10 +1,7 @@
 #include "dietfeatures.h"
+#include "arm-features.h"
 
-.text
-	.align	2
-	.global	strcpy
-
-strcpy:
+FUNC_START	strcpy
 #ifndef WANT_SMALL_STRING_ROUTINES
 	mov	ip, r0
 	ands	r2, r1, #3
@@ -62,5 +59,4 @@ strcpy:
 #endif
 	bne	.Lloop
 	mov	pc, lr
-.Lfe1:
-	.size	 strcpy,.Lfe1-strcpy
+FUNC_END	strcpy

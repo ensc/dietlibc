@@ -1,13 +1,13 @@
-.text
-.weak setjmp
-setjmp:
-.global __setjmp
-__setjmp:
+#include "arm-features.h"
+
+FUNC_START_WEAK	setjmp
+FUNC_START	__setjmp
 	mov	r1, #0
-.global __sigsetjmp
-__sigsetjmp:
-.weak sigsetjmp
-sigsetjmp:
+FUNC_END	__setjmp
+FUNC_END	setjmp
+
+FUNC_START_WEAK	sigsetjmp
+FUNC_START	__sigsetjmp
 
 #ifdef DIET_HAVE_COPROC_REGS
 	/* we have to work on a copy of 'r0' (jmpbuf *) */
@@ -36,4 +36,5 @@ sigsetjmp:
 #endif
 
 	b	__sigjmp_save
-
+FUNC_END	__sigsetjmp
+FUNC_END	sigsetjmp

@@ -1,21 +1,11 @@
 
 #include <dietfeatures.h>
-
-	.text
-#ifdef __ARM_EABI__
-	.align 4
-#else
-	.align 2
-#endif 	
-	.global __unified_syscall
-	.global __unified_syscall4
-
+#include "arm-features.h"
 
 #ifdef __ARM_EABI__
-
-__unified_syscall4:
-__unified_syscall:
-	
+FUNC_START	__unified_syscall4
+FUNC_START	__unified_syscall
+	.hidden	__unified_syscall
         cmn     r0, #4096
         rsbcs   r2, r0, #0
         ldrcs   r3, 1f
@@ -25,6 +15,8 @@ __unified_syscall:
 	.balign 4
 1:
         .word   errno
+FUNC_END	__unified_syscall
+FUNC_END	__unified_syscall4
 	
 /* here we go and "reuse" the return for weak-void functions */
 #include "dietuglyweaks.h"
@@ -33,9 +25,10 @@ __unified_syscall:
 
 #else	
 	
-__unified_syscall4:
+FUNC_START	__unified_syscall4
 	ldmia	sp!, {r4, r5, r6}
-__unified_syscall:
+
+FUNC_START	__unified_syscall
 	cmn	r0, #4096
 	movcc	pc, lr			@ return value comes direct from kernel.
 
@@ -56,7 +49,10 @@ __unified_syscall:
 	mov	pc, lr			@ return
 
 #ifndef WANT_THREAD_SAFE
+	.align	2
 .L0:	.long 	errno
 #endif
+FUNC_END	__unified_syscall
+FUNC_END	__unified_syscall4
 
 #endif

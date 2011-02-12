@@ -1,11 +1,8 @@
 
 #include <errno.h>
 #include "syscalls.h"
+#include "arm-features.h"
 
-	.text
-	.weak 	clone
-	.global __clone
-	
 @
 @ Some slightly tricky stuff here... edit with care :-)
 @
@@ -19,9 +16,8 @@
 @ ;  don't do this yet
 @#define RESET_PID
 
-		
-clone:
-__clone:
+FUNC_START_WEAK	clone
+FUNC_START	__clone
 	@ ; start with a sanity check
 	cmp	r0, #0
 	cmpne	r1, #0
@@ -76,12 +72,13 @@ __clone:
 	
 	@ ; and we're done, passing return value through r0
 	b	_exit			@ branch to _exit (PIC safe)
+FUNC_END	__clone
+FUNC_END	clone
 
-	
 #else
 		
-clone:
-__clone:
+FUNC_START_WEAK	clone
+FUNC_START	__clone
 	movs	r12, r0			@ check function pointer
 	cmpne	r1, #0			@ if function check for stack pointer
 	moveq	r0, #-EINVAL		@ if one is not available set errno value
@@ -101,5 +98,7 @@ __clone:
 	ldmia	sp!, { r0, pc } 	@ load function param and jump to thread function
 
 1:	b	_exit			@ branch to _exit (PIC safe)
+FUNC_END	__clone
+FUNC_END	clone
 
 #endif

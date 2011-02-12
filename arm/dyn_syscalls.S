@@ -8,11 +8,11 @@
 
 #include <dietfeatures.h>
 #include "syscalls.h"
+#include "arm-features.h"
 
-.text
-__unified_syscall4:
+FUNC_START	__unified_syscall4
 	ldmfd	sp!, {r4, r5, r6}
-__unified_syscall:
+FUNC_START	__unified_syscall
 	cmn	r0, #4096
 	movcc	pc, lr
 	rsb	r1, r0, #0
@@ -26,6 +26,8 @@ __unified_syscall:
 	mvn	r0, #0
 #include "dietuglyweaks.h"
 	mov	pc, lr
+FUNC_END	__unified_syscall
+FUNC_END	__unified_syscall4
 
 /* ok now include all syscalls.s (*.S) and sysdep *.S */
 #include "mmap.S"
@@ -280,9 +282,11 @@ __unified_syscall:
 #include "../syscalls.s/fgetxattr.S"
 
 /* other asm-files w.o. changes ... */
-__exit:
+FUNC_START	__exit
 	swi	$__NR_exit
 	eor	pc,lr,lr
+FUNC_END	__exit
+
 #define _exit __exit
 #include "clone.S"
 #undef _exit
