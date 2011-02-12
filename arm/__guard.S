@@ -1,4 +1,5 @@
 .data
+.align 2
 .type __guard,#object
 .global __guard
 .type __stack_chk_guard,#object
