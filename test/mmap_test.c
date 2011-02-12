@@ -15,7 +15,7 @@ int main (int argc, char * argv[])
    void *filememory_1;
    void *filememory_2;
    
-   fd = open (FILENAME, O_RDWR | O_CREAT);
+   fd = open (FILENAME, O_RDWR | O_CREAT, 0600);
    
    if (fd < 0)
    {
