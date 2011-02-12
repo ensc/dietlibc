@@ -27,6 +27,7 @@ FUNC_START_WEAK	exit
 	mov	r7, #__NR_exit		
 	swi	0			@ never returns.
 
+	.align	2
 .L3:	.word 	environ
 FUNC_END	exit
 FUNC_END	_exit
@@ -85,6 +86,7 @@ FUNC_END	exit
 FUNC_END	_exit
 
 
+	.align	2
 #ifdef __DYN_LIB
 .L3:	.word 	environ(GOT)
 .L4:	.word 	_GLOBAL_OFFSET_TABLE_-(1b+8)
