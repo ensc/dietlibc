@@ -3,7 +3,11 @@
 #include "arm-features.h"
 
 #ifdef __ARM_EABI__
-FUNC_START	__unified_syscall4
+
+FUNC_START	__unified_syscall_swi
+	.hidden	__unified_syscall_swi
+	swi	0
+
 FUNC_START	__unified_syscall
 	.hidden	__unified_syscall
         cmn     r0, #4096
@@ -16,7 +20,7 @@ FUNC_START	__unified_syscall
 1:
         .word   errno
 FUNC_END	__unified_syscall
-FUNC_END	__unified_syscall4
+FUNC_END	__unified_syscall_swi
 	
 /* here we go and "reuse" the return for weak-void functions */
 #include "dietuglyweaks.h"
