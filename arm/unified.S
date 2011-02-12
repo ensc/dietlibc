@@ -3,7 +3,24 @@
 #include "arm-features.h"
 
 #ifdef __ARM_EABI__
-FUNC_START	__unified_syscall4
+
+/* expects:
+ * r0-r3 ... syscall arguments 0-3
+ * ip    ... syscall number
+ */
+FUNC_START	__unified_syscall_swi
+	.hidden	__unified_syscall_swi
+        stmfd	sp!,{r4,r5,r7,lr}
+	mov	r7, ip
+	LOAD_ARG4_5
+	swi	0
+	/* fallthrough to __unified4_syscall */
+FUNC_END	__unified_syscall_swi
+
+/* expects:
+ * r0    ... syscall return value
+ * original r4-r7 + lr on stack
+ */
 FUNC_START	__unified_syscall
 	.hidden	__unified_syscall
         cmn     r0, #4096
@@ -16,7 +33,6 @@ FUNC_START	__unified_syscall
 1:
         .word   errno
 FUNC_END	__unified_syscall
-FUNC_END	__unified_syscall4
 	
 #include "dietuglyweaks.h"
 

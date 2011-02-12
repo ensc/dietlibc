@@ -838,12 +838,8 @@ FUNC_END	\wsym
 #define syscall(name,sym) __syscall __NR_##name, sym, __ARGS_##name
 .macro __syscall name sym typ
 FUNC_START	\sym
-        stmfd	sp!,{r4,r5,r7,lr}
-	ldr	r4, [sp,#16]
-	ldr	r5, [sp,#20]
-        ldr     r7, =\name
-	swi	0
-	b	__unified_syscall
+        ldr     ip, =\name
+	b	__unified_syscall_swi
 FUNC_END	\sym
 .endm
 
