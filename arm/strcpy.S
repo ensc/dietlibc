@@ -58,5 +58,5 @@ FUNC_START	strcpy
 	ldrneb	r2, [r1], #1
 #endif
 	bne	.Lloop
-	mov	pc, lr
+	RET
 FUNC_END	strcpy

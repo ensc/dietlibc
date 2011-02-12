@@ -25,7 +25,7 @@ FUNC_START	__unified_syscall
 
 	mvn	r0, #0
 #include "dietuglyweaks.h"
-	mov	pc, lr
+	RET
 FUNC_END	__unified_syscall
 FUNC_END	__unified_syscall4
 
