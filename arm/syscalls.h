@@ -745,9 +745,9 @@
 #define __ARGS_getpeername		0
 #define __ARGS_socketpair		0
 #define __ARGS_send			0
-#define __ARGS_sendto			1
+#define __ARGS_sendto			6
 #define __ARGS_recv			0
-#define __ARGS_recvfrom			1
+#define __ARGS_recvfrom			6
 #define __ARGS_shutdown			0
 #define __ARGS_setsockopt		0
 #define __ARGS_getsockopt		0
