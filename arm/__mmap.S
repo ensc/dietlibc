@@ -28,7 +28,12 @@ FUNC_START	mmap
 	tst	r5, #0x0ff	@ check whether r5 % 4096 == 0
 	tsteq	r5, #0xf00	@ holds
 	movne	r0, #-EINVAL
+#ifdef __ARM_EABI__
+	bne	__unified_syscall
+#else
 	bne	__unified_syscall4
+#endif
+
 	lsr	r5, r5, #12	@ div-by 4096
 #ifdef __ARM_EABI__
 	b	__unified_syscall_swi
