@@ -18,13 +18,12 @@
 
 FUNC_START	mmap
         stmfd	sp!,{r4,r5,r7,lr}
-# if defined(__ARM_ARCH_4__) || defined(__ARM_ARCH_4T__) || defined(__ARM_ARCH_5T__)
-	ldr	r4, [sp,#16]
-	ldr	r5, [sp,#20]
-# else
-	ldrd	r4, [sp,#16]
-# endif
+	LOAD_ARG4_5
+
+#ifdef __ARM_EABI__
 	ldr	r7, =__NR_mmap2
+#endif
+
 	tst	r5, #0x0ff	@ check whether r5 % 4096 == 0
 	tsteq	r5, #0xf00	@ holds
 	movne	r0, #-EINVAL
@@ -35,11 +34,7 @@ FUNC_START	mmap
 #endif
 
 	lsr	r5, r5, #12	@ div-by 4096
-#ifdef __ARM_EABI__
-	b	__unified_syscall_swi
-#else
-	swi	0
+	SWI_UNIFIED4
 FUNC_END	mmap
-#endif
 
 #endif
