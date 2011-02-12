@@ -1,4 +1,4 @@
-
+#include "arm-features.h"
 @
 @ mcount.S: ARM assembler implementation of mcount
 @
@@ -27,11 +27,7 @@
 @
 @
 
-.text
-
-.global mcount
-
-mcount:
+FUNC_START	mcount
     mov     ip,  sp
     stmdb   sp!, { r0 - r3, fp, ip, lr, pc }    @ build stack frame
     sub     fp,  ip, #4                         @ setup new fp
@@ -43,4 +39,4 @@ mcount:
     bl      __mcount                            @ call __mcount
 
     ldmdb   fp,  { r0 - r3, fp, sp, pc }        @ restore context from stack frame and return.
-
+FUNC_END	mcount

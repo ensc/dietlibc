@@ -1,23 +1,11 @@
 
 #include "dietfeatures.h"
 #include "syscalls.h"
-
-	.text
-#ifdef __ARM_EABI__
-	.align 4
-#else
-	.align 2
-#endif
-	
-	.global _start
-	.weak 	exit
-	.global _exit
-
+#include "arm-features.h"
 
 #ifdef __ARM_EABI__
 
-_start:
-
+FUNC_START	_start
 	mov	fp, #0			@ clear the frame pointer
 	ldr	a1, [sp]		@ argc
 	add	a2, sp, #4		@ argv
@@ -32,21 +20,21 @@ _start:
 @ We need to branch to 'exit' in case we have linked with 'atexit'.
 @
 	bl	exit
+FUNC_END	_start
 
-exit:
-_exit:
-
+FUNC_START	_exit
+FUNC_START_WEAK	exit
 	mov	r7, #__NR_exit		
 	swi	0			@ never returns.
 
 .L3:	.word 	environ
-
+FUNC_END	exit
+FUNC_END	_exit
 	
 #else	
 
 	
-_start:
-
+FUNC_START	_start
 #ifdef WANT_DYNAMIC
 	mov	a4, a1			@ save dynamic ld.so _fini
 #endif
@@ -83,16 +71,18 @@ _start:
 @ We need to branch to 'exit' in case we have linked with 'atexit'.
 @
 	bl	exit
+FUNC_END	_start
 
-exit:
-_exit:
-
+FUNC_START	_exit
+FUNC_START_WEAK	exit
 #ifdef PROFILING
 	mov	r4, r0			@ save a copy of exit status
 	bl	_stop_monitor
 	mov	r0, r4
 #endif
 	swi	$__NR_exit		@ never returns.
+FUNC_END	exit
+FUNC_END	_exit
 
 
 #ifdef __DYN_LIB

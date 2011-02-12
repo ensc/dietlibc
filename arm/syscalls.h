@@ -768,51 +768,43 @@
 
 #ifdef __ASSEMBLER__
 
+#include "arm-features.h"
+
 #ifdef __ARM_EABI__
 
 #define syscall_weak(name,wsym,sym) __syscall_weak __NR_##name, wsym, sym, __ARGS_##name
 .macro __syscall_weak name wsym sym typ
-.text
-.type \wsym,function
-.weak \wsym
-\wsym:
-.type \sym,function
-.global \sym
-\sym:
+FUNC_START_WEAK	\wsym
+FUNC_START	\sym
         stmfd	sp!,{r4,r5,r7,lr}
 	ldr	r4, [sp,#16]
 	ldr	r5, [sp,#20]
         ldr     r7, =\name
 	swi	0
 	b	__unified_syscall
+FUNC_END	\sym
+FUNC_END	\wsym
 .endm
 
 
 #define syscall(name,sym) __syscall __NR_##name, sym, __ARGS_##name
 .macro __syscall name sym typ
-.text
-.type \sym,function
-.global \sym
-\sym:
+FUNC_START	\sym
         stmfd	sp!,{r4,r5,r7,lr}
 	ldr	r4, [sp,#16]
 	ldr	r5, [sp,#20]
         ldr     r7, =\name
 	swi	0
 	b	__unified_syscall
+FUNC_END	\sym
 .endm
 
 #else
 
 #define syscall_weak(name,wsym,sym) __syscall_weak $__NR_##name, wsym, sym, __ARGS_##name
 .macro __syscall_weak name wsym sym typ
-.text
-.type \wsym,function
-.weak \wsym
-\wsym:
-.type \sym,function
-.global \sym
-\sym:
+FUNC_START_WEAK	\wsym
+FUNC_START	\sym
 .ifgt \typ
 	mov	ip, sp
 	stmfd	sp!,{r4, r5, r6}
@@ -824,14 +816,13 @@
 .else
 	b	__unified_syscall
 .endif
+FUNC_END	\sym
+FUNC_END	\wsym
 .endm
 
 #define syscall(name,sym) __syscall $__NR_##name, sym, __ARGS_##name
 .macro __syscall name sym typ
-.text
-.type \sym,function
-.global \sym
-\sym:
+FUNC_START	\sym
 .ifgt \typ
 	mov	ip, sp
 	stmfd	sp!,{r4, r5, r6}
@@ -843,6 +834,7 @@
 .else
 	b	__unified_syscall
 .endif
+FUNC_END	\sym
 .endm
 
 #endif
