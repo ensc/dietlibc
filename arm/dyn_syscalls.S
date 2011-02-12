@@ -11,6 +11,9 @@
 #include <dietfeatures.h>
 #include "syscalls.h"
 
+#ifdef __ARM_EABI__
+# error "dyn_syscall.S not ported for EABI yet"
+#endif
 
 FUNC_START	__unified_syscall4
 	ldmfd	sp!, {r4, r5, r6}
