@@ -7,7 +7,7 @@ FUNC_START __aeabi_unwind_cpp_pr2
 .hidden __aeabi_unwind_cpp_pr1
 .hidden __aeabi_unwind_cpp_pr2
 
-	mov	pc, lr	@ return from subroutine
+	RET
 
 FUNC_END  __aeabi_unwind_cpp_pr2
 FUNC_END  __aeabi_unwind_cpp_pr1

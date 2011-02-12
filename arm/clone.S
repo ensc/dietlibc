@@ -47,7 +47,8 @@ FUNC_START	__clone
 	beq	1f
 	ldmfd	sp!, {r4, r7}	
 	blt	__unified_syscall	@ (return code < 0): handle as an error
-	bx	lr
+	RET
+
 1:	
 #ifdef RESET_PID		
 	tst	ip, #CLONE_THREAD
