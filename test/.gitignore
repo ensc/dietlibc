@@ -77,4 +77,5 @@
 /sysconf
 /sysenter
 /ungetc
+/utime
 /waitpid
