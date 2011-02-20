@@ -335,7 +335,7 @@ struct timeval utimeout;		/* seconds to wait before giving up */
 		if (inlen < 4)
 			continue;
 		/* see if reply transaction id matches sent id */
-		if (*((uint32_t *) (cu->cu_inbuf)) != *((uint32_t *) (cu->cu_outbuf)))
+		if (memcmp(cu->cu_inbuf, cu->cu_outbuf, 4) != 0)
 			continue;
 		/* we now assume we have the proper reply */
 		break;
