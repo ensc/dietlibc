@@ -53,7 +53,10 @@ static struct clntraw_private {
 	CLIENT client_object;
 	XDR xdr_stream;
 	char _raw_buf[UDPMSGSIZE];
-	char mashl_callmsg[MCALL_MSG_SIZE];
+	union {
+		struct rpc_msg	msg;
+		char buf[MCALL_MSG_SIZE];
+	} mashl_call;
 	unsigned int mcnt;
 } *clntraw_private;
 
@@ -101,7 +104,7 @@ unsigned long vers;
 	call_msg.rm_call.cb_rpcvers = RPC_MSG_VERSION;
 	call_msg.rm_call.cb_prog = prog;
 	call_msg.rm_call.cb_vers = vers;
-	xdrmem_create(xdrs, clp->mashl_callmsg, MCALL_MSG_SIZE, XDR_ENCODE);
+	xdrmem_create(xdrs, clp->mashl_call.buf, MCALL_MSG_SIZE, XDR_ENCODE);
 	if (!xdr_callhdr(xdrs, &call_msg)) {
 		perror("clnt_raw.c - Fatal header serialization error.");
 	}
@@ -147,8 +150,8 @@ struct timeval timeout;
 	 */
 	xdrs->x_op = XDR_ENCODE;
 	XDR_SETPOS(xdrs, 0);
-	((struct rpc_msg *) clp->mashl_callmsg)->rm_xid++;
-	if ((!XDR_PUTBYTES(xdrs, clp->mashl_callmsg, clp->mcnt)) ||
+	clp->mashl_call.msg.rm_xid++;
+	if ((!XDR_PUTBYTES(xdrs, clp->mashl_call.buf, clp->mcnt)) ||
 		(!XDR_PUTLONG(xdrs, (long *) &proc)) ||
 		(!AUTH_MARSHALL(h->cl_auth, xdrs)) || (!(*xargs) (xdrs, argsp))) {
 		return (RPC_CANTENCODEARGS);
