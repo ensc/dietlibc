@@ -4,6 +4,10 @@
 #include <sys/time.h>
 
 #ifndef __NR_utime
+#define _BSD_SOURCE
+#include <utime.h>
+#include <sys/time.h>
+
 int utime(const char *filename, const struct utimbuf *times)
 {
   if (times == NULL)
