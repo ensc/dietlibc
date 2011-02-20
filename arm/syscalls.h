@@ -770,22 +770,14 @@
 
 #include "arm-features.h"
 
-#ifdef __ARM_EABI__
-
 #define syscall_weak(name,wsym,sym) __syscall_weak __NR_##name, wsym, sym, __ARGS_##name
 .macro __syscall_weak name wsym sym typ
 FUNC_START_WEAK	\wsym
-FUNC_START	\sym
-        stmfd	sp!,{r4,r5,r7,lr}
-        ldr     r7, =\name
-.ifgt \typ
-	LOAD_ARG4_5
-.endif
-	b	__unified_syscall_swi
-FUNC_END	\sym
+__syscall	\name, \sym, \typ
 FUNC_END	\wsym
 .endm
 
+#ifdef __ARM_EABI__
 
 #define syscall(name,sym) __syscall __NR_##name, sym, __ARGS_##name
 .macro __syscall name sym typ
@@ -800,25 +792,6 @@ FUNC_END	\sym
 .endm
 
 #else
-
-#define syscall_weak(name,wsym,sym) __syscall_weak $__NR_##name, wsym, sym, __ARGS_##name
-.macro __syscall_weak name wsym sym typ
-FUNC_START_WEAK	\wsym
-FUNC_START	\sym
-.ifgt \typ
-	mov	ip, sp
-	stmfd	sp!,{r4, r5, r6}
-	ldmia	ip, {r4, r5, r6}
-.endif
-	swi	\name
-.ifgt \typ
-	b	__unified_syscall4
-.else
-	b	__unified_syscall
-.endif
-FUNC_END	\sym
-FUNC_END	\wsym
-.endm
 
 #define syscall(name,sym) __syscall $__NR_##name, sym, __ARGS_##name
 .macro __syscall name sym typ
