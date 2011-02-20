@@ -673,7 +673,9 @@ int utimensat(int dirfd, const char *pathname, struct timespec* t);
 #endif
 
 #if defined(_XOPEN_SOURCE) && (_XOPEN_SOURCE - 0) >= 600
+#include "linux/fadvise.h"
 int posix_fallocate(int fd, off64_t offset, off64_t len) __THROW;
+int posix_fadvise(int fd, off64_t offset, off64_t len, int advice) __THROW;
 #endif
 
 __END_DECLS
