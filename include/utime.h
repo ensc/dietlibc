@@ -12,7 +12,7 @@ struct utimbuf {
   time_t modtime; /* modification time */
 };
 
-int utime(const char* filename, struct utimbuf* buf) __THROW;
+int utime(const char* filename, const struct utimbuf* buf) __THROW;
 
 __END_DECLS
 
