@@ -824,25 +824,16 @@
 
 #ifdef __ASSEMBLER__
 
-#ifdef __ARM_EABI__
-
 #define syscall_weak(name,wsym,sym) __syscall_weak __NR_##name, wsym, sym, __ARGS_##name
 .macro __syscall_weak name wsym sym typ
 .text
 .type \wsym,function
 .weak \wsym
 \wsym:
-.type \sym,function
-.global \sym
-\sym:
-        stmfd	sp!,{r4,r5,r7,lr}
-	ldr	r4, [sp,#16]
-	ldr	r5, [sp,#20]
-        ldr     r7, =\name
-	swi	0
-	b	__unified_syscall
+__syscall	\name, \sym, \typ
 .endm
 
+#ifdef __ARM_EABI__
 
 #define syscall(name,sym) __syscall __NR_##name, sym, __ARGS_##name
 .macro __syscall name sym typ
@@ -859,28 +850,6 @@
 .endm
 
 #else
-
-#define syscall_weak(name,wsym,sym) __syscall_weak $__NR_##name, wsym, sym, __ARGS_##name
-.macro __syscall_weak name wsym sym typ
-.text
-.type \wsym,function
-.weak \wsym
-\wsym:
-.type \sym,function
-.global \sym
-\sym:
-.ifgt \typ
-	mov	ip, sp
-	stmfd	sp!,{r4, r5, r6}
-	ldmia	ip, {r4, r5, r6}
-.endif
-	swi	\name
-.ifgt \typ
-	b	__unified_syscall4
-.else
-	b	__unified_syscall
-.endif
-.endm
 
 #define syscall(name,sym) __syscall $__NR_##name, sym, __ARGS_##name
 .macro __syscall name sym typ
