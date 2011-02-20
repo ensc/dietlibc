@@ -33,8 +33,7 @@ FUNC_START	__unified_syscall
 1:
         .word   errno
 FUNC_END	__unified_syscall
-	
-/* here we go and "reuse" the return for weak-void functions */
+
 #include "dietuglyweaks.h"
 	RET
 
