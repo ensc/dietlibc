@@ -13,6 +13,7 @@
 /flush
 /fnmatch
 /fputc
+/ftruncate
 /ftw
 /fwrite
 /getaddrinfo
