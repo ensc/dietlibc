@@ -1,3 +1,6 @@
+#include "syscalls.h"
+#ifdef __NR_socketcall
+
 #include <linuxnet.h>
 
 extern int socketcall(int callno,long* args);
@@ -9,3 +12,5 @@ int __libc_socket(int a, int b, int c) {
 }
 
 int socket(int a,int b,int c) __attribute__((weak,alias("__libc_socket")));
+
+#endif

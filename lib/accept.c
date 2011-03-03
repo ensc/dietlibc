@@ -1,3 +1,6 @@
+#include "syscalls.h"
+#ifdef __NR_socketcall
+
 #include <linuxnet.h>
 
 extern int socketcall(int callno,long* args);
@@ -10,3 +13,5 @@ int __libc_accept(int a, void * addr, void * addr2) {
 }
 
 int accept(int a, void * addr, void * addr2) __attribute__((weak,alias("__libc_accept")));
+
+#endif

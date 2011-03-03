@@ -1,3 +1,6 @@
+#include "syscalls.h"
+#ifdef __NR_socketcall
+
 #include <sys/socket.h>
 #include <linuxnet.h>
 
@@ -11,3 +14,5 @@ int __libc_sendmsg(int a, const struct msghdr* msg, int flags) {
 
 int sendmsg(int a, const struct msghdr *msg, int flags)
  __attribute__ ((weak,alias("__libc_sendmsg"))) ;
+
+#endif
