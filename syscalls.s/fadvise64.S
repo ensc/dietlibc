@@ -2,7 +2,7 @@
 
 #ifndef __NR_fadvise64_64
 .globl posix_fadvise
-.type   posix_fadvise, @function
+.type posix_fadvise,@function
 posix_fadvise:
 #endif
 
