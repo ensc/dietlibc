@@ -345,6 +345,10 @@
 #define __NR_pwritev		296
 #define __NR_rt_tgsigqueueinfo	297
 #define __NR_perf_event_open	298
+#define __NR_recvmmsg		299
+#define __NR_fanotify_init	300
+#define __NR_fanotify_mark	301
+#define __NR_prlimit64		302
 
 #ifdef __PIC__
 #define syscall_weak(name,wsym,sym) \
