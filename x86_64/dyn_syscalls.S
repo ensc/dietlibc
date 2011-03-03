@@ -16,12 +16,16 @@ __exit:
 	movb	$__NR_exit,%al
 
 .global __unified_syscall
+.global __unified_syscall_16bit
 __unified_syscall:
 _unified_syscall:
-	movzbl	%al, %eax
+	mov	$0, %al
+__unified_syscall_16bit:
+	movzwl	%ax, %eax
 	mov	%rcx, %r10
 	syscall
-	cmpq	$-128, %rax
+__error_unified_syscall:
+	cmpq	$-132, %rax
 	jbe	.Lnoerror
 	negl	%eax
 	pushq	%rax
@@ -292,6 +296,9 @@ _unified_syscall:
 
 #include "../syscalls.s/timerfd.S"
 #include "../syscalls.s/__signalfd.S"
+
+#include "../syscalls.s/fallocate.S"
+#include "../syscalls.s/utimes.S"
 
 #define _exit __exit
 #include "clone.S"

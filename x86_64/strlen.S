@@ -4,8 +4,14 @@
 .type strlen,@function
 strlen:
 #ifdef WANT_VALGRIND_SUPPORT
+#ifdef __DYN_LIB
+	movq	__valgrind@GOTPCREL(%rip), %rax
+	movq	(%rax), %rax
+	test	%rax, %rax
+#else
 	xor %eax,%eax
 	or (__valgrind),%eax
+#endif
 	jnz .Lvalgrind
 #endif
         mov %rdi,%rax
