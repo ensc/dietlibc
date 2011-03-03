@@ -4,18 +4,8 @@
 .global time
 .type time,@function
 time:
-	push    %rdi
-	xor	%rsi,%rsi
-	sub	$16,%rsp
-	mov	%rsp,%rdi
-	call	gettimeofday
-	pop	%rax
-	pop	%rdi
-	pop	%rdi
-	test	%rdi,%rdi
-	jz	1f
-	mov	%rax,(%rdi)
-1:
+	mov	$0xffffffffff600400,%rax
+	call	*%rax
 	ret
 .Lhere:
 	.size	 time,.Lhere-time

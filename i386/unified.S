@@ -49,23 +49,26 @@ __unified_syscall:
 #else
 	int	$0x80
 #endif
-	cmp	$-124,%eax
+	pop	%ebp
+	pop	%ebx
+	pop	%esi
+	pop	%edi
+	cmp	$-132,%eax
 	jb	.Lnoerror
 	neg	%eax
+.global __error_unified_syscall
+.type	__error_unified_syscall,@function
+__error_unified_syscall:
 #ifdef WANT_THREAD_SAFE
-	movl	%eax,%ebx
+	push	%eax
 	call	__errno_location
-	movl	%ebx,(%eax)
+	pop	(%eax)
 	orl	$-1,%eax
 #else
 	mov	%eax,errno
 	sbb	%eax,%eax               # eax = eax - eax - CY = -1
 #endif
 .Lnoerror:
-	pop	%ebp
-	pop	%ebx
-	pop	%esi
-	pop	%edi
 
 /* here we go and "reuse" the return for weak-void functions */
 #include "dietuglyweaks.h"
