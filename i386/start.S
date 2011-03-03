@@ -4,51 +4,46 @@
 .text
 .global _start
 _start:
-#if 1
 	popl	%ecx			/* %ecx = argc */
-	movl	%esp,%esi		/* %esi = argv */
+	movl	%esp,%eax		/* %eax = argv */
 	pushl	%ecx
-#else
-	movl	(%esp),%ecx		/* %ecx = argc */
-	leal	4(%esp),%esi		/* %esi = argv */
-#endif
-	leal	4(%esi,%ecx,4),%eax	/* %eax = envp = (4*ecx)+%esi+4 */
+	leal	4(%eax,%ecx,4),%esi	/* %esi = envp = (4*ecx)+%eax+4 */
 
 #ifdef WANT_DYNAMIC
 /* in %edx we have the ld.so dynamic _fini ( register this if non null ) */
 	push	%edx
 #endif
 
-	pushl	%eax
 	pushl	%esi
+	pushl	%eax
 	pushl	%ecx
 	PIC_INIT			/* non-PIC: this is an empty line */
-	PUT_VAR %eax, environ, %ecx	/* non-PIC: movl %eax,environ */
+	PUT_VAR %esi, environ, %ecx	/* non-PIC: movl %esi,environ */
+
+#ifdef WANT_SYSENTER
+/* skip environment, scan for NULL */
+1:
+	lodsl
+	testl	%eax,%eax
+	jnz	1b
+/* The ELF auxvec follows the environment, consists of key/value pairs.
+   We are looking for key 32, which stands for the vsyscall page */
+1:
+	lodsl
+	testl	%eax,%eax
+	jz	1f
+	cmpl	$32,%eax
+	lodsl
+	jne	1b
+	PUT_VAR %eax, __vsyscall, %edx
+1:
+#endif
 
 #ifdef PROFILING
 	pushl	$_etext
 	pushl	$.text
 	call	monitor
 	addl	$0x8, %esp
-#endif
-
-#ifdef WANT_SYSENTER
-	movl	%eax,%edx
-	xorl	%esi,%esi
-1:
-	add	$4,%edx
-	cmpl	%esi,-4(%edx)
-	jne	1b
-1:
-	movl	(%edx),%edi
-	test	%edi,%edi
-	jz	1f
-	addl	$8,%edx
-	cmpl	$32,%edi
-	jne	1b
-	movl	-4(%edx),%edi
-	PUT_VAR %edi, __vsyscall, %edx
-1:
 #endif
 
 #ifdef WANT_DYNAMIC

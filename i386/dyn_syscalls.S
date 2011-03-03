@@ -354,6 +354,9 @@ __unified_syscall:
 #include "../syscalls.s/timerfd.S"
 #include "../syscalls.s/__signalfd.S"
 
+#include "../syscalls.s/fallocate.S"
+#include "../syscalls.s/utimes.S"
+
 #undef __PIC__
 #undef __socketcall
 /* oh what a kludge! */

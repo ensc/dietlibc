@@ -116,6 +116,8 @@ int wctomb(char *s, wchar_t wc) __THROW;
 size_t mbstowcs(wchar_t *dest, const char *src, size_t n) __THROW;
 int mblen(const char* s,size_t n) __THROW __pure;
 
+size_t wcstombs(char *dest, const wchar_t *src, size_t n) __THROW;
+
 __END_DECLS
 
 #endif
