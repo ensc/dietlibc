@@ -1,6 +1,6 @@
 SUBDIRS="dirent inet stdio string stdlib time"
 
-TESTPROGRAMS="adjtime alarm argv atexit bsearch byteswap calloc confstr empty fadvise flush fputc ffs fnmatch ftw fwrite getaddrinfo getenv getdelim getgrnam gethostbyaddr gethostbyname gethostbyname_r getmntent getopt getpwnam getservbyname getservbyport getusershell glob grent hasmntopt hello iconv if_nameindex ltostr malloc-debugger md5_testharness memccpy memchr memcmp memrchr memusage mktime mmap_test pipe printf printftest protoent prototypes putenv pwent rand48 readdir regex select sendfile servent siglist speed spent sprintf sscanf stdarg strcasecmp strcmp strncat strncpy strptime strrchr strstr strtol sysenter ungetc utime waitpid"
+TESTPROGRAMS="adjtime alarm argv atexit bsearch byteswap calloc confstr empty fadvise flush fputc ffs fnmatch ftw fwrite getaddrinfo getenv getdelim getgrnam gethostbyaddr gethostbyname gethostbyname_r getmntent getopt getpwnam getservbyname getservbyport getusershell glob grent hasmntopt hello iconv if_nameindex ltostr malloc-debugger md5_testharness memccpy memchr memcmp memrchr memusage mktime mmap_test pipe printf printftest protoent prototypes putenv pwent rand48 readdir regex select sendfile servent setjmp siglist sigsetjmp speed spent sprintf sscanf stdarg strcasecmp strcmp strncat strncpy strptime strrchr strstr strtol sysenter ungetc utime waitpid"
 
 STDIN="read1"
 PASS="getpass" 
