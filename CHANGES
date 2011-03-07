@@ -28,6 +28,9 @@
     (Indan Zupancic)
   make sure __sc_nr_cpus does not dump core if /proc/cpuinfo is larger
     than 2048 bytes (Bela Lubkin)
+  use vsyscall for time on x86_64 instead of wrapping gettimeofday (Nikola Vladov)
+  CPU affinity support (Indan Zupancic)
+  lots of ARM fixes (Enrico Scholz)
 
 0.32:
   add mbsinit, mbrlen, mbtowc, wctomb, mbrtowc, wcrtomb, wcwidth

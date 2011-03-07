@@ -2,6 +2,6 @@
 
 #ifdef __NR_pwrite64
 syscall_weak(pwrite64,pwrite64,__libc_pwrite64)
-#elif defined(__NR_pwrite)
+#else
 syscall_weak(pwrite,pwrite64,__libc_pwrite64)
 #endif

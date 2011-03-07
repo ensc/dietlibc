@@ -4,8 +4,14 @@
 .type memchr,@function
 memchr:	/* rdi=ptr, esi=ch, rdx=len */
 #ifdef WANT_VALGRIND_SUPPORT
+#ifdef __DYN_LIB
+  movq	__valgrind@GOTPCREL(%rip), %rax
+  movq	(%rax), %rax
+  test	%rax, %rax
+#else
   xor %eax,%eax
   or (__valgrind),%eax
+#endif
   jnz .Lvalgrind
 #endif
   and $0xff,%esi

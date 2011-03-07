@@ -7,7 +7,11 @@ strnlen:
 	mov %rsi,%r9
 	mov %rsi,%rdx
 	xor %esi,%esi
+#ifdef __DYN_LIB
+	call memchr@PLT
+#else
 	call memchr
+#endif
 	test %rax,%rax
 	jz .Lnotfound
 	sub %r8,%rax

@@ -69,6 +69,54 @@ int sched_rr_get_interval(pid_t pid, struct timespec* tp);
 int clone(void*(*fn)(void*),void*stack,int flags,void*arg);
 
 int unshare(int flags);
+
+/*
+ * Linux CPU affinity.
+ * For simplicity it supports up to 32 CPUs for 32 bits systems and up to
+ * 64 for 64 bits systems. Add the other CPU_SET(3) macros when needed.
+ */
+
+typedef	unsigned long cpu_set_t;
+
+static inline void CPU_ZERO(cpu_set_t *set) {*set = 0;}
+static inline void CPU_SET(int cpu, cpu_set_t *set) {*set |= (1UL << cpu);}
+static inline void CPU_CLR(int cpu, cpu_set_t *set) {*set &= ~(1UL << cpu);}
+static inline int CPU_ISSET(int cpu, cpu_set_t *set) {
+	return !!(*set & (1UL << cpu));
+}
+
+static inline int CPU_COUNT(cpu_set_t *set)
+{
+	int c;
+	unsigned long v;
+
+	/* Peter Wegner/Derrick Lehmer/Brian Kernighan's method */
+	for (c = 0, v = *set; v; c++)
+		v &= v - 1; // clear the least significant bit set
+	return c;
+}
+
+static inline void CPU_AND(cpu_set_t *dest, cpu_set_t *s1, cpu_set_t *s2){
+	*dest = *s1 & *s2;
+}
+
+static inline void CPU_OR(cpu_set_t *dest, cpu_set_t *s1, cpu_set_t *s2){
+	*dest = *s1 | *s2;
+}
+
+static inline void CPU_XOR(cpu_set_t *dest, cpu_set_t *s1, cpu_set_t *s2){
+	*dest = *s1 ^ *s2;
+}
+
+static inline int  CPU_EQUAL(cpu_set_t *s1, cpu_set_t *s2){
+	return *s1 == *s2;
+}
+
+int sched_setaffinity(pid_t pid, size_t size, cpu_set_t *mask);
+int sched_getaffinity(pid_t pid, size_t size, cpu_set_t *mask);
+#define pthread_setaffinity_np sched_setaffinity
+#define pthread_getaffinity_np sched_getaffinity
+
 #endif
 
 __END_DECLS

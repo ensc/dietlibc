@@ -76,7 +76,7 @@ int __fflush_stdout(void);
 int __fflush_stderr(void);
 
 FILE* __stdio_init_file(int fd,int closeonerror,int mode);
-int __stdio_parse_mode(const char *mode);
+int __stdio_parse_mode(const char *mode) __attribute__((__pure__));
 void __stdio_flushall(void);
 
 #ifndef __THREAD_INTERNAL_H__

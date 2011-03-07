@@ -585,6 +585,8 @@
 #define __ARGS_rt_sigsuspend		0
 #define __ARGS_pread			0
 #define __ARGS_pwrite			0
+#define __ARGS_pread64			0
+#define __ARGS_pwrite64			0
 #define __ARGS_chown			0
 #define __ARGS_getcwd			0
 #define __ARGS_capget			0
@@ -674,6 +676,7 @@
 #define __ARGS_fstatfs64		0
 #define __ARGS_tgkill			0
 #define __ARGS_utimes			0
+#define __ARGS_arm_fadvise64_64		1
 
 #define __ARGS_fadvise64		0
 #define __ARGS_fadvise64_64		0

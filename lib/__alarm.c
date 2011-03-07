@@ -1,6 +1,6 @@
 #include <unistd.h>
 #include <sys/time.h>
-#include <syscalls.h>
+#include "syscalls.h"
 
 #ifndef __NR_alarm
 unsigned int alarm(unsigned int seconds) {

@@ -131,6 +131,8 @@ FUNC_END	__unified_syscall4
 #include "../syscalls.s/rt_sigqueueinfo.S"
 #include "../syscalls.s/rt_sigsuspend.S"
 #include "../syscalls.s/rt_sigtimedwait.S"
+#include "../syscalls.s/sched_getaffinity.S"
+#include "../syscalls.s/sched_setaffinity.S"
 #include "../syscalls.s/sched_get_priority_max.S"
 #include "../syscalls.s/sched_get_priority_min.S"
 #include "../syscalls.s/sched_getparam.S"

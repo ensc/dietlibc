@@ -272,7 +272,7 @@ uintmax_t strtoumax (const char *nptr, char **endptr, int base);
 
 intmax_t imaxabs(intmax_t j) __attribute_const__;
 typedef struct { intmax_t quot,rem; } imaxdiv_t;
-imaxdiv_t imaxdiv(intmax_t numerator, intmax_t denominator); __attribute_const__;
+imaxdiv_t imaxdiv(intmax_t numerator, intmax_t denominator) __attribute_const__;
 
 __END_DECLS
 

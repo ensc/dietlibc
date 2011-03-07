@@ -1,3 +1,5 @@
+#include <sys/cdefs.h>
+
 /* parse lib: parse mmapped text with \n terminated lines */
 
 /* a memory buffer. */
@@ -20,6 +22,6 @@ size_t __parse(struct state* s,int (*pred)(int ch));
 
 size_t __parse_ws(struct state* s);		/* skip ' ' or '\t', break at '\n' or '#' */
 size_t __parse_nws(struct state* s);		/* skip non-whitespace, break at '\n' or '#' */
-size_t __parse_1(struct state* s,char c);	/* skip to c */
+size_t __parse_1(struct state* s,char c) __attribute__((__pure__));	/* skip to c */
 
 size_t scan_ulong(const char* s,unsigned long* l);

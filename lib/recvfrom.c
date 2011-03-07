@@ -1,3 +1,6 @@
+#include "syscalls.h"
+#ifdef __NR_socketcall
+
 #include <sys/types.h>
 #include <linuxnet.h>
 
@@ -11,3 +14,5 @@ int __libc_recvfrom(int a, const void * b, size_t c, int flags, void *to, void *
 
 int recvfrom(int a, const void * b, size_t c, int flags, void *to, void *tolen)
  __attribute__ ((weak,alias("__libc_recvfrom"))) ;
+
+#endif

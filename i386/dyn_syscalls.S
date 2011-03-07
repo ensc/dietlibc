@@ -207,6 +207,8 @@ __unified_syscall:
 #include "../syscalls.s/rt_sigqueueinfo.S"
 #include "../syscalls.s/rt_sigsuspend.S"
 #include "../syscalls.s/rt_sigtimedwait.S"
+#include "../syscalls.s/sched_getaffinity.S"
+#include "../syscalls.s/sched_setaffinity.S"
 #include "../syscalls.s/sched_get_priority_max.S"
 #include "../syscalls.s/sched_get_priority_min.S"
 #include "../syscalls.s/sched_getparam.S"
@@ -351,6 +353,9 @@ __unified_syscall:
 
 #include "../syscalls.s/timerfd.S"
 #include "../syscalls.s/__signalfd.S"
+
+#include "../syscalls.s/fallocate.S"
+#include "../syscalls.s/utimes.S"
 
 #undef __PIC__
 #undef __socketcall

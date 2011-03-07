@@ -1,3 +1,6 @@
+#include "syscalls.h"
+#ifdef __NR_socketcall
+
 #include <linuxnet.h>
 #include <sys/socket.h>
 
@@ -10,3 +13,5 @@ int __libc_listen(int a, int b) {
 }
 
 int listen(int s, int backlog) __attribute__((weak,alias("__libc_listen")));
+
+#endif

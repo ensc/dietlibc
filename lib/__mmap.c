@@ -5,10 +5,10 @@
 #ifndef __NR_mmap
 void*__mmap2(void*start,size_t length,int prot,int flags,int fd,off_t pgoffset);
 void *mmap(void *addr, size_t length, int prot, int flags, int fd,
-	   off_t offset)
+          off_t offset)
 {
-  size_t pgsz = 4096;		 /* TODO: fix for dynamic PAGESIZEs needed? */
-  void	*res;
+  size_t pgsz = 4096;	/* TODO: fix for dynamic PAGESIZEs needed? */
+  void *res;
 
   if (__unlikely(offset & (pgsz - 1))) {
     errno = -EINVAL;
@@ -18,3 +18,4 @@ void *mmap(void *addr, size_t length, int prot, int flags, int fd,
   return res;
 }
 #endif
+

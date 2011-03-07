@@ -10,6 +10,7 @@ exit:
 _exit:
 	mov	$SYS_exit,%al
 
+.global __error_unified_syscall
 .global __unified_syscall
 .global __unified_syscall_16bit
 __unified_syscall:
@@ -18,7 +19,8 @@ __unified_syscall_16bit:
 	movzwl	%ax, %eax
 	mov	%rcx, %r10
 	syscall
-	cmpq	$-128, %rax
+__error_unified_syscall:
+	cmpq	$-132, %rax
 	jbe	.Lnoerror
 	negl	%eax
 	pushq	%rax

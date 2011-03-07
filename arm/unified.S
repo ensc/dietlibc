@@ -37,6 +37,8 @@ FUNC_END	__unified_syscall
 #include "dietuglyweaks.h"
 	RET
 
+	mov	pc, lr			@ return
+
 #else	
 	
 FUNC_START	__unified_syscall4

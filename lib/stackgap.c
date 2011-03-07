@@ -115,12 +115,13 @@ void __setup_tls(tcbhead_t* mainthread) {
   sd[1]=(unsigned long int)mainthread;
   sd[2]=0xfffff; /* 4 GB limit */
   sd[3]=0x51; /* bitfield, see struct user_desc in asm-i386/ldt.h */
-  if (__modern_linux>=0)
+  if (__modern_linux>=0) {
     if (set_thread_area((struct user_desc*)(void*)&sd)==0) {
       asm volatile ("movw %w0, %%gs" :: "q" (sd[0]*8+3));
       __modern_linux=1;
     } else
       __modern_linux=-1;
+  }
 
 #elif defined(__alpha__) || defined(__s390__)
   __builtin_set_thread_pointer(mainthread);
