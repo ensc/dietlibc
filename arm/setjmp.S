@@ -8,10 +8,12 @@ __setjmp:
 __sigsetjmp:
 .weak sigsetjmp
 sigsetjmp:
-#ifndef	__SOFTFP__
-	sfm	f4, 4, [r0], #48
-#endif
 	stmia	r0, {r4-r11, sp, lr}
-	sub	r0, r0, #48
+#ifndef	__SOFTFP__
+	sfm	f4, 4, [r0, #10*4]
+#endif
+#ifdef __IWMMXT__
+#  warning "setjmp will not save iwmmxt coprocessor registers"
+#endif
 	b	__sigjmp_save
 
