@@ -3,7 +3,8 @@
 #include <syscalls.h>
 
 #ifndef __NR_mmap
-void*__mmap2(void*start,size_t length,int prot,int flags,int fd,off_t pgoffset);
+void*__mmap2(void*start,size_t length,int prot,int flags,int fd,off_t
+pgoffset);
 void *mmap(void *addr, size_t length, int prot, int flags, int fd,
           off_t offset)
 {

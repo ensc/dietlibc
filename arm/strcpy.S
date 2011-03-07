@@ -60,4 +60,3 @@ FUNC_START	strcpy
 	bne	.Lloop
 	RET
 FUNC_END	strcpy
-
