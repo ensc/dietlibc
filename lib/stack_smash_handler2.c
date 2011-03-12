@@ -16,6 +16,9 @@ void __stack_chk_fail(void) {
    * TODO: limit this to systems which are known to have an MMU (resp. is
    * dietlibc with stack-protector used on systems without an MMU?)
    */
-  while (1)
-	  *(char *)0 = 0;
+  *(char volatile *)0 = 0;
+  while (1) {
+    asm("");
+    __builtin_unreachable();
+  }
 }
