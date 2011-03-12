@@ -9,6 +9,7 @@
 /confstr
 /cycles
 /empty
+/fadvise
 /ffs
 /flush
 /fnmatch
@@ -61,7 +62,9 @@
 /select
 /sendfile
 /servent
+/setjmp
 /siglist
+/sigsetjmp
 /speed
 /spent
 /sprintf
