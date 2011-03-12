@@ -5,14 +5,30 @@
 #include <signal.h>
 #include <setjmp.h>
 
-static char volatile a[8] = "testbufA";
-static sigjmp_buf env;
-static char volatile b[8] = "testbufB";
+#define TEST_PATTERN	\
+	"0123456789abcdefghijklmnopqrstuv"	\
+	"ZYXWVUTSRQPONMLKJIHGFEDCBA987654"	\
+	"456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"	\
+	"vutsrqponmlkjihgfedcba9876543210"	\
+	"0123456789ABCDEFGHIJKLMNOPQRSTUV"	\
+	"zyxwvutsrqponmlkjihgfedcba987654"	\
+	"456789abcdefghijklmnopqrstuvwxyz"	\
+	"VUTSRQPONMLKJIHGFEDCBA987654321"	\
+
+static struct {
+	char volatile a[256];
+	sigjmp_buf env;
+	char volatile b[256];
+} sigenv = {
+	.a = TEST_PATTERN "<",
+	.b = TEST_PATTERN ">",
+};
+
 static int volatile sig_seen;
 
 #define VALIDATE_BUFFERS(_sig_exp) do {		\
-    assert(Xmemcmp(a, "testbufA", 8) == 0);	\
-    assert(Xmemcmp(b, "testbufB", 8) == 0);	\
+    assert(Xmemcmp(sigenv.a, TEST_PATTERN "<", sizeof sigenv.a) == 0);	\
+    assert(Xmemcmp(sigenv.b, TEST_PATTERN ">", sizeof sigenv.b) == 0);	\
     assert(sig_seen == (_sig_exp));		\
   } while (0)
 
@@ -46,7 +62,7 @@ static void do_test(int sig_num, int do_save, int block_sig)
   }
 
   sig_seen = 0;
-  rc = sigsetjmp(env, do_save);
+  rc = sigsetjmp(sigenv.env, do_save);
   if (rc == 0) {
     char volatile somebuf[128];
 
@@ -60,8 +76,8 @@ static void do_test(int sig_num, int do_save, int block_sig)
     /* raise a signal which triggers a siglongjmp */
     if (sig_num != 0) {
       raise(sig_num);
-      a[0] = 'X';
-      b[0] = 'X';
+      sigenv.a[0] = 'X';
+      sigenv.b[0] = 'X';
       assert(0);
     }
   } else if (rc != sig_num)
@@ -92,7 +108,7 @@ static void sig_handler(int num)
 {
   assert(sig_seen == 0);
   sig_seen = num;
-  siglongjmp(env, num);
+  siglongjmp(sigenv.env, num);
 }
 
 int main(void)
@@ -101,6 +117,12 @@ int main(void)
     .sa_handler	= sig_handler,
     .sa_flags	= SA_NODEFER, /* raised signal will be in blocked mask else */
   };
+
+  /* verify our assumptions about the memory layout */
+  assert(sizeof sigenv.a == 256);
+  assert(sizeof sigenv.b == 256);
+  assert(offsetof(__typeof__(sigenv), env) == sizeof sigenv.a);
+  assert(offsetof(__typeof__(sigenv), b)   == sizeof sigenv.a + sizeof sigenv.env);
 
   sigaction(SIGBUS,  &sigact, NULL);
   sigaction(SIGUSR1, &sigact, NULL);
