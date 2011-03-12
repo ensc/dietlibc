@@ -6,6 +6,7 @@
 #include <fcntl.h>
 #include <assert.h>
 #include <unistd.h>
+#include <sys/stat.h>
 
 #define CHECK(_sz)				\
   assert(ftruncate(fd, (_sz)) == 0);		\
