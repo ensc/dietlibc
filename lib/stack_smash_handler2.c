@@ -17,7 +17,7 @@ void __stack_chk_fail(void) {
    */
   *(char volatile *)0 = 0;
   while (1) {
-#if defined(__GNUC__) && (((__GNUC__ << 16) | (__GNUC_MINOR__)) > 0x405)
+#if defined(__GNUC__) && ((((__GNUC__) << 8) | (__GNUC_MINOR__)) >= 0x405)
     __builtin_unreachable();
 #endif
   }
