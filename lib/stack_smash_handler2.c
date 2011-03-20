@@ -17,7 +17,8 @@ void __stack_chk_fail(void) {
    */
   *(char volatile *)0 = 0;
   while (1) {
-    asm("");
+#if defined(__GNUC__) && (((__GNUC__ << 16) | (__GNUC_MINOR__)) > 0x405)
     __builtin_unreachable();
+#endif
   }
 }
