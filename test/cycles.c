@@ -22,6 +22,8 @@
     : "=r" (tbu), "=r" (tbl), "=r" (chk) ); \
   dst = ((uint64_t)tbu << 32) | tbl; \
 } while (0)
+#elif defined (__sparcv9__)
+#define RDTSC(dst) asm volatile ("rd %%tick, %%0":"=r"(dst))
 #else
 #warning "Unimplemented rdtsc"
 #define RDTSC(dst) dst = 0
