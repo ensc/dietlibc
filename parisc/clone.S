@@ -38,3 +38,7 @@ __clone:
 	copy	%r28,%r26		/* return -> arg0 */
 
 /*	iitlbp	%r0,(%r0) */		/* DIE ! DIE ! */
+
+#if defined(__linux__) && defined(__ELF__)
+.section .note.GNU-stack,"",%progbits
+#endif

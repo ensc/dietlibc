@@ -34,3 +34,7 @@ mmap:
         lmg     %r6,%r15,48(%r15)       /* Load registers.  */
 	
 	j __unified_syscall
+
+#if defined(__linux__) && defined(__ELF__)
+.section .note.GNU-stack,"",%progbits
+#endif

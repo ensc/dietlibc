@@ -37,3 +37,7 @@ error_unified_syscall:
 	stl	$0,  0($1)
 #endif
 	ret	$31, ($26), 0x01  /* return */
+
+#if defined(__linux__) && defined(__ELF__)
+.section .note.GNU-stack,"",%progbits
+#endif

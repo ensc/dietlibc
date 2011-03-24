@@ -18,3 +18,7 @@ FUNC_START	__sigsetjmp
 	b	__sigjmp_save
 FUNC_END	__sigsetjmp
 FUNC_END	sigsetjmp
+
+#if defined(__linux__) && defined(__ELF__)
+.section .note.GNU-stack,"",%progbits
+#endif

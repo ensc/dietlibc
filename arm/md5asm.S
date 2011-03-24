@@ -390,3 +390,7 @@ __UnalignedMD5Transform:
 #endif   /* __BYTE_ORDER == __LITTLE_ENDIAN */
 
 
+
+#if defined(__linux__) && defined(__ELF__)
+.section .note.GNU-stack,"",%progbits
+#endif

@@ -37,3 +37,7 @@ __sigsetjmp:
 	j	$25
 .end	__sigsetjmp
 .weak	setjmp
+
+#if defined(__linux__) && defined(__ELF__)
+.section .note.GNU-stack,"",%progbits
+#endif

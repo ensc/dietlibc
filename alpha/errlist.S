@@ -296,3 +296,7 @@ sys_nerr:
 .LC134: .string "Key has been revoked"
 .LC135: .string "Key was rejected by service"
 
+
+#if defined(__linux__) && defined(__ELF__)
+.section .note.GNU-stack,"",%progbits
+#endif

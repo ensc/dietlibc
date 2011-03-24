@@ -16,3 +16,7 @@ __libc_fork:
 	;;
 	mov r15 = __NR_clone
 	br __unified_syscall
+
+#if defined(__linux__) && defined(__ELF__)
+.section .note.GNU-stack,"",%progbits
+#endif

@@ -28,3 +28,7 @@ __hypot:
 .size    hypot,.ende-hypot
 .size    hypotf,.ende-hypotf
 .size    hypotl,.ende-hypotl
+
+#if defined(__linux__) && defined(__ELF__)
+.section .note.GNU-stack,"",%progbits
+#endif

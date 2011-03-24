@@ -44,3 +44,7 @@ floorl:
 .size    floor,.Lende-floor
 .size    floorl,.Lende-floorl
 .size    floorf,.Lende-floorf
+
+#if defined(__linux__) && defined(__ELF__)
+.section .note.GNU-stack,"",%progbits
+#endif

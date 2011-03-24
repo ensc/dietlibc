@@ -3,3 +3,7 @@
 #ifdef __NR_getsockname
 syscall_weak(getsockname,getsockname,__libc_getsockname)
 #endif
+
+#if defined(__linux__) && defined(__ELF__)
+.section .note.GNU-stack,"",%progbits
+#endif

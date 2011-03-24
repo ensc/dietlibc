@@ -65,3 +65,7 @@ __sigsetjmp:
 	fstd %fr21, 0(%sr0, %r19)
 	b,l __sigjmp_save, %r0
 	nop
+
+#if defined(__linux__) && defined(__ELF__)
+.section .note.GNU-stack,"",%progbits
+#endif

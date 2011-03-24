@@ -15,3 +15,7 @@ ffsl:
 .Lende:
 .size ffsl,.Lende-ffsl
 .size ffs,.Lende-ffs
+
+#if defined(__linux__) && defined(__ELF__)
+.section .note.GNU-stack,"",%progbits
+#endif

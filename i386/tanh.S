@@ -41,3 +41,7 @@ tanhl:
 .size    tanh,.Lende-tanh
 .size    tanhf,.Lende-tanhf
 .size    tanhl,.Lende-tanhl
+
+#if defined(__linux__) && defined(__ELF__)
+.section .note.GNU-stack,"",%progbits
+#endif

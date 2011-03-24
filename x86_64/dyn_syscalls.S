@@ -310,3 +310,7 @@ __error_unified_syscall:
 #include "x86_64/gettimeofday.S"
 
 #include "syscalls.s/__guard.S"
+
+#if defined(__linux__) && defined(__ELF__)
+.section .note.GNU-stack,"",%progbits
+#endif

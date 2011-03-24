@@ -36,3 +36,7 @@ __error_unified_syscall:
 	ret
 .Lhere:
 	.size	 __unified_syscall,.Lhere-__unified_syscall
+
+#if defined(__linux__) && defined(__ELF__)
+.section .note.GNU-stack,"",%progbits
+#endif

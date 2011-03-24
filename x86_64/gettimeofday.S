@@ -7,3 +7,7 @@ gettimeofday:
 	jmp __error_unified_syscall
 .Lhere:
 	.size	 gettimeofday,.Lhere-gettimeofday
+
+#if defined(__linux__) && defined(__ELF__)
+.section .note.GNU-stack,"",%progbits
+#endif

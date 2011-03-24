@@ -21,3 +21,7 @@ fabsl:
 .size    fabs,.ende-fabs
 .size    fabsl,.ende-fabsl
 .size    fabsf,.ende-fabsf
+
+#if defined(__linux__) && defined(__ELF__)
+.section .note.GNU-stack,"",%progbits
+#endif

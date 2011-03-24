@@ -50,3 +50,7 @@ mmap64:
         lm      %r6,%r15,24(%r15)       /* Load registers.  */
 	j	__unified_syscall
 
+
+#if defined(__linux__) && defined(__ELF__)
+.section .note.GNU-stack,"",%progbits
+#endif

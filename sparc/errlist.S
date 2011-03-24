@@ -288,3 +288,7 @@ sys_nerr:
 .LC131: .string "Key was rejected by service"
 
 
+
+#if defined(__linux__) && defined(__ELF__)
+.section .note.GNU-stack,"",%progbits
+#endif

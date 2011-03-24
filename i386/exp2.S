@@ -16,3 +16,7 @@ exp2:                           # note: exp2(x) = 2^x
 
 .ende:
 .size    exp2,.ende-exp2
+
+#if defined(__linux__) && defined(__ELF__)
+.section .note.GNU-stack,"",%progbits
+#endif

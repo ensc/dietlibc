@@ -28,3 +28,7 @@ __acos:
 .size    acos,.ende-acos
 .size    acosf,.ende-acosf
 .size    acosl,.ende-acosl
+
+#if defined(__linux__) && defined(__ELF__)
+.section .note.GNU-stack,"",%progbits
+#endif

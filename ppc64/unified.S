@@ -69,3 +69,7 @@ diet_proto_weak(__nop)
 diet_proto_weak(__you_tried_to_link_a_dietlibc_object_against_glibc)
 diet_proto_weak(exit)
 diet_proto(_exit)
+
+#if defined(__linux__) && defined(__ELF__)
+.section .note.GNU-stack,"",%progbits
+#endif

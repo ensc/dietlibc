@@ -9,3 +9,7 @@ strlen:
     add  %o0, 1, %o0
     retl
     sub  %o0, %o1, %o0
+
+#if defined(__linux__) && defined(__ELF__)
+.section .note.GNU-stack,"",%progbits
+#endif

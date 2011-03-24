@@ -23,3 +23,7 @@ atan2:
 .size    atan2,.ende-atan2
 .size    atan2f,.ende-atan2f
 .size    atan2l,.ende-atan2l
+
+#if defined(__linux__) && defined(__ELF__)
+.section .note.GNU-stack,"",%progbits
+#endif

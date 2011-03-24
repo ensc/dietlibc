@@ -27,3 +27,7 @@ __asin:
 .size    asin,.ende-asin
 .size    asinf,.ende-asinf
 .size    asinl,.ende-asinl
+
+#if defined(__linux__) && defined(__ELF__)
+.section .note.GNU-stack,"",%progbits
+#endif

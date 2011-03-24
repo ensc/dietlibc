@@ -47,3 +47,7 @@ __error_unified_syscall:
 
 .endp __error_unified_syscall
 .size __error_unified_syscall, . - __error_unified_syscall
+
+#if defined(__linux__) && defined(__ELF__)
+.section .note.GNU-stack,"",%progbits
+#endif

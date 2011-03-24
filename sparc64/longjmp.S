@@ -15,3 +15,7 @@ __libc_longjmp:
 	ld	[ %o0+FLAG_SAVEMASK ], %o1	/* has setjmp saved the signalmask ? */
 	ta	0x6f				/* setcontext / restore context */
 .size	__libc_longjmp,.-__libc_longjmp
+
+#if defined(__linux__) && defined(__ELF__)
+.section .note.GNU-stack,"",%progbits
+#endif

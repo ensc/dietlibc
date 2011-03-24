@@ -13,3 +13,7 @@ FUNC_START	__testandset
 # endif
 	RET
 FUNC_END	__testandset
+
+#if defined(__linux__) && defined(__ELF__)
+.section .note.GNU-stack,"",%progbits
+#endif

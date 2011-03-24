@@ -8,3 +8,7 @@ waitpid:
 __libc_waitpid:
 	clr	$19
 	br	wait4
+
+#if defined(__linux__) && defined(__ELF__)
+.section .note.GNU-stack,"",%progbits
+#endif

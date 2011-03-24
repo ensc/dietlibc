@@ -33,3 +33,7 @@ cosl:
 .size    cos,.Lende-cos
 .size    cosl,.Lende-cosl
 .size    cosf,.Lende-cosf
+
+#if defined(__linux__) && defined(__ELF__)
+.section .note.GNU-stack,"",%progbits
+#endif

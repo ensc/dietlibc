@@ -10,3 +10,7 @@ __stack_chk_guard:
 
 .size __guard, . - __guard
 .size __stack_chk_guard, . - __stack_chk_guard
+
+#if defined(__linux__) && defined(__ELF__)
+.section .note.GNU-stack,"",%progbits
+#endif

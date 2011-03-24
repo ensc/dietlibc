@@ -99,3 +99,7 @@ __divl :
 	ret	$31 , ($23  ), 1
 
 	.end	__divl
+
+#if defined(__linux__) && defined(__ELF__)
+.section .note.GNU-stack,"",%progbits
+#endif

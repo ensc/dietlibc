@@ -62,3 +62,7 @@ sincosl:
 .size    sincos,.ende-sincos
 .size    sincosf,.ende-sincosf
 .size    sincosl,.ende-sincosl
+
+#if defined(__linux__) && defined(__ELF__)
+.section .note.GNU-stack,"",%progbits
+#endif

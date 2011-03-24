@@ -336,3 +336,7 @@ sys_nerr:
 /* handled in strerror.c
 .LC1133: .string "Quota exceeded"
 */
+
+#if defined(__linux__) && defined(__ELF__)
+.section .note.GNU-stack,"",%progbits
+#endif

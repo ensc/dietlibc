@@ -32,3 +32,7 @@ sinl:
 .size    sin,.ende-sin
 .size    sinf,.ende-sinf
 .size    sinl,.ende-sinl
+
+#if defined(__linux__) && defined(__ELF__)
+.section .note.GNU-stack,"",%progbits
+#endif

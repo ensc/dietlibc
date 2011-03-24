@@ -25,3 +25,7 @@ log10:
 .size    log10,.ende-log10
 .size    log10f,.ende-log10f
 .size    log10l,.ende-log10l
+
+#if defined(__linux__) && defined(__ELF__)
+.section .note.GNU-stack,"",%progbits
+#endif

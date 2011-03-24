@@ -40,3 +40,7 @@ FUNC_START	mcount
 
     ldmdb   fp,  { r0 - r3, fp, sp, pc }        @ restore context from stack frame and return.
 FUNC_END	mcount
+
+#if defined(__linux__) && defined(__ELF__)
+.section .note.GNU-stack,"",%progbits
+#endif

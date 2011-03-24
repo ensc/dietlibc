@@ -6,3 +6,7 @@ FUNC_START	__libc_waitpid
 	b	wait4
 FUNC_END	__libc_waitpid
 FUNC_END	waitpid
+
+#if defined(__linux__) && defined(__ELF__)
+.section .note.GNU-stack,"",%progbits
+#endif

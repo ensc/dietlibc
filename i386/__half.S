@@ -8,3 +8,7 @@
 .type   __half,@object
 .size   __half,4
 __half: .long 0x3f000000
+
+#if defined(__linux__) && defined(__ELF__)
+.section .note.GNU-stack,"",%progbits
+#endif

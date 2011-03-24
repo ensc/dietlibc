@@ -37,3 +37,7 @@ __sigsetjmp:
 	mov	%g1, %o7
 .size __sigsetjmp,.-__sigsetjmp
 
+
+#if defined(__linux__) && defined(__ELF__)
+.section .note.GNU-stack,"",%progbits
+#endif

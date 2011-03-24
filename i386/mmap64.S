@@ -61,3 +61,7 @@ mmap64:
   jmp .Lerror
 .Lende2:
 .size mmap64,.Lende2-mmap64
+
+#if defined(__linux__) && defined(__ELF__)
+.section .note.GNU-stack,"",%progbits
+#endif

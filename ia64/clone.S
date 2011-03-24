@@ -45,3 +45,7 @@ __clone:
 .endp __clone
 .endp __clone2
 .size __clone, . - __clone
+
+#if defined(__linux__) && defined(__ELF__)
+.section .note.GNU-stack,"",%progbits
+#endif

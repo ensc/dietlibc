@@ -164,3 +164,7 @@ LEAF(__longjmp)
 	mov pr=r24,-1
 	ret
 END(__longjmp)
+
+#if defined(__linux__) && defined(__ELF__)
+.section .note.GNU-stack,"",%progbits
+#endif

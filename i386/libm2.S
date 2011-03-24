@@ -459,3 +459,7 @@ logbl:
 ilogbl:	fldt 4(%esp)
 	jmp __ilogb
 
+
+#if defined(__linux__) && defined(__ELF__)
+.section .note.GNU-stack,"",%progbits
+#endif
