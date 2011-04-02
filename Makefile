@@ -144,6 +144,7 @@ CFLAGS = -g
 COMMENT = :
 endif
 CFLAGS += -W -Wall -Wextra -Wchar-subscripts -Wmissing-prototypes -Wmissing-declarations -Wno-switch -Wno-unused -Wredundant-decls
+XCFLAGS = -Wa,--noexecstack
 
 PWD=$(shell pwd)
 
