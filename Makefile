@@ -147,6 +147,7 @@ CFLAGS = -g
 COMMENT = :
 endif
 CFLAGS += -W -Wall -Wextra -Wchar-subscripts -Wmissing-prototypes -Wmissing-declarations -Wno-switch -Wno-unused -Wredundant-decls -Wshadow
+XCFLAGS = -Wa,--noexecstack
 
 ASM_CFLAGS = -Wa,--noexecstack
 ifneq ($(subst clang,fnord,$(CC)),$(CC))
