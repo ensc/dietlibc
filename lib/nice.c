@@ -13,13 +13,14 @@
 
 static inline int int_add_no_wrap(int a, int b)
 {
-	int s = a + b;
+	int	s;
 
-	if (b < 0) {
-		if (s > a) s = INT_MIN;
-	} else {
-		if (s < a) s = INT_MAX;
-	}
+	if ((b > 0) && (a > (INT_MAX - b)))
+		s = INT_MAX;
+	else if ((b < 0) && (a < (INT_MIN - b)))
+		s = INT_MIN;
+	else
+		s = a + b;
 
 	return s;
 }
