@@ -39,7 +39,14 @@
 #error Unable to determine architecture.
 #endif
 
+#define DIET_JMPBUFSZ_REGS_REGULAR	10*32/8	/* r4-r11, sp, pc */
+#define DIET_JMPBUFSZ_REGS_FPv4		16*64/8 /* d0-d15 */
 
+#if !defined(__SOFTFP__) || defined(__IWMMXT__)
+#  define DIET_HAVE_COPROC_REGS	1
+#else
+#  undef  DIET_HAVE_COPROC_REGS
+#endif
 
 #ifdef __ASSEMBLER__
 
