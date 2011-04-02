@@ -168,13 +168,13 @@ $(OBJDIR)/%.o: %.c $(OBJDIR)/.dirstamp
 	$(COMMENT) -$(STRIP) -x -R .comment -R .note $@
 else
 $(OBJDIR)/pstart.o: start.S $(OBJDIR)/.dirstamp
-	$(CROSS)$(CC) $(INC) $(CFLAGS) -DPROFILING -c $< -o $@
+	$(CROSS)$(CC) $(INC) $(CFLAGS) $(XCFLAGS) -DPROFILING -c $< -o $@
 
 $(OBJDIR)/%.o: %.S $(ARCH)/syscalls.h $(OBJDIR)/.dirstamp
-	$(CROSS)$(CC) $(INC) $(CFLAGS) -c $< -o $@
+	$(CROSS)$(CC) $(INC) $(CFLAGS) $(XCFLAGS) -c $< -o $@
 
 $(OBJDIR)/pthread_%.o: libpthread/pthread_%.c $(OBJDIR)/.dirstamp
-	$(CROSS)$(CC) $(INC) $(CFLAGS) -c $< -o $@
+	$(CROSS)$(CC) $(INC) $(CFLAGS) $(XCFLAGS) -c $< -o $@
 	$(COMMENT) -$(STRIP) -x -R .comment -R .note $@
 $(OBJDIR)/stack_smash_handler2.o:	XCFLAGS:=-fno-omit-frame-pointer
 
@@ -196,7 +196,7 @@ endif
 CC+=-D__dietlibc__
 
 $(OBJDIR)/crypt.o: libcrypt/crypt.c $(OBJDIR)/.dirstamp
-	$(CROSS)$(CC) $(INC) $(SAFER_CFLAGS) -c $< -o $@
+	$(CROSS)$(CC) $(INC) $(SAFER_CFLAGS) $(XCFLAGS) -c $< -o $@
 
 DIETLIBC_OBJ = $(OBJDIR)/unified.o \
 $(SYSCALLOBJ) $(LIBOBJ) $(LIBSTDIOOBJ) $(LIBUGLYOBJ) \
@@ -248,21 +248,21 @@ dyn_lib: $(PICODIR)/libc.so $(PICODIR)/dstart.o \
 	$(PICODIR)/libm.so $(PICODIR)/diet-dyn $(PICODIR)/diet-dyn-i
 
 $(PICODIR)/%.o: %.S $(ARCH)/syscalls.h $(PICODIR)/.dirstamp
-	$(CROSS)$(CC) $(INC) $(CFLAGS) -fPIC -D__DYN_LIB -c $< -o $@
+	$(CROSS)$(CC) $(INC) $(CFLAGS) $(XCFLAGS) -fPIC -D__DYN_LIB -c $< -o $@
 
 $(PICODIR)/pthread_%.o: libpthread/pthread_%.c $(PICODIR)/.dirstamp
-	$(CROSS)$(CC) $(INC) $(CFLAGS) -fPIC -D__DYN_LIB -c $< -o $@
+	$(CROSS)$(CC) $(INC) $(CFLAGS) $(XCFLAGS) -fPIC -D__DYN_LIB -c $< -o $@
 	$(COMMENT) $(STRIP) -x -R .comment -R .note $@
 
 $(PICODIR)/%.o: %.c $(PICODIR)/.dirstamp
-	$(CROSS)$(CC) $(INC) $(CFLAGS) -fPIC -D__DYN_LIB -c $< -o $@
+	$(CROSS)$(CC) $(INC) $(CFLAGS) $(XCFLAGS) -fPIC -D__DYN_LIB -c $< -o $@
 	$(COMMENT) $(STRIP) -x -R .comment -R .note $@
 
 $(PICODIR)/dstart.o: start.S $(PICODIR)/.dirstamp
-	$(CROSS)$(CC) $(INC) $(CFLAGS) -fPIC -D__DYN_LIB -c $< -o $@
+	$(CROSS)$(CC) $(INC) $(CFLAGS) $(XCFLAGS) -fPIC -D__DYN_LIB -c $< -o $@
 
 $(PICODIR)/dyn_so_start.o: dyn_start.c $(PICODIR)/.dirstamp
-	$(CROSS)$(CC) $(INC) $(CFLAGS) -fPIC -D__DYN_LIB -D__DYN_LIB_SHARED -c $< -o $@
+	$(CROSS)$(CC) $(INC) $(CFLAGS) $(XCFLAGS) -fPIC -D__DYN_LIB -D__DYN_LIB_SHARED -c $< -o $@
 	$(COMMENT) $(STRIP) -x -R .comment -R .note $@
 
 DYN_LIBC_PIC = $(LIBOBJ) $(LIBSTDIOOBJ) $(LIBUGLYOBJ) \
