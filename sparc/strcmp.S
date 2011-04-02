@@ -11,6 +11,8 @@
 
 .text
 .globl strcmp
+.weak strcoll
+strcoll:
 strcmp:
 	clr %o4
 .Lloop:
