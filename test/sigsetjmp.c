@@ -24,6 +24,10 @@ static struct {
 	.b = TEST_PATTERN ">",
 };
 
+static double const volatile	FP_REF[] = {
+  0.4, 0.8, 1.5, 1.6, 2.3, 4.2
+};
+
 static int volatile sig_seen;
 
 #define VALIDATE_BUFFERS(_sig_exp) do {		\
@@ -104,6 +108,63 @@ static void do_test(int sig_num, int do_save, int block_sig)
   printf(" ok\n");
 };
 
+static void do_test_fp(int sig_num, int do_save)
+{
+  sigset_t	cur_set;
+  int		rc;
+  double	fp0, fp1, fp2, fp3;
+
+  printf("%s(%d,%d)... ", __func__, sig_num, do_save);
+  fflush(stdout);
+
+  VALIDATE_BUFFERS(0);
+
+  assert(sigprocmask(SIG_SETMASK, NULL, &cur_set) == 0);
+
+  /* verify that tested signal is not blocked */
+  if (sig_num != 0)
+    assert(!sigismember(&cur_set, sig_num));
+
+  fp0 = FP_REF[0];
+  fp1 = FP_REF[1];
+  fp2 = FP_REF[2];
+  fp3 = FP_REF[3];
+
+  sig_seen = 0;
+  rc = sigsetjmp(sigenv.env, do_save);
+
+  if (rc == 0) {
+    fp0 = FP_REF[4];
+    fp3 = FP_REF[5];
+
+    if (sig_num != 0) {
+      raise(sig_num);
+      assert(0);
+    }
+  } else if (rc != sig_num)
+    /* sigsetjmp() returned with an unexpected value */
+    assert(0);
+
+  if (sig_num == 0) {
+    /* "exception" was not triggered; we should see the new values */
+    assert(fp0 == FP_REF[4]);
+    assert(fp1 == FP_REF[1]);
+    assert(fp2 == FP_REF[2]);
+    assert(fp3 == FP_REF[5]);
+  } else {
+    /* "exception" was triggered; we should see the old values */
+    assert(fp0 == FP_REF[0]);
+    assert(fp1 == FP_REF[1]);
+    assert(fp2 == FP_REF[2]);
+    assert(fp3 == FP_REF[3]);
+  }
+
+  VALIDATE_BUFFERS(sig_num);
+  sig_seen = 0;
+
+  printf(" ok\n");
+}
+
 static void sig_handler(int num)
 {
   assert(sig_seen == 0);
@@ -135,6 +196,11 @@ int main(void)
   do_test(SIGBUS, 0, SIGUSR1);
   do_test(SIGBUS, 1, 0);
   do_test(SIGBUS, 1, SIGUSR1);
+
+  do_test_fp(0, 0);
+  do_test_fp(0, 1);
+  do_test_fp(SIGBUS, 0);
+  do_test_fp(SIGBUS, 1);
 
   return EXIT_SUCCESS;
 }
