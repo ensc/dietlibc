@@ -37,8 +37,8 @@ int closedir (DIR *__dirp) __THROW;
 struct dirent *readdir (DIR *__dirp) __THROW;
 struct dirent64 *readdir64 (DIR *__dirp) __THROW;
 void rewinddir (DIR *__dirp) __THROW;
-void seekdir (DIR *__dirp, off_t __pos) __THROW;
-off_t telldir (DIR *__dirp) __THROW;
+void seekdir (DIR *__dirp, long int __pos) __THROW;
+long int telldir (DIR *__dirp) __THROW;
 
 int scandir(const char *dir, struct dirent ***namelist,
       int (*selection)(const struct dirent *),
