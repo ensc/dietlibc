@@ -95,7 +95,3 @@ __remq :
 	ret	$31 , ($23  ), 1
 
 	.end	__remq
-
-#if defined(__linux__) && defined(__ELF__)
-.section .note.GNU-stack,"",%progbits
-#endif

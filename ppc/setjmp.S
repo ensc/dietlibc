@@ -54,7 +54,3 @@ __sigsetjmp:
         stfd 31,((JB_FPRS+17*2)*4)(3)
         b JUMPTARGET (__sigjmp_save)
 .size __sigsetjmp,.-__sigsetjmp
-
-#if defined(__linux__) && defined(__ELF__)
-.section .note.GNU-stack,"",%progbits
-#endif

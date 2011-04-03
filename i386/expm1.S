@@ -21,7 +21,3 @@ expm1:                          # note: exp(x) = 2^(x*log2(e))
 
 .ende:
 .size    expm1,.ende-expm1
-
-#if defined(__linux__) && defined(__ELF__)
-.section .note.GNU-stack,"",%progbits
-#endif

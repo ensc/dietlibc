@@ -10,7 +10,3 @@ __testandset:
 	ret
 
 link_warning("__testandset", "warning: __testandset() was never tested!")
-
-#if defined(__linux__) && defined(__ELF__)
-.section .note.GNU-stack,"",%progbits
-#endif

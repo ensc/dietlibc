@@ -40,7 +40,3 @@ __clone:
 	mov	$0,  $16
 	jsr	$26, exit
 
-
-#if defined(__linux__) && defined(__ELF__)
-.section .note.GNU-stack,"",%progbits
-#endif

@@ -16,7 +16,3 @@ __libc_fork:
 1:	sethi	%hi(__unified_syscall_error_handler), %g1
 	jmp	%g1+%lo(__unified_syscall_error_handler)
 	nop
-
-#if defined(__linux__) && defined(__ELF__)
-.section .note.GNU-stack,"",%progbits
-#endif

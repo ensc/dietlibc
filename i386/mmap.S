@@ -12,7 +12,3 @@ mmap:
 	ret
 .Lende3:
 .size mmap,.Lende3-mmap
-
-#if defined(__linux__) && defined(__ELF__)
-.section .note.GNU-stack,"",%progbits
-#endif

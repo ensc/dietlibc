@@ -25,7 +25,3 @@ atanl:
 .size    atan,.ende-atan
 .size    atanf,.ende-atanf
 .size    atanl,.ende-atanl
-
-#if defined(__linux__) && defined(__ELF__)
-.section .note.GNU-stack,"",%progbits
-#endif

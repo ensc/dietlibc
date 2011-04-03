@@ -47,7 +47,3 @@ error_unified_syscall:
 	jr	$31
 #endif
 	.end	error_unified_syscall
-
-#if defined(__linux__) && defined(__ELF__)
-.section .note.GNU-stack,"",%progbits
-#endif

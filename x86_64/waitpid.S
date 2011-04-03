@@ -10,7 +10,3 @@ __libc_waitpid:
 	xor	%rcx,%rcx
 	mov	$__NR_wait4,%al
 	jmp	__unified_syscall
-
-#if defined(__linux__) && defined(__ELF__)
-.section .note.GNU-stack,"",%progbits
-#endif

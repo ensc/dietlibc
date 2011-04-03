@@ -12,7 +12,3 @@ FUNC_START	__longjmp
 #endif
 	ldmia   ip, {r4-r11, sp, pc}
 FUNC_END	__longjmp
-
-#if defined(__linux__) && defined(__ELF__)
-.section .note.GNU-stack,"",%progbits
-#endif

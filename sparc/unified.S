@@ -34,7 +34,3 @@ __unified_syscall_error_handler:
 	ret
 	restore %g0, -1, %o0
 
-
-#if defined(__linux__) && defined(__ELF__)
-.section .note.GNU-stack,"",%progbits
-#endif

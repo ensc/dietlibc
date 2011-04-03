@@ -63,7 +63,3 @@ FUNC_START	strlen
 	.word	0x01010101
 #endif
 FUNC_END	strlen
-
-#if defined(__linux__) && defined(__ELF__)
-.section .note.GNU-stack,"",%progbits
-#endif

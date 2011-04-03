@@ -25,7 +25,3 @@ memccpy:
 .Lret:
 	retl
 	add %o0, %o4, %o0
-
-#if defined(__linux__) && defined(__ELF__)
-.section .note.GNU-stack,"",%progbits
-#endif

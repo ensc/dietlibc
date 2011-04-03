@@ -45,7 +45,3 @@ __sigsetjmp_internal:
 	jmp __sigjmp_save
 #endif
 .size __sigsetjmp,.-__sigsetjmp;
-
-#if defined(__linux__) && defined(__ELF__)
-.section .note.GNU-stack,"",%progbits
-#endif

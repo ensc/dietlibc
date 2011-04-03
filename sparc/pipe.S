@@ -14,7 +14,3 @@ pipe:
 	retl
 	mov	%g0, %o0
 
-
-#if defined(__linux__) && defined(__ELF__)
-.section .note.GNU-stack,"",%progbits
-#endif

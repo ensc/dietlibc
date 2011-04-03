@@ -9,7 +9,3 @@ __testandset:
 	xr	%r2,%r0
 	br	%r14
 
-
-#if defined(__linux__) && defined(__ELF__)
-.section .note.GNU-stack,"",%progbits
-#endif

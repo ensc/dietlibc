@@ -139,7 +139,3 @@ syscall:
 #endif
 #endif
 .size	syscall, . - syscall
-
-#if defined(__linux__) && defined(__ELF__)
-.section .note.GNU-stack,"",%progbits
-#endif

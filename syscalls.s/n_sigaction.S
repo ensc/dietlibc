@@ -3,7 +3,3 @@
 #ifdef __NR_sigaction
 syscall_weak(sigaction,__old_sigaction,__n_sigaction)
 #endif
-
-#if defined(__linux__) && defined(__ELF__)
-.section .note.GNU-stack,"",%progbits
-#endif

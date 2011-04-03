@@ -42,7 +42,3 @@ _start:
 #endif
 	mov	 $0, $16
 	jsr	$26, exit	/* YES, CALL! for threads and atexit ! (+4 byte) */
-
-#if defined(__linux__) && defined(__ELF__)
-.section .note.GNU-stack,"",%progbits
-#endif

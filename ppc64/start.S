@@ -98,7 +98,3 @@ __data_start:
 	.lcomm	__libc_stack_end,8,8
 	.type	__libc_stack_end,@object
 
-
-#if defined(__linux__) && defined(__ELF__)
-.section .note.GNU-stack,"",%progbits
-#endif

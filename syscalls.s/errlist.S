@@ -301,7 +301,3 @@ sys_nerr:
 .LC127:	.asciz	"Key has expired"
 .LC128:	.asciz	"Key has been revoked"
 .LC129:	.asciz	"Key was rejected by service"
-
-#if defined(__linux__) && defined(__ELF__)
-.section .note.GNU-stack,"",%progbits
-#endif

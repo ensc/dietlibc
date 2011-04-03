@@ -35,7 +35,3 @@ __write1:
 	addl	$12,%esp		# und das leidvolle Putzen
 	PIC_RESTORE		# non-PIC: empty line
 	ret
-
-#if defined(__linux__) && defined(__ELF__)
-.section .note.GNU-stack,"",%progbits
-#endif

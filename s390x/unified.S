@@ -44,7 +44,3 @@ __error_unified_syscall:
 	br	%r14
 
 .align 4
-
-#if defined(__linux__) && defined(__ELF__)
-.section .note.GNU-stack,"",%progbits
-#endif

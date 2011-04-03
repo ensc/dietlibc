@@ -196,7 +196,3 @@ strong_alias(__sigsetjmp, _GI___sigsetjmp)
 
 weak_extern(_setjmp)
 weak_extern(setjmp)
-
-#if defined(__linux__) && defined(__ELF__)
-.section .note.GNU-stack,"",%progbits
-#endif

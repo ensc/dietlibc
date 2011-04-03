@@ -24,7 +24,3 @@ log:
 .size    log,.Lende-log
 .size    logl,.Lende-logl
 .size    logf,.Lende-logf
-
-#if defined(__linux__) && defined(__ELF__)
-.section .note.GNU-stack,"",%progbits
-#endif

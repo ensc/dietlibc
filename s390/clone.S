@@ -35,7 +35,3 @@ thread_start:
 .L2:	al	%r1, [.L3-.L2](%r1)
 	br	%r1
 .L3:	.long	__error_unified_syscall-.L0
-
-#if defined(__linux__) && defined(__ELF__)
-.section .note.GNU-stack,"",%progbits
-#endif

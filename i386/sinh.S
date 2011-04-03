@@ -41,7 +41,3 @@ sinhl:
 .size    sinh,.Lende-sinh
 .size    sinhf,.Lende-sinhf
 .size    sinhl,.Lende-sinhl
-
-#if defined(__linux__) && defined(__ELF__)
-.section .note.GNU-stack,"",%progbits
-#endif

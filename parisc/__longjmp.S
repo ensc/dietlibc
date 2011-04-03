@@ -60,7 +60,3 @@ __longjmp:
 	fldd 0(%sr0, %r20), %fr21
 
 	bv,n %r0(%rp)
-
-#if defined(__linux__) && defined(__ELF__)
-.section .note.GNU-stack,"",%progbits
-#endif

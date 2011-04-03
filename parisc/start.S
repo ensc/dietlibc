@@ -60,7 +60,3 @@ _start:
 	or %r28, %r28, %r26
 	.EXIT
 	.PROCEND
-
-#if defined(__linux__) && defined(__ELF__)
-.section .note.GNU-stack,"",%progbits
-#endif

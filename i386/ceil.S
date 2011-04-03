@@ -53,7 +53,3 @@ __flcetr:
 .size    ceill,.Lende-ceill
 .size    ceilf,.Lende-ceilf
 .size    __flcetr,.Lende-__flcetr
-
-#if defined(__linux__) && defined(__ELF__)
-.section .note.GNU-stack,"",%progbits
-#endif

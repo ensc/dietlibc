@@ -73,7 +73,3 @@ pow:
 .size    pow,.Lende-pow
 .size    powf,.Lende-powf
 .size    powl,.Lende-powl
-
-#if defined(__linux__) && defined(__ELF__)
-.section .note.GNU-stack,"",%progbits
-#endif

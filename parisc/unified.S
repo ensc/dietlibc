@@ -69,7 +69,3 @@ __error_unified_syscall:
 #include "dietuglyweaks.h"
 
 	bv,n %r0(%rp)
-
-#if defined(__linux__) && defined(__ELF__)
-.section .note.GNU-stack,"",%progbits
-#endif

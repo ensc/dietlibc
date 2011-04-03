@@ -3,7 +3,3 @@
 #ifdef __NR_fstatfs64
 syscall(fstatfs64,__dietlibc_fstatfs64)
 #endif
-
-#if defined(__linux__) && defined(__ELF__)
-.section .note.GNU-stack,"",%progbits
-#endif

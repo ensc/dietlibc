@@ -21,7 +21,3 @@ sqrtl:
 .size    sqrt,.ende-sqrt
 .size    sqrtf,.ende-sqrtf
 .size    sqrtl,.ende-sqrtl
-
-#if defined(__linux__) && defined(__ELF__)
-.section .note.GNU-stack,"",%progbits
-#endif

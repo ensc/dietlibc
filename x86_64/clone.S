@@ -62,7 +62,3 @@ link_warning("clone", "warning: clone() not yet tested")
 link_warning("__clone", "warning: clone() not yet tested")
 //link_warning("clone", "warning: clone() not yet implemented")
 //link_warning("__clone", "warning: clone() not yet implemented")
-
-#if defined(__linux__) && defined(__ELF__)
-.section .note.GNU-stack,"",%progbits
-#endif

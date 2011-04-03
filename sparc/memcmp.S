@@ -25,7 +25,3 @@ memcmp:
 .Lret:
 	retl
 	sub %o3, %o4, %o0
-
-#if defined(__linux__) && defined(__ELF__)
-.section .note.GNU-stack,"",%progbits
-#endif

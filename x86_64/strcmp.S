@@ -25,7 +25,3 @@ strcmp:
 	sbb %eax,%eax
 	or $1,%eax
 	ret
-
-#if defined(__linux__) && defined(__ELF__)
-.section .note.GNU-stack,"",%progbits
-#endif

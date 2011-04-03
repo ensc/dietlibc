@@ -3,7 +3,3 @@
 /*
  * Doesn't exist on mips ( accept, bind, ... are SYSCALLS !?! )
  */
-
-#if defined(__linux__) && defined(__ELF__)
-.section .note.GNU-stack,"",%progbits
-#endif

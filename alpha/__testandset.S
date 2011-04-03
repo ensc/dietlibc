@@ -9,7 +9,3 @@ __testandset:
 	stq_c	$0, 0($16)		/* write lock is locked :) */
 	beq	$0, 1b			/* oops someone changed MY lock */
 1:	ret	$31, ($26), 0x01	/* return */
-
-#if defined(__linux__) && defined(__ELF__)
-.section .note.GNU-stack,"",%progbits
-#endif

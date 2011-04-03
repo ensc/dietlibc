@@ -9,7 +9,3 @@ getppid:
 	lda	$sp, 8($sp)
 	cmovge	$0, $20, $0
 	ret
-
-#if defined(__linux__) && defined(__ELF__)
-.section .note.GNU-stack,"",%progbits
-#endif

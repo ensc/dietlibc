@@ -12,7 +12,3 @@ FUNC_START __aeabi_unwind_cpp_pr2
 FUNC_END  __aeabi_unwind_cpp_pr2
 FUNC_END  __aeabi_unwind_cpp_pr1
 FUNC_END  __aeabi_unwind_cpp_pr0
-
-#if defined(__linux__) && defined(__ELF__)
-.section .note.GNU-stack,"",%progbits
-#endif

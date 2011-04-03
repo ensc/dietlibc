@@ -26,7 +26,3 @@ ldexpl:
 .size    ldexpl,.ende-ldexpl
 .size    ldexp,ldexpl-ldexp
 .size    ldexpf,ldexp-ldexpf
-
-#if defined(__linux__) && defined(__ELF__)
-.section .note.GNU-stack,"",%progbits
-#endif

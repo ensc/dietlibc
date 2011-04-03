@@ -41,7 +41,3 @@ coshl:
 .size    cosh,.Lende-cosh
 .size    coshf,.Lende-coshf
 .size    coshl,.Lende-coshl
-
-#if defined(__linux__) && defined(__ELF__)
-.section .note.GNU-stack,"",%progbits
-#endif

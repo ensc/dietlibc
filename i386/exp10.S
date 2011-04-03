@@ -25,7 +25,3 @@ exp10:                          # note: 10^(x) = 2^(x*log2(10))
 
 .size    exp10,.ende-exp10
 .size    pow10,.ende-pow10
-
-#if defined(__linux__) && defined(__ELF__)
-.section .note.GNU-stack,"",%progbits
-#endif

@@ -22,7 +22,3 @@ pipe:
 	la	$25, error_unified_syscall
 	jr	$25
 .end pipe
-
-#if defined(__linux__) && defined(__ELF__)
-.section .note.GNU-stack,"",%progbits
-#endif

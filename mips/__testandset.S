@@ -15,7 +15,3 @@ __testandset:
 1:	.set	mips0
 	jr	$31
 .end	__testandset
-
-#if defined(__linux__) && defined(__ELF__)
-.section .note.GNU-stack,"",%progbits
-#endif
