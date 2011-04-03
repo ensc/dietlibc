@@ -13,7 +13,7 @@
 
 static inline int int_add_no_wrap(int a, int b)
 {
-	int s;
+	int	s;
 
 	if ((b > 0) && (a > (INT_MAX - b)))
 		s = INT_MAX;

@@ -166,7 +166,7 @@ typedef int __jmp_buf[3];
 #ifdef __arm__
 #define __JMP_BUF_SP            8
 #ifndef __ASSEMBLER__
-typedef int __jmp_buf[24];
+typedef int __jmp_buf[10 + 16*2 + 16*2];
 #endif
 #endif
 
