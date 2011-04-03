@@ -142,7 +142,15 @@ int main(int argc,char *argv[]) {
       shortplatform=platform+len;
       memmove(shortplatform,argv[1],(size_t)(tmp2-cc));
       platform[tmp2-cc+len]=0;
-      if (shortplatform[0]=='i' && shortplatform[2]=='8' && shortplatform[3]=='6') shortplatform[1]='3';
+      if (shortplatform[0]=='i' && shortplatform[2]=='8' && shortplatform[3]=='6') {
+        shortplatform[1]='3';
+      } else if (strncmp(shortplatform, "hppa1.1", 7) == 0 || strncmp(shortplatform, "hppa2.0", 7) == 0) {
+        memcpy(shortplatform, "parisc", 7);
+      } else if (strncmp(shortplatform, "powerpc", 7) == 0) {
+        memcpy(shortplatform, "ppc", 3);
+      } else if (strncmp(shortplatform, "powerpc64", 9) == 0) {
+        memcpy(shortplatform, "ppc64", 3);
+      }
     } else {
 #ifdef __sparc__
 #ifdef __arch64__
