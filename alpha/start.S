@@ -25,7 +25,7 @@ _start:
 	stq	$18, environ
 
 #ifdef WANT_ELFINFO
-#  warning "MAKE ME alpha ASSEMBLER!"
+#  error "MAKE ME alpha ASSEMBLER!"
 1:	ldq	$19, $18	; load *envp into $19
 	addq	$18,  1,  $18	; increment *envp
 	orr	$19, $19, $19

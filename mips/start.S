@@ -48,7 +48,7 @@ __start:
 	add	$a2, $a2, $a1
 	sw	$a2, environ
 #ifdef WANT_ELFINFO
-#  warning "MAKE ME MIPS CODE!"
+#  error "MAKE ME MIPS CODE!"
 1:	addu	$a2, $a2, 4	/* increment envp */
 	lw	$4, -4($a2)     /* load envp[-1]; TODO: is $4 a proper
 				   temporary register? */

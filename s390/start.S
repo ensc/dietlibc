@@ -31,7 +31,7 @@ _start:
 	st	%r4,0(%r1)
 
 #ifdef WANT_ELFINFO
-#  warning "VERIFY ME!"
+#  error "VERIFY ME!"
 1:	ahi	%r4, 4		# increment envp
 	l	%r12, -4(0,%r4)	# load envp[-1] into %r12
 	or	%r12, %r12	# test %r12 for NULL
