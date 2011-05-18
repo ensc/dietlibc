@@ -16,7 +16,6 @@
 #include <elf.h>
 #include <stdlib.h>
 #include "dietfeatures.h"
-#include "dietelfinfo.h"
 
 #ifdef WANT_GNU_STARTUP_BLOAT
 char* program_invocation_name;
@@ -54,7 +53,6 @@ static void findtlsdata(long* auxvec) {
   Elf32_Phdr const * x=0;
 #endif
   size_t i,n=0;
-#ifndef WANT_ELFINFO
   while (*auxvec) {
     if (auxvec[0]==3) {	/* AT_PHDR */
       x=(void*)auxvec[1];
@@ -65,11 +63,6 @@ static void findtlsdata(long* auxvec) {
     }
     auxvec+=2;
   } /* if we don't find the entry, the kernel let us down */
-#else
-  (void)auxvec;
-  x = __get_elf_aux_value(AT_PHDR);
-  n = __get_elf_aux_value(AT_PHNUM);
-#endif
   if (!x || !n) return;	/* a kernel this old does not support thread local storage anyway */
   for (i=0; i<n; ++i)
     if (x[i].p_type==PT_TLS) {
@@ -130,7 +123,6 @@ void __setup_tls(tcbhead_t* mainthread) {
 }
 #endif
 
-#ifndef WANT_ELFINFO
 static void* find_rand(long* x) {
   while (*x) {
     if (*x==25)
@@ -139,27 +131,21 @@ static void* find_rand(long* x) {
   }
   return NULL;
 }
-#endif
 
 int stackgap(int argc,char* argv[],char* envp[]);
 int stackgap(int argc,char* argv[],char* envp[]) {
 #if defined(WANT_STACKGAP) || defined(WANT_SSP) || defined(WANT_TLS)
+  long* auxvec=(long*)envp;
   char* rand;
   char* tlsdata;
-#ifndef WANT_ELFINFO
-  long* auxvec=(long*)envp;
   while (*auxvec) ++auxvec; ++auxvec;	/* skip envp to get to auxvec */
-#endif
 #ifdef WANT_STACKGAP
   unsigned short s;
   volatile char* gap;
 #endif
 #if defined(WANT_STACKGAP) || defined(WANT_SSP)
-#ifndef WANT_ELFINFO
+  volatile char* gap;
   rand=find_rand(auxvec);
-#else
-  rand = __get_elf_aux_value(25);
-#endif
   if (!rand) {
     char myrand[10];
     int fd=open("/dev/urandom",O_RDONLY);
@@ -180,11 +166,7 @@ int stackgap(int argc,char* argv[],char* envp[]) {
 #endif
 
 #ifdef WANT_TLS
-#ifndef WANT_ELFINFO
   findtlsdata(auxvec);
-#else
-  findtlsdata(NULL);
-#endif
   if (__unlikely(__tmemsize+sizeof(tcbhead_t)<sizeof(tcbhead_t)) ||
       __unlikely(__tmemsize>512*1024*1024) ||
       __unlikely(__tmemsize<__tdatasize))
