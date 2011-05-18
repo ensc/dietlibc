@@ -13,17 +13,6 @@ FUNC_START	_start
 	add	a3, a2, a1, lsl #2	@ &argv[argc]
 	add	a3, a3, #4		@ envp	
 	str	a3, [ip, #0]		@ environ = envp
-
-#ifdef WANT_ELFINFO
-	mov	r6, a3			@ work on a copy of a3 so that common
-					@ 'main(argc, argv, envp)' function
-					@ stays valid
-1:	ldr	r5, [r6], #4		@ load *envp and increment it
-	cmp	r5, #0			@ read value==0?
-	bne	1b
-	str	r6, [ip, #4]		@ __elfinfo = envp
-#endif
-
 	bl	main
 		
 @
@@ -65,16 +54,13 @@ FUNC_START	_start
 #endif
 
 #ifdef WANT_ELFINFO
-	mov	r6, a3			@ work on a copy of a3 so that common
-					@ 'main(argc, argv, envp)' function
-					@ stays valid
-1:	ldr	r5, [r6], #4		@ load *envp and increment it
+1:	ldr	r5, [a3], #4		@ load *envp and increment it
 	cmp	r5, #0			@ read value==0?
 	bne	1b
 #ifdef __DYN_LIB
-	str	r6, [ip, sl]		@ __elfinfo = envp
+	str	a3, [ip, sl]		@ __elfinfo = envp
 #else
-	str	r6, [ip, #4]		@ __elfinfo = envp
+	str	a3, [ip, #4]		@ __elfinfo = envp
 #endif
 #endif
 
