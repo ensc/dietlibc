@@ -129,8 +129,6 @@ LIBPTHREAD_OBJS=$(patsubst libpthread/%.c,$(OBJDIR)/%.o,$(shell ./threadsafe.sh)
 
 LIBGMON_OBJS=$(OBJDIR)/__mcount.o $(OBJDIR)/monitor.o $(OBJDIR)/profil.o
 
-NO_STACK_PROTECTOR=stackgap.o __get_elf_aux_value.o
-
 include $(ARCH)/Makefile.add
 
 LIBMATHOBJ=$(patsubst %,$(OBJDIR)/%,$(LIBMATH))
@@ -182,8 +180,6 @@ $(OBJDIR)/stack_smash_handler2.o:	XCFLAGS:=-fno-omit-frame-pointer
 $(OBJDIR)/%.o: %.c $(OBJDIR)/.dirstamp
 	$(CROSS)$(CC) $(INC) $(CFLAGS) $(XCFLAGS) -c $< -o $@ -D__dietlibc__
 	$(COMMENT) -$(STRIP) -x -R .comment -R .note $@
-
-$(addprefix $(OBJDIR)/,$(NO_STACK_PROTECTOR)):	XCFLAGS+=-fno-stack-protector
 endif
 
 ifeq ($(shell $(CC) -v 2>&1 | grep "gcc version"),gcc version 4.0.0)
