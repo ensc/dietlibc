@@ -48,16 +48,9 @@ FUNC_START	_start
 #ifdef __DYN_LIB
 	ldr	sl, .L4
 1:	add	sl, pc, sl
-	str	a3, [ip, sl]!		@ environ = envp; ip = GOT(environ)
+	str	a3, [sl, ip]		@ environ = envp
 #else
 	str	a3, [ip, #0]		@ environ = envp
-#endif
-
-#ifdef WANT_ELFINFO
-1:	ldr	r5, [a3], #4		@ load *envp and increment it
-	orr	r5, r5, r5		@ read value==0?
-	bne	1b
-	str	a3, [ip, #4]		@ __elfinfo = envp
 #endif
 
 #ifdef PROFILING
@@ -104,7 +97,4 @@ FUNC_END	_exit
 #ifdef PROFILING
 .L5:	.word	.text
 .L6:	.word	_etext
-#endif
-
-
 #endif

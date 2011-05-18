@@ -4,10 +4,8 @@
 #include <dirent.h>
 #include <stdlib.h>
 
-#include "../dietpagesize.h"
-
 int closedir (DIR* d) {
   int res=close(d->fd);
-  munmap (d, __DIET_PAGE_SIZE);
+  munmap (d, PAGE_SIZE);
   return res;
 }

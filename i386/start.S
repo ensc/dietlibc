@@ -20,11 +20,11 @@ _start:
 	PIC_INIT			/* non-PIC: this is an empty line */
 	PUT_VAR %esi, environ, %ecx	/* non-PIC: movl %esi,environ */
 
-#ifdef WANT_ELFINFO
-1:	add	$4, %eax		/* increment envp */
-	cmpl	$0, -4(%eax)		/* load envp[-1] */
-	jne	1b			/* ... until envp[-1]==NULL */
-        PUT_VAR %eax, __elfinfo, %ecx
+#ifdef PROFILING
+	pushl	$_etext
+	pushl	$.text
+	call	monitor
+	addl	$0x8, %esp
 #endif
 
 #ifdef WANT_SYSENTER

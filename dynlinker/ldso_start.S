@@ -86,15 +86,6 @@ __environ:
 	.long 0
 #endif
 
-/* __elfinfo must follow __environ immediately */
-.global __elfinfo
-__elfinfo:
-#if __WORDSIZE == 64
-	.quad 0
-#else
-	.long 0
-#endif
-
 .global fini_entry
 fini_entry:
 	.long 0

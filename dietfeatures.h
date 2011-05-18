@@ -138,16 +138,6 @@
 #define WANT_SSP
 #endif
 
-/* Some platforms like x86_64, ppc* or mips do not have a fixed PAGE_SIZE.
- * Select WANT_DYN_PAGESIZE to detect the current PAGE_SIZE at runtime. Else,
- * define WANT_STATIC_PAGESIZE to a proper value (must be a power of 2)
- * matching the configured pagesize of the kernel where your binaries are
- * running on.
- *
- * Selecting WANT_DYN_PAGESIZE enlarges the startup code by around 1-3
- * instructions and might add an additional __elfinfo symbol */
-#define WANT_DYN_PAGESIZE
-/* #define WANT_STATIC_PAGESIZE 0x10000UL */
 
 
 /* stop uncommenting here ;-) */
@@ -177,10 +167,6 @@
 #ifdef WANT_SAFEGUARD
 #undef WANT_SAFEGUARD
 #endif
-#endif
-
-#ifdef WANT_DYN_PAGESIZE
-#define WANT_ELFINFO
 #endif
 
 #endif

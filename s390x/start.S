@@ -26,6 +26,7 @@ _start:
 	larl	%r13,environ
 	stg	%r4,0(%r13)
 
+<<<<<<< HEAD
 #ifdef WANT_ELFINFO
 #  error "VERIFY ME!"
 1:	aghi	%r4, 8		# increment envp
@@ -37,6 +38,8 @@ _start:
 	stg	%r4,0(%r13)
 #endif
 
+=======
+>>>>>>> parent of bbeb245... Support for dynamic PAGE_SIZE
 /* call main or _dyn_start */
 #ifdef WANT_DYNAMIC
 	brasl	%r14,_dyn_start
