@@ -55,13 +55,9 @@ FUNC_START	_start
 
 #ifdef WANT_ELFINFO
 1:	ldr	r5, [a3], #4		@ load *envp and increment it
-	cmp	r5, #0			@ read value==0?
+	orr	r5, r5, r5		@ read value==0?
 	bne	1b
-#ifdef __DYN_LIB
-	str	a3, [ip, sl]		@ __elfinfo = envp
-#else
 	str	a3, [ip, #4]		@ __elfinfo = envp
-#endif
 #endif
 
 #ifdef PROFILING
