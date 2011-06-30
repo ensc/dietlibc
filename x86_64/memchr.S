@@ -43,7 +43,7 @@ memchr:	/* rdi=ptr, esi=ch, rdx=len */
   bsf %ecx,%eax
   add %rdi,%rax
   cmp %rsi,%rax
-  ja .Lnull
+  jae .Lnull
   ret
 .Lnull:
   xor %eax,%eax
