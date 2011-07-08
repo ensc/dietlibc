@@ -1,3 +1,5 @@
+#ifdef WANT_ELFINFO
+
 #include <stdlib.h>
 #include "../dietelfinfo.h"
 
@@ -12,3 +14,5 @@ __diet_elf_addr_t const *__get_elf_aux_value(unsigned int tag)
 
   return NULL;
 }
+
+#endif
