@@ -38,7 +38,7 @@ _start:
 #  warning "MAKE ME PARISC CODE!"
 1:	add %r20, %r19, %r19		; envp += 4
 	ldw -4(0,%r19), %r21		; load envp[-4] into %r21
-	comibf =,0, 0,%21,1b		; compare %21 with 0 without nullification
+	comibf =,0, 0,%r21,1b		; compare %r21 with 0 without nullification
 
 	ldil LP%__elfinfo, %r19
 	ldo RP%__elfinfo(%r19), %r19
