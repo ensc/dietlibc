@@ -1,5 +1,6 @@
-#ifdef WANT_ELFINFO
+#include "dietfeatures.h"
 
+#ifdef WANT_ELFINFO
 #include <stdlib.h>
 #include "../dietelfinfo.h"
 
