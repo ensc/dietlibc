@@ -137,6 +137,6 @@ syscall:
 #else
 	.long		__syscall_2_not_implemented_for_this_arch
 #endif
-	.section	text
+	.section	.text
 #endif
 .size	syscall, . - syscall
