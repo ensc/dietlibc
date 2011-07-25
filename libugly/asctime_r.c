@@ -9,7 +9,7 @@ static void num2str(char *c,int i) {
 }
 
 char *asctime_r(const struct tm *t, char *buf) {
-  /* "Wed Jun 30 21:49:08 1993\n" */
+  /* "Wed Jun 30 21:49:08 1993\n\0" */
   *(int*)buf=*(int*)(days+(t->tm_wday<<2));
   *(int*)(buf+4)=*(int*)(months+(t->tm_mon<<2));
   num2str(buf+8,t->tm_mday);
