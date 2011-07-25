@@ -239,9 +239,7 @@ retzero:
     }
   }
   else { /* ptr==0 */
-    if (size) {
-      ptr=_alloc_libc_malloc(size);
-    }
+    ptr=_alloc_libc_malloc(size);
   }
   return ptr;
 }
