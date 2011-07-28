@@ -130,6 +130,7 @@ __error_unified_syscall:
 #include "../syscalls.s/mmap.S"
 #include "../syscalls.s/mmap2.S"
 #include "../syscalls.s/mount.S"
+#include "../syscalls.s/umount2.S"
 #include "../syscalls.s/mprotect.S"
 #include "../syscalls.s/mremap.S"
 #include "../syscalls.s/msync.S"
@@ -212,7 +213,6 @@ __error_unified_syscall:
 #include "../syscalls.s/sysfs.S"
 #include "../syscalls.s/sysinfo.S"
 #include "../syscalls.s/syslog.S"
-#include "../syscalls.s/time.S"
 #include "../syscalls.s/timer_create.S"
 #include "../syscalls.s/timer_delete.S"
 #include "../syscalls.s/timer_getoverrun.S"
@@ -298,6 +298,23 @@ __error_unified_syscall:
 
 #include "../syscalls.s/fallocate.S"
 #include "../syscalls.s/utimes.S"
+#include "../syscalls.s/__accept.S"
+#include "../syscalls.s/__bind.S"
+#include "../syscalls.s/__connect.S"
+#include "../syscalls.s/__getpeername.S"
+#include "../syscalls.s/__getsockname.S"
+#include "../syscalls.s/__getsockopt.S"
+#include "../syscalls.s/__listen.S"
+#include "../syscalls.s/__recvfrom.S"
+#include "../syscalls.s/__recvmsg.S"
+#include "../syscalls.s/__recv.S"
+#include "../syscalls.s/__sendmsg.S"
+#include "../syscalls.s/__send.S"
+#include "../syscalls.s/__sendto.S"
+#include "../syscalls.s/__setsockopt.S"
+#include "../syscalls.s/__shutdown.S"
+#include "../syscalls.s/__socketpair.S"
+#include "../syscalls.s/__socket.S"
 
 #define _exit __exit
 #include "clone.S"
@@ -307,6 +324,6 @@ __error_unified_syscall:
 #include "setjmp.S"
 
 #define __errno_location __errno_location@PLT
-#include "x86_64/gettimeofday.S"
+#include "gettimeofday.S"
 
 #include "syscalls.s/__guard.S"
