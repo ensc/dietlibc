@@ -360,7 +360,8 @@ wsym: ; \
 .global sym; \
 sym: \
 	mov	$__NR_##name,%al; \
-	jmp	__unified_syscall@PLT
+	jmp	__unified_syscall@PLT; \
+.size sym,.-sym
 
 #define syscall(name,sym) \
 .text; \
@@ -373,7 +374,8 @@ sym: \
 .else ; \
 	mov	$__NR_##name,%al; \
 	jmp	__unified_syscall@PLT;  \
-.endif
+.endif ; \
+.size sym,.-sym
 
 #else
 
