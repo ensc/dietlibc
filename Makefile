@@ -161,13 +161,13 @@ PICODIR = pic-$(ARCH)
 	@touch $@
 
 ifneq ($(V),1)
-CROSSLD    = @echo "CCLD    $@" && $(LD_UNSET) $(CROSS)$(CC)
+CROSSLD    = @echo "CCLD    $@" && $(LD_UNSET) $(CROSS)$(CC) -Wl,--hash-style=sysv
 CROSSCC    = @echo "CC      $@" && $(CROSS)$(CC)
 CROSSAR    = @echo "AR      $@" && $(CROSS)ar
 CROSSSTRIP = @echo "STRIP   $@" && $(CROSS)strip
 CROSSDIET  = @echo "DIET    $@" && bin-$(MYARCH)/diet $(CROSS)$(CC)
 else
-CROSSLD    = $(LD_UNSET) $(CROSS)$(CC)
+CROSSLD    = $(LD_UNSET) $(CROSS)$(CC) -Wl,--hash-style=sysv
 CROSSCC    = $(CROSS)$(CC)
 CROSSAR    = $(CROSS)ar
 CROSSSTRIP = $(CROSS)strip
