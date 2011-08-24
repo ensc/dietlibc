@@ -8,21 +8,28 @@
 
 //#include "unified.S"
 .text
+.global __unified_syscall_16bit
+.type __unified_syscall_16bit,@function
+__unified_syscall_16bit:
+	movzwl	%ax, %eax
+	jmp	1f
+.size __unified_syscall_16bit,.-__unified_syscall_16bit
+
 .weak exit
 exit:
 .global _exit
+.type _exit,@function
 _exit:
 __exit:
 	movb	$__NR_exit,%al
 
 .global __unified_syscall
-.global __unified_syscall_16bit
+.type __unified_syscall,@function
 __unified_syscall:
 _unified_syscall:
-	mov	$0, %al
-__unified_syscall_16bit:
-	movzwl	%ax, %eax
-	mov	%rcx, %r10
+	movzbl	%al, %eax
+1:
+	movq    %rcx, %r10
 	syscall
 __error_unified_syscall:
 	cmpq	$-132, %rax
@@ -39,6 +46,8 @@ __error_unified_syscall:
 #include "dietuglyweaks.h"
 
 	ret
+.size __unified_syscall,.-__unified_syscall
+.size _exit,.-_exit
 
 #define __unified_syscall _unified_syscall
 
