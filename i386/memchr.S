@@ -51,7 +51,7 @@ memchr:
 
 .Lfound:
 	cmp %edi,%ecx
-	jb .Lnull
+	jbe .Lnull
 	mov %edi,%eax
 	pop %ebx
 	pop %esi
