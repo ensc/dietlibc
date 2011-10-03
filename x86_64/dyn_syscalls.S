@@ -300,6 +300,26 @@ __error_unified_syscall:
 #include "../syscalls.s/fallocate.S"
 #include "../syscalls.s/utimes.S"
 
+#include "syscalls.s/__socket.S"
+#include "syscalls.s/__bind.S"
+#include "syscalls.s/__setsockopt.S"
+#include "syscalls.s/__getsockopt.S"
+#include "syscalls.s/__sendto.S"
+#include "syscalls.s/__recvmsg.S"
+#include "syscalls.s/__accept.S"
+#include "syscalls.s/__connect.S"
+#include "syscalls.s/__getpeername.S"
+#include "syscalls.s/__getsockname.S"
+#include "syscalls.s/__listen.S"
+#include "syscalls.s/__recv.S"
+#include "syscalls.s/__recvfrom.S"
+#include "syscalls.s/__send.S"
+#include "syscalls.s/__sendmsg.S"
+#include "syscalls.s/__shutdown.S"
+#include "syscalls.s/__socketpair.S"
+
+#include "syscalls.s/umount2.S"
+
 #define _exit __exit
 #include "clone.S"
 #undef _exit
