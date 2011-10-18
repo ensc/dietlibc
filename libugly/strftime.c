@@ -123,7 +123,10 @@ again:
 	    break;
     }
 
-    *p = '\0';
+    if (p-dst>=max) {
+      if (max) p[-1]=0;
+    } else
+      *p = '\0';
     return p - dst;
 }
 
