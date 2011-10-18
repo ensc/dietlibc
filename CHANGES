@@ -31,6 +31,8 @@
   use vsyscall for time on x86_64 instead of wrapping gettimeofday (Nikola Vladov)
   CPU affinity support (Indan Zupancic)
   lots of ARM fixes (Enrico Scholz)
+  make sure strftime does not write more than max bytes when writing \0
+    (Tobias S. Josefowitz)
 
 0.32:
   add mbsinit, mbrlen, mbtowc, wctomb, mbrtowc, wcrtomb, wcwidth
