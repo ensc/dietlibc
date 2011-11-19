@@ -26,15 +26,18 @@ __sigsetjmp:
 	std	%f6,48(%r2)
 
 	/* Make a tail call to __sigjmp_save; it takes the same args.  */
-	basr	%r1,%r0
+	basr	%r1,0
 #ifdef	PIC
-.L0:	la	%r1,.L1-.L0(0,%r1)
+.L0:	al	%r1,.L1-.L0(0,%r1)
 	l	%r1,__sigjmp_save@GOT12(0,%r1)
+#else
+.L0:	l	%r1,.L1-.L0(0,%r1)
+#endif
 	br	%r1
+	.p2align 3
+#ifdef	PIC
 .L1:	.long	_GLOBAL_OFFSET_TABLE_-.L0
 #else
-	l	%r1,.L1(0,%r1)
-	br	%r1
 .L1:	.long	__sigjmp_save
 #endif
 .size __sigsetjmp,.-__sigsetjmp;
