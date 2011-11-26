@@ -55,10 +55,12 @@ found:
       }
     }
     endhostent();
+#ifdef WANT_HOSTS_GIVEUP_EARLY
     if (foundsomething) {
       *h_errnop=NO_DATA;
       return -1;
     }
+#endif
   }
 #endif
   strcpy(buf,name);

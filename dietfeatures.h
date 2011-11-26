@@ -93,6 +93,10 @@
  * if you also enabled WANT_PLUGPLAY_DNS */
 #define WANT_LLMNR
 
+/* Uncomment this if you want DNS lookups to fail if /etc/hosts contains
+ * an entry but it's for a different record type */
+/* #define WANT_HOSTS_GIVEUP_EARLY */
+
 /* Do you want valgrind support?  If enabled, the startup code will
  * check for valgrind, and if detected, turn off optimized SIMD string
  * routines that cause false positives in valgrind.  This enlarges and
@@ -141,7 +145,7 @@
 
 
 /* stop uncommenting here ;-) */
-#if defined(WANT_SSP) || defined(WANT_STACKGAP)
+#if defined(WANT_SSP) || defined(WANT_STACKGAP) || defined(WANT_TLS)
 #define CALL_IN_STARTCODE stackgap
 #else
 #define CALL_IN_STARTCODE main
