@@ -66,7 +66,7 @@ int sched_rr_get_interval(pid_t pid, struct timespec* tp);
 
 #define CLONE_SIGNAL    (CLONE_SIGHAND | CLONE_THREAD)
 
-int clone(void*(*fn)(void*),void*stack,int flags,void*arg);
+int clone(int *(*fn)(void*),void* stack,int flags,void* arg, ...);
 
 int unshare(int flags);
 

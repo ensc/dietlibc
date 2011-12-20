@@ -168,7 +168,7 @@ int stackgap(int argc,char* argv[],char* envp[]) {
 
   __vdso=find_in_auxvec(auxvec,33);	// AT_SYSINFO_EHDR -> vdso start address
 #ifdef __x86_64__
-  if (!__vdso) __vdso=0xffffffffff600000;
+  if (!__vdso) __vdso=(char*)0xffffffffff600000;
 #endif
 
 #ifdef WANT_TLS
