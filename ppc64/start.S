@@ -78,7 +78,7 @@ _start:
 	.ascii "_start"
 .LT_start_name_end:
 	.align 2
-	.size _start,.-_start
+	.size ._start,.-._start
 
 /* Define a symbol for the first piece of initialized data.  */
 	.section ".data"

@@ -1,3 +1,6 @@
+#ifndef __arm__
+/* ARM needs special treatment for fadvise */
+
 #include "syscalls.h"
 
 #ifndef __NR_fadvise64_64
@@ -8,5 +11,7 @@ posix_fadvise:
 
 #ifdef __NR_fadvise64
 syscall(fadvise64,fadvise64)
+
+#endif
 
 #endif
