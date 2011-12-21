@@ -23,6 +23,8 @@ char* program_invocation_name;
 char* program_invocation_short_name;
 #endif
 
+void* __vdso;
+
 extern int main(int argc,char* argv[],char* envp[]);
 
 #if defined(WANT_SSP)
@@ -138,9 +140,9 @@ void __setup_tls(tcbhead_t* mainthread) {
 #endif
 
 #ifndef WANT_ELFINFO
-static void* find_rand(long* x) {
+static void* find_in_auxvec(long* x,long what) {
   while (*x) {
-    if (*x==25)
+    if (*x==what)
       return (void*)x[1];
     x+=2;
   }
@@ -163,7 +165,7 @@ int stackgap(int argc,char* argv[],char* envp[]) {
 #endif
 #if defined(WANT_STACKGAP) || defined(WANT_SSP)
 #ifndef WANT_ELFINFO
-  rand=find_rand(auxvec);
+  rand=find_in_auxvec(auxvec,25);
 #else
   {
     __diet_elf_addr_t const	*rand_addr = __get_elf_aux_value(25);
@@ -187,6 +189,11 @@ int stackgap(int argc,char* argv[],char* envp[]) {
 #ifdef WANT_STACKGAP
   gap=alloca(s);
 #endif
+#endif
+
+  __vdso=find_in_auxvec(auxvec,33);	// AT_SYSINFO_EHDR -> vdso start address
+#ifdef __x86_64__
+  if (!__vdso) __vdso=(char*)0xffffffffff600000;
 #endif
 
 #ifdef WANT_TLS

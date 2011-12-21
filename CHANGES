@@ -33,6 +33,9 @@
   lots of ARM fixes (Enrico Scholz)
   make sure strftime does not write more than max bytes when writing \0
     (Tobias S. Josefowitz)
+  change gettimeofday vsyscall to use the vdso
+  add WANT_HOSTS_GIVEUP_EARLY in dietfeatures.h
+  various build fixes, add sys/atomic.h and the __CAS function
 
 0.32:
   add mbsinit, mbrlen, mbtowc, wctomb, mbrtowc, wcrtomb, wcwidth
