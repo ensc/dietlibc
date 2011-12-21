@@ -155,7 +155,7 @@ $(OBJDIR) $(PICODIR):
 
 % :: %,v
 
-$(OBJDIR)/%.o: $(OBJDIR)
+$(OBJDIR)/%: $(OBJDIR)
 
 ifeq ($(CC),tcc)
 $(OBJDIR)/%.o: %.S $(ARCH)/syscalls.h
