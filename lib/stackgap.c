@@ -191,7 +191,15 @@ int stackgap(int argc,char* argv[],char* envp[]) {
 #endif
 #endif
 
+#ifndef WANT_ELFINFO
   __vdso=find_in_auxvec(auxvec,33);	// AT_SYSINFO_EHDR -> vdso start address
+#else
+  {
+    __diet_elf_addr_t const	*vdso_addr = __get_elf_aux_value(33);
+    __vdso = vdso_addr ? (void *)*vdso_addr : NULL;
+  }
+#endif
+
 #ifdef __x86_64__
   if (!__vdso) __vdso=(char*)0xffffffffff600000;
 #endif

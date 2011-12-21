@@ -8,4 +8,3 @@ int pause(void)
   sigprocmask(SIG_BLOCK, NULL, &set);
   return sigsuspend(&set);
 }
-
