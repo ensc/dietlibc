@@ -28,14 +28,14 @@ int main() {
       if (array[i]<array[i+1])
 	die("not sorted after qsort!\n");
     for (i=0; i<j; ++i) {
-      printf("element %d: ",i);
+//      printf("element %d: ",i);
       k=bsearch(array+i,array,j,sizeof(int),compint);
       if (!k) {
 	k=bsearch(array+i,array,j,sizeof(int),compint);
 	die("bsearch returned NULL\n");
       }
       if (k != array+i) die("bsearch found wrong element\n");
-      printf("%d\n",k-array);
+//      printf("%d\n",k-array);
     }
   }
   return 0;
