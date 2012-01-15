@@ -36,6 +36,7 @@
   change gettimeofday vsyscall to use the vdso
   add WANT_HOSTS_GIVEUP_EARLY in dietfeatures.h
   various build fixes, add sys/atomic.h and the __CAS function
+  redo nice with get/setpriority as glibc does (Thierry Vignaud)
 
 0.32:
   add mbsinit, mbrlen, mbtowc, wctomb, mbrtowc, wcrtomb, wcwidth
