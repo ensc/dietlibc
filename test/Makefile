@@ -1,4 +1,4 @@
-all: direnttest inet stdiotests stdlibtests stringtests timetests \
+all: direnttest inettest stdiotests stdlibtests stringtests timetests \
 test ffs getdelim stdlib 
 
 DIET=diet
