@@ -9,6 +9,6 @@
 ifeq ($(CROSS),mips-linux-)
 ENDIAN=-meb
 endif
-CFLAGS+=$(ENDIAN) -Os -G 0 -fstrict-aliasing -fno-pic -mno-abicalls -march=mips2
+CFLAGS+=$(ENDIAN) -Os -march=mips2
 VPATH:=mips:syscalls.s:$(VPATH)
 LIBOBJ+=$(OBJDIR)/pread64.o $(OBJDIR)/pwrite64.o $(OBJDIR)/divdi3.o $(OBJDIR)/__CAS.o

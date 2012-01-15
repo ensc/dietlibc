@@ -33,8 +33,8 @@ static const char* Os[] = {
   "sparc64","-Os","-m64","-mhard-quad-float",0,
   "alpha","-Os","-fomit-frame-pointer",0,
   "arm","-Os","-fomit-frame-pointer",0,
-  "mips","-Os","-fomit-frame-pointer","-mno-abicalls","-fno-pic","-G","0","-march=mips2",0,
-  "mipsel","-Os","-fomit-frame-pointer","-mno-abicalls","-fno-pic","-G","0","-march=mips2",0,
+  "mips","-Os","-fomit-frame-pointer","-march=mips2",0,
+  "mipsel","-Os","-fomit-frame-pointer","-march=mips2",0,
   "ppc","-Os","-fomit-frame-pointer","-mpowerpc-gpopt","-mpowerpc-gfxopt",0,
   "ppc64","-Os","-fomit-frame-pointer","-mpowerpc-gpopt","-mpowerpc-gfxopt",0,
   "s390","-Os","-fomit-frame-pointer",0,
@@ -166,7 +166,10 @@ int main(int argc,char *argv[]) {
 #ifdef __arm__
       shortplatform="arm";
 #endif
-#ifdef __mips__
+#ifdef __MIPSEL__
+      shortplatform="mipsel";
+#endif
+#ifdef __MIPSEB__
       shortplatform="mips";
 #endif
 #ifdef __s390x__
