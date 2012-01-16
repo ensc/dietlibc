@@ -136,8 +136,8 @@ static void* find_in_auxvec(long* x,long what) {
 
 int stackgap(int argc,char* argv[],char* envp[]);
 int stackgap(int argc,char* argv[],char* envp[]) {
-#if defined(WANT_STACKGAP) || defined(WANT_SSP) || defined(WANT_TLS)
   long* auxvec=(long*)envp;
+#if defined(WANT_STACKGAP) || defined(WANT_SSP) || defined(WANT_TLS)
   char* rand;
   char* tlsdata;
   while (*auxvec) ++auxvec; ++auxvec;	/* skip envp to get to auxvec */
