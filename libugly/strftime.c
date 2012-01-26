@@ -123,7 +123,7 @@ again:
 	    break;
     }
 
-    if (p-dst>=max) {
+    if ((size_t)(p-dst)>=max) {
       if (max) p[-1]=0;
     } else
       *p = '\0';
