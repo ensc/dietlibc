@@ -44,7 +44,11 @@ loff_t lseek64(int fildes, loff_t offset, int whence) __THROW;
 int chdir(const char *path) __THROW;
 int fchdir(int fd) __THROW;
 int rmdir(const char *pathname) __THROW;
-char *getcwd(char *buf, size_t size) __THROW;
+char *getcwd(char *buf, size_t size) __attribute__((__warn_unused_result__)) __THROW;
+
+#ifdef _GNU_SOURCE
+char *get_current_dir_name (void) __THROW __attribute_dontuse__;
+#endif
 
 int open(const char* pathname,int flags, ...) __THROW;
 int open64(const char* pathname,int flags, ...) __THROW;
