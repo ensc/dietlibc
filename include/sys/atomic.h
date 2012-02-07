@@ -50,7 +50,7 @@ size_t __CAS(size_t* ptr,size_t oldval,size_t newval);
 
 #if defined(__INTEL_COMPILER) || (__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 1))
 
-#define __atomic_add(ptr,val) __sync_add_and_fetch(ptr,val)
+#define __atomic_add(ptr,val) __sync_fetch_and_add(ptr,val)
 
 #else
 
@@ -59,7 +59,7 @@ static inline size_t __atomic_add(size_t* ptr,size_t val) {
   do {
     r=__CAS(ptr,(o=*ptr),*ptr+val);
   } while (r!=o);
-  return r+val;
+  return r;
 }
 
 #endif
