@@ -649,7 +649,7 @@ int sync_file_range(int fd, off64_t offset, off64_t nbytes, unsigned int flags) 
 int fallocate(int fd, int mode, loff_t offset, loff_t len) __THROW;
 #endif
 
-#ifdef _ATFILE_SOURCE
+#if defined(_ATFILE_SOURCE) || ((_XOPEN_SOURCE + 0) >= 700) || ((_POSIX_C_SOURCE + 0) >= 200809L)
 #define AT_FDCWD		-100    /* Special value used to indicate openat should use the current working directory. */
 #define AT_SYMLINK_NOFOLLOW	0x100   /* Do not follow symbolic links.  */
 #define AT_REMOVEDIR		0x200   /* Remove directory instead of unlinking file.  */

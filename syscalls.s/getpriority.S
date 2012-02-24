@@ -1,3 +1,3 @@
 #include "syscalls.h"
 
-syscall(getpriority,getpriority)
+syscall(getpriority,__syscall_getpriority)

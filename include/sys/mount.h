@@ -41,10 +41,54 @@ enum
 #define MS_NODIRATIME	MS_NODIRATIME
   MS_BIND = 4096,		/* Bind directory at different place.  */
 #define MS_BIND		MS_BIND
+
+  MS_MOVE = 8192,
+#define MS_MOVE		MS_MOVE
+
+  MS_REC = 16384,
+#define MS_REC		MS_REC
+
+  MS_SILENT = 32768,
+#define MS_VERBOSE	MS_SILENT
+#define MS_SILENT	MS_SILENT
+
+  MS_POSIXACL = (1<<16),	/* VFS does not apply the umask */
+#define MS_POSIXACL	MS_POSIXACL
+
+  MS_UNBINDABLE = (1<<17),	/* change to unbindable */
+
+  MS_PRIVATE = (1<<18),		/* change to private */
+#define MS_PRIVATE	MS_PRIVATE
+
+  MS_SLAVE = (1<<19),	/* change to slave */
+#define MS_SLAVE	MS_SLAVE
+
+  MS_SHARED = (1<<20),	/* change to shared */
+#define MS_SHARED	MS_SHARED
+
+  MS_RELATIME = (1<<21),	/* Update atime relative to mtime/ctime. */
+#define MS_RELATIME	MS_RELATIME
+
+  MS_KERNMOUNT = (1<<22),	/* this is a kern_mount call */
+#define MS_KERNMOUNT	MS_KERNMOUNT
+
+  MS_I_VERSION = (1<<23), /* Update inode I_version field */
+#define MS_I_VERSION	MS_I_VERSION
+  MS_STRICTATIME = (1<<24), /* Always perform atime updates */
+#define MS_STRICTATIME	MS_STRICTATIME
+  MS_NOSEC = (1<<28),
+#define MS_NOSEC	MS_NOSEC
+  MS_BORN = (1<<29),
+#define MS_BORN		MS_BORN
+  MS_ACTIVE = (1<<30),
+#define MS_ACTIVE	MS_ACTIVE
+  MS_NOUSER = (1<<31),
+#define MS_NOUSER	MS_NOUSER
+
 };
 
 /* Flags that can be altered by MS_REMOUNT  */
-#define MS_RMT_MASK (MS_RDONLY | MS_MANDLOCK)
+#define MS_RMT_MASK	(MS_RDONLY|MS_SYNCHRONOUS|MS_MANDLOCK|MS_I_VERSION)
 
 
 /* Magic mount flag number. Has to be or-ed to the flag values.  */

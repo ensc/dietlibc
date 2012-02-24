@@ -3,6 +3,8 @@
 #include "dieticonv.h"
 #include <netinet/in.h>
 
+static unsigned int utf8bounds[]={0x7f,0x7ff,0xffff,0x1fffff,0x3ffffff,0x7fffffff};
+
 size_t iconv(iconv_t cd, char* * inbuf, size_t *
 		    inbytesleft, char* * outbuf, size_t * outbytesleft) {
   size_t result=0,i,j,k;
@@ -40,6 +42,7 @@ starve:
       break;
     case UTF_8:
       if (!(v&0x80)) break;
+      if (v>=0xfe) goto ABEND;
       for (i=0xC0; i!=0xFC; i=(i>>1)+0x80)
 	if ((v&((i>>1)|0x80))==i) {
 	  v&=~i;
@@ -49,6 +52,8 @@ starve:
 	if (i>*inbytesleft) goto starve;
 	v=(v<<6)|(in[i]&0x3f);
       }
+      /* reject chars not encoded the most efficient way */
+      if (i>6 || (i>1 && v<utf8bounds[i-1])) goto ABEND;
 /*      printf("got %u in %u bytes, buflen %u\n",v,i,*inbytesleft); */
       break;
     case UTF_16:
