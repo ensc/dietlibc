@@ -35,7 +35,7 @@ int main() {
 	die("bsearch returned NULL\n");
       }
       if (k != array+i) die("bsearch found wrong element\n");
-//      printf("%ld\n",k-array);
+//      printf("%d\n",k-array);
     }
   }
   return 0;

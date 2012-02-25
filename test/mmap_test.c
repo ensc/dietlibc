@@ -48,12 +48,12 @@ int main (int argc, char * argv[])
       return (1);
    }
 
-   /* 
+   /*
       Test mapping at a given offset
     */
 
    filememory_3 = mmap (NULL, 0x0100, PROT_READ, MAP_PRIVATE, fd, pg_sz);
-   
+
    if (filememory_3 == (void *) -1)
    {
       perror("mmap (pg_sz) returned error");
@@ -87,7 +87,7 @@ int main (int argc, char * argv[])
       fprintf (stderr, "mmap (pg_sz) doesn't give expected data...\n");
       return (1);
    }
-   
+
    if (munmap(filememory_3, 0x0100) < 0 ||
        munmap(filememory_1, 0x0100) < 0)
    {
