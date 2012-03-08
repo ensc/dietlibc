@@ -10,12 +10,14 @@
 
 #if (__WORDSIZE == 64)
 
+#define phdr Elf64_Phdr
 #define ehdr Elf64_Ehdr
 #define shdr Elf64_Shdr
 #define sym Elf64_Sym
 
 #else
 
+#define phdr Elf32_Phdr
 #define ehdr Elf32_Ehdr
 #define shdr Elf32_Shdr
 #define sym Elf32_Sym
@@ -55,10 +57,13 @@ const void* vdso_dlsym(const char* elfimage,const char* symbol) {
 //	printf(".dynsym @ %p\n",vdso + sh->sh_offset);
 	for (j=0; j*sh->sh_entsize < sh->sh_size; ++j) {
 	  const sym* es=(sym*)(elfimage + sh->sh_offset + j*sh->sh_entsize);
+//	  printf("%p: %s\n",((shdr*)(elfimage + eh->e_shoff + es->st_shndx * eh->e_shentsize))->sh-offset + es->st_value-eh->e_entry, dynstringtable+es->st_name);
 	  if (!strcmp(dynstringtable+es->st_name,symbol)) {
-	    size_t ofs=es->st_value-eh->e_entry;
-	    shdr* sec=(shdr*)(elfimage + eh->e_shoff + es->st_shndx * eh->e_shentsize);
-	    return elfimage + sec->sh_offset + ofs;
+	    const shdr* sec=(shdr*)(elfimage + eh->e_shoff + es->st_shndx*eh->e_shentsize);
+	    size_t ofs=es->st_value-sec->sh_addr+sec->sh_offset;
+//	    if (ofs>sec->sh_size) return 0;
+//	    printf("found symbol \"%s\" at offset %p\n",dynstringtable+es->st_name,es->st_value);
+	    return elfimage + ofs;
 	  }
 	}
       }
