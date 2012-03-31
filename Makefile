@@ -11,7 +11,7 @@ MAN1DIR=${prefix}/man/man1
 EXTRACFLAGS=-ffunction-sections -fdata-sections
 EXTRALDFLAGS=-Wl,--gc-sections -Wl,-z,noseparate-code
 
-MYARCH:=$(shell uname -m | sed -e 's/i[4-9]86/i386/' -e 's/armv[3-7]t\?e\?[lb]/arm/')
+MYARCH:=$(shell uname -m | sed -e 's/i[4-9]86/i386/' -e 's/armv[3-7]t\?[eh]\?j\?[lb]/arm/')
 
 # This extra-ugly cruft is here so make will not run uname and sed each
 # time it looks at $(OBJDIR).  This alone sped up running make when
