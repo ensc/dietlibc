@@ -39,6 +39,8 @@
   redo nice with get/setpriority as glibc does (Thierry Vignaud)
   add fdopendir
   add openat and friends
+  srand(0) made rand() return a series of 0 instead of random data
+    (https://banu.com/blog/42/openbsd-bug-in-the-random-function/)
 
 0.32:
   add mbsinit, mbrlen, mbtowc, wctomb, mbrtowc, wcrtomb, wcwidth
