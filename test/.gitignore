@@ -2,6 +2,7 @@
 /adjtime
 /alarm
 /argv
+/asctime
 /asprintf
 /atexit
 /atfile
