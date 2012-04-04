@@ -82,6 +82,8 @@
 /strtol
 /sysconf
 /sysenter
+/test
+/testing
 /ungetc
 /utime
 /waitpid
