@@ -614,8 +614,10 @@ struct flock64
 extern int fcntl (int __fd, int __cmd, ...) __THROW;
 #ifndef __NO_STAT64
 extern int fcntl64 (int __fd, int __cmd, ...) __THROW;
+extern int fstatat64(int dirfd, const char *pathname, struct stat *buf, int flags) __THROW;
 #if defined _FILE_OFFSET_BITS && _FILE_OFFSET_BITS == 64
 #define fcntl fcntl64
+#define fstatat fstatat64
 #endif
 #endif
 

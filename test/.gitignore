@@ -3,6 +3,7 @@
 /argv
 /asprintf
 /atexit
+/atfile
 /bsearch
 /byteswap
 /calloc
