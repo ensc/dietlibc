@@ -76,7 +76,11 @@ static struct xdr_ops xdrmem_ops = {
  * memory buffer.  
  */
 void
+#ifdef __dietlibc__
 xdrmem_create (XDR *xdrs, const char* addr, unsigned int size, enum xdr_op op)
+#else
+xdrmem_create (XDR *xdrs, const caddr_t addr, unsigned int size, enum xdr_op op)
+#endif
 {
 	xdrs->x_op = op;
 	xdrs->x_ops = &xdrmem_ops;

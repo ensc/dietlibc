@@ -2,6 +2,7 @@
 #define _LINUX_FD_H
 
 #include <sys/ioctl.h>
+#include <linux/compiler.h>
 
 /*
  * Geometry
@@ -15,6 +16,9 @@ struct floppy_struct {
 #define FD_STRETCH 1
 #define FD_SWAPSIDES 2
 #define FD_ZEROBASED 4
+#define FD_SECTBASEMASK 0x3FC
+#define FD_MKSECTBASE(s) (((s) ^ 1) << 2)
+#define FD_SECTBASE(floppy) ((((floppy)->stretch & FD_SECTBASEMASK) >> 2) ^ 1)
 
 	unsigned char	gap,		/* gap1 size */
 

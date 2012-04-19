@@ -1,7 +1,7 @@
 #ifndef _LINUX_AIO_H
 #define _LINUX_AIO_H
 
-#ifdef <endian.h>
+#include <endian.h>
 
 typedef unsigned long aio_context_t;
 
@@ -15,7 +15,11 @@ enum {
   IOCB_CMD_POLL = 5,
   /* */
   IOCB_CMD_NOOP = 6,
+  IOCB_CMD_PREADV = 7,
+  IOCB_CMD_PWRITEV = 8,
 };
+
+#define IOCB_FLAG_RESFD (1 << 0)
 
 struct io_event {
   uint64_t data;	/* the data field from the iocb */
@@ -55,7 +59,8 @@ struct iocb {
 
   /* extra parameters */
   uint64_t aio_reserved2;	/* TODO: use this for a (struct sigevent *) */
-  uint64_t aio_reserved3;
+  uint32_t aio_flags;
+  uint32_t aio_resfd;
 }; /* 64 bytes */
 
 long io_setup (unsigned nr_events, aio_context_t *ctxp);

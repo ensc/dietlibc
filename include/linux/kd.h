@@ -1,6 +1,7 @@
 #ifndef _LINUX_KD_H
 #define _LINUX_KD_H
 #include <linux/types.h>
+#include <linux/compiler.h>
 
 __BEGIN_DECLS
 
@@ -126,6 +127,16 @@ struct kbdiacrs {
 #define KDGKBDIACR      0x4B4A  /* read kernel accent table */
 #define KDSKBDIACR      0x4B4B  /* write kernel accent table */
 
+struct kbdiacruc {
+  unsigned int diacr, base, result;
+};
+struct kbdiacrsuc {
+  unsigned int kb_cnt;    /* number of entries in following array */
+  struct kbdiacruc kbdiacruc[256];    /* MAX_DIACR from keyboard.h */
+};
+#define KDGKBDIACRUC    0x4BFA  /* read kernel accent table - UCS */
+#define KDSKBDIACRUC    0x4BFB  /* write kernel accent table - UCS */
+
 struct kbkeycode {
   unsigned int scancode, keycode;
 };
@@ -136,7 +147,8 @@ struct kbkeycode {
 
 struct kbd_repeat {
   int delay;	/* in msec; <= 0: don't change */
-  int rate;	/* in msec; <= 0: don't change */
+  int period;	/* in msec; <= 0: don't change */
+			/* earlier this field was misnamed "rate" */
 };
 
 #define KDKBDREP        0x4B52  /* set keyboard delay/repeat rate;
@@ -150,6 +162,12 @@ struct console_font_op {
   unsigned int width, height;	/* font size */
   unsigned int charcount;
   unsigned char* data;	/* font data with height fixed to 32 */
+};
+
+struct console_font {
+  unsigned int width, height;	/* font size */
+  unsigned int charcount;
+  unsigned char *data;	/* font data with height fixed to 32 */
 };
 
 #define KD_FONT_OP_SET		0	/* Set font */

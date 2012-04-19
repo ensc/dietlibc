@@ -31,6 +31,10 @@
 static char sccsid[] = "@(#)svc.c 1.41 87/10/13 Copyr 1984 Sun Micro";
 #endif
 
+#ifndef __dietlibc__
+#define _XOPEN_SOURCE
+#endif
+
 /*
  * svc.c, Server-side remote procedure call interface.
  *
@@ -362,8 +366,8 @@ int rdfds;
 
 	FD_ZERO(&readfds);
 /*#ifdef __linux__*/
-#if 0
-	readfds = rdfds;
+#ifdef __GLIBC__
+	readfds.fds_bits[0] = rdfds;
 #else
 	readfds.fds_bits[0] = rdfds;
 #endif
@@ -410,6 +414,9 @@ int *readfds;
 	maskp = (unsigned long *) readfds;
 #else
 	maskp = (unsigned long *) readfds->fds_bits;
+#endif
+#ifndef NFDBITS
+#define NFDBITS (8*sizeof(readfds->fds_bits[0]))
 #endif
 	for (sock = 0; sock < setsize; sock += NFDBITS) {
 		for (mask = *maskp++; (bit = ffs(mask)); mask ^= (1 << (bit - 1))) {
