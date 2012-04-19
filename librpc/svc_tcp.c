@@ -177,7 +177,10 @@ unsigned int recvsize;
  * Like svtcp_create(), except the routine takes any *open* UNIX file
  * descriptor as its first input.
  */
-static SVCXPRT *svcfd_create(fd, sendsize, recvsize)
+#ifdef __dietlibc__
+static
+#endif
+SVCXPRT *svcfd_create(fd, sendsize, recvsize)
 int fd;
 unsigned int sendsize;
 unsigned int recvsize;

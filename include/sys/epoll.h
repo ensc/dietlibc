@@ -8,6 +8,9 @@
 
 __BEGIN_DECLS
 
+/* Flags for epoll_create1.  */
+#define EPOLL_CLOEXEC O_CLOEXEC
+
 /* Valid opcodes ( "op" parameter ) to issue to epoll_ctl() */
 #define EPOLL_CTL_ADD 1	/* Add a file decriptor to the interface */
 #define EPOLL_CTL_DEL 2	/* Remove a file decriptor from the interface */
@@ -41,6 +44,9 @@ enum EPOLL_EVENTS {
 #define EPOLLERR EPOLLERR
 	EPOLLHUP = 0x010,
 #define EPOLLHUP EPOLLHUP
+
+	EPOLLONESHOT = (1<<30),
+#define EPOLLONESHOT EPOLLONESHOT
 
 	EPOLLET = (1<<31)
 #define EPOLLET EPOLLET

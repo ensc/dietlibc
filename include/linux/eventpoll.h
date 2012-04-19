@@ -5,6 +5,7 @@
 #include <sys/ioctl.h>
 #include <poll.h>
 #include <sys/shm.h>
+#include <sys/epoll.h>
 
 __BEGIN_DECLS
 
