@@ -39,7 +39,7 @@ int main(void)
 	if (dir_fd == -1 && errno == ENOSYS)
 		return EXIT_SUCCESS;	/* kernel too old */
 
-	assert(dir_fd != -1);	
+	assert(dir_fd != -1);
 	close(dir_fd);
 
 	/* create a tree like
