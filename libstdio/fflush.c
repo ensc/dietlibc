@@ -29,6 +29,7 @@ int fflush_unlocked(FILE *stream) {
   if (stream->flags&BUFINPUT) {
     register int tmp;
     if ((tmp=stream->bm-stream->bs)) {
+      if (tmp && stream->ungotten) --tmp;
       lseek(stream->fd,tmp,SEEK_CUR);
     }
     stream->bs=stream->bm=0;
@@ -39,6 +40,7 @@ int fflush_unlocked(FILE *stream) {
     }
     stream->bm=0;
   }
+  stream->ungotten=0;
   return 0;
 }
 
