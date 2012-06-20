@@ -19,10 +19,10 @@ char *fgets_unlocked(char *s, int size, FILE *stream) {
     if (c=='\n') {
 fini:
       s[l]=0;
-      return s;
+      break;
     }
   }
-  return 0;
+  return s;
 }
 
 char*fgets(char*s,int size,FILE*stream) __attribute__((weak,alias("fgets_unlocked")));
