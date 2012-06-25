@@ -2,7 +2,6 @@
 #define _LINUX_FD_H
 
 #include <sys/ioctl.h>
-#include <linux/compiler.h>
 
 /*
  * Geometry

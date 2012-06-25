@@ -17,14 +17,14 @@ kaputt:
     if (__libc_write(stream->fd,(char*)&c+sizeof(c)-1,1) != 1)
 #endif
       goto kaputt;
-    return 0;
+    return (unsigned char)c;
   }
   stream->buf[stream->bm]=c;
   ++stream->bm;
   if (((stream->flags&BUFLINEWISE) && c=='\n') ||
       ((stream->flags&NOBUF))) /* puke */
     if (fflush_unlocked(stream)) goto kaputt;
-  return 0;
+  return (unsigned char)c;
 }
 
 int fputc(int c,FILE* stream) __attribute__((weak,alias("fputc_unlocked")));

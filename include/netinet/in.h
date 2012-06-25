@@ -361,10 +361,10 @@ struct ipv6hdr {
 #undef htons
 #undef ntohl
 #undef ntohs
-uint32_t htonl(uint32_t hostlong);
-uint16_t htons(uint16_t hostshort);
-uint32_t ntohl(uint32_t netlong);
-uint16_t ntohs(uint16_t netshort);
+uint32_t htonl(uint32_t hostlong) __attribute_const__;
+uint16_t htons(uint16_t hostshort) __attribute_const__;
+uint32_t ntohl(uint32_t netlong) __attribute_const__;
+uint16_t ntohs(uint16_t netshort) __attribute_const__;
 
 #define IN6_IS_ADDR_UNSPECIFIED(a) \
 	(((__const uint32_t *) (a))[0] == 0				      \

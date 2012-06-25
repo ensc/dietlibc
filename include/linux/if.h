@@ -2,7 +2,6 @@
 #define _LINUX_IF_H
 
 #include <net/if.h>
-#include <linux/compiler.h>
 
 #define IF_GET_IFACE	0x0001		/* for querying only */
 #define IF_GET_PROTO	0x0002

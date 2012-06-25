@@ -1,7 +1,6 @@
 #ifndef _LINUX_KD_H
 #define _LINUX_KD_H
 #include <linux/types.h>
-#include <linux/compiler.h>
 
 __BEGIN_DECLS
 
