@@ -173,4 +173,9 @@
 #endif
 #endif
 
+// Several 'syscalls' on x86_64 need vdso set...
+#if defined(__x86_64__) && ! defined(WANT_STACKGAP)
+#define WANT_STACKGAP
+#endif
+
 #endif
