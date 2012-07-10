@@ -155,6 +155,12 @@
 
 
 /* stop uncommenting here ;-) */
+
+/* Several 'syscalls' on x86_64 need vdso set... */
+#if defined(__x86_64__) && ! defined(WANT_STACKGAP)
+#define WANT_STACKGAP
+#endif
+
 #if defined(WANT_SSP) || defined(WANT_STACKGAP) || defined(WANT_TLS)
 #define CALL_IN_STARTCODE stackgap
 #else

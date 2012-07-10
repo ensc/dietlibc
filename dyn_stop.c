@@ -26,6 +26,7 @@ static structor __DTOR_END__[1]={((structor)0)};
 
 __attribute__((section(".eh_frame")))
 __attribute_used
+static
 #if __WORDSIZE == 32
 EH_FRAME_SECTION_CONST char __FRAME_END__[4] = { 0, 0, 0, 0 };
 #else
