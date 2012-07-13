@@ -31,6 +31,7 @@ FAILURES_BOGUS_emulator=(
   ":mmap_test"			# qemu does not pass back mmap(2) error codes
   ":fadvise"			# bad translation of 64bit args in qemu
   ":stdio:tst-fseek"		# !! unclear; must be investigated
+  ":dirent:tst-seekdir"		# 32/64 bit issue when calling lseek()
 )
 
 FAILURES_KNOWN=(
