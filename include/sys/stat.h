@@ -615,7 +615,7 @@ int fstatat(int dirfd, const char *pathname, struct stat *buf, int flags) __THRO
 int mkdirat(int dirfd, const char *pathname, mode_t mode) __THROW;
 int mknodat(int dirfd, const char *pathname, mode_t mode, dev_t dev) __THROW;
 int mkfifoat(int dirfd, const char *pathname, mode_t mode) __THROW;
-int utimensat(int dirfd, const char *pathname, struct timespec* t,flags) __THROW;
+int utimensat(int dirfd, const char *pathname, struct timespec* t,int flags) __THROW;
 #endif
 
 __END_DECLS
