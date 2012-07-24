@@ -187,9 +187,16 @@ void funlockfile(FILE* f) __THROW;
 int ftrylockfile (FILE *__stream) __THROW;
 
 #ifdef _GNU_SOURCE
-int vasprintf(char **strp, const char *fmt, va_list ap);
-ssize_t getline(char **lineptr, size_t *n, FILE *stream);
-ssize_t getdelim(char **lineptr, size_t *n, int delim, FILE *stream);
+int vasprintf(char **strp, const char *fmt, va_list ap) __THROW;
+ssize_t getline(char **lineptr, size_t *n, FILE *stream) __THROW;
+ssize_t getdelim(char **lineptr, size_t *n, int delim, FILE *stream) __THROW;
+#endif
+
+#if defined(_ATFILE_SOURCE) || ((_XOPEN_SOURCE + 0) >= 700) || ((_POSIX_C_SOURCE + 0) >= 200809L)
+/* also include fcntl.h for the AT_* constants */
+
+int symlinkat(const char *oldpath, int newdirfd, const char *newpath);
+int renameat(int olddirfd, const char *oldpath, int newdirfd, const char *newpath) __THROW;
 #endif
 
 __END_DECLS
