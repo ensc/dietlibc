@@ -607,6 +607,17 @@ extern int mkfifo (const char *__path, mode_t __mode) __THROW;
 #define S_IWRITE S_IWUSR
 #define S_IEXEC S_IXUSR
 
+#if defined(_ATFILE_SOURCE) || ((_XOPEN_SOURCE + 0) >= 700) || ((_POSIX_C_SOURCE + 0) >= 200809L)
+/* also include fcntl.h for the AT_* constants */
+
+int fchmodat(int dirfd, const char *pathname, mode_t mode, int flags) __THROW;
+int fstatat(int dirfd, const char *pathname, struct stat *buf, int flags) __THROW;
+int mkdirat(int dirfd, const char *pathname, mode_t mode) __THROW;
+int mknodat(int dirfd, const char *pathname, mode_t mode, dev_t dev) __THROW;
+int mkfifoat(int dirfd, const char *pathname, mode_t mode) __THROW;
+int utimensat(int dirfd, const char *pathname, struct timespec* t,flags) __THROW;
+#endif
+
 __END_DECLS
 
 #endif

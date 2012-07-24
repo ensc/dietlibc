@@ -655,21 +655,9 @@ int fallocate(int fd, int mode, loff_t offset, loff_t len) __THROW;
 #define AT_REMOVEDIR		0x200   /* Remove directory instead of unlinking file.  */
 #define AT_SYMLINK_FOLLOW	0x400   /* Follow symbolic links.  */
 
-int openat(int dirfd, const char *pathname, int flags, ...);
-int faccessat(int dirfd, const char *pathname, int mode, int flags);
-int fchmodat(int dirfd, const char *pathname, mode_t mode, int flags);
-int fchownat(int dirfd, const char *pathname, uid_t owner, gid_t group, int flags);
-int fstatat(int dirfd, const char *pathname, struct stat *buf, int flags);
-int futimesat(int dirfd, const char *pathname, const struct timeval times[2]);
-int linkat(int olddirfd, const char *oldpath, int newdirfd, const char *newpath, int flags);
-int mkdirat(int dirfd, const char *pathname, mode_t mode);
-int mknodat(int dirfd, const char *pathname, mode_t mode, dev_t dev);
-int readlinkat(int dirfd, const char *pathname, char *buf, size_t bufsiz);
-int renameat(int olddirfd, const char *oldpath, int newdirfd, const char *newpath);
-int symlinkat(const char *oldpath, int newdirfd, const char *newpath);
-int unlinkat(int dirfd, const char *pathname, int flags);
-int mkfifoat(int dirfd, const char *pathname, mode_t mode);
-int utimensat(int dirfd, const char *pathname, struct timespec* t);
+int openat(int dirfd, const char *pathname, int flags, ...) __THROW;
+int futimesat(int dirfd, const char *pathname, const struct timeval times[2]) __THROW;
+int unlinkat(int dirfd, const char *pathname, int flags) __THROW;
 #endif
 
 #if defined(_XOPEN_SOURCE) && (_XOPEN_SOURCE - 0) >= 600
