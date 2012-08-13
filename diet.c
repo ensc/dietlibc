@@ -124,6 +124,7 @@ int main(int argc,char *argv[]) {
     m=0;
     for (i=1; i<argc; ++i) {
       if (!strcmp(argv[i],"-m32")) m=32; else
+      if (!strcmp(argv[i],"-mx32")) m=33; else
       if (!strcmp(argv[i],"-m64")) m=64;
     }
   }
@@ -186,7 +187,7 @@ int main(int argc,char *argv[]) {
       shortplatform="parisc";
 #endif
 #ifdef __x86_64__
-      shortplatform=(m==32?"i386":"x86_64");
+      shortplatform=(m==32?"i386":(m==33?"x32":"x86_64"));
 #endif
 #ifdef __ia64__
       shortplatform="ia64";

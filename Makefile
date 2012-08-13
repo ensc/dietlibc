@@ -404,6 +404,14 @@ uninstall:
 arm sparc alpha mips parisc s390 sparc64 x86_64 ia64 ppc64 s390x:
 	$(MAKE) ARCH=$@ CROSS=$@-linux- all
 
+.PHONY: x32
+x32:
+ifeq ($(MYARCH),x86_64)
+	$(MAKE) ARCH=$@ CC="$(CC) -mx32" all
+else
+	$(MAKE) ARCH=$@ CROSS=x86_64-linux- CC="$(CC) -mx32" all
+endif
+
 i386:
 ifeq ($(MYARCH),x86_64)
 	$(MAKE) ARCH=$@ CC="$(CC) -m32" all
