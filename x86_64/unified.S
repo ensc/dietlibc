@@ -17,6 +17,9 @@ __unified_syscall:
 	mov	$0, %ah
 __unified_syscall_16bit:
 	movzwl	%ax, %eax
+#ifdef __ILP32_
+	or	$0x40000000, %eax
+#endif
 	mov	%rcx, %r10
 	syscall
 __error_unified_syscall:
