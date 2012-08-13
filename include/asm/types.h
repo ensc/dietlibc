@@ -43,6 +43,8 @@ typedef uint64_t __be64;
 typedef uint16_t __sum16;
 typedef uint32_t __wsum;
 
+typedef uint16_t __kernel_sa_family_t;
+
 __END_DECLS
 
 #endif
