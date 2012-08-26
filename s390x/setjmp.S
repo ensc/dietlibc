@@ -14,6 +14,7 @@ __setjmp:
 
 .global _setjmp
 .type	_setjmp,@function
+_setjmp:
 	lhi	%r3,0
 .size	_setjmp,.-_setjmp
 
