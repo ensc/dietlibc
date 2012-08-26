@@ -11,12 +11,29 @@ _start:
 	
 	leaq	4(%rsi,%rdi,4),%rdx	/* %edx = envp = (4*edi)+%esi+4 */
 
+#ifdef WANT_ELFINFO
+	/* untested !! */
+
+#ifdef __DYN_LIB
+	movl	environ@GOTPCREL(%rip), %eax
+#else
+	leal	environ(%rip), %eax
+#endif
+	movl	%edx, (%eax)	/* environ */
+
+1:	add	$4, %edx	/* incorment envp */
+	cmpl	$0, -4(%edx)	/* load envp[-1] */
+	jne	1b		/* ... until envp[-1]==NULL */
+
+	movl	%edx, 4(%eax)	/* __elfinfo */
+#else	/* WANT_ELFINFO */
 #ifdef __DYN_LIB
 	movl	environ@GOTPCREL(%rip), %eax
 	movl	%edx, (%eax)
 #else
 	movl	%edx, environ(%rip)
 #endif
+#endif	/* WANT_ELFINFO */
 
 #ifdef PROFILING
 	pushl	%edi			/* save reg args */
