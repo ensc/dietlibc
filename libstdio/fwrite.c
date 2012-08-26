@@ -49,7 +49,7 @@ notlinewise:
     } else
       done=0;
     for (i=done; i<len; ++i)
-      if (fputc_unlocked(((char*)ptr)[i],stream)) {
+      if (fputc_unlocked(((char*)ptr)[i],stream) == EOF) {
 	res=len-i;
 	goto abort;
       }
