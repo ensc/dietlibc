@@ -30,7 +30,7 @@ static void quicksort(char* base,size_t size,ssize_t l,ssize_t r,
      data is already sorted.  Try to improve by exchanging it with a
      random other pivot.
    */
-  exch(base,size,l+(random()%(r-l)),r);
+  exch(base,size,l+(rand()%(r-l)),r);
 #elif defined MID
   /*
      We chose the rightmost element in the array to be sorted as pivot,
