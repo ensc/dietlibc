@@ -6,7 +6,7 @@
 
 __BEGIN_DECLS
 
-/* For setsockoptions(2) */
+/* For setsockopt(2) */
 #if defined(__alpha__) || defined(__mips__)
 #define SOL_SOCKET	0xffff
 
@@ -33,6 +33,14 @@ __BEGIN_DECLS
 #define SO_SNDTIMEO	0x1005
 #define SO_ACCEPTCONN	0x1009
 
+#ifdef __alpha__
+#define SO_SNDBUFFORCE	0x100a
+#define SO_RCVBUFFORCE	0x100b
+#else
+#define SO_SNDBUFFORCE	31
+#define SO_RCVBUFFORCE	33
+#endif
+
 #define SO_STYLE	SO_TYPE /* Synonym */
 
 #elif defined(__hppa__)
@@ -54,6 +62,9 @@ __BEGIN_DECLS
 #define SO_RCVTIMEO	0x1006
 #define SO_ERROR	0x1007
 #define SO_TYPE	0x1008
+#define SO_SNDBUFFORCE	0x100a
+#define SO_RCVBUFFORCE	0x100b
+
 #define SO_PEERNAME	0x2000
 
 #define SO_NO_CHECK	0x400b
@@ -101,6 +112,9 @@ __BEGIN_DECLS
 
 #define SO_SNDBUF	0x1001
 #define SO_RCVBUF	0x1002
+#define SO_SNDBUFFORCE	0x100a
+#define SO_RCVBUFFORCE	0x100b
+
 #define SO_ERROR	0x1007
 #define SO_TYPE		0x1008
 
@@ -141,7 +155,9 @@ __BEGIN_DECLS
 #define SO_SNDLOWAT	19
 #define SO_RCVTIMEO	20
 #define SO_SNDTIMEO	21
-#define SO_ACCEPTCONN		30
+#define SO_ACCEPTCONN	30
+#define SO_SNDBUFFORCE	32
+#define SO_RCVBUFFORCE	33
 
 #endif
 
