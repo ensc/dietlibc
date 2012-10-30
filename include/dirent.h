@@ -68,7 +68,6 @@ extern int dirfd(DIR *dirp) __THROW __attribute_dontuse__;
 #define alphasort alphasort64
 #endif
 
-#ifdef _BSD_SOURCE
 /* File types for `d_type'.  */
 enum
   {
@@ -92,6 +91,7 @@ enum
 # define DT_WHT		DT_WHT
   };
 
+#ifdef _BSD_SOURCE
 /* Convert between stat structure types and directory types.  */
 # define IFTODT(mode)	(((mode) & 0170000) >> 12)
 # define DTTOIF(dirtype)	((dirtype) << 12)
