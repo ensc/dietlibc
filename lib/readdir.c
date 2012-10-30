@@ -3,11 +3,10 @@
 #include <dirent.h>
 #include <stdlib.h>
 
+static struct dirent tmp;
+
 struct dirent* readdir(DIR *d) {
-  if (!d->num || (d->cur += ((struct dirent*)(d->buf+d->cur))->d_reclen)>=d->num) {
-    int res=getdents(d->fd,(struct dirent*)d->buf,sizeof (d->buf)-1);
-    if (res<=0) return 0;
-    d->num=res; d->cur=0;
-  }
-  return (struct dirent*)(d->buf+d->cur);
+  struct dirent* ld;
+  if (readdir_r(d,&tmp,&ld)) return 0;
+  return ld;
 }
