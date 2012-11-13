@@ -11,6 +11,7 @@ struct dirent {
   long		d_ino;
   off_t		d_off;
   uint16_t	d_reclen;
+  unsigned char d_type;
   char		d_name[256]; /* We must not include limits.h! */
 };
 
@@ -36,6 +37,9 @@ DIR *opendir (const char *__name) __THROW;
 DIR *fdopendir (int fd) __THROW;
 int closedir (DIR *__dirp) __THROW;
 struct dirent *readdir (DIR *__dirp) __THROW;
+#if (_POSIX_C_SOURCE>=1) || defined(_XOPEN_SOURCE) || defined(_BSD_SOURCE) || defined(_SVID_SOURCE) || defined(_POSIX_SOURCE)
+int readdir_r (DIR* __dirp, struct dirent* entry, struct dirent** result) __THROW;
+#endif
 struct dirent64 *readdir64 (DIR *__dirp) __THROW;
 void rewinddir (DIR *__dirp) __THROW;
 void seekdir (DIR *__dirp, long int __pos) __THROW;
@@ -64,7 +68,6 @@ extern int dirfd(DIR *dirp) __THROW __attribute_dontuse__;
 #define alphasort alphasort64
 #endif
 
-#ifdef _BSD_SOURCE
 /* File types for `d_type'.  */
 enum
   {
@@ -88,6 +91,7 @@ enum
 # define DT_WHT		DT_WHT
   };
 
+#ifdef _BSD_SOURCE
 /* Convert between stat structure types and directory types.  */
 # define IFTODT(mode)	(((mode) & 0170000) >> 12)
 # define DTTOIF(dirtype)	((dirtype) << 12)
