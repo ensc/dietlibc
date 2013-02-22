@@ -1,12 +1,19 @@
 #include <langinfo.h>
 #include <stdlib.h>
+#include "dietlocale.h"
 
 static inline char* get_codeset(void) {
+  if (lc_ctype==CT_UTF8)
+    return "UTF-8";
+  else
+    return "ISO-8859-1";
+#if 0
   /* this is normally only used to look for "UTF-8" */
   char* s=getenv("LC_CTYPE");
   if (!s) s=getenv("LC_ALL");
   if (!s) s="ANSI_X3.4-1968";	/* it's what glibc does */
   return s;
+#endif
 }
 
 static const char   sweekdays [7] [4] = {
