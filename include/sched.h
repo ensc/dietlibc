@@ -63,12 +63,28 @@ int sched_rr_get_interval(pid_t pid, struct timespec* tp);
 #define CLONE_VFORK     0x00004000      /* set if the parent wants the child to wake it up on mm_release */
 #define CLONE_PARENT    0x00008000      /* set if we want to have the same parent as the cloner */
 #define CLONE_THREAD    0x00010000      /* Same thread group? */
+#define CLONE_NEWNS     0x00020000
+#define CLONE_SYSVSEM   0x00040000
+#define CLONE_SETTLS    0x00080000
+#define CLONE_PARENT_SETTID 0x00100000
+#define CLONE_CHILD_CLEARTID 0x00200000
+#define CLONE_DETACHED  0x00400000
+#define CLONE_UNTRACED  0x00800000
+#define CLONE_CHILD_SETTID 0x01000000
+#define CLONE_NEWUTS    0x04000000
+#define CLONE_NEWIPC    0x08000000
+#define CLONE_NEWUSER   0x10000000
+#define CLONE_NEWPID    0x20000000
+#define CLONE_NEWNET    0x40000000
+#define CLONE_IO        0x80000000
 
 #define CLONE_SIGNAL    (CLONE_SIGHAND | CLONE_THREAD)
 
 int clone(int *(*fn)(void*),void* stack,int flags,void* arg, ...);
 
 int unshare(int flags);
+
+long set_tid_address(int* tid);
 
 /*
  * Linux CPU affinity.

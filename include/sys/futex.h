@@ -1,7 +1,10 @@
 #ifndef _SYS_FUTEX_H
 #define _SYS_FUTEX_H
 
+#include <sys/types.h>
 #include <sys/time.h>
+
+__BEGIN_DECLS
 
 enum {
   FUTEX_WAIT=0,
@@ -12,5 +15,7 @@ enum {
 };
 
 long futex(int* uaddr,int op,int val,const struct timespec* timeout,int* uaddr2,int val3);
+
+__END_DECLS
 
 #endif
