@@ -519,6 +519,10 @@ $(OBJDIR)/stat64.o $(OBJDIR)/fstat64.o $(OBJDIR)/lstat64.o: include/sys/stat.h
 # these depend on dietfeatures.h for WANT_INET_ADDR_DNS
 $(OBJDIR)/gethostbyname_r.o: dietfeatures.h
 
+# these depend on dietfeatures.h for WANT_VALGRIND_SUPPORT
+bin-x86_64/strlen.o bin-x86_64/memchr.o bin-x86_64/gettimeofday.o: dietfeatures.h
+bin-x32/strlen.o bin-x32/memchr.o bin-x32/gettimeofday.o: dietfeatures.h
+
 # WANT_PLUGPLAY_DNS
 $(OBJDIR)/getaddrinfo.o: dietfeatures.h
 

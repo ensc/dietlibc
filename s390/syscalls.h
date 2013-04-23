@@ -305,6 +305,29 @@
 #define __NR_timerfd_create	319
 #define __NR_timerfd_settime	320
 #define __NR_timerfd_gettime	321
+#define __NR_signalfd4          322
+#define __NR_eventfd2           323
+#define __NR_inotify_init1      324
+#define __NR_pipe2              325
+#define __NR_dup3               326
+#define __NR_epoll_create1      327
+#define __NR_preadv             328
+#define __NR_pwritev            329
+#define __NR_rt_tgsigqueueinfo  330
+#define __NR_perf_event_open    331
+#define __NR_fanotify_init      332
+#define __NR_fanotify_mark      333
+#define __NR_prlimit64          334
+#define __NR_name_to_handle_at  335
+#define __NR_open_by_handle_at  336
+#define __NR_clock_adjtime      337
+#define __NR_syncfs             338
+#define __NR_setns              339
+#define __NR_process_vm_readv   340
+#define __NR_process_vm_writev  341
+#define __NR_s390_runtime_instr 342
+#define __NR_kcmp               343
+#define __NR_finit_module       344
 
 
 #define syscall_weak(name,wsym,sym) \

@@ -349,6 +349,17 @@
 #define __NR_fanotify_init	300
 #define __NR_fanotify_mark	301
 #define __NR_prlimit64		302
+#define __NR_name_to_handle_at 303
+#define __NR_open_by_handle_at 304
+#define __NR_clock_adjtime 305
+#define __NR_syncfs 306
+#define __NR_sendmmsg 307
+#define __NR_setns 308
+#define __NR_getcpu 309
+#define __NR_process_vm_readv 310
+#define __NR_process_vm_writev 311
+#define __NR_kcmp 312
+#define __NR_finit_module 313
 
 #ifdef __PIC__
 #define syscall_weak(name,wsym,sym) \

@@ -366,6 +366,33 @@
 #define __NR_timerfd_settime		(__NR_SYSCALL_BASE+353)
 #define __NR_timerfd_gettime		(__NR_SYSCALL_BASE+354)
 
+#define __NR_signalfd4                  (__NR_SYSCALL_BASE+355)
+#define __NR_eventfd2                   (__NR_SYSCALL_BASE+356)
+#define __NR_epoll_create1              (__NR_SYSCALL_BASE+357)
+#define __NR_dup3                       (__NR_SYSCALL_BASE+358)
+#define __NR_pipe2                      (__NR_SYSCALL_BASE+359)
+#define __NR_inotify_init1              (__NR_SYSCALL_BASE+360)
+#define __NR_preadv                     (__NR_SYSCALL_BASE+361)
+#define __NR_pwritev                    (__NR_SYSCALL_BASE+362)
+#define __NR_rt_tgsigqueueinfo          (__NR_SYSCALL_BASE+363)
+#define __NR_perf_event_open            (__NR_SYSCALL_BASE+364)
+#define __NR_recvmmsg                   (__NR_SYSCALL_BASE+365)
+#define __NR_accept4                    (__NR_SYSCALL_BASE+366)
+#define __NR_fanotify_init              (__NR_SYSCALL_BASE+367)
+#define __NR_fanotify_mark              (__NR_SYSCALL_BASE+368)
+#define __NR_prlimit64                  (__NR_SYSCALL_BASE+369)
+#define __NR_name_to_handle_at          (__NR_SYSCALL_BASE+370)
+#define __NR_open_by_handle_at          (__NR_SYSCALL_BASE+371)
+#define __NR_clock_adjtime              (__NR_SYSCALL_BASE+372)
+#define __NR_syncfs                     (__NR_SYSCALL_BASE+373)
+#define __NR_sendmmsg                   (__NR_SYSCALL_BASE+374)
+#define __NR_setns                      (__NR_SYSCALL_BASE+375)
+#define __NR_process_vm_readv           (__NR_SYSCALL_BASE+376)
+#define __NR_process_vm_writev          (__NR_SYSCALL_BASE+377)
+#define __NR_kcmp                       (__NR_SYSCALL_BASE+378)
+#define __NR_finit_module               (__NR_SYSCALL_BASE+379)
+
+
 /*
  * The following SWIs are ARM private.
  */
@@ -767,6 +794,32 @@
 #define __ARGS_fallocate		0
 #define __ARGS_timerfd_settime		0
 #define __ARGS_timerfd_gettime		0
+
+#define __ARGS_signalfd4		0
+#define __ARGS_eventfd2			0
+#define __ARGS_epoll_create1		0
+#define __ARGS_dup3			0
+#define __ARGS_pipe2			0
+#define __ARGS_inotify_init1		0
+#define __ARGS_preadv			0
+#define __ARGS_pwritev			0
+#define __ARGS_rt_tgsigqueueinfo	0
+#define __ARGS_perf_event_open		1
+#define __ARGS_recvmmsg			1
+#define __ARGS_accept4			0
+#define __ARGS_fanotify_init		0
+#define __ARGS_fanotify_mark		1
+#define __ARGS_prlimit64		0
+#define __ARGS_name_to_handle_at	1
+#define __ARGS_open_by_handle_at	0
+#define __ARGS_clock_adjtime		0
+#define __ARGS_syncfs			0
+#define __ARGS_sendmmsg			0
+#define __ARGS_setns			0
+#define __ARGS_process_vm_readv		1
+#define __ARGS_process_vm_writev	1
+#define __ARGS_kcmp			1
+#define __ARGS_finit_module		0
 
 
 #ifdef __ASSEMBLER__
