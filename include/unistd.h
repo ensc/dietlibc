@@ -48,6 +48,8 @@ char *getcwd(char *buf, size_t size) __THROW __attribute__((__warn_unused_result
 
 #ifdef _GNU_SOURCE
 char *get_current_dir_name (void) __THROW __attribute_dontuse__;
+
+int pipe2(int pipefd[2], int flags) __THROW;
 #endif
 
 int open(const char* pathname,int flags, ...) __THROW;

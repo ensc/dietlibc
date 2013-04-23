@@ -635,19 +635,23 @@ ssize_t readahead(int fd, off64_t *offset, size_t count) __THROW;
 #endif
 
 #ifdef _GNU_SOURCE
-#define SPLICE_F_MOVE	(0x01)	/* move pages instead of copying */
-#define SPLICE_F_NONBLOCK (0x02) /* don't block on the pipe splicing (but */
-				 /* we may still block on the fd we splice */
-				 /* from/to, of course */
-#define SPLICE_F_MORE	(0x04)	/* expect more data */
-#define SPLICE_F_GIFT	(0x08)	/* pages passed in are a gift */
+enum {
+  SPLICE_F_MOVE=1,	/* move pages instead of copying */
+#define SPLICE_F_MOVE SPLICE_F_MOVE
+  SPLICE_F_NONBLOCK=2,	/* don't block on splicing (may still block on fd we splice */
+#define SPLICE_F_NONBLOCK SPLICE_F_NONBLOCK
+  SPLICE_F_MORE=4,	/* expect more data */
+#define SPLICE_F_MORE SPLICE_F_MORE
+  SPLICE_F_GIFT=8	/* pages passed in are a gift */
+#define SPLICE_F_GIFT SPLICE_F_GIFT
+};
 
-long tee(int fd_in, int fd_out, size_t len, unsigned int flags) __THROW;
+ssize_t tee(int fd_in, int fd_out, size_t len, unsigned int flags) __THROW;
 
 #include <sys/uio.h>
 
-long vmsplice(int fd, const struct iovec *iov, unsigned long nr_segs, unsigned int flags) __THROW;
-long splice(int fd_in, loff_t *off_in, int fd_out, loff_t *off_out, size_t len, unsigned int flags) __THROW;
+ssize_t splice(int fd_in, loff_t *off_in, int fd_out, loff_t *off_out, size_t len, unsigned int flags) __THROW;
+ssize_t vmsplice(int fd, const struct iovec *iov, unsigned long nr_segs, unsigned int flags) __THROW;
 
 int sync_file_range(int fd, off64_t offset, off64_t nbytes, unsigned int flags) __THROW;
 
