@@ -15,9 +15,7 @@ int main() {
     perror("open");
     return -1;
   }
-#ifdef _FILE_OFFSET_BITS
   lseek(fd,0x100000000,SEEK_SET);
-#endif
   write(fd,"x",1);
   close(fd);
   tv[0].tv_sec=123456789;

@@ -45,7 +45,7 @@
 
 #if defined(__x86_64__)
 #if defined(__ILP32__)
-#define __OFF_T_64__
+#define __OFF_T_MATCHES_OFF64_T
 #else
 #define __WORDSIZE 64
 #endif
@@ -60,7 +60,7 @@
 #endif
 
 #ifdef __WORDSIZE
-#define __OFF_T_64__
+#define __OFF_T_MATCHES_OFF64_T
 #else
 #define __WORDSIZE 32
 #endif

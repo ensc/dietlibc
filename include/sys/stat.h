@@ -516,45 +516,19 @@ struct stat {
 #elif defined(__x86_64__)
 
 struct stat {
-	uint32_t	st_dev;
-	unsigned long	st_ino;
-	uint16_t	st_mode;
-	uint16_t	st_nlink;
-	uint16_t	st_uid;
-	uint16_t	st_gid;
-	uint32_t	st_rdev;
-	unsigned long	st_size;
-	unsigned long	st_blksize;
-	unsigned long	st_blocks;
-	time_t		st_atime;
-	unsigned long	st_atime_nsec;
-	time_t		st_mtime;
-	unsigned long	st_mtime_nsec;
-	time_t		st_ctime;
-	unsigned long	st_ctime_nsec;
-	unsigned long	__unused4;
-	unsigned long	__unused5;
-};
-
-struct stat64 {
-	uint64_t	st_dev;
-	uint64_t	st_ino;
-	uint64_t	st_nlink;
-	uint32_t	st_mode;
-	uint32_t	st_uid;
-	uint32_t	st_gid;
-	uint32_t	__pad0;
-	uint64_t	 st_rdev;
-	uint64_t	st_size;
-	uint64_t	st_blksize;
-	uint64_t	st_blocks;
+	uint64_t	st_dev, st_ino;
+	uint32_t	st_mode, st_nlink, st_uid, st_gid;
+	uint64_t	st_rdev, __pad1;
+	int64_t		st_size;
+	int		st_blksize, __pad2;
+	int64_t		st_blocks;
 	time_t		st_atime;
 	uint64_t	st_atime_nsec;
 	time_t		st_mtime;
 	uint64_t	st_mtime_nsec;
 	time_t		st_ctime;
 	uint64_t	st_ctime_nsec;
-	uint64_t	__unused[3];
+	unsigned int	__unused4, __unused5;
 };
 
 #elif defined(__ia64__)
@@ -621,7 +595,7 @@ extern int stat(const char *__file, struct stat *__buf) __THROW;
 extern int fstat(int __fd, struct stat *__buf) __THROW;
 extern int lstat(const char *__file, struct stat *__buf) __THROW;
 
-#if __WORDSIZE == 64
+#if (__WORDSIZE == 64) || defined(__OFF_T_MATCHES_OFF64_T)
 #define __NO_STAT64
 #else
 extern int stat64(const char *__file, struct stat64 *__buf) __THROW;
