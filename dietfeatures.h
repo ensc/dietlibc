@@ -179,4 +179,8 @@
 #endif
 #endif
 
+#if defined(__x86_64__) && defined(__ILP32__)
+#undef WANT_LARGEFILE_BACKCOMPAT
+#endif
+
 #endif

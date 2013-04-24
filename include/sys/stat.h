@@ -8,6 +8,7 @@
 __BEGIN_DECLS
 
 #if defined(__i386__)
+
 struct stat {
 	uint32_t	st_dev;
 	unsigned long	st_ino;
@@ -489,7 +490,7 @@ struct stat64 {
 	unsigned long long st_ino;
 };
 
-#elif defined(__x86_64__)
+#elif defined(__x86_64__) && !defined(__ILP32__)
 
 struct stat {
 	unsigned long	st_dev;
@@ -510,6 +511,50 @@ struct stat {
 	time_t		st_ctime;
 	unsigned long	st_ctime_nsec;
 	long		__unused[3];
+};
+
+#elif defined(__x86_64__)
+
+struct stat {
+	uint32_t	st_dev;
+	unsigned long	st_ino;
+	uint16_t	st_mode;
+	uint16_t	st_nlink;
+	uint16_t	st_uid;
+	uint16_t	st_gid;
+	uint32_t	st_rdev;
+	unsigned long	st_size;
+	unsigned long	st_blksize;
+	unsigned long	st_blocks;
+	time_t		st_atime;
+	unsigned long	st_atime_nsec;
+	time_t		st_mtime;
+	unsigned long	st_mtime_nsec;
+	time_t		st_ctime;
+	unsigned long	st_ctime_nsec;
+	unsigned long	__unused4;
+	unsigned long	__unused5;
+};
+
+struct stat64 {
+	uint64_t	st_dev;
+	uint64_t	st_ino;
+	uint64_t	st_nlink;
+	uint32_t	st_mode;
+	uint32_t	st_uid;
+	uint32_t	st_gid;
+	uint32_t	__pad0;
+	uint64_t	 st_rdev;
+	uint64_t	st_size;
+	uint64_t	st_blksize;
+	uint64_t	st_blocks;
+	time_t		st_atime;
+	uint64_t	st_atime_nsec;
+	time_t		st_mtime;
+	uint64_t	st_mtime_nsec;
+	time_t		st_ctime;
+	uint64_t	st_ctime_nsec;
+	uint64_t	__unused[3];
 };
 
 #elif defined(__ia64__)

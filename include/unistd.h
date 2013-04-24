@@ -34,7 +34,7 @@ int access (const char *__name, int __type) __THROW;
 #define STDERR_FILENO  2
 
 off_t lseek(int fildes, off_t offset, int whence) __THROW;
-#if __WORDSIZE == 32
+#if !defined(__OFF_T_64__)
 loff_t lseek64(int fildes, loff_t offset, int whence) __THROW;
 #if defined _FILE_OFFSET_BITS && _FILE_OFFSET_BITS == 64
 #define lseek(fildes,offset,whence) lseek64(fildes,offset,whence)
