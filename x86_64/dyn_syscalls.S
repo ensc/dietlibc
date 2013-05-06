@@ -141,7 +141,6 @@ __error_unified_syscall:
 #include "../syscalls.s/n_sigprocmask.S"
 #include "../syscalls.s/n_sigsuspend.S"
 #include "../syscalls.s/nanosleep.S"
-#include "../syscalls.s/nice.S"
 #include "../syscalls.s/open.S"
 #include "../syscalls.s/pause.S"
 #include "../syscalls.s/personality.S"
