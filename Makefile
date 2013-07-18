@@ -543,3 +543,6 @@ $(OBJDIR)/stackgap.o: lib/stackgap.c dietfeatures.h
 
 # WANT_MALLOC_ZERO
 $(OBJDIR)/strndup.o: dietfeatures.h
+
+# dietdirent.h dependencies
+$(OBJDIR)/closedir.o $(OBJDIR)/fdopendir.o $(OBJDIR)/ftw.o $(OBJDIR)/ftw64.o $(OBJDIR)/opendir.o $(OBJDIR)/readdir.o $(OBJDIR)/readdir64.o $(OBJDIR)/readdir_r.o $(OBJDIR)/rewinddir.o $(OBJDIR)/seekdir.o $(OBJDIR)/telldir.o $(OBJDIR)/dirfd.o: dietdirent.h
