@@ -10,8 +10,9 @@ int nice(int incr) {
   prio = getpriority(PRIO_PROCESS,0) + incr;
   if (prio < PRIO_MIN) prio=PRIO_MIN;
   if (prio >= PRIO_MAX) prio=PRIO_MAX-1;
-  if (setpriority (PRIO_PROCESS, 0, prio)==-1)
+  if (setpriority (PRIO_PROCESS, 0, prio)==-1) {
+    if (errno==EACCES) errno=EPERM;
     return -1;
-  else
+  } else
     return getpriority(PRIO_PROCESS, 0);
 }
