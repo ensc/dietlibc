@@ -5,6 +5,6 @@
 off_t telldir(DIR *d) {
   off_t result = 0;
   if (lseek(d->fd,0,SEEK_CUR))
-    result=read_unaligned_s(d->buf+d->cur, struct dirent, d_off);
+    result=((struct dirent*)(d->buf+d->cur))->d_off;
   return result;
 }
