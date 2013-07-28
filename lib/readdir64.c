@@ -13,7 +13,7 @@
 
 #ifndef WANT_LARGEFILE_BACKCOMPAT
 struct dirent64* readdir64(DIR *d) {
-  if (!d->num || (d->cur += ((struct dirent64*)(d->buf+d->cur))->d_reclen)>=d->num) {
+  if (!d->num || (d->cur += dirstream_get_reclen(d, struct dirent64))>=d->num) {
     int res=getdents64(d->fd,(struct dirent64*)d->buf, __DIRSTREAM_BUF_SIZE-1);
     if (res<=0) return 0;
     d->num=res; d->cur=0;
@@ -31,7 +31,7 @@ struct dirent64* readdir64(DIR *d) {
 again:
   if (!trygetdents64) {
 #endif
-    if (!d->num || (d->cur += ((struct dirent*)(d->buf+d->cur))->d_reclen)>=d->num) {
+  if (!d->num || (d->cur += dirstream_get_reclen(d, struct dirent))>=d->num) {
       int res=getdents(d->fd,(struct dirent*)d->buf, __DIRSTREAM_BUF_SIZE-1);
       if (res<=0) return 0;
       d->num=res; d->cur=0;
@@ -45,7 +45,7 @@ again:
     return &d64;
 #ifdef __NR_getdents64
   }
-  if (!d->num || (d->cur += ((struct dirent64*)(d->buf+d->cur))->d_reclen)>=d->num) {
+  if (!d->num || (d->cur += dirstream_get_reclen(d, struct dirent64))>=d->num) {
     int res=getdents64(d->fd,(struct dirent64*)d->buf,__DIRSTREAM_BUF_SIZE);
     if (res<=0) {
       if (errno==ENOSYS) {

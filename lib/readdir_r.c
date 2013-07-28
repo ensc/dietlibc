@@ -14,7 +14,7 @@ struct linux_dirent {
 int readdir_r(DIR *d,struct dirent* entry, struct dirent** result) {
   struct linux_dirent* ld;
   *result=0;
-  if (!d->num || (d->cur += ((struct dirent*)(d->buf+d->cur))->d_reclen)>=d->num) {
+  if (!d->num || (d->cur += dirstream_get_reclen(d, struct dirent))>=d->num) {
     int res=getdents(d->fd,(struct dirent*)d->buf,__DIRSTREAM_BUF_SIZE-1);
     if (res<=0)
       return res<0;
