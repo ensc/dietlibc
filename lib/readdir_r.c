@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 struct linux_dirent {
-  long		d_ino;
+  uint32_t	d_ino;
   off_t		d_off;
   uint16_t	d_reclen;
   char		d_name[1];

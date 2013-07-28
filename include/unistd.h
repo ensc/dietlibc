@@ -34,7 +34,7 @@ int access (const char *__name, int __type) __THROW;
 #define STDERR_FILENO  2
 
 off_t lseek(int fildes, off_t offset, int whence) __THROW;
-#if __WORDSIZE == 32
+#if !defined(__OFF_T_MATCHES_OFF64_T)
 loff_t lseek64(int fildes, loff_t offset, int whence) __THROW;
 #if defined _FILE_OFFSET_BITS && _FILE_OFFSET_BITS == 64
 #define lseek(fildes,offset,whence) lseek64(fildes,offset,whence)
@@ -50,6 +50,8 @@ char *getcwd(char *buf, size_t size) __THROW __attribute__((__warn_unused_result
 
 #ifdef _GNU_SOURCE
 char *get_current_dir_name (void) __THROW __attribute_dontuse__;
+
+int pipe2(int pipefd[2], int flags) __THROW;
 #endif
 
 int open(const char* pathname,int flags, ...) __THROW;

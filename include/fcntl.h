@@ -34,6 +34,7 @@ __BEGIN_DECLS
 #define O_DIRECTORY	0200000	/* must be a directory */
 #define O_NOFOLLOW	0400000 /* don't follow links */
 #define O_NOATIME	01000000
+#define O_CLOEXEC	02000000
 
 #define F_DUPFD		0	/* dup */
 #define F_GETFD		1	/* get close_on_exec */
@@ -117,6 +118,7 @@ struct flock64 {
 #define O_LARGEFILE	0400000 /* will be set by the kernel on every open */
 #define O_DIRECT	02000000	/* direct disk access - should check with OSF/1 */
 #define O_NOATIME	04000000
+#define O_CLOEXEC	010000000
 
 #define F_DUPFD		0	/* dup */
 #define F_GETFD		1	/* get close_on_exec */
@@ -186,6 +188,7 @@ struct flock {
 #define O_DIRECTORY	0x10000	/* must be a directory */
 #define O_NOFOLLOW	0x20000	/* don't follow links */
 #define O_NOATIME	0x40000
+#define O_CLOEXEC	0x80000
 
 #define O_NDELAY	O_NONBLOCK
 
@@ -286,6 +289,7 @@ struct flock {
 #define O_LARGEFILE	0x40000
 #define O_DIRECT        0x100000 /* direct disk access hint */
 #define O_NOATIME	0x200000
+#define O_CLOEXEC	0x400000
 
 #define F_DUPFD		0	/* dup */
 #define F_GETFD		1	/* get close_on_exec */
@@ -375,6 +379,7 @@ struct flock64 {
 #define O_LARGEFILE     0200000
 #define O_DIRECT	0400000	/* direct disk access hint - currently ignored */
 #define O_NOATIME	01000000
+#define O_CLOEXEC	02000000
 
 #define F_DUPFD		0	/* dup */
 #define F_GETFD		1	/* get close_on_exec */
@@ -459,6 +464,7 @@ struct flock64 {
 #define O_DIRECT	0200000	/* direct disk access hint - currently ignored */
 #define O_LARGEFILE	0400000
 #define O_NOATIME	01000000
+#define O_CLOEXEC	02000000
 
 #define F_DUPFD		0	/* dup */
 #define F_GETFD		1	/* get close_on_exec */
@@ -543,6 +549,7 @@ struct flock64 {
 #define O_DSYNC     01000000 /* HPUX only */
 #define O_RSYNC     02000000 /* HPUX only */
 #define O_NOATIME   04000000
+#define O_CLOEXEC   010000000
 #define O_DIRECTORY  00010000
 
 #define O_DIRECT    00040000 /* direct disk access hint - currently ignored */
@@ -630,19 +637,23 @@ ssize_t readahead(int fd, off64_t *offset, size_t count) __THROW;
 #endif
 
 #ifdef _GNU_SOURCE
-#define SPLICE_F_MOVE	(0x01)	/* move pages instead of copying */
-#define SPLICE_F_NONBLOCK (0x02) /* don't block on the pipe splicing (but */
-				 /* we may still block on the fd we splice */
-				 /* from/to, of course */
-#define SPLICE_F_MORE	(0x04)	/* expect more data */
-#define SPLICE_F_GIFT	(0x08)	/* pages passed in are a gift */
+enum {
+  SPLICE_F_MOVE=1,	/* move pages instead of copying */
+#define SPLICE_F_MOVE SPLICE_F_MOVE
+  SPLICE_F_NONBLOCK=2,	/* don't block on splicing (may still block on fd we splice */
+#define SPLICE_F_NONBLOCK SPLICE_F_NONBLOCK
+  SPLICE_F_MORE=4,	/* expect more data */
+#define SPLICE_F_MORE SPLICE_F_MORE
+  SPLICE_F_GIFT=8	/* pages passed in are a gift */
+#define SPLICE_F_GIFT SPLICE_F_GIFT
+};
 
-long tee(int fd_in, int fd_out, size_t len, unsigned int flags) __THROW;
+ssize_t tee(int fd_in, int fd_out, size_t len, unsigned int flags) __THROW;
 
 #include <sys/uio.h>
 
-long vmsplice(int fd, const struct iovec *iov, unsigned long nr_segs, unsigned int flags) __THROW;
-long splice(int fd_in, loff_t *off_in, int fd_out, loff_t *off_out, size_t len, unsigned int flags) __THROW;
+ssize_t splice(int fd_in, loff_t *off_in, int fd_out, loff_t *off_out, size_t len, unsigned int flags) __THROW;
+ssize_t vmsplice(int fd, const struct iovec *iov, unsigned long nr_segs, unsigned int flags) __THROW;
 
 int sync_file_range(int fd, off64_t offset, off64_t nbytes, unsigned int flags) __THROW;
 

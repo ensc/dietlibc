@@ -8,6 +8,7 @@
 __BEGIN_DECLS
 
 #if defined(__i386__)
+
 struct stat {
 	uint32_t	st_dev;
 	unsigned long	st_ino;
@@ -489,7 +490,7 @@ struct stat64 {
 	unsigned long long st_ino;
 };
 
-#elif defined(__x86_64__)
+#elif defined(__x86_64__) && !defined(__ILP32__)
 
 struct stat {
 	unsigned long	st_dev;
@@ -510,6 +511,24 @@ struct stat {
 	time_t		st_ctime;
 	unsigned long	st_ctime_nsec;
 	long		__unused[3];
+};
+
+#elif defined(__x86_64__)
+
+struct stat {
+	uint64_t	st_dev, st_ino;
+	uint32_t	st_mode, st_nlink, st_uid, st_gid;
+	uint64_t	st_rdev, __pad1;
+	int64_t		st_size;
+	int		st_blksize, __pad2;
+	int64_t		st_blocks;
+	time_t		st_atime;
+	uint64_t	st_atime_nsec;
+	time_t		st_mtime;
+	uint64_t	st_mtime_nsec;
+	time_t		st_ctime;
+	uint64_t	st_ctime_nsec;
+	unsigned int	__unused4, __unused5;
 };
 
 #elif defined(__ia64__)
@@ -576,7 +595,7 @@ extern int stat(const char *__file, struct stat *__buf) __THROW;
 extern int fstat(int __fd, struct stat *__buf) __THROW;
 extern int lstat(const char *__file, struct stat *__buf) __THROW;
 
-#if __WORDSIZE == 64
+#if (__WORDSIZE == 64) || defined(__OFF_T_MATCHES_OFF64_T)
 #define __NO_STAT64
 #else
 extern int stat64(const char *__file, struct stat64 *__buf) __THROW;

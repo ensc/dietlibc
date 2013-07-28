@@ -84,7 +84,11 @@ typedef int32_t key_t;			/* Used for interprocess communication. */
 typedef int32_t pid_t;			/* Used for process IDs and process group IDs. */
 typedef signed long ssize_t;		/* Used for a count of bytes or an error indication. */
 typedef signed long suseconds_t;	/* Used for time in microseconds. */
+#if defined(__x86_64__) && defined(__ILP32__)
+typedef signed long long time_t;
+#else
 typedef signed long time_t;		/* Used for time in seconds. */
+#endif
 typedef signed long useconds_t;		/* Used for time in microseconds. */
 
 /* non-susv2 types: */
@@ -94,7 +98,12 @@ __extension__ typedef signed long long off64_t;
 #if defined _FILE_OFFSET_BITS && _FILE_OFFSET_BITS == 64
 typedef off64_t off_t;
 #else
+
+#if defined(__x86_64__) && defined(__ILP32__)
+typedef off64_t off_t;
+#else
 typedef signed long off_t;             /* Used for file sizes. */
+#endif
 #endif
 
 __extension__ typedef unsigned long long ino64_t;

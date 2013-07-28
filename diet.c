@@ -29,6 +29,7 @@ static const char* Os[] = {
 	 "-falign-functions=1","-falign-jumps=1",
 	 "-falign-loops=1","-fomit-frame-pointer",0,
   "x86_64","-Os",0,
+  "x32","-Os",0,
   "sparc","-Os","-mcpu=supersparc",0,
   "sparc64","-Os","-m64","-mhard-quad-float",0,
   "alpha","-Os","-fomit-frame-pointer",0,
@@ -41,7 +42,6 @@ static const char* Os[] = {
   "s390x","-Os","-fomit-frame-pointer",0,
   "sh","-Os","-fomit-frame-pointer",0,
   "ia64","-Os","-fno-omit-frame-pointer",0,
-  "x86_64","-Os","-fstrict-aliasing","-momit-leaf-frame-pointer","-mfancy-math-387",0,
   0};
 
 static void usage(void) {
@@ -328,7 +328,7 @@ pp:
 	}
 	if (mangleopts)
 	  if (argv[i][0]=='-' && (argv[i][1]=='O' || argv[i][1]=='f' ||
-				  (argv[i][1]=='m' && argv[i][2]!='3' && argv[i][2]!='6'))) {
+				  (argv[i][1]=='m' && argv[i][2]!='3' && argv[i][2]!='6' && argv[i][2]!='x'))) {
 	    if (strcmp(argv[i],"-fpic") && strcmp(argv[i],"-fno-pic"))
 	      continue;
 	  }

@@ -189,6 +189,10 @@
 #endif
 #endif
 
+#if defined(__x86_64__) && defined(__ILP32__)
+#undef WANT_LARGEFILE_BACKCOMPAT
+#endif
+
 #ifdef WANT_DYN_PAGESIZE
 #define WANT_ELFINFO
 #endif

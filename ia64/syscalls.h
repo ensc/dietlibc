@@ -289,6 +289,29 @@
 #define __NR_timerfd_create		1310
 #define __NR_timerfd_settime		1311
 #define __NR_timerfd_gettime		1312
+#define __NR_signalfd4                  1313
+#define __NR_eventfd2                   1314
+#define __NR_epoll_create1              1315
+#define __NR_dup3                       1316
+#define __NR_pipe2                      1317
+#define __NR_inotify_init1              1318
+#define __NR_preadv                     1319
+#define __NR_pwritev                    1320
+#define __NR_rt_tgsigqueueinfo          1321
+#define __NR_recvmmsg                   1322
+#define __NR_fanotify_init              1323
+#define __NR_fanotify_mark              1324
+#define __NR_prlimit64                  1325
+#define __NR_name_to_handle_at          1326
+#define __NR_open_by_handle_at          1327
+#define __NR_clock_adjtime              1328
+#define __NR_syncfs                     1329
+#define __NR_setns                      1330
+#define __NR_sendmmsg                   1331
+#define __NR_process_vm_readv           1332
+#define __NR_process_vm_writev          1333
+#define __NR_accept4                    1334
+#define __NR_finit_module               1335
 
 #define syscall(name, sym) \
 .text; \

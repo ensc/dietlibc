@@ -26,7 +26,7 @@ struct signalfd_siginfo {
 __BEGIN_DECLS
 
 extern int signalfd (int __fd, const sigset_t *__mask, int __flags)
-  __nonnull ((2)) __THROW;
+  __THROW __nonnull ((2)) ;
 
 __END_DECLS
 

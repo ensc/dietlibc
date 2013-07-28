@@ -13,12 +13,14 @@ _exit:
 .global __error_unified_syscall
 .global __unified_syscall
 .global __unified_syscall_16bit
+.global __unified_syscall_lp64
 __unified_syscall:
 	mov	$0, %ah
 __unified_syscall_16bit:
 	movzwl	%ax, %eax
 #if defined(__ILP32__)
 	or	$0x40000000, %eax
+__unified_syscall_lp64:
 #endif
 	mov	%rcx, %r10
 	syscall

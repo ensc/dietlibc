@@ -2,7 +2,11 @@
 #include "i386/syscalls.h"
 
 #elif defined(__x86_64__)
+#if defined(__ILP32__)
+#include "x32/syscalls.h"
+#else
 #include "x86_64/syscalls.h"
+#endif
 
 #elif defined(__sparc__)
 #if defined(__arch64__)

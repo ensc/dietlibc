@@ -525,6 +525,10 @@ $(OBJDIR)/stat64.o $(OBJDIR)/fstat64.o $(OBJDIR)/lstat64.o: include/sys/stat.h
 # these depend on dietfeatures.h for WANT_INET_ADDR_DNS
 $(OBJDIR)/gethostbyname_r.o: dietfeatures.h
 
+# these depend on dietfeatures.h for WANT_VALGRIND_SUPPORT
+bin-x86_64/strlen.o bin-x86_64/memchr.o bin-x86_64/gettimeofday.o: dietfeatures.h
+bin-x32/strlen.o bin-x32/memchr.o bin-x32/gettimeofday.o: dietfeatures.h
+
 # WANT_PLUGPLAY_DNS
 $(OBJDIR)/getaddrinfo.o: dietfeatures.h
 
@@ -539,6 +543,9 @@ $(OBJDIR)/fcntl64.o: dietfeatures.h
 
 # WANT_MALLOC_ZERO
 $(OBJDIR)/strndup.o: dietfeatures.h
+
+# dietdirent.h dependencies
+$(OBJDIR)/closedir.o $(OBJDIR)/fdopendir.o $(OBJDIR)/ftw.o $(OBJDIR)/ftw64.o $(OBJDIR)/opendir.o $(OBJDIR)/readdir.o $(OBJDIR)/readdir64.o $(OBJDIR)/readdir_r.o $(OBJDIR)/rewinddir.o $(OBJDIR)/seekdir.o $(OBJDIR)/telldir.o $(OBJDIR)/dirfd.o: dietdirent.h
 
 
 GIT_CVSIMPORT=git cvsimport
