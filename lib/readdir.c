@@ -7,7 +7,7 @@
 static struct dirent tmp;
 
 struct dirent* readdir(DIR *d) {
-  static struct dirent* ld;
+  struct dirent* ld;
   if (readdir_r(d,&tmp,&ld)) return 0;
   return ld;
 }
