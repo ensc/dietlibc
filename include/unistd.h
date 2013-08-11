@@ -89,10 +89,10 @@ pid_t setsid (void) __THROW;
 int dup (int oldfd) __THROW;
 int dup2 (int oldfd,int newfd) __THROW;
 
-struct dirent;
-struct dirent64;
-int getdents(int fd, struct dirent *dirp, unsigned int count) __THROW;
-int getdents64(int fd, struct dirent64 *dirp, unsigned int count) __THROW;
+struct linux_dirent;
+struct linux_dirent64;
+int getdents(int fd, struct linux_dirent *dirp, unsigned int count) __THROW;
+int getdents64(int fd, struct linux_dirent64 *dirp, unsigned int count) __THROW;
 
 pid_t fork(void) __THROW;
 pid_t vfork(void) __THROW;
