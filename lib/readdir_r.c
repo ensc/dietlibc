@@ -8,26 +8,18 @@
 #ifdef __DIET_ARCH_ONLY_DIRENT64
 #define linux_dirent dirent64
 #define getdents     getdents64
-#define gddirent     dirent64
+#define gddirent     linux_dirent64
 #else
-#define gddirent     dirent
-struct linux_dirent {
-  uint32_t	d_ino;
-  off_t		d_off;
-  uint16_t	d_reclen;
-  char		d_name[1];
-};
+#define gddirent     linux_dirent
 #endif
-
 int readdir_r(DIR *d,struct dirent* entry, struct dirent** result) {
-  struct linux_dirent* ld;
+  struct linux_dirent* ld = d->num ? (struct linux_dirent*)(d->buf+d->cur) : NULL;
   *result=0;
-  ld=(struct linux_dirent*)(d->buf+d->cur);
   if (!d->num || d->cur >= d->num || (d->cur += ld->d_reclen)>=d->num) {
     int res=getdents(d->fd,(struct gddirent*)d->buf,sizeof (d->buf)-1);
     if (res<=0)
       return res<0;
-    d->num=res; d->cur=0;
+    d->num=res; d->cur=0; d->is_64=0;
   }
   ld=(struct linux_dirent*)(d->buf+d->cur);
   /* struct dirent64 has d_name[256] instead of d_name[1] at the end */

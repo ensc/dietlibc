@@ -12,7 +12,7 @@ fputc ftw fwrite getaddrinfo getenv getgrnam gethostbyaddr gethostbyname \
 gethostbyname_r getmntent getopt getpass getpwnam getservbyname getservbyport getusershell \
 glob grent hasmntopt hello iconv if_nameindex ltostr malloc-debugger md5_testharness \
 memccpy memcpy memchr memcmp memrchr memusage mktime mmap_test pipe printf printftest \
-protoent prototypes putenv pwent rand48 read1 readdir regex select sendfile servent siglist \
+protoent prototypes putenv pwent rand48 read1 readdir readdir64 regex select sendfile servent siglist \
 speed spent sprintf sscanf stdarg strcasecmp strcmp strncat strncpy strptime strrchr \
 strstr strtol sysenter ungetc utime waitpid
 

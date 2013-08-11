@@ -57,6 +57,7 @@
 /rand48
 /read1
 /readdir
+/readdir64
 /regex
 /select
 /sendfile
