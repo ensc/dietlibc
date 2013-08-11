@@ -42,8 +42,8 @@ int readdir_r (DIR* __dirp, struct dirent* entry, struct dirent** result) __THRO
 #endif
 struct dirent64 *readdir64 (DIR *__dirp) __THROW;
 void rewinddir (DIR *__dirp) __THROW;
-void seekdir (DIR *__dirp, off_t __pos) __THROW;
-off_t telldir (DIR *__dirp) __THROW;
+void seekdir (DIR *__dirp, long __pos) __THROW;
+long telldir (DIR *__dirp) __THROW;
 
 int scandir(const char *dir, struct dirent ***namelist,
       int (*selection)(const struct dirent *),
