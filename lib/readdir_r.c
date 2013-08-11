@@ -4,22 +4,14 @@
 #include <dirent.h>
 #include <stdlib.h>
 
-struct linux_dirent {
-  uint32_t	d_ino;
-  off_t		d_off;
-  uint16_t	d_reclen;
-  char		d_name[1];
-};
-
 int readdir_r(DIR *d,struct dirent* entry, struct dirent** result) {
-  struct linux_dirent* ld;
+  struct linux_dirent* ld = d->num ? (struct linux_dirent*)(d->buf+d->cur) : NULL;
   *result=0;
-  ld=(struct linux_dirent*)(d->buf+d->cur);
   if (!d->num || d->cur >= d->num || (d->cur += ld->d_reclen)>=d->num) {
-    int res=getdents(d->fd,(struct dirent*)d->buf,sizeof (d->buf)-1);
+    int res=getdents(d->fd,(struct linux_dirent*)d->buf,sizeof (d->buf)-1);
     if (res<=0)
       return res<0;
-    d->num=res; d->cur=0;
+    d->num=res; d->cur=0; d->is_64=0;
   }
   ld=(struct linux_dirent*)(d->buf+d->cur);
   if (ld->d_reclen < sizeof(struct linux_dirent))
