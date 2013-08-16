@@ -1,3 +1,6 @@
+0.34:
+  move stpcpy from libcompat to lib as it is now part of POSIX (Enrico Scholz)
+
 0.33:
   first stab at getting TLS to work in actual threads
   use fs: to find current thread on x86_64
