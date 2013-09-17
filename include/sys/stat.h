@@ -515,20 +515,20 @@ struct stat {
 
 #elif defined(__x86_64__)
 
+/* for X32 */
+
 struct stat {
-	uint64_t	st_dev, st_ino;
-	uint32_t	st_mode, st_nlink, st_uid, st_gid;
-	uint64_t	st_rdev, __pad1;
-	int64_t		st_size;
-	int		st_blksize, __pad2;
-	int64_t		st_blocks;
+	uint64_t	st_dev, st_ino, st_nlink;
+	uint32_t	st_mode, st_uid, st_gid, __pad0;
+	uint64_t	st_rdev;
+	int64_t		st_size, st_blksize, st_blocks;
 	time_t		st_atime;
 	uint64_t	st_atime_nsec;
 	time_t		st_mtime;
 	uint64_t	st_mtime_nsec;
 	time_t		st_ctime;
 	uint64_t	st_ctime_nsec;
-	unsigned int	__unused4, __unused5;
+	unsigned int	__unused[3]
 };
 
 #elif defined(__ia64__)
