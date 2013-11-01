@@ -6,7 +6,12 @@
 .type gettimeofday,@function
 gettimeofday:
 #ifdef WANT_VALGRIND_SUPPORT
+#ifdef __PIC__
+	mov __valgrind@GOTPCREL(%rip), %rax
+	cmpb $1, (%rax)
+#else
 	cmpb $1, __valgrind(%rip)
+#endif
 	je .Lvalgrind
 #endif
 	movq gtod(%rip), %rax
@@ -18,9 +23,16 @@ gettimeofday:
 .L1:
 	push %rsi
 	push %rdi
+#ifdef __PIC__
+	movq __vdso@GOTPCREL(%rip), %rax
+	movq (%rax),%rdi
+	movq funcname@GOTPCREL(%rip), %rsi
+	call vdso_dlsym@PLT
+#else
 	movq __vdso(%rip),%rdi
 	movq $funcname, %rsi
 	call vdso_dlsym
+#endif
 	pop %rdi
 	pop %rsi
 	jmp .L2
