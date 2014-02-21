@@ -91,7 +91,7 @@ SVCXPRT *svcraw_create()
 
 static enum xprt_stat svcraw_stat(SVCXPRT *__xprt)
 {
-
+  (void)__xprt;
 	return (XPRT_IDLE);
 }
 
@@ -101,6 +101,8 @@ struct rpc_msg *msg;
 {
 	register struct svcraw_private *srp = svcraw_private;
 	register XDR *xdrs;
+
+	(void)xprt;
 
 	if (srp == 0)
 		return (0);
@@ -118,6 +120,8 @@ struct rpc_msg *msg;
 {
 	register struct svcraw_private *srp = svcraw_private;
 	register XDR *xdrs;
+
+	(void)xprt;
 
 	if (srp == 0)
 		return (FALSE);
@@ -137,6 +141,8 @@ char* args_ptr;
 {
 	register struct svcraw_private *srp = svcraw_private;
 
+	(void)xprt;
+
 	if (srp == 0)
 		return (FALSE);
 	return ((*xdr_args) (&srp->xdr_stream, args_ptr));
@@ -150,6 +156,8 @@ char* args_ptr;
 	register struct svcraw_private *srp = svcraw_private;
 	register XDR *xdrs;
 
+	(void)xprt;
+
 	if (srp == 0)
 		return (FALSE);
 	xdrs = &srp->xdr_stream;
@@ -159,5 +167,6 @@ char* args_ptr;
 
 static void svcraw_destroy(SVCXPRT *__xprt)
 {
+  (void)__xprt;
 }
 

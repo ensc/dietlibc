@@ -136,5 +136,7 @@ enum auth_stat _svcauth_short(rqst, msg)
 struct svc_req *rqst;
 struct rpc_msg *msg;
 {
+  (void)rqst;
+  (void)msg;
 	return (AUTH_REJECTEDCRED);
 }

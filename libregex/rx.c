@@ -429,6 +429,12 @@ static int matchbranch(void*__restrict__ x,const char*__restrict__ s,int ofs,str
 }
 
 static int matchempty(void*__restrict__ x,const char*__restrict__ s,int ofs,struct __regex_t*__restrict__ preg,int plus,int eflags) {
+  (void)x;
+  (void)s;
+  (void)ofs;
+  (void)preg;
+  (void)plus;
+  (void)eflags;
   return 0;
 }
 
@@ -618,6 +624,8 @@ void regfree(regex_t* preg) {
 }
 
 size_t regerror(int errcode, const regex_t*__restrict__ preg, char*__restrict__ errbuf, size_t errbuf_size) {
+  (void)preg;
+  (void)errcode;
   strncpy(errbuf,"invalid regular expression (sorry)",errbuf_size);
   return strlen(errbuf);
 }

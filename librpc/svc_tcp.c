@@ -232,6 +232,8 @@ static bool_t rendezvous_request(register SVCXPRT *xprt, struct rpc_msg *msg)
 	struct sockaddr_in addr;
 	socklen_t len;
 
+	(void)msg;
+
 	r = (struct tcp_rendezvous *) xprt->xp_p1;
   again:
 	len = sizeof(struct sockaddr_in);
@@ -253,7 +255,7 @@ static bool_t rendezvous_request(register SVCXPRT *xprt, struct rpc_msg *msg)
 
 static enum xprt_stat rendezvous_stat(SVCXPRT *xprt)
 {
-
+  (void)xprt;
 	return (XPRT_IDLE);
 }
 

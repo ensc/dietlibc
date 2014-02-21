@@ -1,3 +1,4 @@
+#define _POSIX_SOURCE
 #include "dietdirent.h"
 #include <unistd.h>
 #include <dirent.h>

@@ -91,6 +91,7 @@ xdrmem_create (XDR *xdrs, const caddr_t addr, unsigned int size, enum xdr_op op)
 static void
 xdrmem_destroy (XDR *xdrs)
 {
+  (void)xdrs;
 }
 
 static bool_t

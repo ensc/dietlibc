@@ -158,6 +158,9 @@ struct in_addr *addrs;
 int sock;						/* any valid socket will do */
 char *buf;						/* why allocxate more when we can use existing... */
 {
+  (void)addrs;
+  (void)sock;
+  (void)buf;
 #ifdef __linux__
 	struct sockaddr_in addr;
 

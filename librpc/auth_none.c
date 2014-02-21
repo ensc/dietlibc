@@ -98,6 +98,8 @@ XDR *xdrs;
 {
 	register struct authnone_private *ap = authnone_private;
 
+	(void)client;
+
 	if (ap == 0)
 		return (0);
 	return ((*xdrs->x_ops->x_putbytes) (xdrs,
@@ -106,21 +108,24 @@ XDR *xdrs;
 
 static void authnone_verf(AUTH *x)
 {
+  (void)x;
 }
 
 static bool_t authnone_validate(AUTH *x, struct opaque_auth *x1)
 {
-
+  (void)x;
+  (void)x1;
 	return (TRUE);
 }
 
 static bool_t authnone_refresh(AUTH *x)
 {
-
+  (void)x;
 	return (FALSE);
 }
 
 static void authnone_destroy(AUTH *x)
 {
+  (void)x;
 }
 

@@ -137,6 +137,8 @@ struct timeval timeout;
 	enum clnt_stat status;
 	struct rpc_err error;
 
+	(void)timeout;
+
 	if (clp == 0)
 		return (RPC_FAILED);
   call_again:
@@ -197,6 +199,8 @@ struct timeval timeout;
 
 static void clntraw_geterr(CLIENT *x, struct rpc_err *x1)
 {
+  (void)x;
+  (void)x1;
 }
 
 
@@ -208,6 +212,8 @@ char* res_ptr;
 	register struct clntraw_private *clp = clntraw_private;
 	register XDR *xdrs = &clp->xdr_stream;
 	bool_t rval;
+
+	(void)cl;
 
 	if (clp == 0) {
 		rval = (bool_t) RPC_FAILED;
@@ -223,10 +229,14 @@ static void clntraw_abort(void)
 
 static bool_t clntraw_control(CLIENT *x, int x1, char *x2)
 {
+  (void)x;
+  (void)x1;
+  (void)x2;
 	return (FALSE);
 }
 
 static void clntraw_destroy(CLIENT *x)
 {
+  (void)x;
 }
 
