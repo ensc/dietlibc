@@ -6,12 +6,12 @@
 
 .macro DEF_G name
 .global \name
-.type \name,function
+.type \name,@function
 \name:
 .endm
 .macro DEF_W name
 .weak \name
-.type \name,function
+.type \name,@function
 \name:
 .endm
 
