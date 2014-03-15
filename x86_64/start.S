@@ -49,8 +49,7 @@ _start:
 	movq	%rax, %rdi	/* return value */
 #endif
 #if defined(__ILP32__)
-	xor %rax,%rax		/* do exit inline with x64 syscall number so it also works if the kernel does not have x32 support */
-	inc %rax
+	mov	$SYS_exit,%eax
 	syscall
 #else
 	call	exit

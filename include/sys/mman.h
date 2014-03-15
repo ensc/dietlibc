@@ -13,10 +13,27 @@ __BEGIN_DECLS
 #define PROT_READ	0x1		/* page can be read */
 #define PROT_WRITE	0x2		/* page can be written */
 #define PROT_EXEC	0x4		/* page can be executed */
+#define PROT_SEM	0x8		/* page may be used for atomic ops */
 #define PROT_NONE	0x0		/* page can not be accessed */
+
+#define PROT_GROWSDOWN	0x01000000	/* mprotect flag: extend change to start of growsdown vma */
+#define PROT_GROWSUP	0x02000000	/* mprotect flag: extend change to end of growsdown vma */
 
 #define MAP_SHARED	0x01		/* Share changes */
 #define MAP_PRIVATE	0x02		/* Changes are private */
+#define MAP_TYPE	0xf		/* Mask for type of mapping */
+
+#define MADV_REMOVE		9
+#define MADV_DONTFORK		10
+#define MADV_DOFORK		11
+#define MADV_MERGEABLE		12
+#define MADV_UNMERGEABLE	13
+#define MADV_HUGEPAGE		14
+#define MADV_NOHUGEPAGE		15
+#define MADV_DONTDUMP		16
+#define MADV_DODUMP		17
+#define MADV_HWPOISON		100
+#define MADV_SOFT_OFFLINE	101
 
 #if defined(__mips__)
 #define MAP_FIXED	0x010		/* Interpret addr exactly */
@@ -27,6 +44,9 @@ __BEGIN_DECLS
 #define MAP_EXECUTABLE	0x4000		/* mark it as an executable */
 #define MAP_LOCKED	0x8000		/* pages are locked */
 #define MAP_POPULATE	0x10000
+#define MAP_NONBLOCK	0x20000
+#define MAP_STACK	0x40000
+#define MAP_HUGETLB	0x80000
 #define MS_ASYNC	0x0001		/* sync memory asynchronously */
 #define MS_INVALIDATE	0x0002		/* invalidate mappings & caches */
 #define MS_SYNC		0x0004		/* synchronous memory sync */
@@ -46,6 +66,9 @@ __BEGIN_DECLS
 #define MAP_LOCKED	0x8000		/* lock the mapping */
 #define MAP_NORESERVE	0x10000		/* don't check for reservations */
 #define MAP_POPULATE	0x20000
+#define MAP_NONBLOCK	0x40000
+#define MAP_STACK	0x80000
+#define MAP_HUGETLB	0x100000
 #define MS_ASYNC	1		/* sync memory asynchronously */
 #define MS_SYNC		2		/* synchronous memory sync */
 #define MS_INVALIDATE	4		/* invalidate the caches */
@@ -57,7 +80,8 @@ __BEGIN_DECLS
 #define MADV_WILLNEED	3		/* will need these pages */
 #define MADV_SPACEAVAIL	5		/* ensure resources are available */
 #define MADV_DONTNEED	6		/* dont need these pages */
-#elif defined(__i386__) || defined(__s390__) || defined(__x86_64__)
+
+#elif defined(__i386__) || defined(__s390__) || defined(__x86_64__) || defined(__arm__)
 #define MAP_FIXED	0x10		/* Interpret addr exactly */
 #define MAP_ANONYMOUS	0x20		/* don't use a file */
 #define MAP_GROWSDOWN	0x0100		/* stack-like segment */
@@ -66,6 +90,9 @@ __BEGIN_DECLS
 #define MAP_LOCKED	0x2000		/* pages are locked */
 #define MAP_NORESERVE	0x4000		/* don't check for reservations */
 #define MAP_POPULATE	0x8000
+#define MAP_NONBLOCK	0x10000
+#define MAP_STACK	0x20000
+#define MAP_HUGETLB	0x40000
 #define MS_ASYNC	1		/* sync memory asynchronously */
 #define MS_INVALIDATE	2		/* invalidate the caches */
 #define MS_SYNC		4		/* synchronous memory sync */
@@ -76,6 +103,7 @@ __BEGIN_DECLS
 #define MADV_SEQUENTIAL	0x2		/* read-ahead aggressively */
 #define MADV_WILLNEED	0x3		/* pre-fault pages */
 #define MADV_DONTNEED	0x4		/* discard these pages */
+
 #elif defined(__sparc__) || defined (__powerpc__) || defined (__powerpc64__)
 #define MAP_FIXED	0x10		/* Interpret addr exactly */
 #define MAP_ANONYMOUS	0x20		/* don't use a file */
@@ -88,6 +116,9 @@ __BEGIN_DECLS
 #define MAP_DENYWRITE	0x0800		/* ETXTBSY */
 #define MAP_EXECUTABLE	0x1000		/* mark it as an executable */
 #define MAP_POPULATE	0x8000
+#define MAP_NONBLOCK	0x10000
+#define MAP_STACK	0x20000
+#define MAP_HUGETLB	0x40000
 #define MS_ASYNC	1		/* sync memory asynchronously */
 #define MS_INVALIDATE	2		/* invalidate the caches */
 #define MS_SYNC		4		/* synchronous memory sync */
@@ -99,27 +130,9 @@ __BEGIN_DECLS
 #define MADV_WILLNEED	0x3		/* pre-fault pages */
 #define MADV_DONTNEED	0x4		/* discard these pages */
 #define MADV_FREE	0x5		/* (Solaris) contents can be freed */
-#elif defined (__arm__)
-#define MAP_FIXED	0x10		/* Interpret addr exactly */
-#define MAP_ANONYMOUS	0x20		/* don't use a file */
-#define MAP_GROWSDOWN	0x0100		/* stack-like segment */
-#define MAP_DENYWRITE	0x0800		/* ETXTBSY */
-#define MAP_EXECUTABLE	0x1000		/* mark it as an executable */
-#define MAP_LOCKED	0x2000		/* pages are locked */
-#define MAP_NORESERVE	0x4000		/* don't check for reservations */
-#define MAP_POPULATE	0x8000
-#define MS_ASYNC	1		/* sync memory asynchronously */
-#define MS_INVALIDATE	2		/* invalidate the caches */
-#define MS_SYNC		4		/* synchronous memory sync */
-#define MCL_CURRENT	1		/* lock all current mappings */
-#define MCL_FUTURE	2		/* lock all future mappings */
-#define MADV_NORMAL	0x0		/* default page-in behavior */
-#define MADV_RANDOM	0x1		/* page-in minimum required */
-#define MADV_SEQUENTIAL	0x2		/* read-ahead aggressively */
-#define MADV_WILLNEED	0x3		/* pre-fault pages */
-#define MADV_DONTNEED	0x4		/* discard these pages */
 
 #elif defined(__hppa__)
+#undef MAP_TYPE
 #define MAP_TYPE	0x03	/* Mask for type of mapping */
 #define MAP_FIXED	0x04	/* Interpret addr exactly */
 #define MAP_ANONYMOUS	0x10	/* don't use a file */
@@ -130,6 +143,9 @@ __BEGIN_DECLS
 #define MAP_NORESERVE	0x4000	/* don't check for reservations */
 #define MAP_GROWSDOWN	0x8000	/* stack-like segment */
 #define MAP_POPULATE	0x10000
+#define MAP_NONBLOCK	0x20000
+#define MAP_STACK	0x40000
+#define MAP_HUGETLB	0x80000
 
 #define MS_SYNC 	1	/* synchronous memory sync */
 #define MS_ASYNC	2	/* sync memory asynchronously */
@@ -154,9 +170,23 @@ __BEGIN_DECLS
 #define MADV_4M_PAGES	22	/* Use 4 Megabyte pages */
 #define MADV_16M_PAGES	24	/* Use 16 Megabyte pages */
 #define MADV_64M_PAGES	26	/* Use 64 Megabyte pages */
+
+#undef MADV_MERGEABLE
+#undef MADV_UNMERGEABLE
+#undef MADV_HUGEPAGE
+#undef MADV_NOHUGEPAGE
+#undef MADV_DONTDUMP
+#undef MADV_DODUMP
+
+#define MADV_MERGEABLE 65
+#define MADV_UNMERGEABLE 66
+#define MADV_HUGEPAGE 67
+#define MADV_NOHUGEPAGE 68
+#define MADV_DONTDUMP 69
+#define MADV_DODUMP 70
+
 #elif defined(__ia64__)
 
-#define MAP_TYPE	0x0f	/* Mask for type of mapping */
 #define MAP_FIXED	0x10	/* Interpret addr exactly */
 #define MAP_ANONYMOUS	0x20	/* don't use a file */
 
@@ -167,8 +197,9 @@ __BEGIN_DECLS
 #define MAP_LOCKED	0x2000	/* pages are locked */
 #define MAP_NORESERVE	0x4000	/* don't check for reservations */
 #define MAP_POPULATE	0x8000
-#define MAP_WRITECOMBINED 0x10000	/* write-combine the area */
-#define MAP_NONCACHED	0x20000	/* don't cache the memory */
+#define MAP_NONBLOCK	0x10000
+#define MAP_STACK	0x20000
+#define MAP_HUGETLB	0x40000
 
 #define MS_ASYNC	1	/* sync memory asynchronously */
 #define MS_INVALIDATE	2	/* invalidate the caches */

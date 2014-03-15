@@ -181,6 +181,7 @@ int stackgap(int argc,char* argv[],char* envp[]) {
   memcpy(tlsdata,__tdataptr,__tdatasize);
   memset(tlsdata+__tdatasize,0,__tmemsize-__tdatasize);
   __setup_tls(__tcb_mainthread=(tcbhead_t*)(tlsdata+__tmemsize));
+  __tcb_mainthread->sysinfo=find_in_auxvec(auxvec,32);
 #elif defined(WANT_SSP)
   tlsdata=alloca(sizeof(tcbhead_t));
   __setup_tls(__tcb_mainthread=(tcbhead_t*)(tlsdata));
