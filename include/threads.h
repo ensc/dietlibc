@@ -41,8 +41,8 @@ int thrd_sleep(const struct timespec* time_point, struct timespec* remaining);
 void thrd_yield(void);
 
 typedef struct __mtx_t {
-  int lock;
-  char [16-sizeof(int)] __filler;
+  int lock, type;
+  thrd_t owner;
 } mtx_t;
 
 enum {
@@ -51,12 +51,16 @@ enum {
   mtx_recursive = 2
 };
 
-int mtx_init( mtx_t* mutex, int type );
-int mtx_lock( mtx_t* mutex );
-int mtx_timedlock( mtx_t *restrict mutex, const struct timespec *restrict time_point );
-int mtx_trylock( mtx_t *mutex );
-int mtx_unlock( mtx_t *mutex );
-void mtx_destroy( mtx_t *mutex );
+int mtx_init(mtx_t* mutex, int type);
+int mtx_lock(mtx_t* mutex);
+int mtx_timedlock(mtx_t *restrict mutex, const struct timespec *restrict time_point);
+int mtx_trylock(mtx_t* mutex);
+int mtx_unlock(mtx_t* mutex);
+void mtx_destroy(mtx_t* mutex);
+
+#ifdef _DIETLIBC_SOURCE
+int __mtx_trylock(mtx_t* mutex,int* lockval);
+#endif
 
 typedef int once_flag;
 #define ONCE_FLAG_INIT 0
@@ -64,7 +68,7 @@ typedef int once_flag;
 void call_once( once_flag* flag, void (*func)(void) );
 
 typedef struct __cnd_t {
-  int tbd;
+  int sem;
 } cnd_t;
 
 int cnd_init( cnd_t* cond );
@@ -76,7 +80,12 @@ void cnd_destroy( cnd_t* cond );
 
 #define thread_local _Thread_local
 
-typedef void* tss_t;
+typedef void (*tss_dtor_t)(void);
+typedef struct __tss_t {
+  void* data;
+  struct __tss_t* next;
+} tss_t;
+
 #define TSS_DTOR_ITERATIONS 1
 int tss_create( tss_t* tss_id, tss_dtor_t destructor );
 void *tss_get( tss_t tss_id );

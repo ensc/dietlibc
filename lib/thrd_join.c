@@ -20,9 +20,10 @@ int thrd_join(thrd_t thr, int* res) {
     *res=thr->res;
     thr->join_wait_futex=1;
     futex(&thr->join_wait_futex,FUTEX_WAKE,1,0,0,0);
-  } else
+  } else {
     *res=thr->res;
-  munmap(((char*)thr)-sizeof(tcbhead_t),sizeof(tcbhead_t)+sizeof(*thr));
+    munmap(((char*)thr)-sizeof(tcbhead_t),sizeof(tcbhead_t)+sizeof(*thr));
+  }
   return thrd_success;
 }
 

@@ -8,6 +8,8 @@ LIBDIR=${prefix}/lib
 BINDIR=${prefix}/bin
 MAN1DIR=${prefix}/man/man1
 
+EXTRACFLAGS=
+
 MYARCH:=$(shell uname -m | sed -e 's/i[4-9]86/i386/' -e 's/armv[3-6]t\?e\?[lb]/arm/')
 
 # This extra-ugly cruft is here so make will not run uname and sed each
@@ -100,7 +102,7 @@ all: $(WHAT)
 
 profiling: $(OBJDIR)/libgmon.a $(OBJDIR)/pstart.o
 
-CFLAGS=-pipe -nostdinc
+CFLAGS=-pipe -nostdinc $(EXTRACFLAGS)
 CROSS=
 
 CC=gcc
@@ -140,7 +142,7 @@ ifneq ($(DEBUG),)
 CFLAGS = -g
 COMMENT = :
 endif
-CFLAGS += -W -Wall -Wextra -Wchar-subscripts -Wmissing-prototypes -Wmissing-declarations -Wno-switch -Wno-unused -Wredundant-decls
+CFLAGS += -W -Wall -Wextra -Wchar-subscripts -Wmissing-prototypes -Wmissing-declarations -Wno-switch -Wno-unused -Wredundant-decls -Wshadow
 
 PWD=$(shell pwd)
 

@@ -26,7 +26,7 @@ static int launch(void* p) {
 
 int thrd_create(thrd_t *thr, thrd_start_t func, void *arg) {
   size_t stacksize=_thrd_stacksize;	// capture value to prevent asynchronous changes to break us
-  char* stack=mmap(0,stacksize+4096+__tmemsize+sizeof(tcbhead_t)+sizeof(**thr),PROT_NONE,MAP_PRIVATE|MAP_ANONYMOUS|MAP_STACK,-1,0);
+  char* stack=mmap(0,stacksize+4096+__tmemsize+sizeof(tcbhead_t)+sizeof(**thr),PROT_NONE,MAP_PRIVATE|MAP_ANONYMOUS|MAP_STACK|MAP_GROWSDOWN,-1,0);
   thrd_t t;
   tcbhead_t* tcb;
   int r;
@@ -45,7 +45,7 @@ int thrd_create(thrd_t *thr, thrd_start_t func, void *arg) {
   tcb->multiple_threads=1;
 #ifdef WANT_TLS
   tcb->sysinfo=__tcb_mainthread->sysinfo;
-  tcb->stack_guard=__tcb_mainthread->stack_guard;
+  tcb->stack_guard=__tcb_mainthread->stack_guard ^ gettid() ^ (uintptr_t)t;
   __tcb_mainthread->multiple_threads=1;
 #endif
   t->memstart=stack;
