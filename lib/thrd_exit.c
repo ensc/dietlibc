@@ -8,12 +8,19 @@
 
 extern void __munmap_and_exit(void* map,size_t len) __attribute__((noreturn));
 
+thread_local tss_t tss_dtor_list;
+
 void thrd_exit(int res) {
   thrd_t t=thrd_current();
   int flags;
 
   size_t len;
 
+  while (tss_dtor_list) {
+    tss_t cur=tss_dtor_list;
+    tss_dtor_list=tss_dtor_list->next;
+    if (cur->dtor) cur->dtor(cur);
+  }
   if (!t) exit(res);	// moron user called us when no threads are running
   t->res=res;
   if ((flags=__sync_fetch_and_or(&t->flags,4))&4) return;	// shouldn't be possible, but the tear-down-bit was already set

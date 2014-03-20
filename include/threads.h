@@ -65,31 +65,32 @@ int __mtx_trylock(mtx_t* mutex,int* lockval);
 typedef int once_flag;
 #define ONCE_FLAG_INIT 0
 
-void call_once( once_flag* flag, void (*func)(void) );
+void call_once(once_flag* flag, void (*func)(void));
 
 typedef struct __cnd_t {
   int sem;
 } cnd_t;
 
-int cnd_init( cnd_t* cond );
-int cnd_signal( cnd_t *cond );
-int cnd_broadcast( cnd_t *cond );
-int cnd_wait( cnd_t* cond, mtx_t* mutex );
-int cnd_timedwait( cnd_t* restrict cond, mtx_t* restrict mutex, const struct timespec* restrict time_point );
-void cnd_destroy( cnd_t* cond );
+int cnd_init(cnd_t* cond);
+int cnd_signal(cnd_t *cond);
+int cnd_broadcast(cnd_t *cond);
+int cnd_wait(cnd_t* cond, mtx_t* mutex);
+int cnd_timedwait(cnd_t* restrict cond, mtx_t* restrict mutex, const struct timespec* restrict time_point);
+void cnd_destroy(cnd_t* cond);
 
-#define thread_local _Thread_local
+#define thread_local __thread
 
-typedef void (*tss_dtor_t)(void);
+typedef void (*tss_dtor_t)(void*);
 typedef struct __tss_t {
   void* data;
+  tss_dtor_t dtor;
   struct __tss_t* next;
-} tss_t;
+}* tss_t;
 
 #define TSS_DTOR_ITERATIONS 1
-int tss_create( tss_t* tss_id, tss_dtor_t destructor );
-void *tss_get( tss_t tss_id );
-int tss_set( tss_t tss_id, void *val );
-void tss_delete( tss_t tss_id );
+int tss_create(tss_t* tss_id, tss_dtor_t destructor);
+void *tss_get(tss_t tss_id);
+int tss_set(tss_t tss_id, void *val);
+void tss_delete(tss_t tss_id);
 
 #endif

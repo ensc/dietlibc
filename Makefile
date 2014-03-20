@@ -161,17 +161,17 @@ $(OBJDIR)/%: $(OBJDIR)
 
 ifeq ($(CC),tcc)
 $(OBJDIR)/%.o: %.S $(ARCH)/syscalls.h
-	$(CROSS)cpp $(INC) $< | $(CROSS)as -o $@
+	$(CROSS)cpp $(INC) $< | $(CROSS)as --noexecstack -o $@
 
 $(OBJDIR)/%.o: %.c
 	tcc -I. -Iinclude -c $< -o $@
 	$(COMMENT) -$(CROSS)strip -x -R .comment -R .note $@
 else
 $(OBJDIR)/pstart.o: start.S
-	$(CROSS)$(CC) $(INC) $(CFLAGS) -DPROFILING -c $< -o $@
+	$(CROSS)$(CC) $(INC) $(CFLAGS) -DPROFILING -c $< -Wa,--noexecstack -o $@
 
 $(OBJDIR)/%.o: %.S $(ARCH)/syscalls.h
-	$(CROSS)$(CC) $(INC) $(CFLAGS) -c $< -o $@
+	$(CROSS)$(CC) $(INC) $(CFLAGS) -c $< -Wa,--noexecstack -o $@
 
 $(OBJDIR)/pthread_%.o: libpthread/pthread_%.c
 	$(CROSS)$(CC) $(INC) $(CFLAGS) -c $< -o $@
