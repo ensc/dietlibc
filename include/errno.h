@@ -704,11 +704,7 @@
 
 __BEGIN_DECLS
 
-#ifndef _REENTRANT
-extern int errno;
-#else
-#define errno (*__errno_location())
-#endif
+#include <errno_definition.h>
 
 extern int *__errno_location(void);
 

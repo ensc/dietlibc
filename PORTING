@@ -18,9 +18,11 @@ To port the diet libc to a new architecture, you need to:
   - edit include/sys/mman.h
   - edit include/sys/shm.h
   - edit include/sys/stat.h
+  - edit include/sys/tls.h
   - edit include/errno.h
   - edit syscalls.h
   - edit include/termios.h
+  - edit lib/__get_cur_tcb.c
   - edit diet.c to make it recognize the architecture and add proper
     CFLAGS
   - edit libcompat/syscall.S
