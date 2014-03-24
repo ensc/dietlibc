@@ -370,8 +370,13 @@ wsym: ; \
 .type sym,@function; \
 .global sym; \
 sym: \
+.ifge __NR_##name-256 ; \
+	mov	$__NR_##name,%ax; \
+	jmp	__unified_syscall_16bit@PLT;  \
+.else ; \
 	mov	$__NR_##name,%al; \
-	jmp	__unified_syscall@PLT
+	jmp	__unified_syscall@PLT; \
+.endif
 
 #define syscall(name,sym) \
 .text; \
@@ -380,10 +385,10 @@ sym: \
 sym: \
 .ifge __NR_##name-256 ; \
 	mov	$__NR_##name,%ax; \
-	jmp	__unified_syscall_16bit@PLT;  \
+	jmp	__unified_syscall_16bit@PLT; \
 .else ; \
 	mov	$__NR_##name,%al; \
-	jmp	__unified_syscall@PLT;  \
+	jmp	__unified_syscall@PLT; \
 .endif
 
 #else
@@ -398,10 +403,10 @@ wsym: ; \
 sym: \
 .ifge __NR_##name-256 ; \
 	mov	$__NR_##name,%ax; \
-	jmp	__unified_syscall_16bit;  \
+	jmp	__unified_syscall_16bit; \
 .else ; \
 	mov	$__NR_##name,%al; \
-	jmp	__unified_syscall;  \
+	jmp	__unified_syscall; \
 .endif
 
 #define syscall(name,sym) \
