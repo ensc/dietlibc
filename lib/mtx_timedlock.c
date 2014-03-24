@@ -1,3 +1,4 @@
+#define _REENTRANT
 #define _DIETLIBC_SOURCE
 #include <threads.h>
 #include <sys/futex.h>

@@ -1,3 +1,4 @@
+#define _REENTRANT
 #define _LINUX_SOURCE
 #include <threads.h>
 #include <unistd.h>
@@ -46,6 +47,9 @@ void thrd_exit(int res) {
     // Tell thrd_join that we are dead and cleaned up our stack and it
     // should clean up the rest when it's done.
     __sync_fetch_and_or(&t->flags,2);
+    len&=~4095;	// round down to nearest page
+    t->arg=t->memstart+len;
+    t->memsize=t->memsize+sizeof(tcbhead_t)+sizeof(*t)-len;
   }
   /* Problem: we need to unmap the stack and call exit, but we can't
    * touch the stack in between. Unfortunately, calling exit touches the

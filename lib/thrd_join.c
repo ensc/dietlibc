@@ -1,3 +1,4 @@
+#define _REENTRANT
 #include <threads.h>
 #include <sys/futex.h>
 #include <sys/mman.h>
@@ -17,12 +18,12 @@ int thrd_join(thrd_t thr, int* res) {
     do {
       r=futex(&thr->join_futex,FUTEX_WAIT,1,0,0,0);
     } while (r==-1 && errno==EINTR);
-    *res=thr->res;
+    if (res) *res=thr->res;
     thr->join_wait_futex=1;
     futex(&thr->join_wait_futex,FUTEX_WAKE,1,0,0,0);
   } else {
-    *res=thr->res;
-    munmap(((char*)thr)-sizeof(tcbhead_t),sizeof(tcbhead_t)+sizeof(*thr));
+    if (res) *res=thr->res;
+    munmap(thr->arg,thr->memsize);
   }
   return thrd_success;
 }

@@ -1,3 +1,4 @@
+#define _REENTRANT
 #include <threads.h>
 #include <sys/futex.h>
 #include <errno.h>

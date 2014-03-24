@@ -1,3 +1,5 @@
+#define _LINUX_SOURCE
+#include <unistd.h>
 #include <threads.h>
 #include <sys/mman.h>
 #include <fcntl.h>
@@ -60,10 +62,6 @@ int thrd_create(thrd_t *thr, thrd_start_t func, void *arg) {
   memcpy(stack+stacksize+4096,__tdataptr,__tdatasize);
   memset(stack+stacksize+4096+__tdatasize,0,__tmemsize-__tdatasize);
 #endif
-
-  do {
-    t->next=_thrd_root;
-  } while (!__sync_bool_compare_and_swap(&_thrd_root,t->next,t));
 
   t->tid=clone(launch,stack+4096+stacksize,CLONE_FILES|CLONE_FS|CLONE_IO|CLONE_PARENT|CLONE_SIGHAND|CLONE_SYSVSEM|CLONE_THREAD|CLONE_VM|CLONE_SETTLS|CLONE_PARENT_SETTID,t,&t->tid,stack+stacksize+4096+__tmemsize);
   if (t->tid==-1) {
