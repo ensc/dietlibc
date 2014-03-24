@@ -120,7 +120,6 @@ int main(int argc,char *argv[]) {
     } else break;
   } while (1);
   {
-    int i;
     m=0;
     for (i=1; i<argc; ++i) {
       if (!strcmp(argv[i],"-m32")) m=32; else
@@ -193,15 +192,14 @@ int main(int argc,char *argv[]) {
       shortplatform="ia64";
 #endif
       {
-	char *tmp=platform+strlen(platform);
-	strcpy(tmp,shortplatform);
-	shortplatform=tmp;
+	char *tmp4=platform+strlen(platform);
+	strcpy(tmp4,shortplatform);
+	shortplatform=tmp4;
       }
     }
     /* MIPS needs special handling.  If argv contains -EL, change
      * platform name to mipsel */
     if (!strcmp(shortplatform,"mips")) {
-      int i;
       for (i=1; i<argc; ++i)
 	if (!strcmp(argv[i],"-EL"))
 	  strcpy(shortplatform,"mipsel");
@@ -351,7 +349,7 @@ pp:
 
 	{
 	  int fd;
-	  char* tmp=getenv("HOME");
+	  tmp=getenv("HOME");
 	  if (tmp) {
 	    if (strlen(tmp)+strlen(cc)<900) {
 	      strcpy(manglebuf,tmp);
@@ -362,7 +360,6 @@ pp:
 	      if ((fd=open(manglebuf,O_RDONLY))>=0) {
 		int len=read(fd,manglebuf,1023);
 		if (len>0) {
-		  int i;
 		  manglebuf[len]=0;
 		  *dest++=manglebuf;
 		  for (i=1; i<len; ++i) {
@@ -416,7 +413,6 @@ incorporated:
 #endif
       *dest=0;
       if (verbose) {
-	int i;
 	for (i=0; newargv[i]; i++) {
 	  __write2(newargv[i]);
 	  __write2(" ");
