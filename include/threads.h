@@ -5,7 +5,6 @@
 #include <sys/time.h>
 
 typedef struct __thrd_t {
-  struct __thrd_t* next;
   char* memstart;	// points to beginning of guard page
   size_t memsize;	// this includes the guard page, the stack, the thread local storage but not tcb and thrd_t data
   pid_t tid;
