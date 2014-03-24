@@ -456,10 +456,10 @@ static const char* parsebranch(struct branch*__restrict__ b,const char*__restric
     }
 //    printf("b->p from %p to ",b->p);
     {
-      struct piece* tmp;
-      if (!(tmp=realloc(b->p,++b->num*sizeof(p)))) return s;
-//      printf("piece realloc: %p -> %p (%d*%d)\n",b->p,tmp,b->num,sizeof(p));
-      b->p=tmp;
+      struct piece* t;
+      if (!(t=realloc(b->p,++b->num*sizeof(p)))) return s;
+//      printf("piece realloc: %p -> %p (%d*%d)\n",b->p,t,b->num,sizeof(p));
+      b->p=t;
     }
 //    printf("%p (size %d)\n",b->p,b->num*sizeof(p));
     b->p[b->num-1]=p;
@@ -507,10 +507,10 @@ static const char* parseregex(struct regex*__restrict__ r,const char*__restrict_
     if (tmp==s && !closebracket(s,p)) return s;
 //    printf("r->b from %p to ",r->b);
     {
-      struct branch* tmp;
-      if (!(tmp=realloc(r->b,++r->num*sizeof(b)))) return s;
-//      printf("branch realloc: %p -> %p (%d*%d)\n",r->b,tmp,r->num,sizeof(b));
-      r->b=tmp;
+      struct branch* t;
+      if (!(t=realloc(r->b,++r->num*sizeof(b)))) return s;
+//      printf("branch realloc: %p -> %p (%d*%d)\n",r->b,t,r->num,sizeof(b));
+      r->b=t;
     }
 //    printf("%p (size %d)\n",r->b,r->num*sizeof(b));
     r->b[r->num-1]=b;

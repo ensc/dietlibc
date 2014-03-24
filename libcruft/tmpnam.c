@@ -16,7 +16,7 @@ char* tmpnam(char* s) {
   if (s) tmp=s; else tmp=buf;
   strcpy(tmp,"/tmp/temp_");
   for (;;) {
-    struct stat s;
+    struct stat ss;
     int i,j;
     i=rand();
     for (j=0; j<8; ++j) {
@@ -25,7 +25,7 @@ char* tmpnam(char* s) {
       i>>=4;
     }
     tmp[17]=0;
-    if (lstat(tmp,&s)==-1 && errno==ENOENT) break;
+    if (lstat(tmp,&ss)==-1 && errno==ENOENT) break;
   }
   return tmp;
 }

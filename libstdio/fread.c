@@ -3,7 +3,6 @@
 #include <unistd.h>
 
 size_t fread_unlocked(void *ptr, size_t size, size_t nmemb, FILE *stream) {
-  int res;
   unsigned long i,j;
   j=size*nmemb;
   i=0;
@@ -44,6 +43,7 @@ size_t fread_unlocked(void *ptr, size_t size, size_t nmemb, FILE *stream) {
   }
 #endif
   for (; i<j; ++i) {
+    int res;
     res=fgetc_unlocked(stream);
     if (res==EOF)
 exit:

@@ -74,11 +74,11 @@ again:
     while (cur<last && !isspace(*cur)) ++cur;
     {
       char *from=pe->h_aliases[aliasidx];
-      int len=cur-from;
-      if (max-dest<len+2) goto nospace;
+      int l=cur-from;
+      if (max-dest<l+2) goto nospace;
       pe->h_aliases[aliasidx]=dest;
       memmove(dest,from,(size_t)(cur-from));
-      dest+=len;
+      dest+=l;
       *dest=0; ++dest;
     }
     if (*cur=='\n') { ++cur; ++aliasidx; break; }
