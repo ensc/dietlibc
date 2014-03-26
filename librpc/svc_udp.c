@@ -160,7 +160,7 @@ int sock;
 static enum xprt_stat svcudp_stat(xprt)
 SVCXPRT *xprt;
 {
-
+  (void)xprt;
 	return (XPRT_IDLE);
 }
 

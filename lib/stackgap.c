@@ -18,6 +18,11 @@
 #include "dietfeatures.h"
 #include "dietelfinfo.h"
 
+#ifdef IN_LDSO
+#undef WANT_TLS
+#undef WANT_SSP
+#endif
+
 #ifdef WANT_GNU_STARTUP_BLOAT
 char* program_invocation_name;
 char* program_invocation_short_name;
@@ -85,6 +90,8 @@ static void findtlsdata(long* auxvec) {
       __tdataptr=(void*)x[i].p_vaddr;
       __tdatasize=x[i].p_filesz;
       __tmemsize=x[i].p_memsz;
+      if (__tmemsize&15)
+	__tmemsize=(__tmemsize+15)&~15;
       break;
     }
   /* if there is no PT_TLS section, there is no thread-local data, and
@@ -218,6 +225,14 @@ int stackgap(int argc,char* argv[],char* envp[]) {
   memcpy(tlsdata,__tdataptr,__tdatasize);
   memset(tlsdata+__tdatasize,0,__tmemsize-__tdatasize);
   __setup_tls(__tcb_mainthread=(tcbhead_t*)(tlsdata+__tmemsize));
+#ifndef WANT_ELFINFO
+  __tcb_mainthread->sysinfo=(uintptr_t)find_in_auxvec(auxvec,32);
+#else
+  {
+    __diet_elf_addr_t const	*sysinfo = __get_elf_aux_value(32);
+    __tcb_mainthread->sysinfo=sysinfo ? (uintptr_t)*sysinfo : (uintptr_t)0;
+  }
+#endif
 #elif defined(WANT_SSP)
   tlsdata=alloca(sizeof(tcbhead_t));
   __setup_tls(__tcb_mainthread=(tcbhead_t*)(tlsdata));

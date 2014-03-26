@@ -7,7 +7,7 @@
 int readdir_r(DIR *d,struct dirent* entry, struct dirent** result) {
   struct linux_dirent* ld = d->num ? (struct linux_dirent*)(d->buf+d->cur) : NULL;
   *result=0;
-  if (!d->num || (d->cur += ld->d_reclen)>=d->num) {
+  if (!d->num || d->cur >= d->num || (d->cur += ld->d_reclen)>=d->num) {
     int res=getdents(d->fd,(struct linux_dirent*)d->buf,__DIRSTREAM_BUF_SIZE-1);
     if (res<=0)
       return res<0;

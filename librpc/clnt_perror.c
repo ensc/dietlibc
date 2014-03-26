@@ -67,6 +67,8 @@ static char *_buf()
  */
 char *clnt_sperror __P ((CLIENT *rpch, const char *s))
 {
+  (void)rpch;
+  (void)s;
 #if 0
 	struct rpc_err e;
 	void clnt_perrno();
@@ -204,6 +206,7 @@ static struct rpc_errtab rpc_errlist[] = {
 char *clnt_sperrno(stat)
 enum clnt_stat stat;
 {
+  (void)stat;
 #if 0
 	int i;
 
@@ -225,6 +228,7 @@ enum clnt_stat num;
 
 char *clnt_spcreateerror __P ((__const char *s))
 {
+  (void)s;
 #if 0
 	extern int sys_nerr;
 	extern char *sys_errlist[];

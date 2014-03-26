@@ -174,6 +174,8 @@ unsigned int pos;
 
 static int32_t *xdrstdio_inline(XDR* xdrs, unsigned int len)
 {
+  (void)xdrs;
+  (void)len;
 
 	/*
 	 * Must do some work to implement this: must insure

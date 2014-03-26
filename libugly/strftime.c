@@ -82,10 +82,10 @@ again:
 	    case 'W': no  = (tm->tm_yday - (tm->tm_wday - 1 + 7) % 7 + 7) / 7; goto _no;
 	    case 's': {
 			time_t t = mktime((struct tm*)tm);
-			char buf[101];
+			char sbuf[101];
 			char* c;
-			buf[100]=0;
-			for (c=buf+99; c>buf; --c) {
+			sbuf[100]=0;
+			for (c=sbuf+99; c>sbuf; --c) {
 			  *c=(t%10)+'0';
 			  t/=10;
 			  if (!t) break;

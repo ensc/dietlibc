@@ -30,6 +30,9 @@ __error_unified_syscall:
 	negl	%eax
 	pushq	%rax
 	call	__errno_location
+#ifdef IN_LDSO
+	.hidden __errno_location
+#endif
 	popq	%rcx
 	movl	%ecx,(%rax)
 	orq	$-1, %rax

@@ -117,6 +117,9 @@ int main() {
   assert(regexec(&r,"foobarfoo",10,matches,0)==0);
   regfree(&r);
 
+  assert(regcomp(&r,"^(postmaster|abuse|(felix|leitner|zoke|sanjiyan|dreesen|akuma|braun|kristine|gilda|oskar|moritz)(-[^@]*|))@qarx.de$",REG_NOSUB|REG_EXTENDED)==0);
+  assert(regexec(&r,"apollo.bingo-ev.de@fefe.de",10,matches,0)!=0);
+
 #if 0
   printf("regcomp %d\n",regcomp(&r,"\\.( ? ? ?\\.)*\\.",REG_EXTENDED|REG_NOSUB));
   printf("regexec %d\n",regexec(&r,buf,1,0,0));

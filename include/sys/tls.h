@@ -9,8 +9,7 @@
 typedef union dtv
 {
   size_t counter;
-  struct
-  {
+  struct {
     void *val;
     bool is_static;
   } pointer;
@@ -18,19 +17,18 @@ typedef union dtv
 
 typedef struct
 {
-  void *tcb;            /* Pointer to the TCB.  Not necessary the
-                           thread descriptor used by libpthread.  */
-  dtv_t *dtv;
+  void *tcb;            /* Pointer to the TCB.  Accessed as GS:[0], points to itself. */
+  dtv_t *dtv;		/* Data structure used to find thread-local storage */
   void *self;           /* Pointer to the thread descriptor.  */
-  int multiple_threads;
+  int multiple_threads;	/* Set to 0 by _start/stackgap(), set to 1 by thrd_create */
 #ifdef __x86_64__
-  int gscope_flag;
+  int gscope_flag;	/* no idea what this is for */
 #endif
-  uintptr_t sysinfo;
-  uintptr_t stack_guard;
-  uintptr_t pointer_guard;
+  uintptr_t sysinfo;		/* not sure why this is here; passed via ELF auxvec, copied here by thrd_create */
+  uintptr_t stack_guard;	/* random value used as canary value by gcc -fstack-protector, initialized by _start/stackgap()/thrd_create */
+  uintptr_t pointer_guard;	/* random value used by glibc to xor internal pointers as exploit mitigation; not used in dietlibc */
 #ifdef __i386__
-  int gscope_flag;
+  int gscope_flag;	/* no idea what this is for */
 #endif
 } tcbhead_t;
 

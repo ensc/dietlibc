@@ -44,12 +44,17 @@ int res_mkquery(int op, const char *dname, int class, int type, char* data,
   unsigned char packet[512];
   unsigned long len;
 
+  (void)newrr;
+  (void)data;
+  (void)datalen;
+
   memcpy(packet,dnspacket,12);
   len=rand();
   packet[0]=len;
   packet[1]=len>>8;
   len=0;
   if ((_res.options&RES_RECURSE)==0) packet[2]=0;
+  packet[2] |= (op&7)<<3;
   {
     unsigned char* x;
     const char* y,* tmp;

@@ -8,6 +8,8 @@ LIBDIR=${prefix}/lib
 BINDIR=${prefix}/bin
 MAN1DIR=${prefix}/man/man1
 
+EXTRACFLAGS=
+
 MYARCH:=$(shell uname -m | sed -e 's/i[4-9]86/i386/' -e 's/armv[3-7]t\?[eh]\?[lb]/arm/')
 
 # This extra-ugly cruft is here so make will not run uname and sed each
@@ -100,7 +102,8 @@ all: $(WHAT)
 
 profiling: $(OBJDIR)/libgmon.a $(OBJDIR)/pstart.o
 
-CFLAGS=-pipe -nostdinc
+DEFAULTCFLAGS=-pipe -nostdinc -D_REENTRANT $(EXTRACFLAGS)
+CFLAGS=$(DEFAULTCFLAGS)
 CROSS=
 
 CC=gcc
@@ -135,7 +138,7 @@ include $(ARCH)/Makefile.add
 
 LIBMATHOBJ=$(patsubst %,$(OBJDIR)/%,$(LIBMATH))
 
-ifeq ($(CFLAGS),-pipe -nostdinc)
+ifeq ($(CFLAGS),$(DEFAULTCFLAGS))
 CFLAGS+=-O -fomit-frame-pointer
 endif
 
@@ -143,7 +146,7 @@ ifneq ($(DEBUG),)
 CFLAGS = -g
 COMMENT = :
 endif
-CFLAGS += -W -Wall -Wextra -Wchar-subscripts -Wmissing-prototypes -Wmissing-declarations -Wno-switch -Wno-unused -Wredundant-decls
+CFLAGS += -W -Wall -Wextra -Wchar-subscripts -Wmissing-prototypes -Wmissing-declarations -Wno-switch -Wno-unused -Wredundant-decls -Wshadow
 XCFLAGS = -Wa,--noexecstack
 
 PWD=$(shell pwd)
@@ -161,17 +164,17 @@ $(OBJDIR) $(PICODIR):
 
 ifeq ($(CC),tcc)
 $(OBJDIR)/%.o: %.S $(ARCH)/syscalls.h | $(OBJDIR)
-	$(CROSS)cpp $(INC) $< | $(CROSS)as -o $@
+	$(CROSS)cpp $(INC) $< | $(CROSS)as --noexecstack -o $@
 
 $(OBJDIR)/%.o: %.c | $(OBJDIR)
 	tcc -I. -Iinclude -c $< -o $@
 	$(COMMENT) -$(STRIP) -x -R .comment -R .note $@
 else
 $(OBJDIR)/pstart.o: start.S | $(OBJDIR)
-	$(CROSS)$(CC) $(INC) $(CFLAGS) $(XCFLAGS) -DPROFILING -c $< -o $@
+	$(CROSS)$(CC) $(INC) $(CFLAGS) $(XCFLAGS) -DPROFILING -c $< -Wa,--noexecstack -o $@
 
 $(OBJDIR)/%.o: %.S $(ARCH)/syscalls.h | $(OBJDIR)
-	$(CROSS)$(CC) $(INC) $(CFLAGS) $(XCFLAGS) -c $< -o $@
+	$(CROSS)$(CC) $(INC) $(CFLAGS) $(XCFLAGS) -c $< -Wa,--noexecstack -o $@
 
 $(OBJDIR)/pthread_%.o: libpthread/pthread_%.c | $(OBJDIR)
 	$(CROSS)$(CC) $(INC) $(CFLAGS) $(XCFLAGS) -c $< -o $@
@@ -248,7 +251,7 @@ dyn_lib: $(PICODIR)/libc.so $(PICODIR)/dstart.o \
 	$(PICODIR)/libm.so $(PICODIR)/diet-dyn $(PICODIR)/diet-dyn-i
 
 $(PICODIR)/%.o: %.S $(ARCH)/syscalls.h | $(PICODIR)
-	$(CROSS)$(CC) $(INC) $(CFLAGS) $(XCFLAGS) -fPIC -D__DYN_LIB -c $< -o $@
+	$(CROSS)$(CC) $(INC) $(CFLAGS) $(XCFLAGS) -fPIC -D__DYN_LIB -Wa,--noexecstack -c $< -o $@
 
 $(PICODIR)/pthread_%.o: libpthread/pthread_%.c | $(PICODIR)
 	$(CROSS)$(CC) $(INC) $(CFLAGS) $(XCFLAGS) -fPIC -D__DYN_LIB -c $< -o $@
@@ -259,7 +262,7 @@ $(PICODIR)/%.o: %.c | $(PICODIR)
 	$(COMMENT) $(STRIP) -x -R .comment -R .note $@
 
 $(PICODIR)/dstart.o: start.S | $(PICODIR)
-	$(CROSS)$(CC) $(INC) $(CFLAGS) $(XCFLAGS) -fPIC -D__DYN_LIB -c $< -o $@
+	$(CROSS)$(CC) $(INC) $(CFLAGS) $(XCFLAGS) -fPIC -D__DYN_LIB -Wa,--noexecstack -c $< -o $@
 
 $(PICODIR)/dyn_so_start.o: dyn_start.c | $(PICODIR)
 	$(CROSS)$(CC) $(INC) $(CFLAGS) $(XCFLAGS) -fPIC -D__DYN_LIB -D__DYN_LIB_SHARED -c $< -o $@
@@ -340,7 +343,7 @@ $(OBJDIR)/load:
 	chmod 755 $@
 
 clean:
-	rm -f *.o *.a t t1 compile load elftrunc exports mapfile libdietc.so
+	rm -f *.o *.a t t1 compile load elftrunc exports mapfile libdietc.so include/errno_definition.h
 	rm -rf bin-* pic-*
 	$(MAKE) -C examples clean
 	$(MAKE) -C dynlinker clean
@@ -450,6 +453,10 @@ CROSS_ARCH=arm sparc ppc alpha i386 mips sparc64 x86_64 s390 parisc
 cross:
 	$(MAKE) $(subst $(ARCH),,$(CROSS_ARCH))
 
+# DOES NOT WORK YET
+mips64:
+	ARCH=mips64 CROSS=mips64-linux- CC="gcc -mabi=64"
+
 
 # these depend on dietfeatures.h for large file backward compatibility
 $(OBJDIR)/__fstat64.o $(OBJDIR)/__lstat64.o $(OBJDIR)/__stat64.o $(OBJDIR)/lseek64.o $(OBJDIR)/readdir64.o $(OBJDIR)/stat64.o $(OBJDIR)/lstat64.o $(OBJDIR)/fstat64.o $(OBJDIR)/truncate64.o $(OBJDIR)/__truncate64.o $(OBJDIR)/ftruncate64.o $(OBJDIR)/__ftruncate64.o $(OBJDIR)/sendfile64.o $(OBJDIR)/__sendfile64.o $(PICODIR)/dyn_syscalls.o $(PICODIR)/__truncate64.o $(PICODIR)/__ftruncate64.o $(PICODIR)/__stat64.o $(PICODIR)/__lstat64.o $(PICODIR)/__fstat64.o $(OBJDIR)/__sendfile64.o $(OBJDIR)/fstatfs64.o $(OBJDIR)/statfs64.o: dietfeatures.h
@@ -546,6 +553,70 @@ $(OBJDIR)/strndup.o: dietfeatures.h
 # dietdirent.h dependencies
 $(OBJDIR)/closedir.o $(OBJDIR)/fdopendir.o $(OBJDIR)/ftw.o $(OBJDIR)/ftw64.o $(OBJDIR)/opendir.o $(OBJDIR)/readdir.o $(OBJDIR)/readdir64.o $(OBJDIR)/readdir_r.o $(OBJDIR)/rewinddir.o $(OBJDIR)/seekdir.o $(OBJDIR)/telldir.o $(OBJDIR)/dirfd.o: dietdirent.h
 
+$(OBJDIR)/thrd_%.o: include/thread.h
+
+$(OBJDIR)/__fcntl64.o $(OBJDIR)/__fstat64.o $(OBJDIR)/__fstatfs64.o $(OBJDIR)/__ftruncate64.o \
+$(OBJDIR)/__getcwd.o $(OBJDIR)/__lstat64.o $(OBJDIR)/__mmap.o $(OBJDIR)/__ptrace.o \
+$(OBJDIR)/__sendfile64.o $(OBJDIR)/__stat64.o $(OBJDIR)/__statfs64.o $(OBJDIR)/__stime.o \
+$(OBJDIR)/__truncate64.o $(OBJDIR)/__utmp_io.o $(OBJDIR)/__v_printf.o $(OBJDIR)/addmntent.o \
+$(OBJDIR)/alloc.o $(OBJDIR)/bindresvport.o $(OBJDIR)/cfsetispeed.o $(OBJDIR)/cfsetospeed.o \
+$(OBJDIR)/clnt_generic.o $(OBJDIR)/clnt_tcp.o $(OBJDIR)/clnt_udp.o $(OBJDIR)/cnd_timedwait.o \
+$(OBJDIR)/cnd_wait.o $(OBJDIR)/confstr.o $(OBJDIR)/dnscruft2.o $(OBJDIR)/dnsd.o \
+$(OBJDIR)/err.o $(OBJDIR)/errno_location.o $(OBJDIR)/errx.o $(OBJDIR)/execl.o \
+$(OBJDIR)/execle.o $(OBJDIR)/execlp.o $(OBJDIR)/execv.o $(OBJDIR)/execvp.o \
+$(OBJDIR)/fdglue.o $(OBJDIR)/fdglue2.o $(OBJDIR)/fdopen.o $(OBJDIR)/freopen.o \
+$(OBJDIR)/ftell.o $(OBJDIR)/fwrite.o $(OBJDIR)/getdelim.o $(OBJDIR)/gethostbyaddr.o \
+$(OBJDIR)/gethostbyaddr_r.o $(OBJDIR)/gethostbyname.o $(OBJDIR)/gethostbyname2.o \
+$(OBJDIR)/gethostbyname2_r.o $(OBJDIR)/gethostbyname_r.o $(OBJDIR)/gethostent.o \
+$(OBJDIR)/getpass.o $(OBJDIR)/glob.o $(OBJDIR)/herrno_location.o $(OBJDIR)/iconv.o \
+$(OBJDIR)/iconv_open.o $(OBJDIR)/inet_pton.o $(OBJDIR)/isatty.o $(OBJDIR)/lockf.o \
+$(OBJDIR)/logging.o $(OBJDIR)/lseek64.o $(OBJDIR)/mbrlen.o $(OBJDIR)/mbrtowc.o \
+$(OBJDIR)/mkdtemp.o $(OBJDIR)/mkstemp.o $(OBJDIR)/mktemp.o $(OBJDIR)/mmap64.o \
+$(OBJDIR)/mtx_lock.o $(OBJDIR)/mtx_timedlock.o $(OBJDIR)/mtx_trylock.o \
+$(OBJDIR)/mtx_unlock.o $(OBJDIR)/netent.o $(OBJDIR)/nice.o $(OBJDIR)/openpty.o \
+$(OBJDIR)/perror.o $(OBJDIR)/pmap_getmaps.o $(OBJDIR)/pmap_rmt.o \
+$(OBJDIR)/pthread_atfork.o $(OBJDIR)/pthread_attr_getdetachstate.o \
+$(OBJDIR)/pthread_attr_getinheritsched.o $(OBJDIR)/pthread_attr_getschedparam.o \
+$(OBJDIR)/pthread_attr_getschedpolicy.o $(OBJDIR)/pthread_attr_getscope.o \
+$(OBJDIR)/pthread_attr_getstackaddr.o $(OBJDIR)/pthread_attr_getstacksize.o \
+$(OBJDIR)/pthread_attr_setdetachstate.o $(OBJDIR)/pthread_attr_setinheritsched.o \
+$(OBJDIR)/pthread_attr_setschedparam.o $(OBJDIR)/pthread_attr_setschedpolicy.o \
+$(OBJDIR)/pthread_attr_setscope.o $(OBJDIR)/pthread_attr_setstackaddr.o \
+$(OBJDIR)/pthread_attr_setstacksize.o $(OBJDIR)/pthread_cleanup.o \
+$(OBJDIR)/pthread_cond_broadcast.o $(OBJDIR)/pthread_cond_destroy.o \
+$(OBJDIR)/pthread_cond_init.o $(OBJDIR)/pthread_cond_signal.o \
+$(OBJDIR)/pthread_cond_timedwait.o $(OBJDIR)/pthread_cond_wait.o \
+$(OBJDIR)/pthread_condattr_getshared.o $(OBJDIR)/pthread_condattr_setshared.o \
+$(OBJDIR)/pthread_create.o $(OBJDIR)/pthread_detach.o $(OBJDIR)/pthread_fdglue2.o \
+$(OBJDIR)/pthread_internal.o $(OBJDIR)/pthread_join.o $(OBJDIR)/pthread_key.o \
+$(OBJDIR)/pthread_mutex_destroy.o $(OBJDIR)/pthread_mutex_init.o \
+$(OBJDIR)/pthread_mutex_lock.o $(OBJDIR)/pthread_mutex_trylock.o \
+$(OBJDIR)/pthread_mutex_unlock.o $(OBJDIR)/pthread_mutexattr_getkind_np.o \
+$(OBJDIR)/pthread_mutexattr_init.o $(OBJDIR)/pthread_mutexattr_setkind_np.o \
+$(OBJDIR)/pthread_semaphore_destroy.o $(OBJDIR)/pthread_semaphore_getvalue.o \
+$(OBJDIR)/pthread_semaphore_init.o $(OBJDIR)/pthread_semaphore_misc.o \
+$(OBJDIR)/pthread_semaphore_post.o $(OBJDIR)/pthread_semaphore_trywait.o \
+$(OBJDIR)/pthread_semaphore_wait.o $(OBJDIR)/pthread_setcancelstate.o \
+$(OBJDIR)/pthread_setschedparam.o $(OBJDIR)/pthread_spinlock.o \
+$(OBJDIR)/putenv.o $(OBJDIR)/putpwent.o $(OBJDIR)/readdir64.o \
+$(OBJDIR)/realpath.o $(OBJDIR)/remove.o $(OBJDIR)/res_mkquery.o \
+$(OBJDIR)/res_query.o $(OBJDIR)/res_search.o $(OBJDIR)/sigaddset.o \
+$(OBJDIR)/sigdelset.o $(OBJDIR)/sigismember.o $(OBJDIR)/signalfd.o \
+$(OBJDIR)/strerror.o $(OBJDIR)/strtol.o $(OBJDIR)/strtoll.o \
+$(OBJDIR)/strtoul.o $(OBJDIR)/strtoull.o $(OBJDIR)/svc.o \
+$(OBJDIR)/svc_run.o $(OBJDIR)/svc_tcp.o $(OBJDIR)/svc_udp.o \
+$(OBJDIR)/sysconf.o $(OBJDIR)/sysconf_cpus.o $(OBJDIR)/system.o \
+$(OBJDIR)/tcflow.o $(OBJDIR)/tcsendbreak.o $(OBJDIR)/tcsetattr.o \
+$(OBJDIR)/tempnam.o $(OBJDIR)/thrd_exit.o $(OBJDIR)/thrd_join.o \
+$(OBJDIR)/tmpnam.o $(OBJDIR)/utxent.o $(OBJDIR)/verr.o \
+$(OBJDIR)/verrx.o $(OBJDIR)/vwarn.o $(OBJDIR)/warn.o \
+$(OBJDIR)/wcsrtombs.o $(OBJDIR)/wcstombs.o: include/errno_definition.h
+
+include/errno_definition.h: dietfeatures.h
+	if grep -q '^#define WANT_TLS' $<; then echo "extern __thread int errno;"; else echo "extern int errno;"; fi > $@
+
+ldso: ldso.c
+	gcc -nostdlib -shared -g -DIN_LDSO -Iinclude.ldso -I. -isystem include x86_64/start.S -o ldso ldso.c -fPIC x86_64/dyn_syscalls.S lib/errno_location.c -D__thread=
 
 GIT_CVSIMPORT=git cvsimport
 CVS_EXTRA_bigo.ensc.de=;proxy=www-cache;proxyport=3128

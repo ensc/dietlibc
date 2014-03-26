@@ -191,6 +191,7 @@ AUTH *authunix_create_default()
 static void authunix_nextverf(auth)
 AUTH *auth;
 {
+  (void)auth;
 	/* no action necessary */
 }
 

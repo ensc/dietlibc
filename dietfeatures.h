@@ -171,13 +171,6 @@
 #define WANT_SMALL_STRING_ROUTINES
 #endif
 
-#ifdef WANT_THREAD_SAFE
-#ifndef __ASSEMBLER__
-#define errno (*__errno_location())
-#define _REENTRANT
-#endif
-#endif
-
 #ifdef __DYN_LIB
 /* with shared libraries you MUST have a dynamic aware startcode */
 #ifndef WANT_DYNAMIC

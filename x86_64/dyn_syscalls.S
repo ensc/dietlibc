@@ -19,7 +19,7 @@ __exit:
 .global __unified_syscall_16bit
 __unified_syscall:
 _unified_syscall:
-	mov	$0, %al
+	mov	$0, %ah
 __unified_syscall_16bit:
 	movzwl	%ax, %eax
 	mov	%rcx, %r10
@@ -29,7 +29,12 @@ __error_unified_syscall:
 	jbe	.Lnoerror
 	negl	%eax
 	pushq	%rax
+#ifdef IN_LDSO
+	call	__errno_location
+	.hidden __errno_location
+#else
 	call	__errno_location@PLT
+#endif
 	popq	%rcx
 	movl	%ecx,(%rax)
 	orq	$-1, %rax
@@ -70,7 +75,6 @@ __error_unified_syscall:
 #include "../syscalls.s/epoll_create.S"
 #include "../syscalls.s/epoll_ctl.S"
 #include "../syscalls.s/epoll_wait.S"
-#include "../syscalls.s/errno.S"
 #include "../syscalls.s/execve.S"
 #include "../syscalls.s/fchdir.S"
 #include "../syscalls.s/fchmod.S"
@@ -330,3 +334,5 @@ __error_unified_syscall:
 #include "x86_64/gettimeofday.S"
 
 #include "syscalls.s/__guard.S"
+
+	.section	.note.GNU-stack,"",@progbits

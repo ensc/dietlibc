@@ -6,12 +6,12 @@
 #include "thread_internal.h"
 
 sem_t*sem_open(const char*name,int oflag,...) {
-  if (0) { name=0; oflag=0; }
+  (void)name; (void)oflag;
   _errno_=ENOSYS;
   return 0;
 }
 int sem_close(sem_t*sem) {
-  if (0) sem=0;
+  (void)sem;
   _errno_=ENOSYS;
   return -1;
 }

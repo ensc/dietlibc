@@ -283,7 +283,7 @@ static void pthread_handle_sigrestart(int sig) {
 /* cancel signal */
 static void pthread_handle_sigcancel(int sig,siginfo_t*info,void*arg) {
   _pthread_descr this=__thread_self();
-  if (0) { sig=0; arg=0; }
+  (void)sig; (void)arg;
 #ifdef DEBUG
   printf("pthread_handle_sigcancel(%d): sigcancel %d\n",sig,this->pid);
 #endif
@@ -519,7 +519,7 @@ static void*__manager_thread(void*arg) {
   struct pollfd pfd;
   _pthread_descr td;
   int n,status;
-  if (0) arg=0;
+  (void)arg;
   pfd.fd=mgr_recv_fd;
   pfd.events=POLLIN;
 

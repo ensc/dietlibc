@@ -1,3 +1,7 @@
-CFLAGS := -Os -fstrict-aliasing -momit-leaf-frame-pointer -mfancy-math-387
+ifeq ($(CC),clang)
+CFLAGS := -Os -fstrict-aliasing -momit-leaf-frame-pointer
+else
+CFLAGS := -Os -fstrict-aliasing -momit-leaf-frame-pointer -mfancy-math-387 $(EXTRACFLAGS)
+endif
 VPATH  := x86_64:syscalls.s:$(VPATH)
-LIBOBJ += $(OBJDIR)/arch_prctl.o $(OBJDIR)/__CAS.o
+LIBOBJ += $(OBJDIR)/arch_prctl.o $(OBJDIR)/__CAS.o $(OBJDIR)/__munmap_and_exit.o
