@@ -18,6 +18,7 @@ _start:
 	movq	%rdx, (%rax)
 #else
 	movq	%rdx, environ(%rip)
+	.hidden environ
 #endif
 
 #ifdef PROFILING
@@ -62,7 +63,9 @@ _start:
 	syscall
 #else
 	call	exit
+#ifndef __DYN_LIB
 	.hidden exit
+#endif
 #endif
 	hlt
 .Lstart:
