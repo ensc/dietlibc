@@ -3,6 +3,9 @@
   add linux/seccomp.h linux/prctl.h linux/audit.h linux/elf-em.h linux/filter.h
   SECURITY: make sure all assembler files mark the stack non-executable so
     the kernel can map the stack of the whole program as non-executable
+  support compiling with clang (no cross compiling yet, and the resulting
+    binary code is significantly larger than with gcc)
+  implement experimental C11 threads
 
 0.33:
   first stab at getting TLS to work in actual threads

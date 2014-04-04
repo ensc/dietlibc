@@ -145,6 +145,11 @@ COMMENT = :
 endif
 CFLAGS += -W -Wall -Wextra -Wchar-subscripts -Wmissing-prototypes -Wmissing-declarations -Wno-switch -Wno-unused -Wredundant-decls -Wshadow
 
+ASM_CFLAGS = -Wa,--noexecstack
+ifneq ($(subst clang,fnord,$(CC)),$(CC))
+ASM_CFLAGS += -fno-integrated-as
+endif
+
 PWD=$(shell pwd)
 
 .SUFFIXES:
@@ -169,10 +174,10 @@ $(OBJDIR)/%.o: %.c
 	$(COMMENT) -$(CROSS)strip -x -R .comment -R .note $@
 else
 $(OBJDIR)/pstart.o: start.S
-	$(CROSS)$(CC) $(INC) $(CFLAGS) -DPROFILING -c $< -Wa,--noexecstack -o $@
+	$(CROSS)$(CC) $(INC) $(CFLAGS) -DPROFILING -c $< $(ASM_CFLAGS) -o $@
 
 $(OBJDIR)/%.o: %.S $(ARCH)/syscalls.h
-	$(CROSS)$(CC) $(INC) $(CFLAGS) -c $< -Wa,--noexecstack -o $@
+	$(CROSS)$(CC) $(INC) $(CFLAGS) -c $< $(ASM_CFLAGS) -o $@
 
 $(OBJDIR)/pthread_%.o: libpthread/pthread_%.c
 	$(CROSS)$(CC) $(INC) $(CFLAGS) -c $< -o $@
@@ -246,7 +251,7 @@ dyn_lib: $(PICODIR) $(PICODIR)/libc.so $(PICODIR)/dstart.o \
 	$(PICODIR)/libm.so $(PICODIR)/diet-dyn $(PICODIR)/diet-dyn-i
 
 $(PICODIR)/%.o: %.S $(ARCH)/syscalls.h
-	$(CROSS)$(CC) $(INC) $(CFLAGS) -fPIC -D__DYN_LIB -Wa,--noexecstack -c $< -o $@
+	$(CROSS)$(CC) $(INC) $(CFLAGS) -fPIC -D__DYN_LIB $(ASM_CFLAGS) -c $< -o $@
 
 $(PICODIR)/pthread_%.o: libpthread/pthread_%.c
 	$(CROSS)$(CC) $(INC) $(CFLAGS) -fPIC -D__DYN_LIB -c $< -o $@
@@ -257,7 +262,7 @@ $(PICODIR)/%.o: %.c
 	$(COMMENT) $(CROSS)strip -x -R .comment -R .note $@
 
 $(PICODIR)/dstart.o: start.S
-	$(CROSS)$(CC) $(INC) $(CFLAGS) -fPIC -D__DYN_LIB -Wa,--noexecstack -c $< -o $@
+	$(CROSS)$(CC) $(INC) $(CFLAGS) -fPIC -D__DYN_LIB $(ASM_CFLAGS) -c $< -o $@
 
 $(PICODIR)/dyn_so_start.o: dyn_start.c
 	$(CROSS)$(CC) $(INC) $(CFLAGS) -fPIC -D__DYN_LIB -D__DYN_LIB_SHARED -c $< -o $@

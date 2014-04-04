@@ -150,7 +150,7 @@ static int map_sections(int fd,const ehdr* e,const phdr* p,struct dll* D) {
 	__write2("section is both executable and writable, aborting!\n");
 	return 1;
       }
-      if (p[i].p_flags&PF_X) {
+      if (!(p[i].p_flags&PF_W)) {
 	/* code segment */
 	size_t ofs,len,rolen=0,nolen=0,rolen2=0,vaddr=p[i].p_vaddr,baseofs=0;
 	/* the first segment will be the code segment, and it will have
@@ -204,7 +204,7 @@ static int map_sections(int fd,const ehdr* e,const phdr* p,struct dll* D) {
 //	D->s=(shdr*)(c+e->e_shoff);
 	if (rolen>=4096)	/* if we extended the mapping in the front, remove exec permissions */
 	  mprotect(c,rolen&~4095,PROT_READ);
-	if (!vaddr) codeplus=(uintptr_t)(c+rolen);
+	if (!vaddr && !codeplus) codeplus=(uintptr_t)(c+rolen);
 	if (nolen) {
 	  /* We mapped junk in the middle.
 	   * If there are full pages in there, map them PROT_NONE */
@@ -304,6 +304,9 @@ static int map_sections(int fd,const ehdr* e,const phdr* p,struct dll* D) {
 	}
 	D->data=c+memsetstart; D->datalen=len-memsetstart;
 	D->codeplus=codeplus;
+      } else {
+	__write2("can't happen error: LOAD segment that is neither code nor data.\n");
+	return 1;
       }
     }
   }
@@ -458,10 +461,14 @@ static int loadlibs(struct dll* D) {
     if (p[i].p_type==PT_DYNAMIC) {
       d=(dyn*)((char*)p[i].p_vaddr+D->codeplus);
       dnum=p[i].p_memsz/sizeof(dyn);
+      break;
     }
   for (i=0; i<dnum; ++i)
-    if (d[i].d_tag==DT_STRTAB)
+    if (d[i].d_tag==DT_STRTAB) {
       dynstr=(char*)d[i].d_un.d_ptr+D->codeplus;
+      break;
+    } else if (d[i].d_tag==DT_NULL)
+      break;
 
   /* we now have a dynamic section we can traverse */
   for (i=0; i<dnum; ++i) {
@@ -472,7 +479,8 @@ static int loadlibs(struct dll* D) {
 	__write2(" not found!\n");
 	exit(2);
       }
-    }
+    } else if (d[i].d_tag==DT_NULL)
+      break;
   }
 
   return 0;
@@ -553,7 +561,7 @@ static void* dlsym(const char* s) {
 }
 
 static void* _dlsym(const char* s) {
-  const void* x=dlsym(s);
+  void* x=dlsym(s);
   if (!x) {
     __write2("ld.so: lookup of symbol \"");
     __write2(s);
@@ -594,6 +602,7 @@ static void resolve(struct dll* D) {
 
   for (i=0; i<rnum; ++i) {
     size_t* x=(size_t*)((char*)(r[i].r_offset+D->codeplus));
+    char* y;
     size_t sym=R_SYM(r[i].r_info);
     switch (R_TYPE(r[i].r_info)) {
 #if defined(__x86_64__)
@@ -601,11 +610,25 @@ static void resolve(struct dll* D) {
       *x=D->codeplus+symtab[sym].st_value;
       break;
     case R_X86_64_COPY:
-      _memcpy(x,dlsym_int(symtab[sym].st_name+dynstr,D->next),symtab[sym].st_size);
+      y=dlsym_int(symtab[sym].st_name+dynstr,D->next);
+      if (!y && ELF32_ST_BIND(symtab[sym].st_info) != STB_WEAK) {
+	__write2("symbol lookup failed: ");
+	__write2(dynstr+symtab[sym].st_name);
+	__write2("\n");
+	exit(1);
+      }
+      _memcpy(x,y,symtab[sym].st_size);
       break;
     case R_X86_64_GLOB_DAT:
     case R_X86_64_JUMP_SLOT:
-      *x=(uintptr_t)_dlsym(symtab[sym].st_name+dynstr);
+      y=dlsym(symtab[sym].st_name+dynstr);
+      if (!y && ELF32_ST_BIND(symtab[sym].st_info) != STB_WEAK) {
+	__write2("symbol lookup failed: ");
+	__write2(dynstr+symtab[sym].st_name);
+	__write2("\n");
+	exit(1);
+      }
+      *x=(uintptr_t)y;
       break;
     case R_X86_64_RELATIVE:
       *x=r[i].r_addend+D->codeplus;
@@ -756,8 +779,10 @@ kaputt:
 
   resolve(&dllroot);
 
+  __write2("jumping...\n");
+
   {
-    int (*_init)(int argc,char* argv[],char* envp[])=(void*)e->e_entry;
+    int (*_init)(int argc,char* argv[],char* envp[])=(void*)(e->e_entry+dllroot.codeplus);
     return _init(argc,argv,envp);
   }
 #if 0

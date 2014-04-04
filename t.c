@@ -172,7 +172,7 @@ int main(int argc,char *argv[]) {
   strcpy(buf+i,"/bin:/bin");
   putenv(buf);
   execvp("sh",argv);
-  printf("%d\n",islower('ü'));
+  printf("%d\n",islower(0xfc));
 #endif
 #if 0
   char buf[101];
