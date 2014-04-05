@@ -24,6 +24,7 @@ FUNC_END	__unified_syscall_swi
 FUNC_START	__unified_syscall
 	.hidden	__unified_syscall
         cmn     r0, #4096
+#ifndef WANT_THREAD_SAFE
         rsbcs   r2, r0, #0
         ldrcs   r3, 1f
         mvncs   r0, #0
@@ -32,6 +33,15 @@ FUNC_START	__unified_syscall
 	.balign 4
 1:
         .word   errno
+#else
+	bcc	1f
+        rsb	r4, r0, #0
+	bl	__errno_location
+	str	r4, [r0]
+	mvn	r0, #0
+1:	
+        ldmfd   sp!,{r4,r5,r7,pc}
+#endif
 FUNC_END	__unified_syscall
 	
 #include "dietuglyweaks.h"
