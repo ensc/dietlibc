@@ -140,6 +140,8 @@ void __setup_tls(tcbhead_t* mainthread) {
 #elif defined(__sparc__)
   register tcbhead_t* __thread_self __asm("%g7");
   __thread_self=mainthread;
+#elif defined(__arm__)
+  __arm_set_tls(mainthread);
 #else
 #warning "no idea how to enable TLS on this platform, edit lib/stackgap.c"
 #endif

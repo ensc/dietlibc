@@ -59,6 +59,10 @@ int set_thread_area(struct user_desc* uinfo);
 
 int arch_prctl(unsigned int what, void* where);
 
+#elif defined(__arm__)
+
+void __arm_set_tls(void *);
+
 #else
 
 #warning "need proper sys/tls.h for this platform"
