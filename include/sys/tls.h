@@ -71,6 +71,10 @@ int arch_prctl(unsigned int what, void* where);
 
 #define __ABI_TLS_REGISTER	"%g7"
 
+#elif defined(__arm__)
+
+void __arm_set_tls(void *);
+
 #else
 
 #warning "need proper sys/tls.h for this platform"
