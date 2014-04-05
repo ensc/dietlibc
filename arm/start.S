@@ -24,7 +24,7 @@ FUNC_START	_start
 	str	r6, [ip, #4]		@ __elfinfo = envp
 #endif
 
-	bl	main
+	bl	CALL_IN_STARTCODE
 		
 @
 @ The exit status from main() is already in r0.
