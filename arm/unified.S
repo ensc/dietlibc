@@ -39,7 +39,7 @@ FUNC_START	__unified_syscall
 	bl	__errno_location
 	str	r4, [r0]
 	mvn	r0, #0
-1:	
+1:
         ldmfd   sp!,{r4,r5,r7,pc}
 #endif
 FUNC_END	__unified_syscall
