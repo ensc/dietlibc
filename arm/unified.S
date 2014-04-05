@@ -35,7 +35,7 @@ FUNC_START	__unified_syscall
         .word   errno
 #else
 	bcc	1f
-        rsb	r4, r0, #0
+	rsb	r4, r0, #0
 	bl	__errno_location
 	str	r4, [r0]
 	mvn	r0, #0
