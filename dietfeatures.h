@@ -29,7 +29,7 @@
 #define WANT_TLS
 
 /* make the startcode, etc. dynamic aware ({con,de}structors) */
-/* #define WANT_DYNAMIC */
+#define WANT_DYNAMIC
 
 /* GDB support in the dynamic linker */
 #define WANT_LD_SO_GDB_SUPPORT

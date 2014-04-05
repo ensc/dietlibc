@@ -2,7 +2,7 @@
 
 #ifdef __NR__llseek
 .global llseek
-.type	llseek,@function
+.type	llseek,STT_FUNC
 llseek:
 syscall(_llseek,_llseek)
 #endif

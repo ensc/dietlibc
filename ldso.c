@@ -14,6 +14,9 @@
 #define shdr Elf64_Shdr
 #define sym Elf64_Sym
 #define dyn Elf64_Dyn
+#define rela Elf64_Rela
+#define R_SYM ELF64_R_SYM
+#define R_TYPE ELF64_R_TYPE
 
 #else
 
@@ -22,13 +25,16 @@
 #define shdr Elf32_Shdr
 #define sym Elf32_Sym
 #define dyn Elf32_Dyn
+#define rela Elf32_Rela
+#define R_SYM ELF32_R_SYM
+#define R_TYPE ELF32_R_TYPE
 
 #endif
 
 static int errno;
 __attribute__((visibility("hidden"))) int* __errno_location(void) { return &errno; }
 
-static size_t _strlen(const char*s) {
+static size_t _strlen(const char* s) {
   size_t i;
   for (i=0; s[i]; ++i);
   return i;
@@ -125,18 +131,15 @@ static char* ldlp;
 static struct dll {
   struct dll* next;
   ehdr* e;
-  shdr* s;
   void* code,* data;
   size_t codelen,datalen,codeplus;
   char name[1];		// asciiz of library name
 } *dlls, dllroot;
 
 static int map_sections(int fd,const ehdr* e,const phdr* p,struct dll* D) {
-  shdr* s;
   size_t i;
   uintptr_t codeplus=0;
 
-  s=0;
   for (i=0; i<e->e_phnum; ++i) {
     if (p[i].p_type==PT_LOAD) {
       size_t delta=p[i].p_offset%4096;
@@ -147,7 +150,7 @@ static int map_sections(int fd,const ehdr* e,const phdr* p,struct dll* D) {
 	__write2("section is both executable and writable, aborting!\n");
 	return 1;
       }
-      if (p[i].p_flags&PF_X) {
+      if (!(p[i].p_flags&PF_W)) {
 	/* code segment */
 	size_t ofs,len,rolen=0,nolen=0,rolen2=0,vaddr=p[i].p_vaddr,baseofs=0;
 	/* the first segment will be the code segment, and it will have
@@ -198,10 +201,10 @@ static int map_sections(int fd,const ehdr* e,const phdr* p,struct dll* D) {
 	/* in case the can't happen branch ever happens */
 	D->e=(ehdr*)c;
 	D->code=c+rolen; D->codelen=len;
-	D->s=(shdr*)(c+e->e_shoff);
+//	D->s=(shdr*)(c+e->e_shoff);
 	if (rolen>=4096)	/* if we extended the mapping in the front, remove exec permissions */
 	  mprotect(c,rolen&~4095,PROT_READ);
-	if (!vaddr) codeplus=(uintptr_t)(c+rolen);
+	if (!vaddr && !codeplus) codeplus=(uintptr_t)(c+rolen);
 	if (nolen) {
 	  /* We mapped junk in the middle.
 	   * If there are full pages in there, map them PROT_NONE */
@@ -301,21 +304,12 @@ static int map_sections(int fd,const ehdr* e,const phdr* p,struct dll* D) {
 	}
 	D->data=c+memsetstart; D->datalen=len-memsetstart;
 	D->codeplus=codeplus;
+      } else {
+	__write2("can't happen error: LOAD segment that is neither code nor data.\n");
+	return 1;
       }
     }
   }
-#if 0
-  /* map the section table separately */
-  {
-    size_t delta=e->e_shoff&4095;
-    s=mmap(0,delta+e->e_shnum*e->e_shentsize,PROT_READ,MAP_SHARED,fd,e->e_shoff-delta);
-    if (s==MAP_FAILED) {
-      __write2("mmap failed!\n");
-      return 1;
-    }
-    D->s=(shdr*)((char*)s + delta);
-  }
-#endif
   return 0;
 }
 
@@ -391,7 +385,7 @@ kaputt:
   D->next=0;
   D->code=dll.code; D->codelen=dll.codelen;
   D->data=dll.data; D->datalen=dll.datalen;
-  D->s=dll.s;
+//  D->s=dll.s;
   D->e=dll.e;
   D->codeplus=dll.codeplus;
   {
@@ -454,65 +448,39 @@ again:
   return r;
 }
 
-static int loadlibs(ehdr* e,char* codemap,char* datamap,shdr* s) {
+static int loadlibs(struct dll* D) {
   size_t i;
-  phdr* p=(phdr*)((char*)e+e->e_phoff);
-  phdr* code,* data;
+  phdr* p=(phdr*)((char*)D->e+D->e->e_phoff);
   dyn* d;
   size_t dnum,dynstrlen;
   char* dynstr;
 
   /* we know we have exactly one code and exactly one data segment,
    * otherwise we wouldn't have gotten this far */
-  for (i=0; i<e->e_phnum; ++i) {
-    if (p[i].p_type==PT_LOAD)
-      if (p[i].p_flags&PF_X)
-	code=p+i;
-      else
-	data=p+i;
-  }
-
-  d=0; dnum=0; dynstr=0; dynstrlen=0;
-  for (i=0; i<e->e_shnum; ++i) {
-    if (s[i].sh_type==SHT_DYNAMIC) {
-      /* dynamic section must be in data section */
-      if (s[i].sh_offset < data->p_offset || s[i].sh_offset+s[i].sh_size<s[i].sh_offset || s[i].sh_offset+s[i].sh_size > data->p_offset+data->p_memsz ||
-	  s[i].sh_addr < data->p_vaddr || s[i].sh_addr+s[i].sh_size > data->p_vaddr+data->p_memsz || s[i].sh_entsize!=sizeof(dyn)) {
-	__write2("invalid dynamic section offset/size\n");
-	return 1;
-      }
-      d=(dyn*)(datamap+s[i].sh_addr-data->p_vaddr);
-      dnum=s[i].sh_size/s[i].sh_entsize;
-    } else if (s[i].sh_type==SHT_STRTAB) {
-      /* not sure how to keep the strtabs apart */
-      if (s[i].sh_offset < code->p_offset || s[i].sh_offset+s[i].sh_size<s[i].sh_offset || s[i].sh_offset+s[i].sh_size > code->p_offset+code->p_memsz ||
-	  s[i].sh_addr < code->p_vaddr || s[i].sh_addr+s[i].sh_size > code->p_vaddr+code->p_memsz) continue;
-      dynstr=codemap+s[i].sh_addr-code->p_vaddr;
-      dynstrlen=s[i].sh_size;
-      if (!dynstrlen || dynstr[dynstrlen-1]) {
-	__write2("corrupt dynstr section\n");
-	return 1;
-      }
+  for (i=0; i<D->e->e_phnum; ++i)
+    if (p[i].p_type==PT_DYNAMIC) {
+      d=(dyn*)((char*)p[i].p_vaddr+D->codeplus);
+      dnum=p[i].p_memsz/sizeof(dyn);
+      break;
     }
-//    printf("section %d type %d flags %x addr %p off %lx size %lx link %d info %d align %d entsize %d\n",
-//	   s[i].sh_name,s[i].sh_type,s[i].sh_flags,s[i].sh_offset,s[i].sh_size,s[i].sh_link,s[i].sh_info,s[i].sh_addralign,s[i].sh_entsize);
-  }
+  for (i=0; i<dnum; ++i)
+    if (d[i].d_tag==DT_STRTAB) {
+      dynstr=(char*)d[i].d_un.d_ptr+D->codeplus;
+      break;
+    } else if (d[i].d_tag==DT_NULL)
+      break;
 
   /* we now have a dynamic section we can traverse */
   for (i=0; i<dnum; ++i) {
     if (d[i].d_tag==DT_NEEDED) {
-#if 0
-      __write1("needed library: ");
-      __write1(dynstr+d[i].d_un.d_val);
-      __write1("\n");
-#endif
       if (loadlibrary(dynstr+d[i].d_un.d_val)) {
 	__write2("library ");
 	__write2(dynstr+d[i].d_un.d_val);
 	__write2(" not found!\n");
 	exit(2);
       }
-    }
+    } else if (d[i].d_tag==DT_NULL)
+      break;
   }
 
   return 0;
@@ -539,20 +507,19 @@ static uint_fast32_t gnu_hash(const unsigned char *s) {
   return (h&0xffffffff);
 }
 
-static char* dlsym(const char* symbol) {
-  struct dll* x;
-  for (x=&dllroot; x; x=x->next) {
+static char* dlsym_int(const char* symbol,struct dll* x) {
+  for (; x; x=x->next) {
     size_t i;
-    shdr* s=(shdr*)((char*)x->e + x->e->e_shoff);
     dyn* d;
     sym* sy;
+    phdr* p=(phdr*)(x->e->e_phoff+(char*)x->e);
     const char* strtab;
     size_t dnum;
     int* hash=0;
-    for (i=0; i<x->e->e_shnum; ++i)
-      if (s[i].sh_type==SHT_DYNAMIC) {
-	d=(dyn*)(x->codeplus + s[i].sh_addr);
-	dnum=s[i].sh_size/s[i].sh_entsize;
+    for (i=0; i<x->e->e_phnum; ++i)
+      if (p[i].p_type==PT_DYNAMIC) {
+	d=(dyn*)(x->codeplus + p[i].p_vaddr);
+	dnum=p[i].p_memsz/sizeof(dyn);
 	break;
       }
 
@@ -587,6 +554,99 @@ static char* dlsym(const char* symbol) {
 #endif
   }
   return 0;
+}
+
+static void* dlsym(const char* s) {
+  return dlsym_int(s,&dllroot);
+}
+
+static void* _dlsym(const char* s) {
+  void* x=dlsym(s);
+  if (!x) {
+    __write2("ld.so: lookup of symbol \"");
+    __write2(s);
+    __write2("\" failed.\n");
+//    exit(1);
+  }
+  return x;
+}
+
+static void resolve(struct dll* D) {
+  size_t i;
+  phdr* p=(phdr*)((char*)D->e+D->e->e_phoff);
+  dyn* d=0;
+  size_t dnum,dynstrlen,rnum=0;
+  char* dynstr=0, *pltgot=0, *pltrel=0;
+  rela* r=0;
+  sym* symtab=0;
+
+  /* we know we have exactly one code and exactly one data segment,
+   * otherwise we wouldn't have gotten this far */
+  for (i=0; i<D->e->e_phnum; ++i)
+    if (p[i].p_type==PT_DYNAMIC) {
+      d=(dyn*)((char*)p[i].p_vaddr+D->codeplus);
+      dnum=p[i].p_memsz/sizeof(dyn);
+      break;
+    }
+  for (i=0; i<dnum; ++i)
+    if (d[i].d_tag==DT_STRTAB)
+      dynstr=(char*)d[i].d_un.d_ptr+D->codeplus;
+    else if (d[i].d_tag==DT_RELA)
+      r=(rela*)((char*)d[i].d_un.d_ptr+D->codeplus);
+    else if (d[i].d_tag==DT_RELASZ)
+      rnum=d[i].d_un.d_val/sizeof(rela);
+    else if (d[i].d_tag==DT_SYMTAB)
+      symtab=(sym*)((char*)d[i].d_un.d_ptr+D->codeplus);
+    else if (d[i].d_tag==0)
+      break;
+
+  for (i=0; i<rnum; ++i) {
+    size_t* x=(size_t*)((char*)(r[i].r_offset+D->codeplus));
+    char* y;
+    size_t sym=R_SYM(r[i].r_info);
+    switch (R_TYPE(r[i].r_info)) {
+#if defined(__x86_64__)
+    case R_X86_64_64:
+      *x=D->codeplus+symtab[sym].st_value;
+      break;
+    case R_X86_64_COPY:
+      y=dlsym_int(symtab[sym].st_name+dynstr,D->next);
+      if (!y && ELF32_ST_BIND(symtab[sym].st_info) != STB_WEAK) {
+	__write2("symbol lookup failed: ");
+	__write2(dynstr+symtab[sym].st_name);
+	__write2("\n");
+	exit(1);
+      }
+      _memcpy(x,y,symtab[sym].st_size);
+      break;
+    case R_X86_64_GLOB_DAT:
+    case R_X86_64_JUMP_SLOT:
+      y=dlsym(symtab[sym].st_name+dynstr);
+      if (!y && ELF32_ST_BIND(symtab[sym].st_info) != STB_WEAK) {
+	__write2("symbol lookup failed: ");
+	__write2(dynstr+symtab[sym].st_name);
+	__write2("\n");
+	exit(1);
+      }
+      *x=(uintptr_t)y;
+      break;
+    case R_X86_64_RELATIVE:
+      *x=r[i].r_addend+D->codeplus;
+      break;
+    case R_X86_64_32:
+      *(uint32_t*)x=*(uint32_t*)_dlsym(symtab[sym].st_name+dynstr)+r[i].r_addend;
+      break;
+    default:
+      __write2("unknown relocation type!\n");
+      exit(1);
+      break;
+#else
+#error fixme: add relocation types for your platform
+#endif
+    }
+  }
+
+  return;
 }
 
 int main(int argc,char* argv[],char* envp[]) {
@@ -707,20 +767,30 @@ kaputt:
   }
   close(fd);
 
-  loadlibs(dllroot.e,dllroot.code,dllroot.data,dllroot.s);
+  loadlibs(&dllroot);
 
   /* now load the prerequisites of the libraries we loaded */
   {
     struct dll* x;
     for (x=dlls; x; x=x->next) {
-      loadlibs(x->e,x->code,x->data,x->s);
+      loadlibs(x);
     }
   }
 
+  resolve(&dllroot);
+
+  __write2("jumping...\n");
+
+  {
+    int (*_init)(int argc,char* argv[],char* envp[])=(void*)(e->e_entry+dllroot.codeplus);
+    return _init(argc,argv,envp);
+  }
+#if 0
   {
     char* x=dlsym("theint");
-    __write1("done");
+    __write1("done\n");
   }
+#endif
 
 #if 0
   printf("jump to %p\n",e->e_entry);
