@@ -178,9 +178,9 @@ int stackgap(int argc,char* argv[],char* envp[]) {
   volatile char* gap;
 #endif
 #if defined(WANT_STACKGAP) || defined(WANT_SSP)
+  char myrand[10];
   rand=find_in_auxvec(auxvec,25);
   if (!rand) {
-    char myrand[10];
     int fd=open("/dev/urandom",O_RDONLY);
     read(fd,myrand,10);
     close(fd);
