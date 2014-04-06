@@ -149,24 +149,28 @@ void __setup_tls(tcbhead_t* mainthread) {
 }
 #endif
 
-#ifndef WANT_ELFINFO
 static void const * find_in_auxvec(long* x,long what) {
+#ifndef WANT_ELFINFO
   while (*x) {
     if (*x==what)
       return (void*)x[1];
     x+=2;
   }
   return NULL;
-}
+#else
+  __diet_elf_addr_t const	*a = __get_elf_aux_value(what);
+  (void)x;
+  return a ? (void *)*a : NULL;
 #endif
+}
 
 int stackgap(int argc,char* argv[],char* envp[]);
 int stackgap(int argc,char* argv[],char* envp[]) {
 #if defined(WANT_STACKGAP) || defined(WANT_SSP) || defined(WANT_TLS)
   char const * rand;
   char* tlsdata;
-#ifndef WANT_ELFINFO
   long* auxvec=(long*)envp;
+#ifndef WANT_ELFINFO
   while (*auxvec) ++auxvec; ++auxvec;	/* skip envp to get to auxvec */
 #endif
 #ifdef WANT_STACKGAP
@@ -174,14 +178,7 @@ int stackgap(int argc,char* argv[],char* envp[]) {
   volatile char* gap;
 #endif
 #if defined(WANT_STACKGAP) || defined(WANT_SSP)
-#ifndef WANT_ELFINFO
   rand=find_in_auxvec(auxvec,25);
-#else
-  {
-    __diet_elf_addr_t const	*rand_addr = __get_elf_aux_value(25);
-    rand = rand_addr ? (void *)*rand_addr : NULL;
-  }
-#endif
   if (!rand) {
     char myrand[10];
     int fd=open("/dev/urandom",O_RDONLY);
@@ -201,25 +198,13 @@ int stackgap(int argc,char* argv[],char* envp[]) {
 #endif
 #endif
 
-#ifndef WANT_ELFINFO
   __vdso=find_in_auxvec(auxvec,33);	// AT_SYSINFO_EHDR -> vdso start address
-#else
-  {
-    __diet_elf_addr_t const	*vdso_addr = __get_elf_aux_value(33);
-    __vdso = vdso_addr ? (void *)*vdso_addr : NULL;
-  }
-#endif
-
 #ifdef __x86_64__
   if (!__vdso) __vdso=(char*)0xffffffffff600000;
 #endif
 
 #ifdef WANT_TLS
-#ifndef WANT_ELFINFO
   findtlsdata(auxvec);
-#else
-  findtlsdata(NULL);
-#endif
   if (__unlikely(__tmemsize+sizeof(tcbhead_t)<sizeof(tcbhead_t)) ||
       __unlikely(__tmemsize>512*1024*1024) ||
       __unlikely(__tmemsize<__tdatasize))
@@ -228,14 +213,7 @@ int stackgap(int argc,char* argv[],char* envp[]) {
   memcpy(tlsdata,__tdataptr,__tdatasize);
   memset(tlsdata+__tdatasize,0,__tmemsize-__tdatasize);
   __setup_tls(__tcb_mainthread=(tcbhead_t*)(tlsdata+__tmemsize));
-#ifndef WANT_ELFINFO
   __tcb_mainthread->sysinfo=(uintptr_t)find_in_auxvec(auxvec,32);
-#else
-  {
-    __diet_elf_addr_t const	*sysinfo = __get_elf_aux_value(32);
-    __tcb_mainthread->sysinfo=sysinfo ? (uintptr_t)*sysinfo : (uintptr_t)0;
-  }
-#endif
 #elif defined(WANT_SSP)
   tlsdata=alloca(sizeof(tcbhead_t));
   __setup_tls(__tcb_mainthread=(tcbhead_t*)(tlsdata));
