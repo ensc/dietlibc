@@ -27,7 +27,7 @@ char* program_invocation_name;
 char* program_invocation_short_name;
 #endif
 
-void* __vdso;
+void const * __vdso;
 
 extern int main(int argc,char* argv[],char* envp[]);
 
@@ -55,9 +55,9 @@ void* __tdataptr;
 
 static void findtlsdata(long* auxvec) {
 #if (__WORDSIZE == 64)
-  Elf64_Phdr* x=0;
+  Elf64_Phdr const * x=0;
 #else
-  Elf32_Phdr* x=0;
+  Elf32_Phdr const * x=0;
 #endif
   size_t i,n=0;
   while (*auxvec) {
@@ -132,7 +132,7 @@ void __setup_tls(tcbhead_t* mainthread) {
 }
 #endif
 
-static void* find_in_auxvec(long* x,long what) {
+static void const * find_in_auxvec(long* x,long what) {
   while (*x) {
     if (*x==what)
       return (void*)x[1];
@@ -145,7 +145,7 @@ int stackgap(int argc,char* argv[],char* envp[]);
 int stackgap(int argc,char* argv[],char* envp[]) {
   long* auxvec=(long*)envp;
 #if defined(WANT_STACKGAP) || defined(WANT_SSP) || defined(WANT_TLS)
-  char* rand;
+  char const * rand;
   char* tlsdata;
   while (*auxvec) ++auxvec; ++auxvec;	/* skip envp to get to auxvec */
 #ifdef WANT_STACKGAP
