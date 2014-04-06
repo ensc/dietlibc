@@ -414,6 +414,7 @@ install-bin: $(OBJDIR)/start.o $(OBJDIR)/crtend.o $(OBJDIR)/dietlibc.a $(OBJDIR)
 	$(INSTALL) -m 644 $(OBJDIR)/start.o $(OBJDIR)/crtend.o $(DESTDIR)$(ILIBDIR)/
 	-$(INSTALL) -m 644 $(OBJDIR)/start-pie.o $(DESTDIR)$(ILIBDIR)/
 	-$(INSTALL) -m 644 $(OBJDIR)/stackgap-g.o $(DESTDIR)$(ILIBDIR)/
+	$(INSTALL) -m 644 $(OBJDIR)/dyn_start.o $(OBJDIR)/dyn_stop.o $(DESTDIR)$(ILIBDIR)/
 	$(INSTALL) -m 644 $(OBJDIR)/libm.a $(OBJDIR)/libpthread.a $(OBJDIR)/librpc.a \
 $(OBJDIR)/liblatin1.a $(OBJDIR)/libcompat.a $(OBJDIR)/libcrypt.a $(DESTDIR)$(ILIBDIR)
 	$(INSTALL) -m 644 $(OBJDIR)/dietlibc.a $(DESTDIR)$(ILIBDIR)/libc.a
@@ -425,7 +426,7 @@ endif
 	$(INSTALL) -m 644 diet.1 $(DESTDIR)$(MAN1DIR)/diet.1
 
 install-profiling:
-	-$(INSTALL) $(OBJDIR)/pstart.o $(OBJDIR)/libgmon.a $(OBJDIR)/dyn_start.o $(OBJDIR)/dyn_stop.o $(DESTDIR)$(ILIBDIR)
+	-$(INSTALL) $(OBJDIR)/pstart.o $(OBJDIR)/libgmon.a $(DESTDIR)$(ILIBDIR)
 
 install-pic:
 	-$(INSTALL) $(PICODIR)/libc.so $(DESTDIR)$(ILIBDIR)/libc.so
