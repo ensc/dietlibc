@@ -134,14 +134,12 @@ void __setup_tls(tcbhead_t* mainthread) {
 
 #elif defined(__alpha__) || defined(__s390__)
   __builtin_set_thread_pointer(mainthread);
-#elif defined(__ia64__) || defined(__powerpc__)
-  register tcbhead_t* __thread_self __asm__("r13");
-  __thread_self=mainthread;
-#elif defined(__sparc__)
-  register tcbhead_t* __thread_self __asm("%g7");
-  __thread_self=mainthread;
 #elif defined(__arm__)
   __arm_set_tls(mainthread);
+#elif defined(__ABI_TLS_REGISTER)
+  register tcbhead_t* __thread_self __asm__(__ABI_TLS_REGISTER);
+  __thread_self=mainthread;
+  __asm__ __volatile__("" : : "r"(__thread_self) : "memory");
 #else
 #warning "no idea how to enable TLS on this platform, edit lib/stackgap.c"
 #endif
