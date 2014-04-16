@@ -63,6 +63,6 @@ extern int __modern_linux;
   __thread_self=mainthread;
   __asm__ __volatile__("" : : "r"(__thread_self) : "memory");
 #else
-#warning "no idea how to enable TLS on this platform, edit lib/stackgap-common.h"
+#error "no idea how to enable TLS on this platform, edit lib/stackgap-common.h"
 #endif
 }
