@@ -143,6 +143,10 @@ int main(int argc,char *argv[]) {
       memmove(shortplatform,argv[1],(size_t)(tmp2-cc));
       platform[tmp2-cc+len]=0;
       if (shortplatform[0]=='i' && shortplatform[2]=='8' && shortplatform[3]=='6') shortplatform[1]='3';
+      else if (strcmp(shortplatform, "powerpc") == 0)
+        strcpy(shortplatform, "ppc");
+      else if (strcmp(shortplatform, "powerpc64") == 0)
+        strcpy(shortplatform, "ppc64");
     } else {
 #ifdef __sparc__
 #ifdef __arch64__
