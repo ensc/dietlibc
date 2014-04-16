@@ -82,11 +82,7 @@ int _dyn_start(int argc, char **argv, char **envp, structor dl_init)
     __register_frame_info(__EH_FRAME_BEGIN__, &ob);
   }
 
-#ifdef WANT_STACKGAP
-  return stackgap(argc, argv, envp);
-#else
-  return main(argc, argv, envp);
-#endif
+  return CALL_IN_STARTCODE(argc, argv, envp);
 }
 #endif
 #endif
