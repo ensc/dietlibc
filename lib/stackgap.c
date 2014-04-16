@@ -141,7 +141,7 @@ void __setup_tls(tcbhead_t* mainthread) {
   __thread_self=mainthread;
   __asm__ __volatile__("" : : "r"(__thread_self) : "memory");
 #else
-#warning "no idea how to enable TLS on this platform, edit lib/stackgap.c"
+#error "no idea how to enable TLS on this platform, edit lib/stackgap.c"
 #endif
 }
 #endif
