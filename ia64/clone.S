@@ -1,4 +1,4 @@
-/* This is untested code which probably won´t work out of the box! */
+/* This is untested code which probably won't work out of the box! */
 
 #include "syscalls.h"
 #include <errno.h>
@@ -43,4 +43,5 @@ __clone:
 	br.call.dptk.few b0=__error_unified_syscall
 	br.ret.sptk.few b0
 .endp __clone
+.endp __clone2
 .size __clone, . - __clone

@@ -119,10 +119,10 @@ char* strptime(const char* s,const char* format, struct tm* tm) {
 	++s;
 	break;
       case 'x':
-	s=strptime(s,"%b %a %d",tm);
+	s=strptime(s,"%m/%d/%y",tm);
 	break;
       case 'X':
-	s=strptime(s,"%k:%M:%S",tm);
+	s=strptime(s,"%H:%M:%S",tm);
 	break;
       case 'y':
 	i=getint(&s,2);

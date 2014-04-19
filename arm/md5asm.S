@@ -1,3 +1,5 @@
+#include "arm-features.h"
+
 /*****************************************************************************
 * Copyright (C) 2002 Andre McCurdy  <armccurdy@yahoo.co.uk>
 *
@@ -75,8 +77,9 @@ MD5Init:
     mov     r1, #0
     str     r1, [r0, #0x10]                 @ initial count[0] = 0
     str     r1, [r0, #0x14]                 @ initial count[1] = 0
-    mov     pc, lr                          @ return
+    RET
 
+   .align 3
 1: .word    0x67452301                      @ initial MD5 context->state[0]
    .word    0xefcdab89                      @ initial MD5 context->state[1]
    .word    0x98badcfe                      @ initial MD5 context->state[2]
@@ -128,6 +131,7 @@ MD5Update:
     @ static void __MD5Transform (uint32_t *buf, const uint32_t *in, int repeat);
     @ --
 
+.align 3
 MD5MagicData:
 
 1: .word     0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee
@@ -148,6 +152,7 @@ MD5MagicData:
    .word     0xf7537e82, 0xbd3af235, 0x2ad7d2bb, 0xeb86d391, (17f-19f-4)
    .word     0x6e4120A9, 0x20657264, 0x7543634d, 0x00796472, (19f-19f-4)
 
+.align 2
 __MD5Transform:
 
     cmp     r2, #0

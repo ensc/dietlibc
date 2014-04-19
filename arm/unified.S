@@ -1,22 +1,29 @@
-
 #include <dietfeatures.h>
-
-	.text
-#ifdef __ARM_EABI__
-	.align 4
-#else
-	.align 2
-#endif 	
-	.global __unified_syscall
-	.global __unified_syscall4
-
+#include "arm-features.h"
 
 #ifdef __ARM_EABI__
 
-__unified_syscall4:
-__unified_syscall:
-	
+/* expects:
+ * r0-r3 ... syscall arguments 0-3
+ * ip    ... syscall number
+ */
+FUNC_START	__unified_syscall_swi
+	.hidden	__unified_syscall_swi
+        stmfd	sp!,{r4,r5,r7,lr}
+	mov	r7, ip
+	LOAD_ARG4_5
+	swi	0
+	/* fallthrough to __unified4_syscall */
+FUNC_END	__unified_syscall_swi
+
+/* expects:
+ * r0    ... syscall return value
+ * original r4-r7 + lr on stack
+ */
+FUNC_START	__unified_syscall
+	.hidden	__unified_syscall
         cmn     r0, #4096
+#ifndef WANT_THREAD_SAFE
         rsbcs   r2, r0, #0
         ldrcs   r3, 1f
         mvncs   r0, #0
@@ -25,17 +32,28 @@ __unified_syscall:
 	.balign 4
 1:
         .word   errno
-	
+#else
+	bcc	1f
+	rsb	r4, r0, #0
+	bl	__errno_location
+	str	r4, [r0]
+	mvn	r0, #0
+1:
+        ldmfd   sp!,{r4,r5,r7,pc}
+#endif
+FUNC_END	__unified_syscall
+
 /* here we go and "reuse" the return for weak-void functions */
 #include "dietuglyweaks.h"
 
-	mov	pc, lr			@ return
+	RET
 
-#else	
-	
-__unified_syscall4:
+#else
+
+FUNC_START	__unified_syscall4
 	ldmia	sp!, {r4, r5, r6}
-__unified_syscall:
+
+FUNC_START	__unified_syscall
 	cmn	r0, #4096
 	movcc	pc, lr			@ return value comes direct from kernel.
 
@@ -53,10 +71,13 @@ __unified_syscall:
 /* here we go and "reuse" the return for weak-void functions */
 #include "dietuglyweaks.h"
 
-	mov	pc, lr			@ return
+	RET
 
 #ifndef WANT_THREAD_SAFE
+.align 2
 .L0:	.long 	errno
 #endif
+FUNC_END	__unified_syscall
+FUNC_END	__unified_syscall4
 
 #endif

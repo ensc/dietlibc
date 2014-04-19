@@ -727,9 +727,9 @@
 #define __ARGS_getpeername		0
 #define __ARGS_socketpair		0
 #define __ARGS_send			0
-#define __ARGS_sendto			0
+#define __ARGS_sendto			1
 #define __ARGS_recv			0
-#define __ARGS_recvfrom			0
+#define __ARGS_recvfrom			1
 #define __ARGS_shutdown			0
 #define __ARGS_setsockopt		0
 #define __ARGS_getsockopt		0
@@ -824,70 +824,30 @@
 
 #ifdef __ASSEMBLER__
 
-#ifdef __ARM_EABI__
+#include "arm-features.h"
 
 #define syscall_weak(name,wsym,sym) __syscall_weak __NR_##name, wsym, sym, __ARGS_##name
 .macro __syscall_weak name wsym sym typ
-.text
-.type \wsym,function
-.weak \wsym
-\wsym:
-.type \sym,function
-.global \sym
-\sym:
-        stmfd	sp!,{r4,r5,r7,lr}
-	ldr	r4, [sp,#16]
-	ldr	r5, [sp,#20]
-        ldr     r7, =\name
-	swi	0
-	b	__unified_syscall
+FUNC_START_WEAK	\wsym
+__syscall	\name, \sym, \typ
+FUNC_END	\wsym
 .endm
 
+#ifdef __ARM_EABI__
 
 #define syscall(name,sym) __syscall __NR_##name, sym, __ARGS_##name
 .macro __syscall name sym typ
-.text
-.type \sym,function
-.global \sym
-\sym:
-        stmfd	sp!,{r4,r5,r7,lr}
-	ldr	r4, [sp,#16]
-	ldr	r5, [sp,#20]
-        ldr     r7, =\name
-	swi	0
-	b	__unified_syscall
+FUNC_START	\sym
+        ldr     ip, =\name
+	b	__unified_syscall_swi
+FUNC_END	\sym
 .endm
 
 #else
 
-#define syscall_weak(name,wsym,sym) __syscall_weak $__NR_##name, wsym, sym, __ARGS_##name
-.macro __syscall_weak name wsym sym typ
-.text
-.type \wsym,function
-.weak \wsym
-\wsym:
-.type \sym,function
-.global \sym
-\sym:
-.ifgt \typ
-	mov	ip, sp
-	stmfd	sp!,{r4, r5, r6}
-	ldmia	ip, {r4, r5, r6}
-.endif
-	swi	\name
-.ifgt \typ
-	b	__unified_syscall4
-.else
-	b	__unified_syscall
-.endif
-.endm
-
 #define syscall(name,sym) __syscall $__NR_##name, sym, __ARGS_##name
 .macro __syscall name sym typ
-.text
-.type \sym,function
-.global \sym
-\sym:
+FUNC_START	\sym
 .ifgt \typ
 	mov	ip, sp
 	stmfd	sp!,{r4, r5, r6}
@@ -899,6 +859,7 @@
 .else
 	b	__unified_syscall
 .endif
+FUNC_END	\sym
 .endm
 
 #endif

@@ -13,7 +13,7 @@ int main(int argc, char **argv) {
  assert(strlen(path) == asprintlen);
 	     
  printf("%s\n", path);
- asprintlen=asprintf(&path, "/proc" "/%d/stat", strlen(argv[1]));
+ asprintlen=asprintf(&path, "/proc" "/%zu/stat", strlen(argv[1]));
  assert(strlen(path) == asprintlen);
  printf("%s\n", path);
 

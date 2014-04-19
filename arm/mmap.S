@@ -1,3 +1,5 @@
+#include "arm-features.h"
+
 #include <errno.h>
 #include "syscalls.h"
 
@@ -28,7 +30,7 @@ mmap:
 	ldr     r4, [sp], #4
 	ldr     r5, [sp], #4
 	cmn	r0, #4096
-	mov	pc, lr			@ return
+	RET
 
 #else	
 		

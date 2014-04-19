@@ -1,6 +1,8 @@
 .text
 .globl strcmp
 
+.weak strcoll
+strcoll:
 strcmp:
 	.PROC
 	.CALLINFO

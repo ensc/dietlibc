@@ -3,6 +3,8 @@
  * Olaf Dreesen
  */
 
+#include "arm-features.h"
+
 #include "../syscalls.s/environ.S"
 #include "../syscalls.s/errno.S"
 
@@ -25,7 +27,7 @@ __unified_syscall:
 
 	mvn	r0, #0
 #include "dietuglyweaks.h"
-	mov	pc, lr
+	RET
 
 /* ok now include all syscalls.s (*.S) and sysdep *.S */
 #include "mmap.S"
@@ -104,7 +106,6 @@ __unified_syscall:
 #include "../syscalls.s/n_sigprocmask.S"
 #include "../syscalls.s/n_sigsuspend.S"
 #include "../syscalls.s/nanosleep.S"
-#include "../syscalls.s/nice.S"
 #include "../syscalls.s/open.S"
 #include "../syscalls.s/pause.S"
 #include "../syscalls.s/personality.S"

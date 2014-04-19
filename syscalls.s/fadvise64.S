@@ -3,14 +3,13 @@
 
 #include "syscalls.h"
 
-#ifndef __NR_fadvise64_64
-.globl posix_fadvise
-.type posix_fadvise,@function
-posix_fadvise:
-#endif
-
 #ifdef __NR_fadvise64
 syscall(fadvise64,fadvise64)
+
+#ifndef __NR_fadvise64_64
+posix_fadvise = fadvise64
+.globl posix_fadvise
+#endif
 
 #endif
 

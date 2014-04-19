@@ -1,6 +1,7 @@
 
 LIBOBJ+=$(OBJDIR)/md5asm.o $(OBJDIR)/__aeabi_unwind_cpp.o
 LIBOBJ+=$(OBJDIR)/__fadvise.o $(OBJDIR)/arm_fadvise.o
+LIBOBJ+=$(OBJDIR)/__aeabi_read_tp.o $(OBJDIR)/arm_set_tls.o
 CFLAGS+=-Os -fomit-frame-pointer -fstrict-aliasing
 #ifdef __ARM_EABI__
 #CFLAGS+=-mabi=aapcs-linux -mno-thumb-interwork

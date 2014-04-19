@@ -25,5 +25,6 @@ char *asctime_r(const struct tm *t, char *buf) {
   num2str(buf+20,(t->tm_year+1900)/100);
   num2str(buf+22,(t->tm_year+1900)%100);
   buf[24]='\n';
+  buf[25]='\0';
   return buf;
 }

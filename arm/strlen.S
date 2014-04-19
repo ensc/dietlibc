@@ -1,12 +1,7 @@
 #include "dietfeatures.h"
+#include "arm-features.h"
 
-	.text
-	.align	2
-
-	.global	strlen
-
-strlen:
-
+FUNC_START	strlen
 #if 0
 	teq	a1, #0			@ is string pointer NULL ??
 	moveq	pc, lr			@ if so, return 0
@@ -61,12 +56,10 @@ strlen:
 	sub	a1, a1, a2
 #endif
 
-	mov	pc, lr
+	RET
 
 #ifndef WANT_SMALL_STRING_ROUTINES
 .Lmagic:
 	.word	0x01010101
 #endif
-
-.Lstrlen:
-	.size	strlen,.Lstrlen-strlen
+FUNC_END	strlen

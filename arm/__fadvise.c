@@ -1,5 +1,7 @@
-#include <fcntl.h>
 #include "syscalls.h"
+#define _LINUX_SOURCE
+#include <fcntl.h>
+#include <unistd.h>
 
 #ifndef __NR_fadvise64
 long fadvise64_64(int fd, off64_t offset, off64_t len, int advice)
