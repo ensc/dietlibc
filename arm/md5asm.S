@@ -389,5 +389,3 @@ __UnalignedMD5Transform:
 
 
 #endif   /* __BYTE_ORDER == __LITTLE_ENDIAN */
-
-
