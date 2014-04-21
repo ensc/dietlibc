@@ -119,7 +119,6 @@ char* strptime(const char* s,const char* format, struct tm* tm) {
 	++s;
 	break;
       case 'x':
-	/* see SUSv2, Ch.7 "LC_TIME Category in the POSIX Locale" */
 	s=strptime(s,"%m/%d/%y",tm);
 	break;
       case 'X':

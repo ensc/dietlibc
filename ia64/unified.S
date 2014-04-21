@@ -26,7 +26,6 @@ _exit:
 .size _exit, . - _exit
 
 .proc  __unified_syscall
-
 __unified_syscall:
 	break.i 0x100000
 	movl r2=errno
@@ -36,7 +35,6 @@ __unified_syscall:
 .size __unified_syscall, . - __unified_syscall
 
 .proc  __error_unified_syscall
-
 __error_unified_syscall:
 (p6)    st4 [r2]=r8
 (p6)    mov r8=-1
@@ -44,6 +42,6 @@ __error_unified_syscall:
 #include "dietuglyweaks.h"
 
 	br.ret.sptk.few rp
-
 .endp __error_unified_syscall
+
 .size __error_unified_syscall, . - __error_unified_syscall

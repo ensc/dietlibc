@@ -31,6 +31,7 @@ FUNC_START	__sigsetjmp
 
 #ifndef DIET_HAVE_COPROC_REGS
 	stmia	r0, {r4-r11, sp, lr}
+
 #else
 	stmia	ip!, {r4-r11, sp, lr}
 #endif

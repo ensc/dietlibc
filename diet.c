@@ -25,7 +25,7 @@ static void error(const char *message) {
 }
 
 static const char* Os[] = {
-  "i386","-Os","-mpreferred-stack-boundary=2",
+  "i386","-Os","-mpreferred-stack-boundary=4",
 	 "-falign-functions=1","-falign-jumps=1",
 	 "-falign-loops=1","-fomit-frame-pointer",0,
   "x86_64","-Os",0,

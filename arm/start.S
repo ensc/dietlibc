@@ -1,4 +1,3 @@
-
 #include "dietfeatures.h"
 #include "syscalls.h"
 #include "arm-features.h"
@@ -25,7 +24,7 @@ FUNC_START	_start
 #endif
 
 	bl	CALL_IN_STARTCODE
-		
+
 @
 @ The exit status from main() is already in r0.
 @ We need to branch to 'exit' in case we have linked with 'atexit'.
@@ -40,13 +39,14 @@ FUNC_START_WEAK	exit
 
 	.align	2
 .L3:	.word 	environ
+
 FUNC_END	exit
 FUNC_END	_exit
-	
-#else	
 
-	
+#else
+
 FUNC_START	_start
+
 #ifdef WANT_DYNAMIC
 	mov	a4, a1			@ save dynamic ld.so _fini
 #endif
@@ -109,7 +109,6 @@ FUNC_START_WEAK	exit
 	swi	$__NR_exit		@ never returns.
 FUNC_END	exit
 FUNC_END	_exit
-
 
 	.align	2
 #ifdef __DYN_LIB

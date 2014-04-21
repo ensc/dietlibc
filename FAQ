@@ -246,7 +246,7 @@ A: UPDATE: the defaults have been changed as of 2005-04-23.
    code.  Unfortunately, these options have been renamed on gcc 3.  You
    can fix this by creating a file ~/.diet/gcc containing this line:
 
-     -Os -fomit-frame-pointer -falign-jumps=1 -falign-loops=1 -mpreferred-stack-boundary=2
+     -Os -fomit-frame-pointer -falign-jumps=1 -falign-loops=1 -mpreferred-stack-boundary=4
 
    If you get this options not for diet -Os gcc but for diet -Os
    i386-linux-gcc, put this in ~/.diet/i386-linux-gcc instead.

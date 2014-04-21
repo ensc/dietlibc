@@ -4,7 +4,6 @@ FUNC_START	__longjmp
 	mov	ip, r0
 	movs	r0, r1
 	moveq	r0, #1
-
 #ifndef __SOFTFP__
 # if __ARM_ARCH__ == 7
 	vldm	ip!, {d0-d15}

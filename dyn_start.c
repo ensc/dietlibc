@@ -54,10 +54,6 @@ __attribute__((section(".fini"))) void _fini(void)
     __deregister_frame_info(__EH_FRAME_BEGIN__);
 }
 
-#ifdef WANT_STACKGAP
-int stackgap(int argc,char* argv[],char* envp[]);
-#endif
-
 #ifndef __DYN_LIB_SHARED
 /* pre main, post _start */
 extern __attribute__((section(".init"))) void _init(void);
@@ -65,7 +61,7 @@ extern __attribute__((section(".init"))) void _init(void);
 int _dyn_start(int argc, char **argv, char **envp, structor dl_init);
 int _dyn_start(int argc, char **argv, char **envp, structor dl_init)
 {
-  int main(int argc, char **argv, char **envp);
+  int CALL_IN_STARTCODE(int argc, char **argv, char **envp);
 
 #ifndef __arm__
   /* GT: segfaults on arm, don't know why (for now) */

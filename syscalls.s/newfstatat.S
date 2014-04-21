@@ -4,9 +4,10 @@
 syscall(newfstatat,newfstatat)
 
 #ifdef __NR_fstatat64
-#  error __NR_newfstatat and __NR_fstatat64 must not be defined both
+#  error __NR_newfstatat and __NR_fstatat64 must not both be defined
 #endif
 
 fstatat = newfstatat
 .globl fstatat
+
 #endif

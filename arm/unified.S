@@ -1,4 +1,3 @@
-
 #include <dietfeatures.h>
 #include "arm-features.h"
 
@@ -43,13 +42,14 @@ FUNC_START	__unified_syscall
         ldmfd   sp!,{r4,r5,r7,pc}
 #endif
 FUNC_END	__unified_syscall
-	
+
+/* here we go and "reuse" the return for weak-void functions */
 #include "dietuglyweaks.h"
 
 	RET
 
-#else	
-	
+#else
+
 FUNC_START	__unified_syscall4
 	ldmia	sp!, {r4, r5, r6}
 
@@ -74,7 +74,7 @@ FUNC_START	__unified_syscall
 	RET
 
 #ifndef WANT_THREAD_SAFE
-	.align	2
+.align 2
 .L0:	.long 	errno
 #endif
 FUNC_END	__unified_syscall

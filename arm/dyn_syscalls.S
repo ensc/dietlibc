@@ -3,12 +3,13 @@
  * Olaf Dreesen
  */
 
+#include "arm-features.h"
+
 #include "../syscalls.s/environ.S"
 #include "../syscalls.s/errno.S"
 
 #include <dietfeatures.h>
 #include "syscalls.h"
-#include "arm-features.h"
 
 #ifdef __ARM_EABI__
 # error "dyn_syscall.S not ported for EABI yet"

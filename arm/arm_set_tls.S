@@ -22,6 +22,6 @@ FUNC_END	__arm_set_tls
 
 #else
 
-#error "setup-tls not implemented for ARM_EABI!"
+#warning "setup-tls only implemented for ARM_EABI!"
 
 #endif

@@ -1,4 +1,7 @@
 #include <syscalls.h>
+#define _BSD_SOURCE
+#include <utime.h>
+#include <sys/time.h>
 
 #ifndef __NR_utime
 #define _BSD_SOURCE

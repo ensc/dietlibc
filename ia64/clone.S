@@ -1,4 +1,4 @@
-/* This is untested code which probably won´t work out of the box! */
+/* This is untested code which probably won't work out of the box! */
 
 #include "syscalls.h"
 #include <errno.h>
