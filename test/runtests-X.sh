@@ -1,9 +1,5 @@
 #! /bin/bash
 
-eval $(grep '^\(SUBDIRS\)=' runtests.sh)
-eval $(make --no-print-directory \
-       --eval 'print-tests:;@echo TESTPROGRAMS=\"$(sort $(TESTPROGRAMS))\"' print-tests)
-
 SKIP=(
   ":asprintf"			# requires special cmdline
   ":getpass"			# expects input from TTY
@@ -43,6 +39,8 @@ FAILURES_KNOWN=(
   ":stdlib:test-canon"		# realpath(3) is broken...
 )
 
+TESTENV=.testenv.sh
+
 function is_in() {
     local	val=$1
     local	i
@@ -54,14 +52,57 @@ function is_in() {
     return 1
 }
 
+function getenv() {
+    local _e=testenv.sh
+
+    if ${1:-false} || \
+	test ! -e $TESTENV -o \
+		Makefile -nt $TESTENV -o \
+		runtests.sh -nt $TESTENV; then
+	eval $(grep '^\(SUBDIRS\)=' runtests.sh)
+	eval $(make --no-print-directory \
+	    --eval 'print-tests:;@echo TESTPROGRAMS=\"$(sort $(TESTPROGRAMS))\"' \
+	    print-tests)
+
+	rm -f $TESTENV
+
+	{
+	  printf "SUBDIRS='%s'\n" "$SUBDIRS"
+	  printf "TESTPROGRAMS='%s'\n" "$TESTPROGRAMS"
+	} > $TESTENV
+    fi
+
+    source $TESTENV
+}
+
+: ${TESTDIR:=.}
+
+case $1 in
+  --generate-env)
+	getenv true
+	TESTPROGRAMS=		# skip tests; progress subdirs only
+	;;
+  --install)
+	getenv
+	install -d -m 0755 $2/$TESTDIR
+	install -p -m 0755 $TESTPROGRAMS $TESTENV $2/$TESTDIR/
+	TESTPROGRAMS=
+	;;
+  *)
+	getenv
+	;;
+esac
+
 rc=0
 
 : ${ME:=${BASH_SOURCE[0]}}
 : ${EMULATOR:=}
 : ${RUNTEST_INDENT=0}
+
 export ME
 export RUNTEST_INDENT
 export RUNTEST_NS
+export TESTDIR
 
 case $ME in
   /*) ;;
@@ -100,13 +141,16 @@ done
 test $rc -eq 0 || \
     printf "%*s--> %u tests failed\n" $RUNTEST_INDENT '' $rc
 
+orig_testdir=$TESTDIR
+
 for d in $SUBDIRS; do
     echo "--- entering directory $d ---"
     let RUNTEST_INDENT+=2
     old_ns=$RUNTEST_NS
     RUNTEST_NS=$RUNTEST_NS:$d
 
-    cd $d && bash $ME || let ++rc
+    TESTDIR=$orig_testdir/$d
+    cd $d && bash $ME "$@" || let ++rc
 
     RUNTEST_NS=$old_ns
     let RUNTEST_INDENT-=2
