@@ -15,11 +15,9 @@ typedef int (__kernel_cmpxchg_t)(int oldval, int newval, int *ptr);
 
 #define __kernel_cmpxchg (*(__kernel_cmpxchg_t *)0xffff0fc0)
 
-#define CAS(ptr,oldval,newval) __kernel_cmpxchg(oldval,newval,ptr)
+#define __CAS(ptr,oldval,newval) __kernel_cmpxchg(oldval,newval,ptr)
 
-#else
-
-#if defined(__INTEL_COMPILER) || (__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 1))
+#elif defined(__INTEL_COMPILER) || (__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 1))
 
 /* recent gcc versions and the intel compiler have built-ins for this */
 #define __CAS(ptr,oldval,newval) __sync_val_compare_and_swap(ptr,oldval,newval)
@@ -42,8 +40,6 @@ size_t __CAS(size_t* ptr,size_t oldval,size_t newval);
 
 #if (defined(__sparc__) && !defined(__arch64__)) || defined(__hppa__)
 #define NO_CAS
-#endif
-
 #endif
 
 #endif
