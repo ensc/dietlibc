@@ -258,8 +258,8 @@ typedef unsigned long int uintptr_t;
 #if __WORDSIZE == 64
 typedef signed long int64_t;
 typedef unsigned long uint64_t;
-typedef signed long int intmax_t;
-typedef unsigned long int uintmax_t;
+typedef __int128_t intmax_t;
+typedef __uint128_t uintmax_t;
 #else
 __extension__ typedef signed long long int64_t;
 __extension__ typedef unsigned long long uint64_t;
