@@ -177,14 +177,14 @@ $(OBJDIR)/pstart.o: start.S | $(OBJDIR)
 	$(CCC) $(INC) $(CFLAGS) -DPROFILING -c $< $(ASM_CFLAGS) -o $@
 
 $(OBJDIR)/%.o: %.S $(ARCH)/syscalls.h | $(OBJDIR)
-	$(CCC) $(INC) $(CFLAGS) $(EXTRAFLAGS) -c $< $(ASM_CFLAGS) -o $@
+	$(CCC) $(INC) $(CFLAGS) $(EXTRACFLAGS) -c $< $(ASM_CFLAGS) -o $@
 
 $(OBJDIR)/pthread_%.o: libpthread/pthread_%.c | $(OBJDIR)
-	$(CCC) $(INC) $(CFLAGS) $(EXTRAFLAGS) -c $< -o $@
+	$(CCC) $(INC) $(CFLAGS) $(EXTRACFLAGS) -c $< -o $@
 	-$(STRIP) -x -R .comment -R .note $@
 
 $(OBJDIR)/%.o: %.c | $(OBJDIR)
-	$(CCC) $(INC) $(CFLAGS) $(EXTRAFLAGS) -c $< -o $@ -D__dietlibc__
+	$(CCC) $(INC) $(CFLAGS) $(EXTRACFLAGS) -c $< -o $@ -D__dietlibc__
 	-$(STRIP) -x -R .comment -R .note $@
 endif
 
