@@ -8,7 +8,7 @@ LIBDIR=${prefix}/lib
 BINDIR=${prefix}/bin
 MAN1DIR=${prefix}/man/man1
 
-EXTRAFLAGS=
+EXTRACFLAGS=
 
 MYARCH:=$(shell uname -m | sed -e 's/i[4-9]86/i386/' -e 's/armv[3-7]t\?[eh]\?[lb]/arm/')
 
@@ -102,7 +102,7 @@ all: $(WHAT)
 
 profiling: $(OBJDIR)/libgmon.a $(OBJDIR)/pstart.o
 
-DEFAULTCFLAGS=-pipe -nostdinc -D_REENTRANT $(EXTRAFLAGS)
+DEFAULTCFLAGS=-pipe -nostdinc -D_REENTRANT $(EXTRACFLAGS)
 CFLAGS=$(DEFAULTCFLAGS)
 CROSS=
 
@@ -176,22 +176,22 @@ $(OBJDIR)/%.o: %.c | $(OBJDIR)
 	-$(STRIP) -x -R .comment -R .note $@
 else
 $(OBJDIR)/pstart.o: start.S | $(OBJDIR)
-	$(CCC) $(INC) $(CFLAGS) $(EXTRAFLAGS) -DPROFILING -c $< $(ASM_CFLAGS) -o $@
+	$(CCC) $(INC) $(CFLAGS) $(EXTRACFLAGS) -DPROFILING -c $< $(ASM_CFLAGS) -o $@
 
 $(OBJDIR)/%.o: %.S $(ARCH)/syscalls.h | $(OBJDIR)
-	$(CCC) $(INC) $(CFLAGS) $(EXTRAFLAGS) -c $< $(ASM_CFLAGS) -o $@
+	$(CCC) $(INC) $(CFLAGS) $(EXTRACFLAGS) -c $< $(ASM_CFLAGS) -o $@
 
 $(OBJDIR)/pthread_%.o: libpthread/pthread_%.c | $(OBJDIR)
-	$(CCC) $(INC) $(CFLAGS) $(EXTRAFLAGS) -c $< -o $@
+	$(CCC) $(INC) $(CFLAGS) $(EXTRACFLAGS) -c $< -o $@
 	-$(STRIP) -x -R .comment -R .note $@
-$(OBJDIR)/stack_smash_handler2.o:	EXTRAFLAGS:=-fno-omit-frame-pointer
+$(OBJDIR)/stack_smash_handler2.o:	EXTRACFLAGS:=-fno-omit-frame-pointer
 
 $(OBJDIR)/%.o: %.c | $(OBJDIR)
-	$(CCC) $(INC) $(CFLAGS) $(EXTRAFLAGS) -c $< -o $@ -D__dietlibc__
+	$(CCC) $(INC) $(CFLAGS) $(EXTRACFLAGS) -c $< -o $@ -D__dietlibc__
 	-$(STRIP) -x -R .comment -R .note $@
 
 $(addprefix $(OBJDIR)/,$(NO_STACK_PROTECTOR)) \
-$(addprefix $(PICODIR)/,$(NO_STACKPROTECTOR)):	EXTRAFLAGS+=-fno-stack-protector
+$(addprefix $(PICODIR)/,$(NO_STACKPROTECTOR)):	EXTRACFLAGS+=-fno-stack-protector
 endif
 
 
@@ -207,7 +207,7 @@ endif
 CC+=-D__dietlibc__
 
 $(OBJDIR)/crypt.o: libcrypt/crypt.c | $(OBJDIR)
-	$(CCC) $(INC) $(SAFER_CFLAGS) $(EXTRAFLAGS) -c $< -o $@
+	$(CCC) $(INC) $(SAFER_CFLAGS) $(EXTRACFLAGS) -c $< -o $@
 
 DIETLIBC_OBJ = $(OBJDIR)/unified.o \
 $(SYSCALLOBJ) $(LIBOBJ) $(LIBSTDIOOBJ) $(LIBUGLYOBJ) \
@@ -259,21 +259,21 @@ dyn_lib: $(PICODIR) $(PICODIR)/libc.so $(PICODIR)/dstart.o \
 	$(PICODIR)/libm.so $(PICODIR)/diet-dyn $(PICODIR)/diet-dyn-i
 
 $(PICODIR)/%.o: %.S $(ARCH)/syscalls.h | $(PICODIR)
-	$(CCC) $(INC) $(CFLAGS) $(EXTRAFLAGS) -fPIC -D__DYN_LIB $(ASM_CFLAGS) -c $< -o $@
+	$(CCC) $(INC) $(CFLAGS) $(EXTRACFLAGS) -fPIC -D__DYN_LIB $(ASM_CFLAGS) -c $< -o $@
 
 $(PICODIR)/pthread_%.o: libpthread/pthread_%.c | $(PICODIR)
-	$(CCC) $(INC) $(CFLAGS) $(EXTRAFLAGS) -fPIC -D__DYN_LIB -c $< -o $@
+	$(CCC) $(INC) $(CFLAGS) $(EXTRACFLAGS) -fPIC -D__DYN_LIB -c $< -o $@
 	$(STRIP) -x -R .comment -R .note $@
 
 $(PICODIR)/%.o: %.c | $(PICODIR)
-	$(CCC) $(INC) $(CFLAGS) $(EXTRAFLAGS) -fPIC -D__DYN_LIB -c $< -o $@
+	$(CCC) $(INC) $(CFLAGS) $(EXTRACFLAGS) -fPIC -D__DYN_LIB -c $< -o $@
 	$(STRIP) -x -R .comment -R .note $@
 
 $(PICODIR)/dstart.o: start.S | $(PICODIR)
-	$(CCC) $(INC) $(CFLAGS) $(EXTRAFLAGS) -fPIC -D__DYN_LIB $(ASM_CFLAGS) -c $< -o $@
+	$(CCC) $(INC) $(CFLAGS) $(EXTRACFLAGS) -fPIC -D__DYN_LIB $(ASM_CFLAGS) -c $< -o $@
 
 $(PICODIR)/dyn_so_start.o: dyn_start.c | $(PICODIR)
-	$(CCC) $(INC) $(CFLAGS) $(EXTRAFLAGS) -fPIC -D__DYN_LIB -D__DYN_LIB_SHARED -c $< -o $@
+	$(CCC) $(INC) $(CFLAGS) $(EXTRACFLAGS) -fPIC -D__DYN_LIB -D__DYN_LIB_SHARED -c $< -o $@
 	$(STRIP) -x -R .comment -R .note $@
 
 DYN_LIBC_PIC = $(LIBOBJ) $(LIBSTDIOOBJ) $(LIBUGLYOBJ) \
