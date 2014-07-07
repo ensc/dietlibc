@@ -2,7 +2,8 @@
 
 char *fgets_unlocked(char *s, int size, FILE *stream) {
   int l;
-  for (l=0; l<size; ) {
+  if (size<=0) return 0;
+  for (l=0; l+1<size; ) {
     register int c;
     if (l && __likely(stream->bm<stream->bs)) {
       /* try common case first */
@@ -11,17 +12,14 @@ char *fgets_unlocked(char *s, int size, FILE *stream) {
       c=fgetc_unlocked(stream);
       if (__unlikely(c==EOF)) {
 	if (!l) return 0;
-	goto fini;
+	break;
       }
     }
     s[l]=c;
     ++l;
-    if (c=='\n') {
-fini:
-      s[l]=0;
-      break;
-    }
+    if (c=='\n') break;
   }
+  s[l]=0;
   return s;
 }
 
