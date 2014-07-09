@@ -146,17 +146,16 @@ static void do_test_fp(int sig_num, int do_save)
     /* sigsetjmp() returned with an unexpected value */
     assert(0);
 
+  assert(fp1 == FP_REF[1]);
+  assert(fp2 == FP_REF[2]);
+
   if (sig_num == 0) {
     /* "exception" was not triggered; we should see the new values */
     assert(fp0 == FP_REF[4]);
-    assert(fp1 == FP_REF[1]);
-    assert(fp2 == FP_REF[2]);
     assert(fp3 == FP_REF[5]);
   } else {
     /* "exception" was triggered; we should see the old values */
     assert(fp0 == FP_REF[0]);
-    assert(fp1 == FP_REF[1]);
-    assert(fp2 == FP_REF[2]);
     assert(fp3 == FP_REF[3]);
   }
 
