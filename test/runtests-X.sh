@@ -32,6 +32,7 @@ FAILURES_BOGUS_emulator=(
 
 FAILURES_KNOWN=(
   ":sendfile"			# stdin/stdout not supported; test must be wrapped
+  ":sigsetjmp"			# fp test fails when registers are on stack
   ":stdio:tstdiomisc"		# scanf(3) fails on some constructs
   ":stdio:tst-fphex"		# printf(3) does not support %a specifiers
   ":stdio:tst-printf"		# printf(3) does not support some floating point ops
