@@ -144,6 +144,12 @@ static void* find_in_auxvec(long* x,long what) {
   return NULL;
 }
 
+static long* _auxvec;
+
+unsigned long getauxval(unsigned long type) {
+  return find_in_auxvec(_auxvec,type);
+}
+
 int stackgap(int argc,char* argv[],char* envp[]);
 int stackgap(int argc,char* argv[],char* envp[]) {
   long* auxvec=(long*)envp;
@@ -151,6 +157,7 @@ int stackgap(int argc,char* argv[],char* envp[]) {
   char* rand;
   char* tlsdata;
   while (*auxvec) ++auxvec; ++auxvec;	/* skip envp to get to auxvec */
+  _auxvec=auxvec;
 #ifdef WANT_STACKGAP
   unsigned short s;
 #endif
