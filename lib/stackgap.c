@@ -161,6 +161,16 @@ static void const * find_in_auxvec(long* x,long what) {
 #endif
 }
 
+#ifndef WANT_ELFINFO
+static long* _auxvec;
+#else
+#define _auxvec	NULL
+#endif
+
+unsigned long getauxval(unsigned long type) {
+  return find_in_auxvec(_auxvec,type);
+}
+
 int stackgap(int argc,char* argv[],char* envp[]);
 int stackgap(int argc,char* argv[],char* envp[]) {
 #if defined(WANT_STACKGAP) || defined(WANT_SSP) || defined(WANT_TLS)
@@ -169,6 +179,7 @@ int stackgap(int argc,char* argv[],char* envp[]) {
   long* auxvec=(long*)envp;
 #ifndef WANT_ELFINFO
   while (*auxvec) ++auxvec; ++auxvec;	/* skip envp to get to auxvec */
+  _auxvec=auxvec;
 #endif
 #ifdef WANT_STACKGAP
   unsigned short s;

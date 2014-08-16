@@ -6,6 +6,7 @@
   support compiling with clang (no cross compiling yet, and the resulting
     binary code is significantly larger than with gcc)
   implement experimental C11 threads
+  fix fgets (Andreas Förster)
 
 0.33:
   first stab at getting TLS to work in actual threads
