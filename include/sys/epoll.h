@@ -52,6 +52,13 @@ enum EPOLL_EVENTS {
 #define EPOLLET EPOLLET
 };
 
+/* flags for epoll_create1 */
+enum {
+  EPOLL_CLOEXEC = O_CLOEXEC
+#define EPOLL_CLOEXEC EPOLL_CLOEXEC
+};
+
+
 typedef union epoll_data {
   void *ptr;
   int fd;
@@ -69,6 +76,7 @@ __attribute__((__packed__))
 ;
 
 int epoll_create(int size) __THROW;
+int epoll_create1(int flags) __THROW;
 int epoll_ctl(int epfd, int op, int fd, struct epoll_event* event) __THROW;
 int epoll_wait(int epfd, struct epoll_event *events, int maxevents,
 	       int timeout) __THROW;

@@ -147,7 +147,7 @@ static void* find_in_auxvec(long* x,long what) {
 static long* _auxvec;
 
 unsigned long getauxval(unsigned long type) {
-  return find_in_auxvec(_auxvec,type);
+  return (long)find_in_auxvec(_auxvec,type);
 }
 
 int stackgap(int argc,char* argv[],char* envp[]);
