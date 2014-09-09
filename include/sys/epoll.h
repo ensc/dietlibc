@@ -9,9 +9,6 @@
 
 __BEGIN_DECLS
 
-/* Flags for epoll_create1.  */
-#define EPOLL_CLOEXEC O_CLOEXEC
-
 /* Valid opcodes ( "op" parameter ) to issue to epoll_ctl() */
 #define EPOLL_CTL_ADD 1	/* Add a file decriptor to the interface */
 #define EPOLL_CTL_DEL 2	/* Remove a file decriptor from the interface */
