@@ -52,12 +52,16 @@ struct inotify_event {
 			 IN_MOVED_TO | IN_DELETE | IN_CREATE | IN_DELETE_SELF | \
 			 IN_MOVE_SELF)
 
+/* Flags for sys_inotify_init1.  */
+#define IN_CLOEXEC O_CLOEXEC
+#define IN_NONBLOCK O_NONBLOCK
 
 __BEGIN_DECLS
 
 int inotify_init(void) __THROW;
-int inotify_add_watch(int fd,const char* path,unsigned long mask);
-int inotify_rm_watch(int fd,int wd);
+int inotify_init1(int flags) __THROW;
+int inotify_add_watch(int fd,const char* path,unsigned long mask) __THROW;
+int inotify_rm_watch(int fd,int wd) __THROW;
 
 __END_DECLS
 

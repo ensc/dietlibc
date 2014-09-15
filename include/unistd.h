@@ -88,6 +88,9 @@ pid_t getsid(pid_t pid) __THROW;
 pid_t setsid (void) __THROW;
 int dup (int oldfd) __THROW;
 int dup2 (int oldfd,int newfd) __THROW;
+#ifdef _GNU_SOURCE
+int dup3(int oldfd, int newfd, int flags) __THROW;
+#endif
 
 struct linux_dirent;
 struct linux_dirent64;

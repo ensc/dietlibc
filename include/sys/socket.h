@@ -3,6 +3,7 @@
 
 #include <sys/cdefs.h>
 #include <sys/types.h>
+#include <fcntl.h>
 
 __BEGIN_DECLS
 
@@ -177,6 +178,13 @@ __BEGIN_DECLS
 #define SO_TIMESTAMP		29
 #define SCM_TIMESTAMP		SO_TIMESTAMP
 #endif
+
+#if defined(__hppa__) || defined(__alpha__)
+#define SOCK_NONBLOCK 0x40000000
+#else
+#define SOCK_NONBLOCK O_NONBLOCK
+#endif
+#define SOCK_CLOEXEC O_CLOEXEC
 
 /* Socket types. */
 #ifdef __mips__
@@ -415,7 +423,19 @@ int listen(int s, int backlog) __THROW;
 #define SHUT_RDWR 2
 int shutdown(int s, int how) __THROW;
 
-int socketpair(int d, int type, int protocol, int sv[2]);
+int socketpair(int d, int type, int protocol, int sv[2]) __THROW;
+
+#ifdef _GNU_SOURCE
+struct mmsghdr {
+   struct msghdr msg_hdr;  /* Message header */
+   unsigned int  msg_len;  /* Number of bytes transmitted */
+};
+
+int recvmmsg(int sockfd, struct mmsghdr *msgvec, unsigned int vlen,
+	     unsigned int flags, struct timespec *timeout) __THROW;
+int sendmmsg(int sockfd, struct mmsghdr *msgvec, unsigned int vlen,
+	     unsigned int flags);
+#endif
 
 /* currently not supported: */
 #define NI_NOFQDN 1

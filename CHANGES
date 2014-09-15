@@ -7,6 +7,9 @@
     binary code is significantly larger than with gcc)
   implement experimental C11 threads
   fix fgets (Andreas Förster)
+  add eventfd, inotify_init1, epoll_init1, accept4, recvmmsg, sendmmsg
+  add dup3, fanotify_init, fanotify_mark, signalfd4, timerfd_settime
+  add timerfd_gettime
 
 0.33:
   first stab at getting TLS to work in actual threads
