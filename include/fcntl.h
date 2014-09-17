@@ -662,16 +662,17 @@ int sync_file_range(int fd, off64_t offset, off64_t nbytes, unsigned int flags) 
 int fallocate(int fd, int mode, loff_t offset, loff_t len) __THROW;
 #endif
 
-#if defined(_ATFILE_SOURCE) || ((_XOPEN_SOURCE + 0) >= 700) || ((_POSIX_C_SOURCE + 0) >= 200809L)
 #define AT_FDCWD		-100    /* Special value used to indicate openat should use the current working directory. */
 #define AT_SYMLINK_NOFOLLOW	0x100   /* Do not follow symbolic links.  */
 #define AT_REMOVEDIR		0x200   /* Remove directory instead of unlinking file.  */
 #define AT_SYMLINK_FOLLOW	0x400   /* Follow symbolic links.  */
 
+/* for faccessat */
+#define AT_EACCESS		0x200	/* using euid, not uid for accessat */
+
 int openat(int dirfd, const char *pathname, int flags, ...) __THROW;
 int futimesat(int dirfd, const char *pathname, const struct timeval times[2]) __THROW;
 int unlinkat(int dirfd, const char *pathname, int flags) __THROW;
-#endif
 
 #if defined(_XOPEN_SOURCE) && (_XOPEN_SOURCE - 0) >= 600
 #include "linux/fadvise.h"
