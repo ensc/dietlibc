@@ -4,7 +4,7 @@
 #if __WORDSIZE == 64
 typedef __uint128_t ulll;
 #else
-typedef __uint64_t ulll;
+typedef uint64_t ulll;
 #endif
 
 void* reallocarray(void* ptr, size_t nmemb, size_t size) {
