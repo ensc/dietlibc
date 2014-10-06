@@ -618,6 +618,48 @@ struct flock64
 
 #endif
 
+#ifdef _GNU_SOURCE
+
+#define F_SETLEASE	(F_LINUX_SPECIFIC_BASE + 0)
+#define F_GETLEASE	(F_LINUX_SPECIFIC_BASE + 1)
+
+/*
+ * Cancel a blocking posix lock; internal use only until we expose an
+ * asynchronous lock api to userspace:
+ */
+#define F_CANCELLK	(F_LINUX_SPECIFIC_BASE + 5)
+
+/* Create a file descriptor with FD_CLOEXEC set. */
+#define F_DUPFD_CLOEXEC	(F_LINUX_SPECIFIC_BASE + 6)
+
+/*
+ * Request nofications on a directory.
+ * See below for events that may be notified.
+ */
+#define F_NOTIFY	(F_LINUX_SPECIFIC_BASE+2)
+
+/*
+ * Set and get of pipe page size array
+ */
+#define F_SETPIPE_SZ	(F_LINUX_SPECIFIC_BASE + 7)
+#define F_GETPIPE_SZ	(F_LINUX_SPECIFIC_BASE + 8)
+
+/*
+ * Set/Get seals
+ */
+#define F_ADD_SEALS	(F_LINUX_SPECIFIC_BASE + 9)
+#define F_GET_SEALS	(F_LINUX_SPECIFIC_BASE + 10)
+
+/*
+ * Types of seals
+ */
+#define F_SEAL_SEAL	0x0001	/* prevent further seals from being set */
+#define F_SEAL_SHRINK	0x0002	/* prevent file from shrinking */
+#define F_SEAL_GROW	0x0004	/* prevent file from growing */
+#define F_SEAL_WRITE	0x0008	/* prevent writes */
+/* (1U << 31) is reserved for signed error codes */
+#endif
+
 extern int fcntl (int __fd, int __cmd, ...) __THROW;
 #ifndef __NO_STAT64
 extern int fcntl64 (int __fd, int __cmd, ...) __THROW;
@@ -660,12 +702,26 @@ int sync_file_range(int fd, off64_t offset, off64_t nbytes, unsigned int flags) 
 #define FALLOC_FL_KEEP_SIZE 1
 
 int fallocate(int fd, int mode, loff_t offset, loff_t len) __THROW;
+
+/*
+ * Types of directory notifications that may be requested.
+ */
+#define DN_ACCESS	0x00000001	/* File accessed */
+#define DN_MODIFY	0x00000002	/* File modified */
+#define DN_CREATE	0x00000004	/* File created */
+#define DN_DELETE	0x00000008	/* File removed */
+#define DN_RENAME	0x00000010	/* File renamed */
+#define DN_ATTRIB	0x00000020	/* File changed attibutes */
+#define DN_MULTISHOT	0x80000000	/* Don't remove notifier */
+
 #endif
 
 #define AT_FDCWD		-100    /* Special value used to indicate openat should use the current working directory. */
 #define AT_SYMLINK_NOFOLLOW	0x100   /* Do not follow symbolic links.  */
 #define AT_REMOVEDIR		0x200   /* Remove directory instead of unlinking file.  */
 #define AT_SYMLINK_FOLLOW	0x400   /* Follow symbolic links.  */
+#define AT_NO_AUTOMOUNT		0x800	/* Suppress terminal automount traversal */
+#define AT_EMPTY_PATH		0x1000	/* Allow empty relative pathname */
 
 /* for faccessat */
 #define AT_EACCESS		0x200	/* using euid, not uid for accessat */

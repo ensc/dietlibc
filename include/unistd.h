@@ -90,6 +90,14 @@ int dup (int oldfd) __THROW;
 int dup2 (int oldfd,int newfd) __THROW;
 #ifdef _GNU_SOURCE
 int dup3(int oldfd, int newfd, int flags) __THROW;
+
+/* flags for memfd_create(2) (unsigned int) */
+#define MFD_CLOEXEC		0x0001U
+#define MFD_ALLOW_SEALING	0x0002U
+
+int memfd_create(const char* name, unsigned int flags) __THROW;
+
+int syncfs(int fd) __THROW;
 #endif
 
 struct dirent;
@@ -277,8 +285,10 @@ pid_t gettid(void) __THROW __pure;
 int tkill(pid_t tid, int sig) __THROW;
 int tgkill(pid_t tgid, pid_t tid, int sig) __THROW;
 /* see linux/fadvise.h */
-long fadvise64(int fd,off64_t offset,size_t len,int advice);
-long fadvise64_64(int fd,off64_t offset,off64_t len,int advice);
+long fadvise64(int fd,off64_t offset,size_t len,int advice) __THROW;
+long fadvise64_64(int fd,off64_t offset,off64_t len,int advice) __THROW;
+
+int getrandom(void* buf, size_t buflen, unsigned int flags) __THROW;
 #endif
 
 #if defined(_ATFILE_SOURCE) || ((_XOPEN_SOURCE + 0) >= 700) || ((_POSIX_C_SOURCE + 0) >= 200809L)
