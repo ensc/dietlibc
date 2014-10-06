@@ -360,6 +360,13 @@
 #define __NR_process_vm_writev 311
 #define __NR_kcmp 312
 #define __NR_finit_module 313
+#define __NR_sched_setattr 314
+#define __NR_sched_getattr 315
+#define __NR_renameat2 316
+#define __NR_seccomp 317
+#define __NR_getrandom 318
+#define __NR_memfd_create 319
+#define __NR_kexec_file_load 320
 
 #ifdef __PIC__
 #define syscall_weak(name,wsym,sym) \
