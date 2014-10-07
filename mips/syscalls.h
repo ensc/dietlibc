@@ -352,6 +352,12 @@
 #define __NR_process_vm_writev		(__NR_Linux + 346)
 #define __NR_kcmp			(__NR_Linux + 347)
 #define __NR_finit_module		(__NR_Linux + 348)
+#define __NR_sched_setattr		(__NR_Linux + 349)
+#define __NR_sched_getattr		(__NR_Linux + 350)
+#define __NR_renameat2			(__NR_Linux + 351)
+#define __NR_seccomp			(__NR_Linux + 352)
+#define __NR_getrandom			(__NR_Linux + 353)
+#define __NR_memfd_create		(__NR_Linux + 354)
 
 
 #define syscall_weak(name,wsym,sym) \

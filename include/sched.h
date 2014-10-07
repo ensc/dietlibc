@@ -25,29 +25,29 @@ struct sched_param {
 
 /* END OF COPY form kernel-header */
 
-int __sched_setparam(pid_t pid, const struct sched_param* p);
-int sched_setparam(pid_t pid, const struct sched_param* p);
+int __sched_setparam(pid_t pid, const struct sched_param* p) __THROW;
+int sched_setparam(pid_t pid, const struct sched_param* p) __THROW;
 
-int __sched_getparam(pid_t pid, struct sched_param* p);
-int sched_getparam(pid_t pid, struct sched_param* p);
+int __sched_getparam(pid_t pid, struct sched_param* p) __THROW;
+int sched_getparam(pid_t pid, struct sched_param* p) __THROW;
 
-int __sched_getscheduler(pid_t pid);
-int sched_getscheduler(pid_t pid);
+int __sched_getscheduler(pid_t pid) __THROW;
+int sched_getscheduler(pid_t pid) __THROW;
 
-int __sched_setscheduler(pid_t pid, int policy, const struct sched_param* p);
-int sched_setscheduler(pid_t pid, int policy, const struct sched_param* p);
+int __sched_setscheduler(pid_t pid, int policy, const struct sched_param* p) __THROW;
+int sched_setscheduler(pid_t pid, int policy, const struct sched_param* p) __THROW;
 
-int __sched_yield(void);
-int sched_yield(void);
+int __sched_yield(void) __THROW;
+int sched_yield(void) __THROW;
 
-int __sched_get_priority_max(int policy);
-int sched_get_priority_max(int policy);
+int __sched_get_priority_max(int policy) __THROW;
+int sched_get_priority_max(int policy) __THROW;
 
-int __sched_get_priority_min(int policy);
-int sched_get_priority_min(int policy);
+int __sched_get_priority_min(int policy) __THROW;
+int sched_get_priority_min(int policy) __THROW;
 
-int __sched_rr_get_interval(pid_t pid, struct timespec* tp);
-int sched_rr_get_interval(pid_t pid, struct timespec* tp);
+int __sched_rr_get_interval(pid_t pid, struct timespec* tp) __THROW;
+int sched_rr_get_interval(pid_t pid, struct timespec* tp) __THROW;
 
 #ifdef _GNU_SOURCE
 /*
@@ -80,11 +80,11 @@ int sched_rr_get_interval(pid_t pid, struct timespec* tp);
 
 #define CLONE_SIGNAL    (CLONE_SIGHAND | CLONE_THREAD)
 
-int clone(int (*fn)(void*),void* stack,int flags,void* arg, ...);
+int clone(int (*fn)(void*),void* stack,int flags,void* arg, ...) __THROW;
 
-int unshare(int flags);
+int unshare(int flags) __THROW;
 
-long set_tid_address(int* tid);
+long set_tid_address(int* tid) __THROW;
 
 /*
  * Linux CPU affinity.
@@ -128,10 +128,12 @@ static inline int  CPU_EQUAL(cpu_set_t *s1, cpu_set_t *s2){
 	return *s1 == *s2;
 }
 
-int sched_setaffinity(pid_t pid, size_t size, cpu_set_t *mask);
-int sched_getaffinity(pid_t pid, size_t size, cpu_set_t *mask);
+int sched_setaffinity(pid_t pid, size_t size, cpu_set_t *mask) __THROW;
+int sched_getaffinity(pid_t pid, size_t size, cpu_set_t *mask) __THROW;
 #define pthread_setaffinity_np sched_setaffinity
 #define pthread_getaffinity_np sched_getaffinity
+
+int setns(int fd,int nstype) __THROW;
 
 #endif
 

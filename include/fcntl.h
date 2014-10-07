@@ -27,7 +27,7 @@ __BEGIN_DECLS
 #define O_APPEND	  02000
 #define O_NONBLOCK	  04000
 #define O_NDELAY	O_NONBLOCK
-#define O_SYNC		 010000
+#define O_DSYNC		 010000
 #define FASYNC		 020000	/* fcntl, for BSD compatibility */
 #define O_DIRECT	 040000	/* direct disk access hint - currently ignored */
 #define O_LARGEFILE	0100000
@@ -35,6 +35,9 @@ __BEGIN_DECLS
 #define O_NOFOLLOW	0400000 /* don't follow links */
 #define O_NOATIME	01000000
 #define O_CLOEXEC	02000000
+#define O_SYNC		(O_SYNC|04000000)
+#define O_PATH		010000000
+#define O_TMPFILE	020000000
 
 #define F_DUPFD		0	/* dup */
 #define F_GETFD		1	/* get close_on_exec */
@@ -111,7 +114,7 @@ struct flock64 {
 #define O_NONBLOCK	 00004
 #define O_APPEND	 00010
 #define O_NDELAY	O_NONBLOCK
-#define O_SYNC		040000
+#define O_DSYNC		040000
 #define FASYNC		020000	/* fcntl, for BSD compatibility */
 #define O_DIRECTORY	0100000	/* must be a directory */
 #define O_NOFOLLOW	0200000 /* don't follow links */
@@ -119,6 +122,9 @@ struct flock64 {
 #define O_DIRECT	02000000	/* direct disk access - should check with OSF/1 */
 #define O_NOATIME	04000000
 #define O_CLOEXEC	010000000
+#define O_SYNC		(020000000|O_DSYNC)
+#define O_PATH		040000000
+#define O_TMPFILE	0100000000
 
 #define F_DUPFD		0	/* dup */
 #define F_GETFD		1	/* get close_on_exec */
@@ -176,7 +182,7 @@ struct flock {
 #define O_WRONLY	0x0001
 #define O_RDWR		0x0002
 #define O_APPEND	0x0008
-#define O_SYNC		0x0010
+#define O_DSYNC		0x0010
 #define O_NONBLOCK	0x0080
 #define O_CREAT         0x0100	/* not fcntl */
 #define O_TRUNC		0x0200	/* not fcntl */
@@ -184,11 +190,14 @@ struct flock {
 #define O_NOCTTY	0x0800	/* not fcntl */
 #define FASYNC		0x1000	/* fcntl, for BSD compatibility */
 #define O_LARGEFILE	0x2000	/* allow large file opens - currently ignored */
+#define O_SYNC		(0x4000|O_DSYNC)
 #define O_DIRECT	0x8000	/* direct disk access hint - currently ignored */
 #define O_DIRECTORY	0x10000	/* must be a directory */
 #define O_NOFOLLOW	0x20000	/* don't follow links */
 #define O_NOATIME	0x40000
 #define O_CLOEXEC	0x80000
+#define O_PATH		040000000
+#define O_TMPFILE	0100000000
 
 #define O_NDELAY	O_NONBLOCK
 
@@ -280,7 +289,7 @@ struct flock {
 #define O_CREAT		0x0200	/* not fcntl */
 #define O_TRUNC		0x0400	/* not fcntl */
 #define O_EXCL		0x0800	/* not fcntl */
-#define O_SYNC		0x2000
+#define O_DSYNC		0x2000
 #define O_NONBLOCK	0x4000
 #define O_NDELAY	(0x0004 | O_NONBLOCK)
 #define O_NOCTTY	0x8000	/* not fcntl */
@@ -290,6 +299,9 @@ struct flock {
 #define O_DIRECT        0x100000 /* direct disk access hint */
 #define O_NOATIME	0x200000
 #define O_CLOEXEC	0x400000
+#define O_SYNC		(0x800000|O_DSYNC)
+#define O_PATH		0x1000000
+#define O_TMPFILE	0x2000000
 
 #define F_DUPFD		0	/* dup */
 #define F_GETFD		1	/* get close_on_exec */
@@ -380,6 +392,9 @@ struct flock64 {
 #define O_DIRECT	0400000	/* direct disk access hint - currently ignored */
 #define O_NOATIME	01000000
 #define O_CLOEXEC	02000000
+#define O_SYNC		(O_SYNC|04000000)
+#define O_PATH		010000000
+#define O_TMPFILE	020000000
 
 #define F_DUPFD		0	/* dup */
 #define F_GETFD		1	/* get close_on_exec */
@@ -465,6 +480,9 @@ struct flock64 {
 #define O_LARGEFILE	0400000
 #define O_NOATIME	01000000
 #define O_CLOEXEC	02000000
+#define O_SYNC		(O_SYNC|04000000)
+#define O_PATH		010000000
+#define O_TMPFILE	020000000
 
 #define F_DUPFD		0	/* dup */
 #define F_GETFD		1	/* get close_on_exec */
@@ -542,7 +560,7 @@ struct flock64 {
 #define O_EXCL      00002000 /* not fcntl */
 #define O_LARGEFILE 00004000
 #define O_ASYNC     00020000
-#define O_SYNC      00100000
+#define __O_SYNC      00100000
 #define O_NONBLOCK  00200004 /* HPUX has separate NDELAY & NONBLOCK */
 #define O_NDELAY    O_NONBLOCK
 #define O_NOCTTY    00400000 /* not fcntl */
@@ -555,6 +573,10 @@ struct flock64 {
 #define O_DIRECT    00040000 /* direct disk access hint - currently ignored */
 #define O_NOFOLLOW  00000200 /* don't follow links */
 #define O_INVISIBLE 04000000 /* invisible I/O, for DMAPI/XDSM */
+
+#define O_PATH		020000000
+#define O_TMPFILE	040000000
+#define O_SYNC		(__O_SYNC|O_DSYNC)
 
 #define F_DUPFD     0   /* Duplicate file descriptor.  */
 #define F_GETFD     1   /* Get file descriptor flags.  */
@@ -618,6 +640,48 @@ struct flock64
 
 #endif
 
+#ifdef _GNU_SOURCE
+
+#define F_SETLEASE	(F_LINUX_SPECIFIC_BASE + 0)
+#define F_GETLEASE	(F_LINUX_SPECIFIC_BASE + 1)
+
+/*
+ * Cancel a blocking posix lock; internal use only until we expose an
+ * asynchronous lock api to userspace:
+ */
+#define F_CANCELLK	(F_LINUX_SPECIFIC_BASE + 5)
+
+/* Create a file descriptor with FD_CLOEXEC set. */
+#define F_DUPFD_CLOEXEC	(F_LINUX_SPECIFIC_BASE + 6)
+
+/*
+ * Request nofications on a directory.
+ * See below for events that may be notified.
+ */
+#define F_NOTIFY	(F_LINUX_SPECIFIC_BASE+2)
+
+/*
+ * Set and get of pipe page size array
+ */
+#define F_SETPIPE_SZ	(F_LINUX_SPECIFIC_BASE + 7)
+#define F_GETPIPE_SZ	(F_LINUX_SPECIFIC_BASE + 8)
+
+/*
+ * Set/Get seals
+ */
+#define F_ADD_SEALS	(F_LINUX_SPECIFIC_BASE + 9)
+#define F_GET_SEALS	(F_LINUX_SPECIFIC_BASE + 10)
+
+/*
+ * Types of seals
+ */
+#define F_SEAL_SEAL	0x0001	/* prevent further seals from being set */
+#define F_SEAL_SHRINK	0x0002	/* prevent file from shrinking */
+#define F_SEAL_GROW	0x0004	/* prevent file from growing */
+#define F_SEAL_WRITE	0x0008	/* prevent writes */
+/* (1U << 31) is reserved for signed error codes */
+#endif
+
 extern int fcntl (int __fd, int __cmd, ...) __THROW;
 #ifndef __NO_STAT64
 extern int fcntl64 (int __fd, int __cmd, ...) __THROW;
@@ -660,12 +724,43 @@ int sync_file_range(int fd, off64_t offset, off64_t nbytes, unsigned int flags) 
 #define FALLOC_FL_KEEP_SIZE 1
 
 int fallocate(int fd, int mode, loff_t offset, loff_t len) __THROW;
+
+/*
+ * Types of directory notifications that may be requested.
+ */
+#define DN_ACCESS	0x00000001	/* File accessed */
+#define DN_MODIFY	0x00000002	/* File modified */
+#define DN_CREATE	0x00000004	/* File created */
+#define DN_DELETE	0x00000008	/* File removed */
+#define DN_RENAME	0x00000010	/* File renamed */
+#define DN_ATTRIB	0x00000020	/* File changed attibutes */
+#define DN_MULTISHOT	0x80000000	/* Don't remove notifier */
+
 #endif
+
+#define F_SETOWN_EX	15
+#define F_GETOWN_EX	16
+#define F_GETOWNER_UIDS	17
+
+#define F_OFD_GETLK	36
+#define F_OFD_SETLK	37
+#define F_OFD_SETLKW	38
+
+#define F_OWNER_TID	0
+#define F_OWNER_PID	1
+#define F_OWNER_PGRP	2
+
+struct f_owner_ex {
+	int	type;
+	int	pid;
+};
 
 #define AT_FDCWD		-100    /* Special value used to indicate openat should use the current working directory. */
 #define AT_SYMLINK_NOFOLLOW	0x100   /* Do not follow symbolic links.  */
 #define AT_REMOVEDIR		0x200   /* Remove directory instead of unlinking file.  */
 #define AT_SYMLINK_FOLLOW	0x400   /* Follow symbolic links.  */
+#define AT_NO_AUTOMOUNT		0x800	/* Suppress terminal automount traversal */
+#define AT_EMPTY_PATH		0x1000	/* Allow empty relative pathname */
 
 /* for faccessat */
 #define AT_EACCESS		0x200	/* using euid, not uid for accessat */

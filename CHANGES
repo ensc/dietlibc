@@ -9,7 +9,8 @@
   fix fgets (Andreas Förster)
   add eventfd, inotify_init1, epoll_init1, accept4, recvmmsg, sendmmsg
   add dup3, fanotify_init, fanotify_mark, signalfd4, timerfd_settime
-  add timerfd_gettime
+  add timerfd_gettime, setns, memfd_create, getrandom, syncfs
+  add preadv, pwritev
 
 0.33:
   first stab at getting TLS to work in actual threads

@@ -3,6 +3,7 @@
 
 #include <inttypes.h>
 #include <endian.h>
+#include <sys/socket.h> /* for sockaddr_storage */
 
 __BEGIN_DECLS
 
@@ -94,6 +95,12 @@ enum {
 #endif
 };
 
+/*
+ * TCP general constants
+ */
+#define TCP_MSS_DEFAULT		 536U	/* IPv4 (RFC1122, RFC2581) */
+#define TCP_MSS_DESIRED		1220U	/* IPv6 (tunneled), EDNS0 (RFC3226) */
+
 /* TCP socket options */
 #define TCP_NODELAY		1	/* Turn off Nagle's algorithm. */
 #define TCP_MAXSEG		2	/* Limit MSS */
@@ -107,11 +114,25 @@ enum {
 #define TCP_WINDOW_CLAMP	10	/* Bound advertised window */
 #define TCP_INFO		11	/* Information about this connection. */
 #define TCP_QUICKACK		12	/* Block/reenable quick acks */
+#define TCP_CONGESTION		13	/* Congestion control algorithm */
+#define TCP_MD5SIG		14	/* TCP MD5 Signature (RFC2385) */
+#define TCP_THIN_LINEAR_TIMEOUTS 16      /* Use linear timeouts for thin streams*/
+#define TCP_THIN_DUPACK         17      /* Fast retrans. after 1 dupack */
+#define TCP_USER_TIMEOUT	18	/* How long for loss retry before timeout */
+#define TCP_REPAIR		19	/* TCP sock is under repair right now */
+#define TCP_REPAIR_QUEUE	20
+#define TCP_QUEUE_SEQ		21
+#define TCP_REPAIR_OPTIONS	22
+#define TCP_FASTOPEN		23	/* Enable FastOpen on listeners */
+#define TCP_TIMESTAMP		24
+#define TCP_NOTSENT_LOWAT	25	/* limit number of unsent bytes in write queue */
 
 #define TCPI_OPT_TIMESTAMPS	1
 #define TCPI_OPT_SACK		2
 #define TCPI_OPT_WSCALE		4
 #define TCPI_OPT_ECN		8
+#define TCPI_OPT_ECN_SEEN	16 /* we received at least one packet with ECT */
+#define TCPI_OPT_SYN_DATA	32 /* SYN-ACK acked data in SYN sent or rcvd */
 
 enum tcp_ca_state {
   TCP_CA_Open = 0,
@@ -161,6 +182,24 @@ struct tcp_info {
   uint32_t tcpi_snd_cwnd;
   uint32_t tcpi_advmss;
   uint32_t tcpi_reordering;
+  uint32_t tcpi_rcv_rtt;
+  uint32_t tcpi_rcv_space;
+
+  uint32_t tcpi_total_retrans;
+
+  uint64_t tcpi_pacing_rate;
+  uint64_t tcpi_max_pacing_rate;
+};
+
+/* for TCP_MD5SIG socket option */
+#define TCP_MD5SIG_MAXKEYLEN	80
+
+struct tcp_md5sig {
+  struct sockaddr_storage tcpm_addr;	/* address associated */
+  uint16_t __tcpm_pad1;				/* zero */
+  uint16_t tcpm_keylen;				/* key length */
+  uint32_t __tcpm_pad2;				/* zero */
+  uint8_t tcpm_key[TCP_MD5SIG_MAXKEYLEN];	/* key (binary) */
 };
 
 __END_DECLS
