@@ -474,6 +474,14 @@ struct ucred {
 #define MSG_ERRQUEUE	0x2000	/* Fetch message from error queue */
 #define MSG_NOSIGNAL	0x4000	/* Do not generate SIGPIPE */
 #define MSG_MORE	0x8000	/* Sender will send more */
+#define MSG_WAITFORONE	0x10000	/* recvmmsg(): block until 1+ packets avail */
+#define MSG_SENDPAGE_NOTLAST 0x20000 /* sendpage() internal : not the last page */
+#define MSG_EOF         MSG_FIN
+
+#define MSG_FASTOPEN	0x20000000	/* Send data in TCP SYN */
+#define MSG_CMSG_CLOEXEC 0x40000000	/* Set close_on_exit for file
+					   descriptor received through
+					   SCM_RIGHTS */
 
 /* Setsockoptions(2) level. Thanks to BSD these must match IPPROTO_xxx */
 #define SOL_IP		0
