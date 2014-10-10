@@ -1,6 +1,14 @@
 #include "syscalls.h"
 
 .text
+
+.global __setcontext_trampoline
+.type __setcontext_trampoline,@function
+__setcontext_trampoline:
+  movq %rbx,%rdi
+  /* fall through */
+  .size __setcontext_trampoline, .-__setcontext_trampoline
+
 .global setcontext
 .type setcontext,@function
 /* load current CPU context from struct ucontext* */
@@ -36,8 +44,8 @@ setcontext:
   movq 160(%rdi),%rsp
   pushq 168(%rdi)	/* push return value so ret goes to the right place */
 
-  movw 186(%rdi),%gs
-  movw 188(%rdi),%fs
+//  movw 186(%rdi),%gs
+//  movw 188(%rdi),%fs
 
   movq 104(%rdi),%rdi
 

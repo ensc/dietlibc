@@ -1,6 +1,13 @@
 #include "syscalls.h"
 
 .text
+.global __setcontext_trampoline
+.type __setcontext_trampoline,@function
+__setcontext_trampoline:
+  mov %ebx,4(%esp)
+  /* fall through */
+.size __setcontext_trampoline,.-__setcontext_trampoline
+
 .global setcontext
 .type setcontext,@function
 /* switch to stored CPU context from struct ucontext* */

@@ -1,4 +1,6 @@
+#ifndef _REENTRANT
 #define _REENTRANT
+#endif
 #include <errno.h>
 #include <unistd.h>
 #include <sys/resource.h>

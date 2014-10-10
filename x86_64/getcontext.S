@@ -21,14 +21,16 @@ getcontext:
   movq %rdx,136(%rdi)
   movq $0,144(%rdi)	/* store 0 as value of rax because that's the return value of the function */
   movq %rcx,152(%rdi)
-  movq %rsp,160(%rdi)
+  leaq 8(%rsp),%rax
+  movq %rax,160(%rdi)
   movq (%rsp),%rax
   movq %rax,168(%rdi)	/* store function return address as rip */
   lahf
   movq %rax,176(%rdi)
-  movw %cs,184(%rdi)
-  movw %gs,186(%rdi)
-  movw %fs,188(%rdi)
+  /* valgrind dies if we use these instructions */
+//  movw %cs,184(%rdi)
+//  movw %gs,186(%rdi)
+//  movw %fs,188(%rdi)
   /* write nothing to err (192) and trapno (200) */
 
   leaq 424(%rdi),%rax
