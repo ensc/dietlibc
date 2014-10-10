@@ -431,10 +431,10 @@ enum {
 # define POLL_HUP	POLL_HUP
 };
 
-#define _NSIG_WORDS	((_NSIG/sizeof(long))>>3)
+#define _SIGSET_WORDS	(1024 / (8 * sizeof (unsigned long int)))
 
 typedef struct {
-  unsigned long sig[_NSIG_WORDS];
+  unsigned long sig[_SIGSET_WORDS];
 } sigset_t;
 
 struct sigaction {

@@ -202,6 +202,8 @@ size_t confstr(int name,char*buf,size_t len) __THROW;
 #define _SC_NPROCESSORS_ONLN 6
 #define _SC_NPROCESSORS_CONF _SC_NPROCESSORS_ONLN
 #define _SC_PHYS_PAGES 7
+#define _SC_GETPW_R_SIZE_MAX 8
+#define _SC_GETGR_R_SIZE_MAX 9
 long sysconf(int name) __THROW;
 #define _PC_PATH_MAX 1
 #define _PC_VDISABLE 2
