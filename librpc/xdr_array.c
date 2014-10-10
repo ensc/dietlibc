@@ -82,9 +82,9 @@ xdrproc_t elproc;				/* xdr routine to handle each element */
 	}
 	/* duh, look for integer overflow (fefe) */
 	{
-	  unsigned int i;
+	  unsigned int j;
 	  nodesize = 0;
-	  for (i=c; i; --i) {
+	  for (j=c; j; --j) {
 	    unsigned int tmp=nodesize+elsize;
 	    if (tmp<nodesize)	/* overflow */
 	      return FALSE;

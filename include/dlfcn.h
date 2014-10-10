@@ -14,10 +14,10 @@
 
 __BEGIN_DECLS
 
-void *dlopen (const char *filename, int flag);
-const char *dlerror(void);
-void *dlsym(void *handle, const char *symbol);
-int dlclose (void *handle);
+void *dlopen (const char *filename, int flag) __THROWNL;
+const char *dlerror(void) __THROW;
+void *dlsym(void *handle, const char *symbol) __THROW;
+int dlclose (void *handle) __THROWNL;
 
 #ifdef _GNU_SOURCE
 typedef struct

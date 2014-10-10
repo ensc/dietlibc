@@ -281,55 +281,54 @@ static void recv6(int s) {
 }
 
 static void init_sockets(int* sock6,int* sock4,int port,char* v6ip,char* v4ip) {
-  int s4,s6;
+  int _s4,_s6;
   int one=1;
   *sock6=-1; *sock4=-1;
-  s6=socket(PF_INET6,SOCK_DGRAM,IPPROTO_UDP);
-  s4=socket(PF_INET,SOCK_DGRAM,IPPROTO_UDP);
-  if (s4==-1 && s6==-1) {
+  _s6=socket(PF_INET6,SOCK_DGRAM,IPPROTO_UDP);
+  _s4=socket(PF_INET,SOCK_DGRAM,IPPROTO_UDP);
+  if (_s4==-1 && _s6==-1) {
     perror("socket");
     return;
   }
-  if (s6!=-1) {
-    setsockopt(s6,SOL_SOCKET,SO_REUSEADDR,&one,sizeof(one));
+  if (_s6!=-1) {
+    setsockopt(_s6,SOL_SOCKET,SO_REUSEADDR,&one,sizeof(one));
     memset(&sa6,0,sizeof(sa6));
     sa6.sin6_family=PF_INET6;
     sa6.sin6_port=htons(port);
-    if (bind(s6,(struct sockaddr*)&sa6,sizeof(struct sockaddr_in6))==-1) {
+    if (bind(_s6,(struct sockaddr*)&sa6,sizeof(struct sockaddr_in6))==-1) {
       perror("bind IPv6");
-      close(s6);
-      s6=-1;
+      close(_s6);
+      _s6=-1;
     }
   }
-  if (s4!=-1) {
-    setsockopt(s4,SOL_SOCKET,SO_REUSEADDR,&one,sizeof(one));
+  if (_s4!=-1) {
+    setsockopt(_s4,SOL_SOCKET,SO_REUSEADDR,&one,sizeof(one));
     memset(&sa4,0,sizeof(sa4));
     sa4.sin_family=PF_INET;
     sa4.sin_port=htons(port);
-    if (bind(s4,(struct sockaddr*)&sa4,sizeof(struct sockaddr_in))==-1) {
-      if (errno!=EADDRINUSE || s6==-1)
+    if (bind(_s4,(struct sockaddr*)&sa4,sizeof(struct sockaddr_in))==-1) {
+      if (errno!=EADDRINUSE || _s6==-1)
 	perror("bind IPv4");
-      close(s4);
-      s4=-1;
+      close(_s4);
+      _s4=-1;
     }
   }
-  if (s4==-1 && s6==-1) return;
+  if (_s4==-1 && _s6==-1) return;
 
   {
     int val=255;
-    int one=1;
-    if (s6!=-1) {
+    if (_s6!=-1) {
       struct ipv6_mreq opt;
-      setsockopt(s6,IPPROTO_IPV6,IPV6_UNICAST_HOPS,&val,sizeof(val));
-      setsockopt(s6,IPPROTO_IPV6,IPV6_MULTICAST_LOOP,&one,sizeof(one));
+      setsockopt(_s6,IPPROTO_IPV6,IPV6_UNICAST_HOPS,&val,sizeof(val));
+      setsockopt(_s6,IPPROTO_IPV6,IPV6_MULTICAST_LOOP,&one,sizeof(one));
       memcpy(&opt.ipv6mr_multiaddr,v6ip,16);
       opt.ipv6mr_interface=0;
-      setsockopt(s6,IPPROTO_IPV6,IPV6_ADD_MEMBERSHIP,&opt,sizeof opt);
-      setsockopt(s6,IPPROTO_IPV6,IPV6_PKTINFO,&one,sizeof one);
+      setsockopt(_s6,IPPROTO_IPV6,IPV6_ADD_MEMBERSHIP,&opt,sizeof opt);
+      setsockopt(_s6,IPPROTO_IPV6,IPV6_PKTINFO,&one,sizeof one);
     }
     {
       struct ip_mreq opt;
-      int s=(s4==-1?s6:s4);
+      int s=(_s4==-1?_s6:_s4);
       setsockopt(s,SOL_IP,IP_TTL,&val,sizeof(val));
       memcpy(&opt.imr_multiaddr.s_addr,v4ip,4);
       opt.imr_interface.s_addr=0;
@@ -338,8 +337,8 @@ static void init_sockets(int* sock6,int* sock4,int port,char* v6ip,char* v4ip) {
     }
   }
 
-  *sock4=s4;
-  *sock6=s6;
+  *sock4=_s4;
+  *sock6=_s6;
 }
 
 int main() {
