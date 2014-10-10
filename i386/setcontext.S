@@ -23,7 +23,7 @@ setcontext:
   fldenv (%ecx)
 
   /* the registers are in uc_mcontext, which starts at offset 20 */
-  movw 20(%eax),%gs
+  /* do not restore gs because it's thread-specific */
   movw 24(%eax),%fs
   movw 28(%eax),%es
   movw 32(%eax),%ds
