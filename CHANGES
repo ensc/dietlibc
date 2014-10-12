@@ -12,6 +12,7 @@
   add timerfd_gettime, setns, memfd_create, getrandom, syncfs
   add preadv, pwritev
   add getcontext, setcontext, makecontext, swapcontext (i386 and x86_64 only for now)
+  add implementation of hsearch and friends
 
 0.33:
   first stab at getting TLS to work in actual threads

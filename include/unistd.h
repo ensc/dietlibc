@@ -275,7 +275,7 @@ extern char **__environ;
 #endif
 #endif
 
-#ifdef _LINUX_SOURCE
+#if defined(_LINUX_SOURCE) || defined(_GNU_SOURCE)
 int pivot_root(const char *new_root, const char *put_old) __THROW;
 /* Linux 2.6 module loading infrastructure:
  * init_module takes a buffer where you read the module file into */
@@ -290,7 +290,16 @@ int tgkill(pid_t tgid, pid_t tid, int sig) __THROW;
 long fadvise64(int fd,off64_t offset,size_t len,int advice) __THROW;
 long fadvise64_64(int fd,off64_t offset,off64_t len,int advice) __THROW;
 
+#ifndef GRND_NONBLOCK
+enum {
+  GRND_NONBLOCK=1,
+#define GRND_NONBLOCK GRND_NONBLOCK
+  GRND_RANDOM=2
+#define GRND_RANDOM GRND_RANDOM
+};
+
 int getrandom(void* buf, size_t buflen, unsigned int flags) __THROW;
+#endif
 #endif
 
 #if defined(_ATFILE_SOURCE) || ((_XOPEN_SOURCE + 0) >= 700) || ((_POSIX_C_SOURCE + 0) >= 200809L)
