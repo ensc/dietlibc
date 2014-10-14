@@ -41,12 +41,12 @@ __BEGIN_DECLS
 #define W_STOPCODE(sig) ((sig) << 8 | 0x7f)
 #endif
 
-pid_t wait(int *status) __THROW;
-pid_t waitpid(pid_t pid, int *status, int options) __THROW;
+pid_t wait(int *status);
+pid_t waitpid(pid_t pid, int *status, int options);
 
-pid_t wait3(int *status, int options, struct rusage *rusage) __THROW;
+pid_t wait3(int *status, int options, struct rusage *rusage) __THROWNL;
 
-pid_t wait4(pid_t pid, int *status, int options, struct rusage *rusage) __THROW;
+pid_t wait4(pid_t pid, int *status, int options, struct rusage *rusage) __THROWNL;
 
 typedef enum {
   P_ALL,		/* Wait for any child.  */

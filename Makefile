@@ -620,6 +620,11 @@ $(OBJDIR)/tmpnam.o $(OBJDIR)/utxent.o $(OBJDIR)/verr.o \
 $(OBJDIR)/verrx.o $(OBJDIR)/vwarn.o $(OBJDIR)/warn.o \
 $(OBJDIR)/wcsrtombs.o $(OBJDIR)/wcstombs.o: include/errno_definition.h
 
+$(OBJDIR)/abort.o $(OBJDIR)/pselect.o $(OBJDIR)/__utmp_block_signals.o \
+$(OBJDIR)/system.o $(OBJDIR)/utxent.o $(OBJDIR)/sigemptyset.o \
+$(OBJDIR)/sigorset.o $(OBJDIR)/sigandset.o $(OBJDIR)/sigfillset.o \
+$(OBJDIR)/sigisemptyset.o: include/signal.h
+
 include/errno_definition.h: dietfeatures.h
 	if grep -q '^#define WANT_TLS' $<; then echo "extern __thread int errno;"; else echo "extern int errno;"; fi > $@
 

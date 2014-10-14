@@ -16,6 +16,7 @@
 #include <elf.h>
 #include <stdlib.h>
 #include "dietfeatures.h"
+#include <sys/auxv.h>
 #include "dietelfinfo.h"
 
 #ifdef IN_LDSO

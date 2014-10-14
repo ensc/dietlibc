@@ -16,6 +16,22 @@
 #define __extension__
 #endif
 
+#if (__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 6))
+#define __leaf , __leaf__
+#else
+#define __leaf
+#endif
+
+#if !defined(__cplusplus) && ((__GNUC__ > 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 3)))
+#undef __THROW
+#define __THROW __attribute__((__nothrow__ __leaf))
+#define __THROWNL __attribute__((__nothrow__))
+#endif
+
+#ifndef __THROWNL
+#define __THROWNL __THROW
+#endif
+
 #if (__GNUC__ > 2) || ((__GNUC__ == 2) && (__GNUC_MINOR__ >= 96))
 #define __pure __attribute__ ((__pure__))
 #else

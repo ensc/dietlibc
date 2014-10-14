@@ -222,12 +222,12 @@ typedef struct __jmp_buf_tag {	/* C++ doesn't like tagless structs.  */
 extern int __sigsetjmp(jmp_buf __env,int __savemask) __THROW;
 
 extern void longjmp(jmp_buf __env,int __val)
-     __THROW __attribute__((__noreturn__));
+     __THROWNL __attribute__((__noreturn__));
 
 typedef jmp_buf sigjmp_buf;
 
 extern void siglongjmp(sigjmp_buf __env,int __val)
-     __THROW __attribute__((__noreturn__));
+     __THROWNL __attribute__((__noreturn__));
 
 #ifdef _BSD_SOURCE
 #define setjmp(env) __sigsetjmp(env,1)
