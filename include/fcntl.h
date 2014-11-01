@@ -14,8 +14,6 @@ __BEGIN_DECLS
 
 #if defined(__i386__) || defined(__s390__) || defined(__x86_64__) || defined(__ia64__)
 
-/* open/fcntl - O_SYNC is only implemented on blocks devices and on files
-   located on an ext2 file system */
 #define O_ACCMODE	   0003
 #define O_RDONLY	     00
 #define O_WRONLY	     01
@@ -35,7 +33,7 @@ __BEGIN_DECLS
 #define O_NOFOLLOW	0400000 /* don't follow links */
 #define O_NOATIME	01000000
 #define O_CLOEXEC	02000000
-#define O_SYNC		(O_SYNC|04000000)
+#define O_SYNC		(O_DSYNC|04000000)
 #define O_PATH		010000000
 #define O_TMPFILE	020000000
 
@@ -100,8 +98,6 @@ struct flock64 {
 
 #elif defined(__alpha__)
 
-/* open/fcntl - O_SYNC is only implemented on blocks devices and on files
-   located on an ext2 file system */
 #define O_ACCMODE	  0003
 #define O_RDONLY	    00
 #define O_WRONLY	    01
@@ -175,8 +171,6 @@ struct flock {
 
 #elif defined(__mips__)
 
-/* open/fcntl - O_SYNC is only implemented on blocks devices and on files
-   located on an ext2 file system */
 #define O_ACCMODE	0x0003
 #define O_RDONLY	0x0000
 #define O_WRONLY	0x0001
@@ -278,8 +272,6 @@ struct flock {
 
 #elif defined(__sparc__)
 
-/* open/fcntl - O_SYNC is only implemented on blocks devices and on files
-   located on an ext2 file system */
 #define O_RDONLY	0x0000
 #define O_WRONLY	0x0001
 #define O_RDWR		0x0002
@@ -371,8 +363,6 @@ struct flock64 {
 
 #elif defined(__powerpc__) || defined(__powerpc64__)
 
-/* open/fcntl - O_SYNC is only implemented on blocks devices and on files
-   located on an ext2 file system */
 #define O_ACCMODE	   0003
 #define O_RDONLY	     00
 #define O_WRONLY	     01
@@ -384,7 +374,7 @@ struct flock64 {
 #define O_APPEND	  02000
 #define O_NONBLOCK	  04000
 #define O_NDELAY	O_NONBLOCK
-#define O_SYNC		 010000
+#define O_DSYNC		 010000
 #define FASYNC		 020000	/* fcntl, for BSD compatibility */
 #define O_DIRECTORY      040000	/* must be a directory */
 #define O_NOFOLLOW      0100000	/* don't follow links */
@@ -392,7 +382,7 @@ struct flock64 {
 #define O_DIRECT	0400000	/* direct disk access hint - currently ignored */
 #define O_NOATIME	01000000
 #define O_CLOEXEC	02000000
-#define O_SYNC		(O_SYNC|04000000)
+#define O_SYNC		(O_DSYNC|04000000)
 #define O_PATH		010000000
 #define O_TMPFILE	020000000
 
@@ -459,8 +449,6 @@ struct flock64 {
 
 #elif defined (__arm__)
 
-/* open/fcntl - O_SYNC is only implemented on blocks devices and on files
-   located on an ext2 file system */
 #define O_ACCMODE	   0003
 #define O_RDONLY	     00
 #define O_WRONLY	     01
@@ -472,7 +460,7 @@ struct flock64 {
 #define O_APPEND	  02000
 #define O_NONBLOCK	  04000
 #define O_NDELAY	O_NONBLOCK
-#define O_SYNC		 010000
+#define O_DSYNC		 010000
 #define FASYNC		 020000	/* fcntl, for BSD compatibility */
 #define O_DIRECTORY	 040000	/* must be a directory */
 #define O_NOFOLLOW	0100000	/* don't follow links */
@@ -480,7 +468,7 @@ struct flock64 {
 #define O_LARGEFILE	0400000
 #define O_NOATIME	01000000
 #define O_CLOEXEC	02000000
-#define O_SYNC		(O_SYNC|04000000)
+#define O_SYNC		(O_DSYNC|04000000)
 #define O_PATH		010000000
 #define O_TMPFILE	020000000
 
