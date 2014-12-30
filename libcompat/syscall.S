@@ -129,6 +129,20 @@ syscall:
 	mr   %r8,%r9
 	b    __unified_syscall
 
+#elif defined(__mips__)
+	move	$2, $4
+	move	$4, $5
+	move	$5, $6
+	move	$6, $7
+	lw	$7, 16($29)
+	lw	$25, 20($29)
+	sw	$25, 16($29)
+	lw	$25, 24($29)
+	sw	$25, 20($29)
+	syscall
+	la	$25, __unified_syscall
+	jr	$25
+
 #else
 #include <endian.h>
 	.section	.comment
