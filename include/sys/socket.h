@@ -362,6 +362,8 @@ __BEGIN_DECLS
 
 #if defined(__hppa__) || defined(__alpha__)
 #define SOCK_NONBLOCK 0x40000000
+#elif defined(__mips__)
+#define SOCK_NONBLOCK 0x00000200
 #else
 #define SOCK_NONBLOCK O_NONBLOCK
 #endif
