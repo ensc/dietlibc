@@ -3,6 +3,6 @@
 
 #include <asm/unistd.h>
 
-int syscall(int number, ...);
+long syscall(long number, ...);
 
 #endif
