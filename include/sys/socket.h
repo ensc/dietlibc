@@ -615,10 +615,22 @@ const char *gai_strerror(int errcode) __THROW;
 #define EAI_AGAIN -10
 #define EAI_SYSTEM -11
 
+/* flags for getaddrinfo */
+/* do not attempt DNS lookup, node must be numeric IP */
 #define AI_NUMERICHOST 1
+/* ignored by dietlibc */
 #define AI_CANONNAME 2
+/* if node is NULL, return INADDR_ANY / IN6ADDR_ANY_INIT */
 #define AI_PASSIVE 4
+/* do not attempt /etc/services lookup, service must be numeric */
 #define AI_NUMERICSERV 8
+/* ignored by dietlibc */
+#define AI_ADDRCONFIG 16
+/* if hints->ai_protocol=AF_INET6 and no IPv6 addresses found, then
+ * return IPv4 addresses as v4-mapped addresses */
+#define AI_V4MAPPED 32
+/* used with AI_V4MAPPED; return IPv6 and v4-mapped addresses */
+#define AI_ALL 64
 
 /* Linux-specific socket ioctls */
 #define SIOCINQ		FIONREAD
