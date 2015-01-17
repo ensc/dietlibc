@@ -618,6 +618,7 @@ const char *gai_strerror(int errcode) __THROW;
 #define AI_NUMERICHOST 1
 #define AI_CANONNAME 2
 #define AI_PASSIVE 4
+#define AI_NUMERICSERV 8
 
 /* Linux-specific socket ioctls */
 #define SIOCINQ		FIONREAD

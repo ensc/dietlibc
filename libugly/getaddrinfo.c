@@ -17,6 +17,7 @@ extern int __dns_plugplay_interface;
 int getaddrinfo(const char *node, const char *service, const struct addrinfo *hints, struct addrinfo **res) {
   struct addrinfo **tmp;
   int family;
+  int error=EAI_NONAME;
   tmp=res; *res=0;
   if (hints) {
     if (hints->ai_family && hints->ai_family != PF_INET6 && hints->ai_family != PF_INET) return EAI_FAMILY;
@@ -113,11 +114,14 @@ int getaddrinfo(const char *node, const char *service, const struct addrinfo *hi
 	    port=htons(strtol(service?service:"0",&x,0));
 	    if (*x) {	/* service is not numeric :-( */
 	      struct servent* se;
-	      if ((se=getservbyname(service,type)))
+	      if ((!hints || !(hints->ai_flags&AI_NUMERICSERV)) &&
+		  (se=getservbyname(service,type)))
 		port=se->s_port;
 	      else {
-		freeaddrinfo(*res);
-		return EAI_SERVICE;
+/* can't just fail hard here; maybe the port is defined but not for the protocol we are trying */
+		error=EAI_SERVICE;
+		if (foo->ai.ai_socktype==SOCK_DGRAM) break;
+		continue;
 	      }
 	    }
 	    if (family==PF_INET6)
@@ -139,7 +143,7 @@ int getaddrinfo(const char *node, const char *service, const struct addrinfo *hi
     }
     if (family==PF_INET) break;
   }
-  if (*res==0) return EAI_NONAME; /* kludge kludge... */
+  if (*res==0) return error; /* kludge kludge... */
   return 0;
 error:
   freeaddrinfo(*res);
