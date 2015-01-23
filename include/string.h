@@ -28,6 +28,8 @@ int strcmp(const char *s1, const char *s2) __THROW __pure __nonnull((1,2));
 size_t strlen(const char *s) __THROW __pure __nonnull((1));
 #ifdef _GNU_SOURCE
 size_t strnlen(const char *s,size_t maxlen) __THROW __pure __nonnull((1));
+
+int strverscmp(const char* s1,const char* s2) __THROW __pure __nonnull((1,2));
 #endif
 
 char *strstr(const char *haystack, const char *needle) __THROW __pure __nonnull((1,2));
