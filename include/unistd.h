@@ -275,7 +275,7 @@ extern char **__environ;
 #endif
 #endif
 
-#if defined(_LINUX_SOURCE) || defined(_GNU_SOURCE)
+#if defined(_LINUX_SOURCE)
 int pivot_root(const char *new_root, const char *put_old) __THROW;
 /* Linux 2.6 module loading infrastructure:
  * init_module takes a buffer where you read the module file into */
