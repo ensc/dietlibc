@@ -15,6 +15,7 @@ int memccmp(const void* s1, const void* s2, int c, size_t n) __THROW __pure __no
 
 void* memset(void* s, int c, size_t n) __THROW __nonnull((1));
 int memcmp(const void* s1, const void* s2, size_t n) __THROW __pure __nonnull((1,2));
+int timingsafe_memcmp(const void* s1, const void* s2, size_t n) __THROW __pure __nonnull((1,2));
 void* memcpy(void* __restrict__ dest, const void* __restrict__ src, size_t n) __THROW __nonnull((1,2));
 
 char *strncpy(char* __restrict__ dest, const char* __restrict__ src, size_t n) __THROW __nonnull((1,2));
