@@ -4,6 +4,7 @@
 #include <sys/cdefs.h>
 #include <sys/types.h>
 #include <fcntl.h>
+#include <sys/uio.h>
 
 __BEGIN_DECLS
 
@@ -353,11 +354,6 @@ struct sockaddr {
 struct linger {
   int32_t l_onoff;
   int32_t l_linger;
-};
-
-struct iovec {
-  void* iov_base;	/* BSD uses caddr_t (1003.1g requires void *) */
-  size_t iov_len;	/* Must be size_t (1003.1g) */
 };
 
 struct msghdr {
