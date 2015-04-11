@@ -1,4 +1,4 @@
-#define _GNU_SOURCE
+#define _LINUX_SOURCE
 #include <search.h>
 #include <stdlib.h>
 #include <unistd.h>
