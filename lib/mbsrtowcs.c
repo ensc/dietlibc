@@ -1,7 +1,6 @@
 #include <wchar.h>
 
 size_t mbsrtowcs(wchar_t *dest, const char **src, size_t len, mbstate_t *ps) {
-  const char* orig=*src;
   size_t i;
   if (!dest) len=(size_t)-1;
   for (i=0; i<len; ++i) {

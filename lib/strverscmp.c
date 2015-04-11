@@ -6,7 +6,7 @@ int strverscmp(const char* s1, const char* s2)
 {
   size_t i,j;
   long long a,b;
-  a=b=0;
+  b=0;
   for (i=0; s1[i]==s2[i]; ++i) {
     if (!s1[i]) return 0;	/* perfect match */
   }
