@@ -7,7 +7,7 @@ int scandir64(const char *dir, struct dirent64 ***namelist,
 	    int (*compar)(const struct dirent64 **, const struct dirent64 **)) {
   DIR* d;
   struct dirent64 *D;
-  int num=0;
+  size_t num=0;
   if (!(d=opendir(dir)))
     return -1;
   *namelist=0;
@@ -16,9 +16,9 @@ int scandir64(const char *dir, struct dirent64 ***namelist,
       struct dirent64 **tmp;
       ++num;
 /*      printf("realloc %p,%d -> ",*namelist,num*sizeof(struct dirent**)); */
-      if (!(tmp=realloc(*namelist,num*sizeof(struct dirent64**))) ||
+      if (!(tmp=reallocarray(*namelist,num,sizeof(struct dirent64*))) ||
 	  !(tmp[num-1]=malloc(sizeof(struct dirent64)))) {
-	int i;
+	size_t i;
 	for (i=0; i<num-1; ++i) free(tmp[i]);
 	free(*namelist);
 	closedir(d);

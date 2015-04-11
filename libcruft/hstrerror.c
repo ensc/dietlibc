@@ -1,7 +1,7 @@
 #include <netdb.h>
 
-const char* hstrerror(int h_errno) {
-  switch (h_errno) {
+const char* hstrerror(int e) {
+  switch (e) {
   case 0: return "OK";
   case NO_DATA: return "No data of requested type.";
   case TRY_AGAIN: return "Temporary failure.";
