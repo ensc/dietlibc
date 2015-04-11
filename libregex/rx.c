@@ -508,7 +508,10 @@ static const char* parseregex(struct regex*__restrict__ r,const char*__restrict_
 //    printf("r->b from %p to ",r->b);
     {
       struct branch* t;
-      if (!(t=realloc(r->b,++r->num*sizeof(b)))) return s;
+      if (!(t=realloc(r->b,++r->num*sizeof(b)))) {
+	free(b.p);
+	return s;
+      }
 //      printf("branch realloc: %p -> %p (%d*%d)\n",r->b,t,r->num,sizeof(b));
       r->b=t;
     }
