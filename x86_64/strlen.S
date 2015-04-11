@@ -54,3 +54,4 @@ strlen:
 .Lhere:
         .size    strlen,.Lhere-strlen
 
+	.section	.note.GNU-stack,"",@progbits

@@ -13,3 +13,6 @@ strcpy:
 
 	mov %rdx,%rax
 	ret
+.Lhere:
+.size strcpy,.Lhere-strcpy
+	.section	.note.GNU-stack,"",@progbits

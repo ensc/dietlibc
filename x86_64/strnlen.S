@@ -22,3 +22,5 @@ strnlen:
 
 .Lhere:
 	.size	 strnlen,.Lhere-strnlen
+
+	.section	.note.GNU-stack,"",@progbits
