@@ -496,7 +496,6 @@ static const char* parseregex(struct regex*__restrict__ r,const char*__restrict_
   const char *tmp;
   r->m=matchregex;
   r->num=0; r->b=0; r->pieces=0;
-  p->brackets=0;
   b.next=0;
   if (*s==')' || !*s) {
     r->m=matchempty;
@@ -574,6 +573,7 @@ static void regex_putnext(struct regex*__restrict__ r,void*__restrict__ next) {
 int regcomp(regex_t*__restrict__ preg, const char*__restrict__ regex, int cflags) {
   const char* t;
   preg->cflags=cflags;
+  preg->brackets=0;
   t=parseregex(&preg->r,regex,preg);
   if (t==regex && *regex!=0) return -1;
   regex_putnext(&preg->r,0);
