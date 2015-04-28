@@ -2,6 +2,7 @@
 .global memcmp
 .type memcmp,@function
 memcmp:	/* rdi=ptr1, esi=ptr2, rdx=bytes */
+1:
   cmp $8,%rdx
   jb 1f
   mov (%rdi),%rax
@@ -12,7 +13,7 @@ memcmp:	/* rdi=ptr1, esi=ptr2, rdx=bytes */
   bswap %rcx
   cmp %rax,%rcx
   lea -8(%rdx),%rdx
-  jz memcmp
+  jz 1b
 2:
   seta %al
   setb %ah
