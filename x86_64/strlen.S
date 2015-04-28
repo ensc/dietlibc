@@ -6,8 +6,8 @@ strlen:
 #ifdef WANT_VALGRIND_SUPPORT
 #ifdef __DYN_LIB
 	movq	__valgrind@GOTPCREL(%rip), %rax
-	movq	(%rax), %rax
-	test	%rax, %rax
+	movl	(%rax), %eax
+	test	%eax, %eax
 #else
 	xor %eax,%eax
 	or (__valgrind),%eax
