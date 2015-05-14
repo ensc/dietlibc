@@ -311,6 +311,8 @@ int linkat(int olddirfd, const char *oldpath, int newdirfd, const char *newpath,
 int readlinkat(int dirfd, const char *pathname, char *buf, size_t bufsiz) __THROW;
 #endif
 
+int getentropy(void* buf,size_t buflen) __THROW;
+
 __END_DECLS
 
 #endif

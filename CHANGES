@@ -20,6 +20,7 @@
   fix memory leaks in out of memory error paths in regcomp and librpc
     udp and tcp server code (found by the llvm static analyzer)
   fix returning more than one match in regexec (Stefan Wagner)
+  add getentropy (OpenBSD)
 
 0.33:
   first stab at getting TLS to work in actual threads
