@@ -121,6 +121,13 @@ int mblen(const char* s,size_t n) __THROW __pure;
 
 size_t wcstombs(char *dest, const wchar_t *src, size_t n) __THROW;
 
+/* These come from OpenBSD: */
+uint32_t arc4random(void) __THROW;
+void arc4random_buf(void* buf, size_t n) __THROW;
+uint32_t arc4random_uniform(uint32_t upper_bound) __THROW;
+void arc4random_stir(void) __THROW;
+void arc4random_addrandom(unsigned char* dat,size_t datlen) __THROW;
+
 __END_DECLS
 
 #endif
