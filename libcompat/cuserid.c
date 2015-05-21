@@ -13,8 +13,8 @@ char * cuserid(char * string) {
   sp = getpwuid(geteuid());
   if (sp) {
     if (!string) string=buf;
-    strlcpy(buf,sp->pw_name,L_cuserid);
-    return buf;
+    strlcpy(string,sp->pw_name,L_cuserid);
+    return string;
   }
   return NULL;
 }

@@ -50,17 +50,17 @@ time_t __tzfile_map(time_t t, int *isdst, int forward) {
   /* "TZif" plus 16 reserved bytes. */
   unsigned char *tmp;
   int i;
-  int tzh_ttisgmtcnt, tzh_ttisstdcnt, tzh_leapcnt, tzh_timecnt, tzh_typecnt, tzh_charcnt;
+  int tzh_timecnt, tzh_typecnt;
   *isdst=0;
   if (!tzfile) return t;
-  tzh_ttisgmtcnt=ntohl(*(int*)(tzfile+20));
-  tzh_ttisstdcnt=ntohl(*(int*)(tzfile+24));
-  tzh_leapcnt=ntohl(*(int*)(tzfile+28));
   tzh_timecnt=ntohl(*(int*)(tzfile+32));
   tzh_typecnt=ntohl(*(int*)(tzfile+36));
-  tzh_charcnt=ntohl(*(int*)(tzfile+40));
 
 #if 0
+  int tzh_ttisgmtcnt=ntohl(*(int*)(tzfile+20));
+  int tzh_ttisstdcnt=ntohl(*(int*)(tzfile+24));
+  int tzh_leapcnt=ntohl(*(int*)(tzfile+28));
+  int tzh_charcnt=ntohl(*(int*)(tzfile+40));
   tmp=tzfile+20+6*4;
   printf("ttisgmtcnt %d ttisstdcnt %d leapcnt %d timecnt %d typecnt %d charcnt %d\n",tzh_ttisgmtcnt,tzh_ttisstdcnt, tzh_leapcnt, tzh_timecnt, tzh_typecnt, tzh_charcnt);
   printf("transition times: ");

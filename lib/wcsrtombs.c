@@ -9,7 +9,6 @@ size_t wcsrtombs(char *dest, const wchar_t **src, size_t len, mbstate_t *ps) {
   wchar_t c;
   char buf[MB_CUR_MAX];
   size_t cur;
-  char* max;
   if (!src || !*src) {
 inval:
     errno=EINVAL;
@@ -17,7 +16,6 @@ inval:
   }
   if (!dest) {
     len=-1;
-    max=dest+len;
   }
   for (cur=0; (c=**src); ++*src) {
     size_t n;

@@ -18,3 +18,6 @@ strchr:
 .Lfound:
 	lea	-1(%rsi),%rax
 	ret
+.Lhere:
+.size strchr,.Lhere-strchr
+	.section	.note.GNU-stack,"",@progbits

@@ -17,13 +17,17 @@ extern int __dns_plugplay_interface;
 int getaddrinfo(const char *node, const char *service, const struct addrinfo *hints, struct addrinfo **res) {
   struct addrinfo **tmp;
   int family;
+  int error=EAI_NONAME;
+  int flags=0;
   tmp=res; *res=0;
   if (hints) {
     if (hints->ai_family && hints->ai_family != PF_INET6 && hints->ai_family != PF_INET) return EAI_FAMILY;
     if (hints->ai_socktype && hints->ai_socktype != SOCK_STREAM && hints->ai_socktype != SOCK_DGRAM) return EAI_SOCKTYPE;
+    flags=hints->ai_flags;
+    if ((flags&AI_V4MAPPED) && hints->ai_family!=PF_INET6) flags&=~(AI_V4MAPPED|AI_ALL);
   }
   for (family=PF_INET6; ; family=PF_INET) {
-    if (!hints || hints->ai_family==family || hints->ai_family==AF_UNSPEC) {	/* IPv6 addresses are OK */
+    if (!hints || hints->ai_family==family || hints->ai_family==AF_UNSPEC || (flags&(AI_V4MAPPED|AI_ALL))) {
       struct hostent h;
       struct hostent *H;
       int herrno=0;
@@ -39,7 +43,7 @@ int getaddrinfo(const char *node, const char *service, const struct addrinfo *hi
 	  h.h_name=(char*)node;
 	  h.h_addr_list[0]=buf;
 	  lookupok=1;
-	} else if ((!hints || !(hints->ai_flags&AI_NUMERICHOST)) &&
+	} else if (!(flags&AI_NUMERICHOST) &&
 		   !gethostbyname2_r(node,family,&h,buf,4096,&H,&herrno)) {
 	  lookupok=1;
 	} else {
@@ -50,7 +54,7 @@ int getaddrinfo(const char *node, const char *service, const struct addrinfo *hi
 	h.h_addr_list[0]=buf;
 	interface=0;
 	memset(buf,0,16);
-	if (!hints || !(hints->ai_flags&AI_PASSIVE)) {
+	if (!(flags&AI_PASSIVE)) {
 	  if (family==AF_INET) {
 	    buf[0]=127; buf[3]=1;
 	  } else
@@ -78,16 +82,23 @@ int getaddrinfo(const char *node, const char *service, const struct addrinfo *hi
 	  foo->ai.ai_next=0;
 	  foo->ai.ai_addrlen=family==PF_INET6?sizeof(struct sockaddr_in6):sizeof(struct sockaddr_in);
 	  foo->ai.ai_addr=(struct sockaddr*)&foo->ip;
+	  memset(&foo->ip,0,sizeof(foo->ip));
+	  foo->ip.ip6.sin6_family=foo->ai.ai_family=family;
 	  if (family==PF_INET6) {
-	    memset(&foo->ip,0,sizeof(foo->ip));
 	    memmove(&foo->ip.ip6.sin6_addr,h.h_addr_list[i],16);
 	    if (interface) foo->ip.ip6.sin6_scope_id=if_nametoindex(interface);
 	  } else {
-	    memmove(&foo->ip.ip4.sin_addr,h.h_addr_list[i],4);
+	    /* IPv4 */
+	    if (flags&AI_V4MAPPED) {
+	      foo->ai.ai_addrlen=sizeof(struct sockaddr_in6);
+	      foo->ip.ip6.sin6_addr.s6_addr[10]=foo->ip.ip6.sin6_addr.s6_addr[11]=0xff;
+	      memmove(foo->ip.ip6.sin6_addr.s6_addr+12,h.h_addr_list[i],4);
+	      foo->ip.ip6.sin6_family=foo->ai.ai_family=PF_INET6;
+	    } else
+	      memmove(&foo->ip.ip4.sin_addr,h.h_addr_list[i],4);
 	  }
-	  foo->ip.ip6.sin6_family=foo->ai.ai_family=family;
 #ifdef WANT_PLUGPLAY_DNS
-	  if (family==AF_INET6 && node) {
+	  if (family==PF_INET6 && node) {
 	    int l=strlen(node);
 	    if ((l>6 && !strcmp(node+l-6,".local")) || !strchr(node,'.'))
 	      foo->ip.ip6.sin6_scope_id=__dns_plugplay_interface;
@@ -113,14 +124,17 @@ int getaddrinfo(const char *node, const char *service, const struct addrinfo *hi
 	    port=htons(strtol(service?service:"0",&x,0));
 	    if (*x) {	/* service is not numeric :-( */
 	      struct servent* se;
-	      if ((se=getservbyname(service,type)))
+	      if (!(flags&AI_NUMERICSERV) &&
+		  (se=getservbyname(service,type)))
 		port=se->s_port;
 	      else {
-		freeaddrinfo(*res);
-		return EAI_SERVICE;
+/* can't just fail hard here; maybe the port is defined but not for the protocol we are trying */
+		error=EAI_SERVICE;
+		if (foo->ai.ai_socktype==SOCK_DGRAM) break;
+		continue;
 	      }
 	    }
-	    if (family==PF_INET6)
+	    if (foo->ai.ai_family==PF_INET6)
 	      foo->ip.ip6.sin6_port=port;
 	    else
 	      foo->ip.ip4.sin_port=port;
@@ -137,9 +151,11 @@ int getaddrinfo(const char *node, const char *service, const struct addrinfo *hi
 	}
       }
     }
+    if (hints && hints->ai_family==PF_INET6 && (flags&AI_V4MAPPED) && *res==0)
+      flags|=AI_ALL;
     if (family==PF_INET) break;
   }
-  if (*res==0) return EAI_NONAME; /* kludge kludge... */
+  if (*res==0) return error; /* kludge kludge... */
   return 0;
 error:
   freeaddrinfo(*res);

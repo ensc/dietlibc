@@ -6,7 +6,6 @@
 
 int mtx_timedlock(mtx_t* mutex, const struct timespec* time_point) {
   int i,r;
-  thrd_t me=thrd_current();
   do {
     r=__mtx_trylock(mutex,&i);
     if (r!=thrd_busy) return r;

@@ -7,7 +7,7 @@ int scandir(const char *dir, struct dirent ***namelist,
 	    int (*compar)(const struct dirent **, const struct dirent **)) {
   DIR* d;
   struct dirent *D;
-  int num=0;
+  size_t num=0;
   if (!(d=opendir(dir)))
     return -1;
   *namelist=0;
@@ -15,9 +15,9 @@ int scandir(const char *dir, struct dirent ***namelist,
     if (select==0 ||  select(D)) {
       struct dirent **tmp;
 /*      printf("realloc %p,%d -> ",*namelist,num*sizeof(struct dirent**)); */
-      if (!(tmp=realloc(*namelist,(num+1)*sizeof(struct dirent**))) ||
+      if (!(tmp=reallocarray(*namelist,(num+1),sizeof(struct dirent*))) ||
 	  !(tmp[num]=malloc(sizeof(struct dirent)))) {
-	int i;
+	size_t i;
 	for (i=0; i<num; ++i) free((*namelist)[i]);
 	free(*namelist);
 	closedir(d);

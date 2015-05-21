@@ -101,8 +101,7 @@ __clone:
 .Lreturn:
 	/* just return */
 	ret
+.Lhere:
+.size clone,.Lhere-clone
 
-link_warning("clone", "warning: clone() not yet tested")
-link_warning("__clone", "warning: clone() not yet tested")
-//link_warning("clone", "warning: clone() not yet implemented")
-//link_warning("__clone", "warning: clone() not yet implemented")
+	.section	.note.GNU-stack,"",@progbits

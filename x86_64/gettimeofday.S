@@ -42,8 +42,8 @@ gettimeofday:
 	mov $__NR_gettimeofday, %al
 	jmp __unified_syscall
 #endif
-.Lhere:
-	.size	 gettimeofday,.Lhere-gettimeofday
+.Lhere2:
+	.size	 gettimeofday,.Lhere2-gettimeofday
 .local gtod
 .comm gtod,8,8
 .section .rodata.str1.1,"aMS",@progbits,1

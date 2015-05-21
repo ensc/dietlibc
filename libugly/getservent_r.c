@@ -36,8 +36,8 @@ again:
     __ps.cur+=__parse_ws(&__ps);
     if (__ps.cur>=__ps.buflen) { if (i==2) break; else goto error; }
     j=__parse_nws(&__ps);
+    if (i==2 && j==0) break;
     if (!isblank(found=__ps.buffirst[__ps.cur+j])) {
-      if (i==2 && found=='#') break;
       if (found=='#' || (i>1 && found!='\n')) {
 parseerror:
 	while (__ps.cur+j<__ps.buflen) {

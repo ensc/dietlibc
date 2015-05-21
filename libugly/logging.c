@@ -120,7 +120,6 @@ void __libc_vsyslog(int priority, const char *format, va_list arg_ptr)
   int fd;
   int sigpipe;
   struct sigaction action, oldaction;
-  struct sigaction *oldaction_ptr = NULL;
   int saved_errno = errno;
 
   /* check for invalid priority/facility bits */
@@ -164,8 +163,7 @@ void __libc_vsyslog(int priority, const char *format, va_list arg_ptr)
   action.sa_handler = SIG_IGN;
   sigemptyset(&action.sa_mask);
 
-  if ((sigpipe = sigaction (SIGPIPE, &action, &oldaction))==0)
-    oldaction_ptr = &oldaction;
+  sigpipe = sigaction (SIGPIPE, &action, &oldaction);
 
   if (!connected) openlog_intern(LogStat | LOG_NDELAY, 0);
 

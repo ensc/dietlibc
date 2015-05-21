@@ -25,3 +25,6 @@ strcmp:
 	sbb %eax,%eax
 	or $1,%eax
 	ret
+.Lhere:
+.size strcmp,.Lhere-strcmp
+	.section	.note.GNU-stack,"",@progbits

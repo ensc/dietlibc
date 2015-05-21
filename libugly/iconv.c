@@ -15,7 +15,6 @@ size_t iconv(iconv_t cd, char* * inbuf, size_t *
   if (!inbuf || !*inbuf) return 0;
   in=(unsigned char*)(*inbuf);
   out=(unsigned char*)(*outbuf);
-  k=0;
   while (*inbytesleft) {
     unsigned int v;
     v=*in;

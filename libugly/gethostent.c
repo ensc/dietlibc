@@ -29,7 +29,7 @@ struct hostent* gethostent_r(char* buf, int len) {
     hostlen=lseek(hostfd,0,SEEK_END);
     hostmap=mmap(0,hostlen,PROT_READ|PROT_WRITE,MAP_PRIVATE,hostfd,0);
     if ((long)hostmap==(-1)) { close(hostfd); hostmap=0; goto error; }
-    close(hostfd); hostfd=-1;
+    close(hostfd);
     cur=hostmap;
   }
   last=hostmap+hostlen;

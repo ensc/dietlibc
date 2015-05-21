@@ -2,7 +2,7 @@
 
 char *strsep(char **stringp, const char *delim) {
   register char *tmp=*stringp;
-  register char *tmp2=tmp;
+  register char *tmp2;
   register const char *tmp3;
   if (!*stringp) return 0;
   for (tmp2=tmp; *tmp2; ++tmp2) {

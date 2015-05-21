@@ -131,11 +131,14 @@ unsigned int sendsz, recvsz;
 	su = (struct svcudp_data *) mem_alloc(sizeof(*su));
 	if (su == NULL) {
 		(void) fprintf(stderr, "svcudp_create: out of memory\n");
+		free(xprt); xprt=NULL;
 		return (NULL);
 	}
 	su->su_iosz = ((MAX(sendsz, recvsz) + 3) / 4) * 4;
 	if ((rpc_buffer(xprt) = mem_alloc(su->su_iosz)) == NULL) {
 		(void) fprintf(stderr, "svcudp_create: out of memory\n");
+		free(su); su=NULL;
+		free(xprt); xprt=NULL;
 		return (NULL);
 	}
 	xdrmem_create(&(su->su_xdrs), rpc_buffer(xprt), su->su_iosz,
@@ -343,21 +346,24 @@ static int svcudp_enablecache(SVCXPRT* transp, unsigned long size)
 		CACHE_PERROR("enablecache: cache already enabled");
 		return (0);
 	}
-	uc = ALLOC(struct udp_cache, 1);
+	uc = malloc(sizeof(struct udp_cache));
 	if (uc == NULL) {
 		CACHE_PERROR("enablecache: could not allocate cache");
 		return (0);
 	}
 	uc->uc_size = size;
 	uc->uc_nextvictim = 0;
-	uc->uc_entries = ALLOC(cache_ptr, size * SPARSENESS);
+	uc->uc_entries = calloc(size, sizeof(cache_ptr) * SPARSENESS);
 	if (uc->uc_entries == NULL) {
 		CACHE_PERROR("enablecache: could not allocate cache data");
+		free(uc); uc=NULL;
 		return (0);
 	}
 	BZERO(uc->uc_entries, cache_ptr, size * SPARSENESS);
-	uc->uc_fifo = ALLOC(cache_ptr, size);
+	uc->uc_fifo = calloc(sizeof(cache_ptr), size);
 	if (uc->uc_fifo == NULL) {
+		free(uc->uc_entries);
+		free(uc); uc=NULL;
 		CACHE_PERROR("enablecache: could not allocate cache fifo");
 		return (0);
 	}
@@ -404,6 +410,7 @@ static void cache_set(SVCXPRT* xprt, unsigned long replylen)
 		}
 		newbuf = mem_alloc(su->su_iosz);
 		if (newbuf == NULL) {
+			free(victim); victim=NULL;
 			CACHE_PERROR("cache_set: could not allocate new rpc_buffer");
 			return;
 		}

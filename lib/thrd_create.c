@@ -31,10 +31,8 @@ int thrd_create(thrd_t *thr, thrd_start_t func, void *arg) {
   char* stack=mmap(0,stacksize+4096+__tmemsize+sizeof(tcbhead_t)+sizeof(**thr),PROT_NONE,MAP_PRIVATE|MAP_ANONYMOUS|MAP_STACK|MAP_GROWSDOWN,-1,0);
   thrd_t t;
   tcbhead_t* tcb;
-  int r;
 
   if (stack==MAP_FAILED) return thrd_nomem;
-  r=thrd_success;
   if (mprotect(stack+4096,stacksize+__tmemsize+sizeof(tcbhead_t)+sizeof(**thr),PROT_READ|PROT_WRITE)) {
     munmap(stack,stacksize+4096+__tmemsize+sizeof(tcbhead_t)+sizeof(**thr));
     return thrd_error;

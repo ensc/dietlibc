@@ -7,7 +7,7 @@ int cnd_timedwait(cnd_t* cond, mtx_t* mutex, const struct timespec* time_point) 
   do {
     r=futex(&cond->sem,FUTEX_WAIT,0,time_point,0,0);
     if (r==-1) {
-      if (errno==EWOULDBLOCK) { r=0; break; }
+      if (errno==EWOULDBLOCK) break;
       else if (errno==EINTR) continue;
     } else
       break;

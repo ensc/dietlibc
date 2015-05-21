@@ -13,6 +13,14 @@
   add preadv, pwritev
   add getcontext, setcontext, makecontext, swapcontext (i386 and x86_64 only for now)
   add implementation of hsearch and friends
+  add strverscmp (like GNU version but without special treatment for leading zeros)
+  fix cuserid
+  SECURITY: fix integer overflow in scandir/scandir64 if your selector
+    leaves more than 1 billion filenames
+  fix memory leaks in out of memory error paths in regcomp and librpc
+    udp and tcp server code (found by the llvm static analyzer)
+  fix returning more than one match in regexec (Stefan Wagner)
+  add getentropy, lazy arc4random clone (OpenBSD)
 
 0.33:
   first stab at getting TLS to work in actual threads

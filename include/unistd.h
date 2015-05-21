@@ -73,8 +73,8 @@ int execve(const char *filename, char *const argv [], char *const envp[]) __THRO
 int execlp(const char *file, const char *arg, ...) __THROW;
 int execv(const char *path, char *const argv[]) __THROW;
 int execvp(const char *file, char *const argv[]) __THROW;
-int execl(const char *path, ...) __THROW;
-int execle(const char *path, ...) __THROW;
+int execl(const char *path, const char* arg, ...) __THROW;
+int execle(const char *path, const char* arg, ...) __THROW;
 
 pid_t getpid(void) __THROW __pure;
 
@@ -275,7 +275,7 @@ extern char **__environ;
 #endif
 #endif
 
-#if defined(_LINUX_SOURCE) || defined(_GNU_SOURCE)
+#if defined(_LINUX_SOURCE)
 int pivot_root(const char *new_root, const char *put_old) __THROW;
 /* Linux 2.6 module loading infrastructure:
  * init_module takes a buffer where you read the module file into */
@@ -310,6 +310,8 @@ int fchownat(int dirfd, const char *pathname, uid_t owner, gid_t group, int flag
 int linkat(int olddirfd, const char *oldpath, int newdirfd, const char *newpath, int flags) __THROW;
 int readlinkat(int dirfd, const char *pathname, char *buf, size_t bufsiz) __THROW;
 #endif
+
+int getentropy(void* buf,size_t buflen) __THROW;
 
 __END_DECLS
 
