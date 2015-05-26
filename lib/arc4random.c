@@ -7,7 +7,7 @@ static unsigned int n;
 
 /* These come from OpenBSD: */
 uint32_t arc4random(void) {
-  if (n+1>sizeof(buf)) arc4random_stir();
+  if (n>=sizeof(buf)/sizeof(buf[0])) arc4random_stir();
   return buf[n++];
 }
 
