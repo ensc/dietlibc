@@ -5,48 +5,19 @@
 .global time
 .type time,@function
 time:
-#ifdef WANT_VALGRIND_SUPPORT
-#ifdef __PIC__
-	mov __valgrind@GOTPCREL(%rip), %rax
-	cmpb $1, (%rax)
-#else
-	cmpb $1, __valgrind(%rip)
-#endif
-	je .Lvalgrind
-#endif
-	movq gtod(%rip), %rax
-	test %rax,%rax
-	jz .L1
-.L2:
-	callq *%rax
-	jmp __error_unified_syscall
-.L1:
-	push %rsi
-	push %rdi
-#ifdef __PIC__
-	movq __vdso@GOTPCREL(%rip), %rax
-	movq (%rax),%rdi
-	movq funcname@GOTPCREL(%rip), %rsi
-	call vdso_dlsym@PLT
-#else
-	movq __vdso(%rip),%rdi
-	movq $funcname, %rsi
-	call vdso_dlsym
-#endif
-	pop %rdi
-	pop %rsi
-	jmp .L2
-
-#ifdef WANT_VALGRIND_SUPPORT
-.Lvalgrind:
-	mov $__NR_time, %al
-	jmp __unified_syscall
-#endif
+	sub $24, %rsp
+	mov %rdi, 16(%rsp)
+	xor %rsi, %rsi
+	mov %rsp, %rdi
+	call gettimeofday
+	mov (%rsp), %rax
+	mov 16(%rsp), %rcx
+	test %rcx, %rcx
+	jz 1f
+	mov %rax, (%rcx)
+1:
+	add $24, %rsp
+	ret
 .Lhere2:
 	.size	 time,.Lhere2-time
-.local gtod
-.comm gtod,8,8
-.section .rodata.str1.1,"aMS",@progbits,1
-.local funcname
-funcname:
-	.string "__vdso_time"
+	.section	.note.GNU-stack,"",@progbits
