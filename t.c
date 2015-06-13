@@ -109,6 +109,11 @@ extern char* strcpy2(char*a,char*b);
 #define malloc(x) ({typeof(x) y=x; (y<0 || (size_t)(y)!=y ? 0 : malloc(y));})
 
 int main(int argc,char *argv[]) {
+  int i;
+  for (i=0; i<1024; ++i) {
+    printf("%08x%c",arc4random(),(i&15)==15 ? '\n' : ' ');
+  }
+#if 0
   int n;
   struct ucontext uc;
   n=0;
@@ -122,6 +127,7 @@ int main(int argc,char *argv[]) {
   }
   puts("all ok");
   return 0;
+#endif
 #if 0
   char* a=malloc(-3);
   char* b=malloc(0xffffffffull+1);
