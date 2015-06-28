@@ -21,6 +21,7 @@
     udp and tcp server code (found by the llvm static analyzer)
   fix returning more than one match in regexec (Stefan Wagner)
   add getentropy, lazy arc4random clone (OpenBSD)
+  define uintptr_t using __UINTPTR_TYPE__ (32-bit platforms may need a make clean)
 
 0.33:
   first stab at getting TLS to work in actual threads
