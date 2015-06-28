@@ -39,8 +39,7 @@
  */
 
 #ifndef _RPC_AUTH_H
-
-#define _RPC_AUTH_H	1
+#define _RPC_AUTH_H
 #include <sys/cdefs.h>
 #include <sys/socket.h>
 #include <rpc/xdr.h>

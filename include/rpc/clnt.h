@@ -35,7 +35,7 @@
  */
 
 #ifndef _RPC_CLNT_H
-#define _RPC_CLNT_H	1
+#define _RPC_CLNT_H
 
 #include <sys/cdefs.h>
 #include <sys/types.h>

@@ -110,6 +110,7 @@ CC=gcc
 CCC=$(CROSS)$(CC)
 STRIP=$(COMMENT) $(CROSS)strip
 INC=-I. -isystem include
+#INC=-I. -Iinclude
 
 VPATH=lib:libstdio:libugly:libcruft:libcrypt:libshell:liblatin1:libcompat:libdl:librpc:libregex:libm:profiling
 

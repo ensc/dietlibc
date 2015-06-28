@@ -36,7 +36,7 @@
  */
 
 #ifndef _RPC_PMAP_RMT_H
-#define _RPC_PMAP_RMT_H	1
+#define _RPC_PMAP_RMT_H
 
 #include <sys/cdefs.h>
 #include <sys/types.h>

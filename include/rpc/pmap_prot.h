@@ -88,10 +88,10 @@ __BEGIN_DECLS
 #define PMAPPROC_CALLIT		((unsigned long)5)
 
 struct pmap {
-	long unsigned pm_prog;
-	long unsigned pm_vers;
-	long unsigned pm_prot;
-	long unsigned pm_port;
+  long unsigned pm_prog;
+  long unsigned pm_vers;
+  long unsigned pm_prot;
+  long unsigned pm_port;
 };
 
 extern bool_t xdr_pmap (XDR *__xdrs, struct pmap *__regs) __THROW;
