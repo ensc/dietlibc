@@ -617,7 +617,7 @@ $(OBJDIR)/tcflow.o $(OBJDIR)/tcsendbreak.o $(OBJDIR)/tcsetattr.o \
 $(OBJDIR)/tempnam.o $(OBJDIR)/thrd_exit.o $(OBJDIR)/thrd_join.o \
 $(OBJDIR)/tmpnam.o $(OBJDIR)/utxent.o $(OBJDIR)/verr.o \
 $(OBJDIR)/verrx.o $(OBJDIR)/vwarn.o $(OBJDIR)/warn.o \
-$(OBJDIR)/wcsrtombs.o $(OBJDIR)/wcstombs.o: include/errno_definition.h
+$(OBJDIR)/wcsrtombs.o $(OBJDIR)/wcstombs.o $(OBJDIR)/eventfd.o: include/errno_definition.h
 
 $(OBJDIR)/abort.o $(OBJDIR)/pselect.o $(OBJDIR)/__utmp_block_signals.o \
 $(OBJDIR)/system.o $(OBJDIR)/utxent.o $(OBJDIR)/sigemptyset.o \
