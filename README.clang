@@ -1,0 +1,11 @@
+clang (from LLVM) can be used to compile against dietlibc, but it can
+not be used to compile dietlibc itself.  The reason is that dietlibc
+uses gas (the GNU assembler, part of binutils) features in the assembly
+parts that are not yet supported by clang.
+
+The build process compensates by passing -fno-integrated-as to clang,
+but that makes compilation with clang much slower than compilation with
+gcc.
+
+Still, the end result appears to work.
+
