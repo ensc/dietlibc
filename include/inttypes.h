@@ -252,9 +252,6 @@ typedef unsigned int uint32_t __attribute__((__mode__(__SI__)));
 typedef unsigned int uint32_t;
 #endif
 
-typedef signed long int intptr_t;
-typedef unsigned long int uintptr_t;
-
 #if __WORDSIZE == 64
 typedef signed long int64_t;
 typedef unsigned long uint64_t;
@@ -265,6 +262,14 @@ __extension__ typedef signed long long int64_t;
 __extension__ typedef unsigned long long uint64_t;
 __extension__ typedef signed long long int intmax_t;
 __extension__ typedef unsigned long long int uintmax_t;
+#endif
+
+#ifdef __INTPTR_TYPE__
+typedef __INTPTR_TYPE__ intptr_t;
+typedef __UINTPTR_TYPE__ uintptr_t;
+#else
+typedef __SIZE_TYPE__ uintptr_t;
+typedef __PTRDIFF_TYPE__ intptr_t;
 #endif
 
 intmax_t strtoimax (const char *nptr, char **endptr, int base);

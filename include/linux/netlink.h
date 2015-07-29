@@ -104,10 +104,41 @@ struct nlmsgerr {
 #define NETLINK_PKTINFO		3
 #define NETLINK_BROADCAST_ERROR	4
 #define NETLINK_NO_ENOBUFS	5
+#define NETLINK_RX_RING		6
+#define NETLINK_TX_RING		7
 
 struct nl_pktinfo {
   uint32_t group;
 };
+
+struct nl_mmap_req {
+  unsigned int	nm_block_size;
+  unsigned int	nm_block_nr;
+  unsigned int	nm_frame_size;
+  unsigned int	nm_frame_nr;
+};
+
+struct nl_mmap_hdr {
+  unsigned int	nm_status;
+  unsigned int	nm_len;
+  uint32_t	nm_group;
+  /* credentials */
+  uint32_t	nm_pid;
+  uint32_t	nm_uid;
+  uint32_t	nm_gid;
+};
+
+enum nl_mmap_status {
+  NL_MMAP_STATUS_UNUSED,
+  NL_MMAP_STATUS_RESERVED,
+  NL_MMAP_STATUS_VALID,
+  NL_MMAP_STATUS_COPY,
+  NL_MMAP_STATUS_SKIP,
+};
+
+#define NL_MMAP_MSG_ALIGNMENT		NLMSG_ALIGNTO
+#define NL_MMAP_MSG_ALIGN(sz)		__ALIGN_KERNEL(sz, NL_MMAP_MSG_ALIGNMENT)
+#define NL_MMAP_HDRLEN			NL_MMAP_MSG_ALIGN(sizeof(struct nl_mmap_hdr))
 
 #define NET_MAJOR 36		/* Major 36 is reserved for networking 						*/
 

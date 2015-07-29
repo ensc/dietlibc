@@ -8,14 +8,14 @@ diet \- mangle gcc command line arguments
 [\fInormal gcc command line\fP]
 .SH DESCRIPTION
 .PP
-diet is a small wrapper around gcc.  It will try to look at the command
-line you specify and try to mangle it so that gcc will compile against
+diet is a small wrapper around gcc or clang.  It will try to look at the command
+line you specify and try to mangle it so that gcc/clang will compile against
 the diet libc header files and link against the diet libc itself.
 
 diet tries to be smart for cross compiling.  If the first argument is
 not gcc but sparc-linux-gcc, diet will guess that you want to cross
 compile for sparc and use bin-sparc/dietlibc.a instead of the dietlibc.a
-for your default architecture.
+for your default architecture. This does not work yet for clang.
 
 The -v option will make diet print the modified gcc command line before
 executing it.

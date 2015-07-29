@@ -36,7 +36,7 @@
  */
 
 #ifndef _RPC_RPC_H
-#define _RPC_RPC_H 1
+#define _RPC_RPC_H
 
 #include <rpc/types.h>		/* some typedefs */
 #include <netinet/in.h>
