@@ -91,6 +91,12 @@ int ffsl(long i) __THROW __attribute_const__;
 int ffsll(long long i) __THROW __attribute_const__;
 #endif
 
+/* This is an OpenBSD extension that acts like bzero but is hopefully
+ * not removed from by the compiler's dead store optimization pass.
+ * It is meant for scrubbing crypto keys and passwords from memory after
+ * use, so they don't show up in swap files or core dumps. */
+void   explicit_bzero(void*, size_t) __THROW __attribute__((noinline));
+
 __END_DECLS
 
 #endif
