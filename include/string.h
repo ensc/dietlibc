@@ -27,9 +27,9 @@ char *strncat(char* __restrict__ dest, const char* __restrict__ src, size_t n) _
 int strcmp(const char *s1, const char *s2) __THROW __pure __nonnull((1,2));
 
 size_t strlen(const char *s) __THROW __pure __nonnull((1));
-#ifdef _GNU_SOURCE
 size_t strnlen(const char *s,size_t maxlen) __THROW __pure __nonnull((1));
 
+#ifdef _GNU_SOURCE
 int strverscmp(const char* s1,const char* s2) __THROW __pure __nonnull((1,2));
 #endif
 
