@@ -126,4 +126,10 @@
 #define __attribute_formatarg__(x) __attribute__((format_arg(x)))
 #endif
 
+#if (__GNUC__ < 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ < 1))
+#define __noinline__
+#else
+#define __noinline__ __attribute__((noinline))
+#endif
+
 #endif
