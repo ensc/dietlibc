@@ -23,7 +23,11 @@ int main (int argc, char * argv[])
       return (1);
    }
 
+   unlink (FILENAME);
+
    write (fd, TESTSTRING, sizeof(TESTSTRING));
+   lseek(fd,16*1024,SEEK_SET);
+   write(fd,"fnord",5);
 
    /*
       Try mmapping the newly created file...
@@ -48,8 +52,6 @@ int main (int argc, char * argv[])
       fprintf (stderr, "mmap allowed a bogus file descriptor...\n");
       return (1);
    }
-   
-   close (fd);
 
    /*
       Check that we can read back from the file OK
@@ -60,21 +62,24 @@ int main (int argc, char * argv[])
       fprintf (stderr, "mmap doesn't give expected data...\n");
       return (1);
    }
-   
-   /*
-      fixme: check unmapping as well.... ??
-   */
 
+   {
+     char* c=mmap(NULL,5,PROT_READ,MAP_PRIVATE,fd,16*1024);
+     if (c == MAP_FAILED) {
+       perror("mmap failed");
+       return 1;
+     }
+     if (memcmp(c,"fnord",5)) {
+       fprintf(stderr,"page offset didn't work");
+       return 1;
+     }
+   }
+   
+   close (fd);
 
    /*
       Clean up.
    */
-
-   if (unlink (FILENAME) != 0)
-   {
-      fprintf (stderr, "Unexpected problem deleting the tempfile... ?\n");
-      return (1);
-   }
 
    return (0);
 }
