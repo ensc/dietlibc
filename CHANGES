@@ -25,6 +25,9 @@
   move strnlen from libcompat into libc (it's POSIX now)
   fix dn_expand argument signedness
   add explicit_bzero, timingsafe_bcmp and timingsafe_memcmp (OpenBSD APIs useful for crypto)
+  i386 switched from mmap to mmap2. glibc has been doing this for ages,
+    and we now follow suit (without fallback to mmap), because
+    seccomp-filter can't inspect mmap arguments, so this helps security.
 
 0.33:
   first stab at getting TLS to work in actual threads
