@@ -593,7 +593,7 @@ int regexec(const regex_t*__restrict__ preg, const char*__restrict__ string, siz
   while (1) {
     matched=preg->r.m((void*)&preg->r,string,string-orig,(regex_t*)preg,0,eflags);
 //    printf("ebp on stack = %x\n",stack[1]);
-    if (matched>=0) {
+    if (__unlikely(matched>=0)) {
       matched=preg->r.m((void*)&preg->r,string,string-orig,(regex_t*)preg,0,eflags);
       preg->l[0].rm_so=string-orig;
       preg->l[0].rm_eo=string-orig+matched;
@@ -601,7 +601,12 @@ int regexec(const regex_t*__restrict__ preg, const char*__restrict__ string, siz
       return 0;
     }
     if (!*string) break;
-    ++string; eflags|=REG_NOTBOL;
+    ++string;
+    eflags|=REG_NOTBOL;
+    /* we are no longer at the beginning of the line, so if our regex
+     * starts with ^, we can skip trying to run it on the rest of the
+     * line */
+    if (preg->r.b->p->a.type==LINESTART) break;
   }
   return REG_NOMATCH;
 }
