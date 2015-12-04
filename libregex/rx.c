@@ -179,14 +179,15 @@ static int matchatom(void*__restrict__ x,const unsigned char*__restrict__ s,int 
 #ifdef DEBUG
     printf("matching atom LINESTART against \"%.20s\"\n",s);
 #endif
-    if (ofs==0 && (eflags&REG_NOTBOL)==0) {
-      goto match;
-    }
+    if ((eflags&REG_NOTBOL)==0)
+      if (ofs==0 || ((preg->cflags&REG_NEWLINE) && s[-1]=='\n'))
+	goto match;
     break;
   case LINEEND:
 #ifdef DEBUG
     printf("matching atom LINEEND against \"%.20s\"\n",s);
 #endif
+    if ((preg->cflags&REG_NEWLINE) && *s=='\n') goto match;
     if ((*s && *s!='\n') || (eflags&REG_NOTEOL)) break;
     goto match;
   case WORDSTART:
@@ -590,10 +591,19 @@ int regexec(const regex_t*__restrict__ preg, const char*__restrict__ string, siz
   printf("alloca(%d)\n",sizeof(regmatch_t)*(preg->brackets+3));
 #endif
   ((regex_t*)preg)->l=alloca(sizeof(regmatch_t)*(preg->brackets+3));
+  int earlyabort=(preg->cflags&REG_NEWLINE)==0;
+  if (earlyabort) {
+    int i;
+    for (i=0; i<preg->r.num; ++i)
+      if (preg->r.b[i].p->a.type!=LINESTART) {
+	earlyabort=0;
+	break;
+      }
+  }
   while (1) {
     matched=preg->r.m((void*)&preg->r,string,string-orig,(regex_t*)preg,0,eflags);
 //    printf("ebp on stack = %x\n",stack[1]);
-    if (matched>=0) {
+    if (__unlikely(matched>=0)) {
       matched=preg->r.m((void*)&preg->r,string,string-orig,(regex_t*)preg,0,eflags);
       preg->l[0].rm_so=string-orig;
       preg->l[0].rm_eo=string-orig+matched;
@@ -601,7 +611,12 @@ int regexec(const regex_t*__restrict__ preg, const char*__restrict__ string, siz
       return 0;
     }
     if (!*string) break;
-    ++string; eflags|=REG_NOTBOL;
+    ++string;
+    eflags|=REG_NOTBOL;
+    /* we are no longer at the beginning of the line, so if our regex
+     * starts with ^, we can skip trying to run it on the rest of the
+     * line */
+    if (earlyabort) break;
   }
   return REG_NOMATCH;
 }
