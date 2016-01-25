@@ -2,6 +2,9 @@
 
 .text
 .global getcontext
+#ifdef __PIE__
+.hidden getcontext
+#endif
 .type getcontext,@function
 /* store current CPU context into struct ucontext* */
 getcontext:

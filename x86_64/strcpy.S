@@ -1,6 +1,9 @@
 .text
 .align 0
 .global strcpy
+#ifdef __PIE__
+.hidden strcpy
+#endif
 .type	 strcpy,@function
 strcpy:
 	mov %rdi,%rdx

@@ -3,6 +3,10 @@
 .type	strcmp,@function
 .weak	strcoll
 .type	strcoll,@function
+#ifdef __PIE__
+.hidden strcmp
+.hidden strcoll
+#endif
 
 strcoll:
 strcmp:

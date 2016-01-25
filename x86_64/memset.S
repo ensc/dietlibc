@@ -1,5 +1,8 @@
 .text
 .global memset
+#ifdef __PIE__
+.hidden memset
+#endif
 .type memset,@function
 memset:	/* rdi=ptr, esi=ch, rdx=len */
   movzbl %sil,%eax

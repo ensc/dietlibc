@@ -8,6 +8,10 @@
 clone:
 .type __clone,@function
 .global __clone
+#ifdef __PIE__
+.hidden __clone
+.hidden clone
+#endif
 __clone:
 	movl	$-EINVAL,%eax
 	testq	%rdi,%rdi	/* have non null thread_funcion */

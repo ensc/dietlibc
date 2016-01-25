@@ -143,7 +143,7 @@ CFLAGS+=-O -fomit-frame-pointer
 endif
 
 ifneq ($(DEBUG),)
-CFLAGS = -g
+CFLAGS = -g $(EXTRACFLAGS)
 STRIP = :
 endif
 CFLAGS += -W -Wall -Wextra -Wchar-subscripts -Wmissing-prototypes -Wmissing-declarations -Wno-switch -Wno-unused -Wredundant-decls -Wshadow

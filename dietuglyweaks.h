@@ -7,22 +7,34 @@
 #ifdef __clang__
 .macro DEF_G name
 .global \name
+#ifdef __PIE__
+.hidden \name
+#endif
 .type \name,@function
 \name:
 .endm
 .macro DEF_W name
 .weak \name
+#ifdef __PIE__
+.hidden \name
+#endif
 .type \name,@function
 \name:
 .endm
 #else
 .macro DEF_G name
 .global \name
+#ifdef __PIE__
+.hidden \name
+#endif
 .type \name,function
 \name:
 .endm
 .macro DEF_W name
 .weak \name
+#ifdef __PIE__
+.hidden \name
+#endif
 .type \name,function
 \name:
 .endm

@@ -3,6 +3,10 @@
 .text
 
 .global __setcontext_trampoline
+#ifdef __PIE__
+.hidden __setcontext_trampoline
+.hidden setcontext
+#endif
 .type __setcontext_trampoline,@function
 __setcontext_trampoline:
   movq %rbx,%rdi
