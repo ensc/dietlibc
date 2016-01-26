@@ -512,11 +512,10 @@ int stackgap(int argc,char* argv[],char* envp[]) {
   volatile char* gap;
   rand=find_in_auxvec(auxvec,25);
   if (!rand) {
-    char myrand[10];
+    rand=alloca(10);
     int fd=open("/dev/urandom",O_RDONLY);	// If this fails, there is not much we can do. Limp on.
-    read(fd,myrand,10);
+    read(fd,rand,10);
     close(fd);
-    rand=myrand;
   }
 #endif
 #ifdef WANT_STACKGAP
