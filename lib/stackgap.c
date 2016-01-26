@@ -352,6 +352,7 @@ static void callback() {
 
 
 
+__hidden__ char _DYNAMIC;
 
 int stackgap(int argc,char* argv[],char* envp[]);
 int stackgap(int argc,char* argv[],char* envp[]) {
@@ -385,26 +386,7 @@ int stackgap(int argc,char* argv[],char* envp[]) {
     }
     /* All four must be there, or we are hosed. Not checking. */
 
-    /* now find start of mapping (OMG HOW HORRIBLE) */
-    base=(const char*)((uintptr_t)elfimage&~0xfff);
-#if __BYTE_ORDER == __LITTLE_ENDIAN
-#define elfmagic 0x464c457f
-#else
-#define elfmagic 0x7f454c46
-#endif
-    while (*(uint32_t*)base != elfmagic) base-=4096;	/* can't happen, phdr is usually on first page */
-
 #ifdef PIEDEBUG
-    Write(1,base,4); Write(1,"\n",1);
-
-    if (((ehdr*)base)->e_entry + (uintptr_t)base != saddr) {
-      _puts("fail: ");
-      _putx(((ehdr*)base)->e_entry + (uintptr_t)base);
-      _puts(" != ");
-      _putx(saddr);
-      _puts("!\n\n");
-    }
-
     _puts("auxvec:\n");
     for (i=0; auxvec[i]; i+=2) {
       _putl(auxvec[i],atype);
@@ -444,6 +426,17 @@ int stackgap(int argc,char* argv[],char* envp[]) {
 	if (ph->p_type==PT_DYNAMIC) {	/* found .dynamic */
 	  const dyn* dh;
 	  size_t j;
+	  
+	  base = &_DYNAMIC - ph->p_vaddr;
+#ifdef PIEDEBUG
+	  if (((ehdr*)base)->e_entry + (uintptr_t)base != saddr) {
+	    _puts("fail: ");
+	    _putx(((ehdr*)base)->e_entry + (uintptr_t)base);
+	    _puts(" != ");
+	    _putx(saddr);
+	    _puts("!\n\n");
+	  }
+#endif
 
 	  for (j=0; j<ph->p_memsz; j+=sizeof(dyn)) {
 	    dh=(const dyn*)(base + ph->p_vaddr + j);
