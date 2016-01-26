@@ -527,11 +527,19 @@ int stackgap(int argc,char* argv[],char* envp[]) {
   }
 #endif
 #ifdef WANT_STACKGAP
+#ifdef __UNALIGNED_MEMORY_ACCESS_OK
   s=*(unsigned short*)(rand+8);
-#endif
+#else
+  s=rand[8]+(rand[9]<<8);
+#endif	// __UNALIGNED_MEMORY_ACCESS_OK
+#endif	// WANT_STACKGAP
 #ifdef WANT_SSP
+#ifdef __UNALIGNED_MEMORY_ACCESS_OK
   __guard=*(unsigned long*)rand;
-#endif
+#else
+  memcpy(&__guard,rand,sizeof(__guard));
+#endif	// __UNALIGNED_MEMORY_ACCESS_OK
+#endif	// WANT_SSP
 #ifdef WANT_STACKGAP
   gap=alloca(s);
 #endif
