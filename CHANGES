@@ -29,6 +29,7 @@
     and we now follow suit (without fallback to mmap), because
     seccomp-filter can't inspect mmap arguments, so this helps security.
   plumbing to get preliminary PIE support for x86_64
+  don't cause unaligned memory accesses in stackgap for the random from auxvec (Giorgio)
 
 0.33:
   first stab at getting TLS to work in actual threads
