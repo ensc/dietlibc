@@ -30,6 +30,8 @@
     seccomp-filter can't inspect mmap arguments, so this helps security.
   plumbing to get preliminary PIE support for x86_64
   don't cause unaligned memory accesses in stackgap for the random from auxvec (Giorgio)
+  implement malloc case for realpath
+  use __builtin_mul_overflow in calloc if gcc is recent enough
 
 0.33:
   first stab at getting TLS to work in actual threads
