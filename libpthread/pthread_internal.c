@@ -21,7 +21,7 @@
 #include <stdio.h>
 #endif
 
-#ifdef WANT_TLS
+#if defined(WANT_TLS) || defined(WANT_SSP)
 #include <sys/tls.h>
 #endif
 
@@ -385,6 +385,8 @@ static void* __managed_start(void*arg) {
   memcpy(me,__tdataptr,__tdatasize);
   memset(((char*)me)+__tdatasize,0,__tmemsize-__tdatasize);
   me=(tcbhead_t*)(((char*)me) + __tmemsize);
+#else
+  );
 #endif
   __setup_tls(me);
   me->multiple_threads=1;

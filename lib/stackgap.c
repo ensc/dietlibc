@@ -127,12 +127,19 @@ void __setup_tls(tcbhead_t* mainthread) {
 
 #elif defined(__alpha__) || defined(__s390__)
   __builtin_set_thread_pointer(mainthread);
-#elif defined(__ia64__) || defined(__powerpc__)
+#elif defined(__ia64__) || defined(__powerpc64__)
   register tcbhead_t* __thread_self __asm__("r13");
   __thread_self=mainthread;
+#elif defined(__powerpc__)
+  /* __thread_self=mainthread is optimized out by gcc 5 with -Os
+   * on PPC */
+  register tcbhead_t* __thread_self __asm__("r2");
+  __asm__ volatile ("addi %0,%1,0" : "=r"(__thread_self) : "r"(mainthread));
 #elif defined(__sparc__)
   register tcbhead_t* __thread_self __asm("%g7");
   __thread_self=mainthread;
+#elif defined(__mips__)
+  set_thread_area((char*)(void *)mainthread);
 #elif defined(__arm__)
   extern void __arm_set_tls(void*);
   __arm_set_tls(mainthread);

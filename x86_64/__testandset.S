@@ -9,7 +9,5 @@
 __testandset:
 	xorl	%eax,%eax
 	incl	%eax
-	xchg	%rax,(%rdi)
+	xchg	%eax,(%rdi)
 	ret
-
-link_warning("__testandset", "warning: __testandset() was never tested!")

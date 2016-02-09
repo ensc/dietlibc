@@ -33,6 +33,7 @@
   implement malloc case for realpath
   use __builtin_mul_overflow in calloc if gcc is recent enough
   cleanup s390 syscalls (Christian Seiler)
+  various TLS and pthread fixes (Christian Seiler)
 
 0.33:
   first stab at getting TLS to work in actual threads
