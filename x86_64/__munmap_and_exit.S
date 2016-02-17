@@ -2,6 +2,9 @@
 
 .text
 .global __munmap_and_exit
+#ifdef __PIE__
+.hidden __munmap_and_exit
+#endif
 .type __munmap_and_exit,@function
 __munmap_and_exit:
   mov $__NR_munmap,%eax

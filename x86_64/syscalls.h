@@ -368,7 +368,42 @@
 #define __NR_memfd_create 319
 #define __NR_kexec_file_load 320
 
-#ifdef __PIC__
+#if defined(__PIE__)
+
+#define syscall_weak(name,wsym,sym) \
+.text; \
+.type wsym,@function; \
+.weak wsym; \
+.hidden wsym; \
+wsym: ; \
+.type sym,@function; \
+.global sym; \
+.hidden sym; \
+sym: \
+.ifge __NR_##name-256 ; \
+	mov	$__NR_##name,%ax; \
+	jmp	__unified_syscall_16bit@PLT;  \
+.else ; \
+	mov	$__NR_##name,%al; \
+	jmp	__unified_syscall@PLT; \
+.endif
+
+#define syscall(name,sym) \
+.text; \
+.type sym,@function; \
+.global sym; \
+.hidden sym; \
+sym: \
+.ifge __NR_##name-256 ; \
+	mov	$__NR_##name,%ax; \
+	jmp	__unified_syscall_16bit@PLT; \
+.else ; \
+	mov	$__NR_##name,%al; \
+	jmp	__unified_syscall@PLT; \
+.endif
+
+#elif defined(__PIC__)
+
 #define syscall_weak(name,wsym,sym) \
 .text; \
 .type wsym,@function; \

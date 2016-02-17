@@ -1,5 +1,8 @@
 .text
 .global clock_gettime
+#ifdef __PIE__
+.hidden clock_gettime
+#endif
 .type clock_gettime,@function
 clock_gettime:
 	movq cgt(%rip), %rax

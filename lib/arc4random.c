@@ -1,6 +1,8 @@
 #define _LINUX_SOURCE
 #include <unistd.h>
 #include <stdlib.h>
+#include <fcntl.h>
+#include <errno.h>
 
 static uint32_t buf[256];
 static unsigned int n;
@@ -14,8 +16,17 @@ uint32_t arc4random(void) {
 }
 
 void arc4random_buf(void* Buf, size_t N) {
-  if ((size_t)getrandom(Buf,N,GRND_NONBLOCK) != N)
-    abort();
+  int r;
+  if ((size_t)(r=getrandom(Buf,N,GRND_NONBLOCK)) != N) {
+    if (r==-1 && errno==ENOSYS) {
+      int fd=open("/dev/urandom",O_RDONLY);
+      if (fd==-1) abort();
+      r=read(fd,Buf,N);
+      close(fd);
+    }
+    if ((size_t)r != N)
+      abort();
+  }
 }
 
 uint32_t arc4random_uniform(uint32_t upper_bound) {
@@ -44,8 +55,7 @@ uint32_t arc4random_uniform(uint32_t upper_bound) {
 
 void arc4random_stir(void) {
   n=0;
-  if ((size_t)getrandom(buf,sizeof(buf),GRND_NONBLOCK) != sizeof(buf))
-    abort();
+  arc4random_buf(buf,sizeof(buf));
 }
 
 void arc4random_addrandom(unsigned char* dat,size_t datlen) {

@@ -13,7 +13,19 @@ _exit:
 .global __error_unified_syscall
 .global __unified_syscall
 .global __unified_syscall_16bit
+#if defined(__ILP32__)
 .global __unified_syscall_lp64
+#endif
+#ifdef __PIE__
+.hidden exit
+.hidden _exit
+.hidden __error_unified_syscall
+#if defined(__ILP32__)
+.hidden __unified_syscall_lp64
+#endif
+.hidden __unified_syscall_16bit
+.hidden __unified_syscall
+#endif
 __unified_syscall:
 	mov	$0, %ah
 __unified_syscall_16bit:

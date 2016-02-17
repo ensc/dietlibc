@@ -3,6 +3,9 @@
 
 .text
 .global __longjmp
+#ifdef __PIE__
+.hidden __longjmp
+#endif
 .type __longjmp,@function
 __longjmp:
 	mov	$1,%eax

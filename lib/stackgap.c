@@ -1,3 +1,8 @@
+#include <sys/cdefs.h>
+#define extern __hidden__
+
+extern char __executable_start;
+
 /* Warning: this code sets up the machine registers and segments needed
  * for -fstack-protector to work.  If you compile this function with
  * -fstack-protector, it will reference those registers before they are
@@ -17,6 +22,7 @@
 #include <stdlib.h>
 #include "dietfeatures.h"
 #include <sys/auxv.h>
+#include <string.h>
 #include "dietelfinfo.h"
 
 #ifdef IN_LDSO
@@ -34,7 +40,7 @@ void const * __vdso;
 extern int main(int argc,char* argv[],char* envp[]);
 
 #if defined(WANT_SSP)
-extern unsigned long __guard;
+extern __hidden__ unsigned long __guard;
 #endif
 
 #if defined(WANT_VALGRIND_SUPPORT)
@@ -135,6 +141,8 @@ void __setup_tls(tcbhead_t* mainthread) {
 
 #elif defined(__alpha__) || defined(__s390__)
   __builtin_set_thread_pointer(mainthread);
+#elif defined(__mips__)
+  set_thread_area((char*)(void *)mainthread);
 #elif defined(__arm__)
   __arm_set_tls(mainthread);
 #elif defined(__ABI_TLS_REGISTER)
@@ -172,6 +180,203 @@ unsigned long getauxval(unsigned long type) {
   return (long)find_in_auxvec(_auxvec,type);
 }
 
+
+
+#ifdef __PIE__
+
+#if (__WORDSIZE == 64)
+
+#define phdr Elf64_Phdr
+#define ehdr Elf64_Ehdr
+#define shdr Elf64_Shdr
+#define sym Elf64_Sym
+#define dyn Elf64_Dyn
+#define rela Elf64_Rela
+#define R_SYM ELF64_R_SYM
+#define R_TYPE ELF64_R_TYPE
+
+#else
+
+#define phdr Elf32_Phdr
+#define ehdr Elf32_Ehdr
+#define shdr Elf32_Shdr
+#define sym Elf32_Sym
+#define dyn Elf32_Dyn
+#define rela Elf32_Rela
+#define R_SYM ELF32_R_SYM
+#define R_TYPE ELF32_R_TYPE
+
+#endif
+
+#ifdef PIEDEBUG
+static size_t Strlen(const char* s) {
+  size_t i;
+  for (i=0; s[i]; ++i) ;
+  return i;
+}
+
+static void Write(int fd,const char* s,size_t len) {
+  asm("syscall\n" : : "a" (1), "D" (fd), "S" (s), "d" (len));
+}
+
+static void _puts(const char* s) {
+  Write(1,s,Strlen(s));
+}
+
+static void _putn(size_t n) {
+  char buf[100];
+  size_t j=sizeof(buf);
+  if (!n) buf[--j]='0';
+  for (; j>0 && n; ) {
+    buf[--j]=(n%10)+'0';
+    n/=10;
+  }
+  Write(1,buf+j,sizeof(buf)-j);
+}
+
+static void _putx(size_t n) {
+  char buf[100];
+  size_t j=sizeof(buf);
+  if (!n) buf[--j]='0';
+  for (; j>0 && n; ) {
+    char x = n%16;
+    buf[--j]=x<10 ? x+'0' : x+'a'-10;
+    n/=16;
+  }
+  Write(1,buf+j,sizeof(buf)-j);
+}
+
+struct lookup { size_t n; const char s[20]; };
+
+static void _putl(size_t n,struct lookup* l) {
+  size_t i;
+  for (i=0; l[i].n!=0; ++i)
+    if (l[i].n==n) {
+      _puts(l[i].s);
+      return;
+    }
+  Write(1,"[",1);
+  _putx(n);
+  Write(1,"]",1);
+}
+
+static struct lookup atype[] = {
+  { 1, "AT_IGNORE" },
+  { 2, "AT_EXECFD" },
+  { 3, "AT_PHDR" },
+  { 4, "AT_PHENT" },
+  { 5, "AT_PHNUM" },
+  { 6, "AT_PAGESZ" },
+  { 7, "AT_BASE" },
+  { 8, "AT_FLAGS" },
+  { 9, "AT_ENTRY" },
+  { 10, "AT_NOTELF" },
+  { 11, "AT_UID" },
+  { 12, "AT_EUID" },
+  { 13, "AT_GID" },
+  { 14, "AT_EGID" },
+  { 17, "AT_CLKTCK" },
+  { 15, "AT_PLATFORM" },
+  { 16, "AT_HWCAP" },
+  { 18, "AT_FPUCW" },
+  { 19, "AT_DCACHEBSIZE" },
+  { 20, "AT_ICACHEBSIZE" },
+  { 21, "AT_UCACHEBSIZE" },
+  { 22, "AT_IGNOREPPC" },
+  { 23, "AT_SECURE" },
+  { 24, "AT_BASE_PLATFORM" },
+  { 25, "AT_RANDOM" },
+  { 26, "AT_HWCAP2" },
+  { 31, "AT_EXECFN" },
+  { 32, "AT_SYSINFO" },
+  { 33, "AT_SYSINFO_EHDR" },
+  { 0 },
+};
+
+static struct lookup ptype[] = {
+  { 1, "PT_LOAD" },
+  { 2, "PT_DYNAMIC" },
+  { 3, "PT_INTERP" },
+  { 4, "PT_NOTE" },
+  { 5, "PT_SHLIB" },
+  { 6, "PT_PHDR" },
+  { 7, "PT_TLS" },
+  { 8, "PT_NUM" },
+  { 0x60000000, "PT_LOOS" },
+  { 0x6474e550, "PT_GNU_EH_FRAME" },
+  { 0x6474e551, "PT_GNU_STACK" },
+  { 0x6ffffffa, "PT_LOSUNW" },
+  { 0x6ffffffa, "PT_SUNWBSS" },
+  { 0x6ffffffb, "PT_SUNWSTACK" },
+  { 0x6fffffff, "PT_HISUNW" },
+  { 0x6fffffff, "PT_HIOS" },
+  { 0x70000000, "PT_LOPROC" },
+  { 0x7fffffff, "PT_HIPROC" },
+  { 0 } };
+
+static struct lookup dtag[] = {
+  { 1, "DT_NEEDED" },
+  { 2, "DT_PLTRELSZ" },
+  { 3, "DT_PLTGOT" },
+  { 4, "DT_HASH" },
+  { 5, "DT_STRTAB" },
+  { 6, "DT_SYMTAB" },
+  { 7, "DT_RELA" },
+  { 8, "DT_RELASZ" },
+  { 9, "DT_RELAENT" },
+  { 10, "DT_STRSZ" },
+  { 11, "DT_SYMENT" },
+  { 12, "DT_INIT" },
+  { 13, "DT_FINI" },
+  { 14, "DT_SONAME" },
+  { 15, "DT_RPATH" },
+  { 16, "DT_SYMBOLIC" },
+  { 17, "DT_REL" },
+  { 18, "DT_RELSZ" },
+  { 19, "DT_RELENT" },
+  { 20, "DT_PLTREL" },
+  { 21, "DT_DEBUG" },
+  { 22, "DT_TEXTREL" },
+  { 23, "DT_JMPREL" },
+  { 24, "DT_BIND_NOW" },
+  { 25, "DT_INIT_ARRAY" },
+  { 26, "DT_FINI_ARRAY" },
+  { 27, "DT_INIT_ARRAYSZ" },
+  { 28, "DT_FINI_ARRAYSZ" },
+  { 29, "DT_RUNPATH" },
+  { 30, "DT_FLAGS" },
+  { 32, "DT_ENCODING" },
+  { 32, "DT_PREINIT_ARRAY" },
+  { 33, "DT_PREINIT_ARRAYSZ" },
+  { 34, "DT_NUM" },
+  { 0x6000000d, "DT_LOOS" },
+  { 0x6ffff000, "DT_HIOS" },
+  { 0x6ffffff9, "DT_RELACOUNT" },
+  { 0x6ffffffa, "DT_RELCOUNT" },
+  { 0x70000000, "DT_LOPROC" },
+  { 0x7fffffff, "DT_HIPROC" },
+  { 0 }
+};
+#endif
+
+static void callback() {
+#ifdef PIEDEBUG
+  _puts("callback called!\n");
+#endif
+  _exit(111);
+}
+
+#endif	/* __PIE__ */
+
+// extern size_t _GLOBAL_OFFSET_TABLE_;
+
+
+
+
+
+
+__hidden__ char _DYNAMIC;
+
 int stackgap(int argc,char* argv[],char* envp[]);
 int stackgap(int argc,char* argv[],char* envp[]) {
 #if defined(WANT_STACKGAP) || defined(WANT_SSP) || defined(WANT_TLS)
@@ -186,22 +391,172 @@ int stackgap(int argc,char* argv[],char* envp[]) {
   unsigned short s;
   volatile char* gap;
 #endif
+#ifdef __PIE__
+  /* This code is meant for static PIE executables. */
+  /* Since we do not have an interpreter, we'll have to set up the GOT ourselves. */
+  {
+    size_t i;
+    const char* base=0;
+    rela* r=0;
+    size_t relasz=0,relaent=0;
+    size_t phent=0, phnum=0;
+    size_t saddr=0;
+    const char* elfimage=0;
+    for (i=0; auxvec[i]; i+=2) {
+      switch (auxvec[i]) {
+      case AT_PHDR: elfimage=(const char*)auxvec[i+1]; break;
+      case AT_PHENT: phent=auxvec[i+1]; break;
+      case AT_PHNUM: phnum=auxvec[i+1]; break;
+      case AT_ENTRY: saddr=auxvec[i+1]; break;
+      }
+    }
+    /* All four must be there, or we are hosed. Not checking. */
+
+#ifdef PIEDEBUG
+    _puts("auxvec:\n");
+    for (i=0; auxvec[i]; i+=2) {
+      _putl(auxvec[i],atype);
+      _puts(" - ");
+      _putx(auxvec[i+1]);
+      _puts("\n");
+    }
+    _puts("\nme=");
+    _putx((size_t)&stackgap);
+    _puts("\n");
+#endif
+
+    if (elfimage) {
+
+      size_t* pltgot=0;
+      size_t pltrelsz=0,pltrel=0;
+
+#ifdef PIEDEBUG
+      _puts("\nphdr:\n");
+      for (i=0; i<phnum; ++i) {
+	const phdr* ph=(const phdr*)(elfimage + i*phent);
+	_puts("type ");
+	_putl(ph->p_type,ptype); _puts("\tofs ");
+	_putx(ph->p_offset); _puts("\tvaddr ");
+	_putx(ph->p_vaddr); _puts("\tpaddr ");
+	_putx(ph->p_paddr); _puts("\tfilesz ");
+	_putx(ph->p_filesz); _puts("\tmemsz ");
+	_putx(ph->p_memsz); _puts("\tflags ");
+	_putx(ph->p_flags); _puts("\talign ");
+	_putx(ph->p_align); _puts("\n");
+      }
+      _puts("\n\n");
+#endif
+
+      for (i=0; i<phnum; ++i) {
+	const phdr* ph=(const phdr*)(elfimage + i*phent);
+	if (ph->p_type==PT_DYNAMIC) {	/* found .dynamic */
+	  const dyn* dh;
+	  size_t j;
+	  
+	  base = &_DYNAMIC - ph->p_vaddr;
+#ifdef PIEDEBUG
+	  if (((ehdr*)base)->e_entry + (uintptr_t)base != saddr) {
+	    _puts("fail: ");
+	    _putx(((ehdr*)base)->e_entry + (uintptr_t)base);
+	    _puts(" != ");
+	    _putx(saddr);
+	    _puts("!\n\n");
+	  }
+#endif
+
+	  for (j=0; j<ph->p_memsz; j+=sizeof(dyn)) {
+	    dh=(const dyn*)(base + ph->p_vaddr + j);
+	    if (!dh->d_tag) break;
+#ifdef PIEDEBUG
+	    _putl(dh->d_tag,dtag); _puts(" - "); _putx(dh->d_un.d_val); _puts("\n");
+#endif
+	    switch (dh->d_tag) {
+	    case DT_PLTGOT: pltgot=(size_t*)(base+dh->d_un.d_ptr); break;
+	    case DT_PLTRELSZ: pltrelsz=dh->d_un.d_val; break;
+	    case DT_PLTREL: pltrel=dh->d_un.d_val; break;
+
+	    case DT_RELA: r=(rela*)(base+dh->d_un.d_ptr); break;
+	    case DT_RELASZ: relasz=dh->d_un.d_val; break;
+	    case DT_RELAENT: relaent=dh->d_un.d_val; break;
+	    }
+	  }
+	  break;
+	}
+      }
+
+#ifdef PIEDEBUG
+      _puts("got pltgot "); _putx((uintptr_t)pltgot); _puts(", pltrelsz "); _putn(pltrelsz); _puts(", pltrel "); _putn(pltrel); _puts("\n");
+#endif
+      if (r && relasz && relaent) {
+#ifdef PIEDEBUG
+	_puts("got rela ");
+	_putx((uintptr_t)r);
+	_puts(", relasz ");
+	_putx(relasz);
+	_puts(", relaent ");
+	_putx(relaent);
+	_puts("\n");
+
+	_puts("\nrela dump:\n");
+#endif
+
+	for (i=relasz/relaent; i; --i) {
+
+#ifdef PIEDEBUG
+	  _puts("@ "); _putx((uintptr_t)base + r->r_offset);
+	  _puts(", ofs "); _putx(r->r_offset);
+	  _puts(", info "); _putx(r->r_info);
+	  _puts(", addend "); _putx(r->r_addend);
+	  _puts("\n");
+#endif
+
+#if __WORDSIZE == 64
+	  unsigned int type = ELF64_R_TYPE(r->r_info);
+#else
+	  unsigned int type = ELF32_R_TYPE(r->r_info);
+#endif
+	  size_t* x=(size_t*)((char*)(base+r->r_offset));
+	  switch (type) {
+#if defined(__x86_64__)
+	  case R_X86_64_RELATIVE: *x = (uintptr_t)base + r->r_addend; break;
+#else
+#error architecture not supported yet (edit stackgap.c)
+#endif
+#ifdef PIEDEBUG
+	  default: _puts("unsupported relocation type "); _putx(type); break;
+#endif
+	  }
+	  ++r;
+	}
+	if (pltgot)
+	  pltgot[2]=(uintptr_t)callback;
+      }
+    }
+  }
+#endif
 #if defined(WANT_STACKGAP) || defined(WANT_SSP)
-  char myrand[10];
   rand=find_in_auxvec(auxvec,25);
   if (!rand) {
-    int fd=open("/dev/urandom",O_RDONLY);
-    read(fd,myrand,10);
+    rand=alloca(10);
+    int fd=open("/dev/urandom",O_RDONLY);	// If this fails, there is not much we can do. Limp on.
+    read(fd,rand,10);
     close(fd);
-    rand=myrand;
   }
 #endif
 #ifdef WANT_STACKGAP
+#ifdef __UNALIGNED_MEMORY_ACCESS_OK
   s=*(unsigned short*)(rand+8);
-#endif
+#else
+  s=rand[8]+(rand[9]<<8);
+#endif	// __UNALIGNED_MEMORY_ACCESS_OK
+#endif	// WANT_STACKGAP
 #ifdef WANT_SSP
+#ifdef __UNALIGNED_MEMORY_ACCESS_OK
   __guard=*(unsigned long*)rand;
-#endif
+#else
+  memcpy(&__guard,rand,sizeof(__guard));
+#endif	// __UNALIGNED_MEMORY_ACCESS_OK
+#endif	// WANT_SSP
 #ifdef WANT_STACKGAP
   gap=alloca(s);
 #endif

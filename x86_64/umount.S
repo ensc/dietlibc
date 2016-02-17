@@ -2,6 +2,9 @@
 
 .text
 .global umount
+#ifdef __PIE__
+.hidden umount
+#endif
 .type   umount,@function
 umount:
         mov     $__NR_umount2,%al

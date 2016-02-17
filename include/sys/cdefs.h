@@ -132,4 +132,11 @@
 #define __noinline__ __attribute__((noinline))
 #endif
 
+#if (__GNUC__ < 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ < 6))
+#define __hidden__
+#else
+#define __hidden__ __attribute__((visibility("hidden")))
+#endif
+
+
 #endif

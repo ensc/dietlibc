@@ -1,6 +1,9 @@
 #include "dietfeatures.h"
 .text
 .global strlen
+#ifdef __PIE__
+.hidden strlen
+#endif
 .type strlen,@function
 strlen:
 #ifdef WANT_VALGRIND_SUPPORT
@@ -10,7 +13,7 @@ strlen:
 	test	%eax, %eax
 #else
 	xor %eax,%eax
-	or (__valgrind),%eax
+	or __valgrind(%rip),%eax
 #endif
 	jnz .Lvalgrind
 #endif

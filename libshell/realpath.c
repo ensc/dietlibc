@@ -40,7 +40,10 @@ static char* myrealpath(const char* file, char* dest, int count) {
 
 char* realpath(const char* file, char* dest) {
   int fd=open(".",O_RDONLY);	/* save directory */
-  char* res=myrealpath(file,dest,31);
+  char* res;
+  if (!dest) dest=malloc(PATH_MAX+1);
+  if (!dest) return NULL;
+  res=myrealpath(file,dest,31);
   fchdir(fd);
   close(fd);
   return res;

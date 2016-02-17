@@ -2,6 +2,10 @@
 .type   strchr,@function
 .global strchr
 .weak index
+#ifdef __PIE__
+.hidden strchr
+.hidden index
+#endif
 .type index,@function
 
 index:

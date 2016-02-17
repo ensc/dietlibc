@@ -1,7 +1,7 @@
 ifeq ($(CC),clang)
 CFLAGS := -Os -fstrict-aliasing -momit-leaf-frame-pointer $(EXTRACFLAGS)
 else
-CFLAGS := -Os -fstrict-aliasing -momit-leaf-frame-pointer -mfancy-math-387 -fPIC -fvisibility=hidden $(EXTRACFLAGS)
+CFLAGS := -Os -fstrict-aliasing -momit-leaf-frame-pointer -mfancy-math-387 -fpie -fvisibility=hidden $(EXTRACFLAGS)
 endif
 VPATH  := x86_64:syscalls.s:$(VPATH)
 LIBOBJ += $(OBJDIR)/arch_prctl.o $(OBJDIR)/__CAS.o $(OBJDIR)/__munmap_and_exit.o $(OBJDIR)/getcontext.o

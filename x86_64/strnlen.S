@@ -1,5 +1,8 @@
 .text
 .global strnlen
+#ifdef __PIE__
+.hidden strnlen
+#endif
 .type strnlen,@function
 strnlen:
 	/* incoming: rdi = ptr, rsi = len */

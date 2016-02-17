@@ -6,6 +6,11 @@
 .type setjmp,@function
 setjmp:
 .globl __setjmp
+#ifdef __PIE__
+.hidden setjmp
+.hidden __setjmp
+.hidden __sigsetjmp
+#endif
 .type __setjmp,@function
 __setjmp:
 	xorq	%rsi,%rsi

@@ -1,6 +1,9 @@
 #include "dietfeatures.h"
 .text
 .global memchr
+#ifdef __PIE__
+.hidden memchr
+#endif
 .type memchr,@function
 memchr:	/* rdi=ptr, esi=ch, rdx=len */
 #ifdef WANT_VALGRIND_SUPPORT

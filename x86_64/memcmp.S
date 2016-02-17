@@ -1,5 +1,8 @@
 .text
 .global memcmp
+#ifdef __PIE__
+.hidden memcmp
+#endif
 .type memcmp,@function
 memcmp:	/* rdi=ptr1, esi=ptr2, rdx=bytes */
 1:

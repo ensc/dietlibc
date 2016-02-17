@@ -3,6 +3,9 @@
 
 .text
 .global gettimeofday
+#ifdef __PIE__
+.hidden gettimeofday
+#endif
 .type gettimeofday,@function
 gettimeofday:
 #ifdef WANT_VALGRIND_SUPPORT

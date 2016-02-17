@@ -6,6 +6,10 @@
 waitpid:
 .type	__libc_waitpid,@function
 .global __libc_waitpid
+#ifdef __PIE__
+.hidden __libc_waitpid
+.hidden waitpid
+#endif
 __libc_waitpid:
 	xor	%rcx,%rcx
 	mov	$__NR_wait4,%al

@@ -65,4 +65,8 @@
 #define __WORDSIZE 32
 #endif
 
+#if defined(__x86_64__) || defined(__i386__)
+#define __UNALIGNED_MEMORY_ACCESS_OK 1
+#endif
+
 #endif
