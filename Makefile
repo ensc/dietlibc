@@ -217,34 +217,34 @@ $(OBJDIR)/__longjmp.o $(OBJDIR)/setjmp.o \
 $(OBJDIR)/clone.o
 
 $(OBJDIR)/dietlibc.a: $(DIETLIBC_OBJ) $(OBJDIR)/start.o
-	$(CROSS)ar cru $@ $(DIETLIBC_OBJ)
+	$(CROSS)ar cr $@ $(DIETLIBC_OBJ)
 
 $(OBJDIR)/librpc.a: $(LIBRPCOBJ)
-	$(CROSS)ar cru $@ $(LIBRPCOBJ)
+	$(CROSS)ar cr $@ $(LIBRPCOBJ)
 
 $(OBJDIR)/libcrypt.a: | $(OBJDIR)
 	touch dummy.c
 	$(CCC) -c dummy.c
-	$(CROSS)ar cru $@ dummy.o
+	$(CROSS)ar cr $@ dummy.o
 	rm -f dummy.c dummy.o
 
 dummy.o:
 
 LIBLATIN1_OBJS=$(patsubst liblatin1/%.c,$(OBJDIR)/%.o,$(wildcard liblatin1/*.c))
 $(OBJDIR)/liblatin1.a: $(LIBLATIN1_OBJS)
-	$(CROSS)ar cru $@ $^
+	$(CROSS)ar cr $@ $^
 
 $(OBJDIR)/libgmon.a: $(LIBGMON_OBJS)
-	$(CROSS)ar cru $@ $^
+	$(CROSS)ar cr $@ $^
 
 $(OBJDIR)/libpthread.a: $(LIBPTHREAD_OBJS) dietfeatures.h
-	$(CROSS)ar cru $@ $(LIBPTHREAD_OBJS)
+	$(CROSS)ar cr $@ $(LIBPTHREAD_OBJS)
 
 $(OBJDIR)/libcompat.a: $(LIBCOMPATOBJ)
-	$(CROSS)ar cru $@ $(LIBCOMPATOBJ)
+	$(CROSS)ar cr $@ $(LIBCOMPATOBJ)
 
 $(OBJDIR)/libm.a: $(LIBMATHOBJ)
-	$(CROSS)ar cru $@ $(LIBMATHOBJ)
+	$(CROSS)ar cr $@ $(LIBMATHOBJ)
 
 LD_UNSET = env -u LD_RUN_PATH
 
@@ -252,7 +252,7 @@ dyn: dyn_lib
 
 # added dynamic linker
 $(OBJDIR)/libdl.a: $(LIBDLOBJ)
-	$(CROSS)ar cru $@ $(LIBDLOBJ)
+	$(CROSS)ar cr $@ $(LIBDLOBJ)
 
 dyn_lib: $(PICODIR) $(PICODIR)/libc.so $(PICODIR)/dstart.o \
 	$(PICODIR)/dyn_so_start.o $(PICODIR)/dyn_start.o $(PICODIR)/dyn_stop.o \
