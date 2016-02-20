@@ -260,6 +260,14 @@ char * crypt(const char *pw, const char *salt)
   if (salt[0]=='$' && salt[1]=='1' && salt[2]=='$')
     return md5crypt(pw,salt);
 #endif
+#ifdef WANT_CRYPT_SHA256
+  if (salt[0]=='$' && salt[1]=='5' && salt[2]=='$')
+    return sha256_crypt(pw,salt);
+#endif
+#ifdef WANT_CRYPT_SHA512
+  if (salt[0]=='$' && salt[1]=='6' && salt[2]=='$')
+    return sha512_crypt(pw,salt);
+#endif
   for(i=0; i < 66; i++)
     block[i] = 0;
   for(i=0; (c= *pw) && i < 64; pw++) {

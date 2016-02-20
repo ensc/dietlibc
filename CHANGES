@@ -34,6 +34,8 @@
   use __builtin_mul_overflow in calloc if gcc is recent enough
   cleanup s390 syscalls (Christian Seiler)
   various TLS and pthread fixes (Christian Seiler)
+  add sha256 and sha512 support in crypt(3)
+  promote stpncpy from libcompat to main libc as the sha512 code uses it
 
 0.33:
   first stab at getting TLS to work in actual threads
