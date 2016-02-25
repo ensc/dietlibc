@@ -3,7 +3,7 @@
   strength and skill of a true master.
  	--http://www.inner.net/users/cmetz/program-like-a-klingon
 
-diet libc to statically link programs that don't need all the bloat
+Use diet libc to statically link programs that don't need all the bloat
 from glibc.
 
 malloc, printf and scanf contributed from Olaf Dreesen.
