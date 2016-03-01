@@ -1,3 +1,4 @@
+#define _GNU_SOURCE
 #include "dietfeatures.h"
 #include <unistd.h>
 #include <md5.h>
@@ -259,6 +260,14 @@ char * crypt(const char *pw, const char *salt)
 #ifdef WANT_CRYPT_MD5
   if (salt[0]=='$' && salt[1]=='1' && salt[2]=='$')
     return md5crypt(pw,salt);
+#endif
+#ifdef WANT_CRYPT_SHA256
+  if (salt[0]=='$' && salt[1]=='5' && salt[2]=='$')
+    return sha256_crypt(pw,salt);
+#endif
+#ifdef WANT_CRYPT_SHA512
+  if (salt[0]=='$' && salt[1]=='6' && salt[2]=='$')
+    return sha512_crypt(pw,salt);
 #endif
   for(i=0; i < 66; i++)
     block[i] = 0;

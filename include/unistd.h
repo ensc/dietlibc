@@ -175,6 +175,12 @@ char *crypt(const char *key, const char *salt) __THROW;
 void encrypt(char block[64], int edflag) __THROW;
 void setkey(const char *key) __THROW;
 
+#ifdef _GNU_SOURCE
+char* md5crypt(const char* key, const char* salt) __THROW;
+char* sha256_crypt(const char* key, const char* salt) __THROW;
+char* sha512_crypt(const char* key, const char* salt) __THROW;
+#endif
+
 size_t getpagesize(void) __THROW __attribute__((__const__,__pure__));
 
 int getdomainname(char *name, size_t len) __THROW;
