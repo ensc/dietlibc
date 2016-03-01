@@ -1,3 +1,4 @@
+#define _GNU_SOURCE
 #include "dietfeatures.h"
 #include <unistd.h>
 #include <md5.h>
