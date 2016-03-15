@@ -13,7 +13,7 @@ int main() {
 
   stpncpy(test,"bar",2);
   assert(stpncpy(test,"bar",2)==test+2 && !strcmp(test,"bao"));
-  assert(stpncpy(test,"xyz",6)==test+3 && !memcmp(test,"xyz\0\0\0",6));
+  assert(stpncpy(test,"xyz",6)==test+3 && !memcmp(test,"xyz\0\0\0r",7));
 
   return 0;
 }
