@@ -41,8 +41,13 @@ _start:
 	call	_dyn_start
 	.hidden _dyn_start
 #else
+#ifdef __PIE__
+	call	CALL_IN_STARTCODE_PIE
+	.hidden CALL_IN_STARTCODE_PIE
+#else
 	call	CALL_IN_STARTCODE
 	.hidden CALL_IN_STARTCODE
+#endif
 #endif
 
 #ifdef PROFILING
