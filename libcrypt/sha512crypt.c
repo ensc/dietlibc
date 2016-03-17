@@ -127,6 +127,7 @@ sha512_process_block (const void *buffer, size_t len, struct sha512_ctx *ctx)
       uint64_t f_save = f;
       uint64_t g_save = g;
       uint64_t h_save = h;
+      unsigned int t;
 
       /* Operators defined in FIPS 180-2:4.1.2.  */
 #define Ch(x, y, z) ((x & y) ^ (~x & z))
@@ -141,16 +142,16 @@ sha512_process_block (const void *buffer, size_t len, struct sha512_ctx *ctx)
 #define CYCLIC(w, s) ((w >> s) | (w << (64 - s)))
 
       /* Compute the message schedule according to FIPS 180-2:6.3.2 step 2.  */
-      for (unsigned int t = 0; t < 16; ++t)
+      for (t = 0; t < 16; ++t)
 	{
 	  W[t] = SWAP (*words);
 	  ++words;
 	}
-      for (unsigned int t = 16; t < 80; ++t)
+      for (t = 16; t < 80; ++t)
 	W[t] = R1 (W[t - 2]) + W[t - 7] + R0 (W[t - 15]) + W[t - 16];
 
       /* The actual computation according to FIPS 180-2:6.3.2 step 3.  */
-      for (unsigned int t = 0; t < 80; ++t)
+      for (t = 0; t < 80; ++t)
 	{
 	  uint64_t T1 = h + S1 (e) + Ch (e, f, g) + K[t] + W[t];
 	  uint64_t T2 = S0 (a) + Maj (a, b, c);
@@ -221,6 +222,7 @@ sha512_finish_ctx (struct sha512_ctx *ctx, void *resbuf)
   /* Take yet unprocessed bytes into account.  */
   uint64_t bytes = ctx->buflen;
   size_t pad;
+  unsigned int i;
 
   /* Now count remaining bytes.  */
   ctx->total[0] += bytes;
@@ -239,7 +241,7 @@ sha512_finish_ctx (struct sha512_ctx *ctx, void *resbuf)
   sha512_process_block (ctx->buffer, bytes + pad + 16, ctx);
 
   /* Put result from CTX in first 64 bytes following RESBUF.  */
-  for (unsigned int i = 0; i < 8; ++i)
+  for (i = 0; i < 8; ++i)
     ((uint64_t *) resbuf)[i] = SWAP (ctx->H[i]);
 
   return resbuf;
@@ -727,6 +729,7 @@ main (void)
   char sum[64];
   int result = 0;
   int cnt;
+  int i;
 
   for (cnt = 0; cnt < (int) ntests; ++cnt)
     {
@@ -740,7 +743,7 @@ main (void)
 	}
 
       sha512_init_ctx (&ctx);
-      for (int i = 0; tests[cnt].input[i] != '\0'; ++i)
+      for (i = 0; tests[cnt].input[i] != '\0'; ++i)
 	sha512_process_bytes (&tests[cnt].input[i], 1, &ctx);
       sha512_finish_ctx (&ctx, sum);
       if (memcmp (tests[cnt].result, sum, 64) != 0)
@@ -754,7 +757,7 @@ main (void)
   char buf[1000];
   memset (buf, 'a', sizeof (buf));
   sha512_init_ctx (&ctx);
-  for (int i = 0; i < 1000; ++i)
+  for (i = 0; i < 1000; ++i)
     sha512_process_bytes (buf, sizeof (buf), &ctx);
   sha512_finish_ctx (&ctx, sum);
   static const char expected[64] =
