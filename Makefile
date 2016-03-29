@@ -90,7 +90,7 @@ PIE=-fpie -fvisibility=hidden
 OBJDIR=bin-$(ARCH)
 ILIBDIR=$(LIBDIR)-$(ARCH)
 
-HOME=$(shell pwd)
+DIETHOME=$(shell pwd)
 
 WHAT=	$(OBJDIR) $(OBJDIR)/start.o $(OBJDIR)/dyn_start.o $(OBJDIR)/dyn_stop.o \
 	$(OBJDIR)/dietlibc.a $(OBJDIR)/liblatin1.a \
@@ -116,23 +116,23 @@ INC=-I. -isystem include
 
 VPATH=lib:libstdio:libugly:libcruft:libcrypt:libshell:liblatin1:libcompat:libdl:librpc:libregex:libm:profiling
 
-SYSCALLOBJ=$(patsubst syscalls.s/%.S,$(OBJDIR)/%.o,$(wildcard syscalls.s/*.S))
+SYSCALLOBJ=$(patsubst syscalls.s/%.S,$(OBJDIR)/%.o,$(sort $(wildcard syscalls.s/*.S)))
 
-LIBOBJ=$(patsubst lib/%.c,$(OBJDIR)/%.o,$(wildcard lib/*.c))
-LIBUGLYOBJ=$(patsubst libugly/%.c,$(OBJDIR)/%.o,$(wildcard libugly/*.c))
-LIBSTDIOOBJ=$(patsubst libstdio/%.c,$(OBJDIR)/%.o,$(wildcard libstdio/*.c))
-LIBCRUFTOBJ=$(patsubst libcruft/%.c,$(OBJDIR)/%.o,$(wildcard libcruft/*.c))
-LIBCRYPTOBJ=$(patsubst libcrypt/%.c,$(OBJDIR)/%.o,$(wildcard libcrypt/*.c))
-LIBSHELLOBJ=$(patsubst libshell/%.c,$(OBJDIR)/%.o,$(wildcard libshell/*.c))
-LIBCOMPATOBJ=$(patsubst libcompat/%.c,$(OBJDIR)/%.o,$(wildcard libcompat/*.c)) $(OBJDIR)/syscall.o
-LIBMATH=$(patsubst libm/%.c,%.o,$(wildcard libm/*.c))
+LIBOBJ=$(patsubst lib/%.c,$(OBJDIR)/%.o,$(sort $(wildcard lib/*.c)))
+LIBUGLYOBJ=$(patsubst libugly/%.c,$(OBJDIR)/%.o,$(sort $(wildcard libugly/*.c)))
+LIBSTDIOOBJ=$(patsubst libstdio/%.c,$(OBJDIR)/%.o,$(sort $(wildcard libstdio/*.c)))
+LIBCRUFTOBJ=$(patsubst libcruft/%.c,$(OBJDIR)/%.o,$(sort $(wildcard libcruft/*.c)))
+LIBCRYPTOBJ=$(patsubst libcrypt/%.c,$(OBJDIR)/%.o,$(sort $(wildcard libcrypt/*.c)))
+LIBSHELLOBJ=$(patsubst libshell/%.c,$(OBJDIR)/%.o,$(sort $(wildcard libshell/*.c)))
+LIBCOMPATOBJ=$(patsubst libcompat/%.c,$(OBJDIR)/%.o,$(sort $(wildcard libcompat/*.c))) $(OBJDIR)/syscall.o
+LIBMATH=$(patsubst libm/%.c,%.o,$(sort $(wildcard libm/*.c)))
 
-LIBRPCOBJ=$(patsubst librpc/%.c,$(OBJDIR)/%.o,$(wildcard librpc/*.c))
-LIBREGEXOBJ=$(patsubst libregex/%.c,$(OBJDIR)/%.o,$(wildcard libregex/*.c))
+LIBRPCOBJ=$(patsubst librpc/%.c,$(OBJDIR)/%.o,$(sort $(wildcard librpc/*.c)))
+LIBREGEXOBJ=$(patsubst libregex/%.c,$(OBJDIR)/%.o,$(sort $(wildcard libregex/*.c)))
 
-LIBDLOBJ=$(patsubst libdl/%.c,$(OBJDIR)/%.o,$(wildcard libdl/*.c)) $(OBJDIR)/_dl_jump.o
+LIBDLOBJ=$(patsubst libdl/%.c,$(OBJDIR)/%.o,$(sort $(wildcard libdl/*.c))) $(OBJDIR)/_dl_jump.o
 
-LIBPTHREAD_OBJS=$(patsubst libpthread/%.c,$(OBJDIR)/%.o,$(shell ./threadsafe.sh)) $(OBJDIR)/__testandset.o
+LIBPTHREAD_OBJS=$(patsubst libpthread/%.c,$(OBJDIR)/%.o,$(sort $(shell ./threadsafe.sh))) $(OBJDIR)/__testandset.o
 
 LIBGMON_OBJS=$(OBJDIR)/__mcount.o $(OBJDIR)/monitor.o $(OBJDIR)/profil.o
 
@@ -239,7 +239,7 @@ $(OBJDIR)/libcrypt.a: | $(OBJDIR)
 
 dummy.o:
 
-LIBLATIN1_OBJS=$(patsubst liblatin1/%.c,$(OBJDIR)/%.o,$(wildcard liblatin1/*.c))
+LIBLATIN1_OBJS=$(patsubst liblatin1/%.c,$(OBJDIR)/%.o,$(sort $(wildcard liblatin1/*.c)))
 $(OBJDIR)/liblatin1.a: $(LIBLATIN1_OBJS)
 	$(CROSS)ar cru $@ $^
 
@@ -254,6 +254,11 @@ $(OBJDIR)/libcompat.a: $(LIBCOMPATOBJ)
 
 $(OBJDIR)/libm.a: $(LIBMATHOBJ)
 	$(CROSS)ar cru $@ $(LIBMATHOBJ)
+
+$(OBJDIR)/seekdir.o $(OBJDIR)/clnt_raw.o $(OBJDIR)/clnt_udp.o \
+$(PICODIR)/seekdir.o $(PICODIR)/clnt_raw.o $(PICODIR)/clnt_udp.o \
+$(OBJDIR)/sha256crypt.o $(OBJDIR)/sha512crypt.o \
+$(PICODIR)/sha256crypt.o $(PICODIR)/sha512crypt.o: CFLAGS+=-fno-strict-aliasing
 
 LD_UNSET = env -u LD_RUN_PATH
 
@@ -335,7 +340,7 @@ VERSION=dietlibc-$(shell head -n 1 CHANGES|sed 's/://')
 CURNAME=$(notdir $(shell pwd))
 
 $(OBJDIR)/diet: $(OBJDIR)/start.o $(OBJDIR)/dyn_start.o diet.c $(OBJDIR)/dietlibc.a $(OBJDIR)/dyn_stop.o
-	$(CCC) -isystem include $(CFLAGS) -nostdlib -o $@ $^ -DDIETHOME=\"$(HOME)\" -DVERSION=\"$(VERSION)\" -lgcc
+	$(CCC) -isystem include $(CFLAGS) -nostdlib -o $@ $^ -DDIETHOME=\"$(DIETHOME)\" -DVERSION=\"$(VERSION)\" -lgcc
 	$(STRIP) -R .comment -R .note $@
 
 $(OBJDIR)/diet-i: $(OBJDIR)/start.o $(OBJDIR)/dyn_start.o diet.c $(OBJDIR)/dietlibc.a $(OBJDIR)/dyn_stop.o
@@ -343,7 +348,7 @@ $(OBJDIR)/diet-i: $(OBJDIR)/start.o $(OBJDIR)/dyn_start.o diet.c $(OBJDIR)/dietl
 	$(STRIP) -R .comment -R .note $@
 
 $(PICODIR)/diet-dyn: $(PICODIR)/start.o $(PICODIR)/dyn_start.o diet.c
-	$(LD_UNSET) $(CCC) -isystem include $(CFLAGS) -fPIC -nostdlib -o $@ $^ -DDIETHOME=\"$(HOME)\" -D__DYN_LIB -DVERSION=\"$(VERSION)\" -L$(PICODIR) -lc -lgcc $(PICODIR)/dyn_stop.o -Wl,-dynamic-linker=$(HOME)/$(PICODIR)/libdl.so
+	$(LD_UNSET) $(CCC) -isystem include $(CFLAGS) -fPIC -nostdlib -o $@ $^ -DDIETHOME=\"$(DIETHOME)\" -D__DYN_LIB -DVERSION=\"$(VERSION)\" -L$(PICODIR) -lc -lgcc $(PICODIR)/dyn_stop.o -Wl,-dynamic-linker=$(DIETHOME)/$(PICODIR)/libdl.so
 	$(STRIP) -R .command -R .note $@
 
 $(PICODIR)/diet-dyn-i: $(PICODIR)/start.o $(PICODIR)/dyn_start.o diet.c

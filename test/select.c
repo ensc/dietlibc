@@ -2,12 +2,16 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <string.h>
+#include <stdio.h>
 
 int main() {
   fd_set f;
   struct timeval tv;
   FD_ZERO(&f);
   tv.tv_sec=3; tv.tv_usec=0;
-  select(1,&f,0,0,&tv);
+  if (select(1,&f,0,0,&tv)==-1) {
+    perror("select");
+    return 1;
+  }
   return 0;
 }

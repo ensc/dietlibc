@@ -15,7 +15,7 @@ FUNC_START	__sigsetjmp
 #endif
 
 #ifndef __SOFTFP__
-# if __ARM_ARCH__ >= 7
+# if __ARM_ARCH__ >= 6
 	vstmia	ip!, {d0-d15}
 #   ifdef __ARM_NEON__
 	vstmia	ip!, {d16-d31}
