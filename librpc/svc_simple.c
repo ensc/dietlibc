@@ -96,20 +96,20 @@ static int registerrpc(int prognum, int versnum, int procnum, char *(*progname)(
 	return (0);
 }
 
-static void universal(rqstp, transp)
+static void universal(rqstp, mytransp)
 struct svc_req *rqstp;
-SVCXPRT *transp;
+SVCXPRT *mytransp;
 {
 	int prog, proc;
 	char *outdata;
 	char xdrbuf[UDPMSGSIZE];
-	struct proglst *pl;
+	struct proglst *mypl;
 
 	/* 
 	 * enforce "procnum 0 is echo" convention
 	 */
 	if (rqstp->rq_proc == NULLPROC) {
-		if (svc_sendreply(transp, (xdrproc_t)xdr_void, (char *) NULL) == FALSE) {
+		if (svc_sendreply(mytransp, (xdrproc_t)xdr_void, (char *) NULL) == FALSE) {
 			(void) fprintf(stderr, "xxx\n");
 			exit(1);
 		}
@@ -117,26 +117,26 @@ SVCXPRT *transp;
 	}
 	prog = rqstp->rq_prog;
 	proc = rqstp->rq_proc;
-	for (pl = proglst; pl != NULL; pl = pl->p_nxt)
-		if (pl->p_prognum == prog && pl->p_procnum == proc) {
+	for (mypl = proglst; mypl != NULL; mypl = mypl->p_nxt)
+		if (mypl->p_prognum == prog && mypl->p_procnum == proc) {
 			/* decode arguments into a CLEAN buffer */
 			memset(xdrbuf, 0, sizeof(xdrbuf));	/* required ! */
-			if (!svc_getargs(transp, pl->p_inproc, xdrbuf)) {
-				svcerr_decode(transp);
+			if (!svc_getargs(mytransp, mypl->p_inproc, xdrbuf)) {
+				svcerr_decode(mytransp);
 				return;
 			}
-			outdata = (*(pl->p_progname)) (xdrbuf);
-			if (outdata == NULL && pl->p_outproc != (xdrproc_t)xdr_void)
+			outdata = (*(mypl->p_progname)) (xdrbuf);
+			if (outdata == NULL && mypl->p_outproc != (xdrproc_t)xdr_void)
 				/* there was an error */
 				return;
-			if (!svc_sendreply(transp, pl->p_outproc, outdata)) {
+			if (!svc_sendreply(mytransp, mypl->p_outproc, outdata)) {
 				(void) fprintf(stderr,
 							   "trouble replying to prog %d\n",
-							   pl->p_prognum);
+							   mypl->p_prognum);
 				exit(1);
 			}
 			/* free the decoded arguments */
-			(void) svc_freeargs(transp, pl->p_inproc, xdrbuf);
+			(void) svc_freeargs(mytransp, mypl->p_inproc, xdrbuf);
 			return;
 		}
 	(void) fprintf(stderr, "never registered prog %d\n", prog);

@@ -83,12 +83,14 @@ endif
 endif
 endif
 
+PIE=-fpie -fvisibility=hidden
+
 # ARCH=$(MYARCH)
 
 OBJDIR=bin-$(ARCH)
 ILIBDIR=$(LIBDIR)-$(ARCH)
 
-HOME=$(shell pwd)
+DIETHOME=$(shell pwd)
 
 WHAT=	$(OBJDIR) $(OBJDIR)/start.o $(OBJDIR)/dyn_start.o $(OBJDIR)/dyn_stop.o \
 	$(OBJDIR)/dietlibc.a $(OBJDIR)/liblatin1.a \
@@ -114,27 +116,27 @@ INC=-I. -isystem include
 
 VPATH=lib:libstdio:libugly:libcruft:libcrypt:libshell:liblatin1:libcompat:libdl:librpc:libregex:libm:profiling
 
-SYSCALLOBJ=$(patsubst syscalls.s/%.S,$(OBJDIR)/%.o,$(wildcard syscalls.s/*.S))
+SYSCALLOBJ=$(patsubst syscalls.s/%.S,$(OBJDIR)/%.o,$(sort $(wildcard syscalls.s/*.S)))
 
-LIBOBJ=$(patsubst lib/%.c,$(OBJDIR)/%.o,$(wildcard lib/*.c))
-LIBUGLYOBJ=$(patsubst libugly/%.c,$(OBJDIR)/%.o,$(wildcard libugly/*.c))
-LIBSTDIOOBJ=$(patsubst libstdio/%.c,$(OBJDIR)/%.o,$(wildcard libstdio/*.c))
-LIBCRUFTOBJ=$(patsubst libcruft/%.c,$(OBJDIR)/%.o,$(wildcard libcruft/*.c))
-LIBCRYPTOBJ=$(patsubst libcrypt/%.c,$(OBJDIR)/%.o,$(wildcard libcrypt/*.c))
-LIBSHELLOBJ=$(patsubst libshell/%.c,$(OBJDIR)/%.o,$(wildcard libshell/*.c))
-LIBCOMPATOBJ=$(patsubst libcompat/%.c,$(OBJDIR)/%.o,$(wildcard libcompat/*.c)) $(OBJDIR)/syscall.o
-LIBMATH=$(patsubst libm/%.c,%.o,$(wildcard libm/*.c))
+LIBOBJ=$(patsubst lib/%.c,$(OBJDIR)/%.o,$(sort $(wildcard lib/*.c)))
+LIBUGLYOBJ=$(patsubst libugly/%.c,$(OBJDIR)/%.o,$(sort $(wildcard libugly/*.c)))
+LIBSTDIOOBJ=$(patsubst libstdio/%.c,$(OBJDIR)/%.o,$(sort $(wildcard libstdio/*.c)))
+LIBCRUFTOBJ=$(patsubst libcruft/%.c,$(OBJDIR)/%.o,$(sort $(wildcard libcruft/*.c)))
+LIBCRYPTOBJ=$(patsubst libcrypt/%.c,$(OBJDIR)/%.o,$(sort $(wildcard libcrypt/*.c)))
+LIBSHELLOBJ=$(patsubst libshell/%.c,$(OBJDIR)/%.o,$(sort $(wildcard libshell/*.c)))
+LIBCOMPATOBJ=$(patsubst libcompat/%.c,$(OBJDIR)/%.o,$(sort $(wildcard libcompat/*.c))) $(OBJDIR)/syscall.o
+LIBMATH=$(patsubst libm/%.c,%.o,$(sort $(wildcard libm/*.c)))
 
-LIBRPCOBJ=$(patsubst librpc/%.c,$(OBJDIR)/%.o,$(wildcard librpc/*.c))
-LIBREGEXOBJ=$(patsubst libregex/%.c,$(OBJDIR)/%.o,$(wildcard libregex/*.c))
+LIBRPCOBJ=$(patsubst librpc/%.c,$(OBJDIR)/%.o,$(sort $(wildcard librpc/*.c)))
+LIBREGEXOBJ=$(patsubst libregex/%.c,$(OBJDIR)/%.o,$(sort $(wildcard libregex/*.c)))
 
-LIBDLOBJ=$(patsubst libdl/%.c,$(OBJDIR)/%.o,$(wildcard libdl/*.c)) $(OBJDIR)/_dl_jump.o
+LIBDLOBJ=$(patsubst libdl/%.c,$(OBJDIR)/%.o,$(sort $(wildcard libdl/*.c))) $(OBJDIR)/_dl_jump.o
 
-LIBPTHREAD_OBJS=$(patsubst libpthread/%.c,$(OBJDIR)/%.o,$(shell ./threadsafe.sh)) $(OBJDIR)/__testandset.o
+LIBPTHREAD_OBJS=$(patsubst libpthread/%.c,$(OBJDIR)/%.o,$(sort $(shell ./threadsafe.sh))) $(OBJDIR)/__testandset.o
 
 LIBGMON_OBJS=$(OBJDIR)/__mcount.o $(OBJDIR)/monitor.o $(OBJDIR)/profil.o
 
-NO_STACK_PROTECTOR=stackgap.o __get_elf_aux_value.o
+NO_STACK_PROTECTOR=stackgap.o stackgap-pie.o __get_elf_aux_value.o
 
 include $(ARCH)/Makefile.add
 
@@ -153,6 +155,12 @@ CFLAGS += -W -Wall -Wextra -Wchar-subscripts -Wmissing-prototypes -Wmissing-decl
 ASM_CFLAGS = -Wa,--noexecstack
 ifneq ($(subst clang,fnord,$(CC)),$(CC))
 ASM_CFLAGS += -fno-integrated-as
+endif
+
+ifeq ($(ALWAYS_PIC),1)
+CCFLAGS=$(CFLAGS) $(PIE)
+else
+CCFLAGS=$(CFLAGS)
 endif
 
 PWD=$(shell pwd)
@@ -177,18 +185,18 @@ $(OBJDIR)/%.o: %.c | $(OBJDIR)
 	-$(STRIP) -x -R .comment -R .note $@
 else
 $(OBJDIR)/pstart.o: start.S | $(OBJDIR)
-	$(CCC) $(INC) $(CFLAGS) $(EXTRACFLAGS) -DPROFILING -c $< $(ASM_CFLAGS) -o $@
+	$(CCC) $(INC) $(CCFLAGS) $(EXTRACFLAGS) -DPROFILING -c $< $(ASM_CFLAGS) -o $@
 
 $(OBJDIR)/%.o: %.S $(ARCH)/syscalls.h | $(OBJDIR)
-	$(CCC) $(INC) $(CFLAGS) $(EXTRACFLAGS) -c $< $(ASM_CFLAGS) -o $@
+	$(CCC) $(INC) $(CCFLAGS) $(EXTRACFLAGS) -c $< $(ASM_CFLAGS) -o $@
 
 $(OBJDIR)/pthread_%.o: libpthread/pthread_%.c | $(OBJDIR)
-	$(CCC) $(INC) $(CFLAGS) $(EXTRACFLAGS) -c $< -o $@
+	$(CCC) $(INC) $(CCFLAGS) $(EXTRACFLAGS) -c $< -o $@
 	-$(STRIP) -x -R .comment -R .note $@
 $(OBJDIR)/stack_smash_handler2.o:	EXTRACFLAGS:=-fno-omit-frame-pointer
 
 $(OBJDIR)/%.o: %.c | $(OBJDIR)
-	$(CCC) $(INC) $(CFLAGS) $(EXTRACFLAGS) -c $< -o $@ -D__dietlibc__
+	$(CCC) $(INC) $(CCFLAGS) $(EXTRACFLAGS) -c $< -o $@ -D__dietlibc__
 	-$(STRIP) -x -R .comment -R .note $@
 
 $(addprefix $(OBJDIR)/,$(NO_STACK_PROTECTOR)) \
@@ -198,14 +206,21 @@ endif
 
 
 ifeq ($(shell $(CC) -v 2>&1 | grep "gcc version"),gcc version 4.0.0)
-SAFE_CFLAGS=$(shell echo $(CFLAGS)|sed 's/-Os/-O2/')
-SAFER_CFLAGS=$(shell echo $(CFLAGS)|sed 's/-Os/-O/')
+SAFE_CFLAGS=$(shell echo $(CCFLAGS)|sed 's/-Os/-O2/')
+SAFER_CFLAGS=$(shell echo $(CCFLAGS)|sed 's/-Os/-O/')
 else
-SAFE_CFLAGS=$(CFLAGS)
-SAFER_CFLAGS=$(CFLAGS)
+SAFE_CFLAGS=$(CCFLAGS)
+SAFER_CFLAGS=$(CCFLAGS)
 endif
 
 CC+=-D__dietlibc__
+
+$(OBJDIR)/start-pie.o: $(ARCH)/start.S | $(OBJDIR)
+	$(CCC) $(INC) $(CCFLAGS) $(EXTRACFLAGS) -c $< $(ASM_CFLAGS) -fpie -o $@
+
+$(OBJDIR)/start.o: $(ARCH)/start.S | $(OBJDIR)
+	$(CCC) $(INC) $(CCFLAGS) $(EXTRACFLAGS) -c $< $(ASM_CFLAGS) -fno-pie -o $@
+
 
 $(OBJDIR)/crypt.o: libcrypt/crypt.c | $(OBJDIR)
 	$(CCC) $(INC) $(SAFER_CFLAGS) $(EXTRACFLAGS) -c $< -o $@
@@ -217,34 +232,39 @@ $(OBJDIR)/__longjmp.o $(OBJDIR)/setjmp.o \
 $(OBJDIR)/clone.o
 
 $(OBJDIR)/dietlibc.a: $(DIETLIBC_OBJ) $(OBJDIR)/start.o
-	$(CROSS)ar cr $@ $(DIETLIBC_OBJ)
+	$(CROSS)ar cru $@ $(DIETLIBC_OBJ)
 
 $(OBJDIR)/librpc.a: $(LIBRPCOBJ)
-	$(CROSS)ar cr $@ $(LIBRPCOBJ)
+	$(CROSS)ar cru $@ $(LIBRPCOBJ)
 
 $(OBJDIR)/libcrypt.a: | $(OBJDIR)
 	touch dummy.c
 	$(CCC) -c dummy.c
-	$(CROSS)ar cr $@ dummy.o
+	$(CROSS)ar cru $@ dummy.o
 	rm -f dummy.c dummy.o
 
 dummy.o:
 
-LIBLATIN1_OBJS=$(patsubst liblatin1/%.c,$(OBJDIR)/%.o,$(wildcard liblatin1/*.c))
+LIBLATIN1_OBJS=$(patsubst liblatin1/%.c,$(OBJDIR)/%.o,$(sort $(wildcard liblatin1/*.c)))
 $(OBJDIR)/liblatin1.a: $(LIBLATIN1_OBJS)
-	$(CROSS)ar cr $@ $^
+	$(CROSS)ar cru $@ $^
 
 $(OBJDIR)/libgmon.a: $(LIBGMON_OBJS)
-	$(CROSS)ar cr $@ $^
+	$(CROSS)ar cru $@ $^
 
 $(OBJDIR)/libpthread.a: $(LIBPTHREAD_OBJS) dietfeatures.h
-	$(CROSS)ar cr $@ $(LIBPTHREAD_OBJS)
+	$(CROSS)ar cru $@ $(LIBPTHREAD_OBJS)
 
 $(OBJDIR)/libcompat.a: $(LIBCOMPATOBJ)
-	$(CROSS)ar cr $@ $(LIBCOMPATOBJ)
+	$(CROSS)ar cru $@ $(LIBCOMPATOBJ)
 
 $(OBJDIR)/libm.a: $(LIBMATHOBJ)
-	$(CROSS)ar cr $@ $(LIBMATHOBJ)
+	$(CROSS)ar cru $@ $(LIBMATHOBJ)
+
+$(OBJDIR)/seekdir.o $(OBJDIR)/clnt_raw.o $(OBJDIR)/clnt_udp.o \
+$(PICODIR)/seekdir.o $(PICODIR)/clnt_raw.o $(PICODIR)/clnt_udp.o \
+$(OBJDIR)/sha256crypt.o $(OBJDIR)/sha512crypt.o \
+$(PICODIR)/sha256crypt.o $(PICODIR)/sha512crypt.o: CFLAGS+=-fno-strict-aliasing
 
 LD_UNSET = env -u LD_RUN_PATH
 
@@ -252,7 +272,7 @@ dyn: dyn_lib
 
 # added dynamic linker
 $(OBJDIR)/libdl.a: $(LIBDLOBJ)
-	$(CROSS)ar cr $@ $(LIBDLOBJ)
+	$(CROSS)ar cru $@ $(LIBDLOBJ)
 
 dyn_lib: $(PICODIR) $(PICODIR)/libc.so $(PICODIR)/dstart.o \
 	$(PICODIR)/dyn_so_start.o $(PICODIR)/dyn_start.o $(PICODIR)/dyn_stop.o \
@@ -260,21 +280,21 @@ dyn_lib: $(PICODIR) $(PICODIR)/libc.so $(PICODIR)/dstart.o \
 	$(PICODIR)/libm.so $(PICODIR)/diet-dyn $(PICODIR)/diet-dyn-i
 
 $(PICODIR)/%.o: %.S $(ARCH)/syscalls.h | $(PICODIR)
-	$(CCC) $(INC) $(CFLAGS) $(EXTRACFLAGS) -fPIC -D__DYN_LIB $(ASM_CFLAGS) -c $< -o $@
+	$(CCC) $(INC) $(CCFLAGS) $(EXTRACFLAGS) -fPIC -D__DYN_LIB $(ASM_CFLAGS) -c $< -o $@
 
 $(PICODIR)/pthread_%.o: libpthread/pthread_%.c | $(PICODIR)
-	$(CCC) $(INC) $(CFLAGS) $(EXTRACFLAGS) -fPIC -D__DYN_LIB -c $< -o $@
+	$(CCC) $(INC) $(CCFLAGS) $(EXTRACFLAGS) -fPIC -D__DYN_LIB -c $< -o $@
 	$(STRIP) -x -R .comment -R .note $@
 
 $(PICODIR)/%.o: %.c | $(PICODIR)
-	$(CCC) $(INC) $(CFLAGS) $(EXTRACFLAGS) -fPIC -D__DYN_LIB -c $< -o $@
+	$(CCC) $(INC) $(CCFLAGS) $(EXTRACFLAGS) -fPIC -D__DYN_LIB -c $< -o $@
 	$(STRIP) -x -R .comment -R .note $@
 
 $(PICODIR)/dstart.o: start.S | $(PICODIR)
-	$(CCC) $(INC) $(CFLAGS) $(EXTRACFLAGS) -fPIC -D__DYN_LIB $(ASM_CFLAGS) -c $< -o $@
+	$(CCC) $(INC) $(CCFLAGS) $(EXTRACFLAGS) -fPIC -D__DYN_LIB $(ASM_CFLAGS) -c $< -o $@
 
 $(PICODIR)/dyn_so_start.o: dyn_start.c | $(PICODIR)
-	$(CCC) $(INC) $(CFLAGS) $(EXTRACFLAGS) -fPIC -D__DYN_LIB -D__DYN_LIB_SHARED -c $< -o $@
+	$(CCC) $(INC) $(CCFLAGS) $(EXTRACFLAGS) -fPIC -D__DYN_LIB -D__DYN_LIB_SHARED -c $< -o $@
 	$(STRIP) -x -R .comment -R .note $@
 
 DYN_LIBC_PIC = $(LIBOBJ) $(LIBSTDIOOBJ) $(LIBUGLYOBJ) \
@@ -292,10 +312,10 @@ DYN_LIBCOMPAT_OBJS = $(patsubst $(OBJDIR)/%.o,$(PICODIR)/%.o,$(LIBCOMPATOBJ))
 DYN_LIBMATH_OBJS = $(patsubst $(OBJDIR)/%.o,$(PICODIR)/%.o,$(LIBMATHOBJ))
 
 $(PICODIR)/libc.so: $(DYN_LIBC_OBJ)
-	$(LD_UNSET) $(CCC) -nostdlib -shared -o $@ $(CFLAGS) -fPIC $(DYN_LIBC_OBJ) -lgcc -Wl,-soname=libc.so
+	$(LD_UNSET) $(CCC) -nostdlib -shared -o $@ $(CCFLAGS) -fPIC $(DYN_LIBC_OBJ) -lgcc -Wl,-soname=libc.so
 
 $(PICODIR)/libpthread.so: $(DYN_PTHREAD_OBJS) dietfeatures.h $(PICODIR)/libc.so
-	$(LD_UNSET) $(CCC) -nostdlib -shared -o $@ $(CFLAGS) -fPIC $(DYN_PTHREAD_OBJS) -L$(PICODIR) -lc -Wl,-soname=libpthread.so
+	$(LD_UNSET) $(CCC) -nostdlib -shared -o $@ $(CCFLAGS) -fPIC $(DYN_PTHREAD_OBJS) -L$(PICODIR) -lc -Wl,-soname=libpthread.so
 
 $(PICODIR)/libdl.so: libdl/_dl_main.c dietfeatures.h $(PICODIR)/libc.so
 	$(LD_UNSET) $(CCC) -D__OD_CLEAN_ROOM -DNODIETREF -fPIC -nostdlib -shared -Bsymbolic -Wl,-Bsymbolic \
@@ -305,13 +325,13 @@ $(OBJDIR)/pthread_create.o $(PICODIR)/pthread_create.o: dietfeatures.h
 $(OBJDIR)/pthread_internal.o $(PICODIR)/pthread_internal.o: dietfeatures.h
 
 #$(PICODIR)/libdl.so: $(DYN_LIBDL_OBJS) dietfeatures.h
-#	$(CCC) -nostdlib -shared -o $@ $(CFLAGS) -fPIC $(DYN_LIBDL_OBJS) -L$(PICODIR) -ldietc -Wl,-soname=libdl.so
+#	$(CCC) -nostdlib -shared -o $@ $(CCFLAGS) -fPIC $(DYN_LIBDL_OBJS) -L$(PICODIR) -ldietc -Wl,-soname=libdl.so
 
 $(PICODIR)/libcompat.so: $(DYN_LIBCOMPAT_OBJS) dietfeatures.h $(PICODIR)/libc.so
-	$(LD_UNSET) $(CCC) -nostdlib -shared -o $@ $(CFLAGS) -fPIC $(DYN_LIBCOMPAT_OBJS) -L$(PICODIR) -lc -Wl,-soname=libcompat.so
+	$(LD_UNSET) $(CCC) -nostdlib -shared -o $@ $(CCFLAGS) -fPIC $(DYN_LIBCOMPAT_OBJS) -L$(PICODIR) -lc -Wl,-soname=libcompat.so
 
 $(PICODIR)/libm.so: $(DYN_LIBMATH_OBJS) dietfeatures.h $(PICODIR)/libc.so
-	$(LD_UNSET) $(CCC) -nostdlib -shared -o $@ $(CFLAGS) -fPIC $(DYN_LIBMATH_OBJS) -L$(PICODIR) -lc -Wl,-soname=libm.so
+	$(LD_UNSET) $(CCC) -nostdlib -shared -o $@ $(CCFLAGS) -fPIC $(DYN_LIBMATH_OBJS) -L$(PICODIR) -lc -Wl,-soname=libm.so
 
 
 $(SYSCALLOBJ): syscalls.h
@@ -326,7 +346,7 @@ VERSION=dietlibc-$(shell head -n 1 CHANGES|sed 's/://')
 CURNAME=$(notdir $(shell pwd))
 
 $(OBJDIR)/diet: $(OBJDIR)/start.o $(OBJDIR)/dyn_start.o diet.c $(OBJDIR)/dietlibc.a $(OBJDIR)/dyn_stop.o
-	$(CCC) -isystem include $(CFLAGS) -nostdlib -o $@ $^ -DDIETHOME=\"$(HOME)\" -DVERSION=\"$(VERSION)\" -lgcc
+	$(CCC) -isystem include $(CFLAGS) -nostdlib -o $@ $^ -DDIETHOME=\"$(DIETHOME)\" -DVERSION=\"$(VERSION)\" -lgcc
 	$(STRIP) -R .comment -R .note $@
 
 $(OBJDIR)/diet-i: $(OBJDIR)/start.o $(OBJDIR)/dyn_start.o diet.c $(OBJDIR)/dietlibc.a $(OBJDIR)/dyn_stop.o
@@ -334,7 +354,7 @@ $(OBJDIR)/diet-i: $(OBJDIR)/start.o $(OBJDIR)/dyn_start.o diet.c $(OBJDIR)/dietl
 	$(STRIP) -R .comment -R .note $@
 
 $(PICODIR)/diet-dyn: $(PICODIR)/start.o $(PICODIR)/dyn_start.o diet.c
-	$(LD_UNSET) $(CCC) -isystem include $(CFLAGS) -fPIC -nostdlib -o $@ $^ -DDIETHOME=\"$(HOME)\" -D__DYN_LIB -DVERSION=\"$(VERSION)\" -L$(PICODIR) -lc -lgcc $(PICODIR)/dyn_stop.o -Wl,-dynamic-linker=$(HOME)/$(PICODIR)/libdl.so
+	$(LD_UNSET) $(CCC) -isystem include $(CFLAGS) -fPIC -nostdlib -o $@ $^ -DDIETHOME=\"$(DIETHOME)\" -D__DYN_LIB -DVERSION=\"$(VERSION)\" -L$(PICODIR) -lc -lgcc $(PICODIR)/dyn_stop.o -Wl,-dynamic-linker=$(DIETHOME)/$(PICODIR)/libdl.so
 	$(STRIP) -R .command -R .note $@
 
 $(PICODIR)/diet-dyn-i: $(PICODIR)/start.o $(PICODIR)/dyn_start.o diet.c
@@ -344,7 +364,7 @@ $(PICODIR)/diet-dyn-i: $(PICODIR)/start.o $(PICODIR)/dyn_start.o diet.c
 $(OBJDIR)/djb: $(OBJDIR)/compile $(OBJDIR)/load
 
 $(OBJDIR)/compile:
-	echo 'exec' $(CC) '$(CFLAGS) -I$(PWD)/$(OBJDIR)/include -c $${1+"$$@"}' > $@
+	echo 'exec' $(CC) '$(CCFLAGS) -I$(PWD)/$(OBJDIR)/include -c $${1+"$$@"}' > $@
 	chmod 755 $@
 
 $(OBJDIR)/load:
@@ -376,7 +396,8 @@ t1:
 
 install-bin: $(OBJDIR)/start.o $(OBJDIR)/dietlibc.a $(OBJDIR)/librpc.a $(OBJDIR)/liblatin1.a $(OBJDIR)/libcompat.a $(OBJDIR)/elftrunc $(OBJDIR)/diet-i
 	$(INSTALL) -d $(DESTDIR)$(ILIBDIR) $(DESTDIR)$(MAN1DIR) $(DESTDIR)$(BINDIR)
-	$(INSTALL) -m 644 $(OBJDIR)/start.o $(OBJDIR)/dyn_start.o $(OBJDIR)/dyn_stop.o $(DESTDIR)$(ILIBDIR)/
+	$(INSTALL) -m 644 $(OBJDIR)/start.o $(OBJDIR)/start-pie.o $(DESTDIR)$(ILIBDIR)/
+	$(INSTALL) -m 644 $(OBJDIR)/dyn_start.o $(OBJDIR)/dyn_stop.o $(DESTDIR)$(ILIBDIR)/
 	$(INSTALL) -m 644 $(OBJDIR)/libm.a $(OBJDIR)/libpthread.a $(OBJDIR)/librpc.a \
 $(OBJDIR)/liblatin1.a $(OBJDIR)/libcompat.a $(OBJDIR)/libcrypt.a $(DESTDIR)$(ILIBDIR)
 	$(INSTALL) -m 644 $(OBJDIR)/dietlibc.a $(DESTDIR)$(ILIBDIR)/libc.a
@@ -464,7 +485,7 @@ cross:
 
 # DOES NOT WORK YET
 mips64:
-	ARCH=mips64 CROSS=mips64-linux- CC="gcc -mabi=64"
+	$(MAKE) ARCH=mips64 CROSS=mips64-linux- CC="gcc -mabi=64"
 
 
 # these depend on dietfeatures.h for large file backward compatibility
@@ -481,9 +502,6 @@ fclose.o $(OBJDIR)/fdglue.o $(OBJDIR)/fflush.o $(OBJDIR)/fgetc.o $(OBJDIR)/fputc
 
 # these depend on dietfeatures.h for fast string routines
 strcasecmp.o $(OBJDIR)/strcat.o $(OBJDIR)/strchr.o $(OBJDIR)/strcmp.o $(OBJDIR)/strcpy.o $(OBJDIR)/strlen.o $(OBJDIR)/strncasecmp.o $(OBJDIR)/strncat.o $(OBJDIR)/strrchr.o $(OBJDIR)/memchr.o: dietfeatures.h
-
-# this depends on dietfeatures.h for WANT_NON_COMPLIANT_STRNCAT
-$(OBJDIR)/strncpy.o: dietfeatures.h
 
 # these depend on dietfeatures.h for /proc
 $(OBJDIR)/ttyname.o $(OBJDIR)/sysconf_cpus.o: dietfeatures.h
@@ -531,7 +549,7 @@ $(OBJDIR)/setlinebuf.o $(OBJDIR)/bzero.o $(OBJDIR)/setegid.o \
 $(OBJDIR)/seteuid.o $(OBJDIR)/toascii.o: dietfeatures.h
 
 # these depend on dietfeatures.h for WANT_FULL_POSIX_COMPAT
-$(OBJDIR)/strncpy.o: dietfeatures.h
+$(OBJDIR)/strncpy.o $(OBJDIR)/stpncpy.o: dietfeatures.h
 $(OBJDIR)/strxfrm.o: dietfeatures.h
 
 $(OBJDIR)/stat.o $(OBJDIR)/fstat.o $(OBJDIR)/lstat.o: include/sys/stat.h
@@ -555,6 +573,10 @@ $(LIBPTHREAD_OBJS): include/pthread.h
 
 # WANT_LARGEFILE_BACKCOMPAT
 $(OBJDIR)/fcntl64.o: dietfeatures.h
+
+$(OBJDIR)/stackgap-pie.o: EXTRACFLAGS+=-Dstackgap=stackgap_pie -fpie -fvisibility=hidden
+
+$(OBJDIR)/stackgap.o $(OBJDIR)/stackgap-pie.o $(PICODIR)/stackgap.o: lib/stackgap-common.h
 
 # WANT_MALLOC_ZERO
 $(OBJDIR)/strndup.o: dietfeatures.h

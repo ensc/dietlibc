@@ -4,6 +4,8 @@
 
 #include <errno.h>
 #include "syscalls.h"
+#include "dietfeatures.h"
+#include "arm-features.h"
 
 .text
 
@@ -16,13 +18,12 @@
 @ call the syscall.
 @
 
-.global mmap
-
-mmap:
+FUNC_START	mmap
 	stmdb	sp!, {r0, r1, r2, r3}
 	mov	r0, sp
 	swi	__NR_mmap
 	add	sp, sp, #16
 	b	__unified_syscall
+FUNC_END	mmap
 
 #endif

@@ -37,8 +37,8 @@
 /* do you want smaller or faster string routines? */
 #define WANT_FASTER_STRING_ROUTINES
 
-/* define this to have strncpy zero-fill and not just zero-terminate the
- * string */
+/* define this to have strncpy and stpncpy zero-fill and not just
+ * zero-terminate the destination string */
 /* #define WANT_FULL_POSIX_COMPAT */
 
 /* on i386, Linux has an alternate syscall method since 2002/12/16 */
@@ -79,6 +79,12 @@
 
 /* do you want crypt(3) to use MD5 if the salt starts with "$1$"? */
 #define WANT_CRYPT_MD5
+
+/* do you want crypt(3) to use SHA256 if the salt starts with "$5$? */
+#define WANT_CRYPT_SHA256
+
+/* do you want crypt(3) to use SHA512 if the salt starts with "$6$? */
+#define WANT_CRYPT_SHA512
 
 /* do you want diet to include a safeguard dependency to make linking
  * against glibc fail?  This may fail with older binutils. */
@@ -163,6 +169,7 @@
 
 #if defined(WANT_SSP) || defined(WANT_STACKGAP) || defined(WANT_TLS)
 #define CALL_IN_STARTCODE stackgap
+#define CALL_IN_STARTCODE_PIE stackgap_pie
 #else
 #define CALL_IN_STARTCODE main
 #endif

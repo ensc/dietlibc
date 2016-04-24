@@ -318,6 +318,8 @@
 #define __NR_getrandom			1339
 #define __NR_memfd_create		1340
 
+#define __NR_umount_with_flags __NR_umount
+
 #define syscall(name, sym) \
 .text; \
 .globl sym; \

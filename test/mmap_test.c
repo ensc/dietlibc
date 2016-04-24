@@ -71,7 +71,7 @@ int main (int argc, char * argv[])
       fprintf (stderr, "mmap allowed a bogus file descriptor...\n");
       return (1);
    }
-   
+
    /*
       Check that we can read back from the file OK
    */

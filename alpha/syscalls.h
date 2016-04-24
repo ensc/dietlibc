@@ -231,6 +231,8 @@
 #define __NR_osf_memcntl	260	/* not implemented */
 #define __NR_osf_fdatasync	261	/* not implemented */
 
+#define __NR_umount_without_flags __NR_oldumount
+#define __NR_umount_with_flags __NR_umount
 
 /*
  * Linux-specific system calls begin at 300

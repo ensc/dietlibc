@@ -12,9 +12,9 @@ CC=gcc
 
 VPATH=../$(ARCH)/
 
-PTHREAD_OBJS = __testandset.o $(patsubst %.c,%.o,$(wildcard pthread_*.c))
+PTHREAD_OBJS = __testandset.o $(patsubst %.c,%.o,$(sort $(wildcard pthread_*.c)))
 
-TESTS = $(patsubst %.c,%,$(wildcard test-*.c))
+TESTS = $(patsubst %.c,%,$(sort $(wildcard test-*.c)))
 
 %.o : %.c
 	$(CC) $(CFLAGS) -c -o $@ $?

@@ -4,14 +4,9 @@
 #include <dietfeatures.h>
 
 .type environ,object
-.type __environ,object
-#ifdef WANT_ELFINFO
-.global environ
-.global __environ
-#else
 .weak environ
+.type __environ,object
 .weak __environ
-#endif
 __environ:
 environ:
 #if __WORDSIZE == 64
@@ -27,8 +22,7 @@ environ:
 
 #ifdef WANT_ELFINFO
 .type __elfinfo,object
-.global __elfinfo
-.protected __elfinfo
+.weak __elfinfo
 __elfinfo:
 #if __WORDSIZE == 64
 	.quad 0

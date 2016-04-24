@@ -3,7 +3,7 @@
 CC  = $(CROSS)gcc
 DCC = diet $(CC)
 
-SRC = $(wildcard *.c) # test/test.c
+SRC = $(sort $(wildcard *.c)) # test/test.c
 OBJ = _dl_jump.o $(SRC:.c=.o)
 
 #CFLAGS = -Wall -D__OD_CLEAN_ROOM -DNODIETREF -fPIC -g -O

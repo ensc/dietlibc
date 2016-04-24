@@ -39,7 +39,7 @@
 # define __LONG_LONG_PAIR(HI, LO) HI, LO
 #endif
 
-#if defined(__alpha__) || defined(__mips64__) || defined(__sparc_v9__) || defined(__ia64__) || defined(__powerpc64__) || defined(__s390x__)
+#if defined(__alpha__) || defined(__mips64__) || defined(__sparcv9) || defined(__ia64__) || defined(__powerpc64__) || defined(__s390x__)
 #define __WORDSIZE 64
 #endif
 
@@ -51,12 +51,13 @@
 #endif
 #endif
 
-#if defined(__x86_64__) || defined(__powerpc64__) || defined(__sparc_v9__)
+#if defined(__x86_64__) || defined(__powerpc64__) || defined(__sparcv9)
 #define __WORDSIZE_COMPAT32 1
 #endif
 
 #if defined(__sparc__) && (__arch64__)
 #define __WORDSIZE 64
+#define __WORDSIZE_COMPAT32 1
 #endif
 
 #ifdef __WORDSIZE

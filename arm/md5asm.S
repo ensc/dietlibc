@@ -52,7 +52,6 @@
 *****************************************************************************/
 
 #include <endian.h>
-#include "arm-features.h"
 
 #if (__BYTE_ORDER == __LITTLE_ENDIAN)
 
@@ -390,5 +389,3 @@ __UnalignedMD5Transform:
 
 
 #endif   /* __BYTE_ORDER == __LITTLE_ENDIAN */
-
-
