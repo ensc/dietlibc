@@ -12,7 +12,7 @@ size_t fread_unlocked(void *ptr, size_t size, size_t nmemb, FILE *stream) {
     return 0;
   }
   if (!j || j/nmemb!=size) return 0;
-  if (stream->ungotten) {
+  if (__unlikely(stream->ungotten)) {
     stream->ungotten=0;
     *(char*)ptr=stream->ungetbuf;
     ++i;
@@ -20,15 +20,29 @@ size_t fread_unlocked(void *ptr, size_t size, size_t nmemb, FILE *stream) {
   }
 
 #ifdef WANT_FREAD_OPTIMIZATION
+  size_t inbuf=stream->bs-stream->bm;
+  if (__unlikely(!inbuf)) {
+    stream->bm=0;
+    ssize_t res=__libc_read(stream->fd,stream->buf,stream->buflen);
+    if (res<1) {
+      stream->flags |= (res==0 ? EOFINDICATOR : ERRORINDICATOR);
+      return i/size;
+    }
+    inbuf=stream->bs=res;
+  }
+  if (inbuf) {
+    size_t tocopy=j>inbuf ? inbuf : j;
+    memcpy(ptr+i,stream->buf+stream->bm,tocopy);
+    i+=tocopy;
+    stream->bm+=tocopy;
+    if (stream->bm==stream->bs)
+      stream->bm=stream->bs=0;
+    if (i==j) return nmemb;
+  }
   if ( !(stream->flags&FDPIPE) && (j>stream->buflen)) {
     size_t tmp=j-i;
     ssize_t res;
-    size_t inbuf=stream->bs-stream->bm;
-    memcpy(ptr+i,stream->buf+stream->bm,inbuf);
-    stream->bm=stream->bs=0;
-    tmp-=inbuf;
-    i+=inbuf;
-    if (fflush_unlocked(stream)) return 0;
+//    if (fflush_unlocked(stream)) return 0;
     while ((res=__libc_read(stream->fd,ptr+i,tmp))<(ssize_t)tmp) {
       if (res==-1) {
 	stream->flags|=ERRORINDICATOR;

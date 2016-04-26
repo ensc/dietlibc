@@ -18,7 +18,9 @@ kaputt:
     do {
       res=__libc_write(stream->fd,ptr,len);
     } while (res==-1 && errno==EINTR);
-  } else {
+  } else
+again:
+         {
     /* try to make the common case fast */
     size_t todo=stream->buflen-stream->bm;
     if (todo>len) todo=len;
@@ -44,6 +46,15 @@ kaputt:
 notlinewise:
 	memcpy(stream->buf+stream->bm,ptr,todo);
 	stream->bm+=todo;
+	if (stream->bm==stream->buflen) {
+	  if (fflush_unlocked(stream)) return 0;
+	  /* if we are here, we should not have an empty buffer */
+	  len-=todo;
+	  if (!len) return nmemb;
+	  ptr+=todo;
+	  goto again;
+	} else
+	  return nmemb;
       }
       done=todo;
     } else

@@ -32,7 +32,7 @@ err_out:
   }
   switch (mode&3) {
   case O_RDWR: tmp->flags|=CANWRITE;
-  case O_RDONLY: tmp->flags|=CANREAD; break;
+  case O_RDONLY: tmp->flags|=CANREAD|BUFINPUT; break;
   case O_WRONLY: tmp->flags|=CANWRITE;
   }
   tmp->popen_kludge=0;
