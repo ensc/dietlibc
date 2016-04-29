@@ -12,7 +12,9 @@ size_t __libc_getpagesize(void);
 size_t __libc_getpagesize(void) {
   long* x=(long*)environ;
   int fd;
-  while (*x) ++x; ++x;	/* skip envp to get to auxvec */
+  while (*x) ++x;	/* skip envp to get to auxvec */
+  ++x;
+
   while (*x) {
     if (*x==6)
       return x[1];

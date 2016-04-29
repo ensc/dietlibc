@@ -44,7 +44,8 @@ int __v_printf(struct arg_printf* fn, const char *format, va_list arg_ptr)
   while (*format) {
     unsigned long sz = skip_to(format);
     if (sz) {
-      B_WRITE(fn,format,sz); len+=sz;
+      B_WRITE(fn,format,sz);
+      len+=sz;
       format+=sz;
     }
     if (*format=='%') {
@@ -160,7 +161,8 @@ inn_printf:
       case 'c':
 	ch=(char)va_arg(arg_ptr,int);
       case '%':
-	B_WRITE(fn,&ch,1); ++len;
+	B_WRITE(fn,&ch,1);
+	++len;
 	break;
 
 #ifdef WANT_ERROR_PRINTF
@@ -168,7 +170,8 @@ inn_printf:
       case 'm':
 	s=strerror(_errno);
 	sz=strlen(s);
-	B_WRITE(fn,s,sz); len+=sz;
+	B_WRITE(fn,s,sz);
+	len+=sz;
 	break;
 #endif
       /* print a string */
@@ -190,7 +193,8 @@ print_out:
 	int vs;
 	
 	if (! (width||preci) ) {
-	  B_WRITE(fn,s,sz); len+=sz;
+	  B_WRITE(fn,s,sz);
+	  len+=sz;
 	  break;
 	}
 	
@@ -239,7 +243,8 @@ print_out:
 	if (write_pad(&len,fn,preci-sz,precpadwith))
 	  return -1;
 	/* write actual string */
-	B_WRITE(fn,s,sz); len+=sz;
+	B_WRITE(fn,s,sz);
+	len+=sz;
 	if (flag_left) {
 	  if (write_pad(&len,fn,width-preci,padwith))
 	    return -1;

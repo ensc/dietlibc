@@ -9,7 +9,8 @@ int __exec_shell(const char *file, char *const argv[]) {
   int i;
   const char** shell_argv;
 
-  for (i = 0; argv[i]; ++i); ++i;
+  for (i = 0; argv[i]; ++i);
+  ++i;
 
   shell_argv=alloca(sizeof(char*)*(i+1));
   shell_argv[0] = _PATH_BSHELL;
