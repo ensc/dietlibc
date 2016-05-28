@@ -8,12 +8,13 @@ int dn_skipname(const unsigned char* cur,const unsigned char* eom) {
 	return cur-orig+2;
       else
 	return -1;
-    } else
+    } else {
       if (*cur==0) return cur-orig+1;
       if (cur+*cur+1<eom)
 	cur+=*cur+1;
       else
 	return -1;
+    }
   }
   return -1;
 }

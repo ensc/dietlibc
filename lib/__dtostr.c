@@ -46,10 +46,10 @@ int __dtostr(double d,char *buf,unsigned int maxlen,unsigned int prec,unsigned i
   e10=1+(long)(e*0.30102999566398119802); /* log10(2) */
   /* Wir iterieren von Links bis wir bei 0 sind oder maxlen erreicht
    * ist.  Wenn maxlen erreicht ist, machen wir das nochmal in
-   * scientific notation.  Wenn dann von prec noch was übrig ist, geben
+   * scientific notation.  Wenn dann von prec noch was Ã¼brig ist, geben
    * wir einen Dezimalpunkt aus und geben prec2 Nachkommastellen aus.
    * Wenn prec2 Null ist, geben wir so viel Stellen aus, wie von prec
-   * noch übrig ist. */
+   * noch Ã¼brig ist. */
   if (d==0.0) {
     prec2=prec2==0?1:prec2+2;
     prec2=prec2>maxlen?8:prec2;
@@ -126,11 +126,13 @@ int __dtostr(double d,char *buf,unsigned int maxlen,unsigned int prec,unsigned i
   }
 
   if (buf==oldbuf) {
-    if (!maxlen) return 0; --maxlen;
+    if (!maxlen) return 0;
+    --maxlen;
     *buf='0'; ++buf;
   }
   if (prec2 || prec>(unsigned int)(buf-oldbuf)+1) {	/* more digits wanted */
-    if (!maxlen) return 0; --maxlen;
+    if (!maxlen) return 0;
+    --maxlen;
     *buf='.'; ++buf;
     if ((flags & 0x01)) {
       if (prec2) prec=prec2;
