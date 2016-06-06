@@ -625,7 +625,7 @@ struct stat {
 	uint64_t	st_mtime_nsec;
 	time_t		st_ctime;
 	uint64_t	st_ctime_nsec;
-	unsigned int	__unused[3]
+	uint64_t	__unused[3];
 };
 
 #elif defined(__ia64__)

@@ -14,7 +14,12 @@ static void __restore_rt(void) {
 void __restore_rt(void);
 asm(".text\n" ".align 16\n"
     "__restore_rt:"
-    "movq $15, %rax\n" "syscall\n" "hlt\n");
+#ifdef __ILP32__
+    "movq $0x40000201, %rax\n"
+#else
+    "movq $15, %rax\n"
+#endif
+    "syscall\n" "hlt\n");
 #endif
 
 int __libc_sigaction(int signum, const struct sigaction *act, struct sigaction *oldact);

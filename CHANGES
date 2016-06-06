@@ -49,6 +49,7 @@
   powerpc fixes (Gerrit Pape, Christian Seiler)
   sparc64 fixes (Christian Seiler)
   update setjmp/longjmp on s390x to use 64-bit ABI (Christian Seiler)
+  SECURITY: x32 fixes: one of them could lead to memory corruption because struct stat was declared too short (Christian Seiler)
 
 0.33:
   first stab at getting TLS to work in actual threads
