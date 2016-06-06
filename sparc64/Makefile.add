@@ -1,3 +1,5 @@
 CFLAGS+=-m64 -Os
+#XXX unclear whether this is needed here but very probable
+CFLAGS+=-DWANT_STRTOD_WITHOUT_LONG_DOUBLE
 VPATH:=sparc64:syscalls.s:$(VPATH)
 LIBOBJ+=$(patsubst %,$(OBJDIR)/%,__time.o)

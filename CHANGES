@@ -45,6 +45,7 @@
   aarch64 port (Christian Seiler)
   parisc fixes (Gerrit Pape, John David Anglin, Helge Deller, Christian Seiler)
   fix longjmp on mobile armv7 (Christian Seiler)
+  alpha fixes (Christian Seiler, Thorsten Glaser)
 
 0.33:
   first stab at getting TLS to work in actual threads

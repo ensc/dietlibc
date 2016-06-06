@@ -2,11 +2,17 @@
 #include <stdlib.h>
 #include <ctype.h>
 
+#ifndef WANT_STRTOD_WITHOUT_LONG_DOUBLE
+#define ldbltype long double
+#else
+#define ldbltype double
+#endif
+
 double strtod(const char* s, char** endptr) {
     register const char*  p     = s;
-    register long double  value = 0.L;
+    register ldbltype     value = 0.;
     int                   sign  = +1;
-    long double           factor;
+    ldbltype              factor;
     unsigned int          expo;
 
     while ( isspace(*p) )
@@ -33,7 +39,7 @@ double strtod(const char* s, char** endptr) {
 
     if ( (*p | 32) == 'e' ) {
         expo   = 0;
-        factor = 10.L;
+        factor = 10.;
 
         switch (*++p) {                 // ja hier weiﬂ ich nicht, was mindestens nach einem 'E' folgenden MUSS.
         case '-': factor = 0.1;
@@ -41,7 +47,7 @@ double strtod(const char* s, char** endptr) {
                   break;
         case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9':
                   break;
-        default : value = 0.L;
+        default : value = 0.;
                   p     = s;
                   goto done;
         }
