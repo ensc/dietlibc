@@ -1,3 +1,4 @@
 CFLAGS+=-Os -fomit-frame-pointer
 VPATH:=parisc:syscalls.s:$(VPATH)
+LIBOBJ+=$(OBJDIR)/__fadvise.o $(OBJDIR)/parisc_fadvise.o
 DIETLIBC_OBJ += $(OBJDIR)/dyncall.o

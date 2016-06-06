@@ -550,7 +550,7 @@
 
 #define	EALREADY	244	/* Operation already in progress */
 #define	EINPROGRESS	245	/* Operation now in progress */
-#define	EWOULDBLOCK	246	/* Operation would block (Linux returns EAGAIN) */
+#define	EWOULDBLOCK	EAGAIN	/* Operation would block (Linux returns EAGAIN) */
 #define	ENOTEMPTY	247	/* Directory not empty */
 #define	ENAMETOOLONG	248	/* File name too long */
 #define	ELOOP		249	/* Too many symbolic links encountered */

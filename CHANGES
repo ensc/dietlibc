@@ -43,6 +43,7 @@
   ppc64 little endian port (Christian Seiler)
   mips64 little endian port (Christian Seiler)
   aarch64 port (Christian Seiler)
+  parisc fixes (Gerrit Pape, John David Anglin, Helge Deller, Christian Seiler)
 
 0.33:
   first stab at getting TLS to work in actual threads

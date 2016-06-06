@@ -97,9 +97,9 @@ __BEGIN_DECLS
 #define SIGXCPU		30
 #define SIGXFSZ		31
 #elif defined(__hppa__)
-#define SIGEMT		 7
+#define SIGSTKFLT	 7
 #define SIGBUS		10
-#define SIGSYS		12
+#define SIGXCPU		12
 #define SIGUSR1		16
 #define SIGUSR2		17
 #define SIGCHLD		18
@@ -114,12 +114,10 @@ __BEGIN_DECLS
 #define SIGTTIN		27
 #define SIGTTOU		28
 #define SIGURG		29
-#define SIGLOST		30
+#define SIGXFSZ		30
 #define SIGUNUSED	31
-#define SIGRESERVE	SIGUNUSE
-#define SIGXCPU		33
-#define SIGXFSZ		34
-#define SIGSTKFLT	36
+#define SIGRESERVE	SIGUNUSED
+#define SIGSYS		31
 
 #else
 #error signal layout not yet known
@@ -129,12 +127,8 @@ __BEGIN_DECLS
 #define SIGPOLL		SIGIO
 
 /* These should not be considered constants from userland.  */
-#ifdef __hppa__
-#define SIGRTMIN	37
-#else
 #define SIGLOST		SIGPWR
 #define SIGRTMIN	32
-#endif
 #define SIGRTMAX	(_NSIG-1)
 
 /* SA_FLAGS values: */
