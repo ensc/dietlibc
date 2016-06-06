@@ -150,6 +150,16 @@ int main(int argc,char *argv[]) {
       memmove(shortplatform,argv[1],(size_t)(tmp2-cc));
       platform[tmp2-cc+len]=0;
       if (shortplatform[0]=='i' && shortplatform[2]=='8' && shortplatform[3]=='6') shortplatform[1]='3';
+      if (!strncmp(shortplatform, "powerpc", 7)) {
+        shortplatform[0] = shortplatform[1] = 'p'; shortplatform[2] = 'c';
+        memmove(&shortplatform[3], &shortplatform[7], strlen(&shortplatform[7]) + 1);
+      }
+      if (!strcmp(shortplatform, "hppa"))
+        strcpy(shortplatform, "parisc");
+      if (!strcmp(shortplatform, "mips64el"))
+        strcpy(shortplatform, "mips64");
+      if (!strncmp(cc, "x86_64-linux-gnux32-", 20) || !strncmp(cc, "x86_64-pc-linux-gnux32-", 23))
+        strcpy(shortplatform, "x32");
     } else {
 #ifdef __sparc__
 #ifdef __arch64__
