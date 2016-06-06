@@ -360,6 +360,45 @@
 #define __NR_getrandom		359
 #define __NR_memfd_create	360
 
+#if defined(_CALL_ELF) && _CALL_ELF == 2
+
+#define __diet_proto_common(sym) \
+	.type	sym,@function
+
+#define diet_proto_weak(sym) \
+	.weak	sym; \
+	__diet_proto_common(sym)
+
+#define diet_proto(sym) \
+	.globl	sym; \
+	__diet_proto_common(sym)
+
+
+#define syscall_weak(name,wsym,sym) \
+.text; \
+diet_proto_weak(wsym); \
+diet_proto(sym); \
+wsym: \
+sym: \
+	addis	2,12,.TOC.-sym@ha; \
+	addi	2,2,.TOC.-sym@l; \
+.localentry	sym,.-sym; \
+.localentry	wsym,.-wsym; \
+	li	0,__NR_##name; \
+	b	__unified_syscall
+
+#define syscall(name,sym) \
+.text; \
+diet_proto(sym); \
+sym: \
+	addis	2,12,.TOC.-sym@ha; \
+	addi	2,2,.TOC.-sym@l; \
+.localentry	sym,.-sym; \
+	li	0,__NR_##name; \
+	b	__unified_syscall
+
+#else /* _ELF_CALL != 2 */
+
 #define __diet_proto_common(sym) \
 	.section ".opd","aw"; \
 	.align	3; \
@@ -396,3 +435,4 @@ diet_proto(sym); \
 	li	0,__NR_##name; \
 	b	__unified_syscall
 
+#endif /* _ELF_CALL == 2 */

@@ -38,6 +38,7 @@ static const char* Os[] = {
   "mipsel","-Os","-fomit-frame-pointer","-march=mips2",0,
   "ppc","-Os","-fomit-frame-pointer","-mpowerpc-gpopt","-mpowerpc-gfxopt",0,
   "ppc64","-Os","-fomit-frame-pointer","-mpowerpc-gpopt","-mpowerpc-gfxopt",0,
+  "ppc64le","-Os","-fomit-frame-pointer","-mpowerpc-gpopt","-mpowerpc-gfxopt",0,
   "s390","-Os","-fomit-frame-pointer",0,
   "s390x","-Os","-fomit-frame-pointer",0,
   "sh","-Os","-fomit-frame-pointer",0,
@@ -159,7 +160,11 @@ int main(int argc,char *argv[]) {
       shortplatform="ppc";
 #endif
 #ifdef __powerpc64__
+#ifdef __LITTLE_ENDIAN__
+      shortplatform="ppc64le";
+#else
       shortplatform="ppc64";
+#endif
 #endif
 #ifdef __i386__
       shortplatform="i386";

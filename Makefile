@@ -31,6 +31,9 @@ else
 ifeq ($(MYARCH),ppc64)
 ARCH=ppc64
 else
+ifeq ($(MYARCH),ppc64le)
+ARCH=ppc64le
+else
 ifeq ($(MYARCH),arm)
 ARCH=arm
 else
@@ -66,6 +69,7 @@ ifeq ($(MYARCH),armeb)
 ARCH=arm
 else
 $(error unknown architecture, please fix Makefile)
+endif
 endif
 endif
 endif
