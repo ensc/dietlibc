@@ -36,6 +36,8 @@
   various TLS and pthread fixes (Christian Seiler)
   add sha256 and sha512 support in crypt(3)
   promote stpncpy from libcompat to main libc as the sha512 code uses it
+  add x86_64 memccpy, mempcpy
+  import Debian bugfixes (Christian Seiler)
 
 0.33:
   first stab at getting TLS to work in actual threads

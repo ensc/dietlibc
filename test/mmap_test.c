@@ -26,7 +26,7 @@ int main (int argc, char * argv[])
    unlink (FILENAME);
 
    write (fd, TESTSTRING, sizeof(TESTSTRING));
-   lseek(fd,16*1024,SEEK_SET);
+   lseek(fd,64*1024,SEEK_SET);
    write(fd,"fnord",5);
 
    /*
@@ -64,7 +64,7 @@ int main (int argc, char * argv[])
    }
 
    {
-     char* c=mmap(NULL,5,PROT_READ,MAP_PRIVATE,fd,16*1024);
+     char* c=mmap(NULL,5,PROT_READ,MAP_PRIVATE,fd,64*1024);
      if (c == MAP_FAILED) {
        perror("mmap failed");
        return 1;

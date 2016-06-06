@@ -15,7 +15,7 @@ __BEGIN_DECLS
 #ifdef __mips__
 #define _NSIG		128
 #else
-#define _NSIG		64
+#define _NSIG		65
 #endif
 
 #define SIGHUP		 1

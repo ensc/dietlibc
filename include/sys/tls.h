@@ -59,6 +59,18 @@ int set_thread_area(struct user_desc* uinfo);
 
 int arch_prctl(unsigned int what, void* where);
 
+#elif defined(__ia64__) || defined(__powerpc64__)
+
+#define __ABI_TLS_REGISTER	"r13"
+
+#elif defined(__powerpc__)
+
+#define __ABI_TLS_REGISTER	"r2"
+
+#elif defined(__sparc__)
+
+#define __ABI_TLS_REGISTER	"%g7"
+
 #else
 
 #warning "need proper sys/tls.h for this platform"

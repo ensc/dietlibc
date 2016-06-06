@@ -209,10 +209,10 @@ endif
 
 CC+=-D__dietlibc__
 
-$(OBJDIR)/start-pie.o: $(ARCH)/start.S | $(OBJDIR)
+$(OBJDIR)/start-pie.o: start.S | $(OBJDIR)
 	$(CCC) $(INC) $(CCFLAGS) $(EXTRACFLAGS) -c $< $(ASM_CFLAGS) -fpie -o $@
 
-$(OBJDIR)/start.o: $(ARCH)/start.S | $(OBJDIR)
+$(OBJDIR)/start.o: start.S | $(OBJDIR)
 	$(CCC) $(INC) $(CCFLAGS) $(EXTRACFLAGS) -c $< $(ASM_CFLAGS) -fno-pie -o $@
 
 
@@ -390,7 +390,8 @@ t1:
 
 install-bin: $(OBJDIR)/start.o $(OBJDIR)/dietlibc.a $(OBJDIR)/librpc.a $(OBJDIR)/liblatin1.a $(OBJDIR)/libcompat.a $(OBJDIR)/elftrunc $(OBJDIR)/diet-i
 	$(INSTALL) -d $(DESTDIR)$(ILIBDIR) $(DESTDIR)$(MAN1DIR) $(DESTDIR)$(BINDIR)
-	$(INSTALL) -m 644 $(OBJDIR)/start.o $(OBJDIR)/start-pie.o $(DESTDIR)$(ILIBDIR)/
+	$(INSTALL) -m 644 $(OBJDIR)/start.o $(DESTDIR)$(ILIBDIR)/
+	-$(INSTALL) -m 644 $(OBJDIR)/start-pie.o $(DESTDIR)$(ILIBDIR)/
 	$(INSTALL) -m 644 $(OBJDIR)/libm.a $(OBJDIR)/libpthread.a $(OBJDIR)/librpc.a \
 $(OBJDIR)/liblatin1.a $(OBJDIR)/libcompat.a $(OBJDIR)/libcrypt.a $(DESTDIR)$(ILIBDIR)
 	$(INSTALL) -m 644 $(OBJDIR)/dietlibc.a $(DESTDIR)$(ILIBDIR)/libc.a

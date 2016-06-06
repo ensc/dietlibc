@@ -25,5 +25,7 @@ int main(int argc,char* argv[]) {
   for (l=1; argv[l]; ++l) {
     printf("password %s with salt %c%c -> %s\n",argv[l],salt[0],salt[1],crypt(argv[l],salt));
     printf("md5password %s -> %s\n",argv[l],crypt(argv[l],"$1$"));
+    printf("sha256password %s -> %s\n",argv[l],crypt(argv[l],"$5$"));
+    printf("sha512password %s -> %s\n",argv[l],crypt(argv[l],"$6$"));
   }
 }
