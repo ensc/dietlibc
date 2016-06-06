@@ -1,7 +1,7 @@
 
 CFLAGS+=-mpowerpc-gpopt -mpowerpc-gfxopt -Os
 VPATH:=ppc:syscalls.s:$(VPATH)
-LIBOBJ+=$(OBJDIR)/__CAS.o
+LIBOBJ+=$(OBJDIR)/__CAS.o $(OBJDIR)/__fadvise.o
 
 ifeq ($(SOFTFPU),1)
 INC+=-Ippc/softfpu -Isoftfpu
