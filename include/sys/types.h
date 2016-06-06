@@ -90,13 +90,20 @@ typedef __SIZE_TYPE__ ssize_t;
 #else
 typedef signed long ssize_t;		/* Used for a count of bytes or an error indication. */
 #endif
+#if (defined(__sparc__) && (__arch64__)) || defined(__sparcv9)
+/* sparc64 has 32bit suseconds_t for some reason, even though struct
+ * timeval is padded to 16 bytes anyway. */
+typedef signed int suseconds_t;		/* Used for time in microseconds. */
+typedef signed int useconds_t;		/* Used for time in microseconds. */
+#else
 typedef signed long suseconds_t;	/* Used for time in microseconds. */
+typedef signed long useconds_t;		/* Used for time in microseconds. */
+#endif
 #if defined(__x86_64__) && defined(__ILP32__)
 typedef signed long long time_t;
 #else
 typedef signed long time_t;		/* Used for time in seconds. */
 #endif
-typedef signed long useconds_t;		/* Used for time in microseconds. */
 
 /* non-susv2 types: */
 __extension__ typedef signed long long loff_t;	/* 64-bit offset */

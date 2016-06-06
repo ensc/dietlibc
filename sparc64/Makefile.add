@@ -3,3 +3,13 @@ CFLAGS+=-m64 -Os
 CFLAGS+=-DWANT_STRTOD_WITHOUT_LONG_DOUBLE
 VPATH:=sparc64:syscalls.s:$(VPATH)
 LIBOBJ+=$(patsubst %,$(OBJDIR)/%,__time.o)
+
+ifneq ($(DEBUG),)
+# Compiling without at least -O1 will cause __rt_sigreturn_stub
+# to contain instructions that manipulate the stack pointer,
+# (because the compiler doesn't realize w/o optimization that
+# the function doesn't touch the stack). The stack pointer must
+# remain untouched before entering the syscall rt_sigreturn().
+# Therefore, force -O1 even in debug mode for this object.
+$(OBJDIR)/sigaction.o: CFLAGS+=-O1
+endif

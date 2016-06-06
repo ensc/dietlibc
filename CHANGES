@@ -47,6 +47,7 @@
   fix longjmp on mobile armv7 (Christian Seiler)
   alpha fixes (Christian Seiler, Thorsten Glaser)
   powerpc fixes (Gerrit Pape, Christian Seiler)
+  sparc64 fixes (Christian Seiler)
 
 0.33:
   first stab at getting TLS to work in actual threads

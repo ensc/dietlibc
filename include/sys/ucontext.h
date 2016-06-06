@@ -87,8 +87,10 @@ typedef struct {
 struct ucontext {
   struct ucontext         *uc_link;
   unsigned long           uc_flags;
-  sigset_t                uc_sigmask;
+  unsigned long           __uc_sigmask;
   mcontext_t              uc_mcontext;
+  stack_t                 uc_stack;
+  sigset_t                uc_sigmask;
 };
 #elif defined(__s390__)
 struct ucontext {
