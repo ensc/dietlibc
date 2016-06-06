@@ -48,6 +48,7 @@
   alpha fixes (Christian Seiler, Thorsten Glaser)
   powerpc fixes (Gerrit Pape, Christian Seiler)
   sparc64 fixes (Christian Seiler)
+  update setjmp/longjmp on s390x to use 64-bit ABI (Christian Seiler)
 
 0.33:
   first stab at getting TLS to work in actual threads

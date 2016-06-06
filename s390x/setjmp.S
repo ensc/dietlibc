@@ -22,9 +22,15 @@ _setjmp:
 .global __sigsetjmp
 .type	__sigsetjmp,@function
 __sigsetjmp:
-	stm	%r6,%r15,0(%r2)
-	std	%f4,40(%r2)
-	std	%f6,48(%r2)
+	stmg	%r6,%r15,0(%r2)
+	std	%f8,80(%r2)
+	std	%f9,88(%r2)
+	std	%f10,96(%r2)
+	std	%f11,104(%r2)
+	std	%f12,112(%r2)
+	std	%f13,120(%r2)
+	std	%f14,128(%r2)
+	std	%f15,136(%r2)
 
 	/* Make a tail call to __sigjmp_save; it takes the same args.  */
 	basr	%r1,0

@@ -37,7 +37,13 @@ typedef long __jmp_buf[8];
 #ifndef __ASSEMBLER__
 typedef struct {
   long int gregs[10];
+#ifdef __s390x__
+  /* 8x IEEE double (64bit) = 8x 64bit long */
+  long fpregs[8];
+#else
+  /* 2x IEEE double (64bit) = 4x 32bit long */
   long fpregs[4];
+#endif
 } __jmp_buf[1];
 #endif
 #define __JB_GPR6	0
