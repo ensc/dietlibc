@@ -2,3 +2,21 @@
 CFLAGS+=-mpowerpc-gpopt -mpowerpc-gfxopt -Os
 VPATH:=ppc:syscalls.s:$(VPATH)
 LIBOBJ+=$(OBJDIR)/__CAS.o
+
+ifeq ($(SOFTFPU),1)
+INC+=-Ippc/softfpu -Isoftfpu
+VPATH:=softfpu:ppc/softfpu:$(VPATH)
+
+SOFTFPU_OBJ=$(OBJDIR)/negsf2.o $(OBJDIR)/addsf3.o $(OBJDIR)/subsf3.o $(OBJDIR)/mulsf3.o $(OBJDIR)/divsf3.o $(OBJDIR)/eqsf2.o $(OBJDIR)/lesf2.o $(OBJDIR)/gesf2.o $(OBJDIR)/unordsf2.o \
+	$(OBJDIR)/fixsfsi.o $(OBJDIR)/fixunssfsi.o $(OBJDIR)/floatsisf.o $(OBJDIR)/fixsfdi.o $(OBJDIR)/fixunssfdi.o $(OBJDIR)/floatdisf.o $(OBJDIR)/sqrtsf2.o $(OBJDIR)/floatunsisf.o $(OBJDIR)/floatundisf.o \
+	$(OBJDIR)/negdf2.o $(OBJDIR)/adddf3.o $(OBJDIR)/subdf3.o $(OBJDIR)/muldf3.o $(OBJDIR)/divdf3.o $(OBJDIR)/eqdf2.o $(OBJDIR)/ledf2.o $(OBJDIR)/gedf2.o $(OBJDIR)/unorddf2.o \
+	$(OBJDIR)/fixdfsi.o $(OBJDIR)/fixunsdfsi.o $(OBJDIR)/floatsidf.o $(OBJDIR)/fixdfdi.o $(OBJDIR)/fixunsdfdi.o $(OBJDIR)/floatdidf.o $(OBJDIR)/sqrtdf2.o $(OBJDIR)/floatunsidf.o $(OBJDIR)/floatundidf.o \
+	$(OBJDIR)/extendsfdf2.o $(OBJDIR)/truncdfsf2.o \
+	$(OBJDIR)/atomic-feclearexcept.o $(OBJDIR)/atomic-feholdexcept.o $(OBJDIR)/atomic-feupdateenv.o $(OBJDIR)/flt-rounds.o $(OBJDIR)/sim-full.o $(OBJDIR)/fraiseexcept-soft.o
+
+LIBOBJ+=$(SOFTFPU_OBJ)
+
+# This stuff is from glibc and doesn't have prototypes. As these functions
+# are always implicitly referenced by gcc, just ignore that warning.
+$(SOFTFPU_OBJ): CFLAGS+=-Wno-missing-prototypes -Wno-missing-declarations
+endif

@@ -1,0 +1,10 @@
+The FPU emulation library was copied from the soft-fp/ directory in the
+GNU C Library (glibc), as software FPU support was moved from libgcc to
+glibc in recent versions. The code is licensed under the GNU LGPL
+version 2.1. Original authors: Richard Henderson, Jakub Jelinek and
+others.
+
+As of now, only the routines required for powerpcspe (PowerPC e500v2)
+software FPU have been copied, and only those that are part of libc.
+libm routines have not been copied, because dietlibc as of now does not
+support them for other architectures either.

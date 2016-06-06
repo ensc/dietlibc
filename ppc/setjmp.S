@@ -13,6 +13,7 @@ __sigsetjmp:
         stw  1,(JB_GPR1*4)(3)
         mflr 0
         stw  2,(JB_GPR2*4)(3)
+#ifndef __NO_FPRS__
         stw  14,((JB_GPRS+0)*4)(3)
         stfd 14,((JB_FPRS+0*2)*4)(3)
         stw  0,(JB_LR*4)(3)
@@ -52,5 +53,10 @@ __sigsetjmp:
         stfd 30,((JB_FPRS+16*2)*4)(3)
         stw  31,((JB_GPRS+17)*4)(3)
         stfd 31,((JB_FPRS+17*2)*4)(3)
+#else
+        stw  0,(JB_LR*4)(3)
+        mfcr 0
+        stw  0,(JB_CR*4)(3)
+#endif
         b JUMPTARGET (__sigjmp_save)
 .size __sigsetjmp,.-__sigsetjmp

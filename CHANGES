@@ -38,6 +38,8 @@
   promote stpncpy from libcompat to main libc as the sha512 code uses it
   add x86_64 memccpy, mempcpy
   import Debian bugfixes (Christian Seiler)
+  setjmp/longjmp for powerpcspe (Roland Stigge)
+  add softfpu from glibc for powerpcspe (need to pass SOFTFPU=1 to make)
 
 0.33:
   first stab at getting TLS to work in actual threads
