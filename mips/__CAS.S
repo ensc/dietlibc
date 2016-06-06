@@ -1,3 +1,5 @@
+#include "mips-asm.h"
+
 .text
 .global __CAS
 .type __CAS,@function
@@ -6,10 +8,10 @@ __CAS:
 .set noat
 	sync
 1:
-	ll	$2,0($4)
+	PTR_LL	$2,0($4)
 	bne	$2,$5,2f
 	move	$1,$6
-	sc	$1,0($4)
+	PTR_SC	$1,0($4)
 	beq	$1,$0,1b
 	nop
 	sync

@@ -4,7 +4,12 @@
 .section	.rodata
 #endif
 
+#if _MIPS_SIM == _ABI64
+#define long quad
+.align 8
+#else
 .align 4
+#endif
 .global sys_errlist
 .type	sys_errlist,@object
 sys_errlist:
@@ -176,7 +181,12 @@ sys_errlist:
 	.long 0
 .size sys_errlist,.-sys_errlist
 
+#if _MIPS_SIM == _ABI64
+.align 8
+#undef long
+#else
 .align 4
+#endif
 .global sys_nerr
 .type	sys_nerr,@object
 sys_nerr:

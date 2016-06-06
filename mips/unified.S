@@ -27,6 +27,21 @@ __unified_syscall:
 error_unified_syscall:
 .Lerror:
 #ifdef WANT_THREAD_SAFE
+#if _MIPS_SIM == _ABI64
+	daddiu	$sp, $sp, -48
+
+	sd	$31, 0($sp)
+	sd	$2,  8($sp)
+
+	dla	$25, __errno_location
+	jalr	$25
+
+	ld	$8,  8($sp)
+	ld	$31, 0($sp)
+	sd	$8,  0($2)
+	li	$2,  -1
+	daddiu	$sp, $sp, 48
+#else
 	addiu	$sp, $sp, -24
 
 	sw	$31, 0($sp)
@@ -40,9 +55,10 @@ error_unified_syscall:
 	sw	$8,  0($2)
 	li	$2,  -1
 	addiu	$sp, $sp, 24
+#endif
 	jr	$31
 #else
-	sw	$2,  errno
+	PTR_SW	$2,  errno
 	li	$2,  -1
 	jr	$31
 #endif

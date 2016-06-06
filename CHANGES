@@ -41,6 +41,7 @@
   setjmp/longjmp for powerpcspe (Roland Stigge)
   add softfpu from glibc for powerpcspe (need to pass SOFTFPU=1 to make)
   ppc64 little endian port (Christian Seiler)
+  mips64 little endian port (Christian Seiler)
 
 0.33:
   first stab at getting TLS to work in actual threads

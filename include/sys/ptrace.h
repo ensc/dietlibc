@@ -528,6 +528,35 @@ struct switch_stack {
   unsigned long fp[32];	/* fp[31] is fpcr */
 };
 
+#elif defined(__mips64__)
+
+/* 0 - 31 are integer registers, 32 - 63 are fp registers.  */
+#define FPR_BASE        32
+#define PC              64
+#define CAUSE           65
+#define BADVADDR        66
+#define MMHI            67
+#define MMLO            68
+#define FPC_CSR         69
+#define FPC_EIR         70
+#define DSP_BASE        71              /* 3 more hi / lo register pairs */
+#define DSP_CONTROL     77
+#define ACX             78
+
+struct pt_regs {
+  /* Saved main processor registers. */
+  unsigned long regs[32];
+
+  /* Saved special registers. */
+  unsigned long lo;
+  unsigned long hi;
+  unsigned long cp0_epc;
+  unsigned long cp0_badvaddr;
+  unsigned long cp0_status;
+  unsigned long cp0_cause;
+} __attribute__ ((aligned (8)));
+
+
 #elif defined(__mips__)
 
 /* 0 - 31 are integer registers, 32 - 63 are fp registers.  */

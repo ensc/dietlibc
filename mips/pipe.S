@@ -1,4 +1,5 @@
 #include "syscalls.h"
+#include "mips-asm.h"
 
 #define v0      2      /* return value */
 #define v1      3      /* return value */
@@ -19,6 +20,6 @@ pipe:
 	move	$v0,$0
 	jr      $ra
 .Lerror:
-	la	$25, error_unified_syscall
+	PTR_LA	$25, error_unified_syscall
 	jr	$25
 .end pipe

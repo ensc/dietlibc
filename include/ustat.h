@@ -7,7 +7,7 @@
 __BEGIN_DECLS
 
 struct ustat {
-#if defined(__mips__) || (defined(__sparc__) && !defined(__arch64__))
+#if (defined(__mips__) && !defined(__mips64__)) || (defined(__sparc__) && !defined(__arch64__))
   long f_tfree; /* should be daddr_t f_tfree */
 #else
   int f_tfree; /* should be daddr_t f_tfree */

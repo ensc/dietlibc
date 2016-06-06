@@ -83,11 +83,15 @@ typedef struct
   {
     void * __pc;	/* Program counter.  */
     void * __sp;	/* Stack pointer.  */
-    int __regs[8];	/* Callee-saved registers s0 through s7.  */
+    long __regs[8];	/* Callee-saved registers s0 through s7.  */
     void * __fp;	/* The frame pointer.  */
     void * __gp;	/* The global pointer.  */
     int __fpc_csr;	/* Floating point status register.  */
+#ifdef __mips64__
+    double __fpregs[8];	/* Callee-saved floating point registers.  */
+#else
     double __fpregs[6];	/* Callee-saved floating point registers.  */
+#endif
   } __jmp_buf[1];
 #endif
 #endif

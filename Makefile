@@ -52,6 +52,9 @@ else
 ifeq ($(MYARCH),mipsel)
 ARCH=mipsel
 else
+ifeq ($(MYARCH),mips64)
+ARCH=mips64
+else
 ifeq ($(MYARCH),parisc)
 ARCH=parisc
 else
@@ -69,6 +72,7 @@ ifeq ($(MYARCH),armeb)
 ARCH=arm
 else
 $(error unknown architecture, please fix Makefile)
+endif
 endif
 endif
 endif

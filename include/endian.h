@@ -5,7 +5,7 @@
 #define	__BIG_ENDIAN	4321
 
 #ifdef __mips__
-#if _MIPS_SIM == _MIPS_SIM_ABI64
+#if _MIPS_SIM == _ABI64
 #define __mips64__
 #else
 #undef __mips64__
