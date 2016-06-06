@@ -97,6 +97,10 @@ enum
 # define DTTOIF(dirtype)	((dirtype) << 12)
 #endif
 
+#ifdef __aarch64__
+#define __DIET_ARCH_ONLY_DIRENT64
+#endif
+
 __END_DECLS
 
 #endif

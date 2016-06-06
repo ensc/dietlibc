@@ -174,6 +174,12 @@ typedef int __jmp_buf[10 + 16*2 + 16*2];
 #endif
 #endif
 
+#ifdef __aarch64__
+/* x19-x28 (10) + x29-x31 (3: fp, lr, sp) + d8-d15 (8) + 1 unused
+ * (glibc's __jmp_buf has size 22, we follow that) */
+typedef unsigned long long __jmp_buf[10 + 3 + 8 + 1];
+#endif
+
 #if defined(__powerpc__) || defined(__powerpc64__)
 /* 40 registers: 22 GPRs (4 or 8 bytes) + 18 FPRs (8 bytes) */
 #define JB_GPR1   0  /* Also known as the stack pointer */

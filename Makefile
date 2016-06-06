@@ -37,6 +37,9 @@ else
 ifeq ($(MYARCH),arm)
 ARCH=arm
 else
+ifeq ($(MYARCH),aarch64)
+ARCH=aarch64
+else
 ifeq ($(MYARCH),sparc)
 ARCH=sparc
 else
@@ -72,6 +75,7 @@ ifeq ($(MYARCH),armeb)
 ARCH=arm
 else
 $(error unknown architecture, please fix Makefile)
+endif
 endif
 endif
 endif

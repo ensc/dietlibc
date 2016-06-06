@@ -38,7 +38,7 @@ typedef uint64_t fsfilcnt_t;
              Used to identify a thread.
 */
 
-#if defined(__alpha__) || defined(__ia64__) || defined(__sparc64__) || defined(__s390x__)
+#if defined(__alpha__) || defined(__ia64__) || defined(__sparc64__) || defined(__s390x__) || defined(__aarch64__)
     typedef uint32_t dev_t;		/* Used for device IDs. */
     typedef uint32_t gid_t;		/* Used for group IDs. */
     typedef uint32_t mode_t;		/* Used for some file attributes. */

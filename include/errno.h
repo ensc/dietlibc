@@ -563,7 +563,7 @@
 
 #else
 
-/* i386, arm, ppc, x86_64, ia64 */
+/* i386, arm, aarch64, ppc, x86_64, ia64 */
 
 #define EPERM		 1	/* Operation not permitted */
 #define ENOENT		 2	/* No such file or directory */

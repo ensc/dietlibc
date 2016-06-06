@@ -98,6 +98,14 @@ struct ucontext {
   _sigregs		uc_mcontext;
   sigset_t		uc_sigmask;	/* mask last for extensibility */
 };
+#elif defined(__aarch64__)
+struct ucontext {
+  unsigned long		uc_flags;
+  struct ucontext	*uc_link;
+  stack_t		uc_stack;
+  sigset_t		uc_sigmask;
+  mcontext_t		uc_mcontext;
+};
 #elif defined(__ia64__)
 
 /* oh my god is this ugly!  --fefe*/

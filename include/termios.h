@@ -90,6 +90,18 @@ struct termios {
   cc_t c_line;			/* line discipline */
   cc_t c_cc[NCCS];		/* control characters */
 };
+#elif defined(__aarch64__)
+#define NCCS	32
+struct termios {
+	tcflag_t c_iflag;		/* input mode flags */
+	tcflag_t c_oflag;		/* output mode flags */
+	tcflag_t c_cflag;		/* control mode flags */
+	tcflag_t c_lflag;		/* local mode flags */
+	cc_t c_line;			/* line discipline (== c_cc[19]) */
+	cc_t c_cc[NCCS];		/* control characters */
+	speed_t c_ispeed;		/* input speed */
+	speed_t c_ospeed;		/* output speed */
+};
 #elif defined(__mips__)
 #define NCCS	23
 struct termios {
@@ -204,7 +216,7 @@ struct termios {
 #define VLNEXT	15
 #define VMIN	VEOF
 #define VTIME	VEOL
-#else			/* arm, i386, parisc, s390, x86_64 */
+#else			/* arm, aarch64, i386, parisc, s390, x86_64 */
 #define VINTR	0
 #define VQUIT	1
 #define VERASE	2

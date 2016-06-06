@@ -131,6 +131,8 @@ void __setup_tls(tcbhead_t* mainthread) {
   __builtin_set_thread_pointer(mainthread);
 #elif defined(__mips__)
   set_thread_area((char*)(void *)mainthread);
+#elif defined(__aarch64__)
+  asm volatile ("msr tpidr_el0, %0" :: "r"(mainthread));
 #elif defined(__arm__)
   extern void __arm_set_tls(void*);
   __arm_set_tls(mainthread);

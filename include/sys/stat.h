@@ -411,6 +411,54 @@ __extension__	long long	st_size;
 
 __extension__	unsigned long long	st_ino;
 };
+#elif defined(__aarch64__)
+
+struct stat {
+	unsigned long	st_dev;
+	unsigned long	st_ino;
+	unsigned int	st_mode;
+	unsigned int	st_nlink;
+	unsigned int	st_uid;
+	unsigned int	st_gid;
+	unsigned long	st_rdev;
+	unsigned long	__pad1;
+	long		st_size;
+	int		st_blksize;
+	int		__pad2;
+	long		st_blocks;
+	time_t	 	st_atime;
+	long		st_atime_nsec;
+	time_t	 	st_mtime;
+	long		st_mtime_nsec;
+	time_t	 	st_ctime;
+	long		st_ctime_nsec;
+	int		__unused1;
+	int		__unused2;
+};
+
+struct stat64 {
+	unsigned long	st_dev;
+	unsigned long	st_ino;
+	unsigned int	st_mode;
+	unsigned int	st_nlink;
+	unsigned int	st_uid;
+	unsigned int	st_gid;
+	unsigned long	st_rdev;
+	unsigned long	__pad1;
+	long		st_size;
+	int		st_blksize;
+	int		__pad2;
+	long		st_blocks;
+	time_t	 	st_atime;
+	long		st_atime_nsec;
+	time_t	 	st_mtime;
+	long		st_mtime_nsec;
+	time_t	 	st_ctime;
+	long		st_ctime_nsec;
+	int		__unused1;
+	int		__unused2;
+};
+
 #elif defined(__s390__)
 #if defined(__s390x__)
 struct stat {

@@ -11,6 +11,8 @@ __BEGIN_DECLS
 #include <sys/alpha-ioctl.h>
 #elif defined(__arm__)
 #include <sys/arm-ioctl.h>
+#elif defined(__aarch64__)
+#include <sys/aarch64-ioctl.h>
 #elif defined(__sparc__)
 #include <sys/sparc-ioctl.h>
 #elif defined(__mips__)

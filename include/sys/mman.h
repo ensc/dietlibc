@@ -131,6 +131,40 @@ __BEGIN_DECLS
 #define MADV_DONTNEED	0x4		/* discard these pages */
 #define MADV_FREE	0x5		/* (Solaris) contents can be freed */
 
+#elif defined(__aarch64__)
+#define MAP_FIXED	0x10		/* Interpret addr exactly */
+#define MAP_ANONYMOUS	0x20		/* don't use a file */
+#define MAP_GROWSDOWN	0x00100		/* Stack-like segment.  */
+#define MAP_DENYWRITE	0x00800		/* ETXTBSY */
+#define MAP_EXECUTABLE	0x01000		/* Mark it as an executable.  */
+#define MAP_LOCKED	0x02000		/* Lock the mapping.  */
+#define MAP_NORESERVE	0x04000		/* Don't check for reservations.  */
+#define MAP_POPULATE	0x08000		/* Populate (prefault) pagetables.  */
+#define MAP_NONBLOCK	0x10000		/* Do not block on IO.  */
+#define MAP_STACK	0x20000		/* Allocation is for a stack.  */
+#define MAP_HUGETLB	0x40000		/* Create huge page mapping.  */
+#define MS_ASYNC	1		/* sync memory asynchronously */
+#define MS_INVALIDATE	2		/* invalidate the caches */
+#define MS_SYNC		4		/* synchronous memory sync */
+#define MCL_CURRENT	1		/* lock all currently mapped pages */
+#define MCL_FUTURE	2		/* lock all additions to address space */
+#define MADV_NORMAL	 0	/* No further special treatment.  */
+#define MADV_RANDOM	 1	/* Expect random page references.  */
+#define MADV_SEQUENTIAL	 2	/* Expect sequential page references.  */
+#define MADV_WILLNEED	 3	/* Will need these pages.  */
+#define MADV_DONTNEED	 4	/* Don't need these pages.  */
+#define MADV_REMOVE	 9	/* Remove these pages and resources.  */
+#define MADV_DONTFORK	 10	/* Do not inherit across fork.  */
+#define MADV_DOFORK	 11	/* Do inherit across fork.  */
+#define MADV_MERGEABLE	 12	/* KSM may merge identical pages.  */
+#define MADV_UNMERGEABLE 13	/* KSM may not merge identical pages.  */
+#define MADV_HUGEPAGE	 14	/* Worth backing with hugepages.  */
+#define MADV_NOHUGEPAGE	 15	/* Not worth backing with hugepages.  */
+#define MADV_DONTDUMP	 16	/* Explicity exclude from the core dump,
+				   overrides the coredump filter bits.  */
+#define MADV_DODUMP	 17	/* Clear the MADV_DONTDUMP flag.  */
+#define MADV_HWPOISON	 100	/* Poison a page for testing.  */
+
 #elif defined(__hppa__)
 #undef MAP_TYPE
 #define MAP_TYPE	0x03	/* Mask for type of mapping */

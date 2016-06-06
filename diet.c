@@ -34,6 +34,7 @@ static const char* Os[] = {
   "sparc64","-Os","-m64","-mhard-quad-float",0,
   "alpha","-Os","-fomit-frame-pointer",0,
   "arm","-Os","-fomit-frame-pointer",0,
+  "aarch64","-Os","-fomit-frame-pointer",0,
   "mips","-Os","-fomit-frame-pointer","-march=mips2",0,
   "mipsel","-Os","-fomit-frame-pointer","-march=mips2",0,
   "mips64","-Os","-fomit-frame-pointer",0,
@@ -175,6 +176,9 @@ int main(int argc,char *argv[]) {
 #endif
 #ifdef __arm__
       shortplatform="arm";
+#endif
+#ifdef __aarch64__
+      shortplatform="aarch64";
 #endif
 #ifdef __mips64__
       shortplatform="mips64";
