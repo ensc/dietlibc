@@ -184,7 +184,11 @@ struct flock {
 #define O_EXCL		0x0400	/* not fcntl */
 #define O_NOCTTY	0x0800	/* not fcntl */
 #define FASYNC		0x1000	/* fcntl, for BSD compatibility */
+#ifdef __mips64__
+#define O_LARGEFILE	0
+#else
 #define O_LARGEFILE	0x2000	/* allow large file opens - currently ignored */
+#endif
 #define O_SYNC		(0x4000|O_DSYNC)
 #define O_DIRECT	0x8000	/* direct disk access hint - currently ignored */
 #define O_DIRECTORY	0x10000	/* must be a directory */
@@ -448,7 +452,7 @@ struct flock64 {
   pid_t  l_pid;
 };
 
-#elif defined (__arm__)
+#elif defined (__arm__) || defined(__aarch64__)
 
 #define O_ACCMODE	   0003
 #define O_RDONLY	     00
@@ -466,7 +470,11 @@ struct flock64 {
 #define O_DIRECTORY	 040000	/* must be a directory */
 #define O_NOFOLLOW	0100000	/* don't follow links */
 #define O_DIRECT	0200000	/* direct disk access hint - currently ignored */
+#ifdef __aarch64__
+#define O_LARGEFILE	0
+#else
 #define O_LARGEFILE	0400000
+#endif
 #define O_NOATIME	01000000
 #define O_CLOEXEC	02000000
 #define O_SYNC		(O_DSYNC|04000000)
@@ -487,9 +495,15 @@ struct flock64 {
 #define F_SETSIG	10	/*  for sockets. */
 #define F_GETSIG	11	/*  for sockets. */
 
+#ifdef __arch64__
+#define F_GETLK64	5
+#define F_SETLK64	6
+#define F_SETLKW64	7
+#else
 #define F_GETLK64	12	/*  using 'struct flock64' */
 #define F_SETLK64	13
 #define F_SETLKW64	14
+#endif
 
 /* for F_[GET|SET]FL */
 #define FD_CLOEXEC	1	/* actually anything with low bit set goes */

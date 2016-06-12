@@ -45,7 +45,7 @@
 #define UDWtype		UDItype
 #endif
 
-extern const UQItype __clz_tab[256] attribute_hidden;
+extern const UQItype __clz_tab[256] __attribute__ ((visibility ("hidden")));
 
 /* Define auxiliary asm macros.
 

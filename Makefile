@@ -31,8 +31,14 @@ else
 ifeq ($(MYARCH),ppc64)
 ARCH=ppc64
 else
+ifeq ($(MYARCH),ppc64le)
+ARCH=ppc64le
+else
 ifeq ($(MYARCH),arm)
 ARCH=arm
+else
+ifeq ($(MYARCH),aarch64)
+ARCH=aarch64
 else
 ifeq ($(MYARCH),sparc)
 ARCH=sparc
@@ -48,6 +54,9 @@ ARCH=s390x
 else
 ifeq ($(MYARCH),mipsel)
 ARCH=mipsel
+else
+ifeq ($(MYARCH),mips64)
+ARCH=mips64
 else
 ifeq ($(MYARCH),parisc)
 ARCH=parisc
@@ -66,6 +75,9 @@ ifeq ($(MYARCH),armeb)
 ARCH=arm
 else
 $(error unknown architecture, please fix Makefile)
+endif
+endif
+endif
 endif
 endif
 endif
@@ -215,10 +227,10 @@ endif
 
 CC+=-D__dietlibc__
 
-$(OBJDIR)/start-pie.o: $(ARCH)/start.S | $(OBJDIR)
+$(OBJDIR)/start-pie.o: start.S | $(OBJDIR)
 	$(CCC) $(INC) $(CCFLAGS) $(EXTRACFLAGS) -c $< $(ASM_CFLAGS) -fpie -o $@
 
-$(OBJDIR)/start.o: $(ARCH)/start.S | $(OBJDIR)
+$(OBJDIR)/start.o: start.S | $(OBJDIR)
 	$(CCC) $(INC) $(CCFLAGS) $(EXTRACFLAGS) -c $< $(ASM_CFLAGS) -fno-pie -o $@
 
 
@@ -396,7 +408,8 @@ t1:
 
 install-bin: $(OBJDIR)/start.o $(OBJDIR)/dietlibc.a $(OBJDIR)/librpc.a $(OBJDIR)/liblatin1.a $(OBJDIR)/libcompat.a $(OBJDIR)/elftrunc $(OBJDIR)/diet-i
 	$(INSTALL) -d $(DESTDIR)$(ILIBDIR) $(DESTDIR)$(MAN1DIR) $(DESTDIR)$(BINDIR)
-	$(INSTALL) -m 644 $(OBJDIR)/start.o $(OBJDIR)/start-pie.o $(DESTDIR)$(ILIBDIR)/
+	$(INSTALL) -m 644 $(OBJDIR)/start.o $(DESTDIR)$(ILIBDIR)/
+	-$(INSTALL) -m 644 $(OBJDIR)/start-pie.o $(DESTDIR)$(ILIBDIR)/
 	$(INSTALL) -m 644 $(OBJDIR)/dyn_start.o $(OBJDIR)/dyn_stop.o $(DESTDIR)$(ILIBDIR)/
 	$(INSTALL) -m 644 $(OBJDIR)/libm.a $(OBJDIR)/libpthread.a $(OBJDIR)/librpc.a \
 $(OBJDIR)/liblatin1.a $(OBJDIR)/libcompat.a $(OBJDIR)/libcrypt.a $(DESTDIR)$(ILIBDIR)

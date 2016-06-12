@@ -250,7 +250,7 @@
 #define __NR_mq_notify          (__NR_Linux + 233)
 #define __NR_mq_getsetattr      (__NR_Linux + 234)
 #define __NR_waitid		(__NR_Linux + 235)
-#define __NR_fadvise64_64	(__NR_Linux + 236)
+#define __NR_parisc_fadvise64_64	(__NR_Linux + 236)
 #define __NR_set_tid_address	(__NR_Linux + 237)
 #define __NR_setxattr		(__NR_Linux + 238)
 #define __NR_lsetxattr		(__NR_Linux + 239)

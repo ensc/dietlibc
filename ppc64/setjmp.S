@@ -1,13 +1,22 @@
 #include <setjmp.h>
+#include "ppc64-features.h"
 
 #ifdef PIC
 #define JUMPTARGET(name) name##@plt
 #else
-#define JUMPTARGET(name) .name
+#define JUMPTARGET(name) FN_NAME_DOTIFY(name)
 #endif
 
 
 	.globl __sigsetjmp
+#if defined(_CALL_ELF) && _CALL_ELF == 2
+	.section	".text"
+	.type	__sigsetjmp,@function
+__sigsetjmp:
+	addis	2,12,.TOC.-__sigsetjmp@ha
+	addi	2,2,.TOC.-__sigsetjmp@l
+.localentry	__sigsetjmp,.-__sigsetjmp
+#else
 	.section	".opd","aw"
 	.align 3
 __sigsetjmp:
@@ -18,6 +27,7 @@ __sigsetjmp:
 		.globl	.__sigsetjmp
 .align 2
 .__sigsetjmp:
+#endif
         std  1,(JB_GPR1*8)(3)
         mflr 0
         std  2,(JB_GPR2*8)(3)
@@ -61,4 +71,4 @@ __sigsetjmp:
         std  31,((JB_GPRS+17)*8)(3)
         stfd 31,((JB_FPRS+17)*8)(3)
         b JUMPTARGET (__sigjmp_save)
-.size .__sigsetjmp,.-.__sigsetjmp
+.size FN_NAME_DOTIFY(__sigsetjmp),.-FN_NAME_DOTIFY(__sigsetjmp)

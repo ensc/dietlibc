@@ -1,7 +1,8 @@
 
 CFLAGS+=-Os -Iinclude -fomit-frame-pointer -fstrict-aliasing
+CFLAGS+=-DWANT_STRTOD_WITHOUT_LONG_DOUBLE
 VPATH:=alpha:syscalls.s:$(VPATH)
 
-LIBOBJ+=$(patsubst %,$(OBJDIR)/%,divq.o divl.o remq.o reml.o __time.o __alarm.o __CAS.o)
+LIBOBJ+=$(patsubst %,$(OBJDIR)/%,divq.o divl.o remq.o reml.o __time.o __alarm.o __CAS.o sigreturn.o)
 
 $(OBJDIR)/__pause.o: include/signal.h

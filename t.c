@@ -113,6 +113,7 @@ int main(int argc,char *argv[]) {
   for (i=0; i<1024; ++i) {
     printf("%08x%c",arc4random(),(i&15)==15 ? '\n' : ' ');
   }
+  perror("write");
 #if 0
   int n;
   struct ucontext uc;

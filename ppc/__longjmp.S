@@ -14,6 +14,7 @@ __longjmp:
 	lwz 1,(JB_GPR1*4)(3)
 	lwz 2,(JB_GPR2*4)(3)
 	lwz 0,(JB_LR*4)(3)
+#ifndef __NO_FPRS__
 	lwz 14,((JB_GPRS+0)*4)(3)
 	lfd 14,((JB_FPRS+0*2)*4)(3)
 	lwz 15,((JB_GPRS+1)*4)(3)
@@ -53,6 +54,11 @@ __longjmp:
 	lfd 30,((JB_FPRS+16*2)*4)(3)
 	lwz 31,((JB_GPRS+17)*4)(3)
 	lfd 31,((JB_FPRS+17*2)*4)(3)
+#else
+	mtlr 0
+	lwz 0,(JB_CR*4)(3)
+	mtcrf 0xFF,0
+#endif
 	mr 3,4
 	blr
 .size __longjmp,.-__longjmp

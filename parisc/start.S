@@ -56,7 +56,7 @@ _start:
 	bl CALL_IN_STARTCODE, %rp
 #endif
 	ldo R%$global$(%dp), %dp
-	b _exit
+	b exit
 	or %r28, %r28, %r26
 	.EXIT
 	.PROCEND

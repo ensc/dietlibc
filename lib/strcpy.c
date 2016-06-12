@@ -3,6 +3,10 @@
 #include "dietfeatures.h"
 #include "dietstring.h"
 
+#ifdef WANT_VALGRIND_SUPPORT
+extern int __valgrind;
+#endif
+
 char *
 strcpy (char *s1, const char *s2)
 {
@@ -14,7 +18,11 @@ strcpy (char *s1, const char *s2)
     int             tmp;
     unsigned long   l;
 
-    if (UNALIGNED(s1, s2)) {
+    if (UNALIGNED(s1, s2)
+#ifdef WANT_VALGRIND_SUPPORT
+        || __unlikely(__valgrind)
+#endif
+    ) {
 	while ((*s1++ = *s2++));
 	return (res);
     }

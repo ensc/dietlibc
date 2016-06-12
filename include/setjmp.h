@@ -37,7 +37,13 @@ typedef long __jmp_buf[8];
 #ifndef __ASSEMBLER__
 typedef struct {
   long int gregs[10];
+#ifdef __s390x__
+  /* 8x IEEE double (64bit) = 8x 64bit long */
+  long fpregs[8];
+#else
+  /* 2x IEEE double (64bit) = 4x 32bit long */
   long fpregs[4];
+#endif
 } __jmp_buf[1];
 #endif
 #define __JB_GPR6	0
@@ -83,11 +89,15 @@ typedef struct
   {
     void * __pc;	/* Program counter.  */
     void * __sp;	/* Stack pointer.  */
-    int __regs[8];	/* Callee-saved registers s0 through s7.  */
+    long __regs[8];	/* Callee-saved registers s0 through s7.  */
     void * __fp;	/* The frame pointer.  */
     void * __gp;	/* The global pointer.  */
     int __fpc_csr;	/* Floating point status register.  */
+#ifdef __mips64__
+    double __fpregs[8];	/* Callee-saved floating point registers.  */
+#else
     double __fpregs[6];	/* Callee-saved floating point registers.  */
+#endif
   } __jmp_buf[1];
 #endif
 #endif
@@ -168,6 +178,12 @@ typedef int __jmp_buf[3];
 #ifndef __ASSEMBLER__
 typedef int __jmp_buf[10 + 16*2 + 16*2];
 #endif
+#endif
+
+#ifdef __aarch64__
+/* x19-x28 (10) + x29-x31 (3: fp, lr, sp) + d8-d15 (8) + 1 unused
+ * (glibc's __jmp_buf has size 22, we follow that) */
+typedef unsigned long long __jmp_buf[10 + 3 + 8 + 1];
 #endif
 
 #if defined(__powerpc__) || defined(__powerpc64__)

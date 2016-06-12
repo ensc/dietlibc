@@ -60,6 +60,13 @@ struct shm_info {
   unsigned long swap_successes;
 };
 
+#elif defined(__aarch64__)
+/* Technically, this is wrong, as page size might vary, and is not known when compiling stuff.
+ * See also: https://marcin.juszkiewicz.com.pl/2015/09/14/from-a-diary-of-aarch64-porter-page_size
+ * OTOH, dietlibc relies on the constant being available in some places, so just define it to the
+ * minimal value, */
+#define PAGE_SIZE 4096UL
+#define PAGE_SHIFT 12
 extern int shmget(key_t key, int size, int shmflg) __THROW;
 extern void *shmat(int shmid, const void *shmaddr, int shmflg) __THROW;
 extern int shmdt (const void *shmaddr) __THROW;

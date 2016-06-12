@@ -1,5 +1,15 @@
 #include "dietfeatures.h"
+#include "ppc64-features.h"
 
+#if defined(_CALL_ELF) && _CALL_ELF == 2
+	.section ".text"
+	.globl	_start
+	.type	_start,@function
+_start:
+	addis	2,12,.TOC.-_start@ha
+	addi	2,2,.TOC.-_start@l
+.localentry	_start,.-_start
+#else
 	.section ".text"
 	.align	2
 	.globl	._start
@@ -25,6 +35,7 @@ _start:
 	.previous
 ._start:
 */
+#endif
  /* Save the stack pointer, in case we're statically linked under Linux.  */
 	mr	9,1
  /* Set up an initial stack frame, and clear the LR.  */
@@ -70,24 +81,29 @@ _start:
 #ifdef WANT_DYNAMIC
 /* #warning dynamic */
 	mr	6,7
-	bl	._dyn_start
+	/* This has not been tested on ppc64le yet... */
+	bl	FN_NAME_DOTIFY(_dyn_start)
 #else
 /* #warning static */
-#define DOTIFY(name) .##name
-	bl	DOTIFY(CALL_IN_STARTCODE)
+	bl	FN_NAME_DOTIFY(CALL_IN_STARTCODE)
 #endif
-	b	.exit
+	/* Don't use the dotted version here, because __libc_exit is
+	 * defined as an alias in the C code, so only the weak exit
+	 * (but not .exit) will be overridden by it. Fortunately,
+	 * calling the non-dotted symbols also works. This is required
+	 * for atexit (and stdio's flush() at exit) to work. */
+	b	exit
 
 .LT_start:
 	.long	0
 	.quad	0x000c000000000000 | 0x0000200000000000 | 0x0000004000000000
-	.long	.LT_start-._start
+	.long	.LT_start-FN_NAME_DOTIFY(_start)
 	.short	.LT_start_name_end-.LT_start_name_start
 .LT_start_name_start:
 	.ascii "_start"
 .LT_start_name_end:
 	.align 2
-	.size ._start,.-._start
+	.size FN_NAME_DOTIFY(_start),.-FN_NAME_DOTIFY(_start)
 
 /* Define a symbol for the first piece of initialized data.  */
 	.section ".data"

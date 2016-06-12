@@ -1,5 +1,6 @@
 
 CFLAGS+=-mcpu=supersparc -Os
+CFLAGS+=-DWANT_STRTOD_WITHOUT_LONG_DOUBLE
 VPATH:=sparc:syscalls.s:$(VPATH)
 LIBOBJ+=$(OBJDIR)/udiv.o $(OBJDIR)/umul.o $(OBJDIR)/urem.o
 LIBOBJ+=$(OBJDIR)/rem.o $(OBJDIR)/sdiv.o

@@ -123,6 +123,8 @@ _pthread_descr __thread_self(void) {
   asm("mov %0 = r13" : "=r"(cur) );	/* r13 (tp) is used as thread pointer */
 #elif defined(__x86_64__)
   asm("mov %%fs:(16),%0" : "=r"(cur));
+#elif defined(__aarch64__)
+  asm("mrs %0, tpidr_el0" : "=r"(cur));
 #elif defined(__i386__)
   if (__likely(__modern_linux==1))
     asm("mov %%gs:(8),%0" : "=r"(cur));
@@ -349,6 +351,8 @@ static inline _pthread_descr __thread_set_register(void*arg) {
   asm volatile ("sar %%a0,%0" : : "d"(arg) );
 #elif defined(__ia64__)
   asm volatile ("mov r13 = %0" : : "r"(arg) );
+#elif defined(__aarch64__)
+  asm volatile ("msr tpidr_el0, %0" : : "r"(arg) );
 #endif
   return (_pthread_descr)arg;
 }

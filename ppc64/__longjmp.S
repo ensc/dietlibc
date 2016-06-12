@@ -1,6 +1,15 @@
 #include <setjmp.h>
+#include "ppc64-features.h"
 
 	.globl __longjmp
+#if defined(_CALL_ELF) && _CALL_ELF == 2
+	.section	".text"
+	.type	__longjmp,@function
+__longjmp:
+	addis	2,12,.TOC.-__longjmp@ha
+	addi	2,2,.TOC.-__longjmp@l
+.localentry	__longjmp,.-__longjmp
+#else
 	.section	".opd","aw"
 	.align 3
 __longjmp:
@@ -11,6 +20,7 @@ __longjmp:
 		.globl	.__longjmp
 .align 2
 .__longjmp:
+#endif
 	ld  1,(JB_GPR1*8)(3)
 	ld  2,(JB_GPR2*8)(3)
 	ld  0,(JB_LR*8)(3)
@@ -55,4 +65,4 @@ __longjmp:
 	lfd 31,((JB_FPRS+17)*8)(3)
 	mr 3,4
 	blr
-.size .__longjmp,.-.__longjmp
+.size FN_NAME_DOTIFY(__longjmp),.-FN_NAME_DOTIFY(__longjmp)

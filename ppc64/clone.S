@@ -7,6 +7,11 @@
 clone:
 .global __clone
 __clone:
+#if defined(_CALL_ELF) && _CALL_ELF == 2
+	addis	2,12,.TOC.-__clone@ha
+	addi	2,2,.TOC.-__clone@l
+.localentry	__clone,.-__clone
+#endif
 	cmpwi	     4,0	/* check have non null child_stack pointer */
 	cmpwi	cr1, 3,0	/* check have non null thread_funcion */
 	cror	eq,4*cr1+eq,eq	/* now if eq is set one is or both are zero */

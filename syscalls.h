@@ -24,6 +24,9 @@
 #elif defined(__mips__)
 #include "mips/syscalls.h"
 
+#elif defined(__aarch64__)
+#include "aarch64/syscalls.h"
+
 #elif defined(__arm__)
 #include "arm/syscalls.h"
 

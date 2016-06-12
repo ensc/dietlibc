@@ -34,10 +34,13 @@ static const char* Os[] = {
   "sparc64","-Os","-m64","-mhard-quad-float",0,
   "alpha","-Os","-fomit-frame-pointer",0,
   "arm","-Os","-fomit-frame-pointer",0,
+  "aarch64","-Os","-fomit-frame-pointer",0,
   "mips","-Os","-fomit-frame-pointer","-march=mips2",0,
   "mipsel","-Os","-fomit-frame-pointer","-march=mips2",0,
+  "mips64","-Os","-fomit-frame-pointer",0,
   "ppc","-Os","-fomit-frame-pointer","-mpowerpc-gpopt","-mpowerpc-gfxopt",0,
   "ppc64","-Os","-fomit-frame-pointer","-mpowerpc-gpopt","-mpowerpc-gfxopt",0,
+  "ppc64le","-Os","-fomit-frame-pointer","-mpowerpc-gpopt","-mpowerpc-gfxopt",0,
   "s390","-Os","-fomit-frame-pointer",0,
   "s390x","-Os","-fomit-frame-pointer",0,
   "sh","-Os","-fomit-frame-pointer",0,
@@ -80,11 +83,12 @@ int main(int argc,char *argv[]) {
   char *libpthread="-lpthread";
   char dashL[1000];
   char dashstatic[]="-static";
+  char dashshared[]="-shared";	// for -fpie
   int i;
   int mangleopts=0;
   int printpath=0;
   char manglebuf[1024];
-  int m;
+  int m,pie;
 
   if (!(diethome = getenv("DIETHOME")))
     diethome=DIETHOME;
@@ -121,10 +125,13 @@ int main(int argc,char *argv[]) {
   } while (1);
   {
     m=0;
+    pie=0;
     for (i=1; i<argc; ++i) {
       if (!strcmp(argv[i],"-m32")) m=32; else
       if (!strcmp(argv[i],"-mx32")) m=33; else
-      if (!strcmp(argv[i],"-m64")) m=64;
+      if (!strcmp(argv[i],"-m64")) m=64; else
+      if (!strcmp(argv[i],"-fpie")) pie=1; else
+      if (!strcmp(argv[i],"-fno-pie")) pie=0;
     }
   }
   {
@@ -143,10 +150,16 @@ int main(int argc,char *argv[]) {
       memmove(shortplatform,argv[1],(size_t)(tmp2-cc));
       platform[tmp2-cc+len]=0;
       if (shortplatform[0]=='i' && shortplatform[2]=='8' && shortplatform[3]=='6') shortplatform[1]='3';
-      else if (strcmp(shortplatform, "powerpc") == 0)
-        strcpy(shortplatform, "ppc");
-      else if (strcmp(shortplatform, "powerpc64") == 0)
-        strcpy(shortplatform, "ppc64");
+      if (!strncmp(shortplatform, "powerpc", 7)) {
+        shortplatform[0] = shortplatform[1] = 'p'; shortplatform[2] = 'c';
+        memmove(&shortplatform[3], &shortplatform[7], strlen(&shortplatform[7]) + 1);
+      }
+      if (!strcmp(shortplatform, "hppa"))
+        strcpy(shortplatform, "parisc");
+      if (!strcmp(shortplatform, "mips64el"))
+        strcpy(shortplatform, "mips64");
+      if (!strncmp(cc, "x86_64-linux-gnux32-", 20) || !strncmp(cc, "x86_64-pc-linux-gnux32-", 23))
+        strcpy(shortplatform, "x32");
     } else {
 #ifdef __sparc__
 #ifdef __arch64__
@@ -159,7 +172,11 @@ int main(int argc,char *argv[]) {
       shortplatform="ppc";
 #endif
 #ifdef __powerpc64__
+#ifdef __LITTLE_ENDIAN__
+      shortplatform="ppc64le";
+#else
       shortplatform="ppc64";
+#endif
 #endif
 #ifdef __i386__
       shortplatform="i386";
@@ -170,11 +187,18 @@ int main(int argc,char *argv[]) {
 #ifdef __arm__
       shortplatform="arm";
 #endif
+#ifdef __aarch64__
+      shortplatform="aarch64";
+#endif
+#ifdef __mips64__
+      shortplatform="mips64";
+#else
 #ifdef __MIPSEL__
       shortplatform="mipsel";
 #endif
 #ifdef __MIPSEB__
       shortplatform="mips";
+#endif
 #endif
 #ifdef __s390x__
       shortplatform="s390x";
@@ -257,7 +281,10 @@ pp:
       strcpy(a,diethome); strcat(a,"/include");
 #ifndef __DYN_LIB
       strcpy(b,platform);
-      if (profile) strcat(b,"/pstart.o"); else strcat(b,"/start.o");
+      if (profile)
+	strcat(b,"/pstart.o");
+      else
+	strcat(b,pie ? "/start-pie.o" : "/start.o");
 #ifdef INSTALLVERSION
       strcpy(c,platform); strcat(c,"/libc.a");
 #else
@@ -306,7 +333,11 @@ pp:
 	}
       }
 #ifndef __DYN_LIB
-      if (_link) { *dest++=(char*)nostdlib; *dest++=dashstatic; *dest++=dashL; }
+      if (_link) {
+	*dest++=(char*)nostdlib;
+	*dest++=pie ? dashshared : dashstatic;
+	*dest++=dashL;
+      }
 #else
       /* avoid R_*_COPY relocations */
       *dest++="-fPIC";
@@ -328,12 +359,16 @@ pp:
 	  if (_link) *dest++="-lpthread";
 	  continue;
 	}
+#if 0
 	if (mangleopts)
 	  if (argv[i][0]=='-' && (argv[i][1]=='O' || argv[i][1]=='f' ||
 				  (argv[i][1]=='m' && argv[i][2]!='3' && argv[i][2]!='6' && argv[i][2]!='x'))) {
-	    if (strcmp(argv[i],"-fpic") && strcmp(argv[i],"-fno-pic"))
+	    if (strcmp(argv[i],"-fpic") && strcmp(argv[i],"-fno-pic") &&
+		strcmp(argv[i],"-fpie") && strcmp(argv[i],"-fno-pie") &&
+		strncmp(argv[i],"-fvisibility=",13))
 	      continue;
 	  }
+#endif
 	*dest++=argv[i];
       }
 #ifndef __DYN_LIB

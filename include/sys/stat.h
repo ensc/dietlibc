@@ -180,6 +180,55 @@ struct stat64 {
         long            __unused[3];
 };
 
+#elif defined(__mips64__)
+
+/* The memory layout is the same as of struct stat64 of the 32-bit kernel.  */
+struct stat {
+	unsigned int	st_dev;
+	unsigned int	st_pad0[3]; /* Reserved for st_dev expansion */
+	unsigned long	st_ino;
+	uint32_t	st_mode;
+	uint32_t	st_nlink;
+	uint32_t	st_uid;
+	uint32_t	st_gid;
+	unsigned int	st_rdev;
+	unsigned int	st_pad1[3]; /* Reserved for st_rdev expansion */
+	long		st_size;
+	/* WTF? the mips64 kernel interface uses 32bit unsigned int for time_t? */
+	unsigned int	st_atime;
+	unsigned int	st_atime_nsec;
+	unsigned int	st_mtime;
+	unsigned int	st_mtime_nsec;
+	unsigned int	st_ctime;
+	unsigned int	st_ctime_nsec;
+	unsigned int	st_blksize;
+	unsigned int	st_pad2;
+	unsigned long	st_blocks;
+};
+
+/* Define struct stat64 to be identical, even though the kernel only knows struct stat. */
+struct stat64 {
+	unsigned int	st_dev;
+	unsigned int	st_pad0[3];
+	unsigned long	st_ino;
+	uint32_t	st_mode;
+	uint32_t	st_nlink;
+	uint32_t	st_uid;
+	uint32_t	st_gid;
+	unsigned int	st_rdev;
+	unsigned int	st_pad1[3];
+	long		st_size;
+	unsigned int	st_atime;
+	unsigned int	st_atime_nsec;
+	unsigned int	st_mtime;
+	unsigned int	st_mtime_nsec;
+	unsigned int	st_ctime;
+	unsigned int	st_ctime_nsec;
+	unsigned int	st_blksize;
+	unsigned int	st_pad2;
+	unsigned long	st_blocks;
+};
+
 #elif defined(__mips__)
 
 struct stat {
@@ -362,6 +411,54 @@ __extension__	long long	st_size;
 
 __extension__	unsigned long long	st_ino;
 };
+#elif defined(__aarch64__)
+
+struct stat {
+	unsigned long	st_dev;
+	unsigned long	st_ino;
+	unsigned int	st_mode;
+	unsigned int	st_nlink;
+	unsigned int	st_uid;
+	unsigned int	st_gid;
+	unsigned long	st_rdev;
+	unsigned long	__pad1;
+	long		st_size;
+	int		st_blksize;
+	int		__pad2;
+	long		st_blocks;
+	time_t	 	st_atime;
+	long		st_atime_nsec;
+	time_t	 	st_mtime;
+	long		st_mtime_nsec;
+	time_t	 	st_ctime;
+	long		st_ctime_nsec;
+	int		__unused1;
+	int		__unused2;
+};
+
+struct stat64 {
+	unsigned long	st_dev;
+	unsigned long	st_ino;
+	unsigned int	st_mode;
+	unsigned int	st_nlink;
+	unsigned int	st_uid;
+	unsigned int	st_gid;
+	unsigned long	st_rdev;
+	unsigned long	__pad1;
+	long		st_size;
+	int		st_blksize;
+	int		__pad2;
+	long		st_blocks;
+	time_t	 	st_atime;
+	long		st_atime_nsec;
+	time_t	 	st_mtime;
+	long		st_mtime_nsec;
+	time_t	 	st_ctime;
+	long		st_ctime_nsec;
+	int		__unused1;
+	int		__unused2;
+};
+
 #elif defined(__s390__)
 #if defined(__s390x__)
 struct stat {
@@ -528,7 +625,7 @@ struct stat {
 	uint64_t	st_mtime_nsec;
 	time_t		st_ctime;
 	uint64_t	st_ctime_nsec;
-	unsigned int	__unused[3]
+	uint64_t	__unused[3];
 };
 
 #elif defined(__ia64__)

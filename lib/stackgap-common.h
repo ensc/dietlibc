@@ -145,8 +145,22 @@ void __setup_tls(tcbhead_t* mainthread) {
   __builtin_set_thread_pointer(mainthread);
 #elif defined(__mips__)
   set_thread_area((char*)(void *)mainthread);
+#elif defined(__aarch64__)
+  asm volatile ("msr tpidr_el0, %0" :: "r"(mainthread));
 #elif defined(__arm__)
   __arm_set_tls(mainthread);
+#elif defined(__hppa__)
+  /* control register 27 is used as thread pointer on PA-RISC Linux,
+   * but it can only be set from Ring0. The Linux kernel provides
+   * privileged code to set this register, so call that. (cf. syscalls,
+   * which branch to 0x100(%%sr2, %%r0), instead.) PA-RISC has
+   * 1-instruction delayed branching. The register may be read by any
+   * code however (using mfctl %cr27, %rXX). r26 is used as input for
+   * the kernel code, r31 is the return address pointer set by the
+   * branch instruction, so clobber both. */
+  asm volatile ("ble 0xe0(%%sr2, %%r0)\n\t"
+                "copy %0, %%r26"
+                :: "r" (mainthread) : "r26", "r31");
 #elif defined(__ABI_TLS_REGISTER)
   register tcbhead_t* __thread_self __asm__(__ABI_TLS_REGISTER);
   __thread_self=mainthread;
@@ -395,8 +409,11 @@ int stackgap(int argc,char* argv[],char* envp[]) {
   char const * rand;
   char* tlsdata;
   long* auxvec=(long*)envp;
+#endif
 #ifndef WANT_ELFINFO
-  while (*auxvec) ++auxvec; ++auxvec;	/* skip envp to get to auxvec */
+  while (*auxvec) ++auxvec;			/* skip envp to get to auxvec */
+  ++auxvec;
+
   _auxvec=auxvec;
 #endif
 #ifdef WANT_STACKGAP
@@ -550,6 +567,8 @@ int stackgap(int argc,char* argv[],char* envp[]) {
     }
   }
 #endif
+
+#if defined(WANT_STACKGAP) || defined(WANT_SSP) || defined(WANT_TLS)
 #if defined(WANT_STACKGAP) || defined(WANT_SSP)
   rand=find_in_auxvec(auxvec,25);
   if (!rand) {

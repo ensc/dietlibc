@@ -38,7 +38,7 @@ typedef uint64_t fsfilcnt_t;
              Used to identify a thread.
 */
 
-#if defined(__alpha__) || defined(__ia64__) || defined(__sparc64__) || defined(__s390x__)
+#if defined(__alpha__) || defined(__ia64__) || defined(__sparc64__) || defined(__s390x__) || defined(__aarch64__)
     typedef uint32_t dev_t;		/* Used for device IDs. */
     typedef uint32_t gid_t;		/* Used for group IDs. */
     typedef uint32_t mode_t;		/* Used for some file attributes. */
@@ -90,13 +90,20 @@ typedef __SIZE_TYPE__ ssize_t;
 #else
 typedef signed long ssize_t;		/* Used for a count of bytes or an error indication. */
 #endif
+#if (defined(__sparc__) && (__arch64__)) || defined(__sparcv9)
+/* sparc64 has 32bit suseconds_t for some reason, even though struct
+ * timeval is padded to 16 bytes anyway. */
+typedef signed int suseconds_t;		/* Used for time in microseconds. */
+typedef signed int useconds_t;		/* Used for time in microseconds. */
+#else
 typedef signed long suseconds_t;	/* Used for time in microseconds. */
+typedef signed long useconds_t;		/* Used for time in microseconds. */
+#endif
 #if defined(__x86_64__) && defined(__ILP32__)
 typedef signed long long time_t;
 #else
 typedef signed long time_t;		/* Used for time in seconds. */
 #endif
-typedef signed long useconds_t;		/* Used for time in microseconds. */
 
 /* non-susv2 types: */
 __extension__ typedef signed long long loff_t;	/* 64-bit offset */
