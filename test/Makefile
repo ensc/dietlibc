@@ -16,6 +16,8 @@ protoent prototypes putenv pwent rand48 read1 readdir readdir64 regex select sen
 sigsetjmp speed spent sprintf sscanf stdarg strcasecmp strcmp strncat strncpy strptime strrchr \
 strstr strtol sysconf sysenter unaligned ungetc utime waitpid
 
+TESTPROGRAMS += startup-test
+
 test: $(TESTPROGRAMS)
 
 ffs: ffs.c

@@ -19,13 +19,14 @@ _start:
 #else
 	leaq	environ(%rip), %rax
 #endif
+	movq	%rdx, %rbx
 	movq	%rdx, (%rax)	/* environ */
 
-1:	add	$8, %rdx	/* increment envp */
-	cmpq	$0, -8(%rdx)	/* load envp[-1] */
+1:	add	$8, %rbx	/* increment envp */
+	cmpq	$0, -8(%rbx)	/* load envp[-1] */
 	jne	1b		/* ... until envp[-1]==NULL */
 
-	movq	%rdx, 8(%rax)	/* __elfinfo */
+	movq	%rbx, 8(%rax)	/* __elfinfo */
 #else
 #ifdef __DYN_LIB
 	movq	environ@GOTPCREL(%rip), %rax
