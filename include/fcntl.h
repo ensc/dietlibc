@@ -36,7 +36,7 @@ __BEGIN_DECLS
 #define O_CLOEXEC	02000000
 #define O_SYNC		(O_DSYNC|04000000)
 #define O_PATH		010000000
-#define O_TMPFILE	020000000
+#define __O_TMPFILE	020000000
 
 #define F_DUPFD		0	/* dup */
 #define F_GETFD		1	/* get close_on_exec */
@@ -121,7 +121,7 @@ struct flock64 {
 #define O_CLOEXEC	010000000
 #define O_SYNC		(020000000|O_DSYNC)
 #define O_PATH		040000000
-#define O_TMPFILE	0100000000
+#define __O_TMPFILE	0100000000
 
 #define F_DUPFD		0	/* dup */
 #define F_GETFD		1	/* get close_on_exec */
@@ -195,8 +195,8 @@ struct flock {
 #define O_NOFOLLOW	0x20000	/* don't follow links */
 #define O_NOATIME	0x40000
 #define O_CLOEXEC	0x80000
-#define O_PATH		040000000
-#define O_TMPFILE	0100000000
+#define O_PATH		010000000
+#define __O_TMPFILE	020000000
 
 #define O_NDELAY	O_NONBLOCK
 
@@ -298,7 +298,7 @@ struct flock {
 #define O_CLOEXEC	0x400000
 #define O_SYNC		(0x800000|O_DSYNC)
 #define O_PATH		0x1000000
-#define O_TMPFILE	0x2000000
+#define __O_TMPFILE	0x2000000
 
 #define F_DUPFD		0	/* dup */
 #define F_GETFD		1	/* get close_on_exec */
@@ -389,7 +389,7 @@ struct flock64 {
 #define O_CLOEXEC	02000000
 #define O_SYNC		(O_DSYNC|04000000)
 #define O_PATH		010000000
-#define O_TMPFILE	020000000
+#define __O_TMPFILE	020000000
 
 #define F_DUPFD		0	/* dup */
 #define F_GETFD		1	/* get close_on_exec */
@@ -479,7 +479,7 @@ struct flock64 {
 #define O_CLOEXEC	02000000
 #define O_SYNC		(O_DSYNC|04000000)
 #define O_PATH		010000000
-#define O_TMPFILE	020000000
+#define __O_TMPFILE	020000000
 
 #define F_DUPFD		0	/* dup */
 #define F_GETFD		1	/* get close_on_exec */
@@ -578,7 +578,7 @@ struct flock64 {
 #define O_INVISIBLE 04000000 /* invisible I/O, for DMAPI/XDSM */
 
 #define O_PATH		020000000
-#define O_TMPFILE	040000000
+#define __O_TMPFILE	040000000
 #define O_SYNC		(__O_SYNC|O_DSYNC)
 
 #define F_DUPFD     0   /* Duplicate file descriptor.  */
@@ -642,6 +642,8 @@ struct flock64
 };
 
 #endif
+
+#define O_TMPFILE (__O_TMPFILE | O_DIRECTORY)
 
 #ifdef _GNU_SOURCE
 
