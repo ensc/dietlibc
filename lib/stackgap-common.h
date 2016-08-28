@@ -606,5 +606,5 @@ int stackgap(int argc,char* argv[],char* envp[]) {
       if (*c=='/') program_invocation_short_name=c+1;
   }
 #endif
-  return main(argc,argv,envp);
+  exit(main(argc,argv,envp));
 }
