@@ -155,11 +155,13 @@ static void kill_all_threads(int sig,int main2) {
 }
 
 
+#ifndef WANT_TLS
 /* thread errno location */
 int *__errno_location() {
   _pthread_descr td=__thread_self();
   return &(td->errno);
 }
+#endif
 
 /* exit a thread */
 static void __pthread_exit(void*retval) {
