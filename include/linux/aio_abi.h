@@ -2,6 +2,7 @@
 #define _LINUX_AIO_H
 
 #include <inttypes.h>
+#include <sys/time.h>
 #include <endian.h>
 
 typedef unsigned long aio_context_t;
