@@ -1,3 +1,4 @@
+#include "dietfeatures.h"
 #include "syscalls.h"
 
 #ifdef __NR_fstatat64
