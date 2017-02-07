@@ -2,7 +2,7 @@
 #define _SYS_RANDOM_H
 
 #include <sys/cdefs.h>
-#include <sys/stddef.h>
+#include <stddef.h>
 
 __BEGIN_DECLS
 

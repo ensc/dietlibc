@@ -1,5 +1,4 @@
-#define _LINUX_SOURCE
-#include <unistd.h>
+#include <sys/random.h>
 #include <errno.h>
 #include <fcntl.h>
 
