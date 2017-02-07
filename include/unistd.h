@@ -296,16 +296,6 @@ int tgkill(pid_t tgid, pid_t tid, int sig) __THROW;
 long fadvise64(int fd,off64_t offset,size_t len,int advice) __THROW;
 long fadvise64_64(int fd,off64_t offset,off64_t len,int advice) __THROW;
 
-#ifndef GRND_NONBLOCK
-enum {
-  GRND_NONBLOCK=1,
-#define GRND_NONBLOCK GRND_NONBLOCK
-  GRND_RANDOM=2
-#define GRND_RANDOM GRND_RANDOM
-};
-
-int getrandom(void* buf, size_t buflen, unsigned int flags) __THROW;
-#endif
 #endif
 
 #if defined(_ATFILE_SOURCE) || ((_XOPEN_SOURCE + 0) >= 700) || ((_POSIX_C_SOURCE + 0) >= 200809L)
@@ -316,8 +306,6 @@ int fchownat(int dirfd, const char *pathname, uid_t owner, gid_t group, int flag
 int linkat(int olddirfd, const char *oldpath, int newdirfd, const char *newpath, int flags) __THROW;
 int readlinkat(int dirfd, const char *pathname, char *buf, size_t bufsiz) __THROW;
 #endif
-
-int getentropy(void* buf,size_t buflen) __THROW;
 
 __END_DECLS
 
