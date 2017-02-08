@@ -51,6 +51,7 @@
   update setjmp/longjmp on s390x to use 64-bit ABI (Christian Seiler)
   SECURITY: x32 fixes: one of them could lead to memory corruption because struct stat was declared too short (Christian Seiler)
   add really crappy pthread_rwclock implementation for openssl 1.1
+  move getrandom and getentropy declarations to <sys/random.h> to match glibc 2.25
 
 0.33:
   first stab at getting TLS to work in actual threads
