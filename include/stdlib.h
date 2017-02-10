@@ -15,7 +15,7 @@ void free(void *ptr) __THROW;
 void *realloc(void *ptr, size_t size) __THROW __attribute_malloc__;
 
 /* useful OpenBSD extension: */
-void* reallocarray(void* ptr, size_t nmemb, size_t size) __THROW __attribute_malloc__;
+void* reallocarray(void* ptr, size_t nmemb, size_t size) __THROW __attribute_malloc__ __attribute_alloc2__(2,3);
 
 char *getenv(const char *name) __THROW __pure;
 int putenv(const char *string) __THROW;
