@@ -302,6 +302,34 @@
 #define __NR_seccomp		348
 #define __NR_getrandom		349
 #define __NR_memfd_create	350
+#define __NR_bpf		351
+#define __NR_s390_pci_mmio_write	352
+#define __NR_s390_pci_mmio_read		353
+#define __NR_execveat		354
+#define __NR_userfaultfd	355
+#define __NR_membarrier		356
+#define __NR_recvmmsg		357
+#define __NR_sendmmsg		358
+#define __NR_socket		359
+#define __NR_socketpair		360
+#define __NR_bind		361
+#define __NR_connect		362
+#define __NR_listen		363
+#define __NR_accept4		364
+#define __NR_getsockopt		365
+#define __NR_setsockopt		366
+#define __NR_getsockname	367
+#define __NR_getpeername	368
+#define __NR_sendto		369
+#define __NR_sendmsg		370
+#define __NR_recvfrom		371
+#define __NR_recvmsg		372
+#define __NR_shutdown		373
+#define __NR_mlock2		374
+#define __NR_copy_file_range	375
+#define __NR_preadv2		376
+#define __NR_pwritev2		377
+#define NR_syscalls 378
 
 #define syscall_weak(name,wsym,sym) \
 .text; \

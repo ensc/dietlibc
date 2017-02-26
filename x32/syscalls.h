@@ -316,6 +316,9 @@
 #define __NR_getsockopt (__X32_SYSCALL_BIT + 542)
 #define __NR_io_setup (__X32_SYSCALL_BIT + 543)
 #define __NR_io_submit (__X32_SYSCALL_BIT + 544)
+#define __NR_execveat (__X32_SYSCALL_BIT + 545)
+#define __NR_preadv2 (__X32_SYSCALL_BIT + 546)
+#define __NR_pwritev2 (__X32_SYSCALL_BIT + 547)
 
 #ifdef __PIC__
 #define syscall_weak(name,wsym,sym) \

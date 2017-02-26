@@ -359,6 +359,17 @@
 #define __NR_seccomp			(__NR_Linux + 352)
 #define __NR_getrandom			(__NR_Linux + 353)
 #define __NR_memfd_create		(__NR_Linux + 354)
+#define __NR_bpf			(__NR_Linux + 355)
+#define __NR_execveat			(__NR_Linux + 356)
+#define __NR_userfaultfd		(__NR_Linux + 357)
+#define __NR_membarrier			(__NR_Linux + 358)
+#define __NR_mlock2			(__NR_Linux + 359)
+#define __NR_copy_file_range		(__NR_Linux + 360)
+#define __NR_preadv2			(__NR_Linux + 361)
+#define __NR_pwritev2			(__NR_Linux + 362)
+#define __NR_pkey_mprotect		(__NR_Linux + 363)
+#define __NR_pkey_alloc			(__NR_Linux + 364)
+#define __NR_pkey_free			(__NR_Linux + 365)
 
 #elif _MIPS_SIM == _ABI64
 
@@ -686,6 +697,12 @@
 #define __NR_userfaultfd		(__NR_Linux + 317)
 #define __NR_membarrier			(__NR_Linux + 318)
 #define __NR_mlock2			(__NR_Linux + 319)
+#define __NR_copy_file_range		(__NR_Linux + 320)
+#define __NR_preadv2			(__NR_Linux + 321)
+#define __NR_pwritev2			(__NR_Linux + 322)
+#define __NR_pkey_mprotect		(__NR_Linux + 323)
+#define __NR_pkey_alloc			(__NR_Linux + 324)
+#define __NR_pkey_free			(__NR_Linux + 325)
 
 #else
 #error "dietlibc not ported to your MIPS ABI yet."

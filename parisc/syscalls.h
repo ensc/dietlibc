@@ -355,8 +355,16 @@
 #define __NR_seccomp		(__NR_Linux + 338)
 #define __NR_getrandom		(__NR_Linux + 339)
 #define __NR_memfd_create	(__NR_Linux + 340)
+#define __NR_bpf		(__NR_Linux + 341)
+#define __NR_execveat		(__NR_Linux + 342)
+#define __NR_membarrier		(__NR_Linux + 343)
+#define __NR_userfaultfd	(__NR_Linux + 344)
+#define __NR_mlock2		(__NR_Linux + 345)
+#define __NR_copy_file_range	(__NR_Linux + 346)
+#define __NR_preadv2		(__NR_Linux + 347)
+#define __NR_pwritev2		(__NR_Linux + 348)
 
-#define __NR_Linux_syscalls	(__NR_memfd_create + 1)
+#define __NR_Linux_syscalls	(__NR_pwritev2 + 1)
 
 #define LINUX_GATEWAY_ADDR      0x100
 
