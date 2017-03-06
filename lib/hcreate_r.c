@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <time.h>
 #include <sys/auxv.h>
+#include <sys/random.h>
 
 int hcreate_r(size_t count, struct hsearch_data* htab) {
   htab->size=count;

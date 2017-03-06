@@ -3,6 +3,15 @@
 
 /* feel free to comment some of these out to reduce code size */
 
+/* On i386, BSD socket syscalls have traditionally been implemented via
+ * a multiplexing syscall called "socketcall". But somewhere in the 3.x
+ * cycle, Linux got real syscalls for socket(), accept() etc, and now
+ * it would make sense to use those syscalls instead, if only to make
+ * seccomp sandboxes more platform agnostic. However, if you plan on
+ * running your program on an ancient kernel, you need the socketcall
+ * version instead. */
+#define WANT_I386_SOCKETCALL
+
 #define WANT_FLOATING_POINT_IN_PRINTF
 #define WANT_FLOATING_POINT_IN_SCANF
 #define WANT_CHARACTER_CLASSES_IN_SCANF
