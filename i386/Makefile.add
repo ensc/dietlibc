@@ -9,3 +9,11 @@ LIBMATH:=$(filter-out acosh.o asinh.o atanh.o cbrt.o copysign.o exp10.o exp2.o e
 CFLAGS+=$(M)
 VPATH:=i386:syscalls.s:$(VPATH)
 LIBGMON_OBJS+=$(OBJDIR)/mcount.o
+
+$(OBJDIR)/accept.o $(OBJDIR)/accept4.o $(OBJDIR)/bind.o \
+$(OBJDIR)/connect.o $(OBJDIR)/getpeername.o $(OBJDIR)/getsockname.o \
+$(OBJDIR)/getsockopt.o $(OBJDIR)/listen.o $(OBJDIR)/mmap64.o \
+$(OBJDIR)/recv.o $(OBJDIR)/recvfrom.o $(OBJDIR)/recvmmsg.o \
+$(OBJDIR)/recvmsg.o $(OBJDIR)/send.o $(OBJDIR)/sendmmsg.o \
+$(OBJDIR)/sendmsg.o $(OBJDIR)/sendto.o $(OBJDIR)/setsockopt.o \
+$(OBJDIR)/shutdown.o $(OBJDIR)/socket.o $(OBJDIR)/socketpair.o: dietfeatures.h

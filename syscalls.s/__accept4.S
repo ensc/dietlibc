@@ -3,8 +3,8 @@
 
 #if !defined(__i386__) || !defined(WANT_I386_SOCKETCALL)
 
-#ifdef __NR_send
-syscall_weak(send,send,__libc_send)
+#ifdef __NR_accept4
+syscall(accept4,accept4)
 #endif
 
 #endif

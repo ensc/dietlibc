@@ -542,6 +542,15 @@ $(OBJDIR)/getservent.o $(OBJDIR)/iconv.o $(OBJDIR)/iconv_open.o \
 $(OBJDIR)/netent.o $(OBJDIR)/system.o $(OBJDIR)/stdin.o $(OBJDIR)/stdout.o \
 $(OBJDIR)/stderr.o: dietfeatures.h
 
+# these depend on dietfeatures.h for WANT_I386_SOCKETCALL
+$(OBJDIR)/__bind.o $(OBJDIR)/__connect.o $(OBJDIR)/__listen.o \
+$(OBJDIR)/__accept.o $(OBJDIR)/__getsockname.o $(OBJDIR)/__getpeername.o \
+$(OBJDIR)/__socketpair.o $(OBJDIR)/__send.o $(OBJDIR)/__recv.o \
+$(OBJDIR)/__sendto.o $(OBJDIR)/__recvfrom.o $(OBJDIR)/__shutdown.o \
+$(OBJDIR)/__setsockopt.o $(OBJDIR)/__getsockopt.o $(OBJDIR)/__sendmsg.o \
+$(OBJDIR)/__recvmsg.o $(OBJDIR)/__accept4.o $(OBJDIR)/__recvmmsg.o \
+$(OBJDIR)/__sendmmsg.o: dietfeatures.h
+
 # these depend on dietfeatures.h for WANT_CRYPT_MD5
 $(OBJDIR)/crypt.o: dietfeatures.h
 

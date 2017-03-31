@@ -110,8 +110,8 @@
 #define __attribute_alloc__(x)
 #define __attribute_alloc2__(x,y)
 #else
-#define __attribute_alloc__(x) __attribute__((alloc_size(x))
-#define __attribute_alloc2__(x,y) __attribute__((alloc_size(x,y))
+#define __attribute_alloc__(x) __attribute__((alloc_size(x)))
+#define __attribute_alloc2__(x,y) __attribute__((alloc_size(x,y)))
 #endif
 
 #if (__GNUC__ < 2) || ((__GNUC__ == 2) && (__GNUC_MINOR__ < 5))

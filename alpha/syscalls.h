@@ -446,6 +446,9 @@
 #define __NR_sched_setattr		508
 #define __NR_sched_getattr		509
 #define __NR_renameat2			510
+#define __NR_getrandom			511
+#define __NR_memfd_create		512
+#define __NR_execveat			513
 
 #define syscall_weak(name,wsym,sym) \
 .text ; \

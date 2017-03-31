@@ -346,6 +346,17 @@
 #define __NR_seccomp		346
 #define __NR_getrandom		347
 #define __NR_memfd_create	348
+#define __NR_bpf		349
+#define __NR_execveat		350
+#define __NR_membarrier		351
+#define __NR_userfaultfd	352
+#define __NR_bind		353
+#define __NR_listen		354
+#define __NR_setsockopt		355
+#define __NR_mlock2		356
+#define __NR_copy_file_range	357
+#define __NR_preadv2		358
+#define __NR_pwritev2		359
 
 #define syscall_weak(name,wsym,sym) \
 .text; \
