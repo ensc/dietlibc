@@ -1,0 +1,23 @@
+env:
+  global:
+   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+   #   via the "travis encrypt" command using the project repo's public key
+   - secure: "jY1EZqLpZJ5OjvDKWYBbk3yNsAF442EP3650nmFVpigBf7DoPmLjbFQkDgUzHxmlCwlr7xOYHXEB5t+BuQ0ihDbCD0pc0Mrc4XaGfGJMQSBlHgxujGSdRgEVuwcffrtPhgDrieaJrSQ1eZANrVZIWH8hcx3aJEf++k5RUMAAEreuQFWeknBDbUEJOlYLq9bd31xppgtkCJEiKbKR2V9gjfMvchPyWqPdDQWz5nA1xDKm77AAiAf9pt/9IcYNEOt5TUPQlPC74XI2e43MhO5qp7tnOKD1CehPPj9Qurx/jZjW4wnyRmiRBwpQsQM3JaMbZY5beXiLis8AMV7u42X/BGOScVDQ8iXbEUWFeC4CVTXsS791hYxidpE7ofCjwjolOrXNBdvLdx1vw0pQA8giJCKMHo+dPw8lAqGxpEI3w+L9ckr0m2V5QRHGnuJcxosIdRo5QY2zUXsyPlk9CoFCASQcpEAC06EsUSCFfHEm3GR7sX1XXGSIuXE0ounoMUtimsYdmI3o1nvY6HLL1Zx1V2/U4PyLFUtbYaO/9+I9uelQ1ygOZTeFCmFjF/Du8BeGrmnHx+juUyw8DmsurrFYhuGks0hSayi9rXN+GTO7JWEcDY/r85stFU/wiLQUCMe+ZgDiVo7DztTsaCxKbWRQkeugUox3qJ7wueNUg6gVY/o="
+
+language: c
+
+before_install:
+      - echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
+
+addons:
+  coverity_scan:
+    project:
+      name: "ensc/dietlibc"
+      description: "Build submitted via Travis CI"
+    notification_email: github@ensc.de
+    build_command_prepend: ":"
+    build_command:   "make"
+    branch_pattern: master|CVS
+
+script:
+- make
