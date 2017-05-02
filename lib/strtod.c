@@ -19,7 +19,7 @@ double strtod(const char* s, char** endptr) {
         p++;
 
     switch (*p) {
-    case '-': sign = -1;
+    case '-': sign = -1;	/* fall through */
     case '+': p++;
     default : break;
     }
@@ -41,8 +41,8 @@ double strtod(const char* s, char** endptr) {
         expo   = 0;
         factor = 10.;
 
-        switch (*++p) {                 // ja hier weiﬂ ich nicht, was mindestens nach einem 'E' folgenden MUSS.
-        case '-': factor = 0.1;
+        switch (*++p) {                 // ja hier wei√ü ich nicht, was mindestens nach einem 'E' folgenden MUSS.
+        case '-': factor = 0.1;	/* fall through */
         case '+': p++;
                   break;
         case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9':

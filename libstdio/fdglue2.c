@@ -31,7 +31,7 @@ err_out:
     tmp->flags=(S_ISFIFO(st.st_mode))?FDPIPE:0;
   }
   switch (mode&3) {
-  case O_RDWR: tmp->flags|=CANWRITE;
+  case O_RDWR: tmp->flags|=CANWRITE;	/* fall through */
   case O_RDONLY: tmp->flags|=CANREAD|BUFINPUT; break;
   case O_WRONLY: tmp->flags|=CANWRITE;
   }

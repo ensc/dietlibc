@@ -261,6 +261,8 @@ resultproc_t eachresult;		/* call with each result obtained */
 	struct timeval t;
 	char outbuf[MAX_BROADCAST_SIZE], inbuf[UDPMSGSIZE];
 
+	memset(addrs,0,sizeof(addrs));
+
 	/*
 	 * initialization: create a socket, a broadcast address, and
 	 * preserialize the arguments into a send buffer.

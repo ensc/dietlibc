@@ -7,7 +7,7 @@ long int atol(const char* s) {
   int sign=0;
   while ( *s == ' '  ||  (unsigned int)(*s - 9) < 5u) ++s;
   switch (*s) {
-  case '-': sign=-1;
+  case '-': sign=-1;	/* fall through */
   case '+': ++s;
   }
   while ((unsigned int) (*s - '0') < 10u) {
