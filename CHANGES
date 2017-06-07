@@ -53,6 +53,7 @@
   add really crappy pthread_rwclock implementation for openssl 1.1
   move getrandom and getentropy declarations to <sys/random.h> to match glibc 2.25
   add secure_getenv
+  mempcpy -> memcpy in sha256crypt and sha512crypt
 
 0.33:
   first stab at getting TLS to work in actual threads
