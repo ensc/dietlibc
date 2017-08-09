@@ -774,7 +774,7 @@ int openat(int dirfd, const char *pathname, int flags, ...) __THROW;
 int futimesat(int dirfd, const char *pathname, const struct timeval times[2]) __THROW;
 int unlinkat(int dirfd, const char *pathname, int flags) __THROW;
 
-#if defined(_XOPEN_SOURCE) && (_XOPEN_SOURCE - 0) >= 600
+#if (defined(_XOPEN_SOURCE) && (_XOPEN_SOURCE - 0) >= 600) || defined(_POSIX_SOURCE)
 #include "linux/fadvise.h"
 int posix_fallocate(int fd, off64_t offset, off64_t len) __THROW;
 int posix_fadvise(int fd, off64_t offset, off64_t len, int advice) __THROW;
