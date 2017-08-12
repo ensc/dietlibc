@@ -17,7 +17,7 @@ FILE *freopen_unlocked(const char *path, const char *mode, FILE *stream) {
       fstat(stream->fd,&st);
       stream->flags=(S_ISFIFO(st.st_mode))?FDPIPE:0;
       switch (f&3) {
-      case O_RDWR: stream->flags|=CANWRITE;
+      case O_RDWR: stream->flags|=CANWRITE;	/* fall through */
       case O_RDONLY: stream->flags|=CANREAD; break;
       case O_WRONLY: stream->flags|=CANWRITE;
       }

@@ -268,6 +268,7 @@ openbracket:
     tmp=parseregex(&a->u.r,s+1,rx);
     if (closebracket(tmp,rx))
       return tmp+1+((rx->cflags&REG_EXTENDED)==0);
+    /* fall through */
   case ')':
     if ((rx->cflags&REG_EXTENDED)==0) goto handle_char;
     /* fall through */
@@ -404,6 +405,7 @@ static const char* parsepiece(struct piece*__restrict__ p,const char*__restrict_
       if (*tmp!='}') return s;
       ++tmp;
     }
+    /* fall through */
   default:
     return tmp;
   }

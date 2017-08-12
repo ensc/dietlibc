@@ -135,6 +135,7 @@ bloat:
       out[0]=0xff;
       out[1]=0xfe;
       out+=2; *outbytesleft-=2;
+      /* fall through */
     case UTF_16_LE:
       if (v>0xffff) {
 	long a,b;

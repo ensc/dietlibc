@@ -8,8 +8,9 @@ int asprintf(char **s, const char *format,...)
 {
   int n;
   va_list arg_ptr;
+  char tmp[8];
   va_start(arg_ptr, format);
-  n=vsnprintf(0,1000000,format,arg_ptr);
+  n=vsnprintf(tmp,0,format,arg_ptr);
   va_start (arg_ptr, format);
   if ((*s=malloc(n+1))) {
     n=vsnprintf(*s,n+1,format,arg_ptr);
