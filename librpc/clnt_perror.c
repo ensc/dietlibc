@@ -150,7 +150,8 @@ char *clnt_sperror __P ((CLIENT *rpch, const char *s))
 
 void clnt_perror __P ((CLIENT *rpch, const char *s))
 {
-//	(void) fprintf(stderr, "%s", clnt_sperror(rpch, s));
+	(void)rpch;
+	(void)s;
 	(void) fprintf(stderr, "(not supported)");
 }
 
@@ -264,7 +265,7 @@ char *clnt_spcreateerror __P ((__const char *s))
 
 extern void clnt_pcreateerror __P ((__const char *s))
 {
-//	(void) fprintf(stderr, "%s", clnt_spcreateerror(s));
+	(void)s;
 	(void) fprintf(stderr, "(not supported)");
 }
 

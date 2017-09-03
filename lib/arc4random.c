@@ -60,5 +60,7 @@ void arc4random_stir(void) {
 }
 
 void arc4random_addrandom(unsigned char* dat,size_t datlen) {
+  (void)dat;
+  (void)datlen;
 }
 
