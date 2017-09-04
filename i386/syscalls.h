@@ -416,7 +416,7 @@ sym: \
 .Lend##sym: ; \
 .size sym,.Lend##sym-sym
 
-#ifndef __PIC__
+#ifndef __DYN_LIB
 #define __socketcall(name,NAME) \
 .text; \
 .type name,@function; \
