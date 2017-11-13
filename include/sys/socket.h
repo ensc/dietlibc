@@ -505,8 +505,10 @@ struct ucred {
 /* Maximum queue length specifiable by listen.  */
 #define SOMAXCONN	128
 
-/* Flags we can use with send/ and recv.
-   Added those for 1003.1g not all are supported yet */
+/* Flags we can use with send/ and recv. 
+   Added those for 1003.1g not all are supported yet
+ */
+
 #define MSG_OOB		1
 #define MSG_PEEK	2
 #define MSG_DONTROUTE	4
@@ -518,7 +520,6 @@ struct ucred {
 #define MSG_EOR         0x80	/* End of record */
 #define MSG_WAITALL	0x100	/* Wait for a full request */
 #define MSG_FIN         0x200
-#define MSG_EOF         MSG_FIN
 #define MSG_SYN		0x400
 #define MSG_CONFIRM	0x800	/* Confirm path validity */
 #define MSG_RST		0x1000
@@ -527,8 +528,10 @@ struct ucred {
 #define MSG_MORE	0x8000	/* Sender will send more */
 #define MSG_WAITFORONE	0x10000	/* recvmmsg(): block until 1+ packets avail */
 #define MSG_SENDPAGE_NOTLAST 0x20000 /* sendpage() internal : not the last page */
+#define MSG_BATCH	0x40000 /* sendmmsg(): more messages coming */
 #define MSG_EOF         MSG_FIN
 
+#define MSG_ZEROCOPY	0x4000000	/* Use user data in kernel path */
 #define MSG_FASTOPEN	0x20000000	/* Send data in TCP SYN */
 #define MSG_CMSG_CLOEXEC 0x40000000	/* Set close_on_exit for file
 					   descriptor received through
@@ -541,6 +544,8 @@ struct ucred {
 #define SOL_UDP		17
 #define SOL_IPV6	41
 #define SOL_ICMPV6	58
+#define SOL_SCTP	132
+#define SOL_UDPLITE	136     /* UDP-Lite (RFC 3828) */
 #define SOL_RAW		255
 #define SOL_IPX		256
 #define SOL_AX25	257
@@ -553,6 +558,23 @@ struct ucred {
 #define SOL_ATM		264	/* ATM layer (cell level) */
 #define SOL_AAL		265	/* ATM Adaption Layer (packet level) */
 #define SOL_IRDA        266
+#define SOL_NETBEUI	267
+#define SOL_LLC		268
+#define SOL_DCCP	269
+#define SOL_NETLINK	270
+#define SOL_TIPC	271
+#define SOL_RXRPC	272
+#define SOL_PPPOL2TP	273
+#define SOL_BLUETOOTH	274
+#define SOL_PNPIPE	275
+#define SOL_RDS		276
+#define SOL_IUCV	277
+#define SOL_CAIF	278
+#define SOL_ALG		279
+#define SOL_NFC		280
+#define SOL_KCM		281
+#define SOL_TLS		282
+
 
 /* IPX options */
 #define IPX_TYPE	1
