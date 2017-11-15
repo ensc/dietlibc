@@ -135,7 +135,15 @@
 #define	EKEYREVOKED	134	/* Key has been revoked */
 #define	EKEYREJECTED	135	/* Key was rejected by service */
 
-#define __SYS_NERR  ((EKEYREJECTED) + 1)
+/* for robust mutexes */
+#define	EOWNERDEAD	136	/* Owner died */
+#define	ENOTRECOVERABLE	137	/* State not recoverable */
+
+#define	ERFKILL		138	/* Operation not possible due to RF-kill */
+
+#define EHWPOISON	139	/* Memory page has hardware error */
+
+#define __SYS_NERR  ((EHWPOISON) + 1)
 
 #elif defined(__mips__)
 
@@ -270,9 +278,18 @@
 #define	EKEYEXPIRED	162	/* Key has expired */
 #define	EKEYREVOKED	163	/* Key has been revoked */
 #define	EKEYREJECTED	164	/* Key was rejected by service */
+
+/* for robust mutexes */
+#define EOWNERDEAD	165	/* Owner died */
+#define ENOTRECOVERABLE 166	/* State not recoverable */
+
+#define ERFKILL		167	/* Operation not possible due to RF-kill */
+
+#define EHWPOISON	168	/* Memory page has hardware error */
+
 #define EDQUOT		1133	/* Quota exceeded */
 
-#define __SYS_NERR  ((EKEYREJECTED) + 1)
+#define __SYS_NERR  ((EHWPOISON) + 1)
 
 #elif defined(__sparc__)
 
@@ -409,7 +426,15 @@
 #define	EKEYREVOKED	130	/* Key has been revoked */
 #define	EKEYREJECTED	131	/* Key was rejected by service */
 
-#define __SYS_NERR  ((EKEYREJECTED) + 1)
+/* for robust mutexes */
+#define	EOWNERDEAD	132	/* Owner died */
+#define	ENOTRECOVERABLE	133	/* State not recoverable */
+
+#define	ERFKILL		134	/* Operation not possible due to RF-kill */
+
+#define EHWPOISON	135	/* Memory page has hardware error */
+
+#define __SYS_NERR  ((EHWPOISON) + 1)
 
 #elif defined(__hppa__)
 
@@ -559,7 +584,15 @@
 #define ENOTSUP		252	/* Function not implemented (POSIX.4 / HPUX) */
 #define ECANCELLED	253	/* aio request was canceled before complete (POSIX.4 / HPUX) */
 
-#define __SYS_NERR  ((ECANCELLED) + 1)
+/* for robust mutexes */
+#define EOWNERDEAD	254	/* Owner died */
+#define ENOTRECOVERABLE	255	/* State not recoverable */
+
+#define	ERFKILL		256	/* Operation not possible due to RF-kill */
+
+#define EHWPOISON	257	/* Memory page has hardware error */
+
+#define __SYS_NERR  ((EHWPOISON) + 1)
 
 #else
 
@@ -695,7 +728,16 @@
 #define	EKEYEXPIRED	127	/* Key has expired */
 #define	EKEYREVOKED	128	/* Key has been revoked */
 #define	EKEYREJECTED	129	/* Key was rejected by service */
-#define __SYS_NERR  ((EKEYREJECTED) + 1)
+
+/* for robust mutexes */
+#define	EOWNERDEAD	130	/* Owner died */
+#define	ENOTRECOVERABLE	131	/* State not recoverable */
+
+#define ERFKILL		132	/* Operation not possible due to RF-kill */
+
+#define EHWPOISON	133	/* Memory page has hardware error */
+
+#define __SYS_NERR  ((EHWPOISON) + 1)
 #endif
 
 #ifndef __ASSEMBLER__
