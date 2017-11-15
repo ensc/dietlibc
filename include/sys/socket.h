@@ -64,19 +64,12 @@ __BEGIN_DECLS
 
 /* Instruct lower device to use last 4-bytes of skb data as FCS */
 #define SO_NOFCS		43
-
 #define SO_LOCK_FILTER		44
-
 #define SO_SELECT_ERR_QUEUE	45
-
 #define SO_BUSY_POLL		46
-
 #define SO_MAX_PACING_RATE	47
-
 #define SO_BPF_EXTENSIONS	48
-
 #define SO_INCOMING_CPU		49
-
 #define SO_ATTACH_BPF		50
 #define SO_DETACH_BPF		SO_DETACH_FILTER
 
@@ -84,9 +77,13 @@ __BEGIN_DECLS
 #define SO_ATTACH_REUSEPORT_EBPF	52
 
 #define SO_CNX_ADVICE		53
-
 #define SCM_TIMESTAMPING_OPT_STATS	54
-
+#define SO_MEMINFO		55
+#define SO_INCOMING_NAPI_ID	56
+#define SO_COOKIE		57
+#define SCM_TIMESTAMPING_PKTINFO	58
+#define SO_PEERGROUPS		59
+#define SO_ZEROCOPY		60
 
 #ifdef __alpha__
 #define SO_SNDBUFFORCE	0x100a
@@ -180,29 +177,24 @@ __BEGIN_DECLS
 
 /* Instruct lower device to use last 4-bytes of skb data as FCS */
 #define SO_NOFCS		0x4024
-
 #define SO_LOCK_FILTER		0x4025
-
 #define SO_SELECT_ERR_QUEUE	0x4026
-
 #define SO_BUSY_POLL		0x4027
-
 #define SO_MAX_PACING_RATE	0x4028
-
 #define SO_BPF_EXTENSIONS	0x4029
-
 #define SO_INCOMING_CPU		0x402A
-
 #define SO_ATTACH_BPF		0x402B
 #define SO_DETACH_BPF		SO_DETACH_FILTER
-
 #define SO_ATTACH_REUSEPORT_CBPF	0x402C
 #define SO_ATTACH_REUSEPORT_EBPF	0x402D
-
 #define SO_CNX_ADVICE		0x402E
-
 #define SCM_TIMESTAMPING_OPT_STATS	0x402F
-
+#define SO_MEMINFO		0x4030
+#define SO_INCOMING_NAPI_ID	0x4031
+#define SO_COOKIE		0x4032
+#define SCM_TIMESTAMPING_PKTINFO	0x4033
+#define SO_PEERGROUPS		0x4034
+#define SO_ZEROCOPY		0x4035
 
 #elif defined(__sparc__)
 #define SOL_SOCKET	0xffff
@@ -260,28 +252,24 @@ __BEGIN_DECLS
 
 /* Instruct lower device to use last 4-bytes of skb data as FCS */
 #define SO_NOFCS		0x0027
-
 #define SO_LOCK_FILTER		0x0028
-
 #define SO_SELECT_ERR_QUEUE	0x0029
-
 #define SO_BUSY_POLL		0x0030
-
 #define SO_MAX_PACING_RATE	0x0031
-
 #define SO_BPF_EXTENSIONS	0x0032
-
 #define SO_INCOMING_CPU		0x0033
-
 #define SO_ATTACH_BPF		0x0034
 #define SO_DETACH_BPF		SO_DETACH_FILTER
-
 #define SO_ATTACH_REUSEPORT_CBPF	0x0035
 #define SO_ATTACH_REUSEPORT_EBPF	0x0036
-
 #define SO_CNX_ADVICE		0x0037
-
 #define SCM_TIMESTAMPING_OPT_STATS	0x0038
+#define SO_MEMINFO		0x0039
+#define SO_INCOMING_NAPI_ID	0x003a
+#define SO_COOKIE		0x003b
+#define SCM_TIMESTAMPING_PKTINFO	0x003c
+#define SO_PEERGROUPS		0x003d
+#define SO_ZEROCOPY		0x003e
 
 /* Security levels - as per NRL IPv6 - don't actually do anything */
 #define SO_SECURITY_AUTHENTICATION              0x5001
@@ -351,28 +339,24 @@ __BEGIN_DECLS
 
 /* Instruct lower device to use last 4-bytes of skb data as FCS */
 #define SO_NOFCS		43
-
 #define SO_LOCK_FILTER		44
-
 #define SO_SELECT_ERR_QUEUE	45
-
 #define SO_BUSY_POLL		46
-
 #define SO_MAX_PACING_RATE	47
-
 #define SO_BPF_EXTENSIONS	48
-
 #define SO_INCOMING_CPU		49
-
 #define SO_ATTACH_BPF		50
 #define SO_DETACH_BPF		SO_DETACH_FILTER
-
 #define SO_ATTACH_REUSEPORT_CBPF	51
 #define SO_ATTACH_REUSEPORT_EBPF	52
-
 #define SO_CNX_ADVICE		53
-
 #define SCM_TIMESTAMPING_OPT_STATS	54
+#define SO_MEMINFO		55
+#define SO_INCOMING_NAPI_ID	56
+#define SO_COOKIE		57
+#define SCM_TIMESTAMPING_PKTINFO	58
+#define SO_PEERGROUPS		59
+#define SO_ZEROCOPY		60
 
 #endif
 
@@ -470,7 +454,29 @@ struct ucred {
 #define AF_IRDA		23	/* IRDA sockets			*/
 #define AF_PPPOX	24	/* PPPoX sockets		*/
 #define AF_WANPIPE	25	/* Wanpipe API Sockets */
-#define AF_MAX		32	/* For now.. */
+#define AF_LLC		26	/* Linux LLC			*/
+#define AF_IB		27	/* Native InfiniBand address	*/
+#define AF_MPLS		28	/* MPLS */
+#define AF_CAN		29	/* Controller Area Network      */
+#define AF_TIPC		30	/* TIPC sockets			*/
+#define AF_BLUETOOTH	31	/* Bluetooth sockets 		*/
+#define AF_IUCV		32	/* IUCV sockets			*/
+#define AF_RXRPC	33	/* RxRPC sockets 		*/
+#define AF_ISDN		34	/* mISDN sockets 		*/
+#define AF_PHONET	35	/* Phonet sockets		*/
+#define AF_IEEE802154	36	/* IEEE802154 sockets		*/
+#define AF_CAIF		37	/* CAIF sockets			*/
+#define AF_ALG		38	/* Algorithm sockets		*/
+#define AF_NFC		39	/* NFC sockets			*/
+#define AF_VSOCK	40	/* vSockets			*/
+#define AF_KCM		41	/* Kernel Connection Multiplexor*/
+#define AF_QIPCRTR	42	/* Qualcomm IPC Router          */
+#define AF_SMC		43	/* smc sockets: reserve number for
+				 * PF_SMC protocol family that
+				 * reuses AF_INET address family
+				 */
+
+#define AF_MAX		44	/* For now.. */
 
 /* Protocol families, same as address families. */
 #define PF_UNSPEC	AF_UNSPEC
@@ -500,6 +506,24 @@ struct ucred {
 #define PF_IRDA		AF_IRDA
 #define PF_PPPOX	AF_PPPOX
 #define PF_WANPIPE	AF_WANPIPE
+#define PF_LLC		AF_LLC
+#define PF_IB		AF_IB
+#define PF_MPLS		AF_MPLS
+#define PF_CAN		AF_CAN
+#define PF_TIPC		AF_TIPC
+#define PF_BLUETOOTH	AF_BLUETOOTH
+#define PF_IUCV		AF_IUCV
+#define PF_RXRPC	AF_RXRPC
+#define PF_ISDN		AF_ISDN
+#define PF_PHONET	AF_PHONET
+#define PF_IEEE802154	AF_IEEE802154
+#define PF_CAIF		AF_CAIF
+#define PF_ALG		AF_ALG
+#define PF_NFC		AF_NFC
+#define PF_VSOCK	AF_VSOCK
+#define PF_KCM		AF_KCM
+#define PF_QIPCRTR	AF_QIPCRTR
+#define PF_SMC		AF_SMC
 #define PF_MAX		AF_MAX
 
 /* Maximum queue length specifiable by listen.  */
