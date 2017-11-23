@@ -8,8 +8,8 @@
 #define PAGE_SIZE 4096
 #endif
 
-size_t __libc_getpagesize(void);
-size_t __libc_getpagesize(void) {
+int __libc_getpagesize(void);
+int __libc_getpagesize(void) {
   long* x=(long*)environ;
   int fd;
   while (*x) ++x;	/* skip envp to get to auxvec */
@@ -23,5 +23,5 @@ size_t __libc_getpagesize(void) {
   return PAGE_SIZE;
 }
 
-size_t getpagesize(void)       __attribute__((weak,alias("__libc_getpagesize")));
+int getpagesize(void)       __attribute__((weak,alias("__libc_getpagesize")));
 
