@@ -4,7 +4,7 @@
 #include <strings.h>
 #include "dietfeatures.h"
 
-extern size_t __libc_getpagesize(void) __attribute__((__const__)) __pure;
+extern int __libc_getpagesize(void) __attribute__((__const__)) __pure;
 
 #if defined(WANT_STATIC_PAGESIZE)
 #  define __DIET_PAGE_SIZE_PREDEF	(WANT_STATIC_PAGESIZE)
