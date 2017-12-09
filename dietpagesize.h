@@ -21,7 +21,7 @@ extern int __libc_getpagesize(void) __attribute__((__const__)) __pure;
 #endif
 
 #ifdef WANT_DYN_PAGESIZE
-#  define __DIET_PAGE_SIZE	(__libc_getpagesize())
+#  define __DIET_PAGE_SIZE	((size_t)__libc_getpagesize())
 #  define __DIET_PAGE_SHIFT	(ffs(__DIET_PAGE_SIZE)-1)
 #else
 #  define __DIET_PAGE_SIZE	__DIET_PAGE_SIZE_PREDEF
