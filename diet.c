@@ -244,15 +244,23 @@ int main(int argc,char *argv[]) {
 #ifdef WANT_DYNAMIC
       char *d,*e,*f;
 #endif
+      char *g=0;
 /* we need to add -I... if the command line contains -c, -S or -E */
       for (i=2; i<argc; ++i) {
-	if (argv[i][0]=='-' && argv[i][1]=='M')
-	  goto pp;
+	if (argv[i][0]=='-') {
+	  if (argv[i][1]=='M')
+	    goto pp;
+	  else if (argv[i][1]=='g') {
+	    g=alloca(strlen(platform)+20);
+	    strcpy(g,platform);
+	    strcat(g,"/stackgap-g.o");
+	  }
+	}
 	if (!strcmp(argv[i],"-pg"))
 	  profile=1;
-	if (!strcmp(argv[i],"-c") || !strcmp(argv[i],"-S"))
+	else if (!strcmp(argv[i],"-c") || !strcmp(argv[i],"-S"))
 	  compile=1;
-	if (!strcmp(argv[i],"-E"))
+	else if (!strcmp(argv[i],"-E"))
 pp:
 	  preprocess=compile=1;
       }
@@ -349,7 +357,7 @@ pp:
 	*dest++=safeguard2;
       }
 #endif
-      if (_link) { *dest++=b; }
+      if (_link) { *dest++=b; if (g) *dest++=g; }
 #ifdef WANT_DYNAMIC
       if (_link) { *dest++=d; }
 #endif

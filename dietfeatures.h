@@ -140,6 +140,12 @@
  * `main' can not be found. */
 /* #define WANT_STACKGAP */
 
+/* For SSP initialization, dietlibc usually uses randomness given by the
+ * kernel in the ELF auxvec. Some very old kernels do not pass this, and
+ * for them dietlibc will open /dev/urandom to get randomness. Undef
+ * this if you don't need that bloat. */
+// #define WANT_URANDOM_SSP
+
 /* #define this if you want GNU bloat like program_invocation_short_name
  * and program_invocation_name to be there.  This functionality is not
  * portable and adds useless bloat to libc.  Help stomp out code
@@ -182,7 +188,7 @@
 #ifndef WANT_DYNAMIC
 #define WANT_DYNAMIC
 #endif
-/* saveguard crashes with shared objects ... */
+/* safeguard crashes with shared objects ... */
 #ifdef WANT_SAFEGUARD
 #undef WANT_SAFEGUARD
 #endif

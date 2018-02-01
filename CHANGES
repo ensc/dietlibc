@@ -54,6 +54,9 @@
   move getrandom and getentropy declarations to <sys/random.h> to match glibc 2.25
   add secure_getenv
   mempcpy -> memcpy in sha256crypt and sha512crypt
+  prototype for getpagesize was wrong (return was size_t, should be int)
+  split off stackgap-g.o, don't compile valgrind stuff into stackgap.o,
+    diet chooses depending on presence of -g
 
 0.33:
   first stab at getting TLS to work in actual threads

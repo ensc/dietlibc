@@ -746,9 +746,11 @@
 
 __BEGIN_DECLS
 
-#include <errno_definition.h>
+// #include <errno_definition.h>
 
 extern int *__errno_location(void);
+
+#define errno (*__errno_location())
 
 #define __set_errno(x) errno=(x)
 

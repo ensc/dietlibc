@@ -45,7 +45,10 @@ extern __hidden__ unsigned long __guard;
 #endif
 
 #if defined(WANT_VALGRIND_SUPPORT)
-int __valgrind=1;
+#ifdef NDEBUG
+#undef WANT_VALGRIND_SUPPORT
+#endif
+int __valgrind=0;
 #endif
 
 #ifdef __i386__
@@ -378,13 +381,15 @@ static void callback() {
 
 
 
+#ifdef __PIE__
 __hidden__ char _DYNAMIC;
+#endif
 
 int stackgap(int argc,char* argv[],char* envp[]);
 int stackgap(int argc,char* argv[],char* envp[]) {
   long* auxvec=(long*)envp;
 #if defined(WANT_STACKGAP) || defined(WANT_SSP) || defined(WANT_TLS)
-  char* rand;
+  char* rand=(char*)&auxvec;
   char* tlsdata;
 #endif
   while (*auxvec) ++auxvec;			/* skip envp to get to auxvec */
@@ -546,12 +551,14 @@ int stackgap(int argc,char* argv[],char* envp[]) {
 #if defined(WANT_STACKGAP) || defined(WANT_SSP)
   volatile char* gap;
   rand=find_in_auxvec(auxvec,25);
+#ifdef WANT_URANDOM_SSP
   if (!rand) {
     rand=alloca(10);
     int fd=open("/dev/urandom",O_RDONLY);	// If this fails, there is not much we can do. Limp on.
     read(fd,rand,10);
     close(fd);
   }
+#endif
 #endif
 #ifdef WANT_STACKGAP
 #ifdef __UNALIGNED_MEMORY_ACCESS_OK
@@ -593,10 +600,31 @@ int stackgap(int argc,char* argv[],char* envp[]) {
   __setup_tls(__tcb_mainthread=(tcbhead_t*)(tlsdata));
 #endif
 #if defined(WANT_VALGRIND_SUPPORT)
+  /* detect valgrind by looking for "valgrind" in $LD_PRELOAD */
+  /* for i386 and x86_64 we do it inline instead of calling getenv to
+   * reduce bloat */
+#if defined(__i386__) || defined(__x86_64__)
+  {
+    char** e;
+    for (e=environ; *e; ++e) {
+      if (*(uint64_t*)*e == *(uint64_t*)"LD_PRELO") {
+	char* x;
+	for (x=*e; *x; ++x) {
+	  if (*(uint64_t*)x == *(uint64_t*)"valgrind") {
+	    __valgrind=1;
+	    goto found;
+	  }
+	}
+      }
+    }
+found: ;
+  }
+#else
   {
     const char* v=getenv("LD_PRELOAD");
     __valgrind=(v && strstr(v,"valgrind"));
   }
+#endif
 #endif
 #ifdef WANT_GNU_STARTUP_BLOAT
   program_invocation_name=argv[0];

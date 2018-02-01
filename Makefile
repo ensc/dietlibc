@@ -108,7 +108,7 @@ WHAT=	$(OBJDIR) $(OBJDIR)/start.o $(OBJDIR)/dyn_start.o $(OBJDIR)/dyn_stop.o \
 	$(OBJDIR)/dietlibc.a $(OBJDIR)/liblatin1.a \
 	$(OBJDIR)/libcompat.a $(OBJDIR)/libm.a \
 	$(OBJDIR)/librpc.a $(OBJDIR)/libpthread.a \
-	$(OBJDIR)/libcrypt.a \
+	$(OBJDIR)/libcrypt.a $(OBJDIR)/stackgap-g.o \
 	$(OBJDIR)/diet $(OBJDIR)/diet-i $(OBJDIR)/elftrunc \
 	$(OBJDIR)/dnsd
 
@@ -400,10 +400,11 @@ t:
 t1:
 	$(CCC) -g -o t1 t.c
 
-install-bin: $(OBJDIR)/start.o $(OBJDIR)/dietlibc.a $(OBJDIR)/librpc.a $(OBJDIR)/liblatin1.a $(OBJDIR)/libcompat.a $(OBJDIR)/elftrunc $(OBJDIR)/diet-i
+install-bin: $(OBJDIR)/start.o $(OBJDIR)/dietlibc.a $(OBJDIR)/librpc.a $(OBJDIR)/liblatin1.a $(OBJDIR)/libcompat.a $(OBJDIR)/elftrunc $(OBJDIR)/diet-i $(OBJDIR)/stackgap-g.o
 	$(INSTALL) -d $(DESTDIR)$(ILIBDIR) $(DESTDIR)$(MAN1DIR) $(DESTDIR)$(BINDIR)
 	$(INSTALL) -m 644 $(OBJDIR)/start.o $(DESTDIR)$(ILIBDIR)/
 	-$(INSTALL) -m 644 $(OBJDIR)/start-pie.o $(DESTDIR)$(ILIBDIR)/
+	-$(INSTALL) -m 644 $(OBJDIR)/stackgap-g.o $(DESTDIR)$(ILIBDIR)/
 	$(INSTALL) -m 644 $(OBJDIR)/libm.a $(OBJDIR)/libpthread.a $(OBJDIR)/librpc.a \
 $(OBJDIR)/liblatin1.a $(OBJDIR)/libcompat.a $(OBJDIR)/libcrypt.a $(DESTDIR)$(ILIBDIR)
 	$(INSTALL) -m 644 $(OBJDIR)/dietlibc.a $(DESTDIR)$(ILIBDIR)/libc.a
@@ -592,10 +593,12 @@ $(OBJDIR)/fcntl64.o: dietfeatures.h
 # WANT_SSP
 # This facepalm brought to you by: Ubuntu!
 $(PICODIR)/stackgap.o: EXTRACFLAGS:=-fno-stack-protector
-$(OBJDIR)/stackgap.o: EXTRACFLAGS:=-fno-stack-protector -fno-pie
+$(OBJDIR)/stackgap.o: EXTRACFLAGS:=-fno-stack-protector -fno-pie -DNDEBUG
 $(OBJDIR)/stackgap-pie.o: EXTRACFLAGS:=-fno-stack-protector -Dstackgap=stackgap_pie -fpie -fvisibility=hidden
 
-$(OBJDIR)/stackgap.o $(OBJDIR)/stackgap-pie.o $(PICODIR)/stackgap.o: lib/stackgap-common.h
+$(OBJDIR)/stackgap-g.o: EXTRACFLAGS:=-fno-stack-protector -fno-pie
+
+$(OBJDIR)/stackgap.o $(OBJDIR)/stackgap-pie.o $(OBJDIR)/stackgap-g.o $(PICODIR)/stackgap.o: lib/stackgap-common.h
 
 # WANT_MALLOC_ZERO
 $(OBJDIR)/strndup.o: dietfeatures.h
@@ -661,6 +664,8 @@ $(OBJDIR)/tempnam.o $(OBJDIR)/thrd_exit.o $(OBJDIR)/thrd_join.o \
 $(OBJDIR)/tmpnam.o $(OBJDIR)/utxent.o $(OBJDIR)/verr.o \
 $(OBJDIR)/verrx.o $(OBJDIR)/vwarn.o $(OBJDIR)/warn.o \
 $(OBJDIR)/wcsrtombs.o $(OBJDIR)/wcstombs.o $(OBJDIR)/eventfd.o: include/errno_definition.h
+
+$(OBJDIR)/errno_location.o $(OBJDIR)/errno.o: dietfeatures.h
 
 $(OBJDIR)/abort.o $(OBJDIR)/pselect.o $(OBJDIR)/__utmp_block_signals.o \
 $(OBJDIR)/system.o $(OBJDIR)/utxent.o $(OBJDIR)/sigemptyset.o \
