@@ -13,7 +13,7 @@ _start:
 	leaq	8(%rsi,%rdi,8),%rdx	/* %rdx = envp = (8*rdi)+%rsi+8 */
 
 #ifndef IN_LDSO
-#ifdef __DYN_LIB
+#ifdef __PIC__
 	movq	environ@GOTPCREL(%rip), %rax
 	movq	%rdx, (%rax)
 #else
@@ -68,9 +68,6 @@ _start:
 	syscall
 #else
 	call	exit
-#ifndef __DYN_LIB
-	.hidden exit
-#endif
 #endif
 	hlt
 .Lstart:

@@ -7,7 +7,7 @@
 .type memchr,@function
 memchr:	/* rdi=ptr, esi=ch, rdx=len */
 #ifdef WANT_VALGRIND_SUPPORT
-#ifdef __DYN_LIB
+#ifdef __PIC__
   movq	__valgrind@GOTPCREL(%rip), %rax
   movl	(%rax), %eax
   test	%eax, %eax

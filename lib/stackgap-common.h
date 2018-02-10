@@ -1,7 +1,7 @@
 #include <sys/cdefs.h>
 // #define extern __hidden__
 
-#define PIEDEBUG
+// #define PIEDEBUG
 
 extern char __executable_start;
 
@@ -211,8 +211,10 @@ static size_t Strlen(const char* s) {
   return i;
 }
 
-static void Write(int fd,const char* s,size_t len) {
-  asm("syscall\n" : : "a" (1), "D" (fd), "S" (s), "d" (len));
+static ssize_t Write(int fd,const char* s,size_t len) {
+  ssize_t r;
+  asm("syscall\n" : "=a"(r) : "a" (1), "D" (fd), "S" (s), "d" (len) );
+  return r;
 }
 
 static void _puts(const char* s) {
@@ -240,6 +242,15 @@ static void _putx(size_t n) {
     n/=16;
   }
   Write(1,buf+j,sizeof(buf)-j);
+}
+
+static void _putphflags(size_t n) {
+  char buf[100];
+  size_t i=0;
+  if (n&4) buf[i++]='R';
+  if (n&2) buf[i++]='W';
+  if (n&1) buf[i++]='X';
+  Write(1,buf,i);
 }
 
 struct lookup { size_t n; const char s[20]; };
@@ -311,6 +322,7 @@ static struct lookup ptype[] = {
   { 0x60000000, "PT_LOOS" },
   { 0x6474e550, "PT_GNU_EH_FRAME" },
   { 0x6474e551, "PT_GNU_STACK" },
+  { 0x6474e552, "PT_GNU_RELRO" },
   { 0x6ffffffa, "PT_LOSUNW" },
   { 0x6ffffffa, "PT_SUNWBSS" },
   { 0x6ffffffb, "PT_SUNWSTACK" },
@@ -357,8 +369,10 @@ static struct lookup dtag[] = {
   { 34, "DT_NUM" },
   { 0x6000000d, "DT_LOOS" },
   { 0x6ffff000, "DT_HIOS" },
+  { 0x6ffffef5, "DT_GNU_HASH" },
   { 0x6ffffff9, "DT_RELACOUNT" },
   { 0x6ffffffa, "DT_RELCOUNT" },
+  { 0x6ffffffb, "DT_FLAGS_1" },
   { 0x70000000, "DT_LOPROC" },
   { 0x7fffffff, "DT_HIPROC" },
   { 0 }
@@ -453,7 +467,7 @@ int stackgap(int argc,char* argv[],char* envp[]) {
 	_putx(ph->p_paddr); _puts("\tfilesz ");
 	_putx(ph->p_filesz); _puts("\tmemsz ");
 	_putx(ph->p_memsz); _puts("\tflags ");
-	_putx(ph->p_flags); _puts("\talign ");
+	_putphflags(ph->p_flags); _puts("\talign ");
 	_putx(ph->p_align); _puts("\n");
       }
       _puts("\n\n");

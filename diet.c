@@ -83,7 +83,6 @@ int main(int argc,char *argv[]) {
   char *libpthread="-lpthread";
   char dashL[1000];
   char dashstatic[]="-static";
-  char dashshared[]="-shared";	// for -fpie
   int i;
   int mangleopts=0;
   int printpath=0;
@@ -343,7 +342,11 @@ pp:
 #ifndef __DYN_LIB
       if (_link) {
 	*dest++=(char*)nostdlib;
-	*dest++=pie ? dashshared : dashstatic;
+	if (pie) {
+	  *dest++="-Wl,-pie";
+	  *dest++="-Wl,--no-dynamic-linker";
+	} else
+	  *dest++=dashstatic;
 	*dest++=dashL;
       }
 #else
@@ -357,7 +360,7 @@ pp:
 	*dest++=safeguard2;
       }
 #endif
-      if (_link) { *dest++=b; if (g) *dest++=g; }
+      if (_link) { *dest++=b; if (g && !pie) *dest++=g; }
 #ifdef WANT_DYNAMIC
       if (_link) { *dest++=d; }
 #endif

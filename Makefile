@@ -95,7 +95,7 @@ endif
 endif
 endif
 
-PIE=-fpie -fvisibility=hidden
+PIE=-fpie
 
 # ARCH=$(MYARCH)
 
@@ -594,7 +594,7 @@ $(OBJDIR)/fcntl64.o: dietfeatures.h
 # This facepalm brought to you by: Ubuntu!
 $(PICODIR)/stackgap.o: EXTRACFLAGS:=-fno-stack-protector
 $(OBJDIR)/stackgap.o: EXTRACFLAGS:=-fno-stack-protector -fno-pie -DNDEBUG
-$(OBJDIR)/stackgap-pie.o: EXTRACFLAGS:=-fno-stack-protector -Dstackgap=stackgap_pie -fpie -fvisibility=hidden
+$(OBJDIR)/stackgap-pie.o: EXTRACFLAGS:=-fno-stack-protector -Dstackgap=stackgap_pie -fpie
 
 $(OBJDIR)/stackgap-g.o: EXTRACFLAGS:=-fno-stack-protector -fno-pie
 
