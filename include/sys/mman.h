@@ -35,6 +35,8 @@ __BEGIN_DECLS
 #define MADV_HWPOISON		100
 #define MADV_SOFT_OFFLINE	101
 
+#define MLOCK_ONFAULT	1	/* for mlock2 */
+
 #if defined(__mips__)
 #define MAP_FIXED	0x010		/* Interpret addr exactly */
 #define MAP_NORESERVE	0x0400		/* don't check for reservations */
@@ -52,6 +54,7 @@ __BEGIN_DECLS
 #define MS_SYNC		0x0004		/* synchronous memory sync */
 #define MCL_CURRENT	1		/* lock all current mappings */
 #define MCL_FUTURE	2		/* lock all future mappings */
+#define MCL_ONFAULT	4		/* lock all pages that are faulted in */
 #define MADV_NORMAL	0x0		/* default page-in behavior */
 #define MADV_RANDOM	0x1		/* page-in minimum required */
 #define MADV_SEQUENTIAL	0x2		/* read-ahead aggressively */
@@ -74,6 +77,7 @@ __BEGIN_DECLS
 #define MS_INVALIDATE	4		/* invalidate the caches */
 #define MCL_CURRENT	 8192		/* lock all currently mapped pages */
 #define MCL_FUTURE	16384		/* lock all additions to address space */
+#define MCL_ONFAULT	32768		/* lock all pages that are faulted in */
 #define MADV_NORMAL	0		/* no further special treatment */
 #define MADV_RANDOM	1		/* expect random page references */
 #define MADV_SEQUENTIAL	2		/* expect sequential page references */
@@ -98,6 +102,7 @@ __BEGIN_DECLS
 #define MS_SYNC		4		/* synchronous memory sync */
 #define MCL_CURRENT	1		/* lock all current mappings */
 #define MCL_FUTURE	2		/* lock all future mappings */
+#define MCL_ONFAULT	4		/* lock all pages that are faulted in */
 #define MADV_NORMAL	0x0		/* default page-in behavior */
 #define MADV_RANDOM	0x1		/* page-in minimum required */
 #define MADV_SEQUENTIAL	0x2		/* read-ahead aggressively */
@@ -124,6 +129,7 @@ __BEGIN_DECLS
 #define MS_SYNC		4		/* synchronous memory sync */
 #define MCL_CURRENT	0x2000		/* lock all currently mapped pages */
 #define MCL_FUTURE	0x4000		/* lock all additions to address space */
+#define MCL_ONFAULT	0x8000		/* lock all pages that are fauled in */
 #define MADV_NORMAL	0x0		/* default page-in behavior */
 #define MADV_RANDOM	0x1		/* page-in minimum required */
 #define MADV_SEQUENTIAL	0x2		/* read-ahead aggressively */
@@ -148,6 +154,7 @@ __BEGIN_DECLS
 #define MS_SYNC		4		/* synchronous memory sync */
 #define MCL_CURRENT	1		/* lock all currently mapped pages */
 #define MCL_FUTURE	2		/* lock all additions to address space */
+#define MCL_ONFAULT	4		/* lock all pages that are faulted in */
 #define MADV_NORMAL	 0	/* No further special treatment.  */
 #define MADV_RANDOM	 1	/* Expect random page references.  */
 #define MADV_SEQUENTIAL	 2	/* Expect sequential page references.  */
@@ -187,6 +194,7 @@ __BEGIN_DECLS
 
 #define MCL_CURRENT	1	/* lock all current mappings */
 #define MCL_FUTURE	2
+#define MCL_ONFAULT	4		/* lock all pages that are faulted in */
 
 #define MADV_NORMAL	0	/* no further special treatment */
 #define MADV_RANDOM	1	/* expect random page references */
@@ -275,6 +283,7 @@ int mlockall(int flags) __THROW;
 int mlock(const void *addr, size_t len) __THROW;
 int munlock(const void *addr, size_t len) __THROW;
 int munlockall(void) __THROW;
+int mlock2(const void *addr, size_t len, int flags) __THROW;
 
 int madvise(void *start, size_t length, int advice) __THROW;
 

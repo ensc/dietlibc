@@ -4,7 +4,7 @@
 #  My gcc tries to align some of the strings if written the code in C. This costs a lot of bytes.
 #
 
-#ifdef __DYN_LIB
+#ifdef __PIC__
 .section	.data
 #else
 .section	.rodata

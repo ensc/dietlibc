@@ -14,7 +14,7 @@ _start:
 
 #ifndef IN_LDSO
 #ifdef WANT_ELFINFO
-#ifdef __DYN_LIB
+#ifdef __PIC__
 	movq	environ@GOTPCREL(%rip), %rax
 #else
 	leaq	environ(%rip), %rax
@@ -28,7 +28,7 @@ _start:
 
 	movq	%rbx, 8(%rax)	/* __elfinfo */
 #else
-#ifdef __DYN_LIB
+#ifdef __PIC__
 	movq	environ@GOTPCREL(%rip), %rax
 	movq	%rdx, (%rax)
 #else
@@ -84,9 +84,6 @@ _start:
 	syscall
 #else
 	call	exit
-#ifndef __DYN_LIB
-	.hidden exit
-#endif
 #endif
 	hlt
 .Lstart:

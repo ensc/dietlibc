@@ -89,11 +89,15 @@ inn_printf:
 	--flag_long;
 	goto inn_printf;
 #if __WORDSIZE != 64
-      case 'j':		/* fall through */
+      case 'j':
 #endif
       case 'q':		/* BSD ... */
       case 'L':
 	++flag_long;	/* fall through */
+#if defined(__GNUC__) && (__GNUC__ >= 7)
+	__attribute__((fallthrough));
+#endif
+
 #if __WORDSIZE == 64
       case 'j':
 #endif

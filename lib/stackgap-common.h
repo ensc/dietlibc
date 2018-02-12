@@ -1,7 +1,7 @@
 #include <sys/cdefs.h>
 // #define extern __hidden__
 
-#define PIEDEBUG
+// #define PIEDEBUG
 
 extern char __executable_start;
 
@@ -46,7 +46,10 @@ extern __hidden__ unsigned long __guard;
 #endif
 
 #if defined(WANT_VALGRIND_SUPPORT)
-int __valgrind=1;
+#ifdef NDEBUG
+#undef WANT_VALGRIND_SUPPORT
+#endif
+int __valgrind=0;
 #endif
 
 #ifdef __i386__
@@ -231,8 +234,10 @@ static size_t Strlen(const char* s) {
   return i;
 }
 
-static void Write(int fd,const char* s,size_t len) {
-  asm("syscall\n" : : "a" (1), "D" (fd), "S" (s), "d" (len));
+static ssize_t Write(int fd,const char* s,size_t len) {
+  ssize_t r;
+  asm("syscall\n" : "=a"(r) : "a" (1), "D" (fd), "S" (s), "d" (len) );
+  return r;
 }
 
 static void _puts(const char* s) {
@@ -260,6 +265,15 @@ static void _putx(size_t n) {
     n/=16;
   }
   Write(1,buf+j,sizeof(buf)-j);
+}
+
+static void _putphflags(size_t n) {
+  char buf[100];
+  size_t i=0;
+  if (n&4) buf[i++]='R';
+  if (n&2) buf[i++]='W';
+  if (n&1) buf[i++]='X';
+  Write(1,buf,i);
 }
 
 struct lookup { size_t n; const char s[20]; };
@@ -331,6 +345,7 @@ static struct lookup ptype[] = {
   { 0x60000000, "PT_LOOS" },
   { 0x6474e550, "PT_GNU_EH_FRAME" },
   { 0x6474e551, "PT_GNU_STACK" },
+  { 0x6474e552, "PT_GNU_RELRO" },
   { 0x6ffffffa, "PT_LOSUNW" },
   { 0x6ffffffa, "PT_SUNWBSS" },
   { 0x6ffffffb, "PT_SUNWSTACK" },
@@ -377,8 +392,10 @@ static struct lookup dtag[] = {
   { 34, "DT_NUM" },
   { 0x6000000d, "DT_LOOS" },
   { 0x6ffff000, "DT_HIOS" },
+  { 0x6ffffef5, "DT_GNU_HASH" },
   { 0x6ffffff9, "DT_RELACOUNT" },
   { 0x6ffffffa, "DT_RELCOUNT" },
+  { 0x6ffffffb, "DT_FLAGS_1" },
   { 0x70000000, "DT_LOPROC" },
   { 0x7fffffff, "DT_HIPROC" },
   { 0 }
@@ -401,14 +418,16 @@ static void callback() {
 
 
 
+#ifdef __PIE__
 __hidden__ char _DYNAMIC;
+#endif
 
 int stackgap(int argc,char* argv[],char* envp[]);
 int stackgap(int argc,char* argv[],char* envp[]) {
 #if defined(WANT_STACKGAP) || defined(WANT_SSP) || defined(WANT_TLS)
-  char const * rand;
-  char* tlsdata;
   long* auxvec=(long*)envp;
+  char const * rand=(char*)&auxvec;
+  char* tlsdata;
 #endif
 #ifndef WANT_ELFINFO
   while (*auxvec) ++auxvec;			/* skip envp to get to auxvec */
@@ -474,7 +493,7 @@ int stackgap(int argc,char* argv[],char* envp[]) {
 	_putx(ph->p_paddr); _puts("\tfilesz ");
 	_putx(ph->p_filesz); _puts("\tmemsz ");
 	_putx(ph->p_memsz); _puts("\tflags ");
-	_putx(ph->p_flags); _puts("\talign ");
+	_putphflags(ph->p_flags); _puts("\talign ");
 	_putx(ph->p_align); _puts("\n");
       }
       _puts("\n\n");
@@ -571,6 +590,7 @@ int stackgap(int argc,char* argv[],char* envp[]) {
 #if defined(WANT_STACKGAP) || defined(WANT_SSP) || defined(WANT_TLS)
 #if defined(WANT_STACKGAP) || defined(WANT_SSP)
   rand=find_in_auxvec(auxvec,25);
+#ifdef WANT_URANDOM_SSP
   if (!rand) {
     void *tmp=alloca(10);
     rand=tmp;
@@ -578,6 +598,7 @@ int stackgap(int argc,char* argv[],char* envp[]) {
     read(fd,tmp,10);
     close(fd);
   }
+#endif
 #endif
 #ifdef WANT_STACKGAP
 #ifdef __UNALIGNED_MEMORY_ACCESS_OK
@@ -619,10 +640,31 @@ int stackgap(int argc,char* argv[],char* envp[]) {
   __setup_tls(__tcb_mainthread=(tcbhead_t*)(tlsdata));
 #endif
 #if defined(WANT_VALGRIND_SUPPORT)
+  /* detect valgrind by looking for "valgrind" in $LD_PRELOAD */
+  /* for i386 and x86_64 we do it inline instead of calling getenv to
+   * reduce bloat */
+#if defined(__i386__) || defined(__x86_64__)
+  {
+    char** e;
+    for (e=environ; *e; ++e) {
+      if (*(uint64_t*)*e == *(uint64_t*)"LD_PRELO") {
+	char* x;
+	for (x=*e; *x; ++x) {
+	  if (*(uint64_t*)x == *(uint64_t*)"valgrind") {
+	    __valgrind=1;
+	    goto found;
+	  }
+	}
+      }
+    }
+found: ;
+  }
+#else
   {
     const char* v=getenv("LD_PRELOAD");
     __valgrind=(v && strstr(v,"valgrind"));
   }
+#endif
 #endif
 #ifdef WANT_GNU_STARTUP_BLOAT
   program_invocation_name=argv[0];
