@@ -21,3 +21,5 @@ addons:
 
 script:
 - make
+- make -C test all DIET=$(echo `pwd`/bin-*/diet) -k
+- cd test && bash runtests-X.sh
