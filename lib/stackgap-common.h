@@ -366,9 +366,9 @@ int stackgap(int argc,char* argv[],char* envp[], funcptr fp) {
   (void)fp;	// not used
 #endif
 #if defined(WANT_STACKGAP) || defined(WANT_SSP) || defined(WANT_TLS)
+  long* auxvec=(long*)envp;
   char const * rand=(char*)&auxvec;
   char* tlsdata;
-  long* auxvec=(long*)envp;
 #endif
 #ifndef WANT_ELFINFO
   while (*auxvec) ++auxvec;			/* skip envp to get to auxvec */
