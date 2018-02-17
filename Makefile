@@ -599,6 +599,7 @@ $(OBJDIR)/stackgap.o: EXTRACFLAGS:=-fno-stack-protector -fno-pie -DNDEBUG
 $(OBJDIR)/stackgap-pie.o: EXTRACFLAGS:=-fno-stack-protector -Dstackgap=stackgap_pie -fpie
 
 $(OBJDIR)/stackgap-g.o: EXTRACFLAGS:=-fno-stack-protector -fno-pie
+$(OBJDIR)/__get_elf_aux_value.o $(PICODIR)/__get_elf_aux_value.o: EXTRACFLAGS+=-fno-stack-protector
 
 $(OBJDIR)/stackgap.o $(OBJDIR)/stackgap-pie.o $(OBJDIR)/stackgap-g.o $(PICODIR)/stackgap.o: lib/stackgap-common.h
 
