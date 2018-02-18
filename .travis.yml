@@ -40,5 +40,5 @@ dist: xenial
 script:
 - CFLAGS="${BASE_CFLAGS} ${EXTRA_CFLAGS}"
 - make CFLAGS="${CFLAGS}" ARCH="${ARCH}"
-- make -C test all DIET=$(echo `pwd`/bin-*/diet) CFLAGS="${CFLAGS}" ARCH="${ARCH}" -k
+- make -C test all DIET="`pwd`/bin-${ARCH}/diet" CFLAGS="${CFLAGS}" ARCH="${ARCH}" -k
 - cd test && bash runtests-X.sh
