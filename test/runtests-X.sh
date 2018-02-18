@@ -28,6 +28,7 @@ FAILURES_BOGUS_emulator=(
   ":fadvise"			# bad translation of 64bit args in qemu
   ":stdio:tst-fseek"		# !! unclear; must be investigated
   ":dirent:tst-seekdir"		# 32/64 bit issue when calling lseek()
+  ":dirent:tst-seekdir64"	# 32/64 bit issue when calling lseek()
 )
 
 FAILURES_KNOWN=(
