@@ -2,10 +2,22 @@
 
 #include "dietpagesize.h"
 
+#if __WORDSIZE < 64
+#  define __DIR_OFFSET_COOKIE
+#endif
+
+struct __dirent64_offsets {
+  int64_t       d_off;
+};
+
 struct __dirstream {
   int fd;
   unsigned int num;
   unsigned int cur;
+#ifdef __DIR_OFFSET_COOKIE
+  struct __dirent64_offsets *offsets;
+  size_t num_offsets;
+#endif
   unsigned char is_64;
   char buf[] __attribute__((__aligned__(8)));
 };				/* stream data from opendir() */
