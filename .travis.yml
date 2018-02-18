@@ -19,6 +19,7 @@ addons:
     build_command:   "make"
     branch_pattern: master|CVS
 
+dist: xenial
 script:
 - make
 - make -C test all DIET=$(echo `pwd`/bin-*/diet) -k
