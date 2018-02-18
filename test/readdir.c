@@ -88,10 +88,6 @@ int main() {
       xputs("unexpected d_type");
     }
 
-    if (telldir(D) != d->d_off) {
-      xputs("mismatch with telldir");
-    }
-
     unlink(d->d_name);
   }
 
