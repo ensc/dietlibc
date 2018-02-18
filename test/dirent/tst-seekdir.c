@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <dirent.h>
 #include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
 
 int
 main (int argc, char *argv[])
@@ -11,15 +13,25 @@ main (int argc, char *argv[])
   int i = 0;
   int result = 0;
   struct dirent *dp;
+  char const *test_entry = NULL;
 
   dirp = opendir (".");
   for (dp = readdir (dirp); dp != NULL; dp = readdir (dirp))
     {
       /* save position 3 (after fourth entry) */
-      if (i++ == 3)
+      switch (i) {
+      case 3:
 	save3 = telldir (dirp);
+        break;
+      case 4:
+        test_entry = strdup(dp->d_name);
+        break;
+      }
 
-      printf ("%s\n", dp->d_name);
+      ++i;
+
+      if (i < 10)
+        printf ("%s\n", dp->d_name);
 
       /* stop at 400 (just to make sure dirp->__offset and dirp->__size are
 	 scrambled */
@@ -36,13 +48,22 @@ main (int argc, char *argv[])
   cur = telldir (dirp);
   if (cur != save3)
     {
-      printf ("seekdir (d, %ld); telldir (d) == %ld\n", save3, cur);
+      fprintf(stderr, "seekdir (d, %ld); telldir (d) == %ld\n", save3, cur);
       result = 1;
     }
 
   /* print remaining files (3-last) */
-  for (dp = readdir (dirp); dp != NULL; dp = readdir (dirp))
-    printf ("%s\n", dp->d_name);
+  i = 0;
+  for (dp = readdir (dirp); dp != NULL; dp = readdir (dirp)) {
+    if (i == 0 && strcmp(dp->d_name, test_entry) != 0) {
+      fprintf(stderr, "fs entry mismatch: '%s' vs. '%s'\n",
+              dp->d_name, test_entry);
+      result = 1;
+    }
+    if (i < 10)
+      printf ("%s\n", dp->d_name);
+    ++i;
+  }
 
 
   closedir (dirp);
