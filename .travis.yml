@@ -19,8 +19,18 @@ addons:
     build_command:   "make"
     branch_pattern: master|CVS
 
+env:
+  global:
+    - BASE_CFLAGS="-g1 -O1 -fstack-protector"
+
+matrix:
+  include:
+    - env: EXTRA_CFLAGS=-m64
+    - env: EXTRA_CFLAGS=-m32
+
 dist: xenial
 script:
-- make
-- make -C test all DIET=$(echo `pwd`/bin-*/diet) -k
+- CFLAGS="${BASE_CFLAGS} ${EXTRA_CFLAGS}"
+- make CFLAGS="${CFLAGS}"
+- make -C test all DIET=$(echo `pwd`/bin-*/diet) CFLAGS="${CFLAGS}" -k
 - cd test && bash runtests-X.sh
