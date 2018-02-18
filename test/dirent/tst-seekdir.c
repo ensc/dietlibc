@@ -8,8 +8,8 @@ int
 main (int argc, char *argv[])
 {
   DIR * dirp;
-  long int save3 = 0;
-  long int cur;
+  off_t save3 = 0;
+  off_t cur;
   int i = 0;
   int result = 0;
   struct dirent *dp;
@@ -48,7 +48,8 @@ main (int argc, char *argv[])
   cur = telldir (dirp);
   if (cur != save3)
     {
-      fprintf(stderr, "seekdir (d, %ld); telldir (d) == %ld\n", save3, cur);
+      fprintf(stderr, "seekdir (d, %lld); telldir (d) == %lld\n",
+              (long long)save3, (long long)cur);
       result = 1;
     }
 
