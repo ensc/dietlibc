@@ -17,7 +17,7 @@ addons:
     notification_email: github@ensc.de
     build_command_prepend: ":"
     build_command:   "make"
-    branch_pattern: master|CVS
+    branch_pattern: master-for-scan|CVS
 
 env:
   global:
