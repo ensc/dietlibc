@@ -25,12 +25,12 @@ env:
 
 matrix:
   include:
-    - env: EXTRA_CFLAGS=-m64
-    - env: EXTRA_CFLAGS=-m32
+    - env: EXTRA_CFLAGS=-m64 ARCH=x86_64
+    - env: EXTRA_CFLAGS=-m32 ARCH=i386
 
 dist: xenial
 script:
 - CFLAGS="${BASE_CFLAGS} ${EXTRA_CFLAGS}"
-- make CFLAGS="${CFLAGS}"
-- make -C test all DIET=$(echo `pwd`/bin-*/diet) CFLAGS="${CFLAGS}" -k
+- make CFLAGS="${CFLAGS}" ARCH="${ARCH}"
+- make -C test all DIET=$(echo `pwd`/bin-*/diet) CFLAGS="${CFLAGS}" ARCH="${ARCH}" -k
 - cd test && bash runtests-X.sh
