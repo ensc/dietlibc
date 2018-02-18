@@ -1,3 +1,5 @@
+#define _FILE_OFFSET_BITS       64
+
 #include "dietdirent.h"
 #include <unistd.h>
 #include <dirent.h>
