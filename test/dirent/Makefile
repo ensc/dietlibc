@@ -4,7 +4,7 @@ CFLAGS=-Wall
 
 all: dirent
 
-TESTPROGRAMS=opendir-tst1 tst-seekdir
+TESTPROGRAMS=opendir-tst1 tst-seekdir tst-seekdir64
 
 dirent: $(TESTPROGRAMS)
 
