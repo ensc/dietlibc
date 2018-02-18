@@ -36,9 +36,18 @@ static int remove_file(char const *dir, char const *name)
 }
 
 int main() {
-  char tmpdir[] = "/tmp/readdir.XXXXXX";
+  char const *tmpdir_base = getenv("TMPDIR");
+  char *tmpdir;
   unsigned long res = 0;
   DIR* D;
+
+  if (!tmpdir_base)
+    tmpdir_base = "/tmp";
+
+  tmpdir = malloc(strlen(tmpdir_base) + sizeof "/readdir.XXXXXX");
+  strcpy(tmpdir, tmpdir_base);
+  strcat(tmpdir, "/readdir.XXXXXX");
+
   if (!mkdtemp(tmpdir)) {
     perror("mkdtemp");
     return 1;
