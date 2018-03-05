@@ -348,4 +348,8 @@ struct vfs_cap_data {
 #define CAP_TO_MASK(x)      (1 << ((x) & 31)) /* mask for indexed __u32 */
 
 
+int capget(cap_user_header_t h, cap_user_data_t d);
+int capset(cap_user_header_t h, const cap_user_data_t d);
+
+
 #endif
