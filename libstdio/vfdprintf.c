@@ -4,12 +4,12 @@
 #include <stdlib.h>
 #include "dietstdio.h"
 
-static int __fwrite(void*ptr, size_t nmemb, int fd) {
-  return write(fd,ptr,nmemb);
+static int __fwrite(const void*ptr, size_t nmemb, void* cookie) {
+  return write((uintptr_t)cookie,ptr,nmemb);
 }
 
 int vfdprintf(int fd, const char *format, va_list arg_ptr)
 {
-  struct arg_printf ap = { (void*)(long)fd, (int(*)(void*,size_t,void*)) __fwrite };
+  struct arg_printf ap = { (void*)(long)fd, __fwrite };
   return __v_printf(&ap,format,arg_ptr);
 }

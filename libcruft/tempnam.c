@@ -10,11 +10,12 @@ link_warning("tempnam","\e[1;33;41m>>> tempnam stinks! NEVER ! NEVER USE IT ! <<
 
 char* tempnam(char* dir,char* template) {
   char buf[1024];
-  int len=sizeof(buf)-1,fd;
+  int len=sizeof(buf)-2,fd;
   buf[len]=0;
   if ((dir)&&(*dir)) {
-    memccpy(buf,dir,0,len);
-    strncat(buf,"/",1);
+    char* c=memccpy(buf,dir,0,len);
+    if (!c) return 0;
+    memcpy(c-1,"/",2);
   }
   else
     strncpy(buf,"/tmp/",len);

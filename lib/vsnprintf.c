@@ -11,7 +11,8 @@ struct str_data {
   size_t size;
 };
 
-static int swrite(void*ptr, size_t nmemb, struct str_data* sd) {
+static int swrite(const void*ptr, size_t nmemb, void* cookie) {
+  struct str_data* sd=cookie;
   size_t tmp=sd->size-sd->len;
   if (tmp>0) {
     size_t len=nmemb;
@@ -28,7 +29,7 @@ static int swrite(void*ptr, size_t nmemb, struct str_data* sd) {
 int vsnprintf(char* str, size_t size, const char *format, va_list arg_ptr) {
   int n;
   struct str_data sd = { str, 0, size?size-1:0 };
-  struct arg_printf ap = { &sd, (int(*)(void*,size_t,void*)) swrite };
+  struct arg_printf ap = { &sd, swrite };
   n=__v_printf(&ap,format,arg_ptr);
   if (str && size && n>=0) {
     if (size!=(size_t)-1 && ((size_t)n>=size)) str[size-1]=0;
