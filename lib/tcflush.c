@@ -6,4 +6,4 @@ int __libc_tcflush(int fd, int queue_selector)
   return ioctl(fd, TCFLSH, queue_selector);
 }
 
-int tcflush(int fd) __attribute__((weak,alias("__libc_tcflush")));
+int tcflush(int fd, int queue_selector) __attribute__((weak,alias("__libc_tcflush")));
