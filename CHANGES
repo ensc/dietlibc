@@ -58,6 +58,7 @@
   split off stackgap-g.o, don't compile valgrind stuff into stackgap.o,
     diet chooses depending on presence of -g
   add mlock2
+  prefer gcc4+ __CAS implementation to our own on ARM, and fix ours (Philip Zander)
 
 0.33:
   first stab at getting TLS to work in actual threads
