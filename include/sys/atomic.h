@@ -2,7 +2,7 @@
 #define _SYS_ATOMIC_H
 
 #include <stddef.h>
-#include <cdefs.h>
+#include <sys/cdefs.h>
 
 /* this file defines __CAS (compare and swap) and __atomic_add */
 
@@ -21,7 +21,7 @@ typedef int (__kernel_cmpxchg_t)(int oldval, int newval, int *ptr);
 
 #define __kernel_cmpxchg (*(__kernel_cmpxchg_t *)0xffff0fc0)
 
-size_t __CAS(size_t* ptr, size_t oldval, size_t newval) {
+static inline size_t __CAS(size_t* ptr, size_t oldval, size_t newval) {
   while (1) {
     int fail;
     size_t cur=*ptr;
