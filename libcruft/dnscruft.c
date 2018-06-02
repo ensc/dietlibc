@@ -53,7 +53,8 @@ void __dns_make_fd6(void) {
 #endif
 
 static int parsesockaddr(const char* c,void* x) {
-  struct sockaddr_in to;
+  struct sockaddr_in_pad to;
+  memset(&to,0,sizeof(to));
   if (inet_aton(c,&to.sin_addr)) {
     to.sin_port=htons(53);
     to.sin_family=AF_INET;
