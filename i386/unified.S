@@ -23,6 +23,9 @@ exit:
 .global _exit
 .type	_exit,@function
 _exit:
+.global _Exit
+.type	_Exit,@function
+_Exit:
 	movb	$1,%al
 .global __unified_syscall
 .type	__unified_syscall,@function

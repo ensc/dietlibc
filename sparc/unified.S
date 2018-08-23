@@ -8,6 +8,9 @@ exit:
 .global _exit
 .type	_exit,function
 _exit:
+.global _Exit
+.type	_Exit,function
+_Exit:
 	mov	__NR_exit, %g1
 .global __unified_syscall
 __unified_syscall:

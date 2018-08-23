@@ -8,6 +8,9 @@ exit:
 .type _exit,@function
 .global _exit
 _exit:
+.type _Exit,@function
+.global _Exit
+_Exit:
 	li	0,__NR_exit
 .global __unified_syscall
 __unified_syscall:

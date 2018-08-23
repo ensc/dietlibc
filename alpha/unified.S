@@ -4,7 +4,11 @@
 .weak exit
 exit:
 .global _exit
+.type	_exit,@function
 _exit:
+.global _Exit
+.type	_Exit,@function
+_Exit:
 	lda	$0, __NR_exit
 .global __unified_syscall
 __unified_syscall:

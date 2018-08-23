@@ -18,9 +18,14 @@
 .globl __unified_syscall
 .globl __error_unified_syscall
 .globl _exit
+.weak exit
+.globl _Exit
 .proc  _exit
+.proc  _Exit
 
 _exit:
+_Exit:
+exit:
 	mov r15 = 1025
 .endp _exit
 .size _exit, . - _exit

@@ -34,8 +34,10 @@
 
 
 .globl _exit
+.globl _Exit
 .weak exit
 _exit:
+_Exit:
 exit:
         ldi 1, %r20
 	b __unified_syscall
