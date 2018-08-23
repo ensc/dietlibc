@@ -16,6 +16,7 @@ int __stdio_parse_mode(const char *mode) {
     case 'r': f|=O_RDONLY; break;
     case 'w': f|=O_WRONLY|O_CREAT|O_TRUNC; break;
     case 'a': f|=O_WRONLY|O_CREAT|O_APPEND; break;
+    case 'x': f|=O_EXCL; break;
     case '+': f=(f&(~O_WRONLY))|O_RDWR; break;
     }
     ++mode;
