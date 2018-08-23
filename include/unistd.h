@@ -307,6 +307,8 @@ int linkat(int olddirfd, const char *oldpath, int newdirfd, const char *newpath,
 int readlinkat(int dirfd, const char *pathname, char *buf, size_t bufsiz) __THROW;
 #endif
 
+#define _POSIX_MAPPED_FILES 200809L
+
 __END_DECLS
 
 #endif
