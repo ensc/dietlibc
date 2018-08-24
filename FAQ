@@ -342,3 +342,31 @@ A: Here's how I do it:
 
 Then the libraries go to /opt/diet/lib, so you still need a symlink to
 lib-i386 or whatever your architecture is.
+
+
+
+
+Q: My binary segfaults immediately, before reaching main!
+A: This can be caused by a bug in binutils 2.31.1,
+if you have thread local storage enabled your dietlibc configuration
+(that is the default setting). Workaround: Upgrade to more recent
+version/snapshot of binutils. dietlibc cannot work around this,
+unfortunately.
+
+
+
+
+Q: A binary that used to be 8k is not 17k since I upgraded my binutils!
+A: To combat side channel attacks such as Spectre,
+binutils recently (2.31?) introduced a change that would separate rodata
+and code. rodata used to be mapped as part of the code segment
+(read-only and executable). Now binutils puts .text on a different page
+and has a different ELF section. The result is a lot of additional
+padding bytes that can cause small dietlibc binaries to double or even
+triple in size.
+
+The idea appears to be to prevent Spectre gadgets to be accidentally
+exposed through the rodata segment. You can turn this behavior off by
+passing -Wl,-z,noseparate-code to gcc (or -z noseparate-code to ld).
+Since I'm not sure for how long this option has been there, I'm not
+passing it in diet as to not break builds on older binutils versions.
