@@ -5,6 +5,9 @@
 	.align	2
 	.weak exit
 exit:
+	.global _Exit
+	.ent _Exit
+_Exit:
 	.global _exit
 	.ent _exit
 _exit:

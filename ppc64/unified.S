@@ -6,10 +6,12 @@
 #if defined(_CALL_ELF) && _CALL_ELF == 2
 exit:
 _exit:
+_Exit:
 	addis	2,12,.TOC.-exit@ha
 	addi	2,2,.TOC.-exit@l
 .localentry	exit,.-exit
 .localentry	_exit,.-_exit
+.localentry	_Exit,.-_Exit
 #else
 .exit:
 	.weak	.exit
@@ -66,6 +68,7 @@ FN_NAME_DOTIFY(__you_tried_to_link_a_dietlibc_object_against_glibc):
 	.long 0
 	.byte 0,0,0,1,128,0,0,0
 	.size	FN_NAME_DOTIFY(_exit),.-FN_NAME_DOTIFY(_exit)
+	.size	FN_NAME_DOTIFY(_Exit),.-FN_NAME_DOTIFY(_Exit)
 	.size	FN_NAME_DOTIFY(exit),.-FN_NAME_DOTIFY(exit)
 
 diet_proto_weak(__thread_doexit)
@@ -78,3 +81,4 @@ diet_proto_weak(__nop)
 diet_proto_weak(__you_tried_to_link_a_dietlibc_object_against_glibc)
 diet_proto_weak(exit)
 diet_proto(_exit)
+diet_proto(_Exit)

@@ -287,7 +287,13 @@ int mlock2(const void *addr, size_t len, int flags) __THROW;
 
 int madvise(void *start, size_t length, int advice) __THROW;
 
-#define _POSIX_MAPPED_FILES
+#define POSIX_MADV_NORMAL MADV_NORMAL
+#define POSIX_MADV_SEQUENTIAL MADV_SEQUENTIAL
+#define POSIX_MADV_RANDOM MADV_RANDOM
+#define POSIX_MADV_WILLNEED MADV_WILLNEED
+#define POSIX_MADV_DONTNEED MADV_DONTNEED
+
+#define posix_madvise(addr,len,advice) madvise(addr,len,advice)
 
 __END_DECLS
 

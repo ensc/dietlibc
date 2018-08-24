@@ -8,6 +8,8 @@
 exit:
 .global _exit
 _exit:
+.global _Exit
+_Exit:
 	mov	$SYS_exit,%al
 
 .global __error_unified_syscall
