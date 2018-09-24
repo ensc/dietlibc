@@ -59,6 +59,8 @@
     diet chooses depending on presence of -g
   add mlock2
   prefer gcc4+ __CAS implementation to our own on ARM, and fix ours (Philip Zander)
+  move _POSIX_MAPPED_FILES to unistd.h
+  accept "x" in fopen mode
 
 0.33:
   first stab at getting TLS to work in actual threads
