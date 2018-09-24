@@ -16,6 +16,7 @@ _Exit:
 .exit:
 	.weak	.exit
 ._exit:
+._Exit:
 #endif
 	li	0,__NR_exit
 	.global __unified_syscall
