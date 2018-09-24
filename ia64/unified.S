@@ -1,3 +1,5 @@
+#include <dietfeatures.h>
+
 /*
    Copyright (C) 2002 Thomas M. Ogrisegg
 
@@ -33,7 +35,16 @@ exit:
 .proc  __unified_syscall
 __unified_syscall:
 	break.i 0x100000
+#ifdef WANT_THREAD_SAFE
+	addl r2 = @ltoff(@tprel(errno#)), r1
+	;;
+	ld8 r2 = [r2]
+	;;
+	add r2 = r2, r13
+	;;
+#else
 	movl r2=errno
+#endif
 	cmp.eq p6,p0=-1,r10
 	;;
 .endp __unified_syscall
