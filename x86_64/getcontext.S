@@ -31,9 +31,9 @@ getcontext:
   lahf
   movq %rax,176(%rdi)
   /* valgrind dies if we use these instructions */
-//  movw %cs,184(%rdi)
-//  movw %gs,186(%rdi)
-//  movw %fs,188(%rdi)
+  movw %cs,184(%rdi)
+  movw %gs,186(%rdi)
+  movw %fs,188(%rdi)
   /* write nothing to err (192) and trapno (200) */
 
   leaq 424(%rdi),%rax

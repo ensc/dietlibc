@@ -1,4 +1,5 @@
 ALWAYS_PIC=1
 CFLAGS := -Os -fstrict-aliasing -momit-leaf-frame-pointer -mfancy-math-387
 VPATH  := x32:x86_64:syscalls.s:$(VPATH)
-LIBOBJ += $(OBJDIR)/arch_prctl.o $(OBJDIR)/__CAS.o
+LIBOBJ += $(OBJDIR)/arch_prctl.o $(OBJDIR)/__CAS.o $(OBJDIR)/__munmap_and_exit.o $(OBJDIR)/getcontext.o
+LIBOBJ += $(OBJDIR)/setcontext.o $(OBJDIR)/start-pie.o $(OBJDIR)/stackgap-pie.o
