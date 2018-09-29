@@ -15,7 +15,11 @@ clock_gettime:
 	push %rsi
 	push %rdi
 	movq __vdso(%rip),%rdi
+#ifdef __PIC__
+	leaq funcname(%rip), %rsi
+#else
 	movq $funcname, %rsi
+#endif
 	call vdso_dlsym
 	pop %rdi
 	pop %rsi

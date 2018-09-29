@@ -129,6 +129,7 @@ int main(int argc,char *argv[]) {
       if (!strcmp(argv[i],"-m32")) m=32; else
       if (!strcmp(argv[i],"-mx32")) m=33; else
       if (!strcmp(argv[i],"-m64")) m=64; else
+      if (!strcmp(argv[i],"-pie")) pie=1; else
       if (!strcmp(argv[i],"-fpie")) pie=1; else
       if (!strcmp(argv[i],"-fno-pie")) pie=0;
     }
