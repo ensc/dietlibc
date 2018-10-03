@@ -1,5 +1,6 @@
 0.35:
   fix pic for x32
+  putenv removes duplicate entries from malicious environments (Daniel Hodson)
 
 0.34:
   move stpcpy from libcompat to lib as it is now part of POSIX (Enrico Scholz)
