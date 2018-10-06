@@ -344,9 +344,9 @@ static int matchpiece(void*__restrict__ x,const char*__restrict__ s,int ofs,stru
   unsigned int *offsets;
   assert(a->max>0 && a->max<1000);
 #ifdef DEBUG
-  printf("alloca(%d)\n",sizeof(int)*a->max);
+  printf("alloca(%d)\n",sizeof(int)*(a->max+1));
 #endif
-  offsets=alloca(sizeof(int)*a->max);
+  offsets=alloca(sizeof(int)*(a->max+1));
   offsets[0]=0;
 //  printf("allocating %d offsets...\n",a->max);
 //  printf("matchpiece \"%s\"...\n",s);

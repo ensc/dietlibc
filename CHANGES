@@ -1,6 +1,7 @@
 0.35:
   fix pic for x32
-  putenv removes duplicate entries from malicious environments (Daniel Hodson)
+  SECURITY: putenv removes duplicate entries from malicious environments (Daniel Hodson)
+  SECURITY: fix regex stack corruption (Thorsten Glaser)
 
 0.34:
   move stpcpy from libcompat to lib as it is now part of POSIX (Enrico Scholz)
