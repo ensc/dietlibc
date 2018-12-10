@@ -395,7 +395,7 @@ num_printf:
 		while (*tmp) ++tmp;
 		if (tmp1) tmp=tmp1;
 		while (*--tmp=='0') ;
-		if (*tmp!='.') ++tmp;
+		if (*tmp!='.' || flag_hash) ++tmp;
 		*tmp=0;
 		if (tmp1) strcpy(tmp,tmp1);
 	      }

@@ -2,6 +2,7 @@
   fix pic for x32
   SECURITY: putenv removes duplicate entries from malicious environments (Daniel Hodson)
   SECURITY: fix regex stack corruption (Thorsten Glaser)
+  printf("%#.0g", 1.0) -> "1." (Christopher Wellons)
 
 0.34:
   move stpcpy from libcompat to lib as it is now part of POSIX (Enrico Scholz)
