@@ -241,8 +241,11 @@ int main(int argc,char *argv[]) {
       char **newargv;
       char **dest;
       char *a,*b,*c;
-#ifdef WANT_DYNAMIC
-      char *d,*e,*f;
+#if defined(WANT_DYNAMIC) || defined(WANT_CTOR) || defined(WANT_EXCEPTIONS)
+      char *d,*e;
+#endif
+#ifdef __DYN_LIB
+      char *f;
 #endif
       char *g=0;
 /* we need to add -I... if the command line contains -c, -S or -E */
@@ -324,6 +327,11 @@ pp:
       strcpy(d,platform); strcat(d,"/dyn_start.o");
       strcpy(e,platform); strcat(e,"/dyn_stop.o");
 #endif
+
+#elif defined(WANT_CTOR) || defined(WANT_EXCEPTIONS)
+      e=alloca(strlen(platform)+20);
+      strcpy(e,platform);
+      strcat(e,"/crtend.o");
 #endif
 
       dest=newargv;
@@ -448,7 +456,7 @@ incorporated:
 	  *dest++=c;
 	}
       }
-#ifdef WANT_DYNAMIC
+#if defined(WANT_DYNAMIC) || defined(WANT_CTOR) || defined(WANT_EXCEPTIONS)
       if (_link) { *dest++=e; }
 #endif
 #ifdef __DYN_LIB

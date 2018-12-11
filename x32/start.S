@@ -3,7 +3,7 @@
 .text
 .global _start
 _start:
-#ifdef WANT_DYNAMIC
+#ifdef WANT_CTOR
 	movq	%rdx, %rcx		/* %rcx = dynamic fini */
 #endif
 	movl	(%esp), %edi		/* %edi = argc */
@@ -34,14 +34,10 @@ _start:
 	popl	%edi
 #endif
 
-#ifdef WANT_DYNAMIC
-	call	_dyn_start
-#else
 #ifdef __PIE__
 	call	CALL_IN_STARTCODE_PIE
 #else
 	call	CALL_IN_STARTCODE
-#endif
 #endif
 
 #ifdef PROFILING
@@ -56,3 +52,14 @@ _start:
 .Lstart:
 	.size	 _start,.Lstart-_start
 
+.section .ctors,"aw"
+.global __CTOR_LIST__
+__CTOR_LIST__:
+
+.section .dtors,"aw"
+.global __DTOR_LIST__
+__DTOR_LIST__:
+
+.section .eh_frame,"aw"
+.global __EH_FRAME_BEGIN__
+__EH_FRAME_BEGIN__:

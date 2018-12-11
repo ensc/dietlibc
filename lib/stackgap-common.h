@@ -326,8 +326,28 @@ __hidden__ char _DYNAMIC;
 
 extern long* _auxvec;
 
-int stackgap(int argc,char* argv[],char* envp[]);
-int stackgap(int argc,char* argv[],char* envp[]) {
+typedef void(*funcptr)(void);
+
+#ifdef WANT_CTOR
+extern funcptr __CTOR_LIST__[];
+extern funcptr __CTOR_END__[];
+extern funcptr __DTOR_LIST__[];
+extern funcptr __DTOR_END__[];
+#endif
+
+#ifdef WANT_EXCEPTIONS
+extern const char __EH_FRAME_BEGIN__[];
+
+struct object { void* x[7]; };	// actual definition is in unwind-dw2-fde.h in gcc sources
+extern void __register_frame_info (const void *, struct object *);
+extern void __deregister_frame_info (const void *);
+#endif
+
+int stackgap(int argc,char* argv[],char* envp[], funcptr fp);
+int stackgap(int argc,char* argv[],char* envp[], funcptr fp) {
+#ifndef WANT_CTOR
+  (void)fp;	// not used
+#endif
   long* auxvec=(long*)envp;
 #if defined(WANT_STACKGAP) || defined(WANT_SSP) || defined(WANT_TLS)
   char* rand=(char*)&auxvec;
@@ -575,5 +595,29 @@ found: ;
       if (*c=='/') program_invocation_short_name=c+1;
   }
 #endif
-  exit(main(argc,argv,envp));
+#ifdef WANT_EXCEPTIONS
+  {
+    static struct object ob;
+    __register_frame_info(__EH_FRAME_BEGIN__, &ob);
+  }
+#endif
+#ifdef WANT_CTOR
+  {
+    funcptr* f;
+    funcptr* m=__CTOR_END__<__DTOR_LIST__ ? __CTOR_END__ : __DTOR_LIST__;
+    for (f=__CTOR_LIST__; f<m; ++f) (*f)();
+  }
+#endif
+  int r=main(argc,argv,envp);
+#ifdef WANT_CTOR
+  if (fp) fp();
+  {
+    funcptr* f;
+    for (f=__DTOR_LIST__; f<__DTOR_END__; ++f) (*f)();
+  }
+#endif
+#ifdef WANT_EXCEPTIONS
+  __deregister_frame_info(__EH_FRAME_BEGIN__);
+#endif
+  exit(r);
 }

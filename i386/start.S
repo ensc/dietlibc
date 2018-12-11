@@ -9,7 +9,7 @@ _start:
 	pushl	%ecx
 	leal	4(%eax,%ecx,4),%esi	/* %esi = envp = (4*ecx)+%eax+4 */
 
-#ifdef WANT_DYNAMIC
+#ifdef WANT_CTOR
 /* in %edx we have the ld.so dynamic _fini ( register this if non null ) */
 	push	%edx
 #endif
@@ -46,11 +46,7 @@ _start:
 	addl	$0x8, %esp
 #endif
 
-#ifdef WANT_DYNAMIC
-	call	_dyn_start
-#else
 	call	CALL_IN_STARTCODE
-#endif
 
 #ifdef PROFILING
 	pushl	%eax
@@ -63,3 +59,15 @@ _start:
 .Lstart:
 	.size	 _start,.Lstart-_start
 
+
+.section .ctors,"aw"
+.global __CTOR_LIST__
+__CTOR_LIST__:
+
+.section .dtors,"aw"
+.global __DTOR_LIST__
+__DTOR_LIST__:
+
+.section .eh_frame,"aw"
+.global __EH_FRAME_BEGIN__
+__EH_FRAME_BEGIN__:

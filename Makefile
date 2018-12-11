@@ -104,7 +104,8 @@ ILIBDIR=$(LIBDIR)-$(ARCH)
 
 DIETHOME=$(shell pwd)
 
-WHAT=	$(OBJDIR) $(OBJDIR)/start.o $(OBJDIR)/dyn_start.o $(OBJDIR)/dyn_stop.o \
+WHAT=	$(OBJDIR) $(OBJDIR)/start.o $(OBJDIR)/crtend.o \
+	$(OBJDIR)/dyn_start.o $(OBJDIR)/dyn_stop.o \
 	$(OBJDIR)/dietlibc.a $(OBJDIR)/liblatin1.a \
 	$(OBJDIR)/libcompat.a $(OBJDIR)/libm.a \
 	$(OBJDIR)/librpc.a $(OBJDIR)/libpthread.a \
@@ -352,11 +353,11 @@ $(OBJDIR)/dnsd: $(OBJDIR)/diet contrib/dnsd.c
 VERSION=dietlibc-$(shell head -n 1 CHANGES|sed 's/://')
 CURNAME=$(notdir $(shell pwd))
 
-$(OBJDIR)/diet: $(OBJDIR)/start.o $(OBJDIR)/dyn_start.o diet.c $(OBJDIR)/dietlibc.a $(OBJDIR)/dyn_stop.o
+$(OBJDIR)/diet: $(OBJDIR)/start.o diet.c $(OBJDIR)/dietlibc.a $(OBJDIR)/crtend.o
 	$(CCC) -isystem include $(CFLAGS) -nostdlib -o $@ $^ -DDIETHOME=\"$(DIETHOME)\" -DVERSION=\"$(VERSION)\" -lgcc
 	$(STRIP) -R .comment -R .note $@
 
-$(OBJDIR)/diet-i: $(OBJDIR)/start.o $(OBJDIR)/dyn_start.o diet.c $(OBJDIR)/dietlibc.a $(OBJDIR)/dyn_stop.o
+$(OBJDIR)/diet-i: $(OBJDIR)/start.o diet.c $(OBJDIR)/dietlibc.a $(OBJDIR)/crtend.o
 	$(CCC) -isystem include $(CFLAGS) -nostdlib -o $@ $^ -DDIETHOME=\"$(prefix)\" -DVERSION=\"$(VERSION)\" -DINSTALLVERSION -lgcc
 	$(STRIP) -R .comment -R .note $@
 
@@ -401,9 +402,9 @@ t:
 t1:
 	$(CCC) -g -o t1 t.c
 
-install-bin: $(OBJDIR)/start.o $(OBJDIR)/dietlibc.a $(OBJDIR)/librpc.a $(OBJDIR)/liblatin1.a $(OBJDIR)/libcompat.a $(OBJDIR)/elftrunc $(OBJDIR)/diet-i $(OBJDIR)/stackgap-g.o
+install-bin: $(OBJDIR)/start.o $(OBJDIR)/crtend.o $(OBJDIR)/dietlibc.a $(OBJDIR)/librpc.a $(OBJDIR)/liblatin1.a $(OBJDIR)/libcompat.a $(OBJDIR)/elftrunc $(OBJDIR)/diet-i $(OBJDIR)/stackgap-g.o
 	$(INSTALL) -d $(DESTDIR)$(ILIBDIR) $(DESTDIR)$(MAN1DIR) $(DESTDIR)$(BINDIR)
-	$(INSTALL) -m 644 $(OBJDIR)/start.o $(DESTDIR)$(ILIBDIR)/
+	$(INSTALL) -m 644 $(OBJDIR)/start.o $(OBJDIR)/crtend.o $(DESTDIR)$(ILIBDIR)/
 	-$(INSTALL) -m 644 $(OBJDIR)/start-pie.o $(DESTDIR)$(ILIBDIR)/
 	-$(INSTALL) -m 644 $(OBJDIR)/stackgap-g.o $(DESTDIR)$(ILIBDIR)/
 	$(INSTALL) -m 644 $(OBJDIR)/libm.a $(OBJDIR)/libpthread.a $(OBJDIR)/librpc.a \
@@ -552,7 +553,7 @@ $(OBJDIR)/crypt.o: dietfeatures.h
 # these depend on dietfeatures.h for WANT_FREAD_OPTIMIZATION
 $(OBJDIR)/fread.o $(OBJDIR)/fwrite.o: dietfeatures.h
 
-# these depend on dietfeatures.h for WANT_DYNAMIC
+# these depend on dietfeatures.h for WANT_CTOR
 $(OBJDIR)/start.o $(OBJDIR)/dyn_start.o $(OBJDIR)/dyn_stop.o: dietfeatures.h
 
 $(OBJDIR)/unified.o: dietuglyweaks.h

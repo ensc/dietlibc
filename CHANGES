@@ -3,6 +3,7 @@
   SECURITY: putenv removes duplicate entries from malicious environments (Daniel Hodson)
   SECURITY: fix regex stack corruption (Thorsten Glaser)
   printf("%#.0g", 1.0) -> "1." (Christopher Wellons)
+  rename WANT_DYNAMIC to WANT_CTOR, add WANT_EXCEPTIONS to dietfeatures.h
 
 0.34:
   move stpcpy from libcompat to lib as it is now part of POSIX (Enrico Scholz)

@@ -55,12 +55,10 @@ __start:
 #else
 	sll	$a2, $a2, 2
 #endif
-#ifdef WANT_DYNAMIC
+#ifdef WANT_CTOR
 /* FIXME: dl_init parameter ??? */
-	PTR_LA	$25, _dyn_start
-#else
-	PTR_LA	$25, CALL_IN_STARTCODE
 #endif
+	PTR_LA	$25, CALL_IN_STARTCODE
 	PTR_ADD	$a2, $a2, $a1
 	PTR_SW	$a2, environ
 	jalr	$25
@@ -72,3 +70,15 @@ __start:
 .type __main,@function
 __main:
 	j	$31
+
+.section .ctors,"aw"
+.global __CTOR_LIST__
+__CTOR_LIST__:
+
+.section .dtors,"aw"
+.global __DTOR_LIST__
+__DTOR_LIST__:
+
+.section .eh_frame,"aw"
+.global __EH_FRAME_BEGIN__
+__EH_FRAME_BEGIN__:

@@ -40,14 +40,21 @@ _start:
 	;;
 	st8  [r14] = out2           /* store envp in environ */
 
-#ifdef WANT_DYNAMIC
-/* FIXME: dl_init parameter ??? */
-	br.call.sptk.few rp = _dyn_start
-#else
 	br.call.sptk.few rp = CALL_IN_STARTCODE
-#endif
 	;;
 	mov r32 = r8                /* store return code */
 	br exit                     /* branch to exit */
 .endp _start
 .size _start, . - _start
+
+.section .ctors,"aw"
+.global __CTOR_LIST__
+__CTOR_LIST__:
+
+.section .dtors,"aw"
+.global __DTOR_LIST__
+__DTOR_LIST__:
+
+.section .eh_frame,"aw"
+.global __EH_FRAME_BEGIN__
+__EH_FRAME_BEGIN__:

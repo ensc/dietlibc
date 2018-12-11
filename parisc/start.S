@@ -39,14 +39,21 @@ _start:
 
 	stw %r24, 0(%sr0, %r19)
 	ldil L%$global$, %dp
-#ifdef WANT_DYNAMIC
-/* FIXME: dl_init parameter ??? */
-	bl _dyn_start, %rp
-#else
 	bl CALL_IN_STARTCODE, %rp
-#endif
 	ldo R%$global$(%dp), %dp
 	b exit
 	or %r28, %r28, %r26
 	.EXIT
 	.PROCEND
+
+.section .ctors,"aw"
+.global __CTOR_LIST__
+__CTOR_LIST__:
+
+.section .dtors,"aw"
+.global __DTOR_LIST__
+__DTOR_LIST__:
+
+.section .eh_frame,"aw"
+.global __EH_FRAME_BEGIN__
+__EH_FRAME_BEGIN__:

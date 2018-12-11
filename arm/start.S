@@ -36,7 +36,7 @@ FUNC_END	_exit
 
 FUNC_START	_start
 
-#ifdef WANT_DYNAMIC
+#ifdef WANT_CTOR
 	mov	a4, a1			@ save dynamic ld.so _fini
 #endif
 	mov	fp, #0			@ clear the frame pointer
@@ -61,11 +61,7 @@ FUNC_START	_start
 	ldmia	sp!, { r0 - r3 }
 #endif
 
-#ifdef WANT_DYNAMIC
-	bl	_dyn_start
-#else
 	bl	CALL_IN_STARTCODE
-#endif
 
 @
 @ The exit status from main() is already in r0.
@@ -100,3 +96,15 @@ FUNC_END	_exit
 
 
 #endif
+
+.section .ctors,"aw"
+.global __CTOR_LIST__
+__CTOR_LIST__:
+
+.section .dtors,"aw"
+.global __DTOR_LIST__
+__DTOR_LIST__:
+
+.section .eh_frame,"aw"
+.global __EH_FRAME_BEGIN__
+__EH_FRAME_BEGIN__:

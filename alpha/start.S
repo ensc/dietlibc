@@ -24,12 +24,22 @@ _start:
 
 	stq	$18, environ
 
-#ifdef WANT_DYNAMIC
+#ifdef WANT_CTOR
 /* in v0 ($0) is the ld.so _fini pointer */
 	mov	 $0, $19	/* mov v0(dynload) to a3 */
-	jsr	$26, _dyn_start
-#else
-	jsr	$26, CALL_IN_STARTCODE
 #endif
+	jsr	$26, CALL_IN_STARTCODE
 	mov	 $0, $16
 	jsr	$26, exit	/* YES, CALL! for threads and atexit ! (+4 byte) */
+
+.section .ctors,"aw"
+.global __CTOR_LIST__
+__CTOR_LIST__:
+
+.section .dtors,"aw"
+.global __DTOR_LIST__
+__DTOR_LIST__:
+
+.section .eh_frame,"aw"
+.global __EH_FRAME_BEGIN__
+__EH_FRAME_BEGIN__:

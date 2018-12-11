@@ -69,15 +69,13 @@ _start:
 	oris	14,14,environ@ha
 	std	5,environ@l(14)
 
-#ifdef WANT_DYNAMIC
+#ifdef WANT_CTOR
 /* #warning dynamic */
 	mr	6,7
 	/* This has not been tested on ppc64le yet... */
-	bl	FN_NAME_DOTIFY(_dyn_start)
-#else
+#endif
 /* #warning static */
 	bl	FN_NAME_DOTIFY(CALL_IN_STARTCODE)
-#endif
 	/* Don't use the dotted version here, because __libc_exit is
 	 * defined as an alias in the C code, so only the weak exit
 	 * (but not .exit) will be overridden by it. Fortunately,
@@ -105,3 +103,14 @@ __data_start:
 	.lcomm	__libc_stack_end,8,8
 	.type	__libc_stack_end,@object
 
+.section .ctors,"aw"
+.global __CTOR_LIST__
+__CTOR_LIST__:
+
+.section .dtors,"aw"
+.global __DTOR_LIST__
+__DTOR_LIST__:
+
+.section .eh_frame,"aw"
+.global __EH_FRAME_BEGIN__
+__EH_FRAME_BEGIN__:

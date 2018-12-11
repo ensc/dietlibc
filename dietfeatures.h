@@ -37,8 +37,12 @@
 /* support __thread; NEEDED FOR MULTI-THREADING! */
 #define WANT_TLS
 
-/* make the startcode, etc. dynamic aware ({con,de}structors) */
-// #define WANT_DYNAMIC
+/* run constructors/destructors of static objects,
+ * and functions with __attribute__((constructor)) */
+#define WANT_CTOR
+
+/* call __register_frame_info so C++ exception handling works */
+#define WANT_EXCEPTIONS
 
 /* GDB support in the dynamic linker */
 #define WANT_LD_SO_GDB_SUPPORT
@@ -185,8 +189,8 @@
 
 #ifdef __DYN_LIB
 /* with shared libraries you MUST have a dynamic aware startcode */
-#ifndef WANT_DYNAMIC
-#define WANT_DYNAMIC
+#ifndef WANT_CTOR
+#define WANT_CTOR
 #endif
 /* safeguard crashes with shared objects ... */
 #ifdef WANT_SAFEGUARD

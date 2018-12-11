@@ -23,6 +23,8 @@ void __setup_tls(tcbhead_t* mainthread) {
 
 #elif defined(__i386__)
 
+extern int __modern_linux;
+
   unsigned int sd[4];
   sd[0]=-1;
   sd[1]=(unsigned long int)mainthread;

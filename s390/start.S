@@ -6,7 +6,7 @@ _start:
 	basr	%r13,%r0
 	ahi	%r13,[.Laddr-.]
 
-#ifdef WANT_DYNAMIC
+#ifdef WANT_CTOR
 	lr	%r5,%r14		/* save dynamic ld.so _fini */
 #endif
 
@@ -43,14 +43,21 @@ _start:
 
 .align 4
 .Laddr:
-#ifdef WANT_DYNAMIC
-	.long	_dyn_start
-#else
 	.long	CALL_IN_STARTCODE
-#endif
 	.long	exit
 	.long	environ
 
 .Lstart:
 	.size	_start,.Lstart-_start
 
+.section .ctors,"aw"
+.global __CTOR_LIST__
+__CTOR_LIST__:
+
+.section .dtors,"aw"
+.global __DTOR_LIST__
+__DTOR_LIST__:
+
+.section .eh_frame,"aw"
+.global __EH_FRAME_BEGIN__
+__EH_FRAME_BEGIN__:

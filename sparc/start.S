@@ -31,11 +31,7 @@ _start:
    be NULL.  */
 
 /* Let libc do the rest of the initialization, and call main.  */
-#ifdef WANT_DYNAMIC
-	call	_dyn_start
-#else
 	call	CALL_IN_STARTCODE
-#endif
 	mov	%g1, %o3
 
 	b	exit
@@ -47,3 +43,14 @@ _start:
 
 	.size _start, .-_start
 
+.section .ctors,"aw"
+.global __CTOR_LIST__
+__CTOR_LIST__:
+
+.section .dtors,"aw"
+.global __DTOR_LIST__
+__DTOR_LIST__:
+
+.section .eh_frame,"aw"
+.global __EH_FRAME_BEGIN__
+__EH_FRAME_BEGIN__:
