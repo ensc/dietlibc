@@ -369,6 +369,12 @@
 #define __NR_preadv2		380
 #define __NR_pwritev2		381
 #define __NR_kexec_file_load	382
+#define __NR_statx		383
+#define __NR_pkey_alloc		384
+#define __NR_pkey_free		385
+#define __NR_pkey_mprotect	386
+#define __NR_rseq		387
+#define __NR_io_pgetevents	388
 
 #if defined(_CALL_ELF) && _CALL_ELF == 2
 

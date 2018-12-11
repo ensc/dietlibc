@@ -378,6 +378,9 @@
 #define __NR_pkey_mprotect 329
 #define __NR_pkey_alloc 330
 #define __NR_pkey_free 331
+#define __NR_statx 332
+#define __NR_io_pgetevents 333
+#define __NR_rseq 334
 
 #if defined(__PIE__)
 

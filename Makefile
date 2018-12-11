@@ -161,6 +161,7 @@ CFLAGS = -g $(EXTRACFLAGS)
 STRIP = :
 endif
 CFLAGS += -W -Wall -Wextra -Wchar-subscripts -Wmissing-prototypes -Wmissing-declarations -Wno-switch -Wno-unused -Wredundant-decls -Wshadow
+#CFLAGS += -Wsuggest-attribute=malloc
 
 ASM_CFLAGS = -Wa,--noexecstack
 ifneq ($(subst clang,fnord,$(CC)),$(CC))
