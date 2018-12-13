@@ -69,11 +69,11 @@ _start:
 	.size	 _start,.Lstart-_start
 	.section	.note.GNU-stack,"",@progbits
 
-.section .ctors,"aw"
+.section .init_array,"aw"
 .global __CTOR_LIST__
 __CTOR_LIST__:
 
-.section .dtors,"aw"
+.section .fini_array,"aw"
 .global __DTOR_LIST__
 __DTOR_LIST__:
 

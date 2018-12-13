@@ -1,11 +1,11 @@
 #include "dietfeatures.h"
 #include <endian.h>
 
-.section .ctors,"aw"
+.section .init_array,"aw"
 .global __CTOR_END__
 __CTOR_END__:
 
-.section .dtors,"aw"
+.section .fini_array,"aw"
 .global __DTOR_END__
 __DTOR_END__:
 

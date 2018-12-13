@@ -604,8 +604,7 @@ found: ;
 #ifdef WANT_CTOR
   {
     funcptr* f;
-    funcptr* m=__CTOR_END__<__DTOR_LIST__ ? __CTOR_END__ : __DTOR_LIST__;
-    for (f=__CTOR_LIST__; f<m; ++f) (*f)();
+    for (f=__CTOR_LIST__; f<__CTOR_END__; ++f) (*f)();
   }
 #endif
   int r=main(argc,argv,envp);
