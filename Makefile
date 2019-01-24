@@ -8,7 +8,7 @@ LIBDIR=${prefix}/lib
 BINDIR=${prefix}/bin
 MAN1DIR=${prefix}/man/man1
 
-EXTRACFLAGS=
+EXTRACFLAGS=-ffunction-sections -fdata-sections -Wl,--gc-sections -Wl,-z,noseparate-code
 
 MYARCH:=$(shell uname -m | sed -e 's/i[4-9]86/i386/' -e 's/armv[3-7]t\?e\?[lb]/arm/')
 
@@ -536,7 +536,7 @@ $(OBJDIR)/glob.o $(OBJDIR)/realpath.o $(OBJDIR)/fdglue.o $(OBJDIR)/fdglue2.o \
 $(OBJDIR)/getaddrinfo.o $(OBJDIR)/getnameinfo.o $(OBJDIR)/getprotoent.o \
 $(OBJDIR)/getservent.o $(OBJDIR)/iconv.o $(OBJDIR)/iconv_open.o \
 $(OBJDIR)/netent.o $(OBJDIR)/system.o $(OBJDIR)/stdin.o $(OBJDIR)/stdout.o \
-$(OBJDIR)/stderr.o: dietfeatures.h
+$(OBJDIR)/stderr.o $(OBJDIR)errno.o: dietfeatures.h
 
 # these depend on dietfeatures.h for WANT_I386_SOCKETCALL
 $(OBJDIR)/__bind.o $(OBJDIR)/__connect.o $(OBJDIR)/__listen.o \
@@ -595,7 +595,7 @@ $(OBJDIR)/fcntl64.o: dietfeatures.h
 # WANT_SSP
 # This facepalm brought to you by: Ubuntu!
 $(PICODIR)/stackgap.o: EXTRACFLAGS:=-fno-stack-protector
-$(OBJDIR)/stackgap.o: EXTRACFLAGS:=-fno-stack-protector -fno-pie -DNDEBUG
+$(OBJDIR)/stackgap.o: EXTRACFLAGS:=-fno-stack-protector -DNDEBUG #-fno-pie 
 $(OBJDIR)/stackgap-pie.o: EXTRACFLAGS:=-fno-stack-protector -Dstackgap=stackgap_pie -fpie
 
 $(OBJDIR)/stackgap-g.o: EXTRACFLAGS:=-fno-stack-protector -fno-pie
