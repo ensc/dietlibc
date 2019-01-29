@@ -7,6 +7,7 @@
 #include <dietwarning.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include "rand_i.h"
 
 link_warning("tmpnam","\e[1;33;41m>>> tmpnam stinks! NEVER ! NEVER USE IT ! <<<\e[0m");
 
@@ -18,7 +19,7 @@ char* tmpnam(char* s) {
   for (;;) {
     struct stat ss;
     int i,j;
-    i=rand();
+    i=rand_i();
     for (j=0; j<8; ++j) {
       char c=i&0xf;
       tmp[9+j]=c>9?c+'a'-10:c+'0';

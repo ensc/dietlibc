@@ -1,5 +1,6 @@
 #include <sys/cdefs.h>
 #include <stdlib.h>
+#include "rand_i.h"
 
 static void exch(char* base,size_t size,size_t a,size_t b) {
   char* x=base+a*size;
@@ -30,7 +31,7 @@ static void quicksort(char* base,size_t size,ssize_t l,ssize_t r,
      data is already sorted.  Try to improve by exchanging it with a
      random other pivot.
    */
-  exch(base,size,l+(rand()%(r-l)),r);
+  exch(base,size,l+(rand_i()%(r-l)),r);
 #elif defined MID
   /*
      We chose the rightmost element in the array to be sorted as pivot,

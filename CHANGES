@@ -4,6 +4,7 @@
   SECURITY: fix regex stack corruption (Thorsten Glaser)
   printf("%#.0g", 1.0) -> "1." (Christopher Wellons)
   rename WANT_DYNAMIC to WANT_CTOR, add WANT_EXCEPTIONS to dietfeatures.h
+  libc can't call rand() and change the seed, so introduce rand_i (Christopher Wellons)
 
 0.34:
   move stpcpy from libcompat to lib as it is now part of POSIX (Enrico Scholz)
