@@ -8,7 +8,8 @@ LIBDIR=${prefix}/lib
 BINDIR=${prefix}/bin
 MAN1DIR=${prefix}/man/man1
 
-EXTRACFLAGS=-ffunction-sections -fdata-sections -Wl,--gc-sections -Wl,-z,noseparate-code
+EXTRACFLAGS=-ffunction-sections -fdata-sections
+EXTRALDFLAGS=-Wl,--gc-sections -Wl,-z,noseparate-code
 
 MYARCH:=$(shell uname -m | sed -e 's/i[4-9]86/i386/' -e 's/armv[3-7]t\?e\?[lb]/arm/')
 
@@ -345,28 +346,28 @@ $(PICODIR)/libm.so: $(DYN_LIBMATH_OBJS) dietfeatures.h $(PICODIR)/libc.so
 $(SYSCALLOBJ): syscalls.h
 
 $(OBJDIR)/elftrunc: $(OBJDIR)/diet contrib/elftrunc.c
-	bin-$(MYARCH)/diet $(CCC) $(CFLAGS) -o $@ contrib/elftrunc.c
+	bin-$(MYARCH)/diet $(CCC) $(CFLAGS) -o $@ contrib/elftrunc.c $(EXTRALDFLAGS)
 
 $(OBJDIR)/dnsd: $(OBJDIR)/diet contrib/dnsd.c
-	bin-$(MYARCH)/diet $(CCC) $(CFLAGS) -o $@ contrib/dnsd.c
+	bin-$(MYARCH)/diet $(CCC) $(CFLAGS) -o $@ contrib/dnsd.c $(EXTRALDFLAGS)
 
 VERSION=dietlibc-$(shell head -n 1 CHANGES|sed 's/://')
 CURNAME=$(notdir $(shell pwd))
 
 $(OBJDIR)/diet: $(OBJDIR)/start.o diet.c $(OBJDIR)/dietlibc.a $(OBJDIR)/crtend.o
-	$(CCC) -isystem include $(CFLAGS) -nostdlib -o $@ $^ -DDIETHOME=\"$(DIETHOME)\" -DVERSION=\"$(VERSION)\" -lgcc
+	$(CCC) -isystem include $(CFLAGS) -nostdlib -o $@ $^ -DDIETHOME=\"$(DIETHOME)\" -DVERSION=\"$(VERSION)\" -lgcc $(EXTRALDFLAGS)
 	$(STRIP) -R .comment -R .note $@
 
 $(OBJDIR)/diet-i: $(OBJDIR)/start.o diet.c $(OBJDIR)/dietlibc.a $(OBJDIR)/crtend.o
-	$(CCC) -isystem include $(CFLAGS) -nostdlib -o $@ $^ -DDIETHOME=\"$(prefix)\" -DVERSION=\"$(VERSION)\" -DINSTALLVERSION -lgcc
+	$(CCC) -isystem include $(CFLAGS) -nostdlib -o $@ $^ -DDIETHOME=\"$(prefix)\" -DVERSION=\"$(VERSION)\" -DINSTALLVERSION -lgcc $(EXTRALDFLAGS)
 	$(STRIP) -R .comment -R .note $@
 
 $(PICODIR)/diet-dyn: $(PICODIR)/start.o $(PICODIR)/dyn_start.o diet.c
-	$(LD_UNSET) $(CCC) -isystem include $(CFLAGS) -fPIC -nostdlib -o $@ $^ -DDIETHOME=\"$(DIETHOME)\" -D__DYN_LIB -DVERSION=\"$(VERSION)\" -L$(PICODIR) -lc -lgcc $(PICODIR)/dyn_stop.o -Wl,-dynamic-linker=$(DIETHOME)/$(PICODIR)/libdl.so
+	$(LD_UNSET) $(CCC) -isystem include $(CFLAGS) -fPIC -nostdlib -o $@ $^ -DDIETHOME=\"$(DIETHOME)\" -D__DYN_LIB -DVERSION=\"$(VERSION)\" -L$(PICODIR) -lc -lgcc $(PICODIR)/dyn_stop.o -Wl,-dynamic-linker=$(DIETHOME)/$(PICODIR)/libdl.so $(EXTRALDFLAGS)
 	$(STRIP) -R .command -R .note $@
 
 $(PICODIR)/diet-dyn-i: $(PICODIR)/start.o $(PICODIR)/dyn_start.o diet.c
-	$(LD_UNSET) $(CCC) -isystem include $(CFLAGS) -fPIC -nostdlib -o $@ $^ -DDIETHOME=\"$(prefix)\" -D__DYN_LIB -DVERSION=\"$(VERSION)\" -L$(PICODIR) -lc -lgcc $(PICODIR)/dyn_stop.o -Wl,-dynamic-linker=$(ILIBDIR)/libdl.so -DINSTALLVERSION
+	$(LD_UNSET) $(CCC) -isystem include $(CFLAGS) -fPIC -nostdlib -o $@ $^ -DDIETHOME=\"$(prefix)\" -D__DYN_LIB -DVERSION=\"$(VERSION)\" -L$(PICODIR) -lc -lgcc $(PICODIR)/dyn_stop.o -Wl,-dynamic-linker=$(ILIBDIR)/libdl.so -DINSTALLVERSION $(EXTRALDFLAGS)
 	$(STRIP) -R .command -R .note $@
 
 $(OBJDIR)/djb: $(OBJDIR)/compile $(OBJDIR)/load
@@ -397,7 +398,7 @@ $(OBJDIR)/exports: $(OBJDIR)/dietlibc.a
 
 .PHONY: t t1
 t:
-	$(CCC) -g $(CFLAGS) -fno-builtin -nostdlib -isystem include -o t t.c $(OBJDIR)/start.o $(OBJDIR)/dyn_start.o $(OBJDIR)/dietlibc.a -lgcc $(OBJDIR)/dyn_stop.o $(OBJDIR)/crtend.o -Wl,-Map,mapfile
+	$(CCC) -g $(CFLAGS) -fno-builtin -nostdlib -isystem include -o t t.c $(OBJDIR)/start.o $(OBJDIR)/dyn_start.o $(OBJDIR)/dietlibc.a -lgcc $(OBJDIR)/dyn_stop.o $(OBJDIR)/crtend.o -Wl,-Map,mapfile $(EXTRALDFLAGS)
 
 t1:
 	$(CCC) -g -o t1 t.c
@@ -488,7 +489,10 @@ hppa:
 	ln -sf bin-parisc bin-hppa
 	$(MAKE) ARCH=parisc CROSS=hppa-linux- all
 
-CROSS_ARCH=arm sparc ppc alpha i386 mips sparc64 x86_64 s390 parisc
+aarch64 arm64:
+	$(MAKE) ARCH=aarch64 CROSS=aarch64-linux- all
+
+CROSS_ARCH=arm sparc ppc alpha i386 mips sparc64 x86_64 s390 parisc aarch64
 cross:
 	$(MAKE) $(subst $(ARCH),,$(CROSS_ARCH))
 
