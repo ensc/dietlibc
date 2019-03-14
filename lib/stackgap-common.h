@@ -343,6 +343,7 @@ extern void __register_frame_info (const void *, struct object *);
 extern void __deregister_frame_info (const void *);
 #endif
 
+__attribute__((optimize("no-stack-protector")))
 int stackgap(int argc,char* argv[],char* envp[], funcptr fp);
 int stackgap(int argc,char* argv[],char* envp[], funcptr fp) {
 #ifndef WANT_CTOR
