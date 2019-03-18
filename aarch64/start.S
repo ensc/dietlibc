@@ -20,11 +20,7 @@ FUNC_START	_start
 	add	x2, x1, x9		/* &argv[argc] */
 	add	x2, x2, #8		/* envp */
 	str	x2, [x16]		/* environ = envp */
-#ifdef WANT_DYNAMIC
-	bl	_dyn_start
-#else
 	bl	CALL_IN_STARTCODE
-#endif
 
 /*
  * The exit status from main() is already in x0.
@@ -41,3 +37,14 @@ FUNC_START_WEAK	exit
 FUNC_END	exit
 FUNC_END	_exit
 
+.section .ctors,"aw"
+.global __CTOR_LIST__
+__CTOR_LIST__:
+
+.section .dtors,"aw"
+.global __DTOR_LIST__
+__DTOR_LIST__:
+
+.section .eh_frame,"aw"
+.global __EH_FRAME_BEGIN__
+__EH_FRAME_BEGIN__:

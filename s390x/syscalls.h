@@ -329,7 +329,12 @@
 #define __NR_copy_file_range	375
 #define __NR_preadv2		376
 #define __NR_pwritev2		377
-#define NR_syscalls 378
+#define __NR_s390_guarded_storage 378
+#define __NR_statx 379
+#define __NR_s390_sthyi 380
+#define __NR_kexec_file_load 381
+#define __NR_io_pgetevents 382
+#define __NR_rseq 383
 
 #define syscall_weak(name,wsym,sym) \
 .text; \

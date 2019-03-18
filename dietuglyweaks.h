@@ -48,6 +48,8 @@ DEF_W __thread_doexit
 DEF_W flockfile
 DEF_W ftrylockfile
 DEF_W funlockfile
+DEF_W __register_frame_info
+DEF_W __deregister_frame_info
 
 DEF_G __you_tried_to_link_a_dietlibc_object_against_glibc
 

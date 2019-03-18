@@ -10,6 +10,7 @@
 #include <errno.h>
 #include <arpa/nameser.h>
 #include "dietfeatures.h"
+#include "rand_i.h"
 
 static char dnspacket[]="\xfe\xfe\001\000\000\001\000\000\000\000\000\000";
 
@@ -49,7 +50,7 @@ int res_mkquery(int op, const char *dname, int class, int type, char* data,
   (void)datalen;
 
   memcpy(packet,dnspacket,12);
-  len=rand();
+  len=rand_i();
   packet[0]=len;
   packet[1]=len>>8;
   len=0;

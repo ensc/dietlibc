@@ -49,7 +49,7 @@ extern __hidden__ unsigned long __guard;
 #ifdef NDEBUG
 #undef WANT_VALGRIND_SUPPORT
 #endif
-int __valgrind=0;
+extern int __valgrind;
 #endif
 
 #ifdef __i386__
@@ -114,92 +114,8 @@ static void findtlsdata(long* auxvec) {
 #if defined(WANT_SSP) || defined(WANT_TLS)
 tcbhead_t* __tcb_mainthread;
 
-void __setup_tls(tcbhead_t*);
-
-void __setup_tls(tcbhead_t* mainthread) {
-  mainthread->tcb=mainthread;
-  mainthread->dtv=0;
-  mainthread->self=0;
-  mainthread->multiple_threads=0;
-#if defined(WANT_SSP)
-  mainthread->stack_guard=__guard;
+extern void __setup_tls(tcbhead_t*);
 #endif
-
-#if defined(__x86_64__)
-
-  arch_prctl(ARCH_SET_FS, mainthread);
-
-#elif defined(__i386__)
-
-  unsigned int sd[4];
-  sd[0]=-1;
-  sd[1]=(unsigned long int)mainthread;
-  sd[2]=0xfffff; /* 4 GB limit */
-  sd[3]=0x51; /* bitfield, see struct user_desc in asm-i386/ldt.h */
-  if (__modern_linux>=0) {
-    if (set_thread_area((struct user_desc*)(void*)&sd)==0) {
-      asm volatile ("movw %w0, %%gs" :: "q" (sd[0]*8+3));
-      __modern_linux=1;
-    } else
-      __modern_linux=-1;
-  }
-
-#elif defined(__alpha__) || defined(__s390__)
-  __builtin_set_thread_pointer(mainthread);
-#elif defined(__mips__)
-  set_thread_area((char*)(void *)mainthread);
-#elif defined(__aarch64__)
-  asm volatile ("msr tpidr_el0, %0" :: "r"(mainthread));
-#elif defined(__arm__)
-  __arm_set_tls(mainthread);
-#elif defined(__hppa__)
-  /* control register 27 is used as thread pointer on PA-RISC Linux,
-   * but it can only be set from Ring0. The Linux kernel provides
-   * privileged code to set this register, so call that. (cf. syscalls,
-   * which branch to 0x100(%%sr2, %%r0), instead.) PA-RISC has
-   * 1-instruction delayed branching. The register may be read by any
-   * code however (using mfctl %cr27, %rXX). r26 is used as input for
-   * the kernel code, r31 is the return address pointer set by the
-   * branch instruction, so clobber both. */
-  asm volatile ("ble 0xe0(%%sr2, %%r0)\n\t"
-                "copy %0, %%r26"
-                :: "r" (mainthread) : "r26", "r31");
-#elif defined(__ABI_TLS_REGISTER)
-  register tcbhead_t* __thread_self __asm__(__ABI_TLS_REGISTER);
-  __thread_self=mainthread;
-  __asm__ __volatile__("" : : "r"(__thread_self) : "memory");
-#else
-#error "no idea how to enable TLS on this platform, edit lib/stackgap.c"
-#endif
-}
-#endif
-
-static void const * find_in_auxvec(long* x,long what) {
-#ifndef WANT_ELFINFO
-  while (*x) {
-    if (*x==what)
-      return (void*)x[1];
-    x+=2;
-  }
-  return NULL;
-#else
-  __diet_elf_addr_t const	*a = __get_elf_aux_value(what);
-  (void)x;
-  return a ? (void *)*a : NULL;
-#endif
-}
-
-#ifndef WANT_ELFINFO
-static long* _auxvec;
-#else
-#define _auxvec	NULL
-#endif
-
-unsigned long getauxval(unsigned long type) {
-  return (long)find_in_auxvec(_auxvec,type);
-}
-
-
 
 #ifdef __PIE__
 
@@ -422,8 +338,33 @@ static void callback() {
 __hidden__ char _DYNAMIC;
 #endif
 
-int stackgap(int argc,char* argv[],char* envp[]);
-int stackgap(int argc,char* argv[],char* envp[]) {
+#ifndef WANT_ELFINFO
+extern long* _auxvec;
+#endif
+
+typedef void(*funcptr)(void);
+
+#ifdef WANT_CTOR
+extern funcptr __CTOR_LIST__[];
+extern funcptr __CTOR_END__[];
+extern funcptr __DTOR_LIST__[];
+extern funcptr __DTOR_END__[];
+#endif
+
+#ifdef WANT_EXCEPTIONS
+extern const char __EH_FRAME_BEGIN__[];
+
+struct object { void* x[7]; };	// actual definition is in unwind-dw2-fde.h in gcc sources
+extern void __register_frame_info (const void *, struct object *);
+extern void __deregister_frame_info (const void *);
+#endif
+
+__attribute__((optimize("no-stack-protector")))
+int stackgap(int argc,char* argv[],char* envp[], funcptr fp);
+int stackgap(int argc,char* argv[],char* envp[], funcptr fp) {
+#ifndef WANT_CTOR
+  (void)fp;	// not used
+#endif
 #if defined(WANT_STACKGAP) || defined(WANT_SSP) || defined(WANT_TLS)
   long* auxvec=(long*)envp;
   char const * rand=(char*)&auxvec;
@@ -589,7 +530,7 @@ int stackgap(int argc,char* argv[],char* envp[]) {
 
 #if defined(WANT_STACKGAP) || defined(WANT_SSP) || defined(WANT_TLS)
 #if defined(WANT_STACKGAP) || defined(WANT_SSP)
-  rand=find_in_auxvec(auxvec,25);
+  rand=(char*)getauxval(25);
 #ifdef WANT_URANDOM_SSP
   if (!rand) {
     void *tmp=alloca(10);
@@ -619,7 +560,7 @@ int stackgap(int argc,char* argv[],char* envp[]) {
 #endif
 #endif
 
-  __vdso=find_in_auxvec(auxvec,33);	// AT_SYSINFO_EHDR -> vdso start address
+  __vdso=(void*)getauxval(33);	// AT_SYSINFO_EHDR -> vdso start address
 #ifdef __x86_64__
   if (!__vdso) __vdso=(char*)0xffffffffff600000;
 #endif
@@ -634,7 +575,7 @@ int stackgap(int argc,char* argv[],char* envp[]) {
   memcpy(tlsdata,__tdataptr,__tdatasize);
   memset(tlsdata+__tdatasize,0,__tmemsize-__tdatasize);
   __setup_tls(__tcb_mainthread=(tcbhead_t*)(tlsdata+__tmemsize));
-  __tcb_mainthread->sysinfo=(uintptr_t)find_in_auxvec(auxvec,32);
+  __tcb_mainthread->sysinfo=(uintptr_t)getauxval(32);
 #elif defined(WANT_SSP)
   tlsdata=alloca(sizeof(tcbhead_t));
   __setup_tls(__tcb_mainthread=(tcbhead_t*)(tlsdata));
@@ -674,5 +615,28 @@ found: ;
       if (*c=='/') program_invocation_short_name=c+1;
   }
 #endif
-  exit(main(argc,argv,envp));
+#ifdef WANT_EXCEPTIONS
+  {
+    static struct object ob;
+    __register_frame_info(__EH_FRAME_BEGIN__, &ob);
+  }
+#endif
+#ifdef WANT_CTOR
+  {
+    funcptr* f;
+    for (f=__CTOR_LIST__; f<__CTOR_END__; ++f) (*f)();
+  }
+#endif
+  int r=main(argc,argv,envp);
+#ifdef WANT_CTOR
+  if (fp) fp();
+  {
+    funcptr* f;
+    for (f=__DTOR_LIST__; f<__DTOR_END__; ++f) (*f)();
+  }
+#endif
+#ifdef WANT_EXCEPTIONS
+  __deregister_frame_info(__EH_FRAME_BEGIN__);
+#endif
+  exit(r);
 }

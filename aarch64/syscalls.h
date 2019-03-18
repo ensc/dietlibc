@@ -278,7 +278,9 @@
 #define __NR_pkey_mprotect 288
 #define __NR_pkey_alloc 289
 #define __NR_pkey_free 290
-
+#define __NR_statx 291
+#define __NR_io_pgetevents 292
+#define __NR_rseq 293
 
 #ifdef __ASSEMBLER__
 

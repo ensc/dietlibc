@@ -1,3 +1,11 @@
+0.35:
+  fix pic for x32
+  SECURITY: putenv removes duplicate entries from malicious environments (Daniel Hodson)
+  SECURITY: fix regex stack corruption (Thorsten Glaser)
+  printf("%#.0g", 1.0) -> "1." (Christopher Wellons)
+  rename WANT_DYNAMIC to WANT_CTOR, add WANT_EXCEPTIONS to dietfeatures.h
+  libc can't call rand() and change the seed, so introduce rand_i (Christopher Wellons)
+
 0.34:
   move stpcpy from libcompat to lib as it is now part of POSIX (Enrico Scholz)
   add linux/seccomp.h linux/prctl.h linux/audit.h linux/elf-em.h linux/filter.h
@@ -59,6 +67,8 @@
     diet chooses depending on presence of -g
   add mlock2
   prefer gcc4+ __CAS implementation to our own on ARM, and fix ours (Philip Zander)
+  move _POSIX_MAPPED_FILES to unistd.h
+  accept "x" in fopen mode
 
 0.33:
   first stab at getting TLS to work in actual threads

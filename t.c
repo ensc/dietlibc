@@ -108,12 +108,17 @@ extern char* strcpy2(char*a,char*b);
 
 #define malloc(x) ({typeof(x) y=x; (y<0 || (size_t)(y)!=y ? 0 : malloc(y));})
 
+#include "rand_i.h"
+
 int main(int argc,char *argv[]) {
+  printf("%d\n",rand_i());
+#if 0
   int i;
   for (i=0; i<1024; ++i) {
     printf("%08x%c",arc4random(),(i&15)==15 ? '\n' : ' ');
   }
   perror("write");
+#endif
 #if 0
   int n;
   struct ucontext uc;

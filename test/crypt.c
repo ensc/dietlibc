@@ -5,7 +5,7 @@
 #include <assert.h>
 
 int main(int argc,char* argv[]) {
-  char salt[2];
+  char salt[6];
   char charset[100];
   unsigned int l,i;
   int fd;
@@ -24,8 +24,10 @@ int main(int argc,char* argv[]) {
   close(fd);
   for (l=1; argv[l]; ++l) {
     printf("password %s with salt %c%c -> %s\n",argv[l],salt[0],salt[1],crypt(argv[l],salt));
-    printf("md5password %s -> %s\n",argv[l],crypt(argv[l],"$1$"));
-    printf("sha256password %s -> %s\n",argv[l],crypt(argv[l],"$5$"));
-    printf("sha512password %s -> %s\n",argv[l],crypt(argv[l],"$6$"));
+    salt[3]=salt[0]; salt[4]=salt[1];
+    salt[0]=salt[2]='$'; salt[5]=0;
+    salt[1]='1'; printf("md5password %s -> %s\n",argv[l],crypt(argv[l],salt));
+    salt[1]='5'; printf("sha256password %s -> %s\n",argv[l],crypt(argv[l],salt));
+    salt[1]='6'; printf("sha512password %s -> %s\n",argv[l],crypt(argv[l],salt));
   }
 }

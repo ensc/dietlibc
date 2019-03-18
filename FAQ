@@ -306,7 +306,7 @@ A: Disable WANT_STACKGAP in dietfeatures.h or try upgrading your binutils.
 Q: I want to have a gcc that uses the diet libc by default.
 A: You will have to edit the "specs" file from gcc then.  John K. Hohm
    sent these lines to use gcc with the dynamic diet libc (make dyn and
-   make sure you have WANT_DYNAMIC in dietfeatures.h):
+   make sure you have WANT_CTOR in dietfeatures.h):
 
    *endfile:
    %{shared:dyn_dstop.o%s}%{!shared:%{static:dyn_stop.o%s}%{!static:dyn_dstop.o%s}}

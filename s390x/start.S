@@ -3,7 +3,7 @@
 .text
 .global _start
 _start:
-#ifdef WANT_DYNAMIC
+#ifdef WANT_CTOR
 	lgr	%r5,%r14		/* save dynamic ld.so _fini */
 #endif
 	lg	%r2,0(%r15)		/* argc */
@@ -37,11 +37,7 @@ _start:
 #endif
 
 /* call main or _dyn_start */
-#ifdef WANT_DYNAMIC
-	brasl	%r14,_dyn_start
-#else
 	brasl	%r14,CALL_IN_STARTCODE
-#endif
 
 /* call exit */
 	brasl	%r14,exit
@@ -52,3 +48,15 @@ _start:
 .align 4
 .Lstart:
         .size   _start,.Lstart-_start
+
+.section .ctors,"aw"
+.global __CTOR_LIST__
+__CTOR_LIST__:
+
+.section .dtors,"aw"
+.global __DTOR_LIST__
+__DTOR_LIST__:
+
+.section .eh_frame,"aw"
+.global __EH_FRAME_BEGIN__
+__EH_FRAME_BEGIN__:

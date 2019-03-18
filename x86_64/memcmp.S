@@ -27,7 +27,6 @@ memcmp:	/* rdi=ptr1, esi=ptr2, rdx=bytes */
 1:
   xor %eax,%eax
   mov %edx,%ecx
-  jecxz 1f
   repe cmpsb
   jmp 2b
 1:

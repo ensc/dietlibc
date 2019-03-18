@@ -36,18 +36,9 @@ static int remove_file(char const *dir, char const *name)
 }
 
 int main() {
-  char const *tmpdir_base = getenv("TMPDIR");
-  char *tmpdir;
+  char tmpdir[] = "/tmp/readdir.XXXXXX";
   unsigned long res = 0;
   DIR* D;
-
-  if (!tmpdir_base)
-    tmpdir_base = "/tmp";
-
-  tmpdir = malloc(strlen(tmpdir_base) + sizeof "/readdir.XXXXXX");
-  strcpy(tmpdir, tmpdir_base);
-  strcat(tmpdir, "/readdir.XXXXXX");
-
   if (!mkdtemp(tmpdir)) {
     perror("mkdtemp");
     return 1;
@@ -95,6 +86,10 @@ int main() {
       xputs("mismatch in d_type");
     } else if (d->d_type != DT_REG && d->d_type != DT_DIR) {
       xputs("unexpected d_type");
+    }
+
+    if (telldir(D) != d->d_off) {
+      xputs("mismatch with telldir");
     }
 
     unlink(d->d_name);

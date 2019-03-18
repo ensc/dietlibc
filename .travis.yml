@@ -17,25 +17,9 @@ addons:
     notification_email: github@ensc.de
     build_command_prepend: ":"
     build_command:   "make"
-    branch_pattern: master-for-scan|CVS
+    branch_pattern: master|CVS
 
-env:
-  global:
-    - BASE_CFLAGS="-g1 -O1 -fstack-protector"
-
-matrix:
-  include:
-    - env: EXTRA_CFLAGS=-m64 ARCH=x86_64
-    - env: EXTRA_CFLAGS=-m32 ARCH=i386
-      addons:
-        apt:
-          packages:
-            - libstdc++6:i386
-            - gcc-multilib
-
-dist: xenial
 script:
-- CFLAGS="${BASE_CFLAGS} ${EXTRA_CFLAGS}"
-- make CFLAGS="${CFLAGS}" ARCH="${ARCH}"
-- make -C test all DIET="`pwd`/bin-${ARCH}/diet" CFLAGS="${CFLAGS}" ARCH="${ARCH}" -k
+- make
+- make -C test all DIET=$(echo `pwd`/bin-*/diet) -k
 - cd test && bash runtests-X.sh

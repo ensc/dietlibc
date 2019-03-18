@@ -370,6 +370,9 @@
 #define __NR_pkey_mprotect		(__NR_Linux + 363)
 #define __NR_pkey_alloc			(__NR_Linux + 364)
 #define __NR_pkey_free			(__NR_Linux + 365)
+#define __NR_statx			(__NR_Linux + 366)
+#define __NR_rseq			(__NR_Linux + 367)
+#define __NR_io_pgetevents		(__NR_Linux + 368)
 
 #elif _MIPS_SIM == _ABI64
 
@@ -703,6 +706,9 @@
 #define __NR_pkey_mprotect		(__NR_Linux + 323)
 #define __NR_pkey_alloc			(__NR_Linux + 324)
 #define __NR_pkey_free			(__NR_Linux + 325)
+#define __NR_statx			(__NR_Linux + 326)
+#define __NR_rseq			(__NR_Linux + 327)
+#define __NR_io_pgetevents		(__NR_Linux + 328)
 
 #else
 #error "dietlibc not ported to your MIPS ABI yet."

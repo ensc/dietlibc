@@ -358,6 +358,8 @@
 #define __NR_copy_file_range	357
 #define __NR_preadv2		358
 #define __NR_pwritev2		359
+#define __NR_statx		360
+#define __NR_io_pgetevents	361
 
 #define syscall_weak(name,wsym,sym) \
 .text; \

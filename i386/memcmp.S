@@ -9,7 +9,6 @@ memcmp:
 	movl	12(%ecx),%esi
 	movl	16(%ecx),%edi
 	movl	20(%ecx),%ecx
-	jecxz	.Lout
 	cld
 	rep cmpsb
 	jz	.Lout

@@ -40,12 +40,10 @@ _start:
 	stw	5,__elfinfo@l(14)
 #endif
 
-#ifdef WANT_DYNAMIC
+#ifdef WANT_CTOR
 	mr	6,7
-	bl	_dyn_start
-#else
-	bl	CALL_IN_STARTCODE
 #endif
+	bl	CALL_IN_STARTCODE
 	b	exit
 .size _start,.-_start
 
@@ -59,3 +57,14 @@ __data_start:
 	.lcomm	__libc_stack_end,4,4
 	.type	__libc_stack_end,@object
 
+.section .ctors,"aw"
+.global __CTOR_LIST__
+__CTOR_LIST__:
+
+.section .dtors,"aw"
+.global __DTOR_LIST__
+__DTOR_LIST__:
+
+.section .eh_frame,"aw"
+.global __EH_FRAME_BEGIN__
+__EH_FRAME_BEGIN__:
